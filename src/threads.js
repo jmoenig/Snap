@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-November-05';
+modules.threads = '2025-August-29';
 
 var ThreadManager;
 var Process;
@@ -111,6 +111,9 @@ function snapEquals(a, b) {
     }
 
     // selectors (translatable text)
+    if (a instanceof Array && b instanceof Array) {
+        return snapEquals(a[0], b[0]);
+    }
     if (a instanceof Array) {
         return snapEquals(a[0], b);
     }
@@ -1496,13 +1499,6 @@ Process.prototype.evaluate = function (
             return;
         }
         return this.hyperEval(context, args);
-    }
-    if (context instanceof BlockMorph) {
-        return this.evaluate(
-            context.fullCopy().reify(),
-            new List(),
-            context instanceof CommandBlockMorph
-        );
     }
     if (!(context instanceof Context)) {
         if (isCommand) {
@@ -4075,6 +4071,61 @@ Process.prototype.doGlide = function (secs, endX, endY) {
     this.pushContext('doYield');
     this.pushContext();
 };
+//**
+Process.prototype.doGlideSprite = function (secs, name) {
+    var thisObj = this.blockReceiver();
+    var endX = this.context.endX
+    var endY = this.context.endY
+    if (!this.context.startTime) {
+        if (thisObj) {
+            if (this.inputOption(name) === 'center') {
+                endX = 0; endY = 0
+            } else if (this.inputOption(name) === 'mouse-pointer') {
+                endX = this.reportMouseX(); endY= this.reportMouseY();
+            } else if (this.inputOption(name) === 'random position') {
+                stage = thisObj.parentThatIsA(StageMorph);
+                if (stage) {
+                        endX = this.reportBasicRandom(stage.left(), stage.right()) - stage.bounds.origin.x - stage.width()/2
+                        endY = this.reportBasicRandom(stage.top(), stage.bottom()) - stage.bounds.origin.y- stage.height()/2
+                 }
+            } else {
+                if (name instanceof List) {
+                    thisObj.gotoXY(
+                        name.at(1),
+                        name.at(2)
+                    );
+                    return;
+                }
+                thatObj = this.getOtherObject(name, this.homeContext.receiver);
+                if (thatObj) {
+                    endX =thatObj.xPosition(),
+                    endY=    thatObj.yPosition()
+                }
+            }
+        }
+        this.context.endX = endX
+        this.context.endY = endY
+        this.context.startTime = Date.now();
+        this.context.startValue = new Point(
+            this.blockReceiver().xPosition(),
+            this.blockReceiver().yPosition()
+        );
+    }
+    if ((Date.now() - this.context.startTime) >= (secs * 1000)) {
+        this.blockReceiver().gotoXY(endX, endY);
+        return null;
+    }
+    this.blockReceiver().glide(
+        secs * 1000,
+        endX,
+        endY,
+        Date.now() - this.context.startTime,
+        this.context.startValue
+    );
+
+    this.pushContext('doYield');
+    this.pushContext();
+};
 
 Process.prototype.doSayFor = function (data, secs) {
     if (!this.context.startTime) {
@@ -4524,7 +4575,10 @@ Process.prototype.setMicrophoneModifier = function (modifier) {
 };
 
 // Process user prompting primitives (interpolated)
-
+Process.prototype.getAsk = function(data) {
+    this.doAsk(data);
+    return this.blockReceiver().getLastAnswer()
+}
 Process.prototype.doAsk = function (data) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph),
         rcvr = this.blockReceiver(),
@@ -4910,6 +4964,9 @@ Process.prototype.reportTypeOf = function (thing) {
     }
     if (thing instanceof Color) {
         return 'color';
+    }
+    if (thing instanceof Function) {
+        return 'JS Function';
     }
     if (thing instanceof Context) {
         if (thing.expression instanceof RingMorph) {
@@ -5697,7 +5754,7 @@ Process.prototype.reportTextSplit = function (string, delimiter) {
 };
 
 Process.prototype.reportBasicTextSplit = function (string, delimiter) {
-    var types = ['text', 'number'],
+    var types = ['text', 'number', 'color'],
         strType = this.reportTypeOf(string),
         delType = this.reportTypeOf(this.inputOption(delimiter)),
         str,
@@ -6110,7 +6167,7 @@ Process.prototype.log = function (data) {
     if (this.homeContext.receiver) {
         world = this.homeContext.receiver.world();
         if (world.isDevMode) {
-            console.log('Snap! ' + data.itemsArray());
+            console.log('Snap! ', data.itemsArray());
         }
     }
 };
@@ -7730,6 +7787,17 @@ Process.prototype.reportMouseDown = function () {
     return false;
 };
 
+Process.prototype.reportRightMouseDown = function () {
+    var world;
+    if (this.homeContext.receiver) {
+        world = this.homeContext.receiver.world();
+        if (world) {
+            return world.hand.mouseButton === 'right';
+        }
+    }
+    return false;
+};
+
 Process.prototype.reportKeyPressed = function (keyString) {
     // hyper-monadic
     var stage;
@@ -8156,6 +8224,13 @@ Process.prototype.reportNewCostumeStretched = function (name, xP, yP) {
 };
 
 Process.prototype.reportNewCostumeSkewed = function (name, angle, factor) {
+    console.log(angle)
+    if(angle instanceof Array) {
+        if (angle[0] == "random") {
+            angle = this.reportRandom(0, 360)
+
+        }
+    }
     var cst = this.costumeNamed(name);
     if (!cst) {
         return new Costume();
@@ -8538,8 +8613,6 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return expr ? !!expr.isCustomBlock : false;
     case 'global?':
         return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
-    case 'expression':
-        return expr instanceof BlockMorph ? expr.fullCopy() : '';
     case 'type':
         return ['command', 'reporter', 'predicate', 'hat'].indexOf(
             this.reportTypeOf(block)

@@ -44,7 +44,7 @@
       "type": "image/png"
     }],
   "lang": "en-US",
-  "start_url": "./snap.html",
+  "start_url": "./split.html",
   "display": "standalone",
   "background_color": "white",
   "theme_color": "white"

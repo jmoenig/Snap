@@ -1772,7 +1772,8 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 localize(label)
             ],
             toggle,
-            test ? onHint : offHint
+            test ? onHint : offHint,
+            WHITE
         );
     }
 
@@ -1904,7 +1905,9 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         if (!menu) {
             menu = new MenuMorph(this);
         } else {
-            menu.addLine();
+            if(menu.items.length > 0) {
+            menu.addLine(undefined, WHITE);
+            }
         }
         if (this.isTemplate) { // inside the palette
             if (this.isGlobal) {
@@ -1925,7 +1928,9 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                 }
                 menu.addItem(
                     "delete block definition...",
-                    'deleteBlockDefinition'
+                    'deleteBlockDefinition',
+                undefined,
+                WHITE
                 );
             } else { // local method
                 if (contains(
@@ -1949,7 +1954,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                         },
                         true,
                         'uncheck to\ndisinherit',
-                        null
+                        WHITE
                     );
                 } else if (rcvr.exemplar &&
                     rcvr.exemplar.getMethod(this.blockSpec
@@ -1959,7 +1964,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                         'inherited',
                         'deleteBlockDefinition',
                         false,
-                        null,
+                        WHITE,
                         localize('check to inherit\nfrom')
                             + ' ' + rcvr.exemplar.name
                     );
@@ -1967,18 +1972,23 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     // own block
                     menu.addItem(
                         "delete block definition...",
-                        'deleteBlockDefinition'
+                        'deleteBlockDefinition',
+                undefined,
+                WHITE
                     );
                 }
             }
             menu.addItem(
                 "duplicate block definition...",
-                'duplicateBlockDefinition'
+                'duplicateBlockDefinition',
+                undefined,
+                WHITE
             );
             menu.addItem(
                 "export block definition...",
                 'exportBlockDefinition',
-                'including dependencies'
+                'including dependencies',
+                WHITE
             );
             if (!this.isGlobal || !this.definition.isBootstrapped()) {
                 menu.addLine();
@@ -2004,7 +2014,8 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     },
                     def.spaceAbove,
                     'uncheck to remove space above',
-                    'check to add space above'
+                    'check to add space above',
+                    WHITE
                 );
                 menu.addPair(
                     [
@@ -2016,7 +2027,8 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     ],
                     () => this.moveInPalette('up'),
                     null, // shortcut
-                    'move one up in the palette'
+                    'move one up in the palette',
+                    WHITE
                 );
                 menu.addPair(
                     [
@@ -2028,7 +2040,8 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
                     ],
                     () => this.moveInPalette('down'),
                     null, // shortcut
-                    'move one down in the palette'
+                    'move one down in the palette',
+                    WHITE
                 );
                 menu.addLine();
             }
@@ -2050,7 +2063,9 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             monitor(vName)
         );
     }
-    menu.addItem("edit...", 'edit'); // works also for prototypes
+    menu.addItem("edit...", 'edit',
+                undefined,
+                WHITE); // works also for prototypes
     return menu;
 };
 

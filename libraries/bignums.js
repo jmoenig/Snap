@@ -100,6 +100,36 @@ function loadBlocks (useBigNums) {
     var fn = SchemeNumber.fn;
     var originalPrims = window.bigNumbers.originalPrims;
     if (useBigNums) {
+        CursorMorph.prototype.filterText = function (content) {
+        var points = 0,
+            hasE = false,
+            hasI = false,
+            result = '',
+            i, ch, valid;
+        for (i = 0; i < content.length; i += 1) {
+            ch = content.charAt(i);
+            valid = (
+                ('0' <= ch && ch <= '9') || // digits
+                (ch.toLowerCase() === 'e') || // scientific notation
+                (ch === '-')  || // leading '-' or sc. not.
+                (ch === "i") || (ch === "/") || (ch === "+") ||
+                (ch === '.' && points === 0) // at most '.'
+            );
+            if (valid) {
+                result += ch;
+                if (ch === '.') {
+                    points += 1;
+                }
+                if (ch.toLowerCase() === 'e') {
+                    hasE = true;
+                }
+                if (ch.toLowerCase() === 'e') {
+                    hasI = true;
+                }
+            }
+        }
+        return result;
+    }
         InputSlotMorph.prototype.evaluate = function () {
             var contents = this.contents();
 
@@ -317,6 +347,31 @@ function loadBlocks (useBigNums) {
         InputSlotMorph.prototype.evaluate = window.bigNumbers.originalEvaluate;
         VariableFrame.prototype.changeVar = window.bigNumbers.originalChangeVar;
         Object.assign(Process.prototype, originalPrims);
+        CursorMorph.prototype.filterText = function (content) {
+        var points = 0,
+            hasE = false,
+            result = '',
+            i, ch, valid;
+        for (i = 0; i < content.length; i += 1) {
+            ch = content.charAt(i);
+            valid = (
+                ('0' <= ch && ch <= '9') || // digits
+                (ch.toLowerCase() === 'e') || // scientific notation
+                ((i === 0 || hasE) && ch === '-')  || // leading '-' or sc. not.
+                (ch === '.' && points === 0) // at most '.'
+            );
+            if (valid) {
+                result += ch;
+                if (ch === '.') {
+                    points += 1;
+                }
+                if (ch.toLowerCase() === 'e') {
+                    hasE = true;
+                }
+            }
+        }
+        return result;
+    }
     }
     // +++ done = true;
 }

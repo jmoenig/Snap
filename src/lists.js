@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2025-October-23';
+modules.lists = '2025-June-12';
 
 var List;
 var ListWatcherMorph;
@@ -1163,14 +1163,12 @@ List.prototype.asJSON = function () {
             objectify(element) : numberize(element)
         );
     }
-
     function numberize(token) {
         if (isString(token) && parseFloat(token) === +token) {
             return +token;
         }
         return token;
     }
-
     function canBeObject(array) {
         // try to determine whether the contents of a list
         // might be better represented as dictionary/object

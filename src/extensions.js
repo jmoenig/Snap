@@ -31,11 +31,11 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
-BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, console*/
+BigUint64Array, DeviceOrientationEvent, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-November-17';
+modules.extensions = '2025-June-03';
 
 // Global stuff
 
@@ -632,116 +632,6 @@ SnapExtensions.primitives.set(
     }
 );
 
-SnapExtensions.primitives.set(
-    'dta_export(data, name, type)',
-    function (data, mime, name, proc) {
-        var ide = this.parentThatIsA(IDE_Morph),
-            type = mime.toString() || 'text/txt'; // also for 'text/csv' etc.
-        name = name || localize('data');
-        name = name.toString();
-        ide.saveFileAs(data, type, name);
-    }
-);
-
-SnapExtensions.primitives.set(
-    'dta_import(raw?)',
-    function (raw, proc) {
-        // raw is a Boolean flag selecting to keep the data unparsed
-        var inp = document.createElement('input'),
-            ide = this.parentThatIsA(IDE_Morph),
-            data = false;
-
-        function userImport() {
-
-            function txtOnlyMsg(ftype, anyway) {
-                ide.confirm(
-                    localize(
-                        'Can only import "text" files. ' +
-                            'You selected a file of type "' +
-                            ftype +
-                            '".'
-                    ) + '\n\n' + localize('Open anyway?'),
-                    'Unable to import',
-                    anyway // callback
-                );
-            }
-
-            function readText(aFile) {
-                var frd = new FileReader(),
-                    ext = aFile.name.split('.').pop().toLowerCase();
-
-                function isTextFile(aFile) {
-                    // special cases for Windows
-                    // check the file extension for text-like-ness
-                    return aFile.type.indexOf('text') !== -1 ||
-                        contains(['txt', 'csv', 'xml', 'json', 'tsv'], ext);
-                }
-
-                function isType(aFile, string) {
-                    return aFile.type.indexOf(string) !== -1 || (ext === string);
-                }
-
-                frd.onloadend = function (e) {
-                    if (!raw && isType(aFile, 'csv')) {
-                        data = Process.prototype.parseCSV(e.target.result);
-                    } else if (!raw && isType(aFile, 'json')) {
-                        data = Process.prototype.parseJSON(e.target.result);
-                    } else {
-                        data = e.target.result;
-                    }
-                };
-
-                if (raw || isTextFile(aFile)) {
-                    frd.readAsText(aFile);
-                } else {
-                    // show a warning and an option
-                    // letting the user load the file anyway
-                    txtOnlyMsg(
-                        aFile.type,
-                        () => frd.readAsText(aFile)
-                    );
-                }
-            }
-
-            document.body.removeChild(inp);
-            ide.filePicker = null;
-            if (inp.files.length > 0) {
-                readText(inp.files[inp.files.length - 1]);
-            }
-        }
-
-        if (ide.filePicker) {
-            document.body.removeChild(ide.filePicker);
-            ide.filePicker = null;
-        }
-        inp.type = 'file';
-        inp.style.color = "transparent";
-        inp.style.backgroundColor = "transparent";
-        inp.style.border = "none";
-        inp.style.outline = "none";
-        inp.style.position = "absolute";
-        inp.style.top = "0px";
-        inp.style.left = "0px";
-        inp.style.width = "0px";
-        inp.style.height = "0px";
-        inp.style.display = "none";
-        inp.addEventListener(
-            "change",
-            userImport,
-            false
-        );
-        inp.addEventListener(
-            "cancel",
-            () => data = '',
-            false
-        );
-        document.body.appendChild(inp);
-        ide.filePicker = inp;
-        inp.click();
-        return () => data;
-    }
-);
-
 // World map (map_):
 
 SnapExtensions.primitives.set(
@@ -862,6 +752,49 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'tts_recognize',
+    function (proc) {
+        var sprec, done,
+            acc = proc.context.accumulator;
+        if (!acc) {
+            sprec = window.SpeechRecognition ||
+                window.webkitSpeechRecognition ||
+                window.mozSpeechRecognition ||
+                window.msSpeechRecognition;
+            if (!sprec) {
+                throw new Error('Speech Recognition is unavailable');
+            }
+            acc = proc.context.accumulator = {
+                voice: new sprec(),
+                text: null
+            };
+            acc.voice.onresult = (event) => {
+                acc.text = event.results[0][0].transcript;
+            };
+            done = () => acc.text = '';
+            acc.voice.onnomatch = done;
+            acc.voice.orreror = done;
+            acc.voice.start();
+
+        } else if (acc.text !== null) {
+            return acc.text;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'tts_stop',
+    function () {
+        this.parentThatIsA(StageMorph).threads.processes.forEach(proc => {
+            if (proc?.context?.accumulator?.voice) {
+                proc.context.accumulator.text = '';
+            }
+        });
+    }
+);
+SnapExtensions.primitives.set(
     'tts_activate(msg)',
     function (label, proc) {
         // create a DOM button element covering the stage displaying the
@@ -900,64 +833,6 @@ SnapExtensions.primitives.set(
             proc.pushContext('doYield');
             proc.pushContext();
         }
-    }
-);
-
-SnapExtensions.primitives.set(
-    'tts_recognize',
-    function (proc) {
-        var sprec, done,
-            acc = proc.context.accumulator;
-        if (!acc) {
-            sprec = window.SpeechRecognition ||
-                window.webkitSpeechRecognition ||
-                window.mozSpeechRecognition ||
-                window.msSpeechRecognition;
-            if (!sprec) {
-                throw new Error('Speech Recognition is unavailable');
-            }
-            acc = proc.context.accumulator = {
-                start: false,
-                voice: new sprec(),
-                text: null
-            };
-            acc.voice.onresult = (event) => {
-                acc.text = event.results[0][0].transcript;
-            };
-            acc.voice.onspeechstart = () => acc.start = true;
-            done = () => acc.text = '';
-            acc.voice.onnomatch = done;
-            acc.voice.orreror = done;
-            acc.voice.start();
-        } else if (acc.text !== null) {
-            return acc.text;
-        }
-        proc.pushContext('doYield');
-        proc.pushContext();
-    }
-);
-
-SnapExtensions.primitives.set(
-    'tts_started',
-    function () {
-        var started = false;
-        this.parentThatIsA(StageMorph).threads.processes.forEach(proc => {
-            if (proc?.context?.accumulator?.voice) {
-                started = proc.context.accumulator.start;
-            }
-        });
-        return started;
-    }
-);
-
-SnapExtensions.primitives.set(
-    'tts_stop',
-    function () {
-        this.parentThatIsA(StageMorph).threads.processes.forEach(proc => {
-            if (proc?.context?.accumulator?.voice) {
-                proc.context.accumulator.text = '';
-            }
-        });
     }
 );
 
@@ -1630,152 +1505,6 @@ SnapExtensions.primitives.set(
     }
 );
 
-// Tutorials & Cloned Scenes (scn_)
-
-SnapExtensions.primitives.set(
-    'scn_exit',
-    function () {
-        var stage = this.parentThatIsA(StageMorph);
-        if (!stage.tutorialMode) {return; }
-        stage.parentThatIsA(DialogBoxMorph).ok();
-    }
-);
-
-SnapExtensions.primitives.set(
-    'scn_scale(num)',
-    function (scale, proc) {
-        var wrld = this.world(),
-            stage = this.parentThatIsA(StageMorph),
-            acc = proc.context.accumulator,
-            dlg, center;
-        if (!stage.tutorialMode) {return; }
-        if (!scale) {return stage.scale; }
-        dlg = stage.parentThatIsA(DialogBoxMorph);
-        center = dlg.center();
-        if (dlg.ide.isAnimating) {
-            if (!proc.context.accumulator) {
-                acc = proc.context.accumulator = {progress: true };
-                wrld.animations.push(new Animation(
-                    s => { // setter
-                        stage.setScale(s);
-                        dlg.fixLayout();
-                        dlg.setCenter(center);
-                        dlg.keepWithin(wrld);
-                        center = dlg.center();
-                    },
-                    () => stage.scale, // getter
-                    Math.max(scale, dlg.minScale) - stage.scale, // delta
-                    300, // duration in ms
-                    t => Math.pow(t, 6), // easing
-                    () => acc.progress = false // null // onComplete
-                ));
-            } else if (!acc.progress) {
-                return;
-            }
-            proc.pushContext('doYield');
-            proc.pushContext();
-        } else {
-            stage.setScale(scale);
-            dlg.fixLayout();
-            dlg.setCenter(center);
-            dlg.keepWithin(wrld);
-        }
-    }
-);
-
-SnapExtensions.primitives.set(
-    'scn_position(pane, x, y)',
-    function (pane, x = 0, y = 0, proc = null) {
-        var wrld = this.world(),
-            stage = this.parentThatIsA(StageMorph),
-            acc = proc.context.accumulator,
-            dlg, rect, area, target;
-
-        if (!stage.tutorialMode) {return; }
-        dlg = stage.parentThatIsA(DialogBoxMorph);
-
-        switch(pane.toLowerCase()) {
-        case 'ide':
-            rect = dlg.ide.bounds;
-            break;
-        case 'stage':
-            rect = dlg.ide.stage.bounds;
-            break;
-        case 'palette':
-            rect = dlg.ide.palette.bounds;
-            break;
-        case 'corral':
-            rect = dlg.ide.corral.bounds;
-            break;
-        case 'scripts':
-            rect = dlg.ide.spriteEditor.bounds;
-            break;
-        default:
-            return;
-        }
-        area = rect.extent().subtract(dlg.extent());
-        target = rect.origin.add(
-            area.multiplyBy(new Point(+x, -(+y)).add(1).divideBy(2))
-        );
-
-        if (dlg.ide.isAnimating) {
-            if (!proc.context.accumulator) {
-                acc = proc.context.accumulator = {progress: true };
-                dlg.glideTo(
-                    target,
-                    300, // msecs
-                    t => Math.pow(t, 6), // easing
-                    () => {
-                        dlg.keepWithin(wrld);
-                        acc.progress = false;
-                    }
-                );
-            } else if (!acc.progress) {
-                return;
-            }
-            proc.pushContext('doYield');
-            proc.pushContext();
-        } else {
-            dlg.setPosition(target);
-            dlg.keepWithin(wrld);
-        }
-    }
-);
-
-SnapExtensions.primitives.set(
-    'scn_dimensions(pane)',
-    function (pane) {
-        var stage = this.parentThatIsA(StageMorph),
-            dlg, rect;
-
-        if (!stage.tutorialMode) {return ''; }
-        dlg = stage.parentThatIsA(DialogBoxMorph);
-
-        switch(pane.toLowerCase()) {
-        case 'ide':
-            rect = dlg.ide.bounds;
-            break;
-        case 'stage':
-            rect = dlg.ide.stage.bounds;
-            break;
-        case 'palette':
-            rect = dlg.ide.palette.bounds;
-            break;
-        case 'corral':
-            rect = dlg.ide.corral.bounds;
-            break;
-        case 'scripts':
-            rect = dlg.ide.spriteEditor.bounds;
-            break;
-        case 'tutorial':
-            rect = dlg.bounds;
-            break;
-        default:
-            return;
-        }
-        return new List([rect.left(), rect.top(), rect.right(), rect.bottom()]);
-    }
-);
 // Synchronization
 
 SnapExtensions.primitives.set(
@@ -2028,6 +1757,13 @@ SnapExtensions.primitives.set(
         }
         proc.pushContext('doYield');
         proc.pushContext();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'mouse_rightMouseDown?',
+    function (proc) {
+        return proc.returnRightMouseDown()
     }
 );
 
@@ -2296,3 +2032,5 @@ SnapExtensions.menus.set(
         }
     }
 );
+
+

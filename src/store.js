@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-November-06';
+modules.store = '2025-April-01';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -323,21 +323,16 @@ XML_Serializer.prototype.mediaXML = function (name) {
 
 // SnapSerializer loading:
 
-SnapSerializer.prototype.load = function (xmlString, ide, noPrims, keepRoles) {
+SnapSerializer.prototype.load = function (xmlString, ide, noPrims) {
     // public - answer a new Project represented by the given XML String
     var obj;
     this.noPrims = noPrims || false;
-    obj = this.loadProjectModel(this.parse(xmlString), ide, null, keepRoles);
+    obj = this.loadProjectModel(this.parse(xmlString), ide);
     this.noPrims = false;
     return obj;
 };
 
-SnapSerializer.prototype.loadProjectModel = function (
-    xmlNode,
-    ide,
-    remixID,
-    keepRoles // bool - don't change templates into work
-) {
+SnapSerializer.prototype.loadProjectModel = function (xmlNode, ide, remixID) {
     // public - answer a new Project represented by the given XML top node
     // show a warning if the origin apps differ
 
@@ -361,25 +356,16 @@ SnapSerializer.prototype.loadProjectModel = function (
         }
         scenesModel.childrenNamed('scene').forEach(model => {
             ide.scene.captureGlobalSettings();
-            project.scenes.add(
-                this.loadScene(model, appVersion, null, keepRoles)
-            );
+            project.scenes.add(this.loadScene(model, appVersion));
             ide.scene.applyGlobalSettings();
         });
     } else {
-        project.scenes.add(
-            this.loadScene(xmlNode, appVersion, remixID, keepRoles)
-        );
+        project.scenes.add(this.loadScene(xmlNode, appVersion, remixID));
     }
     return project.initialize();
 };
 
-SnapSerializer.prototype.loadScene = function (
-    xmlNode,
-    appVersion,
-    remixID,
-    keepRoles
-) {
+SnapSerializer.prototype.loadScene = function (xmlNode, appVersion, remixID) {
     // private
     var scene = new Scene(),
         model,
@@ -424,25 +410,6 @@ SnapSerializer.prototype.loadScene = function (
     if (model.palette) {
         scene.customCategories = this.loadPalette(model.palette);
         SpriteMorph.prototype.customCategories = scene.customCategories;
-    }
-    scene.role = model.scene.attributes.role || null;
-    model.template = model.scene.childNamed('template');
-    if (model.template) {
-        hidden = new List();
-        hidden.add(
-            this.loadValue(model.template.childNamed('primitives').children[0])
-        );
-        hidden.add(
-            this.loadValue(model.template.childNamed('custom').children[0])
-        );
-        hidden.add(
-            this.loadValue(model.template.childNamed('variables').children[0])
-        );
-        scene.template = {
-            name: model.template.attributes.name,
-            version: model.template.attributes.version,
-            hide: hidden
-        };
     }
     model.globalVariables = model.scene.childNamed('variables');
 
@@ -732,11 +699,6 @@ SnapSerializer.prototype.loadScene = function (
     );
 
     this.objects = {};
-    if (scene.role === 'template' && !keepRoles) {
-        scene.name = '';
-        scene.role = null;
-        scene.createdFromTemplate = true;
-    }
     return scene.initialize();
 };
 
@@ -2057,20 +2019,13 @@ Array.prototype.toXML = function (serializer) {
 // Scenes & multi-scene projects
 
 Project.prototype.toXML = function (serializer) {
-    var thumbdata,
-        scenes = this.scenes.asArray();
+    var thumbdata;
 
     // thumb data catch cross-origin tainting exception when using SVG costumes
     try {
         thumbdata = this.thumbnail.toDataURL('image/png');
     } catch (error) {
         thumbdata = null;
-    }
-
-    if (scenes.some(any => any.createdFromTemplate) &&
-        !(scenes.some(any => any.role === 'template'))
-    ) {
-        scenes = scenes.filter(each => each.role !== 'tutorial');
     }
 
     return serializer.format(
@@ -2084,8 +2039,9 @@ Project.prototype.toXML = function (serializer) {
         serializer.version,
         this.notes || '',
         thumbdata,
-        scenes.indexOf(this.currentScene) + 1,
-        serializer.store(scenes)
+        this.scenes.asArray().indexOf(
+            this.currentScene) + 1,
+        serializer.store(this.scenes.itemsArray())
     );
 };
 
@@ -2108,27 +2064,6 @@ Scene.prototype.toXML = function (serializer) {
         return str;
     }
 
-    function templateXML(dict) {
-        var blocks = dict.hide;
-        return '<template version="' +
-            dict.version +
-            '" name="' +
-            dict.name +
-        '">' +
-            '<primitives>' + serializer.store(blocks.at(1)) + '</primitives>' +
-            '<custom>' + serializer.store(blocks.at(2)) + '</custom>' +
-            '<variables>' + serializer.store(blocks.at(3)) + '</variables>' +
-        '</template>';
-    }
-
-    if (this.role === 'template') {
-        this.template = {
-            name: this.name || localize('Untitled'),
-            version: SnapVersion,
-            hide: this.stage.hiddenGlobalBlocks()
-        };
-    }
-
     serializer.scene = this; // keep the order of sprites in the corral
 
     // capture primitives and apply own ones
@@ -2136,11 +2071,10 @@ Scene.prototype.toXML = function (serializer) {
     SpriteMorph.prototype.blocks = this.blocks;
 
     xml = serializer.format(
-        '<scene name="@"%%%%%%%>' +
+        '<scene name="@"%%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
-            '%' + // template
             '<headers>%</headers>' +
             '<code>%</code>' +
             '<blocks>%</blocks>' +
@@ -2149,7 +2083,6 @@ Scene.prototype.toXML = function (serializer) {
             '<variables>%</variables>' +
             '</scene>',
         this.name || localize('Untitled'),
-        this.role ? ' role="' + this.role + '"' : '',
         this.unifiedPalette ? ' palette="single"' : '',
         this.unifiedPalette && !this.showCategories ?
             ' categories="false"' : '',
@@ -2164,7 +2097,6 @@ Scene.prototype.toXML = function (serializer) {
                 (a, b) => a + ' ' + b,
                 ''
             ),
-        this.template ? templateXML(this.template) : '',
         code('codeHeaders'),
         code('codeMappings'),
         serializer.store(this.stage.globalBlocks),

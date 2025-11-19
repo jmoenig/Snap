@@ -1,0 +1,8 @@
+<script>
+    var t = 0
+    function g() {
+        t++
+        g()
+    }
+</script>
+<button onclick="try{g()}catch(e){alert(t)}">Find Max Recursion Limit</button>

@@ -83,14 +83,14 @@ HatBlockMorph.prototype.renderHatLess = function (ctx) {
 
     if (MorphicPreferences.isFlat) {
         // draw the outline
-        ctx.fillStyle = this.cachedClrDark;
+        ctx.fillStyle = SpriteMorph.prototype.isHighContrast ? this.cachedClr : this.cachedClrDark;
         ctx.beginPath();
         this.noHatOutlinePath(ctx, 0);
         ctx.closePath();
         ctx.fill();
 
         // draw the inner filled shaped
-        ctx.fillStyle = this.cachedClr;
+        ctx.fillStyle = !SpriteMorph.prototype.isHighContrast ? this.cachedClr : this.cachedClrDark;
         ctx.beginPath();
         this.noHatOutlinePath(ctx, this.flatEdge);
         ctx.closePath();
@@ -113,58 +113,105 @@ HatBlockMorph.prototype.renderHatLess = function (ctx) {
 };
 
 HatBlockMorph.prototype.noHatOutlinePath = function (ctx, inset) {
-    var c = this.corner,
-        indent = c * 2 + this.inset,
-        bottom = this.height() - c,
-        bottomCorner = this.height() - c * 2,
-        radius = Math.max(c - inset, 0),
-        h = this.hatHeight,
-        pos = this.position();
+    
+  var indent = this.corner * 2 + this.inset,
+    bottom = this.height() - this.corner,
+    bottomCorner = this.height() - this.corner * 2,
+    radius = Math.max(this.corner - inset, 0),
+    s = this.hatWidth,
+    h = this.hatHeight,
+    r = (4 * h * h + s * s) / (8 * h),
+    a = degrees(4 * Math.atan((2 * h) / s)),
+    sa = a / 2,
+    sp = Math.min(s * 1.7, this.width() - this.corner),
+    pos = this.position();
 
-    ctx.moveTo(inset, h + inset);
+  // top arc:
+  ctx.moveTo(inset, h + this.corner - radius);
+  
+  /*ctx.bezierCurveTo(
+        s,
+        0,
+        s,
+        h,
+        sp,
+        h
+    );*/
 
-    // top right:
-    ctx.arc(
-        this.width() - c,
-        h + c,
-        radius,
-        radians(-90),
-        radians(-0),
-        false
-    );
+  // top right:
+  ctx.arc(
+    this.width() - this.corner,
+    h + this.corner,
+    radius,
+    radians(-90),
+    radians(-0),
+    false
+  );
 
-    // C-Slots
-    this.cSlots().forEach(slot => {
-        slot.outlinePath(ctx, inset, slot.position().subtract(pos));
-    });
+  // C-Slots
+  this.cSlots().forEach((slot) => {
+    slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+  });
 
-    // bottom right:
-    ctx.arc(
-        this.width() - c,
-        bottomCorner,
-        radius,
-        radians(0),
-        radians(90),
-        false
-    );
+  // bottom right:
+  ctx.arc(
+    this.width() - this.corner,
+    bottomCorner - this.dentPlus,
+    radius,
+    radians(0),
+    radians(90),
+    false
+  );
 
-    if (!this.isStop()) {
-        ctx.lineTo(this.width() - c, bottom - inset);
-        ctx.lineTo(c * 3 + this.inset + this.dent, bottom - inset);
-        ctx.lineTo(indent + this.dent, bottom + c - inset);
-        ctx.lineTo(indent, bottom + c - inset);
-        ctx.lineTo(c + this.inset, bottom - inset);
+  if (!this.isStop()) {
+    if (false) {
+      ctx.lineTo(this.width() - this.corner, bottom - inset - this.dentPlus);
+      ctx.lineTo(
+        this.corner * 3 + this.inset + this.dent,
+        bottom - inset - this.dentPlus
+      );
+      ctx.lineTo(indent + this.dent, bottom + this.corner - inset);
+      ctx.lineTo(indent, bottom + this.corner - inset);
+      ctx.lineTo(this.corner + this.inset, bottom - inset - this.dentPlus);
+    } else {
+      var w = this.dent * 1.75 + this.corner / 2,
+        h = this.corner + this.dentPlus,
+        offset = this.inset + this.corner / 2,
+        c = this.dentCorner;
+      ctx.save();
+      ctx.translate(0, bottom - inset - this.dentPlus * 1);
+      ctx.lineTo(0 + offset, -h + h);
+      ctx.bezierCurveTo(
+        c + offset,
+        -h + h,
+        c + offset,
+        -0 + h,
+        c * 2 + offset,
+        -0 + h
+      );
+      ctx.lineTo(w - c * 2 + offset, h);
+      ctx.bezierCurveTo(
+        w - c + offset,
+        0 + h,
+        w - c + offset,
+        -h + h,
+        w + offset,
+        -h + h
+      );
+      ctx.restore();
     }
+  }
 
-    // bottom left:
-    ctx.arc(
-        c,
-        bottomCorner,
-        radius,
-        radians(90),
-        radians(180),
-        false
-    );
+  // bottom left:
+  ctx.arc(
+    this.corner,
+    bottomCorner - this.dentPlus,
+    radius,
+    radians(90),
+    radians(180),
+    false
+  );
+
 };
 
 HatBlockMorph.prototype.renderSantaHat = function (ctx) {

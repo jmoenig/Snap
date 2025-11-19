@@ -15,10 +15,6 @@
         "searchData": [
           "verwandle Code _ in Blöcke\rca",
           "verwandle Blöcke _ in Code _ formatiert\rca"
-        ],
-        "searchData": [
-          "verwandle Code _ in Blöcke\rca",
-          "verwandle Blöcke _ in Code _ formatiert\rca"
         ]
       },
       "ca": {
@@ -46,12 +42,6 @@
     ],
     "translations": {
       "de": {
-        "searchData": [
-          "Objekt _",
-          "klone _ _",
-          "Feld _ von _ _",
-          "füge _ zu _ hinzu"
-        ],
         "searchData": [
           "Objekt _",
           "klone _ _",
@@ -93,14 +83,6 @@
           "hat _ sich ereignet?",
           "hat _ sich verändert?",
           "Wenn _ sich ändert"
-        ],
-        "searchData": [
-          "Wenn Variable _ sich ändert",
-          "Wenn _ > _",
-          "Wenn Hintergrund zu _ wechselt",
-          "hat _ sich ereignet?",
-          "hat _ sich verändert?",
-          "Wenn _ sich ändert"
         ]
       },
       "ca": {
@@ -125,12 +107,6 @@
     "translations": {
       "de": {
         "name": "Farben",
-        "searchData": [
-          "mische _ mit _ im Verhältnis _ %",
-          "Farbe _ _ um _ %",
-          "verschiebe _ von _ um _",
-          "Farbübergang _ Länge _"
-        ],
         "searchData": [
           "mische _ mit _ im Verhältnis _ %",
           "Farbe _ _ um _ %",
@@ -225,16 +201,6 @@
           "ignoriere _\rca",
           "führe _ mit Continuation aus",
           "rufe _ mit Continuation auf"
-        ],
-        "searchData": [
-          "fange _ _\rca",
-          "wirf _\rca",
-          "fange _ _\rca",
-          "wirf _ _\rca",
-          "falls _ dann _ und pause $-1-255-220-0\rca",
-          "ignoriere _\rca",
-          "führe _ mit Continuation aus",
-          "rufe _ mit Continuation auf"
         ]
       },
       "es": {
@@ -272,17 +238,6 @@
       "pt": {
         "name": "Iteração e composição",
         "description": "Comandos tradicionais para ciclos (enquanto, até que, etc.), o «named let» do Lisp (uma generalização do ciclo PARA), iteração funcional (invocação repetida de uma função) e composição de funções.",
-        "searchData": [
-          "o resultado de _ invocações em cascata de _ com argumento inicial _ _\rca",
-          "o resultado da invocação em cascata até que _ de _ com argumento inicial _ _\rca",
-          "a composição de _ com _\rca",
-          "repete _ até que _ $-0.7\rca",
-          "repete _ enquanto _ $-0.7\rca",
-          "enquanto _ , repete _ $-0.7\rpl",
-          "repete _ vezes _ _ $-0.7\rca",
-          "para _ de _ com passo _ a _ _ $-0.7\rca",
-          "tendo _ o valor inicial _ , executa _ definido como _\rca"
-        ],
         "searchData": [
           "o resultado de _ invocações em cascata de _ com argumento inicial _ _\rca",
           "o resultado da invocação em cascata até que _ de _ com argumento inicial _ _\rca",
@@ -865,12 +820,26 @@
       "de": {
         "searchData": [
           "Neigung _\rar"
-        ],
+        ]
+      },
+      "es": {
+        "description": "Acessar sensores en los telephonos y las tabletas",
         "searchData": [
-          "Neigung _\rar"
+          "Giro _ "
         ]
       }
     }
+  },
+  {
+    "fileName": "rotation_style.xml",
+    "name": "Rotation Style",
+    "description": "Set the rotation style. You can use the MY [ v] block to get the rotation style.",
+    "searchData": [
+      "set rotation style to _"
+    ],
+    "categories": [
+      "motion"
+    ]
   },
   {
     "fileName": "microblocks.xml",
@@ -2238,80 +2207,6 @@
     }
   },
   {
-    "fileName": "make-variables.xml",
-    "name": "Create variables",
-    "description": "Create and manage global/sprite/script variables in a script",
-    "translations": {
-      "ca": {
-        "name": "Crea variables",
-        "description": "Crea i gestiona variables de tipus global/sprite/script dins els programes",
-        "searchData": [
-          "assigna a _ el valor _\res",
-          "mostra la variable _\res",
-          "amaga la variable _\res"
-        ],
-        "searchData": [
-          "assigna a _ el valor _\res",
-          "mostra la variable _\res",
-          "amaga la variable _\res"
-        ]
-      },
-      "es": {
-        "name": "Crear variables"
-      },
-      "gl": {
-        "description": "Crear e xestionar \"global/sprite/script\" variábeis a partires dun programa."
-      },
-      "it": {
-        "name": "Crea variabili",
-        "description": "Crea e gestisce in uno script variabili globali/dello sprite/dello script"
-      },
-      "nl": {
-        "name": "Maak variabelen",
-        "description": "Maak en beheer globale/sprite/scriptvariabelen in een script"
-      },
-      "pt": {
-        "description": "Criar e gerir variáveis globais, de objecto e de guião a partir de um guião.",
-        "searchData": [
-          "cria as variáveis _ _\rca",
-          "remove as variáveis _\rca",
-          "o valor de _\rpl",
-          "a variável _ existe\rca"
-        ],
-        "searchData": [
-          "cria as variáveis _ _\rca",
-          "remove as variáveis _\rca",
-          "o valor de _\rpl",
-          "a variável _ existe\rca"
-        ]
-      },
-      "ti": {
-        "name": "ተቓያየርቲ ኣዳሉ",
-        "description": "ሓፈሻውያን፡ ናይ መርሓ ፡ ከምኡ ውን ናይ ትንኩሊብ ወይ ውዱዕ ተቓያየርቲ ኣብ ውሽጢ መርሓ ኣዳሉን ኣመሓድርን።"
-      },
-      "ua": {
-        "name": "Створити змінні",
-        "description": "Створення глобальних/спрайтових/скриптових змінних у сценарії та керування ними"
-      },
-      "zh_CN": {
-        "name": "创建变量",
-        "description": "在脚本中创建和管理全局/精灵/脚本变量"
-      }
-    },
-    "searchData": [
-      "create _ var _",
-      "delete var _",
-      "set var _ to _",
-      "var _",
-      "does var _ exist?",
-      "show var _",
-      "hide var _"
-    ],
-    "categories": [
-      "variables"
-    ]
-  },
-  {
     "fileName": "bitwise.xml",
     "name": "Bitwise operators",
     "description": "Bitwise arithmetic operators for low-level bit manipulation.",
@@ -3092,20 +2987,6 @@
   {
     "fileName": "~",
     "name": "~"
-  },
-  {
-    "fileName": "tutorial_module.xml",
-    "name": "Tutorials",
-    "description": "Position and scale the tutorial window",
-    "searchData": [
-      "when _ bounds change",
-      "position tutorial at _ _",
-      "set tutorial size to _ %",
-      "tutorial size"
-    ],
-    "categories": [
-      "tutorials"
-    ]
   },
   {
     "fileName": "metaprogramming_module.xml",

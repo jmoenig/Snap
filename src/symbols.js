@@ -516,6 +516,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
     }
+    //ctx.lineWidth = this.stroke
+    //ctx.strokeStyle = this.color.darker().toString()
+    //ctx.stroke()
 };
 
 SymbolMorph.prototype.symbolWidth = function () {
@@ -556,13 +559,41 @@ SymbolMorph.prototype.symbolWidth = function () {
         return size * 1.75;
     case 'turnRight':
     case 'turnLeft':
-        return size / 3 * 2;
+        return size
     case 'loop':
-        return size * 2;
+        return size * 1.1;
     default:
         return size;
     }
 };
+
+SymbolMorph.prototype.flagSymbol = new Image();
+SymbolMorph.prototype.flagSymbol.src = "src/flag.svg";
+SymbolMorph.prototype.flagSymbolRed = new Image();
+SymbolMorph.prototype.flagSymbolRed.src = "src/flag-red.svg";
+SymbolMorph.prototype.stopSymbol = new Image();
+SymbolMorph.prototype.stopSymbol.src = "src/stop.svg";
+
+SymbolMorph.prototype.turnRightImage = new Image();
+SymbolMorph.prototype.turnRightImage.src = "src/rotate-right.svg";
+SymbolMorph.prototype.turnRightImageBlack = new Image();
+SymbolMorph.prototype.turnRightImageBlack.src = "src/rotate-right-black.svg";
+SymbolMorph.prototype.turnLeftImage = new Image();
+SymbolMorph.prototype.turnLeftImage.src = "src/rotate-left.svg";
+SymbolMorph.prototype.turnLeftImageBlack = new Image();
+SymbolMorph.prototype.turnLeftImageBlack.src = "src/rotate-left-black.svg";
+SymbolMorph.prototype.arrowImage = new Image();
+SymbolMorph.prototype.arrowImage.src = "src/arrow-button.svg";
+SymbolMorph.prototype.arrowImageBlack = new Image();
+SymbolMorph.prototype.arrowImageBlack.src = "src/arrow-button-black.svg";
+SymbolMorph.prototype.arrowOutImage = new Image();
+SymbolMorph.prototype.arrowOutImage.src = "src/arrow-outline.svg";
+SymbolMorph.prototype.arrowOutImageBlack = new Image();
+SymbolMorph.prototype.arrowOutImageBlack.src = "src/arrow-outline-black.svg";
+SymbolMorph.prototype.loopSymbol = new Image();
+SymbolMorph.prototype.loopSymbol.src = "src/repeat.svg";
+SymbolMorph.prototype.loopSymbolBlack = new Image();
+SymbolMorph.prototype.loopSymbolBlack.src = "src/repeat-black.svg";
 
 SymbolMorph.prototype.renderSymbolStop = function (ctx, color) {
     // draw a vertically centered square
@@ -1011,36 +1042,61 @@ SymbolMorph.prototype.renderSymbolPause = function (ctx, color) {
     // draw two parallel rectangles
     var w = this.symbolWidth() / 5,
         h = this.size;
-
     ctx.fillStyle = color.toString();
     ctx.fillRect(0, 0, w * 2, h);
     ctx.fillRect(w * 3, 0, w * 2, h);
 };
+SymbolMorph.prototype.drawImage = function (ctx, image) {
+    // I have a feeling that this might be turning into spagetti code...
+    var pr = !isRetinaEnabled() ? 1 : (window.devicePixelRatio || 1),
+    w = this.symbolWidth(),
+    h = this.size,
+    ow = image.width,
+    oh = image.height;
+  image.width = (ow / pr) * pr;
+  image.height = (oh / pr) * pr;
+  ctx.drawImage(
+    image, 0, 0, w, h
+  );
+  image.width = ow;
+  image.height = oh;
 
+}
 SymbolMorph.prototype.renderSymbolFlag = function (ctx, color) {
     // draw a flag
     var w = this.symbolWidth(),
         h = this.size,
         l = Math.max(w / 12, 1);
-
+        this.drawImage(ctx, this[color.eq(new Color(255, 0, 0)) ? 'flagSymbolRed' : 'flagSymbol'])
+    return
     ctx.lineWidth = l;
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(l / 2, 0);
     ctx.lineTo(l / 2, h);
     ctx.stroke();
-
+    
     ctx.lineWidth = h / 2;
     ctx.beginPath();
     ctx.moveTo(0, h / 4);
-    ctx.bezierCurveTo(
+    ctx.ellipse(
+        w / 2,
+        h / 2,
+        w / 24,
+        w / 12,
+        0,
+        0,
+        Math.PI
+
+    )
+    /*ctx.bezierCurveTo(
         w * 0.8,
         h / 4,
         w * 0.1,
         h * 0.5,
         w,
         h * 0.5
-    );
+    );*/
     ctx.stroke();
 };
 
@@ -1048,7 +1104,9 @@ SymbolMorph.prototype.renderSymbolOctagon = function (ctx, color) {
     // draw an octagon
     var side = this.symbolWidth(),
         vert = (side - (side * 0.383)) / 2;
-
+        this.drawImage(ctx, this.stopSymbol)
+        
+    return
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(vert, 0);
@@ -1136,7 +1194,8 @@ SymbolMorph.prototype.renderSymbolTurnRight = function (ctx, color) {
     var w = this.symbolWidth(),
         l = Math.max(w / 10, 1),
         r = w / 2;
-
+this.drawImage(ctx, this[color.eq(BLACK) ? 'turnRightImageBlack' : 'turnRightImage']);
+    return
     ctx.lineWidth = l;
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
@@ -1157,7 +1216,8 @@ SymbolMorph.prototype.renderSymbolTurnLeft = function (ctx, color) {
     var w = this.symbolWidth(),
         l = Math.max(w / 10, 1),
         r = w / 2;
-
+        this.drawImage(ctx, this[color.eq(BLACK) ? 'turnLeftImageBlack' : 'turnLeftImage']);
+    return
     ctx.lineWidth = l;
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
@@ -1285,25 +1345,22 @@ SymbolMorph.prototype.renderSymbolFlash = function (ctx, color) {
     // draw a lightning bolt
     var w = this.symbolWidth(),
         h = this.size,
-        w3 = w / 3,
-        h3 = h / 3,
-        off = h3 / 3;
+        w2 = w / 2,
+        h2 = h / 2
 
     ctx.fillStyle = color.toString();
+    var l = ctx.lineCap
+    ctx.lineCap = 'round'
     ctx.beginPath();
-    ctx.moveTo(w3, 0);
-    ctx.lineTo(0, h3);
-    ctx.lineTo(w3, h3);
-    ctx.lineTo(0, h3 * 2);
-    ctx.lineTo(w3, h3 * 2);
-    ctx.lineTo(0, h);
-    ctx.lineTo(w, h3 * 2 - off);
-    ctx.lineTo(w3 * 2, h3 * 2 - off);
-    ctx.lineTo(w, h3 - off);
-    ctx.lineTo(w3 * 2, h3 - off);
-    ctx.lineTo(w, 0);
+    ctx.moveTo(w2, 0);
+    ctx.lineTo(0,h2)
+    ctx.lineTo(w2,h/1.5)
+    ctx.lineTo(w2,h)
+    ctx.lineTo(w,h2)
+    ctx.lineTo(w2,h/3)
     ctx.closePath();
     ctx.fill();
+    ctx.lineCap = l
 };
 
 SymbolMorph.prototype.renderSymbolBrush = function (ctx, color) {
@@ -1624,7 +1681,8 @@ SymbolMorph.prototype.renderSymbolLoop = function (ctx, aColor) {
         w4 = w2 / 2,
         h2 = h / 2,
         l = Math.max(h / 10, 0.5);
-
+    this.drawImage(ctx, this[aColor.eq(BLACK) ? 'loopSymbolBlack' : 'loopSymbol']);
+    return
     ctx.lineWidth = l * 2;
     ctx.strokeStyle = aColor.toString();
     ctx.beginPath();
@@ -1691,7 +1749,8 @@ SymbolMorph.prototype.renderSymbolArrowUp = function (ctx, color) {
         h = this.size,
         n = w / 2,
         l = Math.max(w / 20, 0.5);
-
+        this.drawImage(ctx, this[color.eq(BLACK) ? 'arrowImageBlack' : 'arrowImage'])
+    return
     ctx.fillStyle = color.toString();
     ctx.lineWidth = l * 2;
     ctx.beginPath();
@@ -1712,7 +1771,8 @@ SymbolMorph.prototype.renderSymbolArrowUpOutline = function (ctx, color) {
         h = this.size,
         n = w / 2,
         l = Math.max(w / 20, 0.5);
-
+    this.drawImage(ctx, this[color.eq(BLACK) ? 'arrowOutImageBlack' : 'arrowOutImage'])
+    return
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
     ctx.beginPath();
@@ -1752,6 +1812,7 @@ SymbolMorph.prototype.renderSymbolArrowUpDownThin = function (ctx, color) {
         n = w / 3,
         l = Math.max(w / 20, 0.5);
 
+        
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
     ctx.beginPath();

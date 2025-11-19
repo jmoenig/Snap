@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-November-09';
+modules.widgets = "2025-March-17";
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -114,15 +114,15 @@ PushButtonMorph.uber = TriggerMorph.prototype;
 // PushButtonMorph preferences settings:
 
 PushButtonMorph.prototype.fontSize = 10;
-PushButtonMorph.prototype.fontStyle = 'sans-serif';
+PushButtonMorph.prototype.fontStyle = "sans-serif";
 PushButtonMorph.prototype.labelColor = BLACK;
 PushButtonMorph.prototype.labelShadowColor = WHITE;
 PushButtonMorph.prototype.labelShadowOffset = new Point(1, 1);
 
 PushButtonMorph.prototype.color = new Color(220, 220, 220);
 PushButtonMorph.prototype.pressColor = new Color(115, 180, 240);
-PushButtonMorph.prototype.highlightColor
-    = PushButtonMorph.prototype.pressColor.lighter(50);
+PushButtonMorph.prototype.highlightColor =
+  PushButtonMorph.prototype.pressColor.lighter(50);
 PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
 PushButtonMorph.prototype.outlineGradient = false;
 PushButtonMorph.prototype.contrast = 60;
@@ -134,369 +134,351 @@ PushButtonMorph.prototype.padding = 3;
 
 // PushButtonMorph instance creation:
 
-function PushButtonMorph(
-    target,
-    action,
-    labelString,
-    environment,
-    hint
-) {
-    this.init(
-        target,
-        action,
-        labelString,
-        environment,
-        hint
-    );
+function PushButtonMorph(target, action, labelString, environment, hint) {
+  this.init(target, action, labelString, environment, hint);
 }
 
 PushButtonMorph.prototype.init = function (
-    target,
-    action,
-    labelString,
-    environment,
-    hint
+  target,
+  action,
+  labelString,
+  environment,
+  hint
 ) {
-    // additional properties:
-    this.is3D = false; // for "flat" design exceptions
-    this.target = target || null;
-    this.action = action || null;
-    this.environment = environment || null;
-    this.labelString = labelString || null;
-    this.label = null;
-    this.labelMinExtent = ZERO;
-    this.hint = hint || null;
-    this.isDisabled = false;
-    this.hideable = true; // used for custom extensions
+  // additional properties:
+  this.is3D = false; // for "flat" design exceptions
+  this.target = target || null;
+  this.action = action || null;
+  this.environment = environment || null;
+  this.labelString = labelString || null;
+  this.label = null;
+  this.labelMinExtent = ZERO;
+  this.hint = hint || null;
+  this.isDisabled = false;
+  this.hideable = true; // used for custom extensions
 
-    // initialize inherited properties:
-    TriggerMorph.uber.init.call(this);
+  // initialize inherited properties:
+  TriggerMorph.uber.init.call(this);
 
-    // override inherited properites:
-    this.color = PushButtonMorph.prototype.color;
-    this.createLabel();
-    this.fixLayout();
-    this.rerender();
+  // override inherited properites:
+  this.color = PushButtonMorph.prototype.color;
+  this.createLabel();
+  this.fixLayout();
+  this.rerender();
 };
 
 // PushButtonMorph layout:
 
 PushButtonMorph.prototype.fixLayout = function () {
-    // make sure I at least encompass my label
-    if (this.label !== null) {
-        this.updateLabelColors();
-        var padding = this.padding * 2 + this.outline * 2 + this.edge * 2;
-        this.bounds.setWidth(
-            Math.max(this.label.width(), this.labelMinExtent.x) + padding
-        );
-        this.bounds.setHeight(
-            Math.max(
-                this.label instanceof StringMorph ?
-                    this.label.rawHeight() : this.label.height(),
-                this.labelMinExtent.y
-            ) + padding
-        );
-        this.label.setCenter(this.center());
-    }
+  // make sure I at least encompass my label
+  if (this.label !== null) {
+    this.updateLabelColors();
+    var padding = this.padding * 2 + this.outline * 2 + this.edge * 2;
+    this.bounds.setWidth(
+      Math.max(this.label.width(), this.labelMinExtent.x) + padding
+    );
+    this.bounds.setHeight(
+      Math.max(
+        this.label instanceof StringMorph
+          ? this.label.rawHeight()
+          : this.label.height(),
+        this.labelMinExtent.y
+      ) + padding
+    );
+    this.label.setCenter(this.center());
+  }
 };
 
 // PushButtonMorph events
 
 PushButtonMorph.prototype.mouseDownLeft = function () {
-    PushButtonMorph.uber.mouseDownLeft.call(this);
-    if (this.label) {
-        this.label.setCenter(this.center().add(1));
-    }
+  PushButtonMorph.uber.mouseDownLeft.call(this);
+  if (this.label) {
+    this.label.setCenter(this.center().add(1));
+  }
 };
 
 PushButtonMorph.prototype.mouseClickLeft = function () {
-    if (this.isDisabled) {return; }
-    PushButtonMorph.uber.mouseClickLeft.call(this);
-    if (this.label) {
-        this.label.setCenter(this.center());
-    }
+  if (this.isDisabled) {
+    return;
+  }
+  PushButtonMorph.uber.mouseClickLeft.call(this);
+  if (this.label) {
+    this.label.setCenter(this.center());
+  }
 };
 
 PushButtonMorph.prototype.mouseLeave = function () {
-    PushButtonMorph.uber.mouseLeave.call(this);
-    if (this.label) {
-        this.label.setCenter(this.center());
-    }
+  PushButtonMorph.uber.mouseLeave.call(this);
+  if (this.label) {
+    this.label.setCenter(this.center());
+  }
 };
 
 // PushButtonMorph drawing:
 
 PushButtonMorph.prototype.render = function (ctx) {
-    if (this.userState === 'highlight') {
-        this.drawOutline(ctx);
-        this.drawBackground(ctx, this.highlightColor);
-        this.drawEdges(
-            ctx,
-            this.highlightColor,
-            this.highlightColor.lighter(this.contrast),
-            this.highlightColor.darker(this.contrast)
-        );
-    } else if (this.userState === 'pressed') {
-        this.drawOutline(ctx);
-        this.drawBackground(ctx, this.pressColor);
-        this.drawEdges(
-            ctx,
-            this.pressColor,
-            this.pressColor.darker(this.contrast),
-            this.pressColor.lighter(this.contrast)
-        );
-    } else {
-        this.drawOutline(ctx);
-        this.drawBackground(ctx, this.color);
-        this.drawEdges(
-            ctx,
-            this.color,
-            this.color.lighter(this.contrast),
-            this.color.darker(this.contrast)
-        );
-    }
+  if (this.userState === "highlight") {
+    this.drawOutline(ctx);
+    this.drawBackground(ctx, this.highlightColor);
+    this.drawEdges(
+      ctx,
+      this.highlightColor,
+      this.highlightColor.lighter(this.contrast),
+      this.highlightColor.darker(this.contrast)
+    );
+  } else if (this.userState === "pressed") {
+    this.drawOutline(ctx);
+    this.drawBackground(ctx, this.pressColor);
+    this.drawEdges(
+      ctx,
+      this.pressColor,
+      this.pressColor.darker(this.contrast),
+      this.pressColor.lighter(this.contrast)
+    );
+  } else {
+    this.drawOutline(ctx);
+    this.drawBackground(ctx, this.color);
+    this.drawEdges(
+      ctx,
+      this.color,
+      this.color.lighter(this.contrast),
+      this.color.darker(this.contrast)
+    );
+  }
 };
 
 PushButtonMorph.prototype.drawOutline = function (ctx) {
-    var outlineStyle,
-        isFlat = MorphicPreferences.isFlat && !this.is3D;
+  var outlineStyle,
+    isFlat = MorphicPreferences.isFlat && !this.is3D;
 
-    if (!this.outline || isFlat) {return null; }
-    if (this.outlineGradient) {
-        outlineStyle = ctx.createLinearGradient(
-            0,
-            0,
-            0,
-            this.height()
-        );
-        outlineStyle.addColorStop(0, this.outlineColor.darker().toString());
-        outlineStyle.addColorStop(1, 'white');
-    } else {
-        outlineStyle = this.outlineColor.toString();
-    }
-    ctx.fillStyle = outlineStyle;
-    ctx.beginPath();
-    this.outlinePath(
-        ctx,
-        isFlat ? 0 : this.corner,
-        0
-    );
-    ctx.closePath();
-    ctx.fill();
+  if (!this.outline) {
+   return null
+  }
+  if (this.outlineGradient && !(!this.outline || isFlat)) {
+    outlineStyle = ctx.createLinearGradient(0, 0, 0, this.height());
+    outlineStyle.addColorStop(0, this.outlineColor.darker().toString());
+    outlineStyle.addColorStop(1, "white");
+  } else {
+    outlineStyle = isFlat ? this.outlineColor.lighter().toString() : this.outlineColor.toString();
+  }
+  ctx.fillStyle = outlineStyle;
+  ctx.beginPath();
+  this.outlinePath(ctx, this.corner, 0);
+  ctx.closePath();
+  ctx.fill();
 };
 
 PushButtonMorph.prototype.drawBackground = function (ctx, color) {
-    var isFlat = MorphicPreferences.isFlat && !this.is3D;
+  var isFlat = MorphicPreferences.isFlat && !this.is3D;
 
-    ctx.fillStyle = color.toString();
-    ctx.beginPath();
-    this.outlinePath(
-        ctx,
-        isFlat ? 0 : Math.max(this.corner - this.outline, 0),
-        this.outline
-    );
-    ctx.closePath();
-    ctx.fill();
-    ctx.lineWidth = this.outline;
+  ctx.fillStyle = color.toString();
+  ctx.beginPath();
+  this.outlinePath(
+    ctx,
+    Math.max(this.corner - this.outline, 0),
+    this.outline
+  );
+  ctx.closePath();
+  ctx.fill();
+  ctx.lineWidth = this.outline;
 };
 
 PushButtonMorph.prototype.drawEdges = function (
-    ctx,
-    color,
-    topColor,
-    bottomColor
+  ctx,
+  color,
+  topColor,
+  bottomColor
 ) {
-    if (MorphicPreferences.isFlat && !this.is3D) {return; }
-    var minInset = Math.max(this.corner, this.outline + this.edge),
-        w = this.width(),
-        h = this.height(),
-        gradient;
+  if (MorphicPreferences.isFlat && !this.is3D) {
+    return;
+  }
+  var minInset = Math.max(this.corner, this.outline + this.edge),
+    w = this.width(),
+    h = this.height(),
+    gradient;
 
-    // top:
-    gradient = ctx.createLinearGradient(
-        0,
-        this.outline,
-        0,
-        this.outline + this.edge
-    );
-    gradient.addColorStop(0, topColor.toString());
-    gradient.addColorStop(1, color.toString());
+  // top:
+  gradient = ctx.createLinearGradient(
+    0,
+    this.outline,
+    0,
+    this.outline + this.edge
+  );
+  gradient.addColorStop(0, topColor.toString());
+  gradient.addColorStop(1, color.toString());
 
-    ctx.strokeStyle = gradient;
-    ctx.lineCap = 'round';
-    ctx.lineWidth = this.edge;
-    ctx.beginPath();
-    ctx.moveTo(minInset, this.outline + this.edge / 2);
-    ctx.lineTo(w - minInset, this.outline + this.edge / 2);
-    ctx.stroke();
+  ctx.strokeStyle = gradient;
+  ctx.lineCap = "round";
+  ctx.lineWidth = this.edge;
+  ctx.beginPath();
+  ctx.moveTo(minInset, this.outline + this.edge / 2);
+  ctx.lineTo(w - minInset, this.outline + this.edge / 2);
+  ctx.stroke();
 
-    // top-left corner:
-    gradient = ctx.createRadialGradient(
-        this.corner,
-        this.corner,
-        Math.max(this.corner - this.outline - this.edge, 0),
-        this.corner,
-        this.corner,
-        Math.max(this.corner - this.outline, 0)
-    );
-    gradient.addColorStop(0, color.toString());
-    gradient.addColorStop(1, topColor.toString());
+  // top-left corner:
+  gradient = ctx.createRadialGradient(
+    this.corner,
+    this.corner,
+    Math.max(this.corner - this.outline - this.edge, 0),
+    this.corner,
+    this.corner,
+    Math.max(this.corner - this.outline, 0)
+  );
+  gradient.addColorStop(0, color.toString());
+  gradient.addColorStop(1, topColor.toString());
 
-    ctx.strokeStyle = gradient;
-    ctx.lineCap = 'round';
-    ctx.lineWidth = this.edge;
-    ctx.beginPath();
-    ctx.arc(
-        this.corner,
-        this.corner,
-        Math.max(this.corner - this.outline - this.edge / 2, 0),
-        radians(180),
-        radians(270),
-        false
-    );
-    ctx.stroke();
+  ctx.strokeStyle = gradient;
+  ctx.lineCap = "round";
+  ctx.lineWidth = this.edge;
+  ctx.beginPath();
+  ctx.arc(
+    this.corner,
+    this.corner,
+    Math.max(this.corner - this.outline - this.edge / 2, 0),
+    radians(180),
+    radians(270),
+    false
+  );
+  ctx.stroke();
 
-    // left:
-    gradient = ctx.createLinearGradient(
-        this.outline,
-        0,
-        this.outline + this.edge,
-        0
-    );
-    gradient.addColorStop(0, topColor.toString());
-    gradient.addColorStop(1, color.toString());
+  // left:
+  gradient = ctx.createLinearGradient(
+    this.outline,
+    0,
+    this.outline + this.edge,
+    0
+  );
+  gradient.addColorStop(0, topColor.toString());
+  gradient.addColorStop(1, color.toString());
 
-    ctx.strokeStyle = gradient;
-    ctx.lineCap = 'round';
-    ctx.lineWidth = this.edge;
-    ctx.beginPath();
-    ctx.moveTo(this.outline + this.edge / 2, minInset);
-    ctx.lineTo(this.outline + this.edge / 2, h - minInset);
-    ctx.stroke();
+  ctx.strokeStyle = gradient;
+  ctx.lineCap = "round";
+  ctx.lineWidth = this.edge;
+  ctx.beginPath();
+  ctx.moveTo(this.outline + this.edge / 2, minInset);
+  ctx.lineTo(this.outline + this.edge / 2, h - minInset);
+  ctx.stroke();
 
-    // bottom:
-    gradient = ctx.createLinearGradient(
-        0,
-        h - this.outline,
-        0,
-        h - this.outline - this.edge
-    );
-    gradient.addColorStop(0, bottomColor.toString());
-    gradient.addColorStop(1, color.toString());
+  // bottom:
+  gradient = ctx.createLinearGradient(
+    0,
+    h - this.outline,
+    0,
+    h - this.outline - this.edge
+  );
+  gradient.addColorStop(0, bottomColor.toString());
+  gradient.addColorStop(1, color.toString());
 
-    ctx.strokeStyle = gradient;
-    ctx.lineCap = 'round';
-    ctx.lineWidth = this.edge;
-    ctx.beginPath();
-    ctx.moveTo(minInset, h - this.outline - this.edge / 2);
-    ctx.lineTo(w - minInset, h - this.outline - this.edge / 2);
-    ctx.stroke();
+  ctx.strokeStyle = gradient;
+  ctx.lineCap = "round";
+  ctx.lineWidth = this.edge;
+  ctx.beginPath();
+  ctx.moveTo(minInset, h - this.outline - this.edge / 2);
+  ctx.lineTo(w - minInset, h - this.outline - this.edge / 2);
+  ctx.stroke();
 
-    // bottom-right corner:
-    gradient = ctx.createRadialGradient(
-        w - this.corner,
-        h - this.corner,
-        Math.max(this.corner - this.outline - this.edge, 0),
-        w - this.corner,
-        h - this.corner,
-        Math.max(this.corner - this.outline, 0)
-    );
-    gradient.addColorStop(0, color.toString());
-    gradient.addColorStop(1, bottomColor.toString());
+  // bottom-right corner:
+  gradient = ctx.createRadialGradient(
+    w - this.corner,
+    h - this.corner,
+    Math.max(this.corner - this.outline - this.edge, 0),
+    w - this.corner,
+    h - this.corner,
+    Math.max(this.corner - this.outline, 0)
+  );
+  gradient.addColorStop(0, color.toString());
+  gradient.addColorStop(1, bottomColor.toString());
 
-    ctx.strokeStyle = gradient;
-    ctx.lineCap = 'round';
-    ctx.lineWidth = this.edge;
-    ctx.beginPath();
-    ctx.arc(
-        w - this.corner,
-        h - this.corner,
-        Math.max(this.corner - this.outline - this.edge / 2, 0),
-        radians(0),
-        radians(90),
-        false
-    );
-    ctx.stroke();
+  ctx.strokeStyle = gradient;
+  ctx.lineCap = "round";
+  ctx.lineWidth = this.edge;
+  ctx.beginPath();
+  ctx.arc(
+    w - this.corner,
+    h - this.corner,
+    Math.max(this.corner - this.outline - this.edge / 2, 0),
+    radians(0),
+    radians(90),
+    false
+  );
+  ctx.stroke();
 
-    // right:
-    gradient = ctx.createLinearGradient(
-        w - this.outline,
-        0,
-        w - this.outline - this.edge,
-        0
-    );
-    gradient.addColorStop(0, bottomColor.toString());
-    gradient.addColorStop(1, color.toString());
+  // right:
+  gradient = ctx.createLinearGradient(
+    w - this.outline,
+    0,
+    w - this.outline - this.edge,
+    0
+  );
+  gradient.addColorStop(0, bottomColor.toString());
+  gradient.addColorStop(1, color.toString());
 
-    ctx.strokeStyle = gradient;
-    ctx.lineCap = 'round';
-    ctx.lineWidth = this.edge;
-    ctx.beginPath();
-    ctx.moveTo(w - this.outline - this.edge / 2, minInset);
-    ctx.lineTo(w - this.outline - this.edge / 2, h - minInset);
-    ctx.stroke();
+  ctx.strokeStyle = gradient;
+  ctx.lineCap = "round";
+  ctx.lineWidth = this.edge;
+  ctx.beginPath();
+  ctx.moveTo(w - this.outline - this.edge / 2, minInset);
+  ctx.lineTo(w - this.outline - this.edge / 2, h - minInset);
+  ctx.stroke();
 };
 
 PushButtonMorph.prototype.outlinePath = BoxMorph.prototype.outlinePath;
 
 PushButtonMorph.prototype.createLabel = function () {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
+  var shading = !MorphicPreferences.isFlat || this.is3D;
 
-    if (this.label !== null) {
-        this.label.destroy();
+  if (this.label !== null) {
+    this.label.destroy();
+  }
+  if (this.labelString instanceof SymbolMorph) {
+    this.label = this.labelString.fullCopy();
+    if (shading) {
+      this.label.shadowOffset = this.labelShadowOffset;
+      this.label.shadowColor = this.labelShadowColor;
     }
-    if (this.labelString instanceof SymbolMorph) {
-        this.label = this.labelString.fullCopy();
-        if (shading) {
-            this.label.shadowOffset = this.labelShadowOffset;
-            this.label.shadowColor = this.labelShadowColor;
-        }
-        this.label.color = this.labelColor;
-    } else {
-        this.label = new StringMorph(
-            localize(this.labelString),
-            this.fontSize,
-            this.fontStyle,
-            true,
-            false,
-            false,
-            shading ? this.labelShadowOffset : null,
-            this.labelShadowColor,
-            this.labelColor
-        );
-    }
-    this.add(this.label);
+    this.label.color = this.labelColor;
+  } else {
+    this.label = new StringMorph(
+      localize(this.labelString),
+      this.fontSize,
+      this.fontStyle,
+      true,
+      false,
+      false,
+      shading ? this.labelShadowOffset : null,
+      this.labelShadowColor,
+      this.labelColor
+    );
+  }
+  this.add(this.label);
 };
 
 PushButtonMorph.prototype.updateLabelColors = function () {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
-    if (this.label) {
-        this.label.color = this.labelColor;
-        this.label.fontSize = this.fontSize;
-        if (shading) {
-            this.label.shadowOffset = this.labelShadowOffset;
-            this.label.shadowColor = this.labelShadowColor;
-        }
-        this.label.fixLayout(true); // just me
+  var shading = !MorphicPreferences.isFlat || this.is3D;
+  if (this.label) {
+    this.label.color = this.labelColor;
+    this.label.fontSize = this.fontSize;
+    if (shading) {
+      this.label.shadowOffset = this.labelShadowOffset;
+      this.label.shadowColor = this.labelShadowColor;
     }
+    this.label.fixLayout(true); // just me
+  }
 };
 
 // PushButtonMorph states
 
 PushButtonMorph.prototype.disable = function () {
-    this.isDisabled = true;
-    this.forAllChildren(child =>
-        child.alpha = 0.3
-    );
-    this.rerender();
+  this.isDisabled = true;
+  this.forAllChildren((child) => (child.alpha = 0.3));
+  this.rerender();
 };
 
 PushButtonMorph.prototype.enable = function () {
-    this.isDisabled = false;
-    this.forAllChildren(child =>
-        child.alpha = 1
-    );
-    this.rerender();
+  this.isDisabled = false;
+  this.forAllChildren((child) => (child.alpha = 1));
+  this.rerender();
 };
 
 // ToggleButtonMorph ///////////////////////////////////////////////////////
@@ -521,32 +503,18 @@ ToggleButtonMorph.prototype.labelPressColor = null;
 // ToggleButtonMorph instance creation:
 
 function ToggleButtonMorph(
-    colors, // color overrides, <array>: [normal, highlight, pressed]
-    target,
-    action, // a toggle function
-    labelString,
-    query, // predicate/selector
-    environment,
-    hint,
-    minWidth, // <num> optional, if specified label will left-align
-    hasPreview, // <bool> show press color on left edge (e.g. category)
-    isPicture // treat label as picture, i.e. don't apply typography
+  colors, // color overrides, <array>: [normal, highlight, pressed]
+  target,
+  action, // a toggle function
+  labelString,
+  query, // predicate/selector
+  environment,
+  hint,
+  minWidth, // <num> optional, if specified label will left-align
+  hasPreview, // <bool> show press color on left edge (e.g. category)
+  isPicture // treat label as picture, i.e. don't apply typography
 ) {
-    this.init(
-        colors,
-        target,
-        action,
-        labelString,
-        query,
-        environment,
-        hint,
-        minWidth,
-        hasPreview,
-        isPicture
-    );
-}
-
-ToggleButtonMorph.prototype.init = function (
+  this.init(
     colors,
     target,
     action,
@@ -557,87 +525,101 @@ ToggleButtonMorph.prototype.init = function (
     minWidth,
     hasPreview,
     isPicture
+  );
+}
+
+ToggleButtonMorph.prototype.init = function (
+  colors,
+  target,
+  action,
+  labelString,
+  query,
+  environment,
+  hint,
+  minWidth,
+  hasPreview,
+  isPicture
 ) {
-    // additional properties:
-    this.state = false;
-    this.query = query || (() => true);
-    this.minWidth = minWidth || null;
-    this.hasPreview = hasPreview || false;
-    this.isPicture = isPicture || false;
-    this.hasNeutralBackground = false;
-    this.trueStateLabel = null;
+  // additional properties:
+  this.state = false;
+  this.query = query || (() => true);
+  this.minWidth = minWidth || null;
+  this.hasPreview = hasPreview || false;
+  this.isPicture = isPicture || false;
+  this.hasNeutralBackground = false;
+  this.trueStateLabel = null;
 
-    // initialize inherited properties:
-    ToggleButtonMorph.uber.init.call(
-        this,
-        target,
-        action,
-        labelString,
-        environment,
-        hint
-    );
+  // initialize inherited properties:
+  ToggleButtonMorph.uber.init.call(
+    this,
+    target,
+    action,
+    labelString,
+    environment,
+    hint
+  );
 
-    // override default colors if others are specified
-    if (colors) {
-        this.color = colors[0];
-        this.highlightColor = colors[1];
-        this.pressColor = colors[2];
-    }
+  // override default colors if others are specified
+  if (colors) {
+    this.color = colors[0];
+    this.highlightColor = colors[1];
+    this.pressColor = colors[2];
+  }
 
-    this.refresh();
-    this.rerender();
+  this.refresh();
+  this.rerender();
 };
 
 // ToggleButtonMorph events
 
 ToggleButtonMorph.prototype.mouseEnter = function () {
-    var contents = this.hint instanceof Function ? this.hint() : this.hint;
-    if (!this.state || this.hasNeutralBackground) {
-        this.userState = 'highlight';
-        this.rerender();
-    }
-    if (contents) {
-        this.bubbleHelp(contents);
-    }
+  var contents = this.hint instanceof Function ? this.hint() : this.hint;
+  if (!this.state || this.hasNeutralBackground) {
+    this.userState = "highlight";
+    this.rerender();
+  }
+  if (contents) {
+    this.bubbleHelp(contents);
+  }
 };
 
 ToggleButtonMorph.prototype.mouseLeave = function () {
-    if (!this.state || this.hasNeutralBackground) {
-        this.userState = 'normal';
-        this.rerender();
-    }
-    if (this.schedule) {
-        this.schedule.isActive = false;
-    }
-    if (this.hint) {
-        this.world().hand.destroyTemporaries();
-    }
+  if (!this.state || this.hasNeutralBackground) {
+    this.userState = "normal";
+    this.rerender();
+  }
+  if (this.schedule) {
+    this.schedule.isActive = false;
+  }
+  if (this.hint) {
+    this.world().hand.destroyTemporaries();
+  }
 };
 
 ToggleButtonMorph.prototype.mouseDownLeft = function () {
-    if (!this.state) {
-        this.userState = 'pressed';
-        this.rerender();
-    }
+  if (!this.state) {
+    this.userState = "pressed";
+    this.rerender();
+  }
 };
 
 ToggleButtonMorph.prototype.mouseClickLeft = function () {
-    if (!this.state) {
-        this.userState = 'highlight';
-        this.rerender();
-    }
-    this.trigger(); // allow me to be triggered again to force-update others
+  if (!this.state) {
+    this.userState = "highlight";
+    this.rerender();
+  }
+  this.trigger(); // allow me to be triggered again to force-update others
 };
 
 // ToggleButtonMorph action
 
 ToggleButtonMorph.prototype.trigger = function () {
-    ToggleButtonMorph.uber.trigger.call(this);
-    this.refresh();
+  ToggleButtonMorph.uber.trigger.call(this);
+  this.refresh();
 };
 
 ToggleButtonMorph.prototype.refresh = function () {
-/*
+  /*
     if query is a function:
     execute the query with target as environment (can be null)
     for lambdafied (inline) actions
@@ -646,287 +628,268 @@ ToggleButtonMorph.prototype.refresh = function () {
     treat it as function property of target and execute it
     for selector-like queries
 */
-    if (typeof this.query === 'function') {
-        this.state = this.query.call(this.target);
-    } else { // assume it's a String
-        this.state = this.target[this.query]();
+  if (typeof this.query === "function") {
+    this.state = this.query.call(this.target);
+  } else {
+    // assume it's a String
+    this.state = this.target[this.query]();
+  }
+  if (this.state) {
+    this.userState = "pressed";
+    if (this.labelPressColor) {
+      this.label.setColor(this.labelPressColor);
     }
-    if (this.state) {
-        this.userState = 'pressed';
-        if (this.labelPressColor) {
-            this.label.setColor(this.labelPressColor);
-        }
-        if (this.trueStateLabel) {
-            this.label.hide();
-            this.trueStateLabel.show();
-        }
-    } else {
-        this.userState = 'normal';
-        if (this.labelPressColor) {
-            this.label.setColor(this.labelColor);
-        }
-        if (this.trueStateLabel) {
-            this.label.show();
-            this.trueStateLabel.hide();
-        }
+    if (this.trueStateLabel) {
+      this.label.hide();
+      this.trueStateLabel.show();
     }
-    this.rerender();
+  } else {
+    this.userState = "normal";
+    if (this.labelPressColor) {
+      this.label.setColor(this.labelColor);
+    }
+    if (this.trueStateLabel) {
+      this.label.show();
+      this.trueStateLabel.hide();
+    }
+  }
+  this.rerender();
 };
 
 // ToggleButtonMorph layout:
 
 ToggleButtonMorph.prototype.fixLayout = function () {
-    if (this.label !== null) {
-        var padding = this.padding * 2 + this.outline * 2 + this.edge * 2,
-            lw;
+  if (this.label !== null) {
+    var padding = this.padding * 2 + this.outline * 2 + this.edge * 2,
+      lw;
 
-        this.updateLabelColors();
-        lw = Math.max(this.label.width(), this.labelMinExtent.x);
-        this.bounds.setWidth(this.minWidth ?
-                Math.max(this.minWidth, lw) + padding
-                    : lw + padding
-        );
-        this.bounds.setHeight(
-            Math.max(this.label instanceof StringMorph ?
-                    this.label.rawHeight() :
-                        this.label.height(), this.labelMinExtent.y) + padding
-        );
-        this.label.setCenter(this.center());
-        if (this.trueStateLabel) {
-            this.trueStateLabel.setCenter(this.center());
-        }
-        if (this.minWidth) { // left-align along my corner
-            this.label.setLeft(
-                this.left()
-                    + this.outline
-                    + this.edge
-                    + this.corner
-                    + this.padding
-            );
-        }
+    this.updateLabelColors();
+    lw = Math.max(this.label.width(), this.labelMinExtent.x);
+    this.bounds.setWidth(
+      this.minWidth ? Math.max(this.minWidth, lw) + padding : lw + padding
+    );
+    this.bounds.setHeight(
+      Math.max(
+        this.label instanceof StringMorph
+          ? this.label.rawHeight()
+          : this.label.height(),
+        this.labelMinExtent.y
+      ) + padding
+    );
+    this.label.setCenter(this.center());
+    if (this.trueStateLabel) {
+      this.trueStateLabel.setCenter(this.center());
     }
+    if (this.minWidth) {
+      // left-align along my corner
+      this.label.setLeft(
+        this.left() + this.outline + this.edge + this.corner + this.padding
+      );
+    }
+  }
 };
 
 // ToggleButtonMorph drawing
 
 ToggleButtonMorph.prototype.render = function (ctx) {
-/*
+  /*
     basically the same as inherited from PushButtonMorph, except for
     not inverting the pressed 3D-ish border (because it stays that way),
     and optionally coloring the left edge in the press-color, previewing
     the selection color (e.g. in the case of Snap palette-category
     selector. the latter is done in the drawEdges() method.
 */
-    switch (this.userState) {
-    case 'highlight':
-        this.drawOutline(ctx);
-        this.drawBackground(ctx, this.highlightColor);
-        this.drawEdges(
-            ctx,
-            this.highlightColor,
-            this.highlightColor.lighter(this.contrast),
-            this.highlightColor.darker(this.contrast)
-        );
-        break;
-    case 'pressed':
-        // note: don't invert the 3D-ish edges for 'pressed' state, because
-        // it will stay that way, and should not look inverted (or should it?)
-        this.drawOutline(ctx);
-        this.drawBackground(ctx, this.getPressRenderColor());
-        this.drawEdges(
-            ctx,
-            this.pressColor,
-            this.pressColor.lighter(40),
-            this.pressColor.darker(40)
-        );
-        break;
+  switch (this.userState) {
+    case "highlight":
+      this.drawOutline(ctx);
+      this.drawBackground(ctx, this.highlightColor);
+      this.drawEdges(
+        ctx,
+        this.highlightColor,
+        this.highlightColor.lighter(this.contrast),
+        this.highlightColor.darker(this.contrast)
+      );
+      break;
+    case "pressed":
+      // note: don't invert the 3D-ish edges for 'pressed' state, because
+      // it will stay that way, and should not look inverted (or should it?)
+      this.drawOutline(ctx);
+      this.drawBackground(ctx, this.getPressRenderColor());
+      this.drawEdges(
+        ctx,
+        this.pressColor,
+        this.pressColor.lighter(40),
+        this.pressColor.darker(40)
+      );
+      break;
     default:
-        this.drawOutline(ctx);
-        this.drawBackground(ctx, this.color);
-        this.drawEdges(
-            ctx,
-            this.color,
-            this.color.lighter(this.contrast),
-            this.color.darker(this.contrast)
-        );
-    }
+      this.drawOutline(ctx);
+      this.drawBackground(ctx, this.color);
+      this.drawEdges(
+        ctx,
+        this.color,
+        this.color.lighter(this.contrast),
+        this.color.darker(this.contrast)
+      );
+  }
 };
 
 ToggleButtonMorph.prototype.getPressRenderColor = function () {
-    // can be overridden by my children
-    return this.pressColor;
+  // can be overridden by my children
+  return this.pressColor;
 };
 
 ToggleButtonMorph.prototype.drawEdges = function (
+  ctx,
+  color,
+  topColor,
+  bottomColor
+) {
+  var gradient;
+
+  ToggleButtonMorph.uber.drawEdges.call(
+    this,
     ctx,
     color,
     topColor,
     bottomColor
-) {
-    var gradient;
+  );
 
-    ToggleButtonMorph.uber.drawEdges.call(
-        this,
-        ctx,
-        color,
-        topColor,
-        bottomColor
-    );
-
-    if (this.hasPreview) { // indicate the possible selection color
-        if (MorphicPreferences.isFlat && !this.is3D) {
-            ctx.fillStyle = this.pressColor.toString();
-            ctx.fillRect(
-                this.outline,
-                this.outline,
-                this.corner,
-                this.height() - this.outline * 2
-            );
-            return;
-        }
-        gradient = ctx.createLinearGradient(
-            0,
-            0,
-            this.corner,
-            0
-        );
-        gradient.addColorStop(0, this.pressColor.lighter(40).toString());
-        gradient.addColorStop(1, this.pressColor.darker(40).toString());
-        ctx.fillStyle = gradient; // this.pressColor.toString();
-        ctx.beginPath();
-        this.previewPath(
-            ctx,
-            Math.max(this.corner - this.outline, 0),
-            this.outline
-        );
-        ctx.closePath();
-        ctx.fill();
+  if (this.hasPreview) {
+    // indicate the possible selection color
+    if (MorphicPreferences.isFlat && !this.is3D) {
+      ctx.fillStyle = this.pressColor.toString();
+      ctx.fillRect(
+        this.outline,
+        this.outline,
+        this.corner,
+        this.height() - this.outline * 2
+      );
+      return;
     }
+    gradient = ctx.createLinearGradient(0, 0, this.corner, 0);
+    gradient.addColorStop(0, this.pressColor.lighter(40).toString());
+    gradient.addColorStop(1, this.pressColor.darker(40).toString());
+    ctx.fillStyle = gradient; // this.pressColor.toString();
+    ctx.beginPath();
+    this.previewPath(
+      ctx,
+      Math.max(this.corner - this.outline, 0),
+      this.outline
+    );
+    ctx.closePath();
+    ctx.fill();
+  }
 };
 
 ToggleButtonMorph.prototype.previewPath = function (ctx, radius, inset) {
-    var offset = radius + inset,
-        h = this.height();
+  var offset = radius + inset,
+    h = this.height();
 
-    // top left:
-    ctx.arc(
-        offset,
-        offset,
-        radius,
-        radians(-180),
-        radians(-90),
-        false
-    );
-    // bottom left:
-    ctx.arc(
-        offset,
-        h - offset,
-        radius,
-        radians(90),
-        radians(180),
-        false
-    );
+  // top left:
+  ctx.arc(offset, offset, radius, radians(-180), radians(-90), false);
+  // bottom left:
+  ctx.arc(offset, h - offset, radius, radians(90), radians(180), false);
 };
 
 ToggleButtonMorph.prototype.createLabel = function () {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
+  var shading = !MorphicPreferences.isFlat || this.is3D;
 
-    if (this.label !== null) {
-        this.label.destroy();
-    }
-    if (this.trueStateLabel !== null) {
-        this.trueStateLabel.destroy();
-    }
-    if (this.labelString instanceof Array && this.labelString.length === 2) {
-        if (this.labelString[0] instanceof SymbolMorph) {
-            this.label = this.labelString[0].fullCopy();
-            this.trueStateLabel = this.labelString[1].fullCopy();
-            if (!this.isPicture) {
-                this.label.shadowOffset = shading ?
-                        this.labelShadowOffset : ZERO;
-                this.label.shadowColor = this.labelShadowColor;
-                this.label.color = this.labelColor;
-                this.label.fixLayout();
-                this.label.rerender();
+  if (this.label !== null) {
+    this.label.destroy();
+  }
+  if (this.trueStateLabel !== null) {
+    this.trueStateLabel.destroy();
+  }
+  if (this.labelString instanceof Array && this.labelString.length === 2) {
+    if (this.labelString[0] instanceof SymbolMorph) {
+      this.label = this.labelString[0].fullCopy();
+      this.trueStateLabel = this.labelString[1].fullCopy();
+      if (!this.isPicture) {
+        this.label.shadowOffset = shading ? this.labelShadowOffset : ZERO;
+        this.label.shadowColor = this.labelShadowColor;
+        this.label.color = this.labelColor;
+        this.label.fixLayout();
+        this.label.rerender();
 
-                this.trueStateLabel.shadowOffset = shading ?
-                        this.labelShadowOffset : ZERO;
-                this.trueStateLabel.shadowColor = this.labelShadowColor;
-                this.trueStateLabel.color = this.labelColor;
-                this.trueStateLabel.fixLayout();
-                this.trueStateLabel.rerender();
-            }
-        } else if (this.labelString[0] instanceof Morph) {
-            this.label = this.labelString[0].fullCopy();
-            this.trueStateLabel = this.labelString[1].fullCopy();
-        } else {
-            this.label = new StringMorph(
-                localize(this.labelString[0]),
-                this.fontSize,
-                this.fontStyle,
-                true,
-                false,
-                false,
-                shading ? this.labelShadowOffset : null,
-                this.labelShadowColor,
-                this.labelColor
-            );
-            this.trueStateLabel = new StringMorph(
-                localize(this.labelString[1]),
-                this.fontSize,
-                this.fontStyle,
-                true,
-                false,
-                false,
-                shading ? this.labelShadowOffset : null,
-                this.labelShadowColor,
-                this.labelColor
-            );
-        }
+        this.trueStateLabel.shadowOffset = shading
+          ? this.labelShadowOffset
+          : ZERO;
+        this.trueStateLabel.shadowColor = this.labelShadowColor;
+        this.trueStateLabel.color = this.labelColor;
+        this.trueStateLabel.fixLayout();
+        this.trueStateLabel.rerender();
+      }
+    } else if (this.labelString[0] instanceof Morph) {
+      this.label = this.labelString[0].fullCopy();
+      this.trueStateLabel = this.labelString[1].fullCopy();
     } else {
-        if (this.labelString instanceof SymbolMorph) {
-            this.label = this.labelString.fullCopy();
-            if (!this.isPicture) {
-                this.label.shadowOffset = shading ?
-                        this.labelShadowOffset : ZERO;
-                this.label.shadowColor = this.labelShadowColor;
-                this.label.color = this.labelColor;
-                this.label.fixLayout();
-                this.label.rerender();
-            }
-        } else if (this.labelString instanceof Morph) {
-            this.label = this.labelString.fullCopy();
-        } else {
-            this.label = new StringMorph(
-                localize(this.labelString),
-                this.fontSize,
-                this.fontStyle,
-                true,
-                false,
-                false,
-                shading ? this.labelShadowOffset : ZERO,
-                this.labelShadowColor,
-                this.labelColor
-            );
-        }
+      this.label = new StringMorph(
+        localize(this.labelString[0]),
+        this.fontSize,
+        this.fontStyle,
+        true,
+        false,
+        false,
+        shading ? this.labelShadowOffset : null,
+        this.labelShadowColor,
+        this.labelColor
+      );
+      this.trueStateLabel = new StringMorph(
+        localize(this.labelString[1]),
+        this.fontSize,
+        this.fontStyle,
+        true,
+        false,
+        false,
+        shading ? this.labelShadowOffset : null,
+        this.labelShadowColor,
+        this.labelColor
+      );
     }
-    this.add(this.label);
-    if (this.trueStateLabel) {
-        this.add(this.trueStateLabel);
+  } else {
+    if (this.labelString instanceof SymbolMorph) {
+      this.label = this.labelString.fullCopy();
+      if (!this.isPicture) {
+        this.label.shadowOffset = shading ? this.labelShadowOffset : ZERO;
+        this.label.shadowColor = this.labelShadowColor;
+        this.label.color = this.labelColor;
+        this.label.fixLayout();
+        this.label.rerender();
+      }
+    } else if (this.labelString instanceof Morph) {
+      this.label = this.labelString.fullCopy();
+    } else {
+      this.label = new StringMorph(
+        localize(this.labelString),
+        this.fontSize,
+        this.fontStyle,
+        true,
+        false,
+        false,
+        shading ? this.labelShadowOffset : ZERO,
+        this.labelShadowColor,
+        this.labelColor
+      );
     }
+  }
+  this.add(this.label);
+  if (this.trueStateLabel) {
+    this.add(this.trueStateLabel);
+  }
 };
 
 ToggleButtonMorph.prototype.updateLabelColors = function () {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
-    ToggleButtonMorph.uber.updateLabelColors.call(this);
-    if (this.trueStateLabel) {
-        this.trueStateLabel.color = this.labelColor;
-        if (shading) {
-            this.trueStateLabel.shadowOffset = this.labelShadowOffset;
-            this.trueStateLabel.shadowColor = this.labelShadowColor;
-        }
-        this.trueStateLabel.fixLayout(true); // just me
+  var shading = !MorphicPreferences.isFlat || this.is3D;
+  ToggleButtonMorph.uber.updateLabelColors.call(this);
+  if (this.trueStateLabel) {
+    this.trueStateLabel.color = this.labelColor;
+    if (shading) {
+      this.trueStateLabel.shadowOffset = this.labelShadowOffset;
+      this.trueStateLabel.shadowColor = this.labelShadowColor;
     }
+    this.trueStateLabel.fixLayout(true); // just me
+  }
 };
 
 // TabMorph ///////////////////////////////////////////////////////
@@ -940,107 +903,102 @@ TabMorph.uber = ToggleButtonMorph.prototype;
 // TabMorph instance creation:
 
 function TabMorph(
-    colors, // color overrides, <array>: [normal, highlight, pressed]
-    target,
-    action, // a toggle function
-    labelString,
-    query, // predicate/selector
-    environment,
-    hint
+  colors, // color overrides, <array>: [normal, highlight, pressed]
+  target,
+  action, // a toggle function
+  labelString,
+  query, // predicate/selector
+  environment,
+  hint
 ) {
-    this.init(
-        colors,
-        target,
-        action,
-        labelString,
-        query,
-        environment,
-        hint
-    );
+  this.init(colors, target, action, labelString, query, environment, hint);
 }
 
 // TabMorph layout:
 
 TabMorph.prototype.fixLayout = function () {
-    if (this.label !== null) {
-        this.updateLabelColors();
-        this.setExtent(new Point(
-            this.label.width()
-                + this.padding * 2
-                + this.corner * 3
-                + this.edge * 2,
-            (this.label instanceof StringMorph ?
-                        this.label.rawHeight() : this.label.height())
-                + this.padding * 2
-                + this.edge
-        ));
-        this.label.setCenter(this.center());
-    }
+  if (this.label !== null) {
+    this.updateLabelColors();
+    this.setExtent(
+      new Point(
+        this.label.width() + this.padding * 2 + this.corner * 3 + this.edge * 2,
+        (this.label instanceof StringMorph
+          ? this.label.rawHeight()
+          : this.label.height()) +
+          this.padding * 2 +
+          this.edge
+      )
+    );
+    this.label.setCenter(this.center());
+  }
 };
 
 // TabMorph action:
 
 TabMorph.prototype.refresh = function () {
-    if (this.state) { // bring to front
-        if (this.parent) {
-            this.parent.add(this);
-        }
+  if (this.state) {
+    // bring to front
+    if (this.parent) {
+      this.parent.add(this);
     }
-    TabMorph.uber.refresh.call(this);
+  }
+  TabMorph.uber.refresh.call(this);
 };
 
 // TabMorph drawing:
 
 TabMorph.prototype.drawBackground = function (context, color) {
-    var w = this.width(),
-        h = this.height(),
-        c = this.corner;
+  var w = this.width(),
+    h = this.height(),
+    c = this.corner;
 
-    context.fillStyle = color.toString();
-    context.beginPath();
-    context.moveTo(0, h);
-    context.bezierCurveTo(c, h, c, 0, c * 2, 0);
-    context.lineTo(w - c * 2, 0);
-    context.bezierCurveTo(w - c, 0, w - c, h, w, h);
-    context.closePath();
-    context.fill();
+  context.fillStyle = color.toString();
+  context.beginPath();
+  context.moveTo(0, h);
+  context.bezierCurveTo(c, h, c, 0, c * 2, 0);
+  context.lineTo(w - c * 2, 0);
+  context.bezierCurveTo(w - c, 0, w - c, h, w, h);
+  context.closePath();
+  context.fill();
 };
 
 TabMorph.prototype.drawOutline = function () {
-    nop();
+  nop();
 };
 
 TabMorph.prototype.drawEdges = function (
-    context,
-    color,
-    topColor,
-    bottomColor
+  context,
+  color,
+  topColor,
+  bottomColor
 ) {
-    if (MorphicPreferences.isFlat && !this.is3D) {return; }
+  if (MorphicPreferences.isFlat && !this.is3D) {
+    return;
+  }
 
-    var w = this.width(),
-        h = this.height(),
-        c = this.corner,
-        e = this.edge,
-        eh = e / 2,
-        gradient;
+  var w = this.width(),
+    h = this.height(),
+    c = this.corner,
+    e = this.edge,
+    eh = e / 2,
+    gradient;
 
-    nop(color); // argument not needed here
+  nop(color); // argument not needed here
 
-    gradient = context.createLinearGradient(0, 0, w, 0);
-    gradient.addColorStop(0, topColor.toString());
-    gradient.addColorStop(1, bottomColor.toString());
+  gradient = context.createLinearGradient(0, 0, w, 0);
+  gradient.addColorStop(0, topColor.toString());
+  gradient.addColorStop(1, bottomColor.toString());
 
-    context.strokeStyle = gradient;
-    context.lineCap = 'round';
-    context.lineWidth = e;
+  context.strokeStyle = gradient;
+  context.lineCap = "round";
+  context.lineWidth = e;
 
-    context.beginPath();
-    context.moveTo(0, h + eh);
-    context.bezierCurveTo(c, h, c, 0, c * 2, eh);
-    context.lineTo(w - c * 2, eh);
-    context.bezierCurveTo(w - c, 0, w - c, h, w, h + eh);
-    context.stroke();
+  context.beginPath();
+  context.moveTo(0, h + eh);
+  context.bezierCurveTo(c, h, c, 0, c * 2, eh);
+  context.lineTo(w - c * 2, eh);
+  context.bezierCurveTo(w - c, 0, w - c, h, w, h + eh);
+  context.stroke();
 };
 
 // ToggleMorph ///////////////////////////////////////////////////////
@@ -1063,30 +1021,17 @@ ToggleMorph.uber = PushButtonMorph.prototype;
 // ToggleMorph instance creation:
 
 function ToggleMorph(
-    style, // 'checkbox' or 'radiobutton'
-    target,
-    action, // a toggle function
-    labelString,
-    query, // predicate/selector
-    environment,
-    hint,
-    element, // optional Morph or Canvas to display
-    builder // method which constructs the element (only for Morphs)
+  style, // 'checkbox' or 'radiobutton'
+  target,
+  action, // a toggle function
+  labelString,
+  query, // predicate/selector
+  environment,
+  hint,
+  element, // optional Morph or Canvas to display
+  builder // method which constructs the element (only for Morphs)
 ) {
-    this.init(
-        style,
-        target,
-        action,
-        labelString,
-        query,
-        environment,
-        hint,
-        element,
-        builder
-    );
-}
-
-ToggleMorph.prototype.init = function (
+  this.init(
     style,
     target,
     action,
@@ -1096,147 +1041,161 @@ ToggleMorph.prototype.init = function (
     hint,
     element,
     builder
-) {
-    // additional properties:
-    this.padding = 1;
-    style = style || 'checkbox';
-    this.corner = (style === 'checkbox' ?
-            0 : fontHeight(this.fontSize) / 2 + this.outline + this.padding);
-    this.state = false;
-    this.query = query || (() => true);
-    this.tick = null;
-    this.captionString = labelString || null;
-    this.labelAlignment = 'right';
-    this.element = element || null;
-    this.builder = builder || null;
-    this.toggleElement = null;
+  );
+}
 
-    // initialize inherited properties:
-    ToggleMorph.uber.init.call(
-        this,
-        target,
-        action,
-        (style === 'checkbox' ? '\u2713' : '\u25CF'),
-        environment,
-        hint
-    );
-    this.fixLayout();
-    this.refresh();
+ToggleMorph.prototype.init = function (
+  style,
+  target,
+  action,
+  labelString,
+  query,
+  environment,
+  hint,
+  element,
+  builder,
+  selectedColor
+) {
+  // additional properties:
+  this.padding = 1;
+  style = style || "checkbox";
+  this.corner =
+    style === "checkbox"
+      ? 0
+      : fontHeight(this.fontSize) / 2 + this.outline + this.padding;
+  this.state = false;
+  this.query = query || (() => true);
+  this.tick = null;
+  this.captionString = labelString || null;
+  this.labelAlignment = "right";
+  this.element = element || null;
+  this.builder = builder || null;
+  this.toggleElement = null;
+  this.selectedColor = selectedColor || this.color;
+
+  // initialize inherited properties:
+  ToggleMorph.uber.init.call(
+    this,
+    target,
+    action,
+    style === "checkbox" ? "\u2713" : "\u25CF",
+    environment,
+    hint
+  );
+  this.fixLayout();
+  this.refresh();
 };
 
 // ToggleMorph layout:
 
 ToggleMorph.prototype.fixLayout = function () {
-    var padding = this.padding * 2 + this.outline * 2,
-        y;
-    if (this.tick !== null) {
-        this.bounds.setHeight(this.tick.rawHeight() + padding);
-        this.bounds.setWidth(this.tick.width() + padding);
-        this.bounds.setWidth(Math.max(this.width(), this.height()));
-        this.bounds.setHeight(Math.max(this.width(), this.height()));
-        this.tick.setCenter(this.center());
-    }
-    if (this.state) {
-        this.tick.show();
+  var padding = this.padding * 2 + this.outline * 2,
+    y;
+  if (this.tick !== null) {
+    this.bounds.setHeight(this.tick.rawHeight() + padding);
+    this.bounds.setWidth(this.tick.width() + padding);
+    this.bounds.setWidth(Math.max(this.width(), this.height()));
+    this.bounds.setHeight(Math.max(this.width(), this.height()));
+    this.tick.setCenter(this.center());
+  }
+  if (this.state) {
+    this.tick.show();
+  } else {
+    this.tick.hide();
+  }
+  if (this.toggleElement && this.labelAlignment === "right") {
+    y = this.top() + (this.height() - this.toggleElement.height()) / 2;
+    this.toggleElement.setPosition(new Point(this.right() + padding, y));
+  }
+  if (this.label !== null) {
+    y = this.top() + (this.height() - this.label.height()) / 2;
+    if (this.labelAlignment === "right") {
+      this.label.setPosition(
+        new Point(
+          this.toggleElement
+            ? this.toggleElement instanceof ToggleElementMorph
+              ? this.toggleElement.right()
+              : this.toggleElement.right() + padding
+            : this.right() + padding,
+          y
+        )
+      );
     } else {
-        this.tick.hide();
+      this.label.setPosition(
+        new Point(this.left() - this.label.width() - padding, y)
+      );
     }
-    if (this.toggleElement && (this.labelAlignment === 'right')) {
-        y = this.top() + (this.height() - this.toggleElement.height()) / 2;
-        this.toggleElement.setPosition(new Point(
-            this.right() + padding,
-            y
-        ));
-    }
-    if (this.label !== null) {
-        y = this.top() + (this.height() - this.label.height()) / 2;
-        if (this.labelAlignment === 'right') {
-            this.label.setPosition(new Point(
-                this.toggleElement ?
-                        this.toggleElement instanceof ToggleElementMorph ?
-                                this.toggleElement.right()
-                                : this.toggleElement.right() + padding
-                        : this.right() + padding,
-                y
-            ));
-        } else {
-            this.label.setPosition(new Point(
-                this.left() - this.label.width() - padding,
-                y
-            ));
-        }
-    }
+  }
 };
 
 ToggleMorph.prototype.createLabel = function () {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
+  var shading = !MorphicPreferences.isFlat || this.is3D;
 
-    if (this.label === null) {
-        if (this.captionString) {
-            this.label = new TextMorph(
-                localize(this.captionString),
-                this.fontSize,
-                this.fontStyle,
-                true
-            );
-            this.add(this.label);
-        }
+  if (this.label === null) {
+    if (this.captionString) {
+      this.label = new TextMorph(
+        localize(this.captionString),
+        this.fontSize,
+        this.fontStyle,
+        true
+      );
+      this.add(this.label);
     }
-    if (this.tick === null) {
-        this.tick = new StringMorph(
-            localize(this.labelString),
-            this.fontSize,
-            this.fontStyle,
-            true,
-            false,
-            false,
-            shading ? new Point(1, 1) : null,
-            new Color(240, 240, 240)
+  }
+  if (this.tick === null) {
+    this.tick = new StringMorph(
+      localize(this.labelString),
+      this.fontSize,
+      this.fontStyle,
+      true,
+      false,
+      false,
+      shading ? new Point(1, 1) : null,
+      new Color(240, 240, 240)
+    );
+    this.add(this.tick);
+  }
+  if (this.toggleElement === null) {
+    if (this.element) {
+      if (this.element instanceof Morph) {
+        if (this.element.isTemplate) {
+          this.toggleElement = this.element;
+          if (!this.element.mouseDownLeft) {
+            this.element.mouseDownLeft = nop;
+          }
+        } else {
+          this.toggleElement = new ToggleElementMorph(
+            this.target,
+            this.action,
+            this.element,
+            this.query,
+            this.environment,
+            this.hint,
+            this.builder
+          );
+        }
+      } else if (this.element instanceof HTMLCanvasElement) {
+        this.toggleElement = new Morph();
+        this.toggleElement.isCachingImage = true;
+        this.toggleElement.bounds.setExtent(
+          new Point(this.element.width, this.element.height)
         );
-        this.add(this.tick);
+        this.toggleElement.cachedImage = this.element;
+      }
+      this.add(this.toggleElement);
     }
-    if (this.toggleElement === null) {
-        if (this.element) {
-            if (this.element instanceof Morph) {
-                if (this.element.isTemplate) {
-                    this.toggleElement = this.element;
-                    if (!this.element.mouseDownLeft) {
-                        this.element.mouseDownLeft = nop;
-                    }
-                } else {
-                    this.toggleElement = new ToggleElementMorph(
-                        this.target,
-                        this.action,
-                        this.element,
-                        this.query,
-                        this.environment,
-                        this.hint,
-                        this.builder
-                    );
-                }
-            } else if (this.element instanceof HTMLCanvasElement) {
-                this.toggleElement = new Morph();
-                this.toggleElement.isCachingImage = true;
-                this.toggleElement.bounds.setExtent(new Point(
-                    this.element.width,
-                    this.element.height
-                ));
-                this.toggleElement.cachedImage = this.element;
-            }
-            this.add(this.toggleElement);
-        }
-    }
+  }
 };
 
 // ToggleMorph action:
 
 ToggleMorph.prototype.trigger = function () {
-    ToggleMorph.uber.trigger.call(this);
-    this.refresh();
+  ToggleMorph.uber.trigger.call(this);
+  this.refresh();
 };
 
 ToggleMorph.prototype.refresh = function () {
-    /*
+  /*
     if query is a function:
     execute the query with target as environment (can be null)
     for lambdafied (inline) actions
@@ -1245,43 +1204,48 @@ ToggleMorph.prototype.refresh = function () {
     treat it as function property of target and execute it
     for selector-like queries
     */
-    if (typeof this.query === 'function') {
-        this.state = this.query.call(this.target);
-    } else { // assume it's a String
-        this.state = this.target[this.query]();
-    }
-    if (this.state) {
-        this.tick.show();
-    } else {
-        this.tick.hide();
-    }
-    if (this.toggleElement && this.toggleElement.refresh &&
-            !this.toggleElement.isToggleLabel) {
-        this.toggleElement.refresh();
-    }
+  if (typeof this.query === "function") {
+    this.state = this.query.call(this.target);
+  } else {
+    // assume it's a String
+    this.state = this.target[this.query]();
+  }
+  if (this.state) {
+    this.tick.show();
+  } else {
+    this.tick.hide();
+  }
+  if (
+    this.toggleElement &&
+    this.toggleElement.refresh &&
+    !this.toggleElement.isToggleLabel
+  ) {
+    this.toggleElement.refresh();
+  }
 };
 
 // ToggleMorph events
 
 ToggleMorph.prototype.mouseDownLeft = function () {
-    PushButtonMorph.uber.mouseDownLeft.call(this);
-    if (this.tick) {
-        this.tick.setCenter(this.center().add(1));
-    }
+  PushButtonMorph.uber.mouseDownLeft.call(this);
+  this.color = this.tick ? new Color(255,0,0) : new Color(255,255,0)
+  if (this.tick) {
+    this.tick.setCenter(this.center().add(1));
+  }
 };
 
 ToggleMorph.prototype.mouseClickLeft = function () {
-    PushButtonMorph.uber.mouseClickLeft.call(this);
-    if (this.tick) {
-        this.tick.setCenter(this.center());
-    }
+  PushButtonMorph.uber.mouseClickLeft.call(this);
+  if (this.tick) {
+    this.tick.setCenter(this.center());
+  }
 };
 
 ToggleMorph.prototype.mouseLeave = function () {
-    PushButtonMorph.uber.mouseLeave.call(this);
-    if (this.tick) {
-        this.tick.setCenter(this.center());
-    }
+  PushButtonMorph.uber.mouseLeave.call(this);
+  if (this.tick) {
+    this.tick.setCenter(this.center());
+  }
 };
 
 // ToggleElementMorph /////////////////////////////////////////////////////
@@ -1309,6 +1273,16 @@ ToggleElementMorph.prototype.inactiveColor = new Color(180, 180, 180);
 // ToggleElementMorph instance creation:
 
 function ToggleElementMorph(
+  target,
+  action,
+  element,
+  query,
+  environment,
+  hint,
+  builder,
+  labelString
+) {
+  this.init(
     target,
     action,
     element,
@@ -1317,161 +1291,141 @@ function ToggleElementMorph(
     hint,
     builder,
     labelString
-) {
-    this.init(
-        target,
-        action,
-        element,
-        query,
-        environment,
-        hint,
-        builder,
-        labelString
-    );
+  );
 }
 
 ToggleElementMorph.prototype.init = function (
-    target,
-    action,
-    element, // mandatory
-    query,
-    environment,
-    hint,
-    builder, // optional function name that rebuilds the element
-    labelString
+  target,
+  action,
+  element, // mandatory
+  query,
+  environment,
+  hint,
+  builder, // optional function name that rebuilds the element
+  labelString
 ) {
-    // additional properties:
-    this.target = target || null;
-    this.action = action || null;
-    this.element = element;
-    this.query = query || (() => true);
-    this.environment = environment || null;
-    this.hint = hint || null;
-    this.builder = builder || 'nop';
-    this.captionString = labelString || null;
-    this.labelAlignment = 'right';
-    this.state = false;
+  // additional properties:
+  this.target = target || null;
+  this.action = action || null;
+  this.element = element;
+  this.query = query || (() => true);
+  this.environment = environment || null;
+  this.hint = hint || null;
+  this.builder = builder || "nop";
+  this.captionString = labelString || null;
+  this.labelAlignment = "right";
+  this.state = false;
 
-    // initialize inherited properties:
-    TriggerMorph.uber.init.call(this);
+  // initialize inherited properties:
+  TriggerMorph.uber.init.call(this);
 
-    // override inherited properties:
-    this.color = element.color;
-    this.createLabel();
+  // override inherited properties:
+  this.color = element.color;
+  this.createLabel();
 };
 
 // ToggleElementMorph drawing:
 
 ToggleElementMorph.prototype.render = function (ctx) {
-    var shading = !MorphicPreferences.isFlat || this.is3D,
-        shadow = () => {
-            if (shading) {
-                this.element.addShadow(
-                    this.shadowOffset,
-                    this.userState === 'normal' ? 0 : this.shadowAlpha
-                );
-            }
-        };
-
-    this.color = this.element.color;
-    this.element.removeShadow();
-    this.element[this.builder]();
-    if (this.userState !== 'pressed') {
-        this.element.removeShadow();
-        this.element.setColor(this.inactiveColor);
-        this.element[this.builder](this.contrast);
-        if (this.userState === 'highlight') {
-            this.element.removeShadow();
-            this.element.setColor(this.color.lighter(this.contrast));
-            this.element[this.builder](this.contrast);
-        }
-    }
-    if (this.element.doWithAlpha) {
-        ctx.drawImage(
-            this.element.doWithAlpha(
-                1,
-                () => {
-                    shadow();
-                    return this.element.fullImage();
-                }
-            ),
-            0,
-            0
+  var shading = !MorphicPreferences.isFlat || this.is3D,
+    shadow = () => {
+      if (shading) {
+        this.element.addShadow(
+          this.shadowOffset,
+          this.userState === "normal" ? 0 : this.shadowAlpha
         );
-    } else {
-        shadow();
-        ctx.drawImage(this.element.fullImage(), 0, 0);
-    }
+      }
+    };
 
-    // reset element
+  this.color = this.element.color;
+  this.element.removeShadow();
+  this.element[this.builder]();
+  if (this.userState !== "pressed") {
     this.element.removeShadow();
-    this.element.setColor(this.color);
-    this.element[this.builder]();
+    this.element.setColor(this.inactiveColor);
+    this.element[this.builder](this.contrast);
+    if (this.userState === "highlight") {
+      this.element.removeShadow();
+      this.element.setColor(this.color.lighter(this.contrast));
+      this.element[this.builder](this.contrast);
+    }
+  }
+  if (this.element.doWithAlpha) {
+    ctx.drawImage(
+      this.element.doWithAlpha(1, () => {
+        shadow();
+        return this.element.fullImage();
+      }),
+      0,
+      0
+    );
+  } else {
+    shadow();
+    ctx.drawImage(this.element.fullImage(), 0, 0);
+  }
+
+  // reset element
+  this.element.removeShadow();
+  this.element.setColor(this.color);
+  this.element[this.builder]();
 };
 
 ToggleElementMorph.prototype.setColor = function (aColor) {
-    this.element.setColor(aColor);
-    this.fixLayout();
-    this.refresh();
+  this.element.setColor(aColor);
+  this.fixLayout();
+  this.refresh();
 };
 
 // ToggleElementMorph layout:
 
 ToggleElementMorph.prototype.fixLayout = function () {
-    this.element.fixLayout();
-    this.bounds.setExtent(
-        this.element.fullBounds().extent().add(
-            this.shadowBlur * 2
-        )
-    );
+  this.element.fixLayout();
+  this.bounds.setExtent(
+    this.element
+      .fullBounds()
+      .extent()
+      .add(this.shadowBlur * 2)
+  );
 };
 
 ToggleElementMorph.prototype.createLabel = function () {
-    var y;
-    if (this.captionString) {
-        this.label = new StringMorph(
-            this.captionString,
-            this.fontSize,
-            this.fontStyle,
-            true
-        );
-        this.add(this.label);
-        y = this.top() + (this.height() - this.label.height()) / 2;
-        if (this.labelAlignment === 'right') {
-            this.label.setPosition(new Point(
-                this.right(),
-                y
-            ));
-        } else {
-            this.label.setPosition(new Point(
-                this.left() - this.label.width(),
-                y
-            ));
-        }
+  var y;
+  if (this.captionString) {
+    this.label = new StringMorph(
+      this.captionString,
+      this.fontSize,
+      this.fontStyle,
+      true
+    );
+    this.add(this.label);
+    y = this.top() + (this.height() - this.label.height()) / 2;
+    if (this.labelAlignment === "right") {
+      this.label.setPosition(new Point(this.right(), y));
+    } else {
+      this.label.setPosition(new Point(this.left() - this.label.width(), y));
     }
+  }
 };
 
 // ToggleElementMorph action
 
-ToggleElementMorph.prototype.trigger
-    = ToggleButtonMorph.prototype.trigger;
+ToggleElementMorph.prototype.trigger = ToggleButtonMorph.prototype.trigger;
 
-ToggleElementMorph.prototype.refresh
-    = ToggleButtonMorph.prototype.refresh;
+ToggleElementMorph.prototype.refresh = ToggleButtonMorph.prototype.refresh;
 
 // ToggleElementMorph events
 
-ToggleElementMorph.prototype.mouseEnter
-    = ToggleButtonMorph.prototype.mouseEnter;
+ToggleElementMorph.prototype.mouseEnter =
+  ToggleButtonMorph.prototype.mouseEnter;
 
-ToggleElementMorph.prototype.mouseLeave
-    = ToggleButtonMorph.prototype.mouseLeave;
+ToggleElementMorph.prototype.mouseLeave =
+  ToggleButtonMorph.prototype.mouseLeave;
 
-ToggleElementMorph.prototype.mouseDownLeft
-    = ToggleButtonMorph.prototype.mouseDownLeft;
+ToggleElementMorph.prototype.mouseDownLeft =
+  ToggleButtonMorph.prototype.mouseDownLeft;
 
-ToggleElementMorph.prototype.mouseClickLeft
-    = ToggleButtonMorph.prototype.mouseClickLeft;
+ToggleElementMorph.prototype.mouseClickLeft =
+  ToggleButtonMorph.prototype.mouseClickLeft;
 
 // DialogBoxMorph /////////////////////////////////////////////////////
 
@@ -1494,18 +1448,16 @@ DialogBoxMorph.uber = Morph.prototype;
 
 DialogBoxMorph.prototype.fontSize = 12;
 DialogBoxMorph.prototype.titleFontSize = 14;
-DialogBoxMorph.prototype.fontStyle = 'sans-serif';
+DialogBoxMorph.prototype.fontStyle = "sans-serif";
 
 DialogBoxMorph.prototype.color = PushButtonMorph.prototype.color;
 DialogBoxMorph.prototype.titleTextColor = WHITE;
-DialogBoxMorph.prototype.titleBarColor
-    = PushButtonMorph.prototype.pressColor;
+DialogBoxMorph.prototype.titleBarColor = PushButtonMorph.prototype.pressColor;
 
 DialogBoxMorph.prototype.contrast = 40;
 
 DialogBoxMorph.prototype.corner = 12;
 DialogBoxMorph.prototype.padding = 14;
-DialogBoxMorph.prototype.stackPadding = null;
 DialogBoxMorph.prototype.titlePadding = 6;
 
 DialogBoxMorph.prototype.buttonContrast = 50;
@@ -1514,8 +1466,7 @@ DialogBoxMorph.prototype.buttonCorner = 12;
 DialogBoxMorph.prototype.buttonEdge = 6;
 DialogBoxMorph.prototype.buttonPadding = 0;
 DialogBoxMorph.prototype.buttonOutline = 3;
-DialogBoxMorph.prototype.buttonOutlineColor
-    = PushButtonMorph.prototype.color;
+DialogBoxMorph.prototype.buttonOutlineColor = PushButtonMorph.prototype.color;
 DialogBoxMorph.prototype.buttonOutlineGradient = true;
 
 DialogBoxMorph.prototype.instances = {}; // prevent multiple instances
@@ -1523,985 +1474,1238 @@ DialogBoxMorph.prototype.instances = {}; // prevent multiple instances
 // DialogBoxMorph instance creation:
 
 function DialogBoxMorph(target, action, environment) {
-    this.init(target, action, environment);
+  this.init(target, action, environment);
 }
 
 DialogBoxMorph.prototype.init = function (target, action, environment) {
-    // additional properties:
-    this.is3D = false; // for "flat" design exceptions
-    this.target = target || null;
-    this.action = action || null;
-    this.environment = environment || null;
-    this.key = null; // keep track of my purpose to prevent mulitple instances
-    this.nag = false; // enable nag boxes that cannot be closed by the user
+  // additional properties:
+  this.is3D = false; // for "flat" design exceptions
+  this.target = target || null;
+  this.action = action || null;
+  this.environment = environment || null;
+  this.key = null; // keep track of my purpose to prevent mulitple instances
+  this.nag = false; // enable nag boxes that cannot be closed by the user
 
-    this.labelString = null;
-    this.label = null;
-    this.head = null;
-    this.body = null;
-    this.buttons = null;
+  this.labelString = null;
+  this.label = null;
+  this.head = null;
+  this.body = null;
+  this.buttons = null;
 
-    // initialize inherited properties:
-    DialogBoxMorph.uber.init.call(this);
+  // initialize inherited properties:
+  DialogBoxMorph.uber.init.call(this);
 
-    // override inherited properites:
-    this.isDraggable = true;
-    this.noDropShadow = true;
-    this.fullShadowSource = false;
-    this.color = PushButtonMorph.prototype.color;
-    this.createLabel();
-    this.createButtons();
-    this.setExtent(new Point(300, 150));
+  // override inherited properites:
+  this.isDraggable = true;
+  this.noDropShadow = true;
+  this.fullShadowSource = false;
+  this.color = PushButtonMorph.prototype.color;
+  this.createLabel();
+  this.createButtons();
+  this.setExtent(new Point(300, 150));
 };
 
 // DialogBoxMorph ops
-DialogBoxMorph.prototype.inform = function (
-    title,
+DialogBoxMorph.prototype.inform = function (title, textString, world, pic) {
+  var txt = new TextMorph(
     textString,
-    world,
-    pic
-) {
-    var txt = new TextMorph(
-        textString,
-        this.fontSize,
-        this.fontStyle,
-        true,
-        false,
-        'center',
-        null,
-        null,
-        MorphicPreferences.isFlat ? null : new Point(1, 1),
-        WHITE
-    );
+    this.fontSize,
+    this.fontStyle,
+    true,
+    false,
+    "center",
+    null,
+    null,
+    MorphicPreferences.isFlat ? null : new Point(1, 1),
+    WHITE
+  );
 
-    if (!this.key) {
-        this.key = 'inform' + title + textString;
-    }
+  if (!this.key) {
+    this.key = "inform" + title + textString;
+  }
 
-    txt.enableLinks = true; // let the user click on URLs to open in new tab
-    this.labelString = title;
-    this.createLabel();
-    if (pic) {this.setPicture(pic); }
-    if (textString) {
-        this.addBody(txt);
-    }
-    this.addButton('ok', 'OK');
-    this.fixLayout();
-    this.popUp(world);
-    return this;
+  txt.enableLinks = true; // let the user click on URLs to open in new tab
+  this.labelString = title;
+  this.createLabel();
+  if (pic) {
+    this.setPicture(pic);
+  }
+  if (textString) {
+    this.addBody(txt);
+  }
+  this.addButton("ok", "OK");
+  this.fixLayout();
+  this.popUp(world);
+  return this;
 };
 
-DialogBoxMorph.prototype.askYesNo = function (
-    title,
+DialogBoxMorph.prototype.askYesNo = function (title, textString, world, pic) {
+  var txt = new TextMorph(
     textString,
-    world,
-    pic
-) {
-    var txt = new TextMorph(
-        textString,
-        this.fontSize,
-        this.fontStyle,
-        true,
-        false,
-        'center',
-        300, // fixed width word wrap
-        null,
-        MorphicPreferences.isFlat ? null : new Point(1, 1),
-        WHITE
-    );
+    this.fontSize,
+    this.fontStyle,
+    true,
+    false,
+    "center",
+    300, // fixed width word wrap
+    null,
+    MorphicPreferences.isFlat ? null : new Point(1, 1),
+    WHITE
+  );
 
-    if (!this.key) {
-        this.key = 'decide' + title + textString;
-    }
+  if (!this.key) {
+    this.key = "decide" + title + textString;
+  }
 
-    this.labelString = title;
-    this.createLabel();
-    if (pic) {this.setPicture(pic); }
-    this.addBody(txt);
-    this.addButton('ok', 'Yes');
-    this.addButton('cancel', 'No');
-    this.fixLayout();
-    this.popUp(world);
+  this.labelString = title;
+  this.createLabel();
+  if (pic) {
+    this.setPicture(pic);
+  }
+  this.addBody(txt);
+  this.addButton("ok", "Yes");
+  this.addButton("cancel", "No");
+  this.fixLayout();
+  this.popUp(world);
 };
 
 DialogBoxMorph.prototype.prompt = function (
-    title,
-    defaultString,
-    world,
-    pic,
-    choices, // optional dictionary for drop-down of choices
-    isReadOnly, // optional when using choices
-    isNumeric, // optional
-    sliderMin, // optional for numeric sliders
-    sliderMax, // optional for numeric sliders
-    sliderAction, // optional single-arg function for numeric slider
-    decimals = 2 // optional number of decimal digits
+  title,
+  defaultString,
+  world,
+  pic,
+  choices, // optional dictionary for drop-down of choices
+  isReadOnly, // optional when using choices
+  isNumeric, // optional
+  sliderMin, // optional for numeric sliders
+  sliderMax, // optional for numeric sliders
+  sliderAction, // optional single-arg function for numeric slider
+  decimals = 2 // optional number of decimal digits
 ) {
-    var sld,
-        head,
-        precision = Math.pow(10, decimals),
-        txt = new InputFieldMorph(
-            defaultString,
-            isNumeric || false, // numeric?
-            choices || null, // drop-down dict, optional
-            choices ? isReadOnly || false : false
-        );
-    txt.setWidth(250);
-    if (isNumeric) {
-        if (pic) {
-            head = new AlignmentMorph('column', this.padding);
-            pic.setPosition(head.position());
-            head.add(pic);
-        }
-        if (!isNil(sliderMin) && !isNil(sliderMax)) {
-            sld = new SliderMorph(
-                sliderMin * precision,
-                sliderMax * precision,
-                parseFloat(defaultString) * precision,
-                (sliderMax - sliderMin) / 10 * precision, // knob size
-                'horizontal'
-            );
-            sld.alpha = 1;
-            sld.color = this.color.lighter(50);
-            sld.setHeight(txt.height() * 0.7);
-            sld.setWidth(txt.width());
-            sld.action = num => {
-                if (sliderAction) {
-                    sliderAction(num / precision);
-                }
-                txt.setContents(num / precision);
-                txt.edit();
-            };
-            if (!head) {
-                head = new AlignmentMorph('column', this.padding);
-            }
-            head.add(sld);
-        }
-        if (head) {
-            head.fixLayout();
-            this.setPicture(head);
-            head.fixLayout();
-        }
-    } else {
-        if (pic) {this.setPicture(pic); }
+  var sld,
+    head,
+    precision = Math.pow(10, decimals),
+    txt = new InputFieldMorph(
+      defaultString,
+      isNumeric || false, // numeric?
+      choices || null, // drop-down dict, optional
+      choices ? isReadOnly || false : false
+    );
+  txt.setWidth(250);
+  if (isNumeric) {
+    if (pic) {
+      head = new AlignmentMorph("column", this.padding);
+      pic.setPosition(head.position());
+      head.add(pic);
     }
-
-    this.reactToChoice = function (inp) {
-        if (sld) {
-            sld.value = inp * precision;
-            sld.fixLayout();
-            sld.rerender();
-        }
+    if (!isNil(sliderMin) && !isNil(sliderMax)) {
+      sld = new SliderMorph(
+        sliderMin * precision,
+        sliderMax * precision,
+        parseFloat(defaultString) * precision,
+        ((sliderMax - sliderMin) / 10) * precision, // knob size
+        "horizontal"
+      );
+      sld.alpha = 1;
+      sld.color = this.color.lighter(50);
+      sld.setHeight(txt.height() * 0.7);
+      sld.setWidth(txt.width());
+      sld.action = (num) => {
         if (sliderAction) {
-            sliderAction(inp);
+          sliderAction(num / precision);
         }
-    };
-
-    txt.reactToInput = function () {
-        var inp = txt.getValue();
-        if (sld) {
-            inp = Math.max(inp, sliderMin);
-            sld.value = inp * precision;
-            sld.fixLayout();
-            sld.rerender();
-        }
-        if (sliderAction) {
-            sliderAction(inp);
-        }
-    };
-
-    this.labelString = title;
-    this.createLabel();
-
-    if (!this.key) {
-        this.key = 'prompt' + title + defaultString;
+        txt.setContents(num / precision);
+        txt.edit();
+      };
+      if (!head) {
+        head = new AlignmentMorph("column", this.padding);
+      }
+      head.add(sld);
     }
+    if (head) {
+      head.fixLayout();
+      this.setPicture(head);
+      head.fixLayout();
+    }
+  } else {
+    if (pic) {
+      this.setPicture(pic);
+    }
+  }
 
-    this.addBody(txt);
-    txt.fixLayout();
-    this.addButton('ok', 'OK');
-    this.addButton('cancel', 'Cancel');
-    this.fixLayout();
-    this.popUp(world);
+  this.reactToChoice = function (inp) {
+    if (sld) {
+      sld.value = inp * precision;
+      sld.fixLayout();
+      sld.rerender();
+    }
+    if (sliderAction) {
+      sliderAction(inp);
+    }
+  };
+
+  txt.reactToInput = function () {
+    var inp = txt.getValue();
+    if (sld) {
+      inp = Math.max(inp, sliderMin);
+      sld.value = inp * precision;
+      sld.fixLayout();
+      sld.rerender();
+    }
+    if (sliderAction) {
+      sliderAction(inp);
+    }
+  };
+
+  this.labelString = title;
+  this.createLabel();
+
+  if (!this.key) {
+    this.key = "prompt" + title + defaultString;
+  }
+
+  this.addBody(txt);
+  txt.fixLayout();
+  this.addButton("ok", "OK");
+  this.addButton("cancel", "Cancel");
+  this.fixLayout();
+  this.popUp(world);
 };
 
 DialogBoxMorph.prototype.promptCode = function (
-    title,
-    defaultString,
-    world,
-    pic,
-    instructions
+  title,
+  defaultString,
+  world,
+  pic,
+  instructions
 ) {
-    var frame = new ScrollFrameMorph(),
-        text = new TextMorph(defaultString || ''),
-        bdy = new AlignmentMorph('column', this.padding),
-        size = pic ? Math.max(pic.width, 400) : 400;
+  var frame = new ScrollFrameMorph(),
+    text = new TextMorph(defaultString || ""),
+    bdy = new AlignmentMorph("column", this.padding),
+    size = pic ? Math.max(pic.width, 400) : 400;
 
-    this.getInput = function () {
-        return text.text;
-    };
+  this.getInput = function () {
+    return text.text;
+  };
 
-    function remarkText(string) {
-        return new TextMorph(
-            localize(string),
-            10,
-            null, // style
-            false, // bold
-            null, // italic
-            null, // alignment
-            null, // width
-            null, // font name
-            MorphicPreferences.isFlat ? null : new Point(1, 1),
-            WHITE // shadowColor
-        );
-    }
+  function remarkText(string) {
+    return new TextMorph(
+      localize(string),
+      10,
+      null, // style
+      false, // bold
+      null, // italic
+      null, // alignment
+      null, // width
+      null, // font name
+      MorphicPreferences.isFlat ? null : new Point(1, 1),
+      WHITE // shadowColor
+    );
+  }
 
-    frame.padding = 6;
-    frame.setWidth(size);
-    frame.acceptsDrops = false;
-    frame.contents.acceptsDrops = false;
+  frame.padding = 6;
+  frame.setWidth(size);
+  frame.acceptsDrops = false;
+  frame.contents.acceptsDrops = false;
 
-    text.fontName = 'monospace';
-    text.fontStyle = 'monospace';
-    text.fontSize = 11;
-    text.setPosition(frame.topLeft().add(frame.padding));
-    text.enableSelecting();
-    text.isEditable = true;
+  text.fontName = "monospace";
+  text.fontStyle = "monospace";
+  text.fontSize = 11;
+  text.setPosition(frame.topLeft().add(frame.padding));
+  text.enableSelecting();
+  text.isEditable = true;
 
-    frame.setHeight(size / 4);
-    frame.fixLayout = nop;
-    frame.edge = InputFieldMorph.prototype.edge;
-    frame.fontSize = InputFieldMorph.prototype.fontSize;
-    frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
-    frame.contrast = InputFieldMorph.prototype.contrast;
-    frame.render = InputFieldMorph.prototype.render;
-    frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
+  frame.setHeight(size / 4);
+  frame.fixLayout = nop;
+  frame.edge = InputFieldMorph.prototype.edge;
+  frame.fontSize = InputFieldMorph.prototype.fontSize;
+  frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
+  frame.contrast = InputFieldMorph.prototype.contrast;
+  frame.render = InputFieldMorph.prototype.render;
+  frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-    frame.addContents(text);
-    text.fixLayout();
+  frame.addContents(text);
+  text.fixLayout();
 
-    if (pic) {this.setPicture(pic); }
+  if (pic) {
+    this.setPicture(pic);
+  }
 
-    this.labelString = title;
-    this.createLabel();
+  this.labelString = title;
+  this.createLabel();
 
-    if (!this.key) {
-        this.key = 'promptCode' + title + defaultString;
-    }
+  if (!this.key) {
+    this.key = "promptCode" + title + defaultString;
+  }
 
-    bdy.setColor(this.color);
-    bdy.add(frame);
-    if (instructions) {
-        bdy.add(remarkText(instructions));
-    }
-    bdy.fixLayout();
-    this.addBody(bdy);
+  bdy.setColor(this.color);
+  bdy.add(frame);
+  if (instructions) {
+    bdy.add(remarkText(instructions));
+  }
+  bdy.fixLayout();
+  this.addBody(bdy);
 
-    this.addButton('ok', 'OK');
-    this.addButton('cancel', 'Cancel');
-    this.fixLayout();
-    this.popUp(world);
-    text.edit();
+  this.addButton("ok", "OK");
+  this.addButton("cancel", "Cancel");
+  this.fixLayout();
+  this.popUp(world);
+  text.edit();
 };
 
 DialogBoxMorph.prototype.promptVector = function (
-    title,
-    point,
-    deflt,
-    xLabel,
-    yLabel,
-    world,
-    pic,
-    msg
+  title,
+  point,
+  deflt,
+  xLabel,
+  yLabel,
+  world,
+  pic,
+  msg
 ) {
-    var vec = new AlignmentMorph('row', 4),
-        xInp = new InputFieldMorph(point.x.toString(), true),
-        yInp = new InputFieldMorph(point.y.toString(), true),
-        xCol = new AlignmentMorph('column', 2),
-        yCol = new AlignmentMorph('column', 2),
-        inp = new AlignmentMorph('column', 2),
-        bdy = new AlignmentMorph('column', this.padding);
+  var vec = new AlignmentMorph("row", 4),
+    xInp = new InputFieldMorph(point.x.toString(), true),
+    yInp = new InputFieldMorph(point.y.toString(), true),
+    xCol = new AlignmentMorph("column", 2),
+    yCol = new AlignmentMorph("column", 2),
+    inp = new AlignmentMorph("column", 2),
+    bdy = new AlignmentMorph("column", this.padding);
 
-    function labelText(string) {
-        return new TextMorph(
-            localize(string),
-            10,
-            null, // style
-            false, // bold
-            null, // italic
-            null, // alignment
-            null, // width
-            null, // font name
-            MorphicPreferences.isFlat ? null : new Point(1, 1),
-            WHITE // shadowColor
-        );
-    }
+  function labelText(string) {
+    return new TextMorph(
+      localize(string),
+      10,
+      null, // style
+      false, // bold
+      null, // italic
+      null, // alignment
+      null, // width
+      null, // font name
+      MorphicPreferences.isFlat ? null : new Point(1, 1),
+      WHITE // shadowColor
+    );
+  }
 
-    inp.alignment = 'left';
-    inp.setColor(this.color);
-    bdy.setColor(this.color);
-    xCol.alignment = 'left';
-    xCol.setColor(this.color);
-    yCol.alignment = 'left';
-    yCol.setColor(this.color);
+  inp.alignment = "left";
+  inp.setColor(this.color);
+  bdy.setColor(this.color);
+  xCol.alignment = "left";
+  xCol.setColor(this.color);
+  yCol.alignment = "left";
+  yCol.setColor(this.color);
 
-    xCol.add(labelText(xLabel));
-    xCol.add(xInp);
-    yCol.add(labelText(yLabel));
-    yCol.add(yInp);
-    vec.add(xCol);
-    vec.add(yCol);
-    inp.add(vec);
+  xCol.add(labelText(xLabel));
+  xCol.add(xInp);
+  yCol.add(labelText(yLabel));
+  yCol.add(yInp);
+  vec.add(xCol);
+  vec.add(yCol);
+  inp.add(vec);
 
-    if (msg) {
-        bdy.add(labelText(msg));
-    }
+  if (msg) {
+    bdy.add(labelText(msg));
+  }
 
-    bdy.add(inp);
+  bdy.add(inp);
 
-    vec.fixLayout();
-    xCol.fixLayout();
-    yCol.fixLayout();
-    inp.fixLayout();
-    bdy.fixLayout();
+  vec.fixLayout();
+  xCol.fixLayout();
+  yCol.fixLayout();
+  inp.fixLayout();
+  bdy.fixLayout();
 
-    this.labelString = title;
-    this.createLabel();
-    if (pic) {this.setPicture(pic); }
+  this.labelString = title;
+  this.createLabel();
+  if (pic) {
+    this.setPicture(pic);
+  }
 
-    this.addBody(bdy);
+  this.addBody(bdy);
 
-    this.addButton('ok', 'OK');
+  this.addButton("ok", "OK");
 
-    if (deflt instanceof Point) {
-        this.addButton(
-            () => {
-                xInp.setContents(deflt.x.toString());
-                yInp.setContents(deflt.y.toString());
-            },
-            'Default'
+  if (deflt instanceof Point) {
+    this.addButton(() => {
+      xInp.setContents(deflt.x.toString());
+      yInp.setContents(deflt.y.toString());
+    }, "Default");
+  }
 
-        );
-    }
+  this.addButton("cancel", "Cancel");
+  this.fixLayout();
 
-    this.addButton('cancel', 'Cancel');
-    this.fixLayout();
+  this.edit = function () {
+    xInp.edit();
+  };
 
-    this.edit = function () {
-        xInp.edit();
-    };
+  this.getInput = function () {
+    return new Point(xInp.getValue(), yInp.getValue());
+  };
 
-    this.getInput = function () {
-        return new Point(xInp.getValue(), yInp.getValue());
-    };
+  if (!this.key) {
+    this.key = "vector" + title;
+  }
 
-    if (!this.key) {
-        this.key = 'vector' + title;
-    }
-
-    this.popUp(world);
+  this.popUp(world);
 };
 
-DialogBoxMorph.prototype.promptRGB = function (
-    title,
-    color,
-    world,
-    pic,
-    msg
-) {
-    var clr = new AlignmentMorph('row', 4),
-        iw = this.fontSize * 4,
-        rInp = new InputFieldMorph(color.r.toString(), true),
-        gInp = new InputFieldMorph(color.g.toString(), true),
-        bInp = new InputFieldMorph(color.b.toString(), true),
-        rCol = new AlignmentMorph('column', 2),
-        gCol = new AlignmentMorph('column', 2),
-        bCol = new AlignmentMorph('column', 2),
-        inp = new AlignmentMorph('column', 2),
-        bdy = new AlignmentMorph('column', this.padding);
+DialogBoxMorph.prototype.promptRGB = function (world, colorSlot) {
+  // var clr = new AlignmentMorph('row', 4),
+  //     iw = this.fontSize * 4,
+  //     rInp = new InputFieldMorph(color.r.toString(), true),
+  //     gInp = new InputFieldMorph(color.g.toString(), true),
+  //     bInp = new InputFieldMorph(color.b.toString(), true),
+  //     preview = new ColorSlotMorph(),
+  //     rCol = new AlignmentMorph('column', 2),
+  //     gCol = new AlignmentMorph('column', 2),
+  //     bCol = new AlignmentMorph('column', 2),
+  //     pCol = new AlignmentMorph('column', 2),
+  //     inp = new AlignmentMorph('column', 2),
+  //     bdy = new AlignmentMorph('column', this.padding);
 
-    function labelText(string) {
-        return new TextMorph(
-            localize(string),
-            10,
-            null, // style
-            false, // bold
-            null, // italic
-            null, // alignment
-            null, // width
-            null, // font name
-            MorphicPreferences.isFlat ? null : new Point(1, 1),
-            WHITE // shadowColor
-        );
-    }
+  // function labelText(string) {
+  //     return new TextMorph(
+  //         localize(string),
+  //         10,
+  //         null, // style
+  //         false, // bold
+  //         null, // italic
+  //         null, // alignment
+  //         null, // width
+  //         null, // font name
+  //         MorphicPreferences.isFlat ? null : new Point(1, 1),
+  //         WHITE // shadowColor
+  //     );
+  // }
 
-    function constrain(num) {
-        return Math.max(0, Math.min(num, 255));
-    }
+  // function constrain(num) {
+  //     return Math.max(0, Math.min(num, 255));
+  // }
 
-    rInp.contents().minWidth = iw;
-    rInp.setWidth(iw);
-    gInp.contents().minWidth = iw;
-    gInp.setWidth(iw);
-    bInp.contents().minWidth = iw;
-    bInp.setWidth(iw);
+  // rInp.contents().minWidth = iw;
+  // rInp.setWidth(iw);
+  // gInp.contents().minWidth = iw;
+  // gInp.setWidth(iw);
+  // bInp.contents().minWidth = iw;
+  // bInp.setWidth(iw);
 
-    inp.alignment = 'left';
-    inp.setColor(this.color);
-    bdy.setColor(this.color);
-    rCol.alignment = 'left';
-    rCol.setColor(this.color);
-    gCol.alignment = 'left';
-    gCol.setColor(this.color);
-    bCol.alignment = 'left';
-    bCol.setColor(this.color);
+  // inp.alignment = 'left';
+  // inp.setColor(this.color);
+  // bdy.setColor(this.color);
+  // rCol.alignment = 'left';
+  // rCol.setColor(this.color);
+  // gCol.alignment = 'left';
+  // gCol.setColor(this.color);
+  // bCol.alignment = 'left';
+  // bCol.setColor(this.color);
+  // pCol.alignment = 'left';
+  // pCol.setColor(this.color);
 
-    rCol.add(labelText('red'));
-    rCol.add(rInp);
-    gCol.add(labelText('green'));
-    gCol.add(gInp);
-    bCol.add(labelText('blue'));
-    bCol.add(bInp);
-    clr.add(rCol);
-    clr.add(gCol);
-    clr.add(bCol);
-    inp.add(clr);
+  // rCol.add(labelText('red'));
+  // rCol.add(rInp);
+  // gCol.add(labelText('green'));
+  // gCol.add(gInp);
+  // bCol.add(labelText('blue'));
+  // bCol.add(bInp);
+  // bCol.add(labelText('preview'));
+  // bCol.add(preview);
+  // clr.add(rCol);
+  // clr.add(gCol);
+  // clr.add(bCol);
+  // inp.add(clr);
 
-    if (msg) {
-        bdy.add(labelText(msg));
-    }
+  // if (msg) {
+  //     bdy.add(labelText(msg));
+  // }
 
-    bdy.add(inp);
+  // bdy.add(inp);
 
-    clr.fixLayout();
-    rCol.fixLayout();
-    gCol.fixLayout();
-    bCol.fixLayout();
-    inp.fixLayout();
-    bdy.fixLayout();
+  // clr.fixLayout();
+  // rCol.fixLayout();
+  // gCol.fixLayout();
+  // bCol.fixLayout();
+  // pCol.fixLayout();
+  // inp.fixLayout();
+  // bdy.fixLayout();
+  // this.processMouseMove = function (event) {
+  //     var pos = hand.position();
+  //     hand.setPosition(new Point(
+  //         event.pageX - posInDocument.x,
+  //         event.pageY - posInDocument.y
+  //     ));
+  //     preview.setColor(new Color(
+  //         constrain(rInp.getValue()),
+  //         constrain(gInp.getValue()),
+  //         constrain(bInp.getValue())
+  //     ));
+  // };
 
-    this.labelString = title;
-    this.createLabel();
-    if (pic) {this.setPicture(pic); }
+  // this.labelString = title;
+  // this.createLabel();
+  // if (pic) {this.setPicture(pic); }
 
-    this.addBody(bdy);
+  // this.addBody(bdy);
+  
+  // this.addButton('ok', 'OK');
+  
+  // this.addButton('cancel', 'Cancel');
+  // this.fixLayout();
+  
+  // this.edit = function () {
+  //     rInp.edit();
+  // };
 
-    this.addButton('ok', 'OK');
+  // this.getInput = function () {
+  //     return new Color(
+  //         constrain(rInp.getValue()),
+  //         constrain(gInp.getValue()),
+  //         constrain(bInp.getValue())
+  //     );
+  // };
+  
+  // if (!this.key) {
+    //     this.key = 'RGB' + title;
+    // }
+    
+  // this.popUp(world);
+  var dialog = this;
+  var editor = new Morph();
+  var oldColor = {...colorSlot.color},
+  hInp = new InputFieldMorph(colorSlot.color.hsl()[0]*100, true),
+ sInp = new InputFieldMorph(colorSlot.color.hsl()[1]*100, true),
+vInp = new InputFieldMorph(colorSlot.color.hsl()[2]*100, true);
+Object.setPrototypeOf(oldColor, colorSlot.evaluate().prototype);
 
-    this.addButton('cancel', 'Cancel');
-    this.fixLayout();
+hInp.contents().minWidth = this.fontSize * 3
 
-    this.edit = function () {
-        rInp.edit();
-    };
+hInp.setWidth(this.fontSize * 3)
+hInp.fixLayout()
+hInp.contents().minWidth = this.fontSize * 3
 
-    this.getInput = function () {
-        return new Color(
-            constrain(rInp.getValue()),
-            constrain(gInp.getValue()),
-            constrain(bInp.getValue())
-        );
-    };
+sInp.setWidth(this.fontSize * 3)
+sInp.fixLayout()
+sInp.contents().minWidth = this.fontSize * 3
 
-    if (!this.key) {
-        this.key = 'RGB' + title;
-    }
+vInp.setWidth(this.fontSize * 3)
+vInp.fixLayout()
+vInp.contents().minWidth = this.fontSize * 3
+  var hSlider = new SliderMorph(
+      0,
+      100,
+      colorSlot.color.hsv()[0] * 100,
+      0,
+      "horizontal",
+      new Color(0, 0, 0, 1)
+    );
+    var sSlider = new SliderMorph(
+        0,
+        100,
+        colorSlot.color.hsv()[1] * 100,
+        0,
+        "horizontal",
+        new Color(0, 0, 0, 1)
+    );
+    var vSlider = new SliderMorph(
+      0,
+      100,
+      colorSlot.color.hsv()[2] * 100,
+      0,
+      "horizontal",
+      new Color(0, 0, 0, 1)
+    );
+      var aSlider = new SliderMorph(
+    0,
+    100,
+    colorSlot.color.a * 100,
+    0,
+    "horizontal",
+    new Color(0, 0, 0, 1)
+  );
+  hInp.fixLayout()
+  sInp.fixLayout()
+  vInp.fixLayout()
+  hInp.rerender()
+  var result = new Morph();
+  result.bounds.origin = new Point(0, 62.5);
+  result.bounds.corner = new Point(100, 100);
+  result.color = {...colorSlot.evaluate()};
+  Object.setPrototypeOf(result.color, colorSlot.evaluate().prototype);
+  
+    
+  dialog.labelString = "Color Picker";
+  dialog.createLabel();
+  editor.alpha = 0;
+  editor.setExtent(new Point(162.5, 90));
+  hSlider.setExtent(new Point(100, 12.5));
+  hSlider.target = hInp.text
+  sSlider.target = sInp.text
+  vSlider.target = vInp.text
+  hSlider.action = function (value) {
+    result.color.set_hsv(hSlider.value / 100, sSlider.value / 100, vSlider.value / 100)
+    hInp.text = String(value);
+    hInp.children[0].text = String(value);
+    hInp.children[0].children[0].text = String(value);
+    hInp.rerender()
+    result.fixLayout();
+    
+    hSlider.fixLayout();
+    
+    hSlider.parent.fixLayout();
+    hSlider.parent.parent.fixLayout();
+  };
+  sSlider.setExtent(new Point(100, 12.5));
+  sSlider.action = function (value) {
+    result.color.set_hsv(hSlider.value / 100, sSlider.value / 100, vSlider.value / 100)
+    sInp.text = String(value);
+    sInp.children[0].text = String(value);
+    sInp.children[0].children[0].text = String(value);
+    sInp.rerender()
 
-    this.popUp(world);
+    result.fixLayout();
+    
+    sSlider.fixLayout();
+    
+    sSlider.parent.fixLayout();
+    sSlider.parent.parent.fixLayout();
+  };
+  vSlider.setExtent(new Point(100, 12.5));
+  vSlider.action = function (value) {
+    result.color.set_hsv(hSlider.value / 100, sSlider.value / 100, vSlider.value / 100)
+    vInp.text = String(value);
+    vInp.children[0].text = String(value);
+    vInp.children[0].children[0].text = String(value);
+    vInp.rerender()
+    result.fixLayout();
+    
+    vSlider.fixLayout();
+    
+    vSlider.parent.fixLayout();
+    vSlider.parent.parent.fixLayout();
+  };
+
+  aSlider.setExtent(new Point(100, 12.5));
+  aSlider.action = function (value) {
+    result.color.set_hsv(hSlider.value / 100, sSlider.value / 100, vSlider.value / 100)
+    result.fixLayout();
+    
+    aSlider.color = new Color(value * 2.55, value * 2.55, value * 2.55, 1);
+    aSlider.fixLayout();
+    
+    aSlider.parent.fixLayout();
+    aSlider.parent.parent.fixLayout();
+  };
+  
+  sSlider.fixLayout();
+  editor.add(hSlider);
+  editor.add(vSlider);
+  editor.add(sSlider);
+  //editor.add(aSlider);
+  hInp.children[0].reactToKeystroke = function (evt) {
+    setTimeout(() => {
+      hSlider.value = String(hInp.children[0].children[0].text)
+    hSlider.fixLayout(
+    )
+    this.rerender()
+    hSlider.action()
+    hInp.children[0].children[0].text = String(hSlider.value)
+    hInp.text = String(hInp.children[0].children[0].text)
+  }, 10)
+    
+  };
+  sInp.children[0].reactToKeystroke = function (evt) {
+    setTimeout(() => {
+      sSlider.value = sInp.children[0].children[0].text
+    sSlider.fixLayout()
+    this.rerender()
+    sSlider.action()
+    sInp.children[0].children[0].text = String(sSlider.value)
+    sInp.text = sInp.children[0].children[0].text
+  }, 10)
+    
+  };
+  vInp.children[0].reactToKeystroke = function (evt) {
+    setTimeout(() => {
+      vSlider.value = vInp.children[0].children[0].text
+    vSlider.fixLayout(
+    )
+    this.rerender()
+    vSlider.action()
+    vInp.children[0].children[0].text = String(vSlider.value)
+    vInp.text = vInp.children[0].children[0].text
+  }, 10)
+    
+  };
+  editor.add(hInp);
+  editor.add(sInp);
+  editor.add(vInp);
+  
+  hInp.bounds.origin = new Point(100, 0);
+  sInp.bounds.origin = new Point(100, 20);
+  vInp.bounds.origin = new Point(100, 40);
+  hInp.fixLayout()
+  sInp.fixLayout()
+  vInp.fixLayout()
+  hSlider.bounds.origin = new Point(0, 5);
+  hSlider.bounds.corner = new Point(
+    hSlider.bounds.origin.x + 100,
+    hSlider.bounds.origin.y + 12.5
+  );
+  hSlider.fixLayout()
+  sSlider.bounds.origin = new Point(0, 25);
+  sSlider.bounds.corner = new Point(
+    sSlider.bounds.origin.x + 100,
+    sSlider.bounds.origin.y + 12.5
+  );
+  sSlider.fixLayout();
+  vSlider.bounds.origin = new Point(0, 45);
+  vSlider.bounds.corner = new Point(
+    vSlider.bounds.origin.x + 100,
+    vSlider.bounds.origin.y + 12.5
+  );
+  vSlider.fixLayout();
+  aSlider.bounds.origin = new Point(0, 65);
+  aSlider.bounds.corner = new Point(
+    aSlider.bounds.origin.x + 100,
+    aSlider.bounds.origin.y + 12.5
+  );
+  aSlider.fixLayout();
+  
+  
+  result.fixLayout();
+  editor.add(result);
+  
+  dialog.addBody(editor);
+  dialog.addButton(function () {
+    colorSlot.color = result.color;
+    colorSlot.color = result.color
+    colorSlot.fixLayout()
+    colorSlot.rerender()
+    this.destroy();
+  }, "OK");
+  dialog.addButton(function () {
+    colorSlot.color = oldColor;
+
+    this.destroy();
+  }, "Cancel");
+  dialog.fixLayout();
+
+  dialog.getInput = function () {
+    return new Color(
+      constrain(hSlider.value),
+      constrain(sSlider.value),
+      constrain(vSlider.value),
+      constrain(aSlider.value)
+    );
+  };
+  this.getInput = function () {
+    return new Color(
+      constrain(hSlider.value),
+      constrain(sSlider.value),
+      constrain(vSlider.value),
+      constrain(aSlider.value)
+    );
+  };
+  
+  dialog.popUp(world);
 };
 
 DialogBoxMorph.prototype.promptCategory = function (
-    title,
-    name,
-    color,
-    world,
-    pic,
-    msg
+  title,
+  name,
+  color,
+  world,
+  pic,
+  msg
 ) {
-    var row = new AlignmentMorph('row', 4),
-        field = new InputFieldMorph(name),
-        picker = new BoxMorph(2, 1),
-        inp = new AlignmentMorph('column', 2),
-        bdy = new AlignmentMorph('column', this.padding),
-        side;
+  var row = new AlignmentMorph("row", 4),
+    field = new InputFieldMorph(name),
+    picker = new BoxMorph(2, 1),
+    inp = new AlignmentMorph("column", 2),
+    bdy = new AlignmentMorph("column", this.padding),
+    side;
 
-    function labelText(string) {
-        return new TextMorph(
-            localize(string),
-            10,
-            null, // style
-            false, // bold
-            null, // italic
-            null, // alignment
-            null, // width
-            null, // font name
-            MorphicPreferences.isFlat ? null : new Point(1, 1),
-            WHITE // shadowColor
-        );
-    }
+  function labelText(string) {
+    return new TextMorph(
+      localize(string),
+      10,
+      null, // style
+      false, // bold
+      null, // italic
+      null, // alignment
+      null, // width
+      null, // font name
+      MorphicPreferences.isFlat ? null : new Point(1, 1),
+      WHITE // shadowColor
+    );
+  }
 
-    field.setWidth(160);
-    side = field.height() * 0.8;
-    picker.setExtent(new Point(side, side));
-    picker.setColor(color);
+  field.setWidth(160);
+  side = field.height() * 0.8;
+  picker.setExtent(new Point(side, side));
+  picker.setColor(color);
 
-    picker.mouseClickLeft = () => {
-        var hand = world.hand,
-            posInDocument = getDocumentPositionOf(world.worldCanvas),
-            mouseMoveBak = hand.processMouseMove,
-            mouseDownBak = hand.processMouseDown,
-            mouseUpBak = hand.processMouseUp,
-            pal = new ColorPaletteMorph(null, new Point(160, 100));
+  picker.mouseClickLeft = () => {
+    var hand = world.hand,
+      posInDocument = getDocumentPositionOf(world.worldCanvas),
+      mouseMoveBak = hand.processMouseMove,
+      mouseDownBak = hand.processMouseDown,
+      mouseUpBak = hand.processMouseUp,
+      pal = new ColorPaletteMorph(null, new Point(160, 100));
 
-        world.add(pal);
-        pal.setPosition(picker.topRight().add(new Point(this.edge,0)));
+    world.add(pal);
+    pal.setPosition(picker.topRight().add(new Point(this.edge, 0)));
 
-        hand.processMouseMove = (event) => {
-            var clr = world.getGlobalPixelColor(hand.position());
-            hand.setPosition(new Point(
-                event.pageX - posInDocument.x,
-                event.pageY - posInDocument.y
-            ));
-            if (!clr.a) {
-                // ignore transparent,
-                // needed for retina-display support
-                return;
-            }
-            picker.setColor(clr);
-        };
-
-        hand.processMouseDown = nop;
-
-        hand.processMouseUp = () => {
-            pal.destroy();
-            hand.processMouseMove = mouseMoveBak;
-            hand.processMouseDown = mouseDownBak;
-            hand.processMouseUp = mouseUpBak;
-        };
+    hand.processMouseMove = (event) => {
+      var clr = world.getGlobalPixelColor(hand.position());
+      hand.setPosition(
+        new Point(event.pageX - posInDocument.x, event.pageY - posInDocument.y)
+      );
+      if (!clr.a) {
+        // ignore transparent,
+        // needed for retina-display support
+        return;
+      }
+      picker.setColor(clr);
     };
 
-    picker.mouseClickRight = () => {
-        new DialogBoxMorph(
-            this,
-            (clr) => picker.setColor(clr),
-            this
-        ).promptRGB(
-            "Category color",
-            picker.color,
-            this.world(),
-            null, // pic
-            null // msg
-        );
+    hand.processMouseDown = nop;
+
+    hand.processMouseUp = () => {
+      pal.destroy();
+      hand.processMouseMove = mouseMoveBak;
+      hand.processMouseDown = mouseDownBak;
+      hand.processMouseUp = mouseUpBak;
     };
+  };
 
-    inp.alignment = 'left';
-    inp.setColor(this.color);
-    bdy.setColor(this.color);
-    row.setColor(this.color);
+  picker.mouseClickRight = () => {
+    new DialogBoxMorph(this, (clr) => picker.setColor(clr), this).promptRGB(
+      "Category color",
+      picker.color,
+      this.world(),
+      null, // pic
+      null // msg
+    );
+  };
 
-    row.add(field);
-    row.add(picker);
-    inp.add(row);
+  inp.alignment = "left";
+  inp.setColor(this.color);
+  bdy.setColor(this.color);
+  row.setColor(this.color);
 
-    if (msg) {
-        bdy.add(labelText(msg));
-    }
+  row.add(field);
+  row.add(picker);
+  inp.add(row);
 
-    bdy.add(inp);
+  if (msg) {
+    bdy.add(labelText(msg));
+  }
 
-    row.fixLayout();
-    field.fixLayout();
-    picker.fixLayout();
-    inp.fixLayout();
-    bdy.fixLayout();
+  bdy.add(inp);
 
-    this.labelString = title;
-    this.createLabel();
-    if (pic) {this.setPicture(pic); }
+  row.fixLayout();
+  field.fixLayout();
+  picker.fixLayout();
+  inp.fixLayout();
+  bdy.fixLayout();
 
-    this.addBody(bdy);
+  this.labelString = title;
+  this.createLabel();
+  if (pic) {
+    this.setPicture(pic);
+  }
 
-    this.addButton('ok', 'OK');
+  this.addBody(bdy);
 
-    this.addButton('cancel', 'Cancel');
-    this.fixLayout();
+  this.addButton("ok", "OK");
 
-    this.edit = function () {
-        field.edit();
+  this.addButton("cancel", "Cancel");
+  this.fixLayout();
+
+  this.edit = function () {
+    field.edit();
+  };
+
+  this.getInput = function () {
+    return {
+      name: field.getValue(),
+      color: picker.color.copy(),
     };
+  };
 
-    this.getInput = function () {
-        return {
-            name: field.getValue(),
-            color: picker.color.copy()
-        };
-    };
+  if (!this.key) {
+    this.key = "category" + title;
+  }
 
-    if (!this.key) {
-        this.key = 'category' + title;
-    }
-
-    this.popUp(world);
+  this.popUp(world);
 };
 
 DialogBoxMorph.prototype.promptCredentials = function (
-    title,
-    purpose,
-    tosURL,
-    tosLabel,
-    prvURL,
-    prvLabel,
-    checkBoxLabel,
-    world,
-    pic,
-    msg
+  title,
+  purpose,
+  tosURL,
+  tosLabel,
+  prvURL,
+  prvLabel,
+  checkBoxLabel,
+  world,
+  pic,
+  msg
 ) {
-    var usr = new InputFieldMorph(),
-        bmn,
-        byr,
-        emlLabel,
-        eml = new InputFieldMorph(),
-        pw1 = new InputFieldMorph(),
-        pw2 = new InputFieldMorph(),
-        opw = new InputFieldMorph(),
-        agree = false,
-        chk,
-        dof = new AlignmentMorph('row', 4),
-        mCol = new AlignmentMorph('column', 2),
-        yCol = new AlignmentMorph('column', 2),
-        inp = new AlignmentMorph('column', 2),
-        lnk = new AlignmentMorph('row', 4),
-        bdy = new AlignmentMorph('column', this.padding),
-        years = {},
-        currentYear = new Date().getFullYear(),
-        firstYear = currentYear - 20,
-        myself = this;
+  var usr = new InputFieldMorph(),
+    bmn,
+    byr,
+    emlLabel,
+    eml = new InputFieldMorph(),
+    pw1 = new InputFieldMorph(),
+    pw2 = new InputFieldMorph(),
+    opw = new InputFieldMorph(),
+    agree = false,
+    chk,
+    dof = new AlignmentMorph("row", 4),
+    mCol = new AlignmentMorph("column", 2),
+    yCol = new AlignmentMorph("column", 2),
+    inp = new AlignmentMorph("column", 2),
+    lnk = new AlignmentMorph("row", 4),
+    bdy = new AlignmentMorph("column", this.padding),
+    years = {},
+    currentYear = new Date().getFullYear(),
+    firstYear = currentYear - 20,
+    myself = this;
 
-    function labelText(string) {
-        return new TextMorph(
-            localize(string),
-            10,
-            null, // style
-            false, // bold
-            null, // italic
-            null, // alignment
-            null, // width
-            null, // font name
-            MorphicPreferences.isFlat ? null : new Point(1, 1),
-            WHITE // shadowColor
-        );
-    }
-
-    function linkButton(label, url) {
-        var btn = new PushButtonMorph(
-            myself,
-            () => window.open(url),
-            '  ' + localize(label) + '  '
-        );
-        btn.fontSize = 10;
-        btn.corner = myself.buttonCorner;
-        btn.edge = myself.buttonEdge;
-        btn.outline = myself.buttonOutline;
-        btn.outlineColor = myself.buttonOutlineColor;
-        btn.outlineGradient = myself.buttonOutlineGradient;
-        btn.padding = myself.buttonPadding;
-        btn.contrast = myself.buttonContrast;
-        btn.fixLayout();
-        return btn;
-    }
-
-    function age() {
-        var today = new Date().getFullYear() + new Date().getMonth() / 12,
-            year = +byr.getValue() || 0,
-            monthName = bmn.getValue(),
-            month,
-            birthday;
-        if (monthName instanceof Array) { // translatable
-            monthName = monthName[0];
-        }
-        if (isNaN(year)) {
-            year = 0;
-        }
-        month = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December'
-        ].indexOf(monthName);
-        if (isNaN(month)) {
-            month = 0;
-        }
-        birthday = year + month / 12;
-        return today - birthday;
-    }
-
-    bmn = new InputFieldMorph(
-        null, // text
-        false, // numeric?
-        {
-            'January' : ['January'],
-            'February' : ['February'],
-            'March' : ['March'],
-            'April' : ['April'],
-            'May' : ['May'],
-            'June' : ['June'],
-            'July' : ['July'],
-            'August' : ['August'],
-            'September' : ['September'],
-            'October' : ['October'],
-            'November' : ['November'],
-            'December' : ['December']
-        },
-        true // read-only
+  function labelText(string) {
+    return new TextMorph(
+      localize(string),
+      10,
+      null, // style
+      false, // bold
+      null, // italic
+      null, // alignment
+      null, // width
+      null, // font name
+      MorphicPreferences.isFlat ? null : new Point(1, 1),
+      WHITE // shadowColor
     );
-    for (currentYear; currentYear > firstYear; currentYear -= 1) {
-        years[currentYear.toString() + ' '] = currentYear;
-    }
-    years[firstYear + ' ' + localize('or before')] = '< ' + currentYear;
-    byr = new InputFieldMorph(
-        null, // text
-        false, // numeric?
-        years,
-        true // read-only
+  }
+
+  function linkButton(label, url) {
+    var btn = new PushButtonMorph(
+      myself,
+      () => window.open(url),
+      "  " + localize(label) + "  "
     );
+    btn.fontSize = 10;
+    btn.corner = myself.buttonCorner;
+    btn.edge = myself.buttonEdge;
+    btn.outline = myself.buttonOutline;
+    btn.outlineColor = myself.buttonOutlineColor;
+    btn.outlineGradient = myself.buttonOutlineGradient;
+    btn.padding = myself.buttonPadding;
+    btn.contrast = myself.buttonContrast;
+    btn.fixLayout();
+    return btn;
+  }
 
-    inp.alignment = 'left';
-    inp.setColor(this.color);
-    bdy.setColor(this.color);
+  function age() {
+    var today = new Date().getFullYear() + new Date().getMonth() / 12,
+      year = +byr.getValue() || 0,
+      monthName = bmn.getValue(),
+      month,
+      birthday;
+    if (monthName instanceof Array) {
+      // translatable
+      monthName = monthName[0];
+    }
+    if (isNaN(year)) {
+      year = 0;
+    }
+    month = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ].indexOf(monthName);
+    if (isNaN(month)) {
+      month = 0;
+    }
+    birthday = year + month / 12;
+    return today - birthday;
+  }
 
-    mCol.alignment = 'left';
-    mCol.setColor(this.color);
-    yCol.alignment = 'left';
-    yCol.setColor(this.color);
+  bmn = new InputFieldMorph(
+    null, // text
+    false, // numeric?
+    {
+      January: ["January"],
+      February: ["February"],
+      March: ["March"],
+      April: ["April"],
+      May: ["May"],
+      June: ["June"],
+      July: ["July"],
+      August: ["August"],
+      September: ["September"],
+      October: ["October"],
+      November: ["November"],
+      December: ["December"],
+    },
+    true // read-only
+  );
+  for (currentYear; currentYear > firstYear; currentYear -= 1) {
+    years[currentYear.toString() + " "] = currentYear;
+  }
+  years[firstYear + " " + localize("or before")] = "< " + currentYear;
+  byr = new InputFieldMorph(
+    null, // text
+    false, // numeric?
+    years,
+    true // read-only
+  );
 
-    usr.setWidth(200);
-    bmn.setWidth(100);
-    byr.contents().minWidth = 80;
-    byr.setWidth(80);
-    eml.setWidth(200);
-    pw1.setWidth(200);
-    pw2.setWidth(200);
-    opw.setWidth(200);
-    pw1.contents().text.toggleIsPassword();
-    pw2.contents().text.toggleIsPassword();
-    opw.contents().text.toggleIsPassword();
+  inp.alignment = "left";
+  inp.setColor(this.color);
+  bdy.setColor(this.color);
 
-    if (purpose === 'login') {
-        inp.add(labelText('User name:'));
-        inp.add(usr);
+  mCol.alignment = "left";
+  mCol.setColor(this.color);
+  yCol.alignment = "left";
+  yCol.setColor(this.color);
+
+  usr.setWidth(200);
+  bmn.setWidth(100);
+  byr.contents().minWidth = 80;
+  byr.setWidth(80);
+  eml.setWidth(200);
+  pw1.setWidth(200);
+  pw2.setWidth(200);
+  opw.setWidth(200);
+  pw1.contents().text.toggleIsPassword();
+  pw2.contents().text.toggleIsPassword();
+  opw.contents().text.toggleIsPassword();
+
+  if (purpose === "login") {
+    inp.add(labelText("User name:"));
+    inp.add(usr);
+  }
+
+  if (purpose === "signup") {
+    inp.add(labelText("User name:"));
+    inp.add(usr);
+    mCol.add(labelText("Birth date:"));
+    mCol.add(bmn);
+    yCol.add(labelText("year:"));
+    yCol.add(byr);
+    dof.add(mCol);
+    dof.add(yCol);
+    inp.add(dof);
+    emlLabel = labelText("foo");
+    inp.add(emlLabel);
+    inp.add(eml);
+    inp.add(labelText("Password:"));
+    inp.add(pw1);
+    inp.add(labelText("Repeat Password:"));
+    inp.add(pw2);
+  }
+
+  if (purpose === "login") {
+    inp.add(labelText("Password:"));
+    inp.add(pw1);
+  }
+
+  if (purpose === "changePassword") {
+    inp.add(labelText("Old password:"));
+    inp.add(opw);
+    inp.add(labelText("New password:"));
+    inp.add(pw1);
+    inp.add(labelText("Repeat new password:"));
+    inp.add(pw2);
+  }
+
+  if (purpose === "resetPassword" || purpose === "resendVerification") {
+    inp.add(labelText("User name:"));
+    inp.add(usr);
+  }
+
+  if (msg) {
+    bdy.add(labelText(msg));
+  }
+
+  bdy.add(inp);
+
+  if (tosURL || prvURL) {
+    bdy.add(lnk);
+  }
+  if (tosURL) {
+    lnk.add(linkButton(tosLabel, tosURL));
+  }
+  if (prvURL) {
+    lnk.add(linkButton(prvLabel, prvURL));
+  }
+
+  if (checkBoxLabel) {
+    chk = new ToggleMorph(
+      "checkbox",
+      this,
+      () => (agree = !agree), // action,
+      checkBoxLabel,
+      () => agree //query
+    );
+    chk.edge = this.buttonEdge / 2;
+    chk.outline = this.buttonOutline / 2;
+    chk.outlineColor = this.buttonOutlineColor;
+    chk.outlineGradient = this.buttonOutlineGradient;
+    chk.contrast = this.buttonContrast;
+    chk.fixLayout();
+    bdy.add(chk);
+  }
+
+  dof.fixLayout();
+  mCol.fixLayout();
+  yCol.fixLayout();
+  inp.fixLayout();
+  lnk.fixLayout();
+  bdy.fixLayout();
+
+  this.labelString = title;
+  this.createLabel();
+  if (pic) {
+    this.setPicture(pic);
+  }
+
+  this.addBody(bdy);
+
+  this.addButton("ok", "OK");
+  this.addButton("cancel", "Cancel");
+  this.fixLayout();
+
+  function validInputs() {
+    var checklist,
+      empty,
+      em = eml.getValue();
+
+    function indicate(morph, string) {
+      var bubble = new SpeechBubbleMorph(localize(string));
+      bubble.isPointingRight = false;
+      bubble.fixLayout();
+      bubble.popUp(
+        world,
+        morph.leftCenter().subtract(new Point(bubble.width() + 2, 0))
+      );
+      if (morph.edit) {
+        morph.edit();
+      }
     }
 
-    if (purpose === 'signup') {
-        inp.add(labelText('User name:'));
-        inp.add(usr);
-        mCol.add(labelText('Birth date:'));
-        mCol.add(bmn);
-        yCol.add(labelText('year:'));
-        yCol.add(byr);
-        dof.add(mCol);
-        dof.add(yCol);
-        inp.add(dof);
-        emlLabel = labelText('foo');
-        inp.add(emlLabel);
-        inp.add(eml);
-        inp.add(labelText('Password:'));
-        inp.add(pw1);
-        inp.add(labelText('Repeat Password:'));
-        inp.add(pw2);
+    if (purpose === "login") {
+      checklist = [usr, pw1];
+    } else if (purpose === "signup") {
+      checklist = [usr, bmn, byr, eml, pw1, pw2];
+    } else if (purpose === "changePassword") {
+      checklist = [opw, pw1, pw2];
+    } else if (
+      purpose === "resetPassword" ||
+      purpose === "resendVerification"
+    ) {
+      checklist = [usr];
     }
 
-    if (purpose === 'login') {
-        inp.add(labelText('Password:'));
-        inp.add(pw1);
+    empty = detect(checklist, (inp) => !inp.getValue());
+    if (empty) {
+      indicate(empty, "please fill out\nthis field");
+      return false;
     }
-
-    if (purpose === 'changePassword') {
-        inp.add(labelText('Old password:'));
-        inp.add(opw);
-        inp.add(labelText('New password:'));
-        inp.add(pw1);
-        inp.add(labelText('Repeat new password:'));
-        inp.add(pw2);
+    if (purpose === "signup") {
+      if (usr.getValue().length < 4) {
+        indicate(usr, "User name must be four\ncharacters or longer");
+        return false;
+      }
+      if (
+        em.indexOf(" ") > -1 ||
+        em.indexOf("@") === -1 ||
+        em.indexOf(".") === -1 ||
+        em.length < 5
+      ) {
+        indicate(eml, "please provide a valid\nemail address");
+        return false;
+      }
     }
-
-    if (purpose === 'resetPassword' || purpose === 'resendVerification') {
-        inp.add(labelText('User name:'));
-        inp.add(usr);
+    if (purpose === "changePassword" || purpose === "signup") {
+      if (pw1.getValue().length < 6) {
+        indicate(pw1, "password must be six\ncharacters or longer");
+        return false;
+      }
+      if (pw1.getValue() !== pw2.getValue()) {
+        indicate(pw2, "passwords do\nnot match");
+        return false;
+      }
     }
-
-    if (msg) {
-        bdy.add(labelText(msg));
+    if (purpose === "signup") {
+      if (!agree) {
+        indicate(chk, "please agree to\nthe TOS");
+        return false;
+      }
     }
+    return true;
+  }
 
-    bdy.add(inp);
-
-    if (tosURL || prvURL) {
-        bdy.add(lnk);
+  this.accept = function () {
+    if (validInputs()) {
+      DialogBoxMorph.prototype.accept.call(myself);
     }
-    if (tosURL) {
-        lnk.add(linkButton(tosLabel, tosURL));
+  };
+
+  this.edit = function () {
+    if (purpose === "changePassword") {
+      opw.edit();
+    } else {
+      // 'signup', 'login', 'resetPassword', 'resendVerification'
+      usr.edit();
     }
-    if (prvURL) {
-        lnk.add(linkButton(prvLabel, prvURL));
-    }
+  };
 
-    if (checkBoxLabel) {
-        chk = new ToggleMorph(
-            'checkbox',
-            this,
-            () => agree = !agree, // action,
-            checkBoxLabel,
-            () => agree //query
-        );
-        chk.edge = this.buttonEdge / 2;
-        chk.outline = this.buttonOutline / 2;
-        chk.outlineColor = this.buttonOutlineColor;
-        chk.outlineGradient = this.buttonOutlineGradient;
-        chk.contrast = this.buttonContrast;
-        chk.fixLayout();
-        bdy.add(chk);
-    }
-
-    dof.fixLayout();
-    mCol.fixLayout();
-    yCol.fixLayout();
-    inp.fixLayout();
-    lnk.fixLayout();
-    bdy.fixLayout();
-
-    this.labelString = title;
-    this.createLabel();
-    if (pic) {this.setPicture(pic); }
-
-    this.addBody(bdy);
-
-    this.addButton('ok', 'OK');
-    this.addButton('cancel', 'Cancel');
-    this.fixLayout();
-
-    function validInputs() {
-        var checklist,
-            empty,
-            em = eml.getValue();
-
-        function indicate(morph, string) {
-            var bubble = new SpeechBubbleMorph(localize(string));
-            bubble.isPointingRight = false;
-            bubble.fixLayout();
-            bubble.popUp(
-                world,
-                morph.leftCenter().subtract(new Point(bubble.width() + 2, 0))
-            );
-            if (morph.edit) {
-                morph.edit();
-            }
-        }
-
-        if (purpose === 'login') {
-            checklist = [usr, pw1];
-        } else if (purpose === 'signup') {
-            checklist = [usr, bmn, byr, eml, pw1, pw2];
-        } else if (purpose === 'changePassword') {
-            checklist = [opw, pw1, pw2];
-        } else if (purpose === 'resetPassword' ||
-                purpose === 'resendVerification') {
-            checklist = [usr];
-        }
-
-        empty = detect(
-            checklist,
-            inp => !inp.getValue()
-        );
-        if (empty) {
-            indicate(empty, 'please fill out\nthis field');
-            return false;
-        }
-        if (purpose === 'signup') {
-            if (usr.getValue().length < 4) {
-                indicate(usr, 'User name must be four\ncharacters or longer');
-                return false;
-            }
-            if (em.indexOf(' ') > -1 || em.indexOf('@') === -1
-                    || em.indexOf('.') === -1 || em.length < 5) {
-                indicate(eml, 'please provide a valid\nemail address');
-                return false;
-            }
-        }
-        if (purpose === 'changePassword' || purpose === 'signup') {
-            if (pw1.getValue().length < 6) {
-                indicate(pw1, 'password must be six\ncharacters or longer');
-                return false;
-            }
-            if (pw1.getValue() !== pw2.getValue()) {
-                indicate(pw2, 'passwords do\nnot match');
-                return false;
-            }
-        }
-        if (purpose === 'signup') {
-            if (!agree) {
-                indicate(chk, 'please agree to\nthe TOS');
-                return false;
-            }
-        }
-        return true;
-    }
-
-    this.accept = function () {
-        if (validInputs()) {
-            DialogBoxMorph.prototype.accept.call(myself);
-        }
+  this.getInput = function () {
+    return {
+      username: usr.getValue(),
+      email: eml.getValue(),
+      oldpassword: opw.getValue(),
+      password: pw1.getValue(),
+      passwordRepeat: pw2.getValue(),
+      choice: agree,
     };
+  };
 
-    this.edit = function () {
-        if (purpose === 'changePassword') {
-            opw.edit();
-        } else { // 'signup', 'login', 'resetPassword', 'resendVerification'
-            usr.edit();
-        }
-    };
-
-    this.getInput = function () {
-        return {
-            username: usr.getValue(),
-            email: eml.getValue(),
-            oldpassword: opw.getValue(),
-            password: pw1.getValue(),
-            passwordRepeat: pw2.getValue(),
-            choice: agree
-        };
-    };
-
-    this.reactToChoice = function () {
-        if (purpose === 'signup') {
-            emlLabel.changed();
-            emlLabel.text = age() <= 13 ?
-                    'E-mail address of parent or guardian:'
-                        : 'E-mail address:';
-            emlLabel.text = localize(emlLabel.text);
-            emlLabel.fixLayout();
-            emlLabel.rerender();
-        }
-    };
-
-    this.reactToChoice(); // initialize e-mail label
-
-    if (!this.key) {
-        this.key = 'credentials' + title + purpose;
+  this.reactToChoice = function () {
+    if (purpose === "signup") {
+      emlLabel.changed();
+      emlLabel.text =
+        age() <= 13
+          ? "E-mail address of parent or guardian:"
+          : "E-mail address:";
+      emlLabel.text = localize(emlLabel.text);
+      emlLabel.fixLayout();
+      emlLabel.rerender();
     }
+  };
 
-    this.popUp(world);
+  this.reactToChoice(); // initialize e-mail label
+
+  if (!this.key) {
+    this.key = "credentials" + title + purpose;
+  }
+
+  this.popUp(world);
 };
 
 DialogBoxMorph.prototype.accept = function () {
-    /*
+  /*
     if target is a function, use it as callback:
     execute target as callback function with action as argument
     in the environment as optionally specified.
@@ -2519,276 +2723,249 @@ DialogBoxMorph.prototype.accept = function () {
         treat it as function property of target and execute it
         for selector-like actions
     */
-    if (this.action) {
-        if (typeof this.target === 'function') {
-            if (typeof this.action === 'function') {
-                this.target.call(this.environment, this.action.call());
-            } else {
-                this.target.call(this.environment, this.action);
-            }
-        } else {
-            if (typeof this.action === 'function') {
-                this.action.call(this.target, this.getInput());
-            } else { // assume it's a String
-                this.target[this.action](this.getInput());
-            }
-        }
+  if (this.action) {
+    if (typeof this.target === "function") {
+      if (typeof this.action === "function") {
+        this.target.call(this.environment, this.action.call());
+      } else {
+        this.target.call(this.environment, this.action);
+      }
+    } else {
+      if (typeof this.action === "function") {
+        this.action.call(this.target, this.getInput());
+      } else {
+        // assume it's a String
+        this.target[this.action](this.getInput());
+      }
     }
-    this.destroy();
+  }
+  this.destroy();
 };
 
 DialogBoxMorph.prototype.withKey = function (key) {
-    this.key = key;
-    return this;
+  this.key = key;
+  return this;
 };
 
-DialogBoxMorph.prototype.popUp = function (world, noFocus) {
-    if (world) {
-        if (this.key) {
-            if (this.instances[world.stamp]) {
-                if (this.instances[world.stamp][this.key]) {
-                    this.instances[world.stamp][this.key].destroy();
-                }
-                this.instances[world.stamp][this.key] = this;
-            } else {
-                this.instances[world.stamp] = {};
-                this.instances[world.stamp][this.key] = this;
-            }
+DialogBoxMorph.prototype.popUp = function (world) {
+  if (world) {
+    if (this.key) {
+      if (this.instances[world.stamp]) {
+        if (this.instances[world.stamp][this.key]) {
+          this.instances[world.stamp][this.key].destroy();
         }
-        world.add(this);
-        if (!noFocus) {world.keyboardFocus = this; }
-        this.setCenter(world.center());
-        this.edit();
+        this.instances[world.stamp][this.key] = this;
+      } else {
+        this.instances[world.stamp] = {};
+        this.instances[world.stamp][this.key] = this;
+      }
     }
+    world.add(this);
+    world.keyboardFocus = this;
+    this.setCenter(world.center());
+    this.edit();
+  }
 };
 
 DialogBoxMorph.prototype.destroy = function () {
-    DialogBoxMorph.uber.destroy.call(this);
-    if (this.key) {
-        delete this.instances[this.key];
-    }
+  DialogBoxMorph.uber.destroy.call(this);
+  if (this.key) {
+    delete this.instances[this.key];
+  }
 };
 
 DialogBoxMorph.prototype.ok = function () {
-    this.accept();
+  this.accept();
 };
 
 DialogBoxMorph.prototype.cancel = function () {
-    this.destroy();
+  this.destroy();
 };
 
 DialogBoxMorph.prototype.edit = function () {
-    this.children.forEach(c => {
-        if (c.edit) {
-            c.edit();
-        }
-    });
+  this.children.forEach((c) => {
+    if (c.edit) {
+      c.edit();
+    }
+  });
 };
 
 DialogBoxMorph.prototype.getInput = function () {
-    if (this.body instanceof InputFieldMorph) {
-        return this.body.getValue();
-    }
-    return null;
+  if (this.body instanceof InputFieldMorph) {
+    return this.body.getValue();
+  }
+  return null;
 };
 
 DialogBoxMorph.prototype.justDropped = function (hand) {
-    hand.world.keyboardFocus = this;
-    this.edit();
+  hand.world.keyboardFocus = this;
+  this.edit();
 };
 
 DialogBoxMorph.prototype.destroy = function () {
-    var world = this.world();
-    world.keyboardFocus = null;
-    world.hand.destroyTemporaries();
-    DialogBoxMorph.uber.destroy.call(this);
+  var world = this.world();
+  world.keyboardFocus = null;
+  world.hand.destroyTemporaries();
+  DialogBoxMorph.uber.destroy.call(this);
 };
 
 DialogBoxMorph.prototype.normalizeSpaces = function (string) {
-    var ans = '', i, c, flag = false;
+  var ans = "",
+    i,
+    c,
+    flag = false;
 
-    for (i = 0; i < string.length; i += 1) {
-        c = string[i];
-        if (c === ' ') {
-            if (flag) {
-                ans += c;
-                flag = false;
-            }
-        } else {
-            ans += c;
-            flag = true;
-        }
+  for (i = 0; i < string.length; i += 1) {
+    c = string[i];
+    if (c === " ") {
+      if (flag) {
+        ans += c;
+        flag = false;
+      }
+    } else {
+      ans += c;
+      flag = true;
     }
-    return ans.trim();
+  }
+  return ans.trim();
 };
 
 // DialogBoxMorph submorph construction
 
 DialogBoxMorph.prototype.createLabel = function () {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
+  var shading = !MorphicPreferences.isFlat || this.is3D;
 
-    if (this.label) {
-        this.label.destroy();
-    }
-    if (this.labelString) {
-        this.label = new StringMorph(
-            localize(this.labelString),
-            this.titleFontSize,
-            this.fontStyle,
-            true,
-            false,
-            false,
-            shading ? new Point(2, 1) : null,
-            this.titleBarColor.darker(this.contrast)
-        );
-        this.label.color = this.titleTextColor;
-        this.label.fixLayout();
-        this.add(this.label);
-    }
+  if (this.label) {
+    this.label.destroy();
+  }
+  if (this.labelString) {
+    this.label = new StringMorph(
+      localize(this.labelString),
+      this.titleFontSize,
+      this.fontStyle,
+      true,
+      false,
+      false,
+      shading ? new Point(2, 1) : null,
+      this.titleBarColor.darker(this.contrast)
+    );
+    this.label.color = this.titleTextColor;
+    this.label.fixLayout();
+    this.add(this.label);
+  }
 };
 
 DialogBoxMorph.prototype.createButtons = function () {
-    if (this.buttons) {
-        this.buttons.destroy();
-    }
-    this.buttons = new AlignmentMorph('row', this.padding);
-    this.add(this.buttons);
+  if (this.buttons) {
+    this.buttons.destroy();
+  }
+  this.buttons = new AlignmentMorph("row", this.padding);
+  this.add(this.buttons);
 };
 
 DialogBoxMorph.prototype.addButton = function (action, label) {
-    var button = new PushButtonMorph(
-        this,
-        action || 'ok',
-        '  ' + localize((label || 'OK')) + '  '
-    );
-    button.fontSize = this.buttonFontSize;
-    button.corner = this.buttonCorner;
-    button.edge = this.buttonEdge;
-    button.outline = this.buttonOutline;
-    button.outlineColor = this.buttonOutlineColor;
-    button.outlineGradient = this.buttonOutlineGradient;
-    button.padding = this.buttonPadding;
-    button.contrast = this.buttonContrast;
-    button.fixLayout();
-    this.buttons.add(button);
-    return button;
+  var button = new PushButtonMorph(
+    this,
+    action || "ok",
+    "  " + localize(label || "OK") + "  "
+  );
+  button.fontSize = this.buttonFontSize;
+  button.corner = this.buttonCorner;
+  button.edge = this.buttonEdge;
+  button.outline = this.buttonOutline;
+  button.outlineColor = this.buttonOutlineColor;
+  button.outlineGradient = this.buttonOutlineGradient;
+  button.padding = this.buttonPadding;
+  button.contrast = this.buttonContrast;
+  button.fixLayout();
+  this.buttons.add(button);
+  return button;
 };
 
 DialogBoxMorph.prototype.setPicture = function (aMorphOrCanvas) {
-    var morph;
-    if (aMorphOrCanvas instanceof Morph) {
-        morph = aMorphOrCanvas;
-    } else {
-        morph = new Morph();
-        morph.isCachingImage = true;
-        morph.cachedImage = aMorphOrCanvas;
-        morph.bounds.setWidth(aMorphOrCanvas.width);
-        morph.bounds.setHeight(aMorphOrCanvas.height);
-    }
-    this.addHead(morph);
+  var morph;
+  if (aMorphOrCanvas instanceof Morph) {
+    morph = aMorphOrCanvas;
+  } else {
+    morph = new Morph();
+    morph.isCachingImage = true;
+    morph.cachedImage = aMorphOrCanvas;
+    morph.bounds.setWidth(aMorphOrCanvas.width);
+    morph.bounds.setHeight(aMorphOrCanvas.height);
+  }
+  this.addHead(morph);
 };
 
 DialogBoxMorph.prototype.addHead = function (aMorph) {
-    if (this.head) {
-        this.head.destroy();
-    }
-    this.head = aMorph;
-    this.add(this.head);
+  if (this.head) {
+    this.head.destroy();
+  }
+  this.head = aMorph;
+  this.add(this.head);
 };
 
 DialogBoxMorph.prototype.addBody = function (aMorph) {
-    if (this.body) {
-        this.body.destroy();
-    }
-    this.body = aMorph;
-    this.add(this.body);
+  if (this.body) {
+    this.body.destroy();
+  }
+  this.body = aMorph;
+  this.add(this.body);
 };
 
 // DialogBoxMorph layout
 
 DialogBoxMorph.prototype.fixLayout = function () {
-    // determine by extent and arrange my components
-    var th = fontHeight(this.titleFontSize) + this.titlePadding * 2, w,
-        stack = isNil(this.stackPadding) ? this.padding : this.stackPadding;
+  // determine by extent and arrange my components
+  var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
+    w;
 
+  if (this.head) {
+    this.head.setPosition(
+      this.position().add(new Point(this.padding, th + this.padding))
+    );
+    this.bounds.setWidth(this.head.width() + this.padding * 2);
+    this.bounds.setHeight(this.head.height() + this.padding * 2 + th);
+  }
+
+  if (this.body) {
     if (this.head) {
-        this.head.setPosition(this.position().add(new Point(
-            this.padding,
-            th + stack
-        )));
-        this.bounds.setWidth(this.head.width() + this.padding * 2);
-        this.bounds.setHeight(
-            this.head.height()
-                + stack
-                + this.padding
-                + th
-        );
+      this.body.setPosition(
+        this.head.bottomLeft().add(new Point(0, this.padding))
+      );
+      this.bounds.setWidth(
+        Math.max(this.width(), this.body.width() + this.padding * 2)
+      );
+      this.bounds.setHeight(this.height() + this.body.height() + this.padding);
+      w = this.width();
+      this.head.setLeft(this.left() + Math.round((w - this.head.width()) / 2));
+      this.body.setLeft(this.left() + Math.round((w - this.body.width()) / 2));
+    } else {
+      this.body.setPosition(
+        this.position().add(new Point(this.padding, th + this.padding))
+      );
+      this.bounds.setWidth(this.body.width() + this.padding * 2);
+      this.bounds.setHeight(this.body.height() + this.padding * 2 + th);
     }
+  }
 
-    if (this.body) {
-        if (this.head) {
-            this.body.setPosition(this.head.bottomLeft().add(new Point(
-                0,
-                stack
-            )));
-            this.bounds.setWidth(Math.max(
-                this.width(),
-                this.body.width() + this.padding * 2
-            ));
-            this.bounds.setHeight(
-                this.height()
-                    + this.body.height()
-                    + stack
-            );
-            w = this.width();
-            this.head.setLeft(
-                this.left()
-                    + Math.round((w - this.head.width()) / 2)
-            );
-            this.body.setLeft(
-                this.left()
-                    + Math.round((w - this.body.width()) / 2)
-            );
-        } else {
-            this.body.setPosition(this.position().add(new Point(
-                this.padding,
-                th + stack
-            )));
-            this.bounds.setWidth(this.body.width() + this.padding * 2);
-            this.bounds.setHeight(
-                this.body.height()
-                    + stack
-                    + this.padding
-                    + th
-            );
-        }
-    }
+  if (this.label) {
+    this.label.setCenter(this.center());
+    this.label.setTop(this.top() + (th - this.label.height()) / 2);
+  }
 
-    if (this.label) {
-        this.label.setCenter(this.center());
-        this.label.setTop(this.top() + (th - this.label.height()) / 2);
-    }
+  if (this.buttons && this.buttons.children.length > 0) {
+    this.buttons.fixLayout();
+    this.bounds.setHeight(this.height() + this.buttons.height() + this.padding);
+    this.bounds.setWidth(
+      Math.max(this.width(), this.buttons.width() + 2 * this.padding)
+    );
+    this.buttons.setCenter(this.center());
+    this.buttons.setBottom(this.bottom() - this.padding);
+  }
 
-    if (this.buttons && (this.buttons.children.length > 0)) {
-        this.buttons.fixLayout();
-        this.bounds.setHeight(
-            this.height()
-                + this.buttons.height()
-                + this.padding
-        );
-        this.bounds.setWidth(Math.max(
-                this.width(),
-                this.buttons.width()
-                    + (2 * this.padding)
-            )
-        );
-        this.buttons.setCenter(this.center());
-        this.buttons.setBottom(this.bottom() - this.padding);
-    }
-
-    // refresh a shallow shadow
-    this.removeShadow();
-    this.addShadow();
+  // refresh a shallow shadow
+  this.removeShadow();
+  this.addShadow();
 };
 
 // DialogBoxMorph keyboard events
@@ -2796,224 +2973,170 @@ DialogBoxMorph.prototype.fixLayout = function () {
 DialogBoxMorph.prototype.processKeyPress = nop;
 
 DialogBoxMorph.prototype.processKeyDown = function (event) {
-    // this.inspectKeyEvent(event);
-    switch (event.keyCode) {
+  // this.inspectKeyEvent(event);
+  switch (event.keyCode) {
     case 13:
-        this.ok();
-        break;
+      this.ok();
+      break;
     case 27:
-        this.cancel();
-        break;
+      this.cancel();
+      break;
     default:
-        nop();
-        // this.inspectKeyEvent(event);
-    }
+      nop();
+    // this.inspectKeyEvent(event);
+  }
 };
 
 // DialogBoxMorph drawing
 
 DialogBoxMorph.prototype.render = function (ctx) {
-    var gradient,
-        w = this.width(),
-        h = this.height(),
-        th = Math.floor(
-            fontHeight(this.titleFontSize) + this.titlePadding * 2
-        ),
-        shift = this.corner / 2,
-        x,
-        y,
-        isFlat = MorphicPreferences.isFlat && !this.is3D;
+  var gradient,
+    w = this.width(),
+    h = this.height(),
+    th = Math.floor(fontHeight(this.titleFontSize) + this.titlePadding * 2),
+    shift = this.corner / 2,
+    x,
+    y,
+    isFlat = MorphicPreferences.isFlat && !this.is3D;
 
-    // this.alpha = isFlat ? 0.9 : 1;
+  // this.alpha = isFlat ? 0.9 : 1;
 
-    // title bar
-    if (isFlat) {
-        ctx.fillStyle = this.titleBarColor.toString();
-    } else {
-        gradient = ctx.createLinearGradient(0, 0, 0, th);
-        gradient.addColorStop(
-            0,
-            this.titleBarColor.lighter(this.contrast / 2).toString()
-        );
-        gradient.addColorStop(
-            1,
-            this.titleBarColor.darker(this.contrast).toString()
-        );
-        ctx.fillStyle = gradient;
-    }
-    ctx.beginPath();
-    this.outlinePathTitle(
-        ctx,
-        isFlat ? 0 : this.corner
-    );
-    ctx.closePath();
-    ctx.fill();
-
-    // flat shape
-    // body
-    ctx.fillStyle = this.color.toString();
-    ctx.beginPath();
-    this.outlinePathBody(
-        ctx,
-        isFlat ? 0 : this.corner
-    );
-    ctx.closePath();
-    ctx.fill();
-
-    if (isFlat) {
-        return;
-    }
-
-    // 3D-effect
-    // bottom left corner
-    gradient = ctx.createLinearGradient(
-        0,
-        h - this.corner,
-        0,
-        h
-    );
-    gradient.addColorStop(0, this.color.toString());
-    gradient.addColorStop(1, this.color.darker(this.contrast.toString()));
-
-    ctx.lineWidth = this.corner;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = gradient;
-
-    ctx.beginPath();
-    ctx.moveTo(this.corner, h - shift);
-    ctx.lineTo(this.corner + 1, h - shift);
-    ctx.stroke();
-
-    // bottom edge
-    gradient = ctx.createLinearGradient(
-        0,
-        h - this.corner,
-        0,
-        h
-    );
-    gradient.addColorStop(0, this.color.toString());
-    gradient.addColorStop(1, this.color.darker(this.contrast.toString()));
-
-    ctx.lineWidth = this.corner;
-    ctx.lineCap = 'butt';
-    ctx.strokeStyle = gradient;
-
-    ctx.beginPath();
-    ctx.moveTo(this.corner, h - shift);
-    ctx.lineTo(w - this.corner, h - shift);
-    ctx.stroke();
-
-    // right body edge
-    gradient = ctx.createLinearGradient(
-        w - this.corner,
-        0,
-        w,
-        0
-    );
-    gradient.addColorStop(0, this.color.toString());
-    gradient.addColorStop(1, this.color.darker(this.contrast).toString());
-
-    ctx.lineWidth = this.corner;
-    ctx.lineCap = 'butt';
-    ctx.strokeStyle = gradient;
-
-    ctx.beginPath();
-    ctx.moveTo(w - shift, th);
-    ctx.lineTo(w - shift, h - this.corner);
-    ctx.stroke();
-
-    // bottom right corner
-    x = w - this.corner;
-    y = h - this.corner;
-
-    gradient = ctx.createRadialGradient(
-        x,
-        y,
-        0,
-        x,
-        y,
-        this.corner
-    );
-    gradient.addColorStop(0, this.color.toString());
-    gradient.addColorStop(1, this.color.darker(this.contrast.toString()));
-
-    ctx.lineCap = 'butt';
-
-    ctx.strokeStyle = gradient;
-
-    ctx.beginPath();
-    ctx.arc(
-        x,
-        y,
-        shift,
-        radians(90),
-        radians(0),
-        true
-    );
-    ctx.stroke();
-
-    // left body edge
-    gradient = ctx.createLinearGradient(
-        0,
-        0,
-        this.corner,
-        0
+  // title bar
+  if (isFlat) {
+    ctx.fillStyle = this.titleBarColor.darker(this.contrast/2).toString();
+  } else {
+    gradient = ctx.createLinearGradient(0, 0, 0, th);
+    gradient.addColorStop(
+      0,
+      this.titleBarColor.lighter(this.contrast / 2).toString()
     );
     gradient.addColorStop(
-        0,
-        this.color.lighter(this.contrast).toString()
+      1,
+      this.titleBarColor.darker(this.contrast).toString()
     );
-    gradient.addColorStop(1, this.color.toString());
+    ctx.fillStyle = gradient;
+  }
+  ctx.beginPath();
+  this.outlinePathTitle(ctx, this.corner);//isFlat ? 0 : this.corner);
+  ctx.closePath();
+  ctx.fill();
 
-    ctx.lineCap = 'butt';
-    ctx.strokeStyle = gradient;
+  // flat shape
+  // body
+  ctx.fillStyle = this.color.toString();
+  ctx.beginPath();
+  this.outlinePathBody(ctx, this.corner)//isFlat ? 0 : this.corner);
+  ctx.closePath();
+  ctx.fill();
 
-    ctx.beginPath();
-    ctx.moveTo(shift, th);
-    ctx.lineTo(shift, h - this.corner * 2);
-    ctx.stroke();
+  if (isFlat) {
+    return;
+  }
 
-    // left vertical bottom corner
-    gradient = ctx.createLinearGradient(
-        0,
-        0,
-        this.corner,
-        0
-    );
-    gradient.addColorStop(
-        0,
-        this.color.lighter(this.contrast).toString()
-    );
-    gradient.addColorStop(1, this.color.toString());
+  // 3D-effect
+  // bottom left corner
+  gradient = ctx.createLinearGradient(0, h - this.corner, 0, h);
+  gradient.addColorStop(0, this.color.toString());
+  gradient.addColorStop(1, this.color.darker(this.contrast.toString()));
 
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = gradient;
+  ctx.lineWidth = this.corner;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = gradient;
 
-    ctx.beginPath();
-    ctx.moveTo(shift, h - this.corner * 2);
-    ctx.lineTo(shift, h - this.corner - shift);
-    ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(this.corner, h - shift);
+  ctx.lineTo(this.corner + 1, h - shift);
+  ctx.stroke();
+
+  // bottom edge
+  gradient = ctx.createLinearGradient(0, h - this.corner, 0, h);
+  gradient.addColorStop(0, this.color.toString());
+  gradient.addColorStop(1, this.color.darker(this.contrast.toString()));
+
+  ctx.lineWidth = this.corner;
+  ctx.lineCap = "butt";
+  ctx.strokeStyle = gradient;
+
+  ctx.beginPath();
+  ctx.moveTo(this.corner, h - shift);
+  ctx.lineTo(w - this.corner, h - shift);
+  ctx.stroke();
+
+  // right body edge
+  gradient = ctx.createLinearGradient(w - this.corner, 0, w, 0);
+  gradient.addColorStop(0, this.color.toString());
+  gradient.addColorStop(1, this.color.darker(this.contrast).toString());
+
+  ctx.lineWidth = this.corner;
+  ctx.lineCap = "butt";
+  ctx.strokeStyle = gradient;
+
+  ctx.beginPath();
+  ctx.moveTo(w - shift, th);
+  ctx.lineTo(w - shift, h - this.corner);
+  ctx.stroke();
+
+  // bottom right corner
+  x = w - this.corner;
+  y = h - this.corner;
+
+  gradient = ctx.createRadialGradient(x, y, 0, x, y, this.corner);
+  gradient.addColorStop(0, this.color.toString());
+  gradient.addColorStop(1, this.color.darker(this.contrast.toString()));
+
+  ctx.lineCap = "butt";
+
+  ctx.strokeStyle = gradient;
+
+  ctx.beginPath();
+  ctx.arc(x, y, shift, radians(90), radians(0), true);
+  ctx.stroke();
+
+  // left body edge
+  gradient = ctx.createLinearGradient(0, 0, this.corner, 0);
+  gradient.addColorStop(0, this.color.lighter(this.contrast).toString());
+  gradient.addColorStop(1, this.color.toString());
+
+  ctx.lineCap = "butt";
+  ctx.strokeStyle = gradient;
+
+  ctx.beginPath();
+  ctx.moveTo(shift, th);
+  ctx.lineTo(shift, h - this.corner * 2);
+  ctx.stroke();
+
+  // left vertical bottom corner
+  gradient = ctx.createLinearGradient(0, 0, this.corner, 0);
+  gradient.addColorStop(0, this.color.lighter(this.contrast).toString());
+  gradient.addColorStop(1, this.color.toString());
+
+  ctx.lineCap = "round";
+  ctx.strokeStyle = gradient;
+
+  ctx.beginPath();
+  ctx.moveTo(shift, h - this.corner * 2);
+  ctx.lineTo(shift, h - this.corner - shift);
+  ctx.stroke();
 };
 
 DialogBoxMorph.prototype.outlinePathTitle = function (ctx, radius) {
-    ctx.roundRect(
-        0,
-        0,
-        this.width(),
-        Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2,
-        [radius, radius, 0, 0]
-    );
+  ctx.roundRect(
+    0,
+    0,
+    this.width(),
+    Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2,
+    [radius, radius, 0, 0]
+  );
 };
 
 DialogBoxMorph.prototype.outlinePathBody = function (ctx, radius) {
-    var th = Math.floor(fontHeight(this.titleFontSize)) + this.titlePadding * 2;
-    ctx.roundRect(
-        0,
-        th,
-        this.width(),
-        this.height() - th,
-        [0, 0, radius, radius]
-    );
+  var th = Math.floor(fontHeight(this.titleFontSize)) + this.titlePadding * 2;
+  ctx.roundRect(0, th, this.width(), this.height() - th, [
+    0,
+    0,
+    radius,
+    radius,
+  ]);
 };
 
 // AlignmentMorph /////////////////////////////////////////////////////
@@ -3029,68 +3152,72 @@ AlignmentMorph.uber = Morph.prototype;
 // AlignmentMorph instance creation:
 
 function AlignmentMorph(orientation, padding) {
-    this.init(orientation, padding);
+  this.init(orientation, padding);
 }
 
 AlignmentMorph.prototype.init = function (orientation, padding) {
-    // additional properties:
-    this.orientation = orientation || 'row'; // or 'column'
-    this.alignment = 'center'; // or 'left' in a column
-    this.padding = padding || 0;
-    this.respectHiddens = false;
+  // additional properties:
+  this.orientation = orientation || "row"; // or 'column'
+  this.alignment = "center"; // or 'left' in a column
+  this.padding = padding || 0;
+  this.respectHiddens = false;
 
-    // initialize inherited properties:
-    AlignmentMorph.uber.init.call(this);
+  // initialize inherited properties:
+  AlignmentMorph.uber.init.call(this);
 
-    // override inherited properites:
+  // override inherited properites:
 };
 
 // AlignmentMorph displaying and layout
 
 AlignmentMorph.prototype.render = function (ctx) {
-    // override to not draw anything, as alignments are just containers
-    // for layout of their components
-    nop(ctx);
+  // override to not draw anything, as alignments are just containers
+  // for layout of their components
+  nop(ctx);
 };
 
 AlignmentMorph.prototype.fixLayout = function () {
-    var last = null,
-        newBounds;
-    if (this.children.length === 0) {
-        return null;
-    }
-    this.children.forEach(c => {
-        var cfb = c.fullBounds(),
-            lfb;
-        if (c.isVisible || this.respectHiddens) {
-            if (last) {
-                lfb = last.fullBounds();
-                if (this.orientation === 'row') {
-                    c.setPosition(
-                        lfb.topRight().add(new Point(
-                            this.padding,
-                            (lfb.height() - cfb.height()) / 2
-                        ))
-                    );
-                } else { // orientation === 'column'
-                    c.setPosition(
-                        lfb.bottomLeft().add(new Point(
-                            this.alignment === 'center' ?
-                                    (lfb.width() - cfb.width()) / 2
-                                            : 0,
-                            this.padding
-                        ))
-                    );
-                }
-                cfb = c.fullBounds();
-                newBounds = newBounds.merge(cfb);
-            } else {
-                newBounds = cfb;
-            }
-            last = c;
+  var last = null,
+    newBounds;
+  if (this.children.length === 0) {
+    return null;
+  }
+  this.children.forEach((c) => {
+    var cfb = c.fullBounds(),
+      lfb;
+    if (c.isVisible || this.respectHiddens) {
+      if (last) {
+        lfb = last.fullBounds();
+        if (this.orientation === "row") {
+          c.setPosition(
+            lfb
+              .topRight()
+              .add(new Point(this.padding, (lfb.height() - cfb.height()) / 2))
+          );
+        } else {
+          // orientation === 'column'
+          c.setPosition(
+            lfb
+              .bottomLeft()
+              .add(
+                new Point(
+                  this.alignment === "center"
+                    ? (lfb.width() - cfb.width()) / 2
+                    : 0,
+                  this.padding
+                )
+              )
+          );
         }
-    });
-    this.bounds = newBounds;
+        cfb = c.fullBounds();
+        newBounds = newBounds.merge(cfb);
+      } else {
+        newBounds = cfb;
+      }
+      last = c;
+    }
+  });
+  this.bounds = newBounds;
 };
 
 // InputFieldMorph //////////////////////////////////////////////////////
@@ -3111,339 +3238,339 @@ InputFieldMorph.prototype.contrast = 65;
 // InputFieldMorph instance creation:
 
 function InputFieldMorph(text, isNumeric, choiceDict, isReadOnly) {
-    this.init(text, isNumeric, choiceDict, isReadOnly);
+  this.init(text, isNumeric, choiceDict, isReadOnly);
 }
 
 InputFieldMorph.prototype.init = function (
-    text,
-    isNumeric,
-    choiceDict,
-    isReadOnly
+  text,
+  isNumeric,
+  choiceDict,
+  isReadOnly
 ) {
-    var contents = new StringFieldMorph(
-            text || '',
-            null, null, null, null, null,
-            isNumeric || false
-        ),
-        arrow = new ArrowMorph(
-            'down',
-            0,
-            Math.max(Math.floor(this.fontSize / 6), 1)
-        );
+  var contents = new StringFieldMorph(
+      text || "",
+      null,
+      null,
+      null,
+      null,
+      null,
+      isNumeric || false
+    ),
+    arrow = new ArrowMorph(
+      "down",
+      0,
+      Math.max(Math.floor(this.fontSize / 6), 1)
+    );
 
-    this.choices = choiceDict || null; // object, function or selector
-    this.isReadOnly = isReadOnly || false;
-    this.isNumeric = isNumeric || false;
+  this.choices = choiceDict || null; // object, function or selector
+  this.isReadOnly = isReadOnly || false;
+  this.isNumeric = isNumeric || false;
+  //this.edge = 5;
 
-    contents.alpha = 0;
-    contents.fontSize = this.fontSize;
-    contents.fixLayout();
+  contents.alpha = 0;
+  contents.fontSize = this.fontSize;
+  contents.fixLayout();
 
-    this.oldContentsExtent = contents.extent();
+  this.oldContentsExtent = contents.extent();
 
-    InputFieldMorph.uber.init.call(this);
-    this.color = WHITE;
-    this.add(contents);
-    this.add(arrow);
-    contents.isDraggable = false;
-    this.fixLayout();
+  InputFieldMorph.uber.init.call(this);
+  this.color = WHITE;
+  this.add(contents);
+  this.add(arrow);
+  contents.isDraggable = false;
+  this.fixLayout();
 };
 
 // InputFieldMorph accessing:
 
 InputFieldMorph.prototype.contents = function () {
-    return detect(
-        this.children,
-        child => child instanceof StringFieldMorph
-    );
+  return detect(this.children, (child) => child instanceof StringFieldMorph);
 };
 
 InputFieldMorph.prototype.arrow = function () {
-    return detect(
-        this.children,
-        child => child instanceof ArrowMorph
-    );
+  return detect(this.children, (child) => child instanceof ArrowMorph);
 };
 
 InputFieldMorph.prototype.setChoice = function (aStringOrFloat) {
-    this.setContents(aStringOrFloat);
-    this.escalateEvent('reactToChoice', aStringOrFloat);
+  this.setContents(aStringOrFloat);
+  this.escalateEvent("reactToChoice", aStringOrFloat);
 };
 
 InputFieldMorph.prototype.setContents = function (aStringOrFloat) {
-    var cnts = this.contents();
-    cnts.text.text = aStringOrFloat;
-    if (aStringOrFloat === undefined) {
-        return null;
-    }
-    if (aStringOrFloat === null) {
-        cnts.text.text = '';
-    } else if (aStringOrFloat.toString) {
-        cnts.text.text = aStringOrFloat.toString();
-    }
-    cnts.text.fixLayout();
-    cnts.changed();
-    cnts.fixLayout();
-    cnts.rerender();
+  var cnts = this.contents();
+  cnts.text.text = aStringOrFloat;
+  if (aStringOrFloat === undefined) {
+    return null;
+  }
+  if (aStringOrFloat === null) {
+    cnts.text.text = "";
+  } else if (aStringOrFloat.toString) {
+    cnts.text.text = aStringOrFloat.toString();
+  }
+  cnts.text.fixLayout();
+  cnts.changed();
+  cnts.fixLayout();
+  cnts.rerender();
 };
 
 InputFieldMorph.prototype.edit = function () {
-    var c = this.contents();
-    c.text.edit();
-    c.text.selectAll();
+  var c = this.contents();
+  c.text.edit();
+  c.text.selectAll();
 };
 
 InputFieldMorph.prototype.setIsNumeric = function (bool) {
-    var value;
+  var value;
 
-    this.isNumeric = bool;
-    this.contents().isNumeric = bool;
-    this.contents().text.isNumeric = bool;
+  this.isNumeric = bool;
+  this.contents().isNumeric = bool;
+  this.contents().text.isNumeric = bool;
 
-    // adjust my shown value to conform with the numeric flag
-    value = this.getValue();
-    if (this.isNumeric &&
+  // adjust my shown value to conform with the numeric flag
+  value = this.getValue();
+  if (this.isNumeric &&
         !(isString(value) && value.startsWith('$_'))
-    ) { // support selectors
-        value = parseFloat(value);
-        if (isNaN(value)) {
-            value = null;
-        }
+    ) {
+    value = parseFloat(value);
+    if (isNaN(value)) {
+      value = null;
     }
-    this.setContents(value);
+  }
+  this.setContents(value);
 };
 
 // InputFieldMorph drop-down menu:
 
 InputFieldMorph.prototype.dropDownMenu = function () {
-    var choices = this.choices,
-        key,
-        menu = new MenuMorph(
-            this.setChoice,
-            null,
-            this,
-            this.fontSize
-        );
+  var choices = this.choices,
+    key,
+    menu = new MenuMorph(this.setChoice, null, this, this.fontSize);
 
-    if (choices instanceof Function) {
-        choices = choices.call(this);
-    } else if (isString(choices)) {
-        choices = this[choices]();
-    }
-    if (!choices) {
-        return null;
-    }
-    menu.addItem(' ', null);
-    if (choices instanceof Array) {
-        choices.forEach(choice => menu.addItem(choice[0], choice[1]));
-    } else { // assuming a dictionary
-        for (key in choices) {
-            if (Object.prototype.hasOwnProperty.call(choices, key)) {
-                if (key[0] === '~') {
-                    menu.addLine();
-                } else {
-                    menu.addItem(key, choices[key]);
-                }
-            }
+  if (choices instanceof Function) {
+    choices = choices.call(this);
+  } else if (isString(choices)) {
+    choices = this[choices]();
+  }
+  if (!choices) {
+    return null;
+  }
+  menu.addItem(" ", null);
+  if (choices instanceof Array) {
+    choices.forEach((choice) => menu.addItem(choice[0], choice[1]));
+  } else {
+    // assuming a dictionary
+    for (key in choices) {
+      if (Object.prototype.hasOwnProperty.call(choices, key)) {
+        if (key[0] === "~") {
+          menu.addLine();
+        } else {
+          menu.addItem(key, choices[key]);
         }
+      }
     }
-    if (menu.items.length > 0) {
-        menu.popUpAtHand(this.world());
-    } else {
-        return null;
-    }
+  }
+  if (menu.items.length > 0) {
+    menu.popUpAtHand(this.world());
+  } else {
+    return null;
+  }
 };
 
 // InputFieldMorph layout:
 
 InputFieldMorph.prototype.fixLayout = function () {
-    var contents = this.contents(),
-        arrow = this.arrow();
+  var contents = this.contents(),
+    arrow = this.arrow();
 
-    if (!contents) {return null; }
-    contents.isNumeric = this.isNumeric;
-    contents.isEditable = (!this.isReadOnly);
-    if (this.choices) {
-        arrow.setSize(this.fontSize);
-        arrow.show();
-    } else {
-        arrow.setSize(0);
-        arrow.hide();
-    }
-    this.bounds.setHeight(
-        contents.height()
-            + this.edge * 2
-            + this.typeInPadding * 2
-    );
-    this.bounds.setWidth(Math.max(
-        contents.minWidth
-            + this.edge * 2
-            + this.typeInPadding * 2,
-        this.width()
-    ));
+  if (!contents) {
+    return null;
+  }
+  contents.isNumeric = this.isNumeric;
+  contents.isEditable = !this.isReadOnly;
+  if (this.choices) {
+    arrow.setSize(this.fontSize);
+    arrow.show();
+  } else {
+    arrow.setSize(0);
+    arrow.hide();
+  }
+  this.bounds.setHeight(
+    contents.height() + this.edge * 2 + this.typeInPadding * 2
+  );
+  this.bounds.setWidth(
+    Math.max(
+      contents.minWidth + this.edge * 2 + this.typeInPadding * 2,
+      this.width()
+    )
+  );
 
-    contents.setWidth(
-        this.width() - this.edge - this.typeInPadding -
-            (this.choices ? arrow.width() + this.typeInPadding : 0)
-    );
+  contents.setWidth(
+    this.width() -
+      this.edge -
+      this.typeInPadding -
+      (this.choices ? arrow.width() + this.typeInPadding : 0)
+  );
 
-    contents.setPosition(new Point(
-        this.edge,
-        this.edge
-    ).add(this.typeInPadding).add(this.position()));
+  contents.setPosition(
+    new Point(this.edge, this.edge).add(this.typeInPadding).add(this.position())
+  );
 
-    arrow.setPosition(new Point(
-        this.right() - arrow.width() - this.edge,
-        contents.top()
-    ));
-
+  arrow.setPosition(
+    new Point(this.right() - arrow.width() - this.edge, contents.top())
+  );
 };
 
 // InputFieldMorph events:
 
 InputFieldMorph.prototype.mouseClickLeft = function (pos) {
-    if (this.arrow().bounds.containsPoint(pos)) {
-        this.dropDownMenu();
-    } else if (this.isReadOnly) {
-        this.dropDownMenu();
-    } else {
-        this.escalateEvent('mouseClickLeft', pos);
-    }
+  if (this.arrow().bounds.containsPoint(pos)) {
+    this.dropDownMenu();
+  } else if (this.isReadOnly) {
+    this.dropDownMenu();
+  } else {
+    this.escalateEvent("mouseClickLeft", pos);
+  }
 };
 
 // InputFieldMorph retrieving:
 
 InputFieldMorph.prototype.getValue = function () {
-/*
+  /*
     answer my content's text string. If I am numerical convert that
     string to a number. If the conversion fails answer the string
     otherwise the numerical value.
 */
-    var num,
-        contents = this.contents();
-    if (this.isNumeric) {
-        num = parseFloat(contents.text.text);
-        if (!isNaN(num)) {
-            return num;
-        }
+  var num,
+    contents = this.contents();
+  if (this.isNumeric) {
+    num = parseFloat(contents.text.text);
+    if (!isNaN(num)) {
+      return num;
     }
-    return this.normalizeSpaces(contents.string());
+  }
+  return this.normalizeSpaces(contents.string());
 };
 
-InputFieldMorph.prototype.normalizeSpaces
-    = DialogBoxMorph.prototype.normalizeSpaces;
+InputFieldMorph.prototype.normalizeSpaces =
+  DialogBoxMorph.prototype.normalizeSpaces;
 
 // InputFieldMorph drawing:
 
 InputFieldMorph.prototype.render = function (ctx) {
-    var borderColor;
+  var borderColor;
 
-    if (this.parent) {
-        if (this.parent.color.eq(WHITE)) {
-            this.color = this.parent.color.darker(this.contrast * 0.1);
-        } else {
-            this.color = this.parent.color.lighter(this.contrast * 0.75);
-        }
-        borderColor = this.parent.color;
+  if (this.parent) {
+    if (this.parent.color.eq(WHITE)) {
+      this.color = this.parent.color.darker(this.contrast * 0.1);
     } else {
-        borderColor = new Color(120, 120, 120);
+      this.color = this.parent.color.lighter(this.contrast * 0.75);
     }
-    ctx.fillStyle = this.color.toString();
+    borderColor = this.parent.color;
+  } else {
+    borderColor = new Color(120, 120, 120);
+  }
+  ctx.fillStyle = this.color.toString();
+  ctx.strokeStyle = this.color.darker(this.contrast/2).toString();
+  ctx.strokeWidth = 2
 
-    // cache my border colors
-    this.cachedClr = borderColor.toString();
-    this.cachedClrBright = borderColor.lighter(this.contrast)
-        .toString();
-    this.cachedClrDark = borderColor.darker(this.contrast).toString();
+  // cache my border colors
+  this.cachedClr = borderColor.toString();
+  this.cachedClrBright = borderColor.lighter(this.contrast).toString();
+  this.cachedClrDark = borderColor.darker(this.contrast).toString();
 
-    ctx.fillRect(
+  if(false) {
+  ctx.fillRect(
+    this.edge,
+    this.edge,
+    this.width() - this.edge * 2,
+    this.height() - this.edge * 2
+  );
+} else {
+  ctx.beginPath()
+ ctx.roundRect(
         this.edge,
         this.edge,
-        this.width() - this.edge * 2,
-        this.height() - this.edge * 2
+        this.width() - (this.edge * 2),
+        this.height() - (this.edge * 2),
+        3
     );
+    ctx.fill()
+    ctx.stroke()
+}
 
-    this.drawRectBorder(ctx);
+  this.drawRectBorder(ctx);
 };
 
 InputFieldMorph.prototype.drawRectBorder = function (ctx) {
-    var shift = this.edge * 0.5,
-        gradient;
+  var shift = this.edge * 0.5,
+    gradient;
 
-    if (MorphicPreferences.isFlat && !this.is3D) {return; }
+  if (MorphicPreferences.isFlat && !this.is3D) {
+    return;
+  }
 
-    ctx.lineWidth = this.edge;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
+  ctx.lineWidth = this.edge;
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
 
-    if (useBlurredShadows) {
-        ctx.shadowOffsetY = shift;
-        ctx.shadowBlur = this.edge * 4;
-        ctx.shadowColor = this.cachedClrDark;
-    }
+  if (useBlurredShadows) {
+    ctx.shadowOffsetY = shift;
+    ctx.shadowBlur = this.edge * 4;
+    ctx.shadowColor = this.cachedClrDark;
+  }
 
-    gradient = ctx.createLinearGradient(
-        0,
-        0,
-        0,
-        this.edge
-    );
+  gradient = ctx.createLinearGradient(0, 0, 0, this.edge);
 
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(this.edge, shift);
-    ctx.lineTo(this.width() - this.edge - shift, shift);
-    ctx.stroke();
+  gradient.addColorStop(0, this.cachedClr);
+  gradient.addColorStop(1, this.cachedClrDark);
+  ctx.strokeStyle = gradient;
+  ctx.beginPath();
+  ctx.moveTo(this.edge, shift);
+  ctx.lineTo(this.width() - this.edge - shift, shift);
+  ctx.stroke();
 
-    ctx.shadowOffsetY = 0;
+  ctx.shadowOffsetY = 0;
 
-    gradient = ctx.createLinearGradient(
-        0,
-        0,
-        this.edge,
-        0
-    );
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(shift, this.edge);
-    ctx.lineTo(shift, this.height() - this.edge - shift);
-    ctx.stroke();
+  gradient = ctx.createLinearGradient(0, 0, this.edge, 0);
+  gradient.addColorStop(0, this.cachedClr);
+  gradient.addColorStop(1, this.cachedClrDark);
+  ctx.strokeStyle = gradient;
+  ctx.beginPath();
+  ctx.moveTo(shift, this.edge);
+  ctx.lineTo(shift, this.height() - this.edge - shift);
+  ctx.stroke();
 
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-    ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  ctx.shadowBlur = 0;
 
-    gradient = ctx.createLinearGradient(
-        0,
-        this.height() - this.edge,
-        0,
-        this.height()
-    );
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(this.edge, this.height() - shift);
-    ctx.lineTo(this.width() - this.edge, this.height() - shift);
-    ctx.stroke();
+  gradient = ctx.createLinearGradient(
+    0,
+    this.height() - this.edge,
+    0,
+    this.height()
+  );
+  gradient.addColorStop(0, this.cachedClrBright);
+  gradient.addColorStop(1, this.cachedClr);
+  ctx.strokeStyle = gradient;
+  ctx.beginPath();
+  ctx.moveTo(this.edge, this.height() - shift);
+  ctx.lineTo(this.width() - this.edge, this.height() - shift);
+  ctx.stroke();
 
-    gradient = ctx.createLinearGradient(
-        this.width() - this.edge,
-        0,
-        this.width(),
-        0
-    );
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(this.width() - shift, this.edge);
-    ctx.lineTo(this.width() - shift, this.height() - this.edge);
-    ctx.stroke();
+  gradient = ctx.createLinearGradient(
+    this.width() - this.edge,
+    0,
+    this.width(),
+    0
+  );
+  gradient.addColorStop(0, this.cachedClrBright);
+  gradient.addColorStop(1, this.cachedClr);
+  ctx.strokeStyle = gradient;
+  ctx.beginPath();
+  ctx.moveTo(this.width() - shift, this.edge);
+  ctx.lineTo(this.width() - shift, this.height() - this.edge);
+  ctx.stroke();
 };
 
 // PianoMenuMorph //////////////////////////////////////////////////////
@@ -3460,294 +3587,276 @@ PianoMenuMorph.uber = MenuMorph.prototype;
 // PianoMenuMorph instance creation:
 
 function PianoMenuMorph(target, environment, fontSize, soundType) {
-    this.init(target, environment, fontSize, soundType);
+  this.init(target, environment, fontSize, soundType);
 }
 
 PianoMenuMorph.prototype.init = function (
-    target,
-    environment,
-    fontSize,
-    soundType, // number 1 - 4: 'sine', 'square', 'sawtooth' or 'triangle'
-    visibleOctaves
+  target,
+  environment,
+  fontSize,
+  soundType, // number 1 - 4: 'sine', 'square', 'sawtooth' or 'triangle'
+  visibleOctaves
 ) {
-    var choices, key;
-    this.soundType = soundType;
-    PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
-    if (isNil(visibleOctaves)) {
-        visibleOctaves = 2;
+  var choices, key;
+  this.soundType = soundType;
+  PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
+  if (isNil(visibleOctaves)) {
+    visibleOctaves = 2;
+  }
+  this.visibleOctaves = visibleOctaves;
+  this.octave = 4 - (3 % this.visibleOctaves);
+  choices = {
+    C: 1,
+    D: 3,
+    "C#": 2,
+    E: 5,
+    Eb: 4,
+    F: 6,
+    G: 8,
+    "F#": 7,
+    A: 10,
+    "G#": 9,
+    B: 12,
+    Bb: 11,
+  };
+  for (var octave = 0; octave < this.visibleOctaves; octave++) {
+    for (key in choices) {
+      if (Object.prototype.hasOwnProperty.call(choices, key)) {
+        this.addItem(key, choices[key] + 12 * octave);
+      }
     }
-    this.visibleOctaves = visibleOctaves;
-    this.octave = 4 - (3 % this.visibleOctaves);
-    choices = {
-        'C' : 1,
-        'D' : 3,
-        'C#' : 2,
-        'E' : 5,
-        'Eb' : 4,
-        'F' : 6,
-        'G' : 8,
-        'F#' : 7,
-        'A' : 10,
-        'G#' : 9,
-        'B' : 12,
-        'Bb' : 11,
-    };
-    for (var octave = 0; octave < this.visibleOctaves; octave++) {
-        for (key in choices) {
-            if (Object.prototype.hasOwnProperty.call(choices, key)) {
-                this.addItem(key, choices[key] + (12 * octave));
-            }
-        }
-    }
-    this.addItem('C', choices.C + (12 * this.visibleOctaves));
+  }
+  this.addItem("C", choices.C + 12 * this.visibleOctaves);
 };
 
 PianoMenuMorph.prototype.createItems = function () {
-    var item,
-        fb,
-        x,
-        y,
-        label,
-        blackkey,
-        key,
-        keycolor,
-        keywidth,
-        keyheight,
-        keyposition;
+  var item,
+    fb,
+    x,
+    y,
+    label,
+    blackkey,
+    key,
+    keycolor,
+    keywidth,
+    keyheight,
+    keyposition;
 
-    this.children.forEach(m => m.destroy());
-    this.children = [];
-    if (!this.isListContents) {
-        this.edge = MorphicPreferences.isFlat ? 0 : 5;
-        this.border = MorphicPreferences.isFlat ? 1 : 2;
+  this.children.forEach((m) => m.destroy());
+  this.children = [];
+  if (!this.isListContents) {
+    this.edge = MorphicPreferences.isFlat ? 0 : 5;
+    this.border = MorphicPreferences.isFlat ? 1 : 2;
+  }
+  this.color = WHITE;
+  this.borderColor = new Color(60, 60, 60);
+  this.bounds.setExtent(ZERO);
+
+  x = this.left() + 1;
+  y = this.top() + this.fontSize * 1.5 + 2;
+  label = new StringMorph("", this.fontSize);
+  this.items.forEach((tuple) => {
+    blackkey = tuple[0].length > 1;
+    key = new BoxMorph(1, 1);
+    if (blackkey) {
+      keycolor = BLACK;
+      keywidth = this.fontSize; // 9;
+      keyheight = this.fontSize * 2.5;
+      keyposition = new Point(x + 2 - this.fontSize * 2, y);
+    } else {
+      keycolor = WHITE;
+      keywidth = this.fontSize * 1.5;
+      keyheight = this.fontSize * 4;
+      keyposition = new Point(x + 1, y);
+      x += keywidth - 1;
     }
-    this.color = WHITE;
-    this.borderColor = new Color(60, 60, 60);
-    this.bounds.setExtent(ZERO);
-
-    x = this.left() + 1;
-    y = this.top() + (this.fontSize * 1.5) + 2;
-    label = new StringMorph('', this.fontSize);
-    this.items.forEach(tuple => {
-        blackkey = tuple[0].length > 1;
-        key = new BoxMorph(1, 1);
-        if (blackkey) {
-            keycolor = BLACK;
-            keywidth = this.fontSize; // 9;
-            keyheight = this.fontSize * 2.5;
-            keyposition = new Point(x + 2 - (this.fontSize * 2), y);
-        } else {
-            keycolor = WHITE;
-            keywidth = this.fontSize * 1.5;
-            keyheight = this.fontSize * 4;
-            keyposition = new Point(x + 1, y);
-            x += keywidth - 1;
-        }
-        key.setColor(keycolor);
-        key.setWidth(keywidth);
-        key.setHeight(keyheight);
-        item = new PianoKeyMorph(
-            this.target,
-            tuple[1],
-            [key, tuple[0]],
-            this.fontSize || MorphicPreferences.menuFontSize,
-            MorphicPreferences.menuFontName,
-            this.environment,
-            tuple[2], // bubble help hint
-            tuple[3], // color
-            tuple[4], // bold
-            tuple[5], // italic
-            tuple[6], // doubleclick action
-            label     // String to change
-        );
-        item.setPosition(keyposition);
-        this.add(item);
-    });
-    fb = this.fullBounds();
-    label.setPosition(new Point((fb.width() / 2) - this.fontSize * 1.6, 2));
-    this.add(label);
-
-    var downOctave = new ArrowMorph(
-        'left',
-        fontHeight(this.fontSize),
-        Math.max(Math.floor(this.fontSize / 6), 1)
+    key.setColor(keycolor);
+    key.setWidth(keywidth);
+    key.setHeight(keyheight);
+    item = new PianoKeyMorph(
+      this.target,
+      tuple[1],
+      [key, tuple[0]],
+      this.fontSize || MorphicPreferences.menuFontSize,
+      MorphicPreferences.menuFontName,
+      this.environment,
+      tuple[2], // bubble help hint
+      tuple[3], // color
+      tuple[4], // bold
+      tuple[5], // italic
+      tuple[6], // doubleclick action
+      label // String to change
     );
-    downOctave.setPosition(new Point(5, 3));
-    downOctave.mouseClickLeft = () => this.octaveDown();
-    this.add(downOctave);
+    item.setPosition(keyposition);
+    this.add(item);
+  });
+  fb = this.fullBounds();
+  label.setPosition(new Point(fb.width() / 2 - this.fontSize * 1.6, 2));
+  this.add(label);
 
-    var upOctave = new ArrowMorph(
-        'right',
-        fontHeight(this.fontSize),
-        Math.max(Math.floor(this.fontSize / 6), 1)
-    );
-    upOctave.setPosition(new Point(fb.width() - upOctave.width() - 2, 3));
-    upOctave.mouseClickLeft = () => this.octaveUp();
-    this.add(upOctave);
+  var downOctave = new ArrowMorph(
+    "left",
+    fontHeight(this.fontSize),
+    Math.max(Math.floor(this.fontSize / 6), 1)
+  );
+  downOctave.setPosition(new Point(5, 3));
+  downOctave.mouseClickLeft = () => this.octaveDown();
+  this.add(downOctave);
 
-    fb = this.fullBounds();
-    this.bounds.setExtent(fb.extent().add(2));
+  var upOctave = new ArrowMorph(
+    "right",
+    fontHeight(this.fontSize),
+    Math.max(Math.floor(this.fontSize / 6), 1)
+  );
+  upOctave.setPosition(new Point(fb.width() - upOctave.width() - 2, 3));
+  upOctave.mouseClickLeft = () => this.octaveUp();
+  this.add(upOctave);
+
+  fb = this.fullBounds();
+  this.bounds.setExtent(fb.extent().add(2));
 };
 
 // PianoMenuMorph keyboard selecting a key:
 
-PianoMenuMorph.prototype.select = function(aPianoKeyItem) {
-    this.unselectAllItems();
-    aPianoKeyItem.mouseEnter();
-    this.selection = aPianoKeyItem;
-    this.world.keyboardFocus = this;
-    this.hasFocus = true;
+PianoMenuMorph.prototype.select = function (aPianoKeyItem) {
+  this.unselectAllItems();
+  aPianoKeyItem.mouseEnter();
+  this.selection = aPianoKeyItem;
+  this.world.keyboardFocus = this;
+  this.hasFocus = true;
 };
 
 PianoMenuMorph.prototype.unselectAllItems = function () {
-    this.children.forEach(item => {
-        if (item instanceof MenuItemMorph) {
-            item.mouseLeave();
-        }
-    });
-    this.changed();
+  this.children.forEach((item) => {
+    if (item instanceof MenuItemMorph) {
+      item.mouseLeave();
+    }
+  });
+  this.changed();
 };
 
 PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
-    var key,
-        note,
-        visibleOctave;
-    
-    if (isNil(midiNum)) {
-        return;
-    }
+  var key, note, visibleOctave;
 
-    if (isNil(octave)) {
-        octave = Math.floor((midiNum / 12) - 1);
-        var octaveIndex = (octave + 1) % this.visibleOctaves;
+  if (isNil(midiNum)) {
+    return;
+  }
 
-        visibleOctave = octave - octaveIndex;
-        note = (midiNum % 12) + 1 + (12 * octaveIndex);
-    } else {
-        note = ((midiNum - 1) % (12 * this.visibleOctaves)) + 1;
-        visibleOctave = this.octave;
-    }
+  if (isNil(octave)) {
+    octave = Math.floor(midiNum / 12 - 1);
+    var octaveIndex = (octave + 1) % this.visibleOctaves;
 
-    this.octave = visibleOctave;
-    
-    key = detect(
-        this.children,
-        each => each.pitch === note
-    );
-    if (key) {
-        this.select(key);
-    } else {
-        this.selectKey(1, this.octave);
-    }
+    visibleOctave = octave - octaveIndex;
+    note = (midiNum % 12) + 1 + 12 * octaveIndex;
+  } else {
+    note = ((midiNum - 1) % (12 * this.visibleOctaves)) + 1;
+    visibleOctave = this.octave;
+  }
+
+  this.octave = visibleOctave;
+
+  key = detect(this.children, (each) => each.pitch === note);
+  if (key) {
+    this.select(key);
+  } else {
+    this.selectKey(1, this.octave);
+  }
 };
 
 // PianoMenuMorph keyboard navigation & entry:
 
 PianoMenuMorph.prototype.processKeyDown = function (event) {
-    // console.log(event.keyCode);
-    switch (event.keyCode) {
+  // console.log(event.keyCode);
+  switch (event.keyCode) {
     case 13: // 'enter'
     case 32: // 'space'
-        if (this.selection) {
-            this.selection.mouseClickLeft();
-        }
-        return;
+      if (this.selection) {
+        this.selection.mouseClickLeft();
+      }
+      return;
     case 27: // 'esc'
-        return this.destroy();
+      return this.destroy();
     case 37: // 'left arrow'
     case 40: // 'down arrow'
     case 189: // -
-        return event.shiftKey ?
-            this.octaveDown()
-            : this.selectDown();
+      return event.shiftKey ? this.octaveDown() : this.selectDown();
     case 38: // 'up arrow'
     case 39: // 'right arrow'
     case 187: // +
     case 220: // #
-        return event.shiftKey ?
-            this.octaveUp()
-            : this.selectUp();
+      return event.shiftKey ? this.octaveUp() : this.selectUp();
     default:
-        switch(event.key) {
-        case 'c':
-            return this.selectKey(1, this.octave);
-        case 'C':
-            return this.selectKey(13, this.octave);
-        case 'd':
-            return this.selectKey(3, this.octave);
-        case 'D':
-            return this.selectKey(15, this.octave);
-        case 'e':
-            return this.selectKey(5, this.octave);
-        case 'E':
-            return this.selectKey(17, this.octave);
-        case 'f':
-            return this.selectKey(6, this.octave);
-        case 'F':
-            return this.selectKey(18, this.octave);
-        case 'g':
-            return this.selectKey(8, this.octave);
-        case 'G':
-            return this.selectKey(20, this.octave);
-        case 'a':
-            return this.selectKey(10, this.octave);
-        case 'A':
-            return this.selectKey(22, this.octave);
-        case 'b':
-        case 'h':
-            return this.selectKey(12, this.octave);
-        case 'B':
-        case 'H':
-            return this.selectKey(24, this.octave);
+      switch (event.key) {
+        case "c":
+          return this.selectKey(1, this.octave);
+        case "C":
+          return this.selectKey(13, this.octave);
+        case "d":
+          return this.selectKey(3, this.octave);
+        case "D":
+          return this.selectKey(15, this.octave);
+        case "e":
+          return this.selectKey(5, this.octave);
+        case "E":
+          return this.selectKey(17, this.octave);
+        case "f":
+          return this.selectKey(6, this.octave);
+        case "F":
+          return this.selectKey(18, this.octave);
+        case "g":
+          return this.selectKey(8, this.octave);
+        case "G":
+          return this.selectKey(20, this.octave);
+        case "a":
+          return this.selectKey(10, this.octave);
+        case "A":
+          return this.selectKey(22, this.octave);
+        case "b":
+        case "h":
+          return this.selectKey(12, this.octave);
+        case "B":
+        case "H":
+          return this.selectKey(24, this.octave);
         default:
-            nop();
-        }
-    }
+          nop();
+      }
+  }
 };
 
 PianoMenuMorph.prototype.selectUp = function () {
-    this.selectKey(
-        this.selection ?
-            Math.min(this.selection.action + 1, 143)
-            : 1
-    );
+  this.selectKey(this.selection ? Math.min(this.selection.action + 1, 143) : 1);
 };
 
 PianoMenuMorph.prototype.selectDown = function () {
-    this.selectKey(
-        this.selection ?
-            Math.max(this.selection.action - 1, 0)
-            : 1
-    );
+  this.selectKey(this.selection ? Math.max(this.selection.action - 1, 0) : 1);
 };
 
 PianoMenuMorph.prototype.octaveUp = function () {
-    this.octave += this.visibleOctaves;
-    this.octave = Math.min(this.octave, 10 - (11) % this.visibleOctaves);
+  this.octave += this.visibleOctaves;
+  this.octave = Math.min(this.octave, 10 - (11 % this.visibleOctaves));
 
-    if (this.selection) {
-        this.selection.mouseEnter();
-    }
+  if (this.selection) {
+    this.selection.mouseEnter();
+  }
 };
 
 PianoMenuMorph.prototype.octaveDown = function () {
-    this.octave -= this.visibleOctaves;
-    this.octave = Math.max(-1, this.octave);
+  this.octave -= this.visibleOctaves;
+  this.octave = Math.max(-1, this.octave);
 
-    if (this.selection) {
-        this.selection.mouseEnter();
-    }
+  if (this.selection) {
+    this.selection.mouseEnter();
+  }
 };
 
 PianoMenuMorph.prototype.destroy = function () {
-    this.children.forEach(key => {
-        if (key.note) {
-            key.note.stop();
-        }
-    });
-    PianoMenuMorph.uber.destroy.call(this);
+  this.children.forEach((key) => {
+    if (key.note) {
+      key.note.stop();
+    }
+  });
+  PianoMenuMorph.uber.destroy.call(this);
 };
-
 
 // PianoKeyMorph ///////////////////////////////////////////////////////
 
@@ -3756,37 +3865,20 @@ PianoKeyMorph.prototype.constructor = PianoKeyMorph;
 PianoKeyMorph.uber = MenuItemMorph.prototype;
 
 function PianoKeyMorph(
-    target,
-    action,
-    labelString, // can also be a Morph or a Canvas or a tuple: [icon, string]
-    fontSize,
-    fontStyle,
-    environment,
-    hint,
-    color,
-    bold,
-    italic,
-    doubleClickAction, // optional when used as list morph item
-    label
+  target,
+  action,
+  labelString, // can also be a Morph or a Canvas or a tuple: [icon, string]
+  fontSize,
+  fontStyle,
+  environment,
+  hint,
+  color,
+  bold,
+  italic,
+  doubleClickAction, // optional when used as list morph item
+  label
 ) {
-    this.init(
-        target,
-        action,
-        labelString,
-        fontSize,
-        fontStyle,
-        environment,
-        hint,
-        color,
-        bold,
-        italic,
-        doubleClickAction,
-        label
-    );
-    this.feedback = label;
-}
-
-PianoKeyMorph.prototype.init = function (
+  this.init(
     target,
     action,
     labelString,
@@ -3799,76 +3891,92 @@ PianoKeyMorph.prototype.init = function (
     italic,
     doubleClickAction,
     label
+  );
+  this.feedback = label;
+}
+
+PianoKeyMorph.prototype.init = function (
+  target,
+  action,
+  labelString,
+  fontSize,
+  fontStyle,
+  environment,
+  hint,
+  color,
+  bold,
+  italic,
+  doubleClickAction,
+  label
 ) {
-    // additional "note" property for sound output:
-    this.note = new Note(action);
-    this.pitch = action;
-    PianoKeyMorph.uber.init.call(
-        this,
-        target,
-        action,
-        labelString,
-        fontSize,
-        fontStyle,
-        environment,
-        hint,
-        color,
-        bold,
-        italic,
-        doubleClickAction,
-        label
-    );
+  // additional "note" property for sound output:
+  this.note = new Note(action);
+  this.pitch = action;
+  PianoKeyMorph.uber.init.call(
+    this,
+    target,
+    action,
+    labelString,
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction,
+    label
+  );
 };
 
 PianoKeyMorph.prototype.createLabel = function () {
-    var icon;
-    if (this.label !== null) {
-        this.label.destroy();
-    }
+  var icon;
+  if (this.label !== null) {
+    this.label.destroy();
+  }
 
-    // assume its pattern is: [icon, string]
-    this.label = new Morph();
-    icon = this.createIcon(this.labelString[0]);
-    this.label.add(icon);
-    this.bounds.setExtent(icon.extent());
-    this.label.bounds = this.position().extent(this.label.extent());
-    this.label.bounds.setExtent(ZERO);
-    this.add(this.label);
+  // assume its pattern is: [icon, string]
+  this.label = new Morph();
+  icon = this.createIcon(this.labelString[0]);
+  this.label.add(icon);
+  this.bounds.setExtent(icon.extent());
+  this.label.bounds = this.position().extent(this.label.extent());
+  this.label.bounds.setExtent(ZERO);
+  this.add(this.label);
 };
 
 PianoKeyMorph.prototype.mouseEnter = function () {
-    var piano = this.parentThatIsA(PianoMenuMorph),
-        soundType = piano ? piano.soundType : 1,
-        octave = Math.floor((this.action - 1) / 12),
-        octaveOffset = 0;
-        
-    if (piano) {
-        piano.unselectAllItems();
-        piano.selection = this;
-        piano.world.keyboardFocus = piano;
-        piano.hasFocus = true;
-        
-        octave = piano.octave;
-    }
-    octaveOffset = Math.floor((this.pitch - 1) / 12);
-    this.action = (this.pitch - 1) + (12 * (octave + 1));
-    this.note.pitch = this.action;
-    
-    this.label.children[0].hide();
-    this.userState = 'highlight';
-    this.rerender();
-    this.feedback.text = `${this.labelString[1]}${octave + octaveOffset} (${this.action})`;
-    this.feedback.fixLayout();
-    this.note.play(soundType);
-    setTimeout(
-        () => this.note.stop(true),
-        400
-    );
+  var piano = this.parentThatIsA(PianoMenuMorph),
+    soundType = piano ? piano.soundType : 1,
+    octave = Math.floor((this.action - 1) / 12),
+    octaveOffset = 0;
+
+  if (piano) {
+    piano.unselectAllItems();
+    piano.selection = this;
+    piano.world.keyboardFocus = piano;
+    piano.hasFocus = true;
+
+    octave = piano.octave;
+  }
+  octaveOffset = Math.floor((this.pitch - 1) / 12);
+  this.action = this.pitch - 1 + 12 * (octave + 1);
+  this.note.pitch = this.action;
+
+  this.label.children[0].hide();
+  this.userState = "highlight";
+  this.rerender();
+  this.feedback.text = `${this.labelString[1]}${octave + octaveOffset} (${
+    this.action
+  })`;
+  this.feedback.fixLayout();
+  this.note.play(soundType);
+  setTimeout(() => this.note.stop(true), 400);
 };
 
 PianoKeyMorph.prototype.mouseLeave = function () {
-    this.note.stop(true);
-    this.label.children[0].show();
-    this.userState = 'normal';
-    this.rerender();
+  this.note.stop(true);
+  this.label.children[0].show();
+  this.userState = "normal";
+  this.rerender();
 };
