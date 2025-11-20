@@ -363,6 +363,13 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'snap_extensionexists(prim)',
+    function (prim) {
+        return !isNil(SnapExtensions.primitives.get(prim));
+    }
+);
+
 // errors & exceptions (err_):
 
 SnapExtensions.primitives.set(
