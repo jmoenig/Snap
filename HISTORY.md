@@ -39,6 +39,7 @@
 * extensions: made "dta_import(raw?)" extension interpolated
 * extensions: generalized "meta_current(asset)" extension
 * added "exit tutorial" and "current editor (asset)" blocks to the tutorials library
+* 3D Beetle extension adjustments for tutorials support, thanks, Bernat!
 
 ### 2025-11-17
 * microworlds (EDC) extension: added automatic vertical scrolling to fancy speech & thought bubbles
