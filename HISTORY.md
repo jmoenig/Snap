@@ -7,7 +7,7 @@
         * projects based on a template let the user restore the visibility of global blocks in the template palette
     * tutorials
         * open and run a scene inside a separate modeless window
-        * new "Tutorials" library for positioning and scaling the tutorial window
+        * new "Tutorials" library for positioning and scaling the tutorial window and interacting with the editor
         * "scn" extension category for cloned scenes and tutorials
         * new "scn_scale(num)" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
         * new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
@@ -38,6 +38,7 @@
 * extensions: new "meta_current_scripts" extension for tutorial needing to access the IDE
 * extensions: made "dta_import(raw?)" extension interpolated
 * extensions: generalized "meta_current(asset)" extension
+* added "exit tutorial" and "current editor (asset)" blocks to the tutorials library
 
 ### 2025-11-17
 * microworlds (EDC) extension: added automatic vertical scrolling to fancy speech & thought bubbles
