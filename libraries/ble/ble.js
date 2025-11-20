@@ -47,13 +47,13 @@ BLEController.prototype.connect = async function (serviceUUID, rxUUIX, txUUID) {
 };
 
 BLEController.prototype.onReceive = function (event) {
-    world.schedule(
-        () => this.processData(new Uint8Array(event.target.value.buffer))
+    this.buffer = this.buffer.concat(
+        Array.from(new Uint8Array(event.target.value.buffer))
     );
+    world.schedule(() => this.processData());
 };
 
-BLEController.prototype.processData = function (data) {
-    this.buffer.push(...data);
+BLEController.prototype.processData = function () {
     if (this.snapBLEprocessBlockDef) {
         var block = this.snapBLEprocessBlockDef.blockInstance();
         if (block) {

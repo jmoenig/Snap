@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-March-30';
+modules.blocks = '2025-November-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -397,7 +397,8 @@ SyntaxElementMorph.prototype.labelParts = {
             'name' : ['name'],
             'width' : ['width'],
             'height' : ['height'],
-            'pixels' : ['pixels']
+            'pixels' : ['pixels'],
+            'colors' : ['colors']
         }
     },
     '%imgsource': {
@@ -489,7 +490,9 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: {
             '1' : 1,
             last : ['last'],
-            random : ['random']
+            random : ['random'],
+            '~' : null,
+            all : ['all'],
         }
     },
     '%la': {
@@ -712,7 +715,9 @@ SyntaxElementMorph.prototype.labelParts = {
             'e^' : ['e^'],
             '10^' : ['10^'],
             '2^' : ['2^'],
-            id: ['id']
+            'σ' : ['sigmoid'],
+            // '∂σ' : ['sigmoid\''],
+            id: ['id'],
         }
     },
     '%layer': {
@@ -735,16 +740,31 @@ SyntaxElementMorph.prototype.labelParts = {
             'r-g-b(-a)' : ['r-g-b(-a)']
         }
     },
-    '%pen': {
+    '%color': {
         type: 'input',
         tags: 'read-only static',
         menu: {
-            size : ['size'],
             hue : ['hue'],
             saturation : ['saturation'],
             brightness : ['brightness'],
             transparency : ['transparency'],
             '~' : null,
+            'h-s-b-t' : ['h-s-b-t'],
+            'r-g-b-a' : ['r-g-b-a']
+        }
+    },
+    '%pen': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            size : ['size'],
+            color : ['color'],
+            '~' : null,
+            hue : ['hue'],
+            saturation : ['saturation'],
+            brightness : ['brightness'],
+            transparency : ['transparency'],
+            '~~' : null,
             'r-g-b-a' : ['r-g-b-a']
         }
     },
@@ -752,12 +772,14 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only static',
         menu: {
+            color : ['color'],
+            '~' : null,
             hue : ['hue'],
             saturation : ['saturation'],
             brightness : ['brightness'],
             transparency : ['transparency'],
             'r-g-b-a' : ['r-g-b-a'],
-            '~' : null,
+            '~~' : null,
             sprites : ['sprites'],
         }
     },
@@ -819,6 +841,11 @@ SyntaxElementMorph.prototype.labelParts = {
     '%var': {
         type: 'input',
         tags: 'read-only static', // if "static" is removed, enable auto-ringify
+        menu: 'getVarNamesDict'
+    },
+    '%hyperVar': {
+        type: 'input',
+        tags: 'read-only',
         menu: 'getVarNamesDict'
     },
     '%shd': {
@@ -886,6 +913,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'category': ['category'],
             'custom?': ['custom?'],
             'global?': ['global?'],
+            'expression': ['expression'],
             'type': ['type'],
             'scope': ['scope'],
             'selector': ['selector'],
@@ -1133,8 +1161,7 @@ SyntaxElementMorph.prototype.labelParts = {
 
     // other single types
     '%clr': {
-        type: 'color',
-        tags: 'static'
+        type: 'color'
     },
     '%br': {
         type: 'break'
@@ -1176,6 +1203,21 @@ SyntaxElementMorph.prototype.labelParts = {
         label: ['to', 'with data'],
         tags: 'static widget',
         max: 2
+    },
+    '%survey': {
+        type: 'multi',
+        slots: ['%rcv', '%s'],
+        label: ['from', 'with data'],
+        tags: 'static widget',
+        max: 2
+    },
+    '%hsbt': {
+        type: 'multi',
+        slots: '%n',
+        label: ['hue', 'saturation', 'brightness', 'transparency'],
+        dflt: [0, 100, 100, '0'], // last zero needs to be a string to show up
+        defaults: 1,
+        max: 4
     },
     '%scriptVars': {
         type: 'multi',
@@ -1528,7 +1570,8 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
                     : this.scriptTarget().getMethod(this.blockSpec);
             if (!noValues &&
                 (deflt instanceof InputSlotMorph ||
-                deflt instanceof BooleanSlotMorph)
+                deflt instanceof BooleanSlotMorph ||
+                deflt instanceof ColorSlotMorph)
             ) {
                 deflt.setContents(
                     def.defaultValueOfInputIdx(inp)
@@ -1545,6 +1588,10 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
         if (deflt instanceof MultiArgMorph) {
             deflt.defaults = this.defaults[inp];
         }
+    } else if (this instanceof MultiArgMorph &&
+            this.defaultValue instanceof Array
+    ) {
+        deflt.setContents(this.defaultValue[inp]);
     }
     return deflt;
 };
@@ -1692,7 +1739,9 @@ SyntaxElementMorph.prototype.getVarNamesDict = function () {
                 'draggable?' : ['my draggable?'],
                 'rotation style' : ['my rotation style'],
                 'rotation x' : ['my rotation x'],
-                'rotation y' : ['my rotation y']
+                'rotation y' : ['my rotation y'],
+                'scripts' : ['my scripts']
+
             }];
             if (this.world().currentKey === 16) { // shift
                 dict.my[0]['~'] = null; // don't forget we're inside an array...
@@ -1959,7 +2008,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 info.dflt,
                 info.group
             );
-            part.maxInputs = info.max;
+            part.setMaxSlots(info.max);
             part.initialSlots = Math.max( // this needs some fixing
                 part.initialSlots,
                 isNil(info.min) ? 0 : +info.min,
@@ -2523,6 +2572,28 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             morphToShow.bounds.setWidth(img.width);
             morphToShow.bounds.setHeight(img.height);
             morphToShow.cachedImage = img;
+            if (value instanceof BlockMorph) {
+                // support blocks to be dragged out of result bubbles:
+                morphToShow.isDraggable =
+                    !SpriteMorph.prototype.disableDraggingData;
+
+                morphToShow.selectForEdit = function () {
+                    var script = value.fullCopy(),
+                        prepare = script.prepareToBeGrabbed;
+
+                    script.prepareToBeGrabbed = function (hand) {
+                        prepare.call(this, hand);
+                        hand.grabOrigin = {
+                            origin: ide.palette,
+                            position: ide.palette.center()
+                        };
+                        this.prepareToBeGrabbed = prepare;
+                    };
+
+                    script.setPosition(this.position());
+                    return script;
+                };
+            }
         }
     } else if (value instanceof Costume) {
         img = value.thumbnail(new Point(40, 40));
@@ -2655,6 +2726,11 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow = SpriteMorph.prototype.booleanMorph.call(
             null,
             value
+        );
+    } else if (value instanceof Color) {
+        morphToShow = SpriteMorph.prototype.colorSwatch(
+            value,
+            this.fontSize * 1.4
         );
     } else if (isString(value)) {
         // shorten the string, commented out because we now scroll it
@@ -3769,14 +3845,8 @@ BlockMorph.prototype.userMenu = function () {
         });
         return menu;
     }
-    if (this.parent.parentThatIsA(RingMorph)) {
-        menu.addLine();
-        menu.addItem("unringify", 'unringify');
-        menu.addItem("ringify", 'ringify');
-        return menu;
-    }
     if (contains(
-        ['doBroadcast', 'doBroadcastAndWait', 'receiveMessage',
+        ['doBroadcast', 'doBroadcastAndWait', 'reportPoll', 'receiveMessage',
             'receiveOnClone', 'receiveGo'],
         this.selector
     )) {
@@ -3787,6 +3857,12 @@ BlockMorph.prototype.userMenu = function () {
                 "senders..." : "receivers..."),
             'showMessageUsers'
         );
+    }
+    if (this.parent.parentThatIsA(RingMorph)) {
+        if (!hasLine) {menu.addLine(); }
+        menu.addItem("unringify", 'unringify');
+        menu.addItem("ringify", 'ringify');
+        return menu;
     }
     if (this.parent instanceof ReporterSlotMorph
             || (this.parent instanceof CommandSlotMorph)
@@ -3839,7 +3915,8 @@ BlockMorph.prototype.messageUsers = function () {
     var ide = this.parentThatIsA(IDE_Morph) ||
             this.parentThatIsA(BlockEditorMorph)
                 .target.parentThatIsA(IDE_Morph),
-        isSender = this.selector.indexOf('doBroadcast') === 0,
+        isSender = this.selector === 'reportPoll' ||
+            this.selector.indexOf('doBroadcast') === 0,
         isReceiver = this.selector.indexOf('receive') === 0,
         getter = isReceiver ? 'allSendersOf' : 'allHatBlocksFor',
         inputs = this.inputs(),
@@ -3893,7 +3970,9 @@ BlockMorph.prototype.isSending = function (message, receiverName, known = []) {
         ) {
             return true;
         }
-        if (morph.selector && morph.selector.indexOf('doBroadcast') === 0) {
+        if (morph.selector && (morph.selector === 'reportPoll' ||
+            morph.selector.indexOf('doBroadcast') === 0)
+        ) {
             inputs = morph.inputs();
             event = inputs[0].evaluate();
             if (event instanceof Array) {
@@ -8227,6 +8306,9 @@ RingMorph.prototype.render = function (ctx) {
 RingMorph.prototype.rootForGrab = function () {
     if (this.parent?.isTemplate) {
         return this.parent;
+    } else if (this.parent instanceof MultiArgMorph &&
+            this.parent.parent?.isTemplate) {
+        return this.parent.parent;
     }
     if (this.isDraggable) {
         return this;
@@ -11668,8 +11750,8 @@ InputSlotMorph.prototype.clonablesMenuWithTurtle = function (searching) {
 
     if (rcvr instanceof SpriteMorph) {
         dict.myself = ['myself'];
-        dict['Turtle sprite'] = ['Turtle sprite'];
     }
+    dict['Turtle sprite'] = ['Turtle sprite'];
     stage.children.forEach(morph => {
         if (morph instanceof SpriteMorph && !morph.isTemporary) {
             if (!allNames.some(n => snapEquals(n, morph.name))) {
@@ -11772,6 +11854,7 @@ InputSlotMorph.prototype.typesMenu = function () {
     }
     dict.costume = ['costume'];
     dict.sound = ['sound'];
+    dict.color = ['color'];
     dict.command = ['command'];
     dict.reporter = ['reporter'];
     dict.predicate = ['predicate'];
@@ -13749,11 +13832,24 @@ function ColorSlotMorph(clr) {
 ColorSlotMorph.prototype.init = function (clr) {
     ColorSlotMorph.uber.init.call(this);
     this.alpha = 1;
-    this.setColor(clr || new Color(145, 26, 68));
+    this.setColor(clr);
+    this.fixLayout();
 };
 
 ColorSlotMorph.prototype.getSpec = function () {
     return '%clr';
+};
+
+ColorSlotMorph.prototype.setContents = function (clr) {
+    this.setColor(clr);
+};
+
+ColorSlotMorph.prototype.setColor = function (clr) {
+    ColorSlotMorph.uber.setColor.call(
+        this,
+        isString(clr) && clr.length > 10 ? Color.fromString(clr)
+            : (clr instanceof Color ? clr : new Color(145, 26, 68))
+    );
 };
 
 // ColorSlotMorph  color sensing:
@@ -14126,6 +14222,16 @@ MultiArgMorph.prototype.initGroup = function (aBlockSpec) {
         }
         this.labelText = labels.map(arr => arr.join(' '));
     }
+    // special case: if maxSlots equals the input group size
+    // expand and collapse the group inputs one by one
+    // otherwise group-wise
+    if (this.slotSpec instanceof Array) { // input group
+        if (this.groupInputs === this.maxInputs) {
+            this.groupInputs = 1;
+        } else {
+            this.groupInputs = this.slotSpec.length;
+        }
+    }
 };
 
 MultiArgMorph.prototype.collapseLabel = function () {
@@ -14242,7 +14348,7 @@ MultiArgMorph.prototype.setDefaultValue = function (defaultValue) {
         var items = (str || '').toString().split('\n')
             .filter(each => each.length).map(each =>
                 isString(each) && each.length > 2 && each.startsWith('$_') ?
-                    localize(each.slice(2))
+                    [each.slice(2)]
                     : each);
         return items.length > 1 ? items : items[0] || null;
     }
@@ -14263,6 +14369,17 @@ MultiArgMorph.prototype.setMinSlots = function (minSlots) {
 
 MultiArgMorph.prototype.setMaxSlots = function (maxSlots) {
     this.maxInputs = +maxSlots;
+
+    // special case: if maxSlots equals the input group size
+    // expand and collapse the group inputs one by one
+    // otherwise group-wise
+    if (this.slotSpec instanceof Array) { // input group
+        if (this.slotSpec.length === this.maxInputs) {
+            this.groupInputs = 1;
+        } else {
+            this.groupInputs = this.slotSpec.length;
+        }
+    }
 };
 
 // MultiArgMorph defaults:
@@ -14714,6 +14831,8 @@ MultiArgMorph.prototype.defaultValueFor = function (index) {
 MultiArgMorph.prototype.defaultValueDataFor = function (index) {
     // private - answer the raw untranslated data
     // repeat & wrap default values inside label groups
+    var dflt;
+
     if (!this.parent || this.groupInputs > 1) {
         return this.defaultValue instanceof Array ?
             this.defaultValue[index % this.defaultValue.length]
@@ -14721,10 +14840,12 @@ MultiArgMorph.prototype.defaultValueDataFor = function (index) {
     }
 
     // otherwise use them just once each
-    if (this.defaultValue instanceof Array) {
-        return this.defaultValue[index] || '';
+    dflt = isNil(this.defaultValue) ? this.defaults
+        : this.defaultValue;
+    if (dflt instanceof Array) {
+        return dflt[index] || '';
     }
-    return index ? '' : this.defaultValue;
+    return index ? '' : dflt;
 };
 
 // MultiArgMorph events:

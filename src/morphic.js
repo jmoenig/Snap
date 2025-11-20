@@ -1351,7 +1351,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-March-20';
+var morphicVersion = '2025-November-03';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 
@@ -5807,6 +5807,9 @@ CursorMorph.prototype.processInput = function (event) {
             hasE = false,
             result = '',
             i, ch, valid;
+        if (content === '$' || content.startsWith('$_')) { // support selectors
+            return content;
+        }
         for (i = 0; i < content.length; i += 1) {
             ch = content.charAt(i);
             valid = (
@@ -11683,12 +11686,9 @@ HandMorph.prototype.processMouseScroll = function (event) {
     if (morph) {
         morph.mouseScroll(
             (event.detail / -3) || (
-                Object.prototype.hasOwnProperty.call(
-                    event,
-                    'wheelDeltaY'
-                ) ?
-                        event.wheelDeltaY / 120 :
-                        event.wheelDelta / 120
+                'wheelDeltaY' in event ?
+                    event.wheelDeltaY / 120 :
+                    event.wheelDelta / 120
             ),
             event.wheelDeltaX / 120 || 0
         );
@@ -11754,7 +11754,6 @@ HandMorph.prototype.processDrop = function (event) {
             trg.droppedSVG(pic, aFile.name);
             bulkDrop();
         };
-        frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
     }
@@ -11794,7 +11793,6 @@ HandMorph.prototype.processDrop = function (event) {
             })();
         };
 
-        frd = new FileReader();
         frd.onloadend = (e) => pic.src = e.target.result;
         frd.readAsDataURL(aFile);
     }
@@ -12452,22 +12450,14 @@ WorldMorph.prototype.initEventListeners = function () {
         false
     );
 
-    window.cachedOnbeforeunload = window.onbeforeunload;
     this.onbeforeunloadListener = (evt) => {
-        if (!this.hasUnsavedEdits()) return;
-        if (window.cachedOnbeforeunload) {
-            window.cachedOnbeforeunload.call(null, evt);
+        if (this.hasUnsavedEdits() && !window.noExitWarning) {
+            evt.preventDefault();
+            // legacy browsers support
+            evt.returnValue = true;
         }
-        var e = evt || window.event,
-            msg = "Are you sure you want to leave?";
-        // For IE and Firefox
-        if (e) {
-            e.returnValue = msg;
-        }
-        // For Safari / chrome
-        return msg;
     };
-     window.addEventListener("beforeunload", this.onbeforeunloadListener);
+    window.addEventListener("beforeunload", this.onbeforeunloadListener);
 };
 
 WorldMorph.prototype.hasUnsavedEdits = function () {

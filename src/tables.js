@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2022 by Jens Mönig
+    Copyright (C) 2025 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -68,12 +68,12 @@
 MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph, isNil,
 SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
-ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows,
+ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows, Color,
 CostumeIconMorph, SoundIconMorph, localize, display*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2023-August-17';
+modules.tables = '2025-April-03';
 
 var Table;
 var TableCellMorph;
@@ -286,7 +286,7 @@ TableCellMorph.prototype.listSymbol = function () {
             SpriteMorph.prototype.blockColor.lists.darker(50)
         );
     }
-    return this.cachedListSymbol.getImage();
+    return this.cachedListSymbol;
 };
 
 // TableCellMorph instance creation:
@@ -374,6 +374,14 @@ TableCellMorph.prototype.render = function (ctx) {
             ctx.shadowColor = 'lightgray';
         }
         ctx.drawImage(dta, x, y);
+    } else if (dta instanceof Morph) {
+        ctx.save();
+        ctx.translate(
+            Math.max((width - dta.width()) / 2, 0),
+            Math.max((height - dta.height()) / 2, 0)
+        );
+        dta.render(ctx); // to do: center horizontally
+        ctx.restore();
     } else { // text
         ctx.font = font;
         ctx.textAlign = 'left';
@@ -391,9 +399,8 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
     if (dta instanceof Morph) {
         if (isSnapObject(dta)) {
             return dta.thumbnail(new Point(40, 40), null, true); // no watchers
-        } else {
-            return dta.fullImage();
         }
+        return dta;
     } else if (isString(dta)) {
         return dta.length > 100 ? dta.slice(0, 100) + '...' : dta;
     } else if (typeof dta === 'number') {
@@ -402,7 +409,7 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         return SpriteMorph.prototype.booleanMorph.call(
             null,
             dta
-        ).fullImage();
+        );
     } else if (dta instanceof Array) {
         if (dta[0] instanceof Array && isString(dta[0][0])) {
             return display(dta[0]);
@@ -419,9 +426,14 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
     } else if (dta instanceof Sound) {
         return new SymbolMorph(
             'notes', SyntaxElementMorph.prototype.fontSize
-        ).getImage();
+        );
     } else if (dta instanceof List) {
         return this.listSymbol();
+    } else if (dta instanceof Color) {
+        return SpriteMorph.prototype.colorSwatch(
+            dta,
+            SyntaxElementMorph.prototype.fontSize * 1.4
+        );
     } else {
         return dta ? dta.toString() : (dta === 0 ? '0' : null);
     }
