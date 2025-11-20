@@ -16,7 +16,7 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
     SpriteMorph.prototype.setColorDimension = function (idx, num) {
         var stage = this.parent;
         this.originalSetColorDimension(idx, num);
-        if (stage?.beetleController.currentSprite === this) {
+        if (stage?.beetleController?.currentSprite === this) {
             stage.beetleController.beetle.setColor(this.color);
         }
     };
@@ -24,7 +24,7 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
     SpriteMorph.prototype.setColor = function (aColor) {
         var stage = this.parent;
         this.originalSetColor(aColor);
-        if (stage?.beetleController.currentSprite === this) {
+        if (stage?.beetleController?.currentSprite === this) {
             stage.beetleController.beetle.setColor(this.color);
         }
     };
@@ -37,7 +37,7 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
             stage = this.parent;
         this.originalMoveBy(delta, justMe);
         newPos = this.rotationCenter();
-        if (stage?.beetleController.currentSprite === this) {
+        if (stage?.beetleController?.currentSprite === this) {
             if (stage.beetleController.beetle.loggingSpritePositions
                 && !newPos.eq(oldPos)
             ) {
@@ -986,6 +986,8 @@ Beetle.prototype.init = function (controller) {
 
     this.name = 'beetle';
 
+    this.ready = false; // will be true when all meshes have been loaded
+
     this.shapeScale = new BABYLON.Vector2(1,1);
     this.shapeOffset = new BABYLON.Vector2.Zero;
     this.movementScale = 1;
@@ -1024,7 +1026,11 @@ Beetle.prototype.initColor = function () {
             return;
         }
     }
-    this.setColor(sprite.color);
+    if (sprite instanceof SpriteMorph) {
+        this.setColor(sprite.color);
+    } else {
+        this.setColor(new Color(128,100,90));
+    }
     this.controller.changed();
 };
 
@@ -1042,6 +1048,7 @@ Beetle.prototype.setColor = function (color) {
 };
 
 Beetle.prototype.loadMeshes = function () {
+    var myself = this;
     ['gray', 'color', 'black'].forEach(
         (each) =>
             BABYLON.SceneLoader.ImportMesh(
@@ -1072,6 +1079,7 @@ Beetle.prototype.loadMeshes = function () {
                         this.wings = meshes[0];
                         this.initColor();
                     }
+                    myself.ready = true;
                 }
             )
     );
@@ -1528,11 +1536,13 @@ SnapExtensions.buttons.palette.push({
 
 (function() {
     var ide = world.children[0],
-        stage = ide.stage;
+        scene = world.children[0].scenes.asArray().find(
+            s => s.globalVariables.names(true).includes('__module__beetle__')),
+        stage = scene.stage;
 
     // Redo palette so the button actually shows up
-    world.children[0].flushBlocksCache();
-    world.children[0].refreshPalette();
+    ide.flushBlocksCache();
+    ide.refreshPalette();
 
     // Init controller
     if (!stage.beetleController) {
@@ -1542,7 +1552,14 @@ SnapExtensions.buttons.palette.push({
 
 // Primitives
 
-SnapExtensions.primitives.set('bb_clear()', function (steps) {
+SnapExtensions.primitives.set('bb_ready()', function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
+    return stage.beetleController.beetle.ready;
+});
+
+SnapExtensions.primitives.set('bb_clear()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
     stage.beetleController.currentSprite = this;
