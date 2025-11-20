@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-09';
+modules.gui = '2025-November-20';
 
 // Declarations
 
