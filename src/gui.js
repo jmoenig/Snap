@@ -7159,16 +7159,18 @@ IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
     );
 };
 
-IDE_Morph.prototype.autoLoadExtensions = function () {
+IDE_Morph.prototype.autoLoadExtensions = function (optionalScene) {
     // experimental - allow auto-loading extensions from urls specified
     // in global variables whose names start with "__module__".
     // Still very much under construction, also needs to be tweaked for
     // asynch operation
-    var urls = [];
-    Object.keys(this.globalVariables.vars).forEach(vName => {
+    var urls = [],
+        context = this;
+    if (optionalScene) { context = optionalScene; }
+    Object.keys(context.globalVariables.vars).forEach(vName => {
         var val;
         if (vName.startsWith('__module__')) {
-            val = this.globalVariables.getVar(vName);
+            val = context.globalVariables.getVar(vName);
             if (isString(val)) {
                 urls.push(val);
             }
@@ -7255,6 +7257,7 @@ IDE_Morph.prototype.switchToScene = function (
     this.toggleAppMode(appMode);
     this.controlBar.stopButton.refresh();
     this.world().keyboardFocus = this.stage;
+    this.autoLoadExtensions();
     if (msg) {
         this.stage.fireChangeOfSceneEvent(msg, data);
     }
@@ -9225,6 +9228,9 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
             ).withKey('tutorial ' + scene.name),
         handle,
         diff;
+
+    // handle loading extension modules for the tutorial scene
+    this.autoLoadExtensions(scene);
 
     dlg.padding = MorphicPreferences.isFlat ? 1 : dlg.corner;
     dlg.stackPadding = 0;
