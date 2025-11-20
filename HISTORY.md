@@ -13,7 +13,7 @@
         * new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
         * new "scn_position(pane, x, y)" extension, positions the tutorial dialog into the specified pane
         * new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
-        * new "meta_current_scripts" extension for tutorial needing to access the IDE
+        * new "'meta_current(asset)'" extension for tutorial needing to access the IDE for the current sprite, stage, scripts, category or tab
     * unringed blocks as data
         * new "expression" selector in block-attribute (metaprogramming) reporter
         * enables expressions (unringed blocks) to be CALLed and RUN
@@ -37,6 +37,7 @@
 ### 2025-11-20
 * extensions: new "meta_current_scripts" extension for tutorial needing to access the IDE
 * extensions: made "dta_import(raw?)" extension interpolated
+* extensions: generalized "meta_current(asset)" extension
 
 ### 2025-11-17
 * microworlds (EDC) extension: added automatic vertical scrolling to fancy speech & thought bubbles

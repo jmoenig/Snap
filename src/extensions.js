@@ -1789,7 +1789,41 @@ SnapExtensions.primitives.set(
 // Autograding / Code-critique / structural help - mostly for tutorials (meta_)
 
 SnapExtensions.primitives.set(
-    'meta_current_scripts',
+    'meta_current(asset)', // sprite, sprites, stage, scripts, category, tab
+    function (choice, proc) {
+        var stage = this.parentThatIsA(StageMorph),
+            dlg, ide;
+        if (!stage.tutorialMode) {return; }
+        dlg = stage.parentThatIsA(DialogBoxMorph);
+        ide = dlg ? dlg.ide : stage.parentThatIsA(IDE_Morph);
+        if (!ide) {return ''; }
+
+        switch (choice) {
+        case 'scripts':
+            return new List(
+                ide.currentSprite.scripts.sortedElements().filter(
+                    each => each instanceof BlockMorph
+                ).map(
+                    each => each.fullCopy().reify()
+                )
+            );
+        case 'sprites':
+            return ide.sprites;
+        case 'stage':
+            return ide.stage;
+        case 'tab':
+            return ide.currentTab;
+        case 'category':
+            return ide.categories.buttons.find(each =>
+                each.state).category;
+        default: // 'sprite'
+            return ide.currentSprite;
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'meta_current_sprite',
     function (proc) {
         var stage = this.parentThatIsA(StageMorph),
             dlg, ide;
@@ -1797,13 +1831,7 @@ SnapExtensions.primitives.set(
         dlg = stage.parentThatIsA(DialogBoxMorph);
         ide = dlg ? dlg.ide : stage.parentThatIsA(IDE_Morph);
         if (!ide) {return ''; }
-        return new List(
-            ide.currentSprite.scripts.sortedElements().filter(
-                each => each instanceof BlockMorph
-            ).map(
-                each => each.fullCopy().reify()
-            )
-        );
+        return ide.currentSprite;
     }
 );
 
