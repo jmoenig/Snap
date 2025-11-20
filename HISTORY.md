@@ -13,6 +13,7 @@
         * new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
         * new "scn_position(pane, x, y)" extension, positions the tutorial dialog into the specified pane
         * new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
+        * new "meta_current_scripts" extension for tutorial needing to access the IDE
     * unringed blocks as data
         * new "expression" selector in block-attribute (metaprogramming) reporter
         * enables expressions (unringed blocks) to be CALLed and RUN
@@ -33,7 +34,10 @@
 * **Translation Updates:**
     * German
 
-### 2025-12-17
+### 2025-11-20
+* extensions: new "meta_current_scripts" extension for tutorial needing to access the IDE
+
+### 2025-11-17
 * microworlds (EDC) extension: added automatic vertical scrolling to fancy speech & thought bubbles
 * microworlds (EDC) extension: added optional "max height" input to "fancy say / think" extensions
 * (EDC) Fancy Text library: added optional "max height" inputs to "fancy say / think" library blocks
@@ -44,19 +48,19 @@
 * extensions: added general "dta_export(data, name, type)" extension (for csv, json, etc.)
 * extensions: added general "dta_import(raw?)" extension (for text files, csv, json etc.)
 
-### 2025-12-13
+### 2025-11-13
 * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
 
-### 2025-12-09
+### 2025-11-09
 * gui: optimized tutorial window layout for flat mode
 * gui, widgets: optimized tutorial window layout for default mode
 
-### 2025-12-06
+### 2025-11-06
 * gui: exit the tutorial window when creating or opening a new project
 * gui: make sure to switch to a non-tutorial scene when launching a tutorial
 * gui, store: retain templates and tutorials when refreshing the IDE by serializing and de-serializing the project 
 
-### 2025-12-05
+### 2025-11-05
 * gui, extensions: prevent programmatic downscaling of the tutorial window below its minimum size
 * extensions: reverse direction of y-axis for positioning tutorial windows, make it same as the stage
 * extensions: new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
@@ -66,7 +70,7 @@
 * objects: display expressions (unringed blocks) in speech balloons, allow dragging them out into the scripting area
 * German translation update for new "expression" selector ("Term") for unringed blocks 
 
-### 2025-12-04
+### 2025-11-04
 * extensions: new "scn" category for cloned scenes and tutorials
 * extensions: new "scn_scale([num])" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
 * gui, extensions: new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
@@ -74,7 +78,7 @@
 * extensions: new "scn_position(pane, [x, y])" extension, positions the tutorial dialog into the specified pane
 * extensions: interpolated evaluation of tutorial scaling and positioning extensions
 
-### 2025-12-03
+### 2025-11-03
 * gui: always normalize SVGs on import
 * gui, objects: prevent dialog boxes to be dropped onto the palette
 * morphic: cleaned up some redunancies
@@ -83,7 +87,7 @@
 * German translation update for new "Launch tutorial..." and "Exit tutorial" strings
 * gui: refactored layout of tutorial dialog
 
-### 2025-12-02
+### 2025-11-02
 * widgets, gui: prevent a launched tutorial stage from automatically getting keyboard focus
 * objects, gui: disable drag & drop for assets on a launched tutorial stage
 
