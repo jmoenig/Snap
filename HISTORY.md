@@ -36,6 +36,7 @@
 
 ### 2025-11-20
 * extensions: new "meta_current_scripts" extension for tutorial needing to access the IDE
+* extensions: made "dta_import(raw?)" extension interpolated
 
 ### 2025-11-17
 * microworlds (EDC) extension: added automatic vertical scrolling to fancy speech & thought bubbles

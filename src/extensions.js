@@ -647,9 +647,9 @@ SnapExtensions.primitives.set(
     'dta_import(raw?)',
     function (raw, proc) {
         // raw is a Boolean flag selecting to keep the data unparsed
-        var inp = document.createElement('input'),
-            ide = this.parentThatIsA(IDE_Morph),
-            data = false;
+        var ide = this.parentThatIsA(IDE_Morph),
+            acc = proc.context.accumulator,
+            inp;
 
         function userImport() {
 
@@ -683,11 +683,11 @@ SnapExtensions.primitives.set(
 
                 frd.onloadend = function (e) {
                     if (!raw && isType(aFile, 'csv')) {
-                        data = Process.prototype.parseCSV(e.target.result);
+                        acc.data = Process.prototype.parseCSV(e.target.result);
                     } else if (!raw && isType(aFile, 'json')) {
-                        data = Process.prototype.parseJSON(e.target.result);
+                        acc.data = Process.prototype.parseJSON(e.target.result);
                     } else {
-                        data = e.target.result;
+                        acc.data = e.target.result;
                     }
                 };
 
@@ -710,35 +710,44 @@ SnapExtensions.primitives.set(
             }
         }
 
-        if (ide.filePicker) {
-            document.body.removeChild(ide.filePicker);
-            ide.filePicker = null;
+        if (!acc) {
+            acc = proc.context.accumulator = {
+                data: null
+            };
+            if (ide.filePicker) {
+                document.body.removeChild(ide.filePicker);
+                ide.filePicker = null;
+            }
+            inp = document.createElement('input');
+            inp.type = 'file';
+            inp.style.color = "transparent";
+            inp.style.backgroundColor = "transparent";
+            inp.style.border = "none";
+            inp.style.outline = "none";
+            inp.style.position = "absolute";
+            inp.style.top = "0px";
+            inp.style.left = "0px";
+            inp.style.width = "0px";
+            inp.style.height = "0px";
+            inp.style.display = "none";
+            inp.addEventListener(
+                "change",
+                userImport,
+                false
+            );
+            inp.addEventListener(
+                "cancel",
+                () => acc.data = '',
+                false
+            );
+            document.body.appendChild(inp);
+            ide.filePicker = inp;
+            inp.click();
+        } else if (acc.data !== null) {
+            return acc.data;
         }
-        inp.type = 'file';
-        inp.style.color = "transparent";
-        inp.style.backgroundColor = "transparent";
-        inp.style.border = "none";
-        inp.style.outline = "none";
-        inp.style.position = "absolute";
-        inp.style.top = "0px";
-        inp.style.left = "0px";
-        inp.style.width = "0px";
-        inp.style.height = "0px";
-        inp.style.display = "none";
-        inp.addEventListener(
-            "change",
-            userImport,
-            false
-        );
-        inp.addEventListener(
-            "cancel",
-            () => data = '',
-            false
-        );
-        document.body.appendChild(inp);
-        ide.filePicker = inp;
-        inp.click();
-        return () => data;
+        proc.pushContext('doYield');
+        proc.pushContext();
     }
 );
 
