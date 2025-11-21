@@ -2378,13 +2378,13 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         hasLoopCSlot = true;
       }
       if (
-        (part instanceof InputSlotMorph ||
+        index == 0 && (!part?.isBlockLabelBreak && (part instanceof InputSlotMorph ||
           part instanceof ReporterBlockMorph ||
           (!(part instanceof BlockLabelMorph) &&
             !(part instanceof CSlotMorph) &&
             !(part instanceof ArrowMorph) &&
             !(part instanceof MultiArgMorph && part.slotSpec.includes("%cs")) &&
-            !(part instanceof SymbolMorph))) &&
+            !(part instanceof SymbolMorph)))) &&
         this.constructor.name.includes("CommandBlockMorph")
       ) {
         if (typeof x == "number") {
