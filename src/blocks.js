@@ -2337,7 +2337,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   }
   this.alwaysRound = lines.length == 1;
   this.lineCount = lines.length;
-  lines.forEach((line) => {
+  lines.forEach((line, index) => {
     if (hasLoopCSlot) {
       hasLoopArrow = true;
       hasLoopCSlot = false;
@@ -2373,7 +2373,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     y += lineHeight;
 
     lineHeight = 0;
-    line.forEach((part, index) => {
+    line.forEach((part) => {
       if (part.isLoop) {
         hasLoopCSlot = true;
       }
@@ -2532,7 +2532,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   }
   // adjust right padding if rightmost input in a reporter is round
   if (
-    rightMost instanceof InputSlotMorph && !rightMost?.isReadOnly &&
+    rightMost instanceof InputSlotMorph && (this?.squareStrings ? !rightMost?.isStatic && this.isNumeric : !rightMost?.isStatic) &&
     this instanceof ReporterBlockMorph &&
     lines.length === 1
   ) {
@@ -8156,7 +8156,7 @@ ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
     r =
       this?.alwaysRound && !(this instanceof RingMorph)
         ? h / 2
-        : Math.min((2 * this.rounding), h / 2),
+        : Math.min((1 * this.rounding), h / 2),
     radius = Math.max(r - inset, 0),
     w = this.width(),
     pos = this.position();
@@ -12533,7 +12533,7 @@ InputSlotMorph.prototype.fixLayout = function () {
       this.symbol.width() + arrowWidth + this.edge * 4 + this.typeInPadding * 2;
   } else {
     height = contents.height() + this.edge * 8; // + this.typeInPadding * 2
-    if (this.squareStrings ? (this.isNumeric) : (!(this instanceof TextSlotMorph) || !this.isStatic)) {
+    if (this.squareStrings ? !((!this.isNumeric) && (!this.isReadOnly || this.isStatic)) : (!(this instanceof TextSlotMorph) || !this.isStatic)) {
       
       width = Math.max(
         contents.width() +
@@ -12851,7 +12851,7 @@ InputSlotMorph.prototype.render = function (ctx) {
   this.cachedClrDark = borderColor.darker(this.contrast).toString();
   ctx.strokeStyle = this.parent.color.darker(20).toString();
   ctx.lineWidth = (this.isStatic || this.isReadOnly ? 1 : 1) * this.scale;
-  if (this.squareStrings ? (!this.isNumeric) : (this.isStatic || this instanceof TextSlotMorph)) {
+  if (this.squareStrings ? ((!this.isNumeric) && (!this.isReadOnly || this.isStatic)) : (this.isStatic || this instanceof TextSlotMorph)) {
     ctx.beginPath();
     if (false) {
       ctx.strokeRect(

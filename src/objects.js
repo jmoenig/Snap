@@ -4504,7 +4504,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
     palette.owner = this;
     palette.padding = unit / 2;
     palette.color = this.paletteColor;
-    palette.alpha = 0.5;
+    palette.alpha = 1;
     palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
     // toolbar:

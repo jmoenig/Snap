@@ -1228,7 +1228,6 @@ ToggleMorph.prototype.refresh = function () {
 
 ToggleMorph.prototype.mouseDownLeft = function () {
   PushButtonMorph.uber.mouseDownLeft.call(this);
-  this.color = this.tick ? new Color(255,0,0) : new Color(255,255,0)
   if (this.tick) {
     this.tick.setCenter(this.center().add(1));
   }
