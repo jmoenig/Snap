@@ -111,26 +111,66 @@ PushButtonMorph.prototype = new TriggerMorph();
 PushButtonMorph.prototype.constructor = PushButtonMorph;
 PushButtonMorph.uber = TriggerMorph.prototype;
 
+// This color is used for the background of Snap! buttons, highlights
+// and in dialog boxes.
+const SnapAccentLightBlue = new Color(115, 180, 240);
+// This color (#3B7CA0) is chose to have 4.5:1 contrast ratio with white AND black
+// It is safe to use both in the dialog title bars and button highlights.
+// TODO-a11y: In some lists, this a darker version is used for selected items,
+// We may need to adjust dependent colors to maintain sufficient contrast.
+const SnapHighContrastAccentBlue = new Color(59, 124, 160);
+
 // PushButtonMorph preferences settings:
+PushButtonMorph.prototype.DEFAULT_LOOKS = {
+    fontSize: 10,
+    fontStyle: 'sans-serif',
+    labelColor: BLACK,
+    labelShadowColor: WHITE,
+    labelShadowOffset: new Point(1, 1),
 
-PushButtonMorph.prototype.fontSize = 10;
-PushButtonMorph.prototype.fontStyle = 'sans-serif';
-PushButtonMorph.prototype.labelColor = BLACK;
-PushButtonMorph.prototype.labelShadowColor = WHITE;
-PushButtonMorph.prototype.labelShadowOffset = new Point(1, 1);
+    color: new Color(220, 220, 220),
+    pressColor: SnapAccentLightBlue,
+    highlightColor: SnapAccentLightBlue.lighter(50),
+    outlineColor: new Color(30, 30, 30),
+    outlineGradient: false,
+    contrast: 60,
 
-PushButtonMorph.prototype.color = new Color(220, 220, 220);
-PushButtonMorph.prototype.pressColor = new Color(115, 180, 240);
-PushButtonMorph.prototype.highlightColor
-    = PushButtonMorph.prototype.pressColor.lighter(50);
-PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
-PushButtonMorph.prototype.outlineGradient = false;
-PushButtonMorph.prototype.contrast = 60;
+    edge: 2,
+    corner: 5,
+    outline: 1,
+    padding: 3,
+};
 
-PushButtonMorph.prototype.edge = 2;
-PushButtonMorph.prototype.corner = 5;
-PushButtonMorph.prototype.outline = 1;
-PushButtonMorph.prototype.padding = 3;
+PushButtonMorph.prototype.FLAT_MODE_LOOKS = {
+    outlineColor: new Color(70, 70, 70),
+    outlineGradient: false,
+    highlightColor: SnapAccentLightBlue.lighter(30),
+    corner: 2,
+};
+
+// Even in bright mode, buttons are still light (like in dialogs)
+PushButtonMorph.prototype.FLAT_MODE_BRIGHT_LOOKS = {
+    outlineColor: new Color(200, 200, 200),
+    outlineGradient: false,
+    highlightColor: SnapAccentLightBlue.lighter(30),
+    corner: 2,
+};
+
+PushButtonMorph.prototype.LARGE_TEXT_LOOKS = {
+    fontSize: 12,
+    labelShadowOffset: new Point(0, 0)
+};
+
+PushButtonMorph.prototype.HIGH_CONTRAST_LOOKS = {
+    color: new Color(220, 220, 220),
+    pressColor: SnapHighContrastAccentBlue,
+    // Because this a button with black text, it is OK to lighten the highlight
+    highlightColor: SnapHighContrastAccentBlue.lighter(20),
+    // This is used in the main UI for buttons around the scripting area
+    outlineColor: new Color(120, 120, 120),
+};
+
+Object.assign(PushButtonMorph.prototype, PushButtonMorph.prototype.DEFAULT_LOOKS);
 
 // PushButtonMorph instance creation:
 
@@ -261,7 +301,10 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
     var outlineStyle,
         isFlat = MorphicPreferences.isFlat && !this.is3D;
 
-    if (!this.outline || isFlat) {return null; }
+    if (!this.outline) {return null; }
+    if (isFlat) {
+        ctx.lineWidth = 1;
+    }
     if (this.outlineGradient) {
         outlineStyle = ctx.createLinearGradient(
             0,
@@ -278,7 +321,7 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
     ctx.beginPath();
     this.outlinePath(
         ctx,
-        isFlat ? 0 : this.corner,
+        isFlat ? 2 : this.corner,
         0
     );
     ctx.closePath();
@@ -292,7 +335,7 @@ PushButtonMorph.prototype.drawBackground = function (ctx, color) {
     ctx.beginPath();
     this.outlinePath(
         ctx,
-        isFlat ? 0 : Math.max(this.corner - this.outline, 0),
+        isFlat ? 2 : Math.max(this.corner - this.outline, 0),
         this.outline
     );
     ctx.closePath();
@@ -1492,31 +1535,60 @@ DialogBoxMorph.uber = Morph.prototype;
 
 // DialogBoxMorph preferences settings:
 
-DialogBoxMorph.prototype.fontSize = 12;
-DialogBoxMorph.prototype.titleFontSize = 14;
-DialogBoxMorph.prototype.fontStyle = 'sans-serif';
+DialogBoxMorph.prototype.DEFAULT_LOOKS = {
+    fontSize: 12,
+    titleFontSize: 14,
+    fontStyle: 'sans-serif',
 
-DialogBoxMorph.prototype.color = PushButtonMorph.prototype.color;
-DialogBoxMorph.prototype.titleTextColor = WHITE;
-DialogBoxMorph.prototype.titleBarColor
-    = PushButtonMorph.prototype.pressColor;
+    color: PushButtonMorph.prototype.color,
+    titleTextColor: WHITE,
+    titleBarColor: SnapAccentLightBlue,
 
-DialogBoxMorph.prototype.contrast = 40;
+    contrast: 40,
 
-DialogBoxMorph.prototype.corner = 12;
-DialogBoxMorph.prototype.padding = 14;
-DialogBoxMorph.prototype.stackPadding = null;
-DialogBoxMorph.prototype.titlePadding = 6;
+    corner: 12,
+    padding: 14,
+    stackPadding: null,
+    titlePadding: 6,
 
-DialogBoxMorph.prototype.buttonContrast = 50;
-DialogBoxMorph.prototype.buttonFontSize = 12;
-DialogBoxMorph.prototype.buttonCorner = 12;
-DialogBoxMorph.prototype.buttonEdge = 6;
-DialogBoxMorph.prototype.buttonPadding = 0;
-DialogBoxMorph.prototype.buttonOutline = 3;
-DialogBoxMorph.prototype.buttonOutlineColor
-    = PushButtonMorph.prototype.color;
-DialogBoxMorph.prototype.buttonOutlineGradient = true;
+    buttonContrast: 50,
+    buttonFontSize: 12,
+    buttonCorner: 12,
+    buttonEdge: 6,
+    buttonPadding: 0,
+    buttonOutline: 3,
+    // In default mode, buttons have a gradient outline with the start of the gradient
+    // being the same color as the button color.
+    buttonOutlineColor: PushButtonMorph.prototype.color,
+    buttonOutlineGradient: true,
+};
+
+// Each 'theme' or 'design' mode in the GUI can override some of the above:
+// Settings can be composed using Object.assign(), where the order of assignment
+// determines precedence (last one wins).
+DialogBoxMorph.prototype.FLAT_MODE_LOOKS = {
+    buttonOutline: 1,
+    buttonOutlineColor: new Color(180, 180, 180),
+    buttonOutlineGradient: false,
+};
+
+DialogBoxMorph.prototype.LARGE_TEXT_LOOKS = {
+    fontSize: 14,
+    titleFontSize: 16,
+    buttonFontSize: 14,
+    buttonCorner: 14,
+    buttonOutlineGradient: false,
+};
+
+DialogBoxMorph.prototype.HIGH_CONTRAST_LOOKS = {
+    titleBarColor: SnapHighContrastAccentBlue,
+    contrast: 40, // TODO-a11y: Verify if this matters for high contrast mode
+    buttonContrast: 50,
+    buttonOutlineColor: new Color(120, 120, 120),
+    buttonOutlineGradient: false,
+};
+
+Object.assign(DialogBoxMorph.prototype, DialogBoxMorph.prototype.DEFAULT_LOOKS);
 
 DialogBoxMorph.prototype.instances = {}; // prevent multiple instances
 
@@ -2855,7 +2927,7 @@ DialogBoxMorph.prototype.render = function (ctx) {
     ctx.beginPath();
     this.outlinePathBody(
         ctx,
-        isFlat ? 0 : this.corner
+        isFlat ? 2 : this.corner
     );
     ctx.closePath();
     ctx.fill();
@@ -3366,6 +3438,7 @@ InputFieldMorph.prototype.render = function (ctx) {
     this.drawRectBorder(ctx);
 };
 
+// TODO-a11y: draw 1px border when focused
 InputFieldMorph.prototype.drawRectBorder = function (ctx) {
     var shift = this.edge * 0.5,
         gradient;
@@ -3447,7 +3520,7 @@ InputFieldMorph.prototype.drawRectBorder = function (ctx) {
 };
 
 // PianoMenuMorph //////////////////////////////////////////////////////
-/* 
+/*
     I am a menu that looks like a piano keyboard.
 */
 
@@ -3612,7 +3685,7 @@ PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
     var key,
         note,
         visibleOctave;
-    
+
     if (isNil(midiNum)) {
         return;
     }
@@ -3629,7 +3702,7 @@ PianoMenuMorph.prototype.selectKey = function (midiNum, octave) {
     }
 
     this.octave = visibleOctave;
-    
+
     key = detect(
         this.children,
         each => each.pitch === note
@@ -3841,19 +3914,19 @@ PianoKeyMorph.prototype.mouseEnter = function () {
         soundType = piano ? piano.soundType : 1,
         octave = Math.floor((this.action - 1) / 12),
         octaveOffset = 0;
-        
+
     if (piano) {
         piano.unselectAllItems();
         piano.selection = this;
         piano.world.keyboardFocus = piano;
         piano.hasFocus = true;
-        
+
         octave = piano.octave;
     }
     octaveOffset = Math.floor((this.pitch - 1) / 12);
     this.action = (this.pitch - 1) + (12 * (octave + 1));
     this.note.pitch = this.action;
-    
+
     this.label.children[0].hide();
     this.userState = 'highlight';
     this.rerender();
