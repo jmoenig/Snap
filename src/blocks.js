@@ -275,7 +275,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
   this.corner = 3 * scale;
   this.rounding = 9 * scale;
   this.edge = scale;
-  this.flatEdge = scale * (highContrast ? 1 : 0.75);
+  this.flatEdge = scale * (highContrast ? 1 : 0.65);
   this.jag = 10 * scale;
   this.dentPlus = 1.4 * scale;
   this.dentCorner = 3.5 * scale;
@@ -3532,7 +3532,11 @@ BlockMorph.prototype.userMenu = function () {
     compiledAlternatives,
     field,
     rcvr;
-  menu.bgColor = SpriteMorph.prototype.blockColorFor(this.category).darker(SpriteMorph.prototype.isHighContrast ? 70 : 0);
+  menu.bgColor = SpriteMorph.prototype.blockColorFor(this.category);
+  if(SpriteMorph.prototype.isHighContrast) {
+    menu.bgColor = menu.bgColor.darker(70)
+  }
+    
   menu.rerender();
   function addOption(label, toggle, test, onHint, offHint) {
     menu.addItem(
@@ -11298,6 +11302,8 @@ function InputSlotMorph(text, isNumeric, choiceDict, isReadOnly) {
   this.init(text, isNumeric, choiceDict, isReadOnly);
 }
 
+InputSlotMorph.prototype.squareStrings = false;
+
 InputSlotMorph.prototype.init = function (
   text,
   isNumeric,
@@ -11490,7 +11496,10 @@ InputSlotMorph.prototype.menuFromDict = function (
     block = this.parentThatIsA(BlockMorph),
     trgt = block.scriptTarget(true),
     menu = new MenuMorph(this.userSetContents, null, this, this.fontSize);
-  menu.bgColor = this.parent.color.darker(SpriteMorph.prototype.isHighContrast ? 70 : 0);
+  menu.bgColor = this.parent.color;
+  if(SpriteMorph.prototype.isHighContrast) {
+    menu.bgColor = menu.bgColor.darker(70)
+  }
 
   function update(num) {
     myself.setContents(num);
@@ -12483,7 +12492,8 @@ InputSlotMorph.prototype.fixLayout = function () {
     tp = this.topBlock(),
     attempt = (x) => {
       try {return x()} catch(e) {}
-    };
+    },
+    highContrast = attempt(()=>(SpriteMorph.prototype.isHighContrast));
 
   contents.isNumeric = this.isNumeric && !this.isAlphanumeric;
   contents.isEditable = !this.isReadOnly;
@@ -12492,10 +12502,10 @@ InputSlotMorph.prototype.fixLayout = function () {
     contents.color = WHITE;
   } else {
     contents.enableSelecting();
-    contents.color = attempt(()=>(SpriteMorph.prototype.isHighContrast)) ? WHITE : new Color(87, 94, 117);
+    contents.color = highContrast ? WHITE : new Color(87, 94, 117);
     //contents.color = new Color(87, 94, 117);
   }
-  arrow.color = this.isReadOnly || this.isStatic ? WHITE : BLACK;
+  arrow.color = this.isReadOnly || this.isStatic ? WHITE : (highContrast ? WHITE : BLACK);
 
   if (this.choices) {
     arrow.setSize(fontHeight(this.fontSize));
@@ -12523,8 +12533,8 @@ InputSlotMorph.prototype.fixLayout = function () {
       this.symbol.width() + arrowWidth + this.edge * 4 + this.typeInPadding * 2;
   } else {
     height = contents.height() + this.edge * 8; // + this.typeInPadding * 2
-    if (!(this instanceof TextSlotMorph) || !this.isStatic) {
-      //this.isNumeric) {
+    if (this.squareStrings ? (this.isNumeric) : (!(this instanceof TextSlotMorph) || !this.isStatic)) {
+      
       width = Math.max(
         contents.width() +
           Math.floor(arrowWidth * 0.5) +
@@ -12543,7 +12553,7 @@ InputSlotMorph.prototype.fixLayout = function () {
         contents.rawHeight // single vs. multi-line contents
           ? contents.rawHeight() + arrowWidth
           : fontHeight(contents.fontSize) / 1.3 + arrowWidth,
-        this.minWidth // for text-type slots
+        this.scale * (this.isReadOnly ? 30 : 24)//this.minWidth // for text-type slots
       );
     }
   }
@@ -12829,7 +12839,7 @@ InputSlotMorph.prototype.render = function (ctx) {
   ctx.fillStyle = highContrast ? this.color.darker(70).toString() : this.color.toString();
   if (this.isReadOnly && !this.cachedNormalColor) {
     // unless flashing
-    ctx.fillStyle = borderColor.darker(highContrast ? 80 : 11).toString();
+    ctx.fillStyle = borderColor.darker(highContrast ? 80 : 10).toString();
     if (this.isStatic) {
       ctx.fillStyle = highContrast ? borderColor.darker(70).toString() : borderColor.toString();
     }
@@ -12839,10 +12849,9 @@ InputSlotMorph.prototype.render = function (ctx) {
   this.cachedClr = borderColor.toString();
   this.cachedClrBright = borderColor.lighter(this.contrast).toString();
   this.cachedClrDark = borderColor.darker(this.contrast).toString();
-  ctx.strokeStyle = this.parent.color.darker().toString();
-  ctx.lineWidth = (this.isStatic || this.isReadOnly ? 2 : 1) * this.scale;
-  if (this.isStatic || this instanceof TextSlotMorph) {
-    //!this.isNumeric) {
+  ctx.strokeStyle = this.parent.color.darker(20).toString();
+  ctx.lineWidth = (this.isStatic || this.isReadOnly ? 1 : 1) * this.scale;
+  if (this.squareStrings ? (!this.isNumeric) : (this.isStatic || this instanceof TextSlotMorph)) {
     ctx.beginPath();
     if (false) {
       ctx.strokeRect(
@@ -12862,22 +12871,22 @@ InputSlotMorph.prototype.render = function (ctx) {
     ctx.translate(ctx.lineWidth / 1.5, ctx.lineWidth / 1.5);
     ctx.arc(this.corner, this.corner, this.corner, radians(-180), radians(-90));
     ctx.arc(
-      this.width() - this.corner * 2,
+      this.width() - this.corner * 1.5,
       this.corner,
       this.corner,
       radians(-90),
       radians(0)
     );
     ctx.arc(
-      this.width() - this.corner * 2,
-      this.height() - this.corner * 2,
+      this.width() - this.corner * 1.5,
+      this.height() - this.corner * 1.5,
       this.corner,
       radians(0),
       radians(90)
     );
     ctx.arc(
       this.corner,
-      this.height() - this.corner * 2,
+      this.height() - this.corner * 1.5,
       this.corner,
       radians(90),
       radians(180)
@@ -13669,7 +13678,6 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
   ctx.closePath();
   ctx.lineWidth = 2 * this.scale;
   ctx.strokeStyle = this.color.darker();
-  !this.isEmptySlot() ? ctx.stroke() : void 0;
   if (progress < 1) ctx.fill();
 
   if (MorphicPreferences.isFlat) {
@@ -14012,13 +14020,13 @@ ArrowMorph.prototype.blackArrow.src = "src/down-arrow-black.svg";
 ArrowMorph.prototype.drawImage = function (ctx, image, horiz) {
   // I have a feeling that this might be turning into spagetti code...
   var pr = !isRetinaEnabled() ? 1 : window.devicePixelRatio || 1,
-    pad = horiz ? 0 : this.padding + 1 * this.scale,
+    pad = horiz ? 0 : this.padding + (this.parent instanceof InputFieldMorph ? 0 : 2) * this.scale,
     w = this.width(),
     h = this.height(),
     ow = image.width,
     oh = image.height,
-    i1 = [pad - 0.9 * this.scale, h - h / 1.7],
-    i2 = [w - pad - (0.5 * this.scale), h / 1.7];
+    i1 = [pad - ow / 10 * this.scale, h - h / 1.7],
+    i2 = [w - pad - (0.5 * this.scale), h / 2];
   image.width = (ow / pr) * pr;
   image.height = (oh / pr) * pr;
   ctx.drawImage(
@@ -14028,6 +14036,7 @@ ArrowMorph.prototype.drawImage = function (ctx, image, horiz) {
   );
   image.width = ow;
   image.height = oh;
+  return;
 };
 ArrowMorph.prototype.render = function (ctx) {
   // initialize my surface property

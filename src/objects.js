@@ -154,6 +154,7 @@ SpriteMorph.prototype.categories =
         'looks',
         'sound',
         'pen',
+        'events',
         'control',
         'sensing',
         'operators',
@@ -3782,13 +3783,14 @@ SpriteMorph.prototype.blockTemplates = function (
             },
             null
         );
-        t.bounds.setWidth(30)
+        t.bounds.setWidth(t.width() * SyntaxElementMorph.prototype.scale);
+        t.bounds.setHeight(t.height() * SyntaxElementMorph.prototype.scale);
         //t.fixLayout()
         return t
     }
 
     function variableWatcherToggle(varName, isGlobal) {
-        return new ToggleMorph(
+        var t =  new ToggleMorph(
             'checkbox',
             this,
             function () {
@@ -3800,6 +3802,9 @@ SpriteMorph.prototype.blockTemplates = function (
             },
             null
         );
+        t.bounds.setWidth(t.width() * SyntaxElementMorph.prototype.scale);
+        t.bounds.setHeight(t.height() * SyntaxElementMorph.prototype.scale);
+        return t
     }
 
     SnapExtensions.buttons.palette.forEach(buttonDescriptor => {
@@ -4588,7 +4593,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     primitives = this.getPrimitiveTemplates(category),
                     customs = this.customBlockTemplatesForCategory(category),
                     showHeader = showCategories &&
-                        !['lists', 'other'].includes(category) &&
+                        !['lists', 'other', 'events'].includes(category) &&
                         (primitives.some(item =>
                             item instanceof BlockMorph) || customs.length);
 
@@ -4637,6 +4642,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'variables') {
         blocks.push(...this.customBlockTemplatesForCategory('lists'));
         blocks.push(...this.customBlockTemplatesForCategory('other'));
+    }
+    if (category === 'control') {
+        blocks.push(...this.customBlockTemplatesForCategory('events'));
     }
 
     blocks.forEach(block => {

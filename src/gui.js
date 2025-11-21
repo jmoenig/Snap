@@ -91,8 +91,8 @@ modules.gui = '2025-August-29';
 
 // Declarations
 
-var SnapVersion = '11.0.2';
-var SplitVersion = '1.0.0';
+var SnapVersion = '11.0.8';
+var SplitVersion = '1.0.1';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1681,6 +1681,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.refreshEmpty = function () {
         var dict = myself.currentSprite.emptyCategories();
         dict.variables = dict.variables || dict.lists || dict.other;
+        dict.control = dict?.events;
         this.buttons.forEach(cat => {
             if (Object.hasOwn(dict, cat.category) && (dict[cat.category])) {
                 cat.enable();
@@ -1856,7 +1857,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     SpriteMorph.prototype.categories.forEach(cat => {
-        if (!contains(['lists', 'other'], cat)) {
+        if (!contains(['events', 'lists', 'other'], cat)) {
             addCategoryButton(cat);
         }
     });
@@ -3307,6 +3308,9 @@ IDE_Morph.prototype.topVisibleCategoryInPalette = function () {
         if (top.category === 'lists') {
             return 'variables';
         }
+        if (top.category === 'events') {
+            return 'control';
+        }
         return top.category;
     }
     return null;
@@ -3549,7 +3553,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
         this.setDefaultTheme();
     }
     this.getSetting('highContrast') ? SpriteMorph.prototype.setHighContrastBlockColor() : SpriteMorph.prototype.setDefaultBlockColor()
-
+    InputSlotMorph.prototype.squareStrings = this.getSetting('squareStrings')
     // blocks zoom
     if (zoom) {
         SyntaxElementMorph.prototype.setScale(Math.min(zoom, 12));
@@ -4209,12 +4213,12 @@ IDE_Morph.prototype.snapMenu = function () {
     );
     menu.addItem(
         'Split! Forum Topic',
-        () => window.open('https://forum.snap.berkeley.edu/', 'SplitWebsite')
+        () => window.open('https://forum.snap.berkeley.edu/t/split-snap-but-scratch/20564', 'SplitWebsite')
     );
     menu.addItem(
         'Download source',
         () => window.open(
-                'https://github.com/d016/Split/releases/latest',
+                'https://github.com/e016/split-mod/releases/latest',
                 'SplitSource'
             )
     );
@@ -8028,6 +8032,25 @@ IDE_Morph.prototype.looksMenuData = function () {
         SpriteMorph.prototype.isHighContrast,
         'uncheck for normal contrast blocks',
         'check for higher contrast blocks',
+        false
+    );
+    menu.addPreference(
+        'Square Strings',
+        () => {
+            if (InputSlotMorph.prototype.squareStrings) {
+                InputSlotMorph.prototype.squareStrings = false
+                this.refreshIDE()
+                this.removeSetting('squareStrings');
+                return
+
+            }
+            InputSlotMorph.prototype.squareStrings = true
+            this.saveSetting('squareStrings');
+            this.refreshIDE()
+        },
+        InputSlotMorph.prototype.squareStrings,
+        'uncheck for round string inputs',
+        'check for square string inputs',
         false
     );
     return menu;
