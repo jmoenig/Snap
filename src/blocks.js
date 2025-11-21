@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-September-08';
+modules.blocks = '2025-November-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -490,7 +490,9 @@ SyntaxElementMorph.prototype.labelParts = {
         menu: {
             '1' : 1,
             last : ['last'],
-            random : ['random']
+            random : ['random'],
+            '~' : null,
+            all : ['all'],
         }
     },
     '%la': {
@@ -911,6 +913,7 @@ SyntaxElementMorph.prototype.labelParts = {
             'category': ['category'],
             'custom?': ['custom?'],
             'global?': ['global?'],
+            'expression': ['expression'],
             'type': ['type'],
             'scope': ['scope'],
             'selector': ['selector'],
@@ -1567,7 +1570,8 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
                     : this.scriptTarget().getMethod(this.blockSpec);
             if (!noValues &&
                 (deflt instanceof InputSlotMorph ||
-                deflt instanceof BooleanSlotMorph)
+                deflt instanceof BooleanSlotMorph ||
+                deflt instanceof ColorSlotMorph)
             ) {
                 deflt.setContents(
                     def.defaultValueOfInputIdx(inp)
@@ -1584,6 +1588,10 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
         if (deflt instanceof MultiArgMorph) {
             deflt.defaults = this.defaults[inp];
         }
+    } else if (this instanceof MultiArgMorph &&
+            this.defaultValue instanceof Array
+    ) {
+        deflt.setContents(this.defaultValue[inp]);
     }
     return deflt;
 };
@@ -2564,6 +2572,28 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
             morphToShow.bounds.setWidth(img.width);
             morphToShow.bounds.setHeight(img.height);
             morphToShow.cachedImage = img;
+            if (value instanceof BlockMorph) {
+                // support blocks to be dragged out of result bubbles:
+                morphToShow.isDraggable =
+                    !SpriteMorph.prototype.disableDraggingData;
+
+                morphToShow.selectForEdit = function () {
+                    var script = value.fullCopy(),
+                        prepare = script.prepareToBeGrabbed;
+
+                    script.prepareToBeGrabbed = function (hand) {
+                        prepare.call(this, hand);
+                        hand.grabOrigin = {
+                            origin: ide.palette,
+                            position: ide.palette.center()
+                        };
+                        this.prepareToBeGrabbed = prepare;
+                    };
+
+                    script.setPosition(this.position());
+                    return script;
+                };
+            }
         }
     } else if (value instanceof Costume) {
         img = value.thumbnail(new Point(40, 40));
@@ -14810,6 +14840,8 @@ MultiArgMorph.prototype.defaultValueFor = function (index) {
 MultiArgMorph.prototype.defaultValueDataFor = function (index) {
     // private - answer the raw untranslated data
     // repeat & wrap default values inside label groups
+    var dflt;
+
     if (!this.parent || this.groupInputs > 1) {
         return this.defaultValue instanceof Array ?
             this.defaultValue[index % this.defaultValue.length]
@@ -14817,10 +14849,12 @@ MultiArgMorph.prototype.defaultValueDataFor = function (index) {
     }
 
     // otherwise use them just once each
-    if (this.defaultValue instanceof Array) {
-        return this.defaultValue[index] || '';
+    dflt = isNil(this.defaultValue) ? this.defaults
+        : this.defaultValue;
+    if (dflt instanceof Array) {
+        return dflt[index] || '';
     }
-    return index ? '' : this.defaultValue;
+    return index ? '' : dflt;
 };
 
 // MultiArgMorph events:

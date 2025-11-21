@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-September-08';
+modules.objects = '2025-November-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -3691,17 +3691,21 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
             block.inputs()[migration.expand].addInput();
         }
     }
-    if ((setDefaults && info.defaults) || (migration && migration.inputs)) {
-        defaults = migration ? migration.inputs : info.defaults;
+    if (info.defaults || migration?.inputs) {
+        defaults = migration?.inputs || info.defaults;
         block.defaults = defaults;
         inputs = block.inputs();
         if (inputs[0] instanceof MultiArgMorph) {
-            inputs[0].setContents(defaults);
             inputs[0].defaults = defaults;
+            if (setDefaults || migration?.inputs) {
+                inputs[0].setContents(defaults);
+            }
         } else {
             for (i = 0; i < defaults.length; i += 1) {
                 if (defaults[i] !== null) {
-                    inputs[i].setContents(defaults[i]);
+                    if (setDefaults || migration?.inputs) {
+                        inputs[i].setContents(defaults[i]);
+                    }
                     if (inputs[i] instanceof MultiArgMorph) {
                         inputs[i].defaults = defaults[i];
                     }
@@ -4221,7 +4225,7 @@ SpriteMorph.prototype.blockTemplates = function (
     return blocks;
 };
 
-// Utitlies displayed in the palette
+// Utilities displayed in the palette
 SpriteMorph.prototype.makeVariableButton = function () {
     var button, myself = this;
 
@@ -4546,6 +4550,16 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 () => new BlockVisibilityDialogMorph(myself).popUp(
                     myself.world())
             );
+            if (ide.scene.template) {
+                menu.addItem(
+                    'restore palette',
+                    () => ide.stage.restoreHiddenGlobalBlocks(
+                        ide.scene.template.hide,
+                        ide.scene.template.version
+                    ),
+                    '"' + ide.scene.template.name + '"'
+                );
+            }
             menu.addLine();
             menu.addItem(
                 'make a category...',
@@ -7649,6 +7663,10 @@ SpriteMorph.prototype.moveBy = function (delta, justMe) {
 };
 
 SpriteMorph.prototype.rootForGrab = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage?.tutorialMode) {
+        return stage;
+    }
     if (this.anchor) {
         return this.anchor.rootForGrab();
     }
@@ -9873,6 +9891,9 @@ SpriteMorph.prototype.mouseLeave = function () {
 SpriteMorph.prototype.wantsDropOf = function (morph) {
     // allow myself to be the anchor of another sprite
     // by drag & drop
+    if (this.parent?.tutorialMode) {
+        return false;
+    }
     return this.enableNesting
         && morph instanceof SpriteIconMorph
         && !contains(morph.object.allParts(), this);
@@ -10135,6 +10156,9 @@ StageMorph.prototype.init = function (globals) {
 
     // Snap! API event listeners, transient
     this.messageCallbacks = {}; // name : [functions]
+
+    // Tutorial scenes, transient
+    this.tutorialMode = false;
 
     StageMorph.uber.init.call(this);
 
@@ -10536,6 +10560,9 @@ StageMorph.prototype.reportMouseY = function () {
 // StageMorph drag & drop
 
 StageMorph.prototype.wantsDropOf = function (aMorph) {
+    if (this.tutorialMode) {
+        return false;
+    }
     return aMorph instanceof SpriteMorph ||
         aMorph instanceof WatcherMorph ||
         aMorph instanceof ListWatcherMorph ||
@@ -11502,6 +11529,59 @@ StageMorph.prototype.blockTemplates = function (
     }
 
     return blocks;
+};
+
+// StageMorph microworld palette support
+
+StageMorph.prototype.hiddenGlobalBlocks = function () {
+    var dict = this.globalVariables().vars;
+    return new List([
+        new List(Object.keys(this.hiddenPrimitives).filter(selector =>
+            this.hiddenPrimitives[selector])
+        ),
+        new List(this.globalBlocks.filter(def => def.isHelper).map(def =>
+            def.abstractBlockSpec())
+        ),
+        new List(Object.keys(dict).filter(name => dict[name].isHidden))
+    ]);
+    
+};
+
+StageMorph.prototype.restoreHiddenGlobalBlocks = function (
+    hiddenList,
+    version // optionial snap version
+) {
+    var ide = this.parentThatIsA(IDE_Morph),
+        variables = this.globalVariables(),
+        newer = SpriteMorph.prototype.newPrimitivesSince(parseFloat(version)),
+        dict = {};
+
+    function hidePrimitive(selector) {
+        let migration = SpriteMorph.prototype.blockMigrations[selector],
+            id = migration ? migration.selector : selector;
+        dict[id] = true;
+    }
+
+    // primitives - make sure to take the current block, in case it was changed
+    hiddenList.at(1).map(sel => hidePrimitive(sel));
+    newer.map(sel => hidePrimitive(sel));
+    StageMorph.prototype.hiddenPrimitives = dict;
+
+    // global custom blocks
+    this.globalBlocks.forEach(def =>
+        def.isHelper = hiddenList.at(2).contains(def.abstractBlockSpec));
+
+    // global variables
+    variables.names(true).forEach(name =>
+        variables.vars[name].isHidden = hiddenList.at(3).contains(name));
+
+    ide.flushBlocksCache();
+    ide.refreshPalette();
+    ide.categories.refreshEmpty();
+    this.recordUserEdit(
+        'palette',
+        'restore microworld'
+    );
 };
 
 // StageMorph primitives
@@ -12634,7 +12714,7 @@ StageMorph.prototype.globalBlocksSending = function (message, receiverName) {
     return all;
 };
 
-// StageMorph serialization & exporting utils
+// StageMorph serialization & exporting utilities
 
 StageMorph.prototype.toXMLString = function () {
     // answer an xml string representation of this sprite and all parts
@@ -12779,7 +12859,37 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         }
     }
 
-    if (data instanceof Morph) {
+    if (data instanceof BlockMorph) {
+        img = data.fullImage();
+        contents = new Morph();
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
+
+        // support blocks to be dragged out of speech balloons:
+        contents.isDraggable = !sprite.disableDraggingData;
+
+        contents.selectForEdit = function () {
+            var script = data.fullCopy(),
+                prepare = script.prepareToBeGrabbed,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            script.prepareToBeGrabbed = function (hand) {
+                prepare.call(this, hand);
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            script.setPosition(this.position());
+            return script;
+        };
+    } else if (data instanceof Morph) {
         if (isSnapObject(data)) {
             img = data.thumbnail(new Point(40, 40));
             contents = new Morph();
@@ -13185,16 +13295,16 @@ StageBubbleMorph.prototype.init = function (data, stage) {
     this.rerender();
 };
 
-// SpriteBubbleMorph contents formatting
+// StageBubbleMorph contents formatting
 
 StageBubbleMorph.prototype.dataAsMorph =
     SpriteBubbleMorph.prototype.dataAsMorph;
 
-// SpriteBubbleMorph scaling
+// StageBubbleMorph scaling
 
 StageBubbleMorph.prototype.setScale = SpriteBubbleMorph.prototype.setScale;
 
-// SpriteBubbleMorph layout:
+// StageBubbleMorph layout:
 
 StageBubbleMorph.prototype.fixLayout = SpriteBubbleMorph.prototype.fixLayout;
 
@@ -15175,10 +15285,17 @@ WatcherMorph.prototype.mouseDoubleClick = function (pos) {
 // WatcherMorph dragging and dropping:
 
 WatcherMorph.prototype.rootForGrab = function () {
-    // prevent watchers to be dragged in presentation mode
-    var ide = this.parentThatIsA(IDE_Morph);
+    // prevent watchers to be dragged in presentation and tutorial mode
+    var ide = this.parentThatIsA(IDE_Morph),
+        stage;
     if (ide && ide.isAppMode) {
         return ide;
+    } else if (!ide) {
+        return null;
+    }
+    stage = this.parentThatIsA(StageMorph);
+    if (stage?.tutorialMode) {
+        return stage;
     }
     return this;
 };

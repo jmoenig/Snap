@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-August-29';
+modules.threads = '2025-November-05';
 
 var ThreadManager;
 var Process;
@@ -1496,6 +1496,13 @@ Process.prototype.evaluate = function (
             return;
         }
         return this.hyperEval(context, args);
+    }
+    if (context instanceof BlockMorph) {
+        return this.evaluate(
+            context.fullCopy().reify(),
+            new List(),
+            context instanceof CommandBlockMorph
+        );
     }
     if (!(context instanceof Context)) {
         if (isCommand) {
@@ -5597,6 +5604,9 @@ Process.prototype.reportBasicLetter = function (idx, string) {
     var str = isNil(string) ? '' : string.toString(),
         char_array = this.safeStringArray(str),
         i;
+    if (this.inputOption(idx) === 'all') {
+        return new List(char_array);
+    }
     if (this.inputOption(idx) === 'random') {
         idx = this.reportBasicRandom(1, char_array.length);
     }
@@ -8528,6 +8538,8 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return expr ? !!expr.isCustomBlock : false;
     case 'global?':
         return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
+    case 'expression':
+        return expr instanceof BlockMorph ? expr.fullCopy() : '';
     case 'type':
         return ['command', 'reporter', 'predicate', 'hat'].indexOf(
             this.reportTypeOf(block)

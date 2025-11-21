@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-October-22';
+modules.widgets = '2025-November-09';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1548,6 +1548,7 @@ DialogBoxMorph.prototype.DEFAULT_LOOKS = {
 
     corner: 12,
     padding: 14,
+    stackPadding: null,
     titlePadding: 6,
 
     buttonContrast: 50,
@@ -2613,7 +2614,7 @@ DialogBoxMorph.prototype.withKey = function (key) {
     return this;
 };
 
-DialogBoxMorph.prototype.popUp = function (world) {
+DialogBoxMorph.prototype.popUp = function (world, noFocus) {
     if (world) {
         if (this.key) {
             if (this.instances[world.stamp]) {
@@ -2627,7 +2628,7 @@ DialogBoxMorph.prototype.popUp = function (world) {
             }
         }
         world.add(this);
-        world.keyboardFocus = this;
+        if (!noFocus) {world.keyboardFocus = this; }
         this.setCenter(world.center());
         this.edit();
     }
@@ -2779,17 +2780,19 @@ DialogBoxMorph.prototype.addBody = function (aMorph) {
 
 DialogBoxMorph.prototype.fixLayout = function () {
     // determine by extent and arrange my components
-    var th = fontHeight(this.titleFontSize) + this.titlePadding * 2, w;
+    var th = fontHeight(this.titleFontSize) + this.titlePadding * 2, w,
+        stack = isNil(this.stackPadding) ? this.padding : this.stackPadding;
 
     if (this.head) {
         this.head.setPosition(this.position().add(new Point(
             this.padding,
-            th + this.padding
+            th + stack
         )));
         this.bounds.setWidth(this.head.width() + this.padding * 2);
         this.bounds.setHeight(
             this.head.height()
-                + this.padding * 2
+                + stack
+                + this.padding
                 + th
         );
     }
@@ -2798,7 +2801,7 @@ DialogBoxMorph.prototype.fixLayout = function () {
         if (this.head) {
             this.body.setPosition(this.head.bottomLeft().add(new Point(
                 0,
-                this.padding
+                stack
             )));
             this.bounds.setWidth(Math.max(
                 this.width(),
@@ -2807,7 +2810,7 @@ DialogBoxMorph.prototype.fixLayout = function () {
             this.bounds.setHeight(
                 this.height()
                     + this.body.height()
-                    + this.padding
+                    + stack
             );
             w = this.width();
             this.head.setLeft(
@@ -2821,12 +2824,13 @@ DialogBoxMorph.prototype.fixLayout = function () {
         } else {
             this.body.setPosition(this.position().add(new Point(
                 this.padding,
-                th + this.padding
+                th + stack
             )));
             this.bounds.setWidth(this.body.width() + this.padding * 2);
             this.bounds.setHeight(
                 this.body.height()
-                    + this.padding * 2
+                    + stack
+                    + this.padding
                     + th
             );
         }
@@ -2841,13 +2845,13 @@ DialogBoxMorph.prototype.fixLayout = function () {
         this.buttons.fixLayout();
         this.bounds.setHeight(
             this.height()
-                    + this.buttons.height()
-                    + this.padding
+                + this.buttons.height()
+                + this.padding
         );
         this.bounds.setWidth(Math.max(
                 this.width(),
                 this.buttons.width()
-                        + (2 * this.padding)
+                    + (2 * this.padding)
             )
         );
         this.buttons.setCenter(this.center());

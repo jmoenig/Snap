@@ -3094,6 +3094,20 @@
     "name": "~"
   },
   {
+    "fileName": "tutorial_module.xml",
+    "name": "Tutorials",
+    "description": "Position and scale the tutorial window",
+    "searchData": [
+      "when _ bounds change",
+      "position tutorial at _ _",
+      "set tutorial size to _ %",
+      "tutorial size"
+    ],
+    "categories": [
+      "tutorials"
+    ]
+  },
+  {
     "fileName": "metaprogramming_module.xml",
     "name": "Metaprogramming",
     "description": "Analyze, transform and generate blocks and scripts",

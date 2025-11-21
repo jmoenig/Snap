@@ -83,15 +83,15 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK, CLEAR,
 BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
 HatBlockMorph*/
 
-/*jshint esversion: 8*/
+/*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-October-15';
+modules.gui = '2025-November-20';
 
 // Declarations
 
-var SnapVersion = '11.0.5';
+var SnapVersion = '11.1-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -447,6 +447,9 @@ IDE_Morph.prototype.init = function (config) {
     this.scene = this.scenes.at(1);
     this.isAddingScenes = false;
     this.isAddingNextScene = false;
+
+    // tutorial scene(s)
+    this.tutorial = null; // active dialog box or tutorial pane, if any
 
     // editor
     this.globalVariables = this.scene.globalVariables;
@@ -2069,10 +2072,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         };
     }
 
+    this.palette.wantsDropOf = (morph) => !(morph instanceof DialogBoxMorph);
+
     this.palette.reactToDropOf = (droppedMorph, hand) => {
-        if (droppedMorph instanceof DialogBoxMorph) {
-            this.world().add(droppedMorph);
-        } else if (droppedMorph instanceof SpriteMorph) {
+        if (droppedMorph instanceof SpriteMorph) {
             this.removeSprite(droppedMorph);
         } else if (droppedMorph instanceof SpriteIconMorph) {
             droppedMorph.destroy();
@@ -2697,7 +2700,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
         this.stageIcon.setLeft(this.left() + padding);
 
         // scenes
-        if (myself.scenes.length() < 2) {
+        if (myself.tutorial || myself.scenes.length() < 2) {
             this.album.hide();
         } else {
             this.stageIcon.setTop(this.top());
@@ -3167,7 +3170,7 @@ IDE_Morph.prototype.droppedSVG = function (anImage, name) {
         svgObj = new DOMParser().parseFromString(
             atob(svgStrEncoded), "image/svg+xml"
         ).firstElementChild,
-        normalizing = false;
+        normalizing = true; // false; // v11.1: always reconfigure SVGs
 
     name = name.split('.')[0];
 
@@ -3512,7 +3515,11 @@ IDE_Morph.prototype.isPaused = function () {
 
 IDE_Morph.prototype.stopAllScripts = function () {
     if (this.world().currentKey === 16) { // shiftClicked
-        this.scenes.map(scn => scn.stop(true));
+        this.scenes.map(scn => {
+            if (scn !== this.tutorial?.scene) {
+                scn.stop(true);
+            }
+        });
     } else {
         this.scene.stop();
     }
@@ -3632,7 +3639,20 @@ IDE_Morph.prototype.highContrastTheme = function () {
 };
 
 IDE_Morph.prototype.refreshIDE = function () {
-    var projectData;
+    var projectData, onComplete, name, tutorial;
+
+    if (this.scene.createdFromTemplate) {
+        name = this.scene.name;
+        tutorial = !isNil(this.tutorial);
+        this.scene.createdFromTemplate = false;
+        onComplete = () => {
+            this.scene.createdFromTemplate = true;
+            this.setProjectName(name);
+            if (tutorial) {
+                this.launchProjectTutorial();
+            }
+        };
+    }
 
     this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
@@ -3654,7 +3674,13 @@ IDE_Morph.prototype.refreshIDE = function () {
     if (this.loadNewProject) {
         this.newProject();
     } else {
-        this.openProjectString(projectData);
+        this.openProjectString(
+            projectData,
+            null,
+            null,
+            true,  // keepRoles
+            onComplete // restore name and template origin
+        );
     }
 };
 
@@ -5076,6 +5102,22 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
+        'Template',
+        () => this.scene.role = this.scene.role === 'template' ?
+            null : 'template',
+        this.scene.role === 'template',
+        'uncheck to save this\nscene regularly',
+        'check to turn this scene into an uneditable\ntemplate when saving it'
+    );
+    addPreference(
+        'Tutorial',
+        () => this.scene.role = this.scene.role === 'tutorial' ?
+            null : 'tutorial',
+        this.scene.role === 'tutorial',
+        'uncheck to treat this\nscene regularly',
+        'check to turn this scene\ninto a tutorial'
+    );
+    addPreference(
         'Thread safe scripts',
         () => stage.isThreadSafe = !stage.isThreadSafe,
         this.stage.isThreadSafe,
@@ -5226,7 +5268,8 @@ IDE_Morph.prototype.projectMenu = function () {
         graphicsName = this.currentSprite instanceof SpriteMorph ?
                 'Costumes' : 'Backgrounds',
         shiftClicked = (world.currentKey === 16),
-        backup = this.availableBackup(shiftClicked);
+        backup = this.availableBackup(shiftClicked),
+        scns, help, work;
 
     menu = new MenuMorph(this);
     menu.addItem('Notes...', 'editNotes');
@@ -5379,6 +5422,24 @@ IDE_Morph.prototype.projectMenu = function () {
                     this.currentSprite
                 ).popUp(world)
         );
+        if (this.scene.template) {
+            menu.addItem(
+                'Restore palette',
+                () => this.stage.restoreHiddenGlobalBlocks(
+                    this.scene.template.hide,
+                    this.scene.template.version
+                ),
+                '"' + this.scene.template.name + '"'
+            );
+            if (shiftClicked) {
+                menu.addItem(
+                    'Remove template',
+                    () => this.scene.template = null,
+                    '"' + this.scene.template.name + '"',
+                    new Color(100, 0, 0)
+                );
+            }
+        }
         menu.addItem(
             'New category...',
             () => this.createNewCategory()
@@ -5400,10 +5461,21 @@ IDE_Morph.prototype.projectMenu = function () {
         }
         menu.addLine();
         if (this.scenes.length() > 1) {
+            if (!this.tutorial) {
+                scns = this.scenes.itemsArray();
+                help = scns.find(any => any.role === 'tutorial');
+                work = scns.find(any => any.role !== 'tutorial');
+                if (help && work) {
+                    menu.addItem('Launch tutorial...', 'launchProjectTutorial');
+                }
+            }
             menu.addItem('Scenes...', 'scenesMenu');
         }
         menu.addPair('New scene', 'createNewScene');
         menu.addPair('Add scene...', 'addScene');
+        if (this.tutorial) {
+            menu.addPair('Exit tutorial', 'escapeTutorial');
+        }
         menu.addLine();
     }
     menu.addItem(
@@ -6814,10 +6886,16 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     );
 };
 
-IDE_Morph.prototype.openProjectString = function (str, callback, noPrims) {
+IDE_Morph.prototype.openProjectString = function (
+    str,
+    callback,
+    noPrims,
+    keepRoles,
+    onDone = nop
+) {
     var msg;
     if (this.bulkDropInProgress || this.isAddingScenes) {
-        this.rawOpenProjectString(str, noPrims);
+        this.rawOpenProjectString(str, noPrims, keepRoles);
         if (callback) {callback(); }
         return;
     }
@@ -6827,27 +6905,28 @@ IDE_Morph.prototype.openProjectString = function (str, callback, noPrims) {
     this.nextSteps([
         () => msg = this.showMessage('Opening project...'),
         () => {
-            this.rawOpenProjectString(str, noPrims);
+            this.rawOpenProjectString(str, noPrims, keepRoles);
             msg.destroy();
             if (callback) {callback(); }
-        }
+        },
+        onDone
     ]);
 };
 
-IDE_Morph.prototype.rawOpenProjectString = function (str, noPrims) {
+IDE_Morph.prototype.rawOpenProjectString = function (str, noPrims, keepRoles) {
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             this.openProject(
-                this.serializer.load(str, this, noPrims)
+                this.serializer.load(str, this, noPrims, keepRoles)
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
         this.openProject(
-            this.serializer.load(str, this, noPrims)
+            this.serializer.load(str, this, noPrims, keepRoles)
         );
     }
     this.autoLoadExtensions();
@@ -7225,18 +7304,30 @@ IDE_Morph.prototype.openProjectName = function (name) {
 };
 
 IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
-    var scn = project.currentScene || project.scenes.at(1);
+    var scn = project.currentScene || project.scenes.at(1),
+        tutorial;
     if (this.isAddingScenes) {
         project.scenes.itemsArray().forEach(scene => {
             scene.name = this.newSceneName(scene.name, scene);
             this.scenes.add(scene);
         });
     } else {
+        this.escapeTutorial();
         this.scenes = project.scenes;
     }
     this.performerMode = false;
     if (purgeCustomizedPrims) {
         scn.blocks = SpriteMorph.prototype.primitiveBlocks();
+    }
+    if (scn.createdFromTemplate) {
+        // launch tutorial, if any exist
+        tutorial = detect(
+            project.scenes.asArray(),
+            each => each.role == 'tutorial'
+        );
+        if (tutorial) {
+            this.launchTutorial(tutorial);
+        }
     }
     this.switchToScene(
         scn,
@@ -7247,16 +7338,18 @@ IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
     );
 };
 
-IDE_Morph.prototype.autoLoadExtensions = function () {
+IDE_Morph.prototype.autoLoadExtensions = function (optionalScene) {
     // experimental - allow auto-loading extensions from urls specified
     // in global variables whose names start with "__module__".
     // Still very much under construction, also needs to be tweaked for
     // asynch operation
-    var urls = [];
-    Object.keys(this.globalVariables.vars).forEach(vName => {
+    var urls = [],
+        context = this;
+    if (optionalScene) { context = optionalScene; }
+    Object.keys(context.globalVariables.vars).forEach(vName => {
         var val;
         if (vName.startsWith('__module__')) {
-            val = this.globalVariables.getVar(vName);
+            val = context.globalVariables.getVar(vName);
             if (isString(val)) {
                 urls.push(val);
             }
@@ -7312,6 +7405,7 @@ IDE_Morph.prototype.switchToScene = function (
     this.add(scene.stage);
     this.stage = scene.stage;
     this.stage.messageCallbacks = listeners;
+    this.stage.tutorialMode = false;
     this.sprites = scene.sprites;
     if (pauseHats) {
         this.stage.pauseGenericHatBlocks();
@@ -7342,6 +7436,7 @@ IDE_Morph.prototype.switchToScene = function (
     this.toggleAppMode(appMode);
     this.controlBar.stopButton.refresh();
     this.world().keyboardFocus = this.stage;
+    this.autoLoadExtensions();
     if (msg) {
         this.stage.fireChangeOfSceneEvent(msg, data);
     }
@@ -8036,10 +8131,22 @@ IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
 };
 
 IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
-    var projectData,
+    var projectData, onComplete, name, tutorial,
         urlBar = location.hash;
     SnapTranslator.language = lang;
     if (!this.loadNewProject) {
+        if (this.scene.createdFromTemplate) {
+            name = this.scene.name;
+            tutorial = !isNil(this.tutorial);
+            this.scene.createdFromTemplate = false;
+            onComplete = () => {
+                this.scene.createdFromTemplate = true;
+                this.setProjectName(name);
+                if (tutorial) {
+                    this.launchProjectTutorial();
+                }
+            };
+        }
         this.scene.captureGlobalSettings();
         if (Process.prototype.isCatchingErrors) {
             try {
@@ -8067,7 +8174,13 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
         location.hash = urlBar;
         if (callback) {callback.call(this); }
     } else {
-        this.openProjectString(projectData, callback);
+        this.openProjectString(
+            projectData,
+            callback,
+            null,
+            true, // keepRoles
+            onComplete // restore name and template origin
+        );
     }
     if (!noSave) {
         this.saveSetting('language', lang);
@@ -8279,7 +8392,19 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
 };
 
 IDE_Morph.prototype.setBlocksScale = function (num) {
-    var projectData;
+    var projectData, onComplete, name, tutorial;
+    if (this.scene.createdFromTemplate) {
+        name = this.scene.name;
+        tutorial = !isNil(this.tutorial);
+        this.scene.createdFromTemplate = false;
+        onComplete = () => {
+            this.scene.createdFromTemplate = true;
+            this.setProjectName(name);
+            if (tutorial) {
+                this.launchProjectTutorial();
+            }
+        };
+    }
     this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
@@ -8303,7 +8428,13 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     this.createCorralBar();
     this.refreshCustomizedPalette();
     this.fixLayout();
-    this.openProjectString(projectData);
+    this.openProjectString(
+            projectData,
+            null,
+            null,
+            true,  // keepRoles
+            onComplete // restore name and template origin
+        );
     this.saveSetting('zoom', num);
 };
 
@@ -8549,7 +8680,19 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
 IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
     // highly experimental for v10 - tweak the palette blocks,
     // e.g. replace all primitives with custom block definitions etc.
-    var projectData;
+    var projectData, onComplete, name, tutorial;
+    if (this.scene.createdFromTemplate) {
+        name = this.scene.name;
+        tutorial = !isNil(this.tutorial);
+        this.scene.createdFromTemplate = false;
+        onComplete = () => {
+            this.scene.createdFromTemplate = true;
+            this.setProjectName(name);
+            if (tutorial) {
+                this.launchProjectTutorial();
+            }
+        };
+    }
     this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
@@ -8571,7 +8714,13 @@ IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
     this.categories.refreshEmpty();
     this.createCorralBar();
     this.fixLayout();
-    this.openProjectString(projectData, null, true); // no prims
+    this.openProjectString(
+        projectData,
+        null,
+        true, // no prims
+        true, // keepRoles
+        onComplete // restore name and template origin
+    );
 };
 
 // IDE_Morph cloud interface
@@ -9263,6 +9412,100 @@ IDE_Morph.prototype.warnAboutDev = function () {
             'visit https://snap.berkeley.edu/run\n' +
             'for the official Snap! installation.'
     ).nag = true;
+};
+
+// IDE_Morph tutorial scene
+
+IDE_Morph.prototype.launchProjectTutorial = function () {
+    // if both a tutorial and a non-tutorial scene exist in the project,
+    // make sure the non-tutorial scene is active and launch the tutorial
+    var scns = this.scenes.itemsArray(),
+        help = scns.find(any => any.role === 'tutorial'),
+        work = scns.find(any => any.role !== 'tutorial');
+    if (help && work) {
+        if (this.scene.role === 'tutorial') {
+            this.switchToScene(work);
+        }
+        this.launchTutorial(help);
+    }
+};
+
+IDE_Morph.prototype.launchTutorial = function (scene) {
+    // open and run a scene in a separate dialog box
+    var dlg = new DialogBoxMorph(
+                null,
+                () => {
+                    scene.stop();
+                    this.tutorial = null;
+                    this.corral.fixLayout(); // update scene icons
+                }
+            ).withKey('tutorial ' + scene.name),
+        handle,
+        diff;
+
+    // handle loading extension modules for the tutorial scene
+    this.autoLoadExtensions(scene);
+
+    dlg.padding = MorphicPreferences.isFlat ? 1 : dlg.corner;
+    dlg.stackPadding = 0;
+    this.escapeTutorial();
+    dlg.scene = scene;
+    dlg.ide = this;
+    scene.stage.setScale(1);
+    scene.stage.tutorialMode = true;
+    dlg.labelString = scene.name;
+    dlg.createLabel();
+    dlg.addBody(scene.stage);
+    // dlg.addButton('ok', 'OK');
+    dlg.fixLayout();
+    dlg.popUp(this.world(), true); // noFocus
+    dlg.nag = true; // don't close when switching scenes
+    this.tutorial = dlg;
+    this.corral.fixLayout(); // update scene icons
+    diff = dlg.extent().subtract(scene.stage.dimensions);
+    dlg.minScale = (100 - (Math.min(diff.x, diff.y))) /
+        Math.min(scene.stage.dimensions.x, scene.stage.dimensions.y);
+
+    handle = new HandleMorph(
+        dlg,
+        100,
+        100,
+        dlg.padding,
+        dlg.padding
+    );
+
+    handle.mouseMove = function (pos) {
+        var newPos, newExt;
+        newPos = pos.subtract(this.offset);
+        newExt = newPos.add(
+            this.extent().add(this.inset)
+        ).subtract(this.target.bounds.origin).subtract(diff);
+        newExt = newExt.max(this.minExtent);
+        scene.stage.setScale(Math.min(
+            newExt.x / scene.stage.dimensions.x,
+            newExt.y / scene.stage.dimensions.y
+        ));
+        this.target.fixLayout();
+    };
+
+    dlg.fixLayout = function () {
+        DialogBoxMorph.prototype.fixLayout.call(this);
+        handle.setPosition(
+            this.bottomRight().subtract(handle.extent().add(handle.inset))
+        );
+    };
+
+    scene.stage.fireGreenFlagEvent();
+};
+
+IDE_Morph.prototype.escapeTutorial = function () {
+    if (!this.tutorial) {
+        return;
+    }
+    this.tutorial.scene.stage.tutorialMode = false;
+    this.tutorial.ok();
+    this.tutorial = null;
+    this.corral.fixLayout(); // update scene icons
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////
@@ -12959,11 +13202,26 @@ SceneIconMorph.prototype.userMenu = function () {
         return null;
     }
     if (!this.isProjectScene()) {
+        if (!this.isCurrentScene()) {
+            menu.addItem(
+                "launch...",
+                "launchAsTutorial",
+                "open and run this scene as a tutorial\nin a separate pane"
+            );
+            menu.addLine();
+        }
         menu.addItem("rename", "renameScene");
         menu.addItem("delete", "removeScene");
     }
     menu.addItem("export", "exportScene");
     return menu;
+};
+
+SceneIconMorph.prototype.launchAsTutorial = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.launchTutorial(this.object);
+    }
 };
 
 SceneIconMorph.prototype.renameScene = function () {
@@ -13032,6 +13290,13 @@ SceneIconMorph.prototype.isProjectScene = function (anIDE) {
     // because its name and project notes are those of the project
     var ide = anIDE || this.parentThatIsA(IDE_Morph);
     return ide.scenes.indexOf(this.object) === 1;
+};
+
+SceneIconMorph.prototype.isCurrentScene = function (anIDE) {
+    // the currently actife  scene of a project cannot be launched as a
+    // tutorial, because it cannot live in 2 locations at the same time
+    var ide = anIDE || this.parentThatIsA(IDE_Morph);
+    return ide.scene === this.object;
 };
 
 // SceneIconMorph drawing
