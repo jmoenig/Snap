@@ -34,6 +34,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-11-22
+* gui: let tutorials disable / enable the user to drag data (and blocks) out of watchers and balloons
+
 ### 2025-11-20
 * extensions: new "meta_current_scripts" extension for tutorial needing to access the IDE
 * extensions: made "dta_import(raw?)" extension interpolated

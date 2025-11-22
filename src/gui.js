@@ -87,7 +87,7 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-20';
+modules.gui = '2025-November-22';
 
 // Declarations
 
@@ -9235,6 +9235,10 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
     dlg.padding = MorphicPreferences.isFlat ? 1 : dlg.corner;
     dlg.stackPadding = 0;
     this.escapeTutorial();
+
+    this.scene.captureGlobalSettings();
+    SpriteMorph.prototype.disableDraggingData = scene.disableDraggingData;
+
     dlg.scene = scene;
     dlg.ide = this;
     scene.stage.setScale(1);
@@ -9292,6 +9296,7 @@ IDE_Morph.prototype.escapeTutorial = function () {
     this.tutorial.ok();
     this.tutorial = null;
     this.corral.fixLayout(); // update scene icons
+    this.scene.applyGlobalSettings();
 };
 
 // ProjectDialogMorph ////////////////////////////////////////////////////
