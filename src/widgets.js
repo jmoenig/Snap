@@ -947,19 +947,19 @@ TabMorph.prototype.refresh = function () {
 
 // TabMorph drawing:
 
-TabMorph.prototype.drawBackground = function (context, color) {
+TabMorph.prototype.drawBackground = function (ctx, color) {
   var w = this.width(),
     h = this.height(),
     c = this.corner;
 
-  context.fillStyle = color.toString();
-  context.beginPath();
-  context.moveTo(0, h);
-  context.bezierCurveTo(c, h, c, 0, c * 2, 0);
-  context.lineTo(w - c * 2, 0);
-  context.bezierCurveTo(w - c, 0, w - c, h, w, h);
-  context.closePath();
-  context.fill();
+  ctx.fillStyle = color.toString();
+  ctx.beginPath();
+  ctx.moveTo(0, h);
+  ctx.arc(0 + c, 0 + c, c, radians(-180),radians(-90))
+  ctx.arc(w - c, 0 + c, c, radians(-90),radians(0))
+  ctx.lineTo(w, h);
+  ctx.closePath();
+  ctx.fill();
 };
 
 TabMorph.prototype.drawOutline = function () {

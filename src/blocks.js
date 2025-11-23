@@ -2373,7 +2373,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     y += lineHeight;
 
     lineHeight = 0;
-    line.forEach((part) => {
+    line.forEach((part, partIndex) => {
       if (part.isLoop) {
         hasLoopCSlot = true;
       }
@@ -2426,7 +2426,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         }
         if (
           part instanceof MultiArgMorph &&
-          index == 0 &&
+          partIndex == 0 &&
           this.constructor.name.includes("ReporterBlockMorph") &&
           !(this instanceof RingMorph)
         ) {
@@ -7776,6 +7776,7 @@ HatBlockMorph.prototype.outlinePath = function (ctx, inset) {
     radians(180),
     false
   );
+  ctx.lineTo(0 + inset, h + this.corner)
 };
 
 HatBlockMorph.prototype.drawLeftEdge = function (ctx) {
@@ -8154,7 +8155,7 @@ ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
   // draw the 'flat' shape
   var h = this.height(),
     r =
-      this?.alwaysRound && !(this instanceof RingMorph)
+      this instanceof TemplateSlotMorph || (this?.alwaysRound && !(this instanceof RingMorph))
         ? h / 2
         : Math.min((1 * this.rounding), h / 2),
     radius = Math.max(r - inset, 0),

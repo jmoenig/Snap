@@ -87,12 +87,12 @@ HatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-August-29';
+modules.gui = '2025-November-23';
 
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.0.1';
+var SplitVersion = '1.0.3';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -325,6 +325,7 @@ IDE_Morph.prototype.init = function (config) {
     this.categories = null;
     this.palette = null;
     this.paletteHandle = null;
+    this.oldSpriteBar = null;
     this.spriteBar = null;
     this.spriteEditor = null;
     this.stage = null;
@@ -995,6 +996,7 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
 
     // hide sprite editing widgets
     if (cnf.noSpriteEdits) {
+        this.oldSpriteBar.hide();
         this.spriteBar.hide();
         this.stageHandle.hide();
         this.corralBar.hide();
@@ -1017,7 +1019,7 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createCategories();
     this.createPalette();
     this.createStage();
-    this.createSpriteBar();
+    this.createOldSpriteBar();
     this.createSpriteEditor();
     this.createCorralBar();
     this.createCorral();
@@ -1521,6 +1523,9 @@ IDE_Morph.prototype.createControlBar = function () {
         );
         x = Math.max(x, this.left());
     }
+    if(myself.performerMode){
+        x = myself.right() - (3 * padding + 3 * stageSizeButton.width()) - padding
+    }
     [startButton, pauseButton, stopButton].forEach(button => {
             x += padding;
             button.setCenter(myself.controlBar.center());
@@ -2011,7 +2016,7 @@ IDE_Morph.prototype.createStageHandle = function () {
     }
 };
 
-IDE_Morph.prototype.createSpriteBar = function () {
+IDE_Morph.prototype.createOldSpriteBar = function () {
     // assumes that the categories pane has already been created
     var rotationStyleButtons = [],
         thumbSize = new Point(45, 45),
@@ -2021,7 +2026,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabCorner = 10,//15,
         tabPadding = 5,//3,
         tabColors = this.tabColors,
-        tabBar = new AlignmentMorph('row', -tabCorner * 2),
+        tabBar = new AlignmentMorph('row', -tabCorner * 0.5),
         tab,
         symbols = [
             new SymbolMorph('arrowRightThin', 10),
@@ -2031,6 +2036,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
         labels = ['don\'t rotate', 'can rotate', 'only face left/right'],
         myself = this;
 
+    if (this.oldSpriteBar) {
+        this.oldSpriteBar.destroy();
+    }
     if (this.spriteBar) {
         this.spriteBar.destroy();
     }
@@ -2038,6 +2046,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
     this.spriteBar = new Morph();
     this.spriteBar.color = this.frameColor;
     this.add(this.spriteBar);
+    this.oldSpriteBar = new Morph();
+    this.oldSpriteBar.color = this.frameColor;
+    this.add(this.oldSpriteBar);
 
     function addRotationStyleButton(rotationStyle) {
         var colors = myself.rotationStyleColors,
@@ -2078,9 +2089,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
         button.fixLayout();
         button.refresh();
         rotationStyleButtons.push(button);
-        button.setPosition(myself.spriteBar.position().add(new Point(2, 4)));
-        button.setLeft(button.left()
-            + ((rotationStyleButtons.length - 1) * (button.width() + 2))
+        button.setPosition(myself.spriteBar.position().add(new Point(4, 2)));
+        button.setTop(button.top()
+            + ((rotationStyleButtons.length - 1) * (button.height() + 2))
             );
         myself.spriteBar.add(button);
         if (myself.currentSprite instanceof StageMorph) {
@@ -2088,21 +2099,20 @@ IDE_Morph.prototype.createSpriteBar = function () {
         }
         return button;
     }
-    if(false) {
     addRotationStyleButton(1);
     addRotationStyleButton(2);
     addRotationStyleButton(0);
-    }
+    
     this.rotationStyleButtons = rotationStyleButtons;
 
     thumbnail = new Morph();
     thumbnail.isCachingImage = true;
     thumbnail.bounds.setExtent(thumbSize);
     thumbnail.cachedImage = this.currentSprite.thumbnail(thumbSize);
-    //thumbnail.setPosition(
-    //    rotationStyleButtons[0].topRight().add(new Point(5, 3))
-    //);
-    //this.spriteBar.add(thumbnail);
+    thumbnail.setPosition(
+        rotationStyleButtons[0].topRight().add(new Point(5, 3))
+    );
+//this.spriteBar.add(thumbnail);
 
     thumbnail.fps = 3;
 
@@ -2119,9 +2129,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     nameField = new InputFieldMorph(this.currentSprite.name);
     nameField.setWidth(100); // fixed dimensions
+    
     nameField.contrast = 90;
-    nameField.setPosition(thumbnail.topRight().add(new Point(10, 3)));
-    //this.spriteBar.add(nameField);
+    nameField.setPosition(rotationStyleButtons[0].topRight().add(new Point(10, 3)));
+    this.spriteBar.add(nameField);
     this.spriteBar.nameField = nameField;
     nameField.fixLayout();
     nameField.accept = function () {
@@ -2163,7 +2174,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
 
     padlock.setPosition(nameField.bottomLeft().add(2));
     padlock.fixLayout();
-    //this.spriteBar.add(padlock);
+    this.spriteBar.add(padlock);
     if (this.currentSprite instanceof StageMorph) {
         padlock.hide();
     }
@@ -2249,12 +2260,21 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tabBar.children.forEach(each =>
         each.refresh()
     );
-    this.spriteBar.tabBar = tabBar;
-    this.spriteBar.add(this.spriteBar.tabBar);
+    this.oldSpriteBar.tabBar = tabBar;
+    this.oldSpriteBar.add(this.oldSpriteBar.tabBar);
 
-    this.spriteBar.fixLayout = function () {
+    this.oldSpriteBar.fixLayout = function () {
         this.tabBar.setLeft(this.left());
         this.tabBar.setBottom(this.bottom() + myself.padding);
+    };
+    this.spriteBar.fixLayout = function () {
+        this.setTop(myself.corralBar.bottom());
+        this.setLeft(myself.corralBar.left());
+        nameField.bounds.corner.x = Math.min(nameField.left() + 100, world.right() - 5);
+        
+        nameField.fixLayout()
+        nameField.bounds.corner.x = Math.min(nameField.left() + 100, world.right() - 5);
+        
     };
 };
 
@@ -2337,11 +2357,11 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
     this.spriteEditor.mouseEnterDragging = (morph) => {
         if (morph instanceof BlockMorph) {
-            this.spriteBar.tabBar.tabTo('scripts');
+            this.oldSpriteBar.tabBar.tabTo('scripts');
         } else if (morph instanceof CostumeIconMorph) {
-            this.spriteBar.tabBar.tabTo('costumes');
+            this.oldSpriteBar.tabBar.tabTo('costumes');
         } else if (morph instanceof SoundIconMorph) {
-            this.spriteBar.tabBar.tabTo('sounds');
+            this.oldSpriteBar.tabBar.tabTo('sounds');
         }
     };
 
@@ -2667,7 +2687,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         // categories
         this.categories.setLeft(this.logo.left());
         this.categories.setTop(
-            57//this.spriteBar.bottom()//cnf.hideControls ? this.top() + border : this.spriteBar.bottom()//this.logo.bottom() - this.spriteBar.
+            57//this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
         );
         this.categories.setWidth(this.paletteWidth);
         if (this.categories.scroller) {
@@ -2693,7 +2713,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         // stage
         if (this.performerMode) {
             this.stage.setLeft(this.palette.right() + padding);
-            this.stage.setTop(this.spriteBar.bottom() + padding);
+            this.stage.setTop(this.oldSpriteBar.bottom() + padding);
             this.stage.setScale(1);
             this.stageRatio = 1;
             this.isSmallStage = false;
@@ -2758,7 +2778,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                     200,
                     this.width() -
                         this.stage.width() -
-                        this.spriteBar.tabBar.width() -
+                        this.oldSpriteBar.tabBar.width() -
                         padding * 2 -
                         border * 2
                 );
@@ -2771,23 +2791,23 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.paletteHandle.fixLayout();
         }
 
-        // spriteBar
-        this.spriteBar.setLeft(this.left()/*cnf.noPalette ?
+        // oldSpriteBar
+        this.oldSpriteBar.setLeft(this.left()/*cnf.noPalette ?
             this.left() + border
             : this.paletteWidth + padding + border*/
         );
-        this.spriteBar.setTop(
+        this.oldSpriteBar.setTop(
             cnf.hideControls ?
                 this.top() + border
                     : this.logo.bottom() + padding
         );
-        this.spriteBar.setWidth(
-            Math.max(0, this.stage.left() - padding - this.spriteBar.left())
+        this.oldSpriteBar.setWidth(
+            Math.max(0, this.stage.left() - padding - this.oldSpriteBar.left())
         );
-        this.spriteBar.setHeight(
+        this.oldSpriteBar.setHeight(
             Math.round(this.logo.height() * 1)
         );
-        this.spriteBar.fixLayout();
+        this.oldSpriteBar.fixLayout();
 
         // spriteEditor
         if (this.spriteEditor.isVisible) {
@@ -2798,17 +2818,17 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                 this.spriteEditor.setHeight(this.stage.height());
             } else {
                 //*
-                this.spriteEditor.setLeft(this.currentTab == "scripts" ? this.categories.right() : 0)//this.spriteBar.left());
+                this.spriteEditor.setLeft(this.currentTab == "scripts" ? this.categories.right() : 0)//this.oldSpriteBar.left());
                 this.spriteEditor.setTop(
                     cnf.noSprites || cnf.noSpriteEdits ?
                     (cnf.hideControls ? this.top() + border
                         : this.controlBar.bottom() + padding)
-                    : this.spriteBar.bottom() + padding
+                    : this.oldSpriteBar.bottom() + padding
                 );
                 this.spriteEditor.setWidth(
                     (cnf.noSprites ?
                         this.right() - this.spriteEditor.left() - border
-                        : this.spriteBar.width() - this.spriteEditor.left() - 10)
+                        : this.oldSpriteBar.width() - this.spriteEditor.left() - 10)
                 );
                 this.spriteEditor.setHeight(
                     this.bottom() - this.spriteEditor.top() - border
@@ -2821,9 +2841,23 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.corralBar.setTop(this.stage.bottom() + padding);
         this.corralBar.setWidth(this.stage.width());
 
+        // spriteBar
+        this.spriteBar.setLeft(this.corralBar.left()
+        );
+        this.spriteBar.setTop(
+            this.corralBar.bottom()
+        );
+        this.spriteBar.setWidth(
+            this.corralBar.width()
+        );
+        this.spriteBar.setHeight(
+            Math.round(this.logo.height() * 2.2)
+        );
+        this.spriteBar.fixLayout();
+
         // corral
         if (!contains(['selectSprite', 'tabEditor'], situation)) {
-            this.corral.setPosition(this.corralBar.bottomLeft());
+            this.corral.setPosition(this.spriteBar.bottomLeft());
             this.corral.setWidth(this.stage.width());
             this.corral.setHeight(this.bottom() - this.corral.top() - border);
             this.corral.fixLayout();
@@ -2907,7 +2941,7 @@ IDE_Morph.prototype.setExtent = function (point) {
         // (in presentation mode this is already handled separately)
         if (!cnf.noSprites) {
             maxWidth = ext.x -
-                (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
+                (200 + this.oldSpriteBar.tabBar.width() + (this.padding * 2));
             minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
             maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
             minRatio = minWidth / this.stage.dimensions.x;
@@ -3016,7 +3050,7 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
     costume.embeddedData = embeddedData || null;
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
-    this.spriteBar.tabBar.tabTo('costumes');
+    this.oldSpriteBar.tabBar.tabTo('costumes');
     this.spriteEditor.updateList();
     this.hasChangedMedia = true;
     this.currentSprite.recordUserEdit(
@@ -3102,7 +3136,7 @@ IDE_Morph.prototype.loadSVG = function (anImage, name) {
 
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
-    this.spriteBar.tabBar.tabTo('costumes');
+    this.oldSpriteBar.tabBar.tabTo('costumes');
     this.spriteEditor.updateList();
     this.hasChangedMedia = true;
 };
@@ -3129,7 +3163,7 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
         );
     } else {
     	this.currentSprite.addSound(anAudio, name.split('.')[0]); // up to '.'
-    	this.spriteBar.tabBar.tabTo('sounds');
+    	this.oldSpriteBar.tabBar.tabTo('sounds');
     	this.hasChangedMedia = true;
         this.currentSprite.recordUserEdit(
             'sound',
@@ -3343,7 +3377,7 @@ IDE_Morph.prototype.toggleSingleStepping = function () {
 IDE_Morph.prototype.toggleCameraSupport = function () {
     CamSnapshotDialogMorph.prototype.enableCamera =
         !CamSnapshotDialogMorph.prototype.enableCamera;
-    this.spriteBar.tabBar.tabTo(this.currentTab);
+    this.oldSpriteBar.tabBar.tabTo(this.currentTab);
     this.createCorralBar();
     this.fixLayout();
 };
@@ -3422,7 +3456,7 @@ IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {
         this.categories.refreshEmpty();
     }
     this.createPalette();
-    this.createSpriteBar();
+    this.createOldSpriteBar();
     this.createSpriteEditor();
     this.corral.refresh();
     this.fixLayout('selectSprite');
@@ -3881,7 +3915,7 @@ IDE_Morph.prototype.recordNewSound = function () {
                     this.newSoundName('recording')
                 );
                 this.makeSureRecordingIsMono(sound);
-                this.spriteBar.tabBar.tabTo('sounds');
+                this.oldSpriteBar.tabBar.tabTo('sounds');
                 this.hasChangedMedia = true;
             }
         });
@@ -6689,7 +6723,7 @@ IDE_Morph.prototype.openProjectString = function (str, callback, noPrims) {
 
 IDE_Morph.prototype.rawOpenProjectString = function (str, noPrims) {
     this.toggleAppMode(false);
-    this.spriteBar.tabBar.tabTo('scripts');
+    this.oldSpriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             this.openProject(
@@ -6772,7 +6806,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     // name is optional (string), so is silently (bool)
     var blocks;
     this.toggleAppMode(false);
-    this.spriteBar.tabBar.tabTo('scripts');
+    this.oldSpriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             blocks = this.serializer.loadBlocks(str, this.stage);
@@ -6835,7 +6869,7 @@ IDE_Morph.prototype.openSpritesString = function (str) {
 
 IDE_Morph.prototype.rawOpenSpritesString = function (str) {
     this.toggleAppMode(false);
-    this.spriteBar.tabBar.tabTo('scripts');
+    this.oldSpriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
             this.deserializeSpritesString(str);
@@ -6917,7 +6951,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str, silently) {
         script = this.deserializeScriptString(str);
     }
     script.fixBlockColor(null, true);
-    this.spriteBar.tabBar.tabTo('scripts');
+    this.oldSpriteBar.tabBar.tabTo('scripts');
     if (silently) {
         this.currentSprite.scripts.add(script);
         this.currentSprite.scripts.cleanUp();
@@ -7005,7 +7039,7 @@ IDE_Morph.prototype.rawOpenScriptsOnlyString = function (str) {
         this.serializer.loadScripts(object, scripts, xml);
     }
     scripts.changed();
-    this.spriteBar.tabBar.tabTo('scripts');
+    this.oldSpriteBar.tabBar.tabTo('scripts');
     this.showMessage(
         'Imported Scripts.',
         2
@@ -7556,7 +7590,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.corral,
             this.corralBar,
             this.spriteEditor,
-            this.spriteBar,
+            this.oldSpriteBar,
             this.palette,
             this.categories
         ];
@@ -7608,7 +7642,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         // prevent rotation and draggability controls from
         // showing for the stage
         if (this.currentSprite === this.stage) {
-            this.spriteBar.children.forEach(child => {
+            this.oldSpriteBar.children.forEach(child => {
                 if (child instanceof PushButtonMorph) {
                     child.hide();
                 }
@@ -7618,7 +7652,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         this.currentSprite.scripts.updateToolbar();
         // hide hidden panes
         if (this.config.noSpriteEdits) {
-            this.spriteBar.hide();
+            this.oldSpriteBar.hide();
             this.stageHandle.hide();
             this.corralBar.hide();
             this.corral.hide();
@@ -7911,7 +7945,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
         }
     }
     SpriteMorph.prototype.initBlocks();
-    this.spriteBar.tabBar.tabTo('scripts');
+    this.oldSpriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
     this.createCorralBar();
@@ -8155,7 +8189,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     SpriteMorph.prototype.initBlocks();
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
-    this.spriteBar.tabBar.tabTo('scripts');
+    this.oldSpriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
     this.createCorralBar();
@@ -8424,7 +8458,7 @@ IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
     }
     SpriteMorph.prototype.initBlocks();
     callback();
-    this.spriteBar.tabBar.tabTo('scripts');
+    this.oldSpriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.categories.refreshEmpty();
     this.createCorralBar();
@@ -11260,7 +11294,7 @@ SpriteIconMorph.prototype.userMenu = function () {
                 this.object.setName(this.parentThatIsA(IDE_Morph).newSpriteName(x, this.object))
                 this.step()
                 this.fixLayout()
-                //this.parentThatIsA(IDE_Morph).spriteBar.nameField.setContents(this.object.name)
+                //this.parentThatIsA(IDE_Morph).oldSpriteBar.nameField.setContents(this.object.name)
             }).prompt(
                 "Rename Sprite",
                 "",
@@ -11795,7 +11829,7 @@ CostumeIconMorph.prototype.removeCostume = function () {
 
 CostumeIconMorph.prototype.importEmbeddedData = function () {
     var ide = this.parentThatIsA(IDE_Morph);
-    ide.spriteBar.tabBar.tabTo('scripts');
+    ide.oldSpriteBar.tabBar.tabTo('scripts');
     ide.droppedText(this.object.embeddedData, this.object.name, '');
 };
 
@@ -13243,7 +13277,7 @@ PaletteHandleMorph.prototype.mouseMove = function (pos) {
             cnf.noSprites ?
                 ide.width() - border * 2
                 : ide.stageHandle.left() -
-                    ide.spriteBar.tabBar.width()
+                    ide.oldSpriteBar.tabBar.width()
     );
     ide.setExtent(ide.world().extent());
 };
