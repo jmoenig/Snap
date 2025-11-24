@@ -120,26 +120,81 @@ IDE_Morph.prototype.constructor = IDE_Morph;
 IDE_Morph.uber = Morph.prototype;
 
 // IDE_Morph preferences settings and skins
+/* Snap! has two independent appearance dimensions:
+    - Design: 'default' (skeuomorphic), 'flat', and 'large-text'
+    - Theme: 'default' (dark), 'bright', and 'high-contrast'
+
+    Both affect the overall look of the IDE and widgets, can be combined differently.
+    Note that while 'large-text' is a design mode, it also enforces the flat design properties.
+    (It is designed to be more accessible for low-vision users, and not have too many individual styles.) When saved to local storage, it is saved as 'large-text-flat'.
+
+    Note that the 'design' settings are stored in MorphicPreferences.isFlat and MorphicPreferences.isLargeText,
+    and the 'theme' settings are stored in IDE_Morph.prototype.isBright and IDE_Morph.prototype.isHighContrastTheme.
+
+    When Snap! loads setDefaultDesign() and setDefaultTheme() are called to set the default appearance, and subsequently any additional methods are called when reading saved user settings.
+
+    These settings are commonly combined as follows:
+    * 'Default Looks': default design + default theme (skeuomorphic + dark)
+    * 'Flat Bright': flat design + bright theme
+    * 'Large Text High Contrast': large-text design + high-contrast theme (see setAccessibleLooks)
+*/
 
 IDE_Morph.prototype.isBright = false;
+IDE_Morph.prototype.isHighContrastTheme = false;
 
 IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
+    MorphicPreferences = Object.assign({}, standardSettings);
     MorphicPreferences.isFlat = false;
+    IDE_Morph.prototype.isBright = false;
+    IDE_Morph.prototype.isHighContrastTheme = false;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     SyntaxElementMorph.prototype.contrast = 65;
+
+    Object.assign(PushButtonMorph.prototype, PushButtonMorph.prototype.DEFAULT_LOOKS);
+    // We need to manually update subclasses that inherit PushButtonMorph looks
+    Object.assign(ToggleButtonMorph.prototype, PushButtonMorph.prototype.DEFAULT_LOOKS);
+    Object.assign(DialogBoxMorph.prototype, DialogBoxMorph.prototype.DEFAULT_LOOKS);
 };
 
 IDE_Morph.prototype.setFlatDesign = function () {
+    MorphicPreferences = Object.assign({}, standardSettings);
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = null;
     SyntaxElementMorph.prototype.contrast = 20;
+
+    let looks = PushButtonMorph.prototype.FLAT_MODE_LOOKS;
+    if (IDE_Morph.prototype.isBright) {
+        looks = PushButtonMorph.prototype.FLAT_MODE_BRIGHT_LOOKS;
+    }
+    Object.assign(PushButtonMorph.prototype, looks);
+    Object.assign(ToggleButtonMorph.prototype, looks);
+    Object.assign(DialogBoxMorph.prototype, DialogBoxMorph.prototype.FLAT_MODE_LOOKS);
+};
+
+IDE_Morph.prototype.setLargeTextDesign = function () {
+    MorphicPreferences = Object.assign({}, standardSettings, largeTextSettings);
+    MorphicPreferences.isFlat = true;
+    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    SyntaxElementMorph.prototype.contrast = 65;
+
+    let looks = PushButtonMorph.prototype.FLAT_MODE_LOOKS;
+    if (IDE_Morph.prototype.isBright) {
+        looks = PushButtonMorph.prototype.FLAT_MODE_BRIGHT_LOOKS;
+    }
+    Object.assign(PushButtonMorph.prototype,
+        looks,
+        PushButtonMorph.prototype.LARGE_TEXT_LOOKS);
+    Object.assign(ToggleButtonMorph.prototype,
+        looks,
+        PushButtonMorph.prototype.LARGE_TEXT_LOOKS);
+    Object.assign(DialogBoxMorph.prototype,
+        DialogBoxMorph.prototype.FLAT_MODE_LOOKS,
+        DialogBoxMorph.prototype.LARGE_TEXT_LOOKS);
 };
 
 IDE_Morph.prototype.setDefaultTheme = function () { // dark
     IDE_Morph.prototype.isBright = false;
-
-    PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
-    PushButtonMorph.prototype.outlineGradient = false;
+    IDE_Morph.prototype.isHighContrastTheme = false;
 
     SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
     SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
@@ -178,13 +233,19 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
         = IDE_Morph.prototype.buttonLabelColor;
 
     ScriptsMorph.prototype.feedbackColor = WHITE;
+    SpriteMorph.prototype.blockColor = SpriteMorph.prototype.DEFAULT_BLOCK_COLOR;
+
+    Object.assign(PushButtonMorph.prototype,
+        PushButtonMorph.prototype.DEFAULT_LOOKS);
+    Object.assign(ToggleButtonMorph.prototype,
+        PushButtonMorph.prototype.DEFAULT_LOOKS);
+    Object.assign(DialogBoxMorph.prototype,
+        DialogBoxMorph.prototype.DEFAULT_LOOKS);
 };
 
 IDE_Morph.prototype.setBrightTheme = function () {
     IDE_Morph.prototype.isBright = true;
-
-    PushButtonMorph.prototype.outlineColor = new Color(255, 255, 255);
-    PushButtonMorph.prototype.outlineGradient = true;
+    IDE_Morph.prototype.isHighContrastTheme = false;
 
     SpriteMorph.prototype.paletteColor = WHITE;
     SpriteMorph.prototype.paletteTextColor = new Color(70, 70, 70);
@@ -221,6 +282,82 @@ IDE_Morph.prototype.setBrightTheme = function () {
         = IDE_Morph.prototype.buttonLabelColor;
 
     ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
+    SpriteMorph.prototype.blockColor = SpriteMorph.prototype.DEFAULT_BLOCK_COLOR;
+
+    let pushButtonLooks = PushButtonMorph.prototype.DEFAULT_LOOKS;
+    let dialogBoxLooks = DialogBoxMorph.prototype.DEFAULT_LOOKS;
+    if (MorphicPreferences.isFlat) {
+        pushButtonLooks = PushButtonMorph.prototype.FLAT_MODE_BRIGHT_LOOKS;
+        dialogBoxLooks = DialogBoxMorph.prototype.FLAT_MODE_LOOKS;
+    }
+    Object.assign(PushButtonMorph.prototype, pushButtonLooks);
+    Object.assign(ToggleButtonMorph.prototype, pushButtonLooks);
+    Object.assign(DialogBoxMorph.prototype, dialogBoxLooks);
+};
+
+IDE_Morph.prototype.setHighContrastTheme = function () {
+    IDE_Morph.prototype.isBright = false;
+    IDE_Morph.prototype.isHighContrastTheme = true;
+
+    Object.assign(PushButtonMorph.prototype,
+        PushButtonMorph.prototype.HIGH_CONTRAST_LOOKS);
+    Object.assign(ToggleButtonMorph.prototype,
+        PushButtonMorph.prototype.HIGH_CONTRAST_LOOKS);
+    Object.assign(DialogBoxMorph.prototype,
+        DialogBoxMorph.prototype.HIGH_CONTRAST_LOOKS);
+
+    // The regular palette colors generally have enough contrast already
+    // However, we could consider increasing the contrast between the blocks (now darker)
+    // and the background by lightening the background a bit or increasing the block border
+    // See also: IDE_Morph.prototype.backgroundColor
+    SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
+    SpriteMorph.prototype.paletteTextColor = new Color(255, 255, 255);
+    StageMorph.prototype.paletteTextColor
+        = SpriteMorph.prototype.paletteTextColor;
+    StageMorph.prototype.paletteColor = SpriteMorph.prototype.paletteColor;
+    SpriteMorph.prototype.sliderColor
+        = SpriteMorph.prototype.paletteColor.lighter(30);
+
+    IDE_Morph.prototype.buttonContrast = 30;
+    IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
+    IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
+
+    IDE_Morph.prototype.groupColor
+        = SpriteMorph.prototype.paletteColor.lighter(5);
+    IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
+    IDE_Morph.prototype.buttonLabelColor = WHITE;
+    IDE_Morph.prototype.tabColors = [
+        IDE_Morph.prototype.groupColor.darker(50),
+        IDE_Morph.prototype.groupColor.darker(25),
+        IDE_Morph.prototype.groupColor
+    ];
+    IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
+    IDE_Morph.prototype.appModeColor = BLACK;
+    IDE_Morph.prototype.padding = 1;
+
+    SpriteIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    CostumeIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    SoundIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    TurtleIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    SceneIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+
+    ScriptsMorph.prototype.feedbackColor = WHITE;
+    // Use high contrast block colors
+    SpriteMorph.prototype.blockColor = SpriteMorph.prototype.HIGH_CONTRAST_BLOCK_COLOR;
+
+    // CONSIDERATIONS:
+    // Borders on blocks:
+    // SyntaxElementMorph.prototype.contrast = 80;
+    // SpriteMorph.prototype.highlightColor = new Color(250, 200, 130);
+    // SpriteMorph.prototype.highlightBorder = 8;
+    // SpriteMorph.prototype.bubbleBorderColor = new Color(190, 190, 190);
+    // SpriteMorph.prototype.bubbleMaxTextWidth = 130;
+    // BlockMorph.prototype.zebraContrast = 40;
 };
 
 IDE_Morph.prototype.scriptsTexture = function () {
@@ -258,7 +395,8 @@ function IDE_Morph(config = {}) {
         path            str, path to additional resources (translations)
         load:           str, microworld file name (xml)
         onload:         callback, called when the microworld is loaded
-        design:         str, currently "flat" (bright) or "classic" (dark)
+        design:         str, currently "flat", "classic" (default), or "large-text-flat"
+        theme:          str, currently "dark" (default), "bright", or "high-contrast"
         border:         num, pixels surrounding the IDE, default is none (zero)
         lang:           str, translation to be used, e.g. "de" for German
         mode:           str, currently "presentation" or "edit"
@@ -887,21 +1025,31 @@ IDE_Morph.prototype.applyConfigurations = function () {
     }
 
     // design
-    if (cnf.design) {
-        if (cnf.design === 'flat') {
+    switch(cnf.design) {
+        case 'flat':
             this.setFlatDesign();
-        } else if (cnf.design === 'classic') {
+            break;
+        case 'large-text-flat':
+            this.setLargeTextDesign();
+            break;
+        case 'classic':
+        default:
             this.setDefaultDesign();
-        }
+            break;
     }
 
     // theme
-    if (cnf.theme) {
-        if (cnf.theme === 'bright') {
+    switch (cnf.theme) {
+        case 'bright':
             this.setBrightTheme();
-        } else if (cnf.theme === 'dark') {
+            break;
+        case 'high-contrast':
+            this.setHighContrastTheme();
+            break;
+        case 'dark':
+        default:
             this.setDefaultTheme();
-        }
+            break;
     }
 
     // interaction mode
@@ -2185,6 +2333,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
 
+    // TODO-a11y: verify this
     tab.getPressRenderColor = function () {
         if (MorphicPreferences.isFlat ||
                 SyntaxElementMorph.prototype.alpha > 0.85) {
@@ -3445,6 +3594,14 @@ IDE_Morph.prototype.flatBrightLooks = function () {
     this.saveSetting('theme', 'bright');
 };
 
+IDE_Morph.prototype.accessibleLooks = function () {
+    this.setLargeTextDesign();
+    this.setHighContrastTheme();
+    this.refreshIDE();
+    this.saveSetting('design', 'large-text-flat');
+    this.saveSetting('theme', 'high-contrast');
+};
+
 IDE_Morph.prototype.defaultDesign = function () {
     this.setDefaultDesign();
     this.refreshIDE();
@@ -3457,6 +3614,12 @@ IDE_Morph.prototype.flatDesign = function () {
     this.saveSetting('design', 'flat');
 };
 
+IDE_Morph.prototype.largeTextDesign = function () {
+    this.setLargeTextDesign();
+    this.refreshIDE();
+    this.saveSetting('design', 'large-text-flat');
+};
+
 IDE_Morph.prototype.defaultTheme = function () {
     this.setDefaultTheme();
     this.refreshIDE();
@@ -3467,6 +3630,12 @@ IDE_Morph.prototype.brightTheme = function () {
     this.setBrightTheme();
     this.refreshIDE();
     this.saveSetting('theme', 'bright');
+};
+
+IDE_Morph.prototype.highContrastTheme = function () {
+    this.setHighContrastTheme();
+    this.refreshIDE();
+    this.saveSetting('theme', 'high-contrast');
 };
 
 IDE_Morph.prototype.refreshIDE = function () {
@@ -3536,16 +3705,26 @@ IDE_Morph.prototype.applySavedSettings = function () {
         solidshadow = this.getSetting('solidshadow');
 
     // design
-    if (design === 'flat') {
+    switch (design) {
+    case 'large-text-flat':
+        this.setLargeTextDesign();
+        break;
+    case 'flat':
         this.setFlatDesign();
-    } else {
+        break;
+    default:
         this.setDefaultDesign();
     }
 
     // theme
-    if (theme === 'bright') {
+    switch (theme) {
+    case 'high-contrast':
+        this.setHighContrastTheme();
+        break;
+    case 'bright':
         this.setBrightTheme();
-    } else {
+        break;
+    default:
         this.setDefaultTheme();
     }
 
@@ -8067,6 +8246,14 @@ IDE_Morph.prototype.looksMenuData = function () {
         ],
         this.flatBrightLooks
     );
+    menu.addItem(
+        [
+            MorphicPreferences.isLargeText && IDE_Morph.prototype.isHighContrastTheme ? tick
+                : empty,
+            localize('High Contrast Large Text')
+        ],
+        this.accessibleLooks
+    );
     menu.addLine();
     menu.addPreference(
         'Flat design',
@@ -8082,6 +8269,20 @@ IDE_Morph.prototype.looksMenuData = function () {
         false
     );
     menu.addPreference(
+        'Large text design',
+        () => {
+            // Turning off large text leaves flat design active.
+            if (MorphicPreferences.isLargeText) {
+                return this.flatDesign();
+            }
+            this.largeTextDesign();
+        },
+        MorphicPreferences.isLargeText,
+        'uncheck for flat\nGUI design',
+        'check for large text (accessible)\nGUI design\nlarge text always enables flat design',
+        false
+    );
+    menu.addPreference(
         'Bright theme',
         () => {
             if (IDE_Morph.prototype.isBright) {
@@ -8092,6 +8293,19 @@ IDE_Morph.prototype.looksMenuData = function () {
         IDE_Morph.prototype.isBright,
         'uncheck for default\nGUI theme',
         'check for alternative\nGUI theme',
+        false
+    );
+    menu.addPreference(
+        'High contrast theme',
+        () => {
+            if (IDE_Morph.prototype.isHighContrastTheme) {
+                return this.defaultTheme();
+            }
+            this.highContrastTheme();
+        },
+        IDE_Morph.prototype.isHighContrastTheme,
+        'uncheck for default\nGUI theme',
+        'check for high contrast\nGUI theme',
         false
     );
     return menu;
