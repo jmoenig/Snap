@@ -21,6 +21,7 @@
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
+    * global zoom setting
 * **Notable Changes:**
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
@@ -31,8 +32,12 @@
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
+    * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
 * **Translation Updates:**
     * German
+
+### 2025-11-25
+* morphic, gui: new global zoom setting in the "looks" submenu
 
 ### 2025-11-22
 * gui: let tutorials disable / enable the user to drag data (and blocks) out of watchers and balloons
