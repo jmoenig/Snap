@@ -62,8 +62,9 @@
         (6) development and user modes
         (7) turtle graphics
         (8) supporting high-resolution "retina" screens
-        (9 animations
-        (10) minifying morphic.js
+        (9) global zoom
+        (10) animations
+        (11) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -1226,7 +1227,22 @@
     stage (high-resolution) into a sprite-costume (normal resolution).
 
 
-    (9) animations
+    (9) global zoom
+    ----------------
+    For better accessibility it can be useful to support magnifying a morphic
+    application to different, individual zoom levels. By default the global
+    
+        ZOOM
+    
+    factor is set to the number 1. It can be changed using the Wold's
+
+        zoom(factor)
+
+    method. The zoom level can only be used for magnification, i.e. it only
+    supports levels greater than or equals 1.
+
+
+    (10) animations
     ---------------
     Animations handle gradual transitions between one state and another over a
     period of time. Transition effects can be specified using easing functions.
@@ -1274,7 +1290,7 @@
     method.
 
 
-    (10) minifying morphic.js
+    (11) minifying morphic.js
     -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have
