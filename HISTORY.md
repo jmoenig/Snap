@@ -22,6 +22,7 @@
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
     * global zoom setting ("magnification"), scales everything seamlessly
+        * magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
 * **Notable Changes:**
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
@@ -44,6 +45,7 @@
 * gui: renamed "zoom" setting into "magnification"
 * German translation update for "Magnification"
 * gui: added experimental "stage scale" persistence, commented out for now
+* gui: added magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
 
 ### 2025-11-22
 * gui: let tutorials disable / enable the user to drag data (and blocks) out of watchers and balloons

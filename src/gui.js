@@ -1133,6 +1133,18 @@ IDE_Morph.prototype.createLogo = function () {
         myself.snapMenu();
     };
 
+    this.logo.mouseScroll = function (y) {
+        if (this.world().currentKey === 16) { // shiftClicked
+            myself.setZoom(ZOOM * 100 - y);
+        }
+    };
+
+    this.logo.mouseDoubleClick = function () {
+        if (this.world().currentKey === 16) { // shiftClicked
+            myself.setZoom(100);
+        }
+    };
+
     this.logo.color = BLACK;
     this.logo.setExtent(new Point(200, 28)); // dimensions are fixed
     this.add(this.logo);
