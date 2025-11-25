@@ -8065,7 +8065,7 @@ IDE_Morph.prototype.looksMenuData = function () {
         false
     );
     menu.addLine();
-    menu.addItem('Zoom...', 'userZoom');
+    menu.addItem('Magnification...', 'userZoom');
     menu.addItem('Zoom blocks...', 'userSetBlocksScale');
     menu.addItem('Fade blocks...', 'userFadeBlocks');
     menu.addItem('Afterglow blocks...', 'userSetBlocksAfterglow');
