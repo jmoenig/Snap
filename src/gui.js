@@ -427,6 +427,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     this.buildPanes();
     world.add(this);
+    this.applySavedMagnification();
     world.userMenu = this.userMenu;
 
     // override SnapCloud's user message with Morphic
@@ -3621,6 +3622,13 @@ IDE_Morph.prototype.applySavedSettings = function () {
     if (solidshadow) {
         window.useBlurredShadows = false;
         this.rerender();
+    }
+};
+
+IDE_Morph.prototype.applySavedMagnification = function () {
+    var magnification = this.getSetting('magnification');
+    if (magnification && magnification !== 1) {
+        this.world().zoom(magnification);
     }
 };
 
@@ -8102,10 +8110,9 @@ IDE_Morph.prototype.looksMenuData = function () {
 // IDE_Morph zoom
 
 IDE_Morph.prototype.userZoom = function () {
-    var world = this.world(),
-        dlg = new DialogBoxMorph(
-            null,
-            num => world.zoom(Math.max(num, 100) / 100)
+    var dlg = new DialogBoxMorph(
+            this,
+            'setZoom'
         ).withKey('zoom');
     if (MorphicPreferences.isTouchDevice) {
         dlg.isDraggable = false;
@@ -8113,7 +8120,7 @@ IDE_Morph.prototype.userZoom = function () {
     dlg.prompt(
         'Zoom',
         Math.round(ZOOM * 100).toString(),
-        world,
+        this.world(),
         null, // pic
         {
             '100%' : 100,
@@ -8134,7 +8141,15 @@ IDE_Morph.prototype.userZoom = function () {
         null, // action // slider action
         0 // decimals
     );
+};
 
+IDE_Morph.prototype.setZoom = function (percent) {
+    this.world().zoom(Math.max(percent, 100) / 100);
+    if (ZOOM > 1) {
+        this.saveSetting('magnification', ZOOM);
+    } else {
+        this.removeSetting('magnification');
+    }
 };
 
 // IDE_Morph blocks scaling

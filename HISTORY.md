@@ -21,7 +21,7 @@
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
-    * global zoom setting
+    * global zoom setting, magnifies everything seamlessly
 * **Notable Changes:**
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
@@ -38,6 +38,7 @@
 
 ### 2025-11-25
 * morphic, gui: new global zoom setting in the "looks" submenu
+* gui: save and restore the user's "zoom" setting in the browser
 
 ### 2025-11-22
 * gui: let tutorials disable / enable the user to drag data (and blocks) out of watchers and balloons
