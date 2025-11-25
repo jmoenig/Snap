@@ -8065,7 +8065,7 @@ IDE_Morph.prototype.looksMenuData = function () {
         false
     );
     menu.addLine();
-    menu.addItem('Magnification...', 'userZoom');
+    menu.addItem(localize('Magnification') + '...', 'userZoom');
     menu.addItem('Zoom blocks...', 'userSetBlocksScale');
     menu.addItem('Fade blocks...', 'userFadeBlocks');
     menu.addItem('Afterglow blocks...', 'userSetBlocksAfterglow');
@@ -8112,7 +8112,7 @@ IDE_Morph.prototype.userZoom = function () {
         dlg.isDraggable = false;
     }
     dlg.prompt(
-        'Zoom',
+        'Magnification',
         Math.round(ZOOM * 100).toString(),
         this.world(),
         null, // pic
