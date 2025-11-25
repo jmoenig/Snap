@@ -81,13 +81,13 @@ BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
 disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
 Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK, CLEAR,
 BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
-HatBlockMorph*/
+HatBlockMorph, ZOOM*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-22';
+modules.gui = '2025-November-25';
 
 // Declarations
 
@@ -8094,7 +8094,47 @@ IDE_Morph.prototype.looksMenuData = function () {
         'check for alternative\nGUI theme',
         false
     );
+    menu.addLine();
+    menu.addItem('Zoom...', 'userZoom');
     return menu;
+};
+
+// IDE_Morph zoom
+
+IDE_Morph.prototype.userZoom = function () {
+    var world = this.world(),
+        dlg = new DialogBoxMorph(
+            null,
+            num => world.zoom(Math.max(num, 100) / 100)
+        ).withKey('zoom');
+    if (MorphicPreferences.isTouchDevice) {
+        dlg.isDraggable = false;
+    }
+    dlg.prompt(
+        'Zoom',
+        Math.round(ZOOM * 100).toString(),
+        world,
+        null, // pic
+        {
+            '100%' : 100,
+            '110%' : 110,
+            '125%' : 125,
+            '150%' : 150,
+            '175%' : 175,
+            '200%' : 200,
+            '250%' : 250,
+            '300%' : 300,
+            '400%' : 400,
+            '500%' : 500
+        },
+        false, // read only?
+        true, // numeric
+        100, // slider min
+        500, // slider max
+        null, // action // slider action
+        0 // decimals
+    );
+
 };
 
 // IDE_Morph blocks scaling
