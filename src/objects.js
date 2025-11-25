@@ -3959,7 +3959,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportColorAttribute'));
         blocks.push(block('reportNewColor'));
 
-    } else if (category === 'control') {
+    } else if (category === 'events') {
 
         blocks.push(block('receiveGo'));
         blocks.push(block('receiveKey'));
@@ -3970,7 +3970,20 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('doBroadcast'));
         blocks.push(block('doBroadcastAndWait'));
         blocks.push(block('reportPoll'));
-        blocks.push('-');
+        blocks.push(block('doSwitchToScene'));
+
+        // for debugging: ///////////////
+        if (devMode) {
+            blocks.push('-');
+            blocks.push(this.devModeText());
+            blocks.push('-');
+            blocks.push(watcherToggle('getLastMessage'));
+            blocks.push(block('getLastMessage'));
+        }
+
+    } else if (category === 'control') {
+
+        
         blocks.push(block('doWarp'));
         blocks.push('-');
         blocks.push(block('doWait'));
@@ -4003,7 +4016,6 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('removeClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-        blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('receiveUserEdit'));
         blocks.push(block('doDefineBlock'));
@@ -4020,8 +4032,6 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
-            blocks.push(watcherToggle('getLastMessage'));
-            blocks.push(block('getLastMessage'));
             blocks.push(block('reportHyperZip'));
         // deprecated - superseded by reportEnviornment - retained for legacy
             blocks.push('-');
@@ -4593,7 +4603,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     primitives = this.getPrimitiveTemplates(category),
                     customs = this.customBlockTemplatesForCategory(category),
                     showHeader = showCategories &&
-                        !['lists', 'other', 'events'].includes(category) &&
+                        !['lists', 'other'].includes(category) &&
                         (primitives.some(item =>
                             item instanceof BlockMorph) || customs.length);
 
@@ -4642,9 +4652,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'variables') {
         blocks.push(...this.customBlockTemplatesForCategory('lists'));
         blocks.push(...this.customBlockTemplatesForCategory('other'));
-    }
-    if (category === 'control') {
-        blocks.push(...this.customBlockTemplatesForCategory('events'));
     }
 
     blocks.forEach(block => {
@@ -11364,15 +11371,7 @@ StageMorph.prototype.blockTemplates = function (
 
     } else if (category === 'control') {
 
-        blocks.push(block('receiveGo'));
-        blocks.push(block('receiveKey'));
-        blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveConditionEvent'));
-        blocks.push('-');
-        blocks.push(block('receiveMessage'));
-        blocks.push(block('doBroadcast'));
-        blocks.push(block('doBroadcastAndWait'));
-        blocks.push(block('reportPoll'));
+        
         blocks.push('-');
         blocks.push(block('doWarp'));
         blocks.push('-');
@@ -11404,7 +11403,6 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('newClone'));
         blocks.push('-');
         blocks.push(block('doPauseAll'));
-        blocks.push(block('doSwitchToScene'));
         blocks.push('-');
         blocks.push(block('receiveUserEdit'));
         blocks.push(block('doDefineBlock'));

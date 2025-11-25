@@ -2347,10 +2347,10 @@ SyntaxElementMorph.prototype.fixLayout = function () {
       ico +
       this.edge +
       this.labelPadding /
-        (line[0] instanceof InputSlotMorph &&
+        ((((line[0] instanceof InputSlotMorph) || (line[0] instanceof BooleanSlotMorph)) &&
         this.constructor.name.includes("ReporterBlockMorph") &&
-        !line[0]?.isReadOnly
-          ? 2
+        !(line[0]?.isStatic))
+          ? (2)
           : 1);
     if (this instanceof RingMorph) {
       x = this.left() + space; //this.labelPadding;
@@ -2366,7 +2366,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         this.left() +
         ico +
         this.edge +
-        this.labelPadding * (line[0] instanceof InputSlotMorph ? 1 : 1.5) + //(!(lines.length > 1) * 1.5) +
+        this.labelPadding * ((line[0] instanceof InputSlotMorph || line[0] instanceof BooleanSlotMorph) ? 1 : 1.5) + //(!(lines.length > 1) * 1.5) +
         this.height() * ((lines.length > 1) * 0.5);
     }
 
@@ -2378,7 +2378,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         hasLoopCSlot = true;
       }
       if (
-        index == 0 && (!part?.isBlockLabelBreak && (part instanceof InputSlotMorph ||
+        index == 0 && (!part?.isBlockLabelBreak && (part instanceof InputSlotMorph || part instanceof BooleanSlotMorph ||
           part instanceof ReporterBlockMorph ||
           (!(part instanceof BlockLabelMorph) &&
             !(part instanceof CSlotMorph) &&
@@ -2425,12 +2425,16 @@ SyntaxElementMorph.prototype.fixLayout = function () {
           y += part.scale * 10;
         }
         if (
-          part instanceof MultiArgMorph &&
+          (part instanceof MultiArgMorph &&
           partIndex == 0 &&
           this.constructor.name.includes("ReporterBlockMorph") &&
-          !(this instanceof RingMorph)
+          !(this instanceof RingMorph))
         ) {
           x -= this.labelPadding / 2;
+        }
+        if(((!line[0].isVisible && partIndex == 1) || partIndex == 0) && part instanceof BooleanSlotMorph) {
+          console.warn(partIndex, line)
+          x -= this.labelPadding * 1.5
         }
         part.setPosition(new Point(x, y));
         if (!part.isBlockLabelBreak) {
@@ -2532,11 +2536,16 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   }
   // adjust right padding if rightmost input in a reporter is round
   if (
-    rightMost instanceof InputSlotMorph && (this?.squareStrings ? !rightMost?.isStatic && this.isNumeric : !rightMost?.isStatic) &&
+    (rightMost instanceof InputSlotMorph && (this?.squareStrings ? !rightMost?.isStatic && this.isNumeric : !rightMost?.isStatic)) &&
     this instanceof ReporterBlockMorph &&
     lines.length === 1
   ) {
     blockWidth -= this.labelPadding / 2;
+  }
+  if(rightMost instanceof BooleanSlotMorph &&
+    this instanceof ReporterBlockMorph &&
+    lines.length === 1) {
+      blockWidth -= this.labelPadding * 1.5
   }
 
   // adjust width to hat width
@@ -9278,7 +9287,7 @@ ScriptsMorph.prototype.cleanUp = function () {
       if (child instanceof CommentMorph && child.block) {
         return; // skip anchored comments
       }
-      child.setPosition(origin.add(new Point(target.cleanUpMargin + 150, y)));
+      child.setPosition(origin.add(new Point(target.cleanUpMargin + 200, y)));
       if (child instanceof BlockMorph) {
         child.allComments().forEach(
           (comment) => comment.align(child, true) // ignore layer
@@ -13510,6 +13519,7 @@ BooleanSlotMorph.prototype.mouseClickLeft = function () {
 
 BooleanSlotMorph.prototype.mouseEnter = function () {
   if (this.isWide()) {
+    this.progress = -1
     return;
   }
   if (this.nextValue() === null) {
@@ -13521,9 +13531,6 @@ BooleanSlotMorph.prototype.mouseEnter = function () {
 };
 
 BooleanSlotMorph.prototype.mouseLeave = function () {
-  if (this.isWide()) {
-    return;
-  }
   this.progress = 0;
   this.rerender();
 };
@@ -13594,10 +13601,10 @@ BooleanSlotMorph.prototype.fixLayout = function () {
     text = this.textLabelExtent();
     h = text.y + this.edge * 3;
     this.bounds.setWidth(text.x + h * 1.5 + this.edge * 2);
-    this.bounds.setHeight(h + this.edge * 3);
+    this.bounds.setHeight(this.fontSize * 1.3 + this.edge * 7);
   } else {
-    this.bounds.setWidth((this.fontSize + this.edge * 3) * 2);
-    this.bounds.setHeight(this.fontSize + this.edge * 7);
+    this.bounds.setWidth((this.fontSize + this.edge * 3) * 2.2);
+    this.bounds.setHeight(this.fontSize + this.edge * 8);
   }
 };
 
@@ -13612,8 +13619,7 @@ BooleanSlotMorph.prototype.render = function (ctx) {
   this.cachedClrBright = this.bright();
   this.cachedClrDark = this.dark();
   this.drawDiamond(ctx, this.progress);
-  this.drawLabel(ctx);
-  this.drawKnob(ctx, this.progress);
+  //this.drawKnob(ctx, this.progress);
 };
 
 BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
@@ -13624,29 +13630,93 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     shift = this.edge / 2,
     gradient;
 
+// "tick:"
+  var drawTick = () => {
+    var w = this.width(),
+    r = this.height() / 2 - this.edge,
+    r2 = r / 2,
+    shift = this.edge / 2,
+    text,
+    x,
+    y = this.height() / 2;
+    x = this.width() / 2;
+  if (!MorphicPreferences.isFlat && useBlurredShadows) {
+    ctx.shadowOffsetX = -shift;
+    ctx.shadowOffsetY = -shift;
+    ctx.shadowBlur = shift;
+    ctx.shadowColor = "rgb(0, 100, 0)";
+  }
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = this.edge + shift;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "miter";
+  ctx.beginPath();
+  ctx.moveTo(x - r2, y);
+  ctx.lineTo(x, y + r2);
+  ctx.lineTo(x + r2, r2 + this.edge);
+  ctx.stroke();
+}
+
+  // "cross:"
+  var drawCross = () => {
+    var w = this.width(),
+    r = this.height() / 2 - this.edge,
+    r2 = r / 2,
+    shift = this.edge / 2,
+    text,
+    x,
+    y = this.height() / 2;
+  x = this.width() / 2;
+  if (!MorphicPreferences.isFlat && useBlurredShadows) {
+    ctx.shadowOffsetX = -shift;
+    ctx.shadowOffsetY = -shift;
+    ctx.shadowBlur = shift;
+    ctx.shadowColor = "rgb(100, 0, 0)";
+  }
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = this.edge;
+  ctx.lineCap = "butt";
+  ctx.beginPath();
+  ctx.moveTo(x - r2, y - r2);
+  ctx.lineTo(x + r2, y + r2);
+  ctx.moveTo(x - r2, y + r2);
+  ctx.lineTo(x + r2, y - r2);
+  ctx.stroke();
+}
+
   // draw the 'flat' shape:
+  var clr
   if (this.cachedNormalColor) {
     // if flashing
-    ctx.fillStyle = this.color.toString();
-  } else if (progress < 0) {
-    // 'fade'
-    ctx.fillStyle = this.color.darker(25).toString();
+    clr = this.color
   } else {
     switch (this.value) {
       case true:
-        ctx.fillStyle = "rgb(0, 200, 0)";
+        clr = new Color(0,200,0);
         break;
       case false:
-        ctx.fillStyle = "rgb(200, 0, 0)";
+        clr = new Color(200,0,0);
         break;
       default:
-        ctx.fillStyle = this.color.darker(25).toString();
+        clr = this.color.darker(25);
+    }
+    if(progress < 0 && this.isWide()) {
+      clr = clr.lighter(20)
     }
   }
+  ctx.fillStyle = clr.toString()
 
   if (progress > 0 && !this.isEmptySlot()) {
-    // left half:
-    ctx.fillStyle = "rgb(0, 200, 0)";
+    var rightHalf = () => {ctx.fillStyle = "rgb(200, 0, 0)";
+    ctx.beginPath();
+    ctx.moveTo(w2, 0);
+    ctx.lineTo(w - r, 0);
+    ctx.lineTo(w, r);
+    ctx.lineTo(w - r, h);
+    ctx.lineTo(w2, h);
+    ctx.closePath();
+    ctx.fill();},
+    leftHalf = () => {ctx.fillStyle = "rgb(0, 200, 0)";
     ctx.beginPath();
     ctx.moveTo(0, r);
     ctx.lineTo(r, 0);
@@ -13655,18 +13725,18 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     ctx.lineTo(r, h);
     ctx.closePath();
 
-    ctx.fill();
+    ctx.fill();}
 
     // right half:
-    ctx.fillStyle = "rgb(200, 0, 0)";
-    ctx.beginPath();
-    ctx.moveTo(w2, 0);
-    ctx.lineTo(w - r, 0);
-    ctx.lineTo(w, r);
-    ctx.lineTo(w - r, h);
-    ctx.lineTo(w2, h);
-    ctx.closePath();
-    ctx.fill();
+
+      rightHalf()
+      
+  
+      // left half:
+      leftHalf();
+    
+    
+
   } else {
   }
   ctx.beginPath();
@@ -13677,11 +13747,18 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
   ctx.lineTo(w - r, h);
   ctx.lineTo(r, h);
   ctx.closePath();
+  
   ctx.lineWidth = 2 * this.scale;
   ctx.strokeStyle = this.color.darker();
   if (progress < 1) ctx.fill();
+  
+  if(this.value) {
+    drawTick()
+  } else {
+    drawCross()
+  }
 
-  if (MorphicPreferences.isFlat) {
+  /*if (MorphicPreferences.isFlat) {
     return;
   }
 
@@ -13757,28 +13834,24 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
   ctx.moveTo(r, h - shift);
   ctx.lineTo(w - r - shift, h - shift);
   ctx.closePath();
-  ctx.stroke();
-};
+  ctx.stroke();*/
 
-BooleanSlotMorph.prototype.drawLabel = function (ctx) {
-  var w = this.width(),
-    r = this.height() / 2 - this.edge,
-    r2 = r / 2,
-    shift = this.edge / 2,
-    text,
-    x,
-    y = this.height() / 2;
 
-  if (this.isEmptySlot() || this.progress < 0) {
+  //! drawLabel
+
+  
+  
+
+  if (this.isEmptySlot()) {
     return;
   }
 
-  if (this.isWide()) {
+  if (false){//this.isWide()) {
     // draw the full text label
     text = this.textLabelExtent();
     y = this.height() - (this.height() - text.y) / 2;
     if (this.value) {
-      x = this.height() / 2;
+      x = this.width() / 2 - this.width() / 5;
     } else {
       x = this.width() - this.height() / 2 - text.x;
     }
@@ -13798,42 +13871,10 @@ BooleanSlotMorph.prototype.drawLabel = function (ctx) {
     return;
   }
 
-  // "tick:"
-  x = r + this.edge * 2 + shift;
-  if (!MorphicPreferences.isFlat && useBlurredShadows) {
-    ctx.shadowOffsetX = -shift;
-    ctx.shadowOffsetY = -shift;
-    ctx.shadowBlur = shift;
-    ctx.shadowColor = "rgb(0, 100, 0)";
-  }
-  ctx.strokeStyle = "white";
-  ctx.lineWidth = this.edge + shift;
-  ctx.lineCap = "round";
-  ctx.lineJoin = "miter";
-  ctx.beginPath();
-  ctx.moveTo(x - r2, y);
-  ctx.lineTo(x, y + r2);
-  ctx.lineTo(x + r2, r2 + this.edge);
-  ctx.stroke();
+  
 
-  // "cross:"
-  x = w - y - this.edge * 2;
-  if (!MorphicPreferences.isFlat && useBlurredShadows) {
-    ctx.shadowOffsetX = -shift;
-    ctx.shadowOffsetY = -shift;
-    ctx.shadowBlur = shift;
-    ctx.shadowColor = "rgb(100, 0, 0)";
-  }
-  ctx.strokeStyle = "white";
-  ctx.lineWidth = this.edge;
-  ctx.lineCap = "butt";
-  ctx.beginPath();
-  ctx.moveTo(x - r2, y - r2);
-  ctx.lineTo(x + r2, y + r2);
-  ctx.moveTo(x - r2, y + r2);
-  ctx.lineTo(x + r2, y - r2);
-  ctx.stroke();
 };
+
 
 BooleanSlotMorph.prototype.drawKnob = function (ctx, progress) {
   var w = this.width(),

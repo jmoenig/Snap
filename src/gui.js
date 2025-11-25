@@ -94,7 +94,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.0.3';
+var SplitVersion = '1.0.4';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1666,9 +1666,11 @@ IDE_Morph.prototype.createCategories = function () {
         flag = this.categories.isVisible;
         this.categories.destroy();
     }
-    this.categories = new Morph();
+    this.categories = new ScrollFrameMorph();
     this.categories.color = this.groupColor;
-    this.catWidth = 75;
+    this.catWidth = 62;
+    this.categories.acceptsDrops = false;
+        this.categories.contents.acceptsDrops = false;
     // this.categories.bounds.setWidth(this.paletteWidth);
     this.categories.bounds.setWidth(this.catWidth);
     this.categories.bounds.setHeight(world.height())
@@ -1692,7 +1694,6 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.refreshEmpty = function () {
         var dict = myself.currentSprite.emptyCategories();
         dict.variables = dict.variables || dict.lists || dict.other;
-        dict.control = dict.control || dict?.events;
         this.buttons.forEach(cat => {
             if (Object.hasOwn(dict, cat.category) && (dict[cat.category])) {
                 cat.enable();
@@ -1730,9 +1731,9 @@ IDE_Morph.prototype.createCategories = function () {
             colors = [
                 // myself.frameColor.darker(IDE_Morph.prototype.isBright ? 5 : 50),
                 color || SpriteMorph.prototype.blockColor[category],
-                color || SpriteMorph.prototype.blockColor[category],
+                color || SpriteMorph.prototype.blockColor[category].darker(),
                 // SpriteMorph.prototype.blockColor[category],
-                new Color(0, 0, 0, 0)
+                color || SpriteMorph.prototype.blockColor[category].darker(),
             ],
             button;
         button = new ToggleButtonMorph(
@@ -1745,33 +1746,41 @@ IDE_Morph.prototype.createCategories = function () {
             null, // env
             null, // hint
             labelWidth, // minWidth
-            true // has preview
+            false // has preview
         );
 
         button.category = category;
-        button.corner = 20;
+        button.corner = 25;
         // console.log(button)
         button.padding = 0;
         button.labelShadowOffset = new Point(-1, -1);
         button.labelShadowColor = IDE_Morph.prototype.isBright ?
-            CLEAR : colors[1];
+            colors[1] : colors[1];
         button.labelColor = myself.buttonLabelColor;
         if (IDE_Morph.prototype.isBright) {
-            button.labelPressColor = WHITE;
+            button.labelPressColor = BLACK;
         }
         button.fixLayout();
         button.refresh();
-        button.bounds.setHeight(30);
-        button.bounds.setWidth(30);
-        myself.categories.add(button);
+        button.bounds.setHeight(25);
+        button.bounds.setWidth(25);
+        myself.categories.addContents(button);
         myself.categories.buttons.push(button);
-        button.label.setPosition(new Point(0, 30))
+        button.label.setPosition(new Point(0, 20))
         button.label.setPosition(
             new Point(
                 button.bounds.origin.x + (button.width() / 2) - ((button.label.right() - button.label.bounds.origin.x) / 2),
-                35
+                26
             )
         );
+        if(color) {
+            button.userMenu = () => {
+                var menu = new MenuMorph(this);
+                menu.addItem("Remove Category",()=>(myself.deletePaletteCategory(category)))
+
+                return menu
+            }
+        }
         // console.log(button.label.right())
         return button;
     }
@@ -1780,46 +1789,12 @@ IDE_Morph.prototype.createCategories = function () {
         // console.log(category, "custom")
         addCategoryButton(category, color);
         return 0;
-        var labelWidth = 168,
-            colors = [
-                myself.frameColor,
-                myself.frameColor.darker(IDE_Morph.prototype.isBright ? 5 : 50),
-                color
-            ],
-            button;
-
-        button = new ToggleButtonMorph(
-            colors,
-            myself, // the IDE is the target
-            categorySelectionAction(category),
-            category, // label
-            categoryQueryAction(category), // query
-            null, // env
-            null, // hint
-            labelWidth, // minWidth
-            true // has preview
-        );
-
-        button.category = category;
-        button.corner = 8;
-        button.padding = 0;
-        button.labelShadowOffset = new Point(-1, -1);
-        button.labelShadowColor = IDE_Morph.prototype.isBright ?
-            CLEAR : colors[1];
-        button.labelColor = myself.buttonLabelColor;
-        if (IDE_Morph.prototype.isBright) {
-            button.labelPressColor = WHITE;
-        }
-        button.fixLayout();
-        button.refresh();
-        myself.categories.add(button);
-        myself.categories.buttons.push(button);
-        return button;
+        
     }
 
     function fixCategoriesLayout() {
-        var buttonWidth = myself.categories.children[0].width(),
-            buttonHeight = myself.categories.children[0].height(),
+        var buttonWidth = 25,
+            buttonHeight = 25,
             more = SpriteMorph.prototype.customCategories.size,
             border = 3,
             xPadding = (200 // myself.logo.width()
@@ -1833,7 +1808,7 @@ IDE_Morph.prototype.createCategories = function () {
             col,
             i;
 
-        myself.categories.children.forEach((button, i) => {
+        myself.categories.children[0].children.forEach((button, i) => {
             row = i < 8 ? i % 4 : i - 4;
             col = (i < 4 || i > 7) ? 1 : 2;
             button.setPosition(new Point(
@@ -1841,7 +1816,7 @@ IDE_Morph.prototype.createCategories = function () {
                 // t + (((row - shift) + 1) * yPadding + ((row - shift) *
                 //     buttonHeight) + border) +
                 // (i > 7 ? border + 2 : 0)
-                18.75, i * (buttonHeight + 30) + 20
+                18.75, i * (buttonHeight + 22)
             ));
         });
 
@@ -1851,42 +1826,27 @@ IDE_Morph.prototype.createCategories = function () {
             }
         }
 
-        if (more > 6) {
-            scroller = new ScrollFrameMorph(null, null, myself.sliderColor);
-            scroller.setColor(myself.groupColor);
-            scroller.acceptsDrops = false;
-            scroller.contents.acceptsDrops = false;
-            scroller.setPosition(
-                new Point(0, myself.categories.children[8].top())
-            );
-            scroller.setWidth(myself.paletteWidth);
-            scroller.setHeight(buttonHeight * 6 + yPadding * 5);
+        /*scroller = new ScrollFrameMorph(null, null, myself.sliderColor);
+        scroller.setColor(myself.groupColor);
+        scroller.acceptsDrops = false;
+        scroller.contents.acceptsDrops = false;
+        scroller.setPosition(
+            new Point(0, myself.categories.children[8].top())
+        );
+        scroller.setWidth(myself.paletteWidth);
+        scroller.setHeight(buttonHeight * 6 + yPadding * 5);
 
-            for (i = 0; i < more; i += 1) {
-                scroller.addContents(myself.categories.children[8]);
-            }
-            myself.categories.add(scroller);
-            myself.categories.scroller = scroller;
-            myself.categories.setHeight(
-                (4 + 1 - shift) * yPadding
-                + (4 - shift) * buttonHeight
-                + 6 * (yPadding + buttonHeight) + border + 2
-                + 2 * border
-            );
-        } else {
-            myself.categories.setHeight(
-                (4 + 1 - shift) * yPadding
-                + (4 - shift) * buttonHeight
-                + (more ?
-                    (more * (yPadding + buttonHeight) + border + 2)
-                    : 0)
-                + 2 * border
-            );
+        for (i = 0; i < more; i += 1) {
+            scroller.addContents(myself.categories.children[8]);
         }
+        myself.categories.add(scroller);
+        myself.categories.scroller = scroller;*/
+        myself.categories.bounds.corner.y = myself.bottom();
+        
     }
 
     SpriteMorph.prototype.categories.forEach(cat => {
-        if (!contains(['events', 'lists', 'other'], cat)) {
+        if (!contains(['lists', 'other'], cat)) {
             addCategoryButton(cat);
         }
     });
@@ -2714,7 +2674,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             57//this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
         );
         this.categories.setWidth(this.catWidth);
-        this.categories.setHeight(world.height())
+        this.categories.bounds.corner.y = this.bottom()
         if (this.categories.scroller) {
             this.categories.scroller.setWidth(this.paletteWidth);
         }
@@ -3364,9 +3324,6 @@ IDE_Morph.prototype.topVisibleCategoryInPalette = function () {
         }
         if (top.category === 'lists') {
             return 'variables';
-        }
-        if (top.category === 'events') {
-            return 'control';
         }
         return top.category;
     }
