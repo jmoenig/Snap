@@ -43,6 +43,7 @@
 * gui: rearranged IDE settings menu items into "looks" submenu
 * gui: renamed "zoom" setting into "magnification"
 * German translation update for "Magnification"
+* gui: added experimental "stage scale" persistence, commented out for now
 
 ### 2025-11-22
 * gui: let tutorials disable / enable the user to drag data (and blocks) out of watchers and balloons

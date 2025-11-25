@@ -428,6 +428,7 @@ IDE_Morph.prototype.openIn = function (world) {
     this.buildPanes();
     world.add(this);
     this.applySavedMagnification();
+    // this.applySavedStageScale(); // commented out for now
     world.userMenu = this.userMenu;
 
     // override SnapCloud's user message with Morphic
@@ -3629,6 +3630,19 @@ IDE_Morph.prototype.applySavedMagnification = function () {
     var magnification = this.getSetting('magnification');
     if (magnification && magnification !== 1) {
         this.world().zoom(magnification);
+    }
+};
+
+IDE_Morph.prototype.applySavedStageScale = function () {
+    // experimental, currently unused / commented out
+    var stagescale = this.getSetting('stagescale');
+    if (stagescale && stagescale !== 1) {
+        this.stageRatio = stagescale;
+        if (this.isSmallStage !== (this.stageRatio !== 1)) {
+            this.isSmallStage = (this.stageRatio !== 1);
+            this.controlBar.stageSizeButton.refresh();
+        }
+        this.setExtent(this.world().extent());
     }
 };
 
@@ -7685,6 +7699,13 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
             () => {
                 myself.isSmallStage = (targetRatio !== 1);
                 myself.controlBar.stageSizeButton.refresh();
+                /* // save the stage size as setting, commented out for now
+                if (myself.stageRatio === 1) {
+                    myself.removeSetting('stagescale');
+                } else {
+                    myself.saveSetting('stagescale', myself.stageRatio);
+                }
+                */
             }
         ));
     }
@@ -13399,6 +13420,8 @@ StageHandleMorph.prototype.mouseMove = function (pos) {
         ide.controlBar.stageSizeButton.refresh();
     }
     ide.setExtent(ide.world().extent());
+    // save the stage size as setting, commented out for now
+    // ide.saveSetting('stagescale', ide.stageRatio);
 };
 
 StageHandleMorph.prototype.mouseDoubleClick = function () {
