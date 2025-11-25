@@ -4482,18 +4482,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'looksMenu'
     );
     menu.addItem(
-        'Zoom blocks...',
-        'userSetBlocksScale'
-    );
-    menu.addItem(
-        'Fade blocks...',
-        'userFadeBlocks'
-    );
-    menu.addItem(
-        'Afterglow blocks...',
-        'userSetBlocksAfterglow'
-    );
-    menu.addItem(
         'Stage size...',
         'userSetStageSize'
     );
@@ -4725,7 +4713,9 @@ IDE_Morph.prototype.settingsMenu = function () {
             'specify the scale of the stage\npixels in performer mode'
         );
     }
-    menu.addLine(); // everything visible below is persistent
+    if (shiftClicked) {
+        menu.addLine(); // everything visible below is currently hidden
+    }
     addPreference(
         'Blurred shadows',
         'toggleBlurredShadows',
@@ -4757,34 +4747,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to allow dropped\nreporters to kick out others',
         'settings menu prefer empty slots hint',
         true
-    );
-    addPreference(
-        'Long form input dialog',
-        'toggleLongFormInputDialog',
-        InputSlotDialogMorph.prototype.isLaunchingExpanded,
-        'uncheck to use the input\ndialog in short form',
-        'check to always show slot\ntypes in the input dialog'
-    );
-    addPreference(
-        'Plain prototype labels',
-        'togglePlainPrototypeLabels',
-        BlockLabelPlaceHolderMorph.prototype.plainLabel,
-        'uncheck to always show (+) symbols\nin block prototype labels',
-        'check to hide (+) symbols\nin block prototype labels'
-    );
-    addPreference(
-        'Clicking sound',
-        () => {
-            BlockMorph.prototype.toggleSnapSound();
-            if (BlockMorph.prototype.snapSound) {
-                this.saveSetting('click', true);
-            } else {
-                this.removeSetting('click');
-            }
-        },
-        BlockMorph.prototype.snapSound,
-        'uncheck to turn\nblock clicking\nsound off',
-        'check to turn\nblock clicking\nsound on'
     );
     addPreference(
         'Animations',
@@ -8043,7 +8005,7 @@ IDE_Morph.prototype.looksMenuData = function () {
             MorphicPreferences.menuFontSize * 0.75
         );
 
-    menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
+    function addPreference(label, toggle, test, onHint, offHint, hide) {
         if (!hide || shiftClicked) {
             menu.addItem(
                 [
@@ -8055,7 +8017,7 @@ IDE_Morph.prototype.looksMenuData = function () {
                 hide ? new Color(100, 0, 0) : null
             );
         }
-    };
+    }
 
     empty.render = nop;
 
@@ -8076,7 +8038,7 @@ IDE_Morph.prototype.looksMenuData = function () {
         this.flatBrightLooks
     );
     menu.addLine();
-    menu.addPreference(
+    addPreference(
         'Flat design',
         () => {
             if (MorphicPreferences.isFlat) {
@@ -8089,7 +8051,7 @@ IDE_Morph.prototype.looksMenuData = function () {
         'check for alternative\nGUI design',
         false
     );
-    menu.addPreference(
+    addPreference(
         'Bright theme',
         () => {
             if (IDE_Morph.prototype.isBright) {
@@ -8104,6 +8066,38 @@ IDE_Morph.prototype.looksMenuData = function () {
     );
     menu.addLine();
     menu.addItem('Zoom...', 'userZoom');
+    menu.addItem('Zoom blocks...', 'userSetBlocksScale');
+    menu.addItem('Fade blocks...', 'userFadeBlocks');
+    menu.addItem('Afterglow blocks...', 'userSetBlocksAfterglow');
+    menu.addLine();
+    addPreference(
+        'Long form input dialog',
+        'toggleLongFormInputDialog',
+        InputSlotDialogMorph.prototype.isLaunchingExpanded,
+        'uncheck to use the input\ndialog in short form',
+        'check to always show slot\ntypes in the input dialog'
+    );
+    addPreference(
+        'Plain prototype labels',
+        'togglePlainPrototypeLabels',
+        BlockLabelPlaceHolderMorph.prototype.plainLabel,
+        'uncheck to always show (+) symbols\nin block prototype labels',
+        'check to hide (+) symbols\nin block prototype labels'
+    );
+    addPreference(
+        'Clicking sound',
+        () => {
+            BlockMorph.prototype.toggleSnapSound();
+            if (BlockMorph.prototype.snapSound) {
+                this.saveSetting('click', true);
+            } else {
+                this.removeSetting('click');
+            }
+        },
+        BlockMorph.prototype.snapSound,
+        'uncheck to turn\nblock clicking\nsound off',
+        'check to turn\nblock clicking\nsound on'
+    );
     return menu;
 };
 

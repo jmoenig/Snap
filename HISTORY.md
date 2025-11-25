@@ -30,6 +30,7 @@
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
+    * rearranged IDE settings menu items into "looks" submenu 
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
@@ -39,6 +40,7 @@
 ### 2025-11-25
 * morphic, gui: new global zoom setting in the "looks" submenu
 * gui: save and restore the user's "zoom" setting in the browser
+* gui: rearranged IDE settings menu items into "looks" submenu 
 
 ### 2025-11-22
 * gui: let tutorials disable / enable the user to drag data (and blocks) out of watchers and balloons
