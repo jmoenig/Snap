@@ -1542,7 +1542,7 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
     var canvas, ext;
     nonRetina = nonRetina || false;
     if (extentPoint) {
-        ext = extentPoint.multiplyBy(ZOOM).ceil();
+        ext = extentPoint.ceil();
     } else {
         ext = recycleMe ? new Point(recycleMe.width, recycleMe.height)
             : new Point();
