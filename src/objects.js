@@ -4367,7 +4367,7 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (
 
     function addCustomBlock(definition) {
         if ((!definition.isHelper || includeHidden) &&
-            definition.category === category)
+            (category == "my blocks" ? (true) : (definition.category === category)))
         {
             block = definition.templateInstance();
             if (isInherited) {block.ghost(); }
@@ -4433,9 +4433,11 @@ SpriteMorph.prototype.makeBlock = function () {
         stage = this.parentThatIsA(StageMorph),
         category = ide.currentCategory === 'unified' ?
             ide.topVisibleCategoryInPalette()
-            : ide.currentCategory,
-        clr = SpriteMorph.prototype.blockColorFor(category),
+            : ide.currentCategory;
+        category = category == "my blocks" ? 'other' : category;
+        var clr = SpriteMorph.prototype.blockColorFor(category),
         dlg;
+        
     dlg = new BlockDialogMorph(
         null,
         definition => {
@@ -4654,18 +4656,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'variables') {
         blocks.push(...this.customBlockTemplatesForCategory('lists'));
         blocks.push(...this.customBlockTemplatesForCategory('other'));
-    }
-    if (category === 'my blocks') {
-        blocks.push(...this.customBlockTemplatesForCategory('motion'));
-        blocks.push(...this.customBlockTemplatesForCategory('looks'));
-        blocks.push(...this.customBlockTemplatesForCategory('sounds'));
-        blocks.push(...this.customBlockTemplatesForCategory('pen'));
-        blocks.push(...this.customBlockTemplatesForCategory('events'));
-        blocks.push(...this.customBlockTemplatesForCategory('control'));
-        blocks.push(...this.customBlockTemplatesForCategory('operators'));
-        blocks.push(...this.customBlockTemplatesForCategory('variables'));
-        blocks.push(...this.customBlockTemplatesForCategory('lists'));
-         blocks.push(...this.customBlockTemplatesForCategory('other'));
     }
 
     blocks.forEach(block => {

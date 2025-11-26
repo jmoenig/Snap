@@ -2946,7 +2946,7 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
 };
 
 BlockDialogMorph.prototype.addCategoryButton = function (category) {
-    var labelWidth = 75,
+    var labelWidth = category == "other" ? 172 : 75,
         colors = [
             IDE_Morph.prototype.frameColor,
             IDE_Morph.prototype.frameColor.darker

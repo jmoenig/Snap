@@ -94,7 +94,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.0.5';
+var SplitVersion = '1.0.6';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -2127,6 +2127,35 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
         nameField.setContents(myself.currentSprite.name);
     };
     this.spriteBar.reactToEdit = nameField.accept;
+    if(!(this.currentSprite instanceof StageMorph)) {
+    var xLabel = new StringMorph("x:"),
+    yLabel = new StringMorph("y:"),
+    dirLabel = new StringMorph("dir:"),
+    sizeLabel = new StringMorph("size:");
+    xLabel.color = this.buttonLabelColor;
+    xLabel.setPosition(nameField.topRight().add(new Point(0, 0)));
+    xLabel.fps = 10;
+    xLabel.step = () => (xLabel.text = `x: ${Math.round(myself.currentSprite.xPosition())}`, xLabel.fixLayout(),this.spriteBar.rerender())
+    this.spriteBar.add(xLabel)
+
+    yLabel.color = this.buttonLabelColor;
+    yLabel.setPosition(nameField.topRight().add(new Point(0, 10)));
+    yLabel.fps = 10;
+    yLabel.step = () => (yLabel.text = `y: ${Math.round(myself.currentSprite.yPosition())}`, yLabel.fixLayout(),this.spriteBar.rerender())
+    this.spriteBar.add(yLabel)
+
+    sizeLabel.color = this.buttonLabelColor;
+    sizeLabel.setPosition(xLabel.topRight().add(new Point(40, 0)));
+    sizeLabel.fps = 10;
+    sizeLabel.step = () => (sizeLabel.text = `size: ${Math.round(myself.currentSprite.getScale())}`, sizeLabel.fixLayout(),this.spriteBar.rerender())
+    this.spriteBar.add(sizeLabel)
+
+    dirLabel.color = this.buttonLabelColor;
+    dirLabel.setPosition(yLabel.topRight().add(new Point(40, 0)));
+    dirLabel.fps = 10;
+    dirLabel.step = () => (dirLabel.text = `dir: ${Math.round(myself.currentSprite.direction())}`, dirLabel.fixLayout(),this.spriteBar.rerender())
+    this.spriteBar.add(dirLabel)
+    }
 
     // padlock
     padlock = new ToggleMorph(
