@@ -94,7 +94,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.0.4';
+var SplitVersion = '1.0.5';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1362,7 +1362,7 @@ IDE_Morph.prototype.createControlBar = function () {
         'pressStart',
         new SymbolMorph('flag', 14)
     );
-    button.stroke = 2;
+    button.stroke = 0;
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
@@ -2690,6 +2690,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.palette.setHeight(this.bottom() - this.palette.top() - border);
     this.palette.setWidth(this.paletteWidth);
     this.paletteHandle.hide()
+    
     // this.currentTab == "scripts" ? this.paletteHandle.show() : this.palette.setPosition(new Point(-this.width(), 0))
 
     if (situation !== 'refreshPalette') {
@@ -2801,7 +2802,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                 this.spriteEditor.setHeight(this.stage.height());
             } else {
                 //*
-                this.spriteEditor.setLeft(this.currentTab == "scripts" ? this.categories.right() : 0)//this.oldSpriteBar.left());
+                this.spriteEditor.setLeft(this.currentTab == "scripts" ? this.palette.right() : 0)//this.oldSpriteBar.left());
                 this.spriteEditor.setTop(
                     cnf.noSprites || cnf.noSpriteEdits ?
                         (cnf.hideControls ? this.top() + border
@@ -2846,6 +2847,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.corral.fixLayout();
         }
     }
+    this.palette.fixLayout()
 };
 
 // IDE_Morph project properties
@@ -5960,7 +5962,7 @@ IDE_Morph.prototype.createNewCategory = function () {
     ).promptCategory(
         "New Category",
         null,
-        new Color(0, 116, 143),
+        new Color (255, 102, 128),
         this.world(),
         null, // pic
         'Blocks category name:' // msg

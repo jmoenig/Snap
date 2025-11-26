@@ -2268,7 +2268,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     blockWidth += this.rounding * 2 + this.edge * 2;
   } else {
     blockWidth +=
-      this.corner * 0.9 + this.edge * 2 + this.inset * 3 + this.dent;
+      this.corner * 0.9 + this.edge * 2 + this.inset * 2.5 + this.dent;
   }
 
   if (this.nextBlock) {
@@ -2520,7 +2520,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   } else {
     blockWidth = Math.max(
       blockWidth,
-      maxX - this.left() + this.labelPadding - this.edge
+      maxX - this.left() + this.labelPadding * 1 - this.edge
     );
     rightCorrection = space;
   }
@@ -2547,6 +2547,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     lines.length === 1) {
       blockWidth -= this.labelPadding * 1.5
   }
+  
 
   // adjust width to hat width
   if (this instanceof HatBlockMorph) {
@@ -7683,7 +7684,7 @@ HatBlockMorph.prototype.outlinePath = function (ctx, inset) {
     pos = this.position();
 
   // top arc:
-  ctx.moveTo(inset, h + this.corner);
+  ctx.moveTo(inset, h + this.corner - radius);
   ctx.ellipse(
     s / 2,
     r / 1.4 + inset + 4 * this.scale,
@@ -9287,7 +9288,7 @@ ScriptsMorph.prototype.cleanUp = function () {
       if (child instanceof CommentMorph && child.block) {
         return; // skip anchored comments
       }
-      child.setPosition(origin.add(new Point(target.cleanUpMargin + 200, y)));
+      child.setPosition(origin.add(new Point(target.cleanUpMargin, y)));
       if (child instanceof BlockMorph) {
         child.allComments().forEach(
           (comment) => comment.align(child, true) // ignore layer
@@ -13411,7 +13412,7 @@ BooleanSlotMorph.prototype.getSpec = function () {
 BooleanSlotMorph.prototype.isWide = function () {
   return (
     this.isStatic &&
-    (!(this.parent instanceof BlockMorph) || this.parent?.isPredicate)
+    (this.parent?.isPredicate || (this.parent instanceof BlockMorph))
   );
 };
 
@@ -13700,14 +13701,15 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
       default:
         clr = this.color.darker(25);
     }
-    if(progress < 0 && this.isWide()) {
-      clr = clr.lighter(20)
-    }
+  }
+  if(progress == -1) {
+    clr = this.color.darker(10)
   }
   ctx.fillStyle = clr.toString()
 
-  if (progress > 0 && !this.isEmptySlot()) {
-    var rightHalf = () => {ctx.fillStyle = "rgb(200, 0, 0)";
+  if (progress > 0) {
+    var rightHalf = () => {
+      ctx.fillStyle = this.isEmptySlot() ? this.color.darker(25).toString() : "rgb(200, 0, 0)";
     ctx.beginPath();
     ctx.moveTo(w2, 0);
     ctx.lineTo(w - r, 0);
@@ -13715,8 +13717,10 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     ctx.lineTo(w - r, h);
     ctx.lineTo(w2, h);
     ctx.closePath();
-    ctx.fill();},
-    leftHalf = () => {ctx.fillStyle = "rgb(0, 200, 0)";
+    ctx.fill();
+  },
+    leftHalf = () => {
+      ctx.fillStyle = "rgb(0, 200, 0)";
     ctx.beginPath();
     ctx.moveTo(0, r);
     ctx.lineTo(r, 0);
@@ -13725,11 +13729,13 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     ctx.lineTo(r, h);
     ctx.closePath();
 
-    ctx.fill();}
+    ctx.fill();
+  }
 
     // right half:
-
+      
       rightHalf()
+      
       
   
       // left half:
@@ -13738,7 +13744,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
     
 
   } else {
-  }
+  
   ctx.beginPath();
   ctx.moveTo(0, r);
   ctx.lineTo(r, 0);
@@ -13747,16 +13753,17 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
   ctx.lineTo(w - r, h);
   ctx.lineTo(r, h);
   ctx.closePath();
+  }
   
-  ctx.lineWidth = 2 * this.scale;
-  ctx.strokeStyle = this.color.darker();
-  if (progress < 1) ctx.fill();
+  ctx.fill();
   
+  if(progress < 0 || (!this.isEmptySlot() || progress == 1)) {
   if(this.value) {
     drawTick()
   } else {
     drawCross()
   }
+}
 
   /*if (MorphicPreferences.isFlat) {
     return;

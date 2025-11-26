@@ -160,7 +160,8 @@ SpriteMorph.prototype.categories =
         'operators',
         'variables',
         'lists',
-        'other'
+        'other',
+        "my blocks"
     ];
 
 SpriteMorph.prototype.blockColor = {
@@ -174,7 +175,8 @@ SpriteMorph.prototype.blockColor = {
     operators : new Color(89, 192, 89),
     variables : new Color(255, 140, 26),
     lists : new Color(255, 102, 26),
-    other: new Color(191, 191, 191)
+    other: new Color(191, 191, 191),
+    "my blocks": new Color (255, 102, 128),
 };
 SpriteMorph.prototype.isHighContrast = false;
 SpriteMorph.prototype.setDefaultBlockColor = function () {
@@ -4652,6 +4654,18 @@ SpriteMorph.prototype.freshPalette = function (category) {
     if (category === 'variables') {
         blocks.push(...this.customBlockTemplatesForCategory('lists'));
         blocks.push(...this.customBlockTemplatesForCategory('other'));
+    }
+    if (category === 'my blocks') {
+        blocks.push(...this.customBlockTemplatesForCategory('motion'));
+        blocks.push(...this.customBlockTemplatesForCategory('looks'));
+        blocks.push(...this.customBlockTemplatesForCategory('sounds'));
+        blocks.push(...this.customBlockTemplatesForCategory('pen'));
+        blocks.push(...this.customBlockTemplatesForCategory('events'));
+        blocks.push(...this.customBlockTemplatesForCategory('control'));
+        blocks.push(...this.customBlockTemplatesForCategory('operators'));
+        blocks.push(...this.customBlockTemplatesForCategory('variables'));
+        blocks.push(...this.customBlockTemplatesForCategory('lists'));
+         blocks.push(...this.customBlockTemplatesForCategory('other'));
     }
 
     blocks.forEach(block => {
@@ -11368,6 +11382,28 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportColor'));
         blocks.push(block('reportColorAttribute'));
         blocks.push(block('reportNewColor'));
+
+    } else if (category === 'events') {
+
+        blocks.push(block('receiveGo'));
+        blocks.push(block('receiveKey'));
+        blocks.push(block('receiveInteraction'));
+        blocks.push(block('receiveConditionEvent'));
+        blocks.push('-');
+        blocks.push(block('receiveMessage'));
+        blocks.push(block('doBroadcast'));
+        blocks.push(block('doBroadcastAndWait'));
+        blocks.push(block('reportPoll'));
+        blocks.push(block('doSwitchToScene'));
+
+        // for debugging: ///////////////
+        if (this.world().devMode) {
+            blocks.push('-');
+            blocks.push(this.devModeText());
+            blocks.push('-');
+            blocks.push(watcherToggle('getLastMessage'));
+            blocks.push(block('getLastMessage'));
+        }
 
     } else if (category === 'control') {
 

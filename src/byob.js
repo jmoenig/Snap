@@ -2930,7 +2930,7 @@ BlockDialogMorph.prototype.openForChange = function (
 // category buttons
 
 BlockDialogMorph.prototype.createCategoryButtons = function () {
-    SpriteMorph.prototype.categories.forEach(cat =>
+    SpriteMorph.prototype.categories.filter(cat=>cat!="my blocks").forEach(cat =>
         this.addCategoryButton(cat)
     );
 
@@ -3107,14 +3107,14 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         this.categories.add(scroller);
         this.categories.setHeight(
             (5 + 1) * yPadding
-                + 5 * buttonHeight
+                + 6 * buttonHeight
                 + 6 * (yPadding + buttonHeight) + border + 2
                 + 2 * border
         );
     } else {
         this.categories.setHeight(
             (5 + 1) * yPadding
-                + 5 * buttonHeight
+                + 6 * buttonHeight
                 + (more ? (more * (yPadding + buttonHeight) + border / 2) : 0)
                 + 2 * border
         );
@@ -3950,8 +3950,8 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
 
     // init inherited stuff
     HatBlockMorph.uber.init.call(this);
-    this.color = SpriteMorph.prototype.blockColor.control;
-    this.category = 'control';
+    this.color = SpriteMorph.prototype.blockColor.events;
+    this.category = 'events';
     this.add(proto);
     if (definition.variableNames.length) {
         vars = this.labelPart('%blockVars');
@@ -4075,6 +4075,112 @@ PrototypeHatBlockMorph.prototype.blockSequence = function () {
     result = HatBlockMorph.uber.blockSequence.call(this);
     result.shift();
     return result;
+};
+
+// PrototypeHatBlockMorph drawing:
+
+PrototypeHatBlockMorph.prototype.outlinePath = function (ctx, inset) {
+  var indent = this.corner * 2 + this.inset,
+    bottom = this.height() - this.corner,
+    bottomCorner = this.height() - this.corner * 2,
+    radius = Math.max(this.corner - inset, 0),
+    s = this.hatWidth,
+    h = this.hatHeight * 0.7,
+    pos = this.position();
+
+  // top arc:
+  ctx.moveTo(inset, h + this.corner - radius);
+  ctx.arc(
+    radius * 4,
+    h + radius * 4,
+    radius * 4 - inset,
+    radians(-180),
+    radians(-90),
+    false
+  );
+  /*ctx.bezierCurveTo(
+        s,
+        0,
+        s,
+        h,
+        sp,
+        h
+    );*/
+
+  // top right:
+  ctx.arc(
+    this.width() - radius * 4, 
+    h + radius * 4,
+    radius * 4 - inset,
+    radians(-90),
+    radians(-0),
+    false
+  );
+
+  // C-Slots
+  this.cSlots().forEach((slot) => {
+    slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+  });
+
+  // bottom right:
+  ctx.arc(
+    this.width() - this.corner,
+    bottomCorner - this.dentPlus,
+    radius,
+    radians(0),
+    radians(90),
+    false
+  );
+
+  if (!this.isStop()) {
+    if (false) {
+      ctx.lineTo(this.width() - this.corner, bottom - inset - this.dentPlus);
+      ctx.lineTo(
+        this.corner * 3 + this.inset + this.dent,
+        bottom - inset - this.dentPlus
+      );
+      ctx.lineTo(indent + this.dent, bottom + this.corner - inset);
+      ctx.lineTo(indent, bottom + this.corner - inset);
+      ctx.lineTo(this.corner + this.inset, bottom - inset - this.dentPlus);
+    } else {
+      var w = this.dent * 1.75 + this.corner / 2,
+        h = this.corner + this.dentPlus,
+        offset = this.inset + this.corner / 2,
+        c = this.dentCorner;
+      ctx.save();
+      ctx.translate(0, bottom - inset - this.dentPlus * 1);
+      ctx.lineTo(0 + offset, -h + h);
+      ctx.bezierCurveTo(
+        c + offset,
+        -h + h,
+        c + offset,
+        -0 + h,
+        c * 2 + offset,
+        -0 + h
+      );
+      ctx.lineTo(w - c * 2 + offset, h);
+      ctx.bezierCurveTo(
+        w - c + offset,
+        0 + h,
+        w - c + offset,
+        -h + h,
+        w + offset,
+        -h + h
+      );
+      ctx.restore();
+    }
+  }
+
+  // bottom left:
+  ctx.arc(
+    this.corner,
+    bottomCorner - this.dentPlus,
+    radius,
+    radians(90),
+    radians(180),
+    false
+  );
+  ctx.lineTo(0 + inset, h + this.corner)
 };
 
 // BlockLabelFragment //////////////////////////////////////////////////
