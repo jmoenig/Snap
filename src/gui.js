@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-25';
+modules.gui = '2025-November-26';
 
 // Declarations
 
@@ -8171,12 +8171,21 @@ IDE_Morph.prototype.userZoom = function () {
 };
 
 IDE_Morph.prototype.setZoom = function (percent) {
-    this.world().zoom(Math.max(percent, 100) / 100);
+    this.isSmallStage = true;
+    this.controlBar.stageSizeButton.refresh();
+    this.world().zoom(Math.max(Math.min(percent, this.maxZoom()), 100) / 100);
     if (ZOOM > 1) {
         this.saveSetting('magnification', ZOOM);
     } else {
         this.removeSetting('magnification');
     }
+};
+
+IDE_Morph.prototype.maxZoom = function () {
+    var minExt = new Point(430, 110).add(this.stage.dimensions.multiplyBy(this.stageRatio)),
+        wc = this.world().worldCanvas,
+        free = new Point(wc.width, wc.height).divideBy(minExt);
+        return Math.min(free.x, free.y) * 100;
 };
 
 // IDE_Morph blocks scaling

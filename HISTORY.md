@@ -38,6 +38,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-11-26
+* gui: tweaked global zoom mechanism
+
 ### 2025-11-25
 * morphic, gui: new global zoom setting in the "looks" submenu
 * gui: save and restore the user's "zoom" setting in the browser
