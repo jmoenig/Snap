@@ -8171,9 +8171,11 @@ IDE_Morph.prototype.userZoom = function () {
 };
 
 IDE_Morph.prototype.setZoom = function (percent) {
+    var wrld = this.world();
     this.isSmallStage = true;
     this.controlBar.stageSizeButton.refresh();
     this.world().zoom(Math.max(Math.min(percent, this.maxZoom()), 100) / 100);
+    this.siblings().forEach(morph => morph.keepWithin(wrld));
     if (ZOOM > 1) {
         this.saveSetting('magnification', ZOOM);
     } else {

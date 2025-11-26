@@ -40,6 +40,7 @@
 
 ### 2025-11-26
 * gui: tweaked global zoom mechanism
+* gui: keep dialog boxes within the world when zooming globally
 
 ### 2025-11-25
 * morphic, gui: new global zoom setting in the "looks" submenu
