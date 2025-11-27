@@ -8194,9 +8194,11 @@ IDE_Morph.prototype.userZoom = function () {
         this,
         'setZoom'
     ).withKey('zoom');
+    /*
     if (MorphicPreferences.isTouchDevice) {
         dlg.isDraggable = false;
     }
+    */
     dlg.cancel = () => {
         // restore initial zoom and stage scale
         this.setZoom(initial * 100);
