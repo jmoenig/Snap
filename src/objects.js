@@ -586,14 +586,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSwitchToCostumeNew: {
             type: 'command',
             category: 'looks',
-            spec: 'switch to costume %cst',
+            spec: 'switch costume to %cst',
             animation: true,
             code: 'wearNew'
         },
         doSwitchToCostumeNumber: {
             type: 'command',
             category: 'looks',
-            spec: 'switch to costume # %n',
+            spec: 'switch costume to # %n',
             animation: true,
             defaults: [1],
             code: 'wearNum'
@@ -886,7 +886,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'command',
             category: 'sound',
             spec: 'rest for %n beats',
-            defaults: [0.2],
+            defaults: [0.25],
             code: 'rest',
             src: `(
                 (prim t doRest beats)
@@ -1190,7 +1190,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveInteraction: {
             type: 'hat',
             category: 'events',
-            spec: 'when I am %interaction',
+            spec: 'when this sprite %interaction',
             defaults: [['clicked']]
         },
         receiveMessage: {
@@ -1783,7 +1783,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportDifference: {
             type: 'reporter',
             category: 'operators',
-            spec: '%n \u2212 %n',
+            spec: '%n - %n',
             alias: '-',
             code: '-'
         },

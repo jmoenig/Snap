@@ -83,7 +83,9 @@ Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK, CLEAR,
 BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
 HatBlockMorph*/
 
-/*very hidden owl edit hehe*/
+/* very hidden owl edit hehe */
+
+/* Not so hidden, is it? - d016 */
 
 /*jshint esversion: 8*/
 
@@ -94,7 +96,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.0.6';
+var SplitVersion = '1.0.7';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -841,7 +843,6 @@ IDE_Morph.prototype.openIn = function (world) {
     this.applyConfigurations();
 
     this.warnAboutDev();
-    this.inform("BETA BUILD!", "This is a WIP of Split!")
     return this;
 };
 
@@ -12263,7 +12264,7 @@ WardrobeMorph.prototype.paintNew = function () {
     var ide = this.parentThatIsA(IDE_Morph),
         cos = new Costume(
             newCanvas(null, true),
-            this.sprite.newCostumeName(localize('Untitled')),
+            this.sprite.newCostumeName(localize('costume')),
             null, // rotation center
             null, // don't shrink-to-fit
             ide.stage.dimensions // max extent

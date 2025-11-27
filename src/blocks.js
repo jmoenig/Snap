@@ -365,7 +365,7 @@ SyntaxElementMorph.prototype.labelParts = {
   },
   "%inst": {
     type: "input",
-    tags: "numeric",
+    tags: "numeric read-only",
     menu: {
       "(1) sine": 1,
       "(2) square": 2,
@@ -1064,7 +1064,7 @@ SyntaxElementMorph.prototype.labelParts = {
     type: "symbol",
     name: "flag",
     color: new Color(0, 200, 0),
-    scale: 1.4,
+    scale: 1.2,
     tags: "protected",
   },
   $blitz: {
@@ -1311,7 +1311,7 @@ SyntaxElementMorph.prototype.labelParts = {
     type: "multi",
     slots: "%n",
     min: 2,
-    infix: "\u00D7",
+    infix: "*",
     collapse: "product",
   },
   "%min": {
@@ -2349,7 +2349,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
       this.labelPadding /
         ((((line[0] instanceof InputSlotMorph) || (line[0] instanceof BooleanSlotMorph)) &&
         this.constructor.name.includes("ReporterBlockMorph") &&
-        !(line[0]?.isStatic))
+        (!(line[0]?.isSquare?.())))
           ? (2)
           : 1);
     if (this instanceof RingMorph) {
@@ -2536,7 +2536,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   }
   // adjust right padding if rightmost input in a reporter is round
   if (
-    (rightMost instanceof InputSlotMorph && (this?.squareStrings ? !rightMost?.isStatic && this.isNumeric : !rightMost?.isStatic)) &&
+    (rightMost instanceof InputSlotMorph && (!rightMost?.isSquare())) &&
     this instanceof ReporterBlockMorph &&
     lines.length === 1
   ) {
@@ -8934,7 +8934,7 @@ ScriptsMorph.prototype.showReporterDropFeedback = function (block, hand) {
     this.feedbackMorph.borderColor = this.feedbackColor;
   }
   this.feedbackMorph.bounds = target
-    .fullBounds();
+    .fullBounds().expandBy(this.feedbackMorph.border);
   this.feedbackMorph.color.a = 0.5;
   this.feedbackMorph.rerender();
   this.add(this.feedbackMorph);
@@ -12494,6 +12494,9 @@ InputSlotMorph.prototype.setChoices = function (dict, readonly) {
 
 // InputSlotMorph layout:
 
+InputSlotMorph.prototype.isSquare = function () {
+  return this.squareStrings ? ((!this.isNumeric) && (!this.isReadOnly || this.isStatic)) : (this.isStatic || this instanceof TextSlotMorph)
+}
 InputSlotMorph.prototype.fixLayout = function () {
   var width,
     height,
@@ -12544,7 +12547,7 @@ InputSlotMorph.prototype.fixLayout = function () {
       this.symbol.width() + arrowWidth + this.edge * 4 + this.typeInPadding * 2;
   } else {
     height = contents.height() + this.edge * 8; // + this.typeInPadding * 2
-    if (this.squareStrings ? !((!this.isNumeric) && (!this.isReadOnly || this.isStatic)) : (!(this instanceof TextSlotMorph) || !this.isStatic)) {
+    if (!((this instanceof TextSlotMorph) || this.isStatic)) {
       
       width = Math.max(
         contents.width() +
@@ -12861,7 +12864,7 @@ InputSlotMorph.prototype.render = function (ctx) {
   this.cachedClrBright = borderColor.lighter(this.contrast).toString();
   this.cachedClrDark = borderColor.darker(this.contrast).toString();
   ctx.strokeStyle = this.parent.color.darker(20).toString();
-  ctx.lineWidth = (this.isStatic || this.isReadOnly ? 1 : 1) * this.scale;
+  ctx.lineWidth = this.flatEdge * 2;
   if (this.squareStrings ? ((!this.isNumeric) && (!this.isReadOnly || this.isStatic)) : (this.isStatic || this instanceof TextSlotMorph)) {
     ctx.beginPath();
     if (false) {
