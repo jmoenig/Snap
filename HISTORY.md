@@ -40,6 +40,7 @@
 
 ### 2025-11-27
 * gui: refined IDE layout for global magnification zoom levels
+* gui: refined IDE "Magnification" dialog for continuous scaling
 
 ### 2025-11-26
 * gui: tweaked global zoom mechanism

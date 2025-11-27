@@ -8139,9 +8139,9 @@ IDE_Morph.prototype.looksMenuData = function () {
     );
     menu.addLine();
     menu.addItem(localize('Magnification') + '...', 'userZoom');
-    menu.addItem('Zoom blocks...', 'userSetBlocksScale');
     menu.addItem('Fade blocks...', 'userFadeBlocks');
     menu.addItem('Afterglow blocks...', 'userSetBlocksAfterglow');
+    menu.addItem('Zoom blocks...', 'userSetBlocksScale');
     menu.addLine();
     addPreference(
         'Long form input dialog',
@@ -8181,6 +8181,10 @@ IDE_Morph.prototype.userZoom = function () {
         options = {},
         scales = [100, 110, 125, 150, 175, 200, 250, 300, 400, 500, max].filter(
             n => n <= max),
+        initial = ZOOM,
+        ratio = this.stageRatio,
+        last = ZOOM * 100,
+        update,
         dlg;
     scales.forEach(n => options[n + '%'] = n);
     dlg = new DialogBoxMorph(
@@ -8190,6 +8194,23 @@ IDE_Morph.prototype.userZoom = function () {
     if (MorphicPreferences.isTouchDevice) {
         dlg.isDraggable = false;
     }
+    dlg.cancel = () => {
+        // restore initial zoom and stage scale
+        this.setZoom(initial * 100);
+        this.stageRatio = ratio;
+        this.isSmallStage = (this.stageRatio !== 1);
+        this.controlBar.stageSizeButton.refresh();
+        this.setExtent(this.world().extent());
+        dlg.destroy();
+    };
+    update = n => {
+        var normal = dlg.position().divideBy(last / 100),
+            target = normal.multiplyBy(n / 100),
+            delta = dlg.position().subtract(target);
+        this.setZoom(n);
+        dlg.moveBy(delta);
+        last = n;
+    };
     dlg.prompt(
         'Magnification',
         Math.round(ZOOM * 100).toString(),
@@ -8200,8 +8221,8 @@ IDE_Morph.prototype.userZoom = function () {
         true, // numeric
         100, // slider min
         max, // slider max
-        null, // action // slider action
-        0 // decimals
+        update, // slider action
+        2 // decimals
     );
 };
 
