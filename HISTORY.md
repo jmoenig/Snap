@@ -2,6 +2,8 @@
 
 ## in development:
 * **New Features:**
+    * global zoom setting ("magnification"), scales everything seamlessly
+        * magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
     * templates
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
         * projects based on a template let the user restore the visibility of global blocks in the template palette
@@ -21,8 +23,6 @@
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
-    * global zoom setting ("magnification"), scales everything seamlessly
-        * magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
 * **Notable Changes:**
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
@@ -37,6 +37,9 @@
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
 * **Translation Updates:**
     * German
+
+### 2025-11-27
+* gui: refined IDE layout for global magnification zoom levels
 
 ### 2025-11-26
 * gui: tweaked global zoom mechanism

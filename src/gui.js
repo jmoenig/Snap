@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-26';
+modules.gui = '2025-November-27';
 
 // Declarations
 
@@ -2866,11 +2866,9 @@ IDE_Morph.prototype.setProjectNotes = function (string) {
 
 IDE_Morph.prototype.setExtent = function (point) {
     var cnf = this.config,
-        padding = new Point(430, 110),
         minExt,
         ext,
         maxWidth,
-        minWidth,
         maxHeight,
         minRatio,
         maxRatio;
@@ -2884,13 +2882,7 @@ IDE_Morph.prototype.setExtent = function (point) {
     } else if (cnf.noSprites) {
         minExt = new Point(100, 100);
     } else {
-        if (this.stageRatio > 1) {
-            minExt = padding.add(this.stage.dimensions);
-        } else {
-            minExt = padding.add(
-                this.stage.dimensions.multiplyBy(this.stageRatio)
-            );
-        }
+        minExt = new Point(this.minWidth(), this.minHeight());
     }
     if (this.performerMode) {
         ext = point;
@@ -2903,23 +2895,71 @@ IDE_Morph.prototype.setExtent = function (point) {
         if (!cnf.noSprites) {
             maxWidth = ext.x -
                 (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
-            minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
-            maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
-            minRatio = minWidth / this.stage.dimensions.x;
+            maxHeight = ext.y -
+                SpriteIconMorph.prototype.thumbSize.y * 3;
+            minRatio = Math.max(
+                this.minStageWidth() / this.stage.dimensions.x,
+                this.minStageHeight() / this.stage.dimensions.y
+            );
             maxRatio = Math.min(
-                (maxWidth / this.stage.dimensions.x),
-                (maxHeight / this.stage.dimensions.y)
+                maxWidth / this.stage.dimensions.x,
+                maxHeight / this.stage.dimensions.y
             );
             this.stageRatio = Math.min(
                 maxRatio,
                 Math.max(minRatio,this.stageRatio)
             );
+            this.isSmallStage = (this.stageRatio !== 1);
+            this.controlBar.stageSizeButton.refresh();
         }
     }
 
     // apply
     IDE_Morph.uber.setExtent.call(this, ext);
     this.fixLayout();
+};
+
+IDE_Morph.prototype.minWidth = function () {
+    // answer the minimum horizontal space required to render the full IDE
+    // in edit mode with all panes and UI elements,
+    // constrained by displaying all elements in the control bar
+    var buttons = this.controlBar.children.filter(morph =>
+            morph instanceof PushButtonMorph);
+    return this.logo.width() +
+        buttons.map(each => each.width()).reduce((a, b) => a + b) +
+        this.controlBar.steppingSlider.width();
+};
+
+IDE_Morph.prototype.minHeight = function () {
+    // answer the minimum vertical space required to render the full IDE
+    // in edit mode with all panes and UI elements,
+    // constrained by displaying the control bar, and whichever requires more
+    // space:
+    // - a minimal stage and the corral with a single row of icons
+    //      - the stage height is constrained by the minimum stage width
+    // - the category buttons including user defined ones, a minimal palette
+    // - the sprite bar (name field and tabs) and a minimal scripts pane
+    var left = this.categories.height() + 100,
+        middle = this.spriteBar.height() + 100,
+        right = this.minStageHeight() +
+            SpriteIconMorph.prototype.thumbSize.y * 3;
+    return this.controlBar.height() + Math.max(left, middle, right);
+};
+
+IDE_Morph.prototype.minStageWidth = function () {
+    // answer the minimum horizontal space to which the stage with its current
+    // dimensions can be reduced without distorting the layout of the IDE in
+    // edit mode, constrained by being able to display a minimal corral with
+    // 2 icons and scroll bars
+    return SpriteIconMorph.prototype.thumbSize.x * 3;
+};
+
+IDE_Morph.prototype.minStageHeight = function () {
+    // answer the minimum vertical space required to display a minimal
+    // renditions of the stage in its current dimensions,
+    // constrained by the stage's dimensions and its minimum width
+    var ratio = this.minStageWidth() / this.stage.dimensions.x;
+    return this.stage.dimensions.y * ratio;
 };
 
 // IDE_Morph rendering
@@ -3641,7 +3681,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
 IDE_Morph.prototype.applySavedMagnification = function () {
     var magnification = this.getSetting('magnification');
     if (magnification && magnification !== 1) {
-        this.world().zoom(magnification);
+        this.setZoom(magnification * 100);
     }
 };
 
@@ -8137,10 +8177,16 @@ IDE_Morph.prototype.looksMenuData = function () {
 // IDE_Morph zoom
 
 IDE_Morph.prototype.userZoom = function () {
-    var dlg = new DialogBoxMorph(
-            this,
-            'setZoom'
-        ).withKey('zoom');
+    var max = Math.floor(this.maxZoom()),
+        options = {},
+        scales = [100, 110, 125, 150, 175, 200, 250, 300, 400, 500, max].filter(
+            n => n <= max),
+        dlg;
+    scales.forEach(n => options[n + '%'] = n);
+    dlg = new DialogBoxMorph(
+        this,
+        'setZoom'
+    ).withKey('zoom');
     if (MorphicPreferences.isTouchDevice) {
         dlg.isDraggable = false;
     }
@@ -8149,22 +8195,11 @@ IDE_Morph.prototype.userZoom = function () {
         Math.round(ZOOM * 100).toString(),
         this.world(),
         null, // pic
-        {
-            '100%' : 100,
-            '110%' : 110,
-            '125%' : 125,
-            '150%' : 150,
-            '175%' : 175,
-            '200%' : 200,
-            '250%' : 250,
-            '300%' : 300,
-            '400%' : 400,
-            '500%' : 500
-        },
+        options,
         false, // read only?
         true, // numeric
         100, // slider min
-        500, // slider max
+        max, // slider max
         null, // action // slider action
         0 // decimals
     );
@@ -8172,7 +8207,6 @@ IDE_Morph.prototype.userZoom = function () {
 
 IDE_Morph.prototype.setZoom = function (percent) {
     var wrld = this.world();
-    this.isSmallStage = true;
     this.controlBar.stageSizeButton.refresh();
     this.world().zoom(Math.max(Math.min(percent, this.maxZoom()), 100) / 100);
     this.siblings().forEach(morph => morph.keepWithin(wrld));
@@ -8184,10 +8218,11 @@ IDE_Morph.prototype.setZoom = function (percent) {
 };
 
 IDE_Morph.prototype.maxZoom = function () {
-    var minExt = new Point(430, 110).add(this.stage.dimensions.multiplyBy(this.stageRatio)),
-        wc = this.world().worldCanvas,
-        free = new Point(wc.width, wc.height).divideBy(minExt);
-        return Math.min(free.x, free.y) * 100;
+    var wc = this.world().worldCanvas;
+    return Math.min(
+        wc.width / this.minWidth(),
+        wc.height / this.minHeight()
+    ) * 100;
 };
 
 // IDE_Morph blocks scaling
