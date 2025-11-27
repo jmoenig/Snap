@@ -4543,6 +4543,10 @@ IDE_Morph.prototype.settingsMenu = function () {
         ],
         'languageMenu'
     );
+    menu.addItem(localize(
+        'Magnification') + '...',
+        'userZoom'
+    );
     menu.addItem(
         localize('Looks') + '...',
         'looksMenu'
@@ -8138,7 +8142,6 @@ IDE_Morph.prototype.looksMenuData = function () {
         false
     );
     menu.addLine();
-    menu.addItem(localize('Magnification') + '...', 'userZoom');
     menu.addItem('Fade blocks...', 'userFadeBlocks');
     menu.addItem('Afterglow blocks...', 'userSetBlocksAfterglow');
     menu.addItem('Zoom blocks...', 'userSetBlocksScale');
