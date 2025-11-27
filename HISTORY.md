@@ -42,6 +42,7 @@
 * gui: refined IDE layout for global magnification zoom levels
 * gui: refined IDE "Magnification" dialog for continuous scaling
 * gui: returned "magnification" item to the settings menu
+* gui: increased scroll effect for zoom-gesture (shift-scroll on logo)
 
 ### 2025-11-26
 * gui: tweaked global zoom mechanism

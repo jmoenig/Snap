@@ -1135,7 +1135,7 @@ IDE_Morph.prototype.createLogo = function () {
 
     this.logo.mouseScroll = function (y) {
         if (this.world().currentKey === 16) { // shiftClicked
-            myself.setZoom(ZOOM * 100 - y);
+            myself.setZoom(ZOOM * 100 - y * 5);
         }
     };
 
