@@ -2859,7 +2859,9 @@ IDE_Morph.prototype.setExtent = function (point) {
         maxWidth,
         maxHeight,
         minRatio,
-        maxRatio;
+        maxRatio,
+        newRatio,
+        delta;
 
     // determine the minimum dimensions making sense for the current mode
     if (this.isAppMode) {
@@ -2893,10 +2895,16 @@ IDE_Morph.prototype.setExtent = function (point) {
                 maxWidth / this.stage.dimensions.x,
                 maxHeight / this.stage.dimensions.y
             );
-            this.stageRatio = Math.min(
+            newRatio = Math.min(
                 maxRatio,
                 Math.max(minRatio,this.stageRatio)
             );
+            if (ext.gt(this.extent()) && newRatio < 1) {
+                delta = ext.divideBy(this.extent());
+                delta = Math.min(delta.x, delta.y);
+                newRatio *= delta;
+            }
+            this.stageRatio = newRatio;
             this.isSmallStage = (this.stageRatio !== 1);
             this.controlBar.stageSizeButton.refresh();
         }
