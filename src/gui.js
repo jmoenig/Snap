@@ -7726,6 +7726,8 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     }
 };
 
+// not sure how to default snap! to single palette mode so i put in in split.html
+
 IDE_Morph.prototype.toggleUnifiedPalette = function () {
     this.setUnifiedPalette(!this.scene.unifiedPalette);
     this.recordUnsavedChanges();
