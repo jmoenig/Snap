@@ -2897,12 +2897,16 @@ IDE_Morph.prototype.setExtent = function (point) {
             );
             newRatio = Math.min(
                 maxRatio,
-                Math.max(minRatio,this.stageRatio)
+                Math.max(minRatio, this.stageRatio)
             );
-            if (ext.gt(this.extent()) && newRatio < 1) {
+            if (
+                ext.gt(this.extent()) &&
+                newRatio < 1 &&
+                this.stage.extent().lt(new Point(maxWidth, maxHeight))
+            ) {
                 delta = ext.divideBy(this.extent());
                 delta = Math.min(delta.x, delta.y);
-                newRatio *= delta;
+                newRatio = Math.min(newRatio * delta, 1);
             }
             this.stageRatio = newRatio;
             this.isSmallStage = (this.stageRatio !== 1);
