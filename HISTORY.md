@@ -44,6 +44,7 @@
 * gui: refactored magnification gestures
 * gui: gradually zoom the stage in up to 100% when zooming out globally
 * objects: disabled data from being dragged out of tutorial speech balloons (for now)
+* objects: disabled data from being dragged out of watchers (for now)
 
 ### 2025-11-27
 * gui: refined IDE layout for global magnification zoom levels

@@ -14586,7 +14586,8 @@ CellMorph.prototype.createContents = function () {
 
             // support blocks to be dragged out of watchers:
             this.contentsMorph.isDraggable =
-                !SpriteMorph.prototype.disableDraggingData;
+                !SpriteMorph.prototype.disableDraggingData &&
+                !this.parentThatIsA(StageMorph)?.tutorialMode;
 
             this.contentsMorph.selectForEdit = function () {
                 var script = myself.contents.toUserBlock(),
@@ -14617,7 +14618,8 @@ CellMorph.prototype.createContents = function () {
 
             // support costumes to be dragged out of watchers:
             this.contentsMorph.isDraggable =
-                !SpriteMorph.prototype.disableDraggingData;
+                !SpriteMorph.prototype.disableDraggingData &&
+                !this.parentThatIsA(StageMorph)?.tutorialMode;
 
             this.contentsMorph.selectForEdit = function () {
                 var cst = myself.contents.copy(),
@@ -14647,7 +14649,8 @@ CellMorph.prototype.createContents = function () {
 
             // support sounds to be dragged out of watchers:
             this.contentsMorph.isDraggable =
-                !SpriteMorph.prototype.disableDraggingData;
+                !SpriteMorph.prototype.disableDraggingData &&
+                !this.parentThatIsA(StageMorph)?.tutorialMode;
 
             this.contentsMorph.selectForEdit = function () {
                 var snd = myself.contents.copy(),
