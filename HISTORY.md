@@ -38,6 +38,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-11-28
+* gui: extended magnification gestures (shift-scroll / double click) to control bar, categories and sprite bar panes
+
 ### 2025-11-27
 * gui: refined IDE layout for global magnification zoom levels
 * gui: refined IDE "Magnification" dialog for continuous scaling

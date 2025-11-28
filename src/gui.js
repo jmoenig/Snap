@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-27';
+modules.gui = '2025-November-28';
 
 // Declarations
 
@@ -1650,6 +1650,10 @@ IDE_Morph.prototype.createControlBar = function () {
         this.label.setLeft(this.settingsButton.right() + padding);
         this.add(this.label);
     };
+
+    // global zoom gestures
+    this.controlBar.mouseScroll = this.logo.mouseScroll;
+    this.controlBar.mouseDoubleClick = this.logo.mouseDoubleClick;
 };
 
 IDE_Morph.prototype.createCategories = function () {
@@ -1695,6 +1699,10 @@ IDE_Morph.prototype.createCategories = function () {
             }
         });
     };
+
+    // global zoom gestures
+    this.categories.mouseScroll = this.logo.mouseScroll;
+    this.categories.mouseDoubleClick = this.logo.mouseDoubleClick;
 
     function changePalette(category) {
         return () => {
@@ -2258,6 +2266,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
         this.tabBar.setLeft(this.left());
         this.tabBar.setBottom(this.bottom() + myself.padding);
     };
+
+    // global zoom gestures
+    this.spriteBar.mouseScroll = this.logo.mouseScroll;
+    this.spriteBar.mouseDoubleClick = this.logo.mouseDoubleClick;
 };
 
 IDE_Morph.prototype.createSpriteEditor = function () {
