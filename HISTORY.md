@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * global zoom setting ("magnification"), scales everything seamlessly
+        * new interactive "Magnification" dialog in the settings menu
         * magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
     * templates
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
