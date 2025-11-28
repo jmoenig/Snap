@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-November-05';
+modules.objects = '2025-November-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -12777,7 +12777,8 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.cachedImage = img;
 
         // support blocks to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData;
+        contents.isDraggable = !sprite.disableDraggingData &&
+            !this.stage.tutorialMode;
 
         contents.selectForEdit = function () {
             var script = data.fullCopy(),
@@ -12866,7 +12867,8 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.cachedImage = img;
 
         // support costumes to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData;
+        contents.isDraggable = !sprite.disableDraggingData &&
+            !this.stage.tutorialMode;
 
         contents.selectForEdit = function () {
             var cst = data.copy(),
@@ -12921,7 +12923,8 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents = new SymbolMorph('notes', 30);
 
         // support sounds to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData;
+        contents.isDraggable = !sprite.disableDraggingData &&
+            !this.stage.tutorialMode;
 
         contents.selectForEdit = function () {
             var snd = data.copy(),
@@ -13005,7 +13008,8 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         };
 
         // support blocks to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData;
+        contents.isDraggable = !sprite.disableDraggingData &&
+            !this.stage.tutorialMode;
 
         contents.selectForEdit = function () {
             var script = data.toUserBlock(),

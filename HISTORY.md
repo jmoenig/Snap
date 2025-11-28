@@ -43,6 +43,7 @@
 * gui: extended magnification gestures (shift-scroll / double click) to control bar, categories and sprite bar panes
 * gui: refactored magnification gestures
 * gui: gradually zoom the stage in up to 100% when zooming out globally
+* objects: disabled data from being dragged out of tutorial speech balloons (for now)
 
 ### 2025-11-27
 * gui: refined IDE layout for global magnification zoom levels
