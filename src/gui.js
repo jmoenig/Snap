@@ -8096,7 +8096,7 @@ IDE_Morph.prototype.looksMenuData = function () {
             MorphicPreferences.menuFontSize * 0.75
         );
 
-    function addPreference(label, toggle, test, onHint, offHint, hide) {
+    menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
         if (!hide || shiftClicked) {
             menu.addItem(
                 [
@@ -8108,7 +8108,7 @@ IDE_Morph.prototype.looksMenuData = function () {
                 hide ? new Color(100, 0, 0) : null
             );
         }
-    }
+    };
 
     empty.render = nop;
 
@@ -8129,7 +8129,7 @@ IDE_Morph.prototype.looksMenuData = function () {
         this.flatBrightLooks
     );
     menu.addLine();
-    addPreference(
+    menu.addPreference(
         'Flat design',
         () => {
             if (MorphicPreferences.isFlat) {
@@ -8142,7 +8142,7 @@ IDE_Morph.prototype.looksMenuData = function () {
         'check for alternative\nGUI design',
         false
     );
-    addPreference(
+    menu.addPreference(
         'Bright theme',
         () => {
             if (IDE_Morph.prototype.isBright) {
@@ -8160,21 +8160,21 @@ IDE_Morph.prototype.looksMenuData = function () {
     menu.addItem('Afterglow blocks...', 'userSetBlocksAfterglow');
     menu.addItem('Zoom blocks...', 'userSetBlocksScale');
     menu.addLine();
-    addPreference(
+    menu.addPreference(
         'Long form input dialog',
         'toggleLongFormInputDialog',
         InputSlotDialogMorph.prototype.isLaunchingExpanded,
         'uncheck to use the input\ndialog in short form',
         'check to always show slot\ntypes in the input dialog'
     );
-    addPreference(
+    menu.addPreference(
         'Plain prototype labels',
         'togglePlainPrototypeLabels',
         BlockLabelPlaceHolderMorph.prototype.plainLabel,
         'uncheck to always show (+) symbols\nin block prototype labels',
         'check to hide (+) symbols\nin block prototype labels'
     );
-    addPreference(
+    menu.addPreference(
         'Clicking sound',
         () => {
             BlockMorph.prototype.toggleSnapSound();

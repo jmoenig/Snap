@@ -48,7 +48,8 @@
 * objects: fixed a dev mode context menu glitch
 * objects: refactored disabling dragging data out from tutorials (not 100% but good enough for now)
 * gui: disabled pressing ESC to close a tutorial window 
-* gui: tweaked magnification when zooming out 
+* gui: tweaked magnification when zooming out
+* gui: refactored "Looks" menu
 
 ### 2025-11-27
 * gui: refined IDE layout for global magnification zoom levels
