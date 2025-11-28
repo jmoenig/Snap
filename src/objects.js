@@ -11517,21 +11517,24 @@ StageMorph.prototype.userMenu = function () {
         'save a picture\nof the stage'
     );
     menu.addLine();
-    menu.addItem(
-        'pen trails',
-        () => {
-            var costume = ide.currentSprite.reportPenTrailsAsCostume().copy();
-            ide.currentSprite.addCostume(costume);
-            ide.currentSprite.wearCostume(costume);
-            ide.hasChangedMedia = true;
-            ide.spriteBar.tabBar.tabTo('costumes');
-        },
-        ide.currentSprite instanceof SpriteMorph ?
-            'turn all pen trails and stamps\n' +
-                'into a new costume for the\ncurrently selected sprite'
-                    : 'turn all pen trails and stamps\n' +
-                        'into a new background for the stage'
-    );
+    if (ide) {
+        menu.addItem(
+            'pen trails',
+            () => {
+                var costume =
+                    ide.currentSprite.reportPenTrailsAsCostume().copy();
+                ide.currentSprite.addCostume(costume);
+                ide.currentSprite.wearCostume(costume);
+                ide.hasChangedMedia = true;
+                ide.spriteBar.tabBar.tabTo('costumes');
+            },
+            ide.currentSprite instanceof SpriteMorph ?
+                'turn all pen trails and stamps\n' +
+                    'into a new costume for the\ncurrently selected sprite'
+                        : 'turn all pen trails and stamps\n' +
+                            'into a new background for the stage'
+        );
+    }
     if (this.trailsLog.length) {
         menu.addItem(
             'svg...',
