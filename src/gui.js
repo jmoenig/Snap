@@ -1133,18 +1133,6 @@ IDE_Morph.prototype.createLogo = function () {
         myself.snapMenu();
     };
 
-    this.logo.mouseScroll = function (y) {
-        if (this.world().currentKey === 16) { // shiftClicked
-            myself.setZoom(ZOOM * 100 - y * 5);
-        }
-    };
-
-    this.logo.mouseDoubleClick = function () {
-        if (this.world().currentKey === 16) { // shiftClicked
-            myself.setZoom(100);
-        }
-    };
-
     this.logo.color = BLACK;
     this.logo.setExtent(new Point(200, 28)); // dimensions are fixed
     this.add(this.logo);
@@ -1650,10 +1638,6 @@ IDE_Morph.prototype.createControlBar = function () {
         this.label.setLeft(this.settingsButton.right() + padding);
         this.add(this.label);
     };
-
-    // global zoom gestures
-    this.controlBar.mouseScroll = this.logo.mouseScroll;
-    this.controlBar.mouseDoubleClick = this.logo.mouseDoubleClick;
 };
 
 IDE_Morph.prototype.createCategories = function () {
@@ -1699,10 +1683,6 @@ IDE_Morph.prototype.createCategories = function () {
             }
         });
     };
-
-    // global zoom gestures
-    this.categories.mouseScroll = this.logo.mouseScroll;
-    this.categories.mouseDoubleClick = this.logo.mouseDoubleClick;
 
     function changePalette(category) {
         return () => {
@@ -2266,10 +2246,6 @@ IDE_Morph.prototype.createSpriteBar = function () {
         this.tabBar.setLeft(this.left());
         this.tabBar.setBottom(this.bottom() + myself.padding);
     };
-
-    // global zoom gestures
-    this.spriteBar.mouseScroll = this.logo.mouseScroll;
-    this.spriteBar.mouseDoubleClick = this.logo.mouseDoubleClick;
 };
 
 IDE_Morph.prototype.createSpriteEditor = function () {
@@ -3283,6 +3259,20 @@ IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
         ypr.src = this.resourceURL('src', 'ypr.js');
     } else {
         loadYPR(anArrayBuffer, name);
+    }
+};
+
+// IDE_Morph global zoom gesture events
+
+IDE_Morph.prototype.mouseScroll = function (y) {
+    if (this.world().currentKey === 16) { // shiftClicked
+        this.setZoom(ZOOM * 100 - y * 5);
+    }
+};
+
+IDE_Morph.prototype.mouseDoubleClick = function () {
+    if (this.world().currentKey === 16) { // shiftClicked
+        this.setZoom(100);
     }
 };
 
