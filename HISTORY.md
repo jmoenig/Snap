@@ -46,7 +46,8 @@
 * objects: disabled data from being dragged out of tutorial speech balloons (for now)
 * objects: disabled data from being dragged out of watchers (for now)
 * objects: fixed a dev mode context menu glitch
-* objects: refactored disabling dragging data out from tutorials (not 100% but good enough for now) 
+* objects: refactored disabling dragging data out from tutorials (not 100% but good enough for now)
+* gui: disabled pressing ESC to close a tutorial window  
 
 ### 2025-11-27
 * gui: refined IDE layout for global magnification zoom levels

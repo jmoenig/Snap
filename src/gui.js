@@ -9414,6 +9414,7 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
     dlg.fixLayout();
     dlg.popUp(this.world(), true); // noFocus
     dlg.nag = true; // don't close when switching scenes
+    dlg.cancel = nop; // disallow pressing ESC to close the window
     this.tutorial = dlg;
     this.corral.fixLayout(); // update scene icons
     diff = dlg.extent().subtract(scene.stage.dimensions);
