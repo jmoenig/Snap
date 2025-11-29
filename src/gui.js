@@ -5306,7 +5306,7 @@ IDE_Morph.prototype.projectMenu = function () {
         menu.addLine();
     }
     menu.addItem(
-        'Extentions...',
+        'Extensions...',
         () => {
             if (location.protocol === 'file:') {
                 this.importLocalFile();
@@ -10621,7 +10621,7 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     this.notesText = null;
     this.notesField = null;
 
-    this.labelString = 'Import Extention';
+    this.labelString = 'Import Extension';
     this.createLabel();
 
     this.buildContents();
