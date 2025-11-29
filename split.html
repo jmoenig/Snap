@@ -61,9 +61,13 @@
                     navigator.serviceWorker.register('sw.js');
                 }
                 world = new WorldMorph(document.getElementById('world'));
-                new IDE_Morph().openIn(world);
+                // store the ide in a varibale so we can change the palette mode later
+                const ide = new IDE_Morph();
+	            ide.openIn(world);
                 requestAnimationFrame(loop);
                 plmod()
+                // enable single palette
+                ide.setUnifiedPalette(true);
             };
         </script>
     </head>
