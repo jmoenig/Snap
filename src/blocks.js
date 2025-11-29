@@ -11489,7 +11489,7 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
       menu.popup(this.world(), this.bottomLeft());
       menu.getFocus();
     } else {
-      menu.popUpAtHand(this.world());
+      menu.popup(this.world(), this.center().add(new Point(menu.width() / -2, 8 * this.scale)));
     }
   }
 };

@@ -577,6 +577,10 @@ SymbolMorph.prototype.flagSymbolRed = new Image();
 SymbolMorph.prototype.flagSymbolRed.src = "src/flag-red.svg";
 SymbolMorph.prototype.stopSymbol = new Image();
 SymbolMorph.prototype.stopSymbol.src = "src/stop.svg";
+SymbolMorph.prototype.notesImage = new Image();
+SymbolMorph.prototype.notesImage.src = "src/notes.svg";
+SymbolMorph.prototype.notesImageBlack = new Image();
+SymbolMorph.prototype.notesImageBlack.src = "src/notes-black.svg";
 
 SymbolMorph.prototype.turnRightImage = new Image();
 SymbolMorph.prototype.turnRightImage.src = "src/rotate-right.svg";
@@ -2081,6 +2085,10 @@ SymbolMorph.prototype.renderSymbolClosedBrushPath =
   SymbolMorph.prototype.renderSymbolCloudOutline;
 
 SymbolMorph.prototype.renderSymbolNotes = function (ctx, color) {
+  if(color.eq(WHITE) || color.eq(BLACK)) {
+    this.drawImage(ctx, this[color.eq(BLACK)?"notesImageBlack":"notesImage"]);
+    return
+  }
   // draw two musical notes
   var size = this.symbolWidth(),
     r = size / 6,

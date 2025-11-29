@@ -96,7 +96,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.0.7';
+var SplitVersion = '1.0.8';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1669,6 +1669,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
     this.categories = new ScrollFrameMorph();
     this.categories.color = this.groupColor;
+    
     this.catWidth = 62;
     this.categories.acceptsDrops = false;
         this.categories.contents.acceptsDrops = false;
@@ -1694,7 +1695,7 @@ IDE_Morph.prototype.createCategories = function () {
 
     this.categories.refreshEmpty = function () {
         var dict = myself.currentSprite.emptyCategories();
-        dict.variables = dict.variables || dict.lists || dict.other;
+        dict.variables = dict.variables || dict.other;
         this.buttons.forEach(cat => {
             if (Object.hasOwn(dict, cat.category) && (dict[cat.category])) {
                 cat.enable();
@@ -1761,6 +1762,9 @@ IDE_Morph.prototype.createCategories = function () {
         if (IDE_Morph.prototype.isBright) {
             button.labelPressColor = BLACK;
         }
+        button.color = SpriteMorph.prototype.blockColor[category];
+        button.outlineColor = SpriteMorph.prototype.blockColor[category].darker(25);
+        button.hint = category[0].toUpperCase().concat(category.slice(1));
         button.fixLayout();
         button.refresh();
         button.bounds.setHeight(25);
@@ -1817,7 +1821,7 @@ IDE_Morph.prototype.createCategories = function () {
                 // t + (((row - shift) + 1) * yPadding + ((row - shift) *
                 //     buttonHeight) + border) +
                 // (i > 7 ? border + 2 : 0)
-                18.75, i * (buttonHeight + 22)
+                18.75, i * (buttonHeight + 22) + 5
             ));
         });
 
@@ -1847,7 +1851,7 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     SpriteMorph.prototype.categories.forEach(cat => {
-        if (!contains(['lists', 'other'], cat)) {
+        if (!contains(['other'], cat)) {
             addCategoryButton(cat);
         }
     });
@@ -3354,9 +3358,7 @@ IDE_Morph.prototype.topVisibleCategoryInPalette = function () {
             }
             return 'variables';
         }
-        if (top.category === 'lists') {
-            return 'variables';
-        }
+        
         return top.category;
     }
     return null;
@@ -7725,8 +7727,6 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
         zoomTo(1);
     }
 };
-
-// not sure how to default snap! to single palette mode so i put in in split.html
 
 IDE_Morph.prototype.toggleUnifiedPalette = function () {
     this.setUnifiedPalette(!this.scene.unifiedPalette);

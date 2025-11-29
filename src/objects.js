@@ -393,6 +393,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
                         (* (- (list (get x) (get y)) (get pos)) (get fract))))))
                 (go (get x) (get y)))`
         },
+        /*
+        Currently unused
+
         doGlideSprite: {
             only: SpriteMorph,
             type: 'command',
@@ -414,7 +417,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
                         (get pos)
                         (* (- (list (get x) (get y)) (get pos)) (get fract))))))
                 (go (get x) (get y)))`
-        },
+        },*/
         changeXPosition: {
             only: SpriteMorph,
             type: 'command',
@@ -650,7 +653,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSayFor: {
             type: 'command',
             category: 'looks',
-            spec: 'say %s for %n secs',
+            spec: 'say %s for %n seconds',
             defaults: [localize('Hello!'), 2],
             code: 'sayFor',
             src: `(
@@ -670,7 +673,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
-            spec: 'think %s for %n secs',
+            spec: 'think %s for %n seconds',
             defaults: [localize('Hmm...'), 2],
             code: 'thinkFor',
             src: `(
@@ -903,7 +906,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'sound',
-            spec: 'play %n Hz for %n secs',
+            spec: 'play %n Hz for %n seconds',
             defaults: [440, 2]
         },
         doSetInstrument: {
@@ -1236,7 +1239,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doWait: {
             type: 'command',
             category: 'control',
-            spec: 'wait %n secs',
+            spec: 'wait %n seconds',
             defaults: [1],
             code: 'wait',
             src: `(
@@ -1438,7 +1441,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         createClone: {
             type: 'command',
             category: 'control',
-            spec: 'create a clone of %cln',
+            spec: 'create clone of %cln',
             defaults: [['myself']],
             animation: true,
             code: 'clone',
@@ -3033,9 +3036,9 @@ SpriteMorph.prototype.blockAlternatives = {
     turn: ['turnLeft'],
     turnLeft: ['turn'],
     doFaceTowards:  ['doGotoObject'],
-    gotoXY: [['doGlide', 1],['doGlideSprite', 1]],
+    gotoXY: [['doGlide', 1]],//,['doGlideSprite', 1]],
     doGotoObject: ['doFaceTowards'],
-    doGlide: [['gotoXY', -1],['doGlideSprite', 1]],
+    doGlide: [['gotoXY', -1]],//,['doGlideSprite', 1]],
     doGlideSprite: [['gotoXY', -1],['doGlide', 1]],
     changeXPosition: ['changeYPosition', 'setXPosition', 'setYPosition',
         'forward'],
@@ -3827,7 +3830,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('gotoXY'));
         blocks.push(block('doGotoObject'));
         blocks.push(block('doGlide'));
-        blocks.push(block('doGlideSprite'));
+        //blocks.push(block('doGlideSprite'));
         blocks.push('-');
         blocks.push(block('changeXPosition'));
         blocks.push(block('setXPosition'));
@@ -4194,8 +4197,9 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push(block('doDeleteAttr'));
         }
 
-        blocks.push('=');
-        blocks.push(block('reportNewList'));
+        
+    } else if (category === 'lists') {
+    blocks.push(block('reportNewList'));
         blocks.push(block('reportNumbers'));
         blocks.push('-');
         blocks.push(block('reportCONS'));
@@ -4462,7 +4466,7 @@ SpriteMorph.prototype.makeBlock = function () {
         },
         this
     );
-    if (category !== 'variables' || category !== 'unified') {
+    if (category !== 'unified') {
         dlg.category = category;
         dlg.categories.refresh();
         dlg.types.children.forEach(each => {
@@ -4607,7 +4611,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     primitives = this.getPrimitiveTemplates(category),
                     customs = this.customBlockTemplatesForCategory(category),
                     showHeader = showCategories &&
-                        !['lists', 'other'].includes(category) &&
+                        !['other'].includes(category) &&
                         (primitives.some(item =>
                             item instanceof BlockMorph) || customs.length);
 
@@ -4654,7 +4658,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
         blocks.push(...this.customBlockTemplatesForCategory(category));
     }
     if (category === 'variables') {
-        blocks.push(...this.customBlockTemplatesForCategory('lists'));
         blocks.push(...this.customBlockTemplatesForCategory('other'));
     }
 
@@ -4792,7 +4795,6 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
         doDeclareVariables: 'variables'
     };
     cat = dict[aBlock.selector] || aBlock.category;
-    if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
     this.recordUserEdit(
@@ -11595,7 +11597,8 @@ blocks.push(block('getAsk'));
         blocks.push(block('doShowVar'));
         blocks.push(block('doHideVar'));
         blocks.push(block('doDeclareVariables'));
-        blocks.push('=');
+       
+    } else if (category === 'lists') {
         blocks.push(block('reportNewList'));
         blocks.push(block('reportNumbers'));
         blocks.push('-');
