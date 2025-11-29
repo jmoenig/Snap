@@ -39,6 +39,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-11-29
+* santa: update
+
 ### 2025-11-28
 * gui: extended magnification gestures (shift-scroll / double click) to control bar, categories and sprite bar panes
 * gui: refactored magnification gestures

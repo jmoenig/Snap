@@ -2,7 +2,7 @@
 
     santa.js
 
-    XMas themed skin for Snap! hat blocks
+    XMas themed skin for Snap! hat blocks and dialogs
 
     written by Jens Mönig
     jens@moenig.org
@@ -31,14 +31,15 @@
 
 */
 
-/*global modules, HatBlockMorph, MorphicPreferences, Color, radians, degrees,
-WHITE, IDE_Morph, BLACK, PrototypeHatBlockMorph, SnapTranslator*/
+/*global modules, HatBlockMorph, DialogBoxMorph, MorphicPreferences, Color,
+radians, degrees, WHITE, IDE_Morph, BLACK, PrototypeHatBlockMorph, fontHeight,
+SnapTranslator*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.santa = '2024-December-07';
+modules.santa = '2025-November-29';
 
 // HatBlockMorph Xmas Skin (2024)
 
@@ -966,6 +967,61 @@ IDE_Morph.prototype.looksMenu = function () {
     );
 };
 
+DialogBoxMorph.prototype.nativeRender = DialogBoxMorph.prototype.render;
+
+DialogBoxMorph.prototype.render = function (ctx) {
+    this.nativeRender(ctx);
+    if (HatBlockMorph.prototype.xmasSkin) {
+        this.renderTreeHat(ctx);
+    }
+};
+
+DialogBoxMorph.prototype.nativeOutlinePathTitle =
+    DialogBoxMorph.prototype.outlinePathTitle;
+
+DialogBoxMorph.prototype.outlinePathTitle = function (ctx, radius) {
+    var h = Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2;
+    if (HatBlockMorph.prototype.xmasSkin) {
+        ctx.roundRect(
+            h * 1.5,
+            0,
+            this.width() - h * 1.5,
+            Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2,
+            [radius, radius, 0, 0]
+        );
+    } else {
+        this.nativeOutlinePathTitle(ctx, radius);
+    }
+};
+
+DialogBoxMorph.prototype.renderTreeHat = function (ctx) {
+    var h = Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2,
+        b = h / 4;
+    ctx.strokeStyle = new Color(0, 200, 0);
+    ctx.fillStyle = new Color(0, 100, 0);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+
+    ctx.moveTo(h, 0);
+    ctx.lineTo(b * 2, b);
+    ctx.lineTo(b * 3, b);
+    ctx.lineTo(b, b * 2);
+    ctx.lineTo(b * 3, b * 2);
+    ctx.lineTo(0, b * 3);
+    ctx.lineTo(b * 3, b * 3);
+    ctx.lineTo(b * 3, h);
+    ctx.lineTo(b * 5, h);
+    ctx.lineTo(b * 5, b * 3);
+    ctx.lineTo(h * 2, b * 3);
+    ctx.lineTo(b * 5, b * 2);
+    ctx.lineTo(b * 7, b * 2);
+    ctx.lineTo(b * 5, b);
+    ctx.lineTo(b * 6, b);
+
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+};
 IDE_Morph.prototype.bakeYourOwnBlocks = function () {
     if (HatBlockMorph.prototype.xmasSkin) {
         SnapTranslator.dict.en['Make a block'] = 'Bake a block';
