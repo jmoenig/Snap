@@ -11486,10 +11486,10 @@ InputSlotMorph.prototype.dropDownMenu = function (enableKeyboard) {
   }
   if (menu.items.length > 0) {
     if (enableKeyboard) {
-      menu.popup(this.world(), this.bottomLeft());
+      menu.popup(this.world(), this.bottomCenter());
       menu.getFocus();
     } else {
-      menu.popup(this.world(), this.center().add(new Point(menu.width() / -2, 8 * this.scale)));
+      menu.popup(this.world(), this.bottomCenter());;
     }
   }
 };
@@ -12865,22 +12865,8 @@ InputSlotMorph.prototype.render = function (ctx) {
   this.cachedClrDark = borderColor.darker(this.contrast).toString();
   ctx.strokeStyle = this.parent.color.darker(20).toString();
   ctx.lineWidth = this.flatEdge * 2;
-  if (this.squareStrings ? ((!this.isNumeric) && (!this.isReadOnly || this.isStatic)) : (this.isStatic || this instanceof TextSlotMorph)) {
+  if (this.isSquare()) {
     ctx.beginPath();
-    if (false) {
-      ctx.strokeRect(
-        this.edge,
-        this.edge,
-        this.width() - this.edge * 2,
-        this.height() - this.edge * 2
-      );
-      ctx.fillRect(
-        this.edge,
-        this.edge,
-        this.width() - this.edge * 2,
-        this.height() - this.edge * 2
-      );
-    }
     ctx.save();
     ctx.translate(ctx.lineWidth / 1.5, ctx.lineWidth / 1.5);
     ctx.arc(this.corner, this.corner, this.corner, radians(-180), radians(-90));
