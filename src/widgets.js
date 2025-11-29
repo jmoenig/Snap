@@ -3583,8 +3583,8 @@ PianoMenuMorph.uber = MenuMorph.prototype;
 
 // PianoMenuMorph instance creation:
 
-function PianoMenuMorph(target, environment, fontSize, soundType) {
-  this.init(target, environment, fontSize, soundType);
+function PianoMenuMorph(target, environment, fontSize, soundType, visibleOctaves, bgColor) {
+  this.init(target, environment, fontSize, soundType, visibleOctaves, bgColor);
 }
 
 PianoMenuMorph.prototype.init = function (
@@ -3592,14 +3592,18 @@ PianoMenuMorph.prototype.init = function (
   environment,
   fontSize,
   soundType, // number 1 - 4: 'sine', 'square', 'sawtooth' or 'triangle'
-  visibleOctaves
+  visibleOctaves,
+  bgColor
 ) {
   var choices, key;
   this.soundType = soundType;
-  PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize);
+  PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize, bgColor);
+  this.bgColor = bgColor || WHITE;
   if (isNil(visibleOctaves)) {
     visibleOctaves = 2;
   }
+  this.backColor = bgColor || WHITE;
+  this.color = this.backColor;
   this.visibleOctaves = visibleOctaves;
   this.octave = 4 - (3 % this.visibleOctaves);
   choices = {
@@ -3645,24 +3649,26 @@ PianoMenuMorph.prototype.createItems = function () {
     this.edge = MorphicPreferences.isFlat ? 0 : 5;
     this.border = MorphicPreferences.isFlat ? 1 : 2;
   }
-  this.color = WHITE;
+
+  this.color = this.bgColor;
   this.borderColor = new Color(60, 60, 60);
   this.bounds.setExtent(ZERO);
 
   x = this.left() + 1;
   y = this.top() + this.fontSize * 1.5 + 2;
   label = new StringMorph("", this.fontSize);
+  label.color = WHITE;
   this.items.forEach((tuple) => {
     blackkey = tuple[0].length > 1;
     key = new BoxMorph(1, 1);
     if (blackkey) {
       keycolor = BLACK;
-      keywidth = this.fontSize; // 9;
+      keywidth = this.fontSize * 1.8; // 9;
       keyheight = this.fontSize * 2.5;
-      keyposition = new Point(x + 2 - this.fontSize * 2, y);
+      keyposition = new Point(x + 2 - this.fontSize * 3.3, y);
     } else {
       keycolor = WHITE;
-      keywidth = this.fontSize * 1.5;
+      keywidth = this.fontSize * 2.5;
       keyheight = this.fontSize * 4;
       keyposition = new Point(x + 1, y);
       x += keywidth - 1;
@@ -3691,19 +3697,19 @@ PianoMenuMorph.prototype.createItems = function () {
   label.setPosition(new Point(fb.width() / 2 - this.fontSize * 1.6, 2));
   this.add(label);
 
-  var downOctave = new ArrowMorph(
-    "left",
+  var downOctave = new SymbolMorph(
+    "arrowLeft",
     fontHeight(this.fontSize),
-    Math.max(Math.floor(this.fontSize / 6), 1)
+    WHITE
   );
   downOctave.setPosition(new Point(5, 3));
   downOctave.mouseClickLeft = () => this.octaveDown();
   this.add(downOctave);
 
-  var upOctave = new ArrowMorph(
-    "right",
+  var upOctave = new SymbolMorph(
+    "arrowRight",
     fontHeight(this.fontSize),
-    Math.max(Math.floor(this.fontSize / 6), 1)
+    WHITE
   );
   upOctave.setPosition(new Point(fb.width() - upOctave.width() - 2, 3));
   upOctave.mouseClickLeft = () => this.octaveUp();
@@ -3922,8 +3928,23 @@ PianoKeyMorph.prototype.init = function (
     bold,
     italic,
     doubleClickAction,
-    label
+    //label
   );
+  /*
+  (
+  target,
+  action,
+  labelString,
+  fontSize,
+  fontStyle,
+  environment,
+  hint,
+  labelColor,
+  labelBold,
+  labelItalic,
+  doubleClickAction,
+  bakColor
+)*/
 };
 
 PianoKeyMorph.prototype.createLabel = function () {
@@ -3944,7 +3965,7 @@ PianoKeyMorph.prototype.createLabel = function () {
 
 PianoKeyMorph.prototype.mouseEnter = function () {
   var piano = this.parentThatIsA(PianoMenuMorph),
-    soundType = piano ? piano.soundType : 1,
+  
     octave = Math.floor((this.action - 1) / 12),
     octaveOffset = 0;
 
@@ -3967,9 +3988,25 @@ PianoKeyMorph.prototype.mouseEnter = function () {
     this.action
   })`;
   this.feedback.fixLayout();
+  
+};
+PianoKeyMorph.prototype.mouseDownLeft = function () {
+  var piano = this.parentThatIsA(PianoMenuMorph),
+  soundType = piano ? piano.soundType : 1;
+  this.note.stop(true);
   this.note.play(soundType);
   setTimeout(() => this.note.stop(true), 400);
-};
+}
+PianoKeyMorph.prototype.mouseClickLeft = function () {
+  return
+}
+PianoKeyMorph.prototype.destroy = function () {
+  if (this.parent !== null) {
+    this.fullChanged();
+    this.parent.removeChild(this);
+  }
+  this.note.stop(true)
+}
 
 PianoKeyMorph.prototype.mouseLeave = function () {
   this.note.stop(true);

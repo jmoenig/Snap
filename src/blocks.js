@@ -2433,7 +2433,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
           x -= this.labelPadding / 2;
         }
         if(((!line[0].isVisible && partIndex == 1) || partIndex == 0) && part instanceof BooleanSlotMorph) {
-          console.warn(partIndex, line)
+          
           x -= this.labelPadding * 1.5
         }
         part.setPosition(new Point(x, y));
@@ -12411,7 +12411,10 @@ InputSlotMorph.prototype.pianoKeyboardMenu = function (searching) {
   if (block) {
     instrument = block.scriptTarget().instrument;
   }
-  menu = new PianoMenuMorph(this.setContents, this, this.fontSize, instrument);
+  menu = new PianoMenuMorph(this.setContents, this, this.fontSize, instrument, 1, this.parent.color);
+  
+  menu.bgColor = this.parent.color;
+  menu.backColor = this.parent.color;
   menu.popup(
     this.world(),
     new Point(this.right() - menu.width() / 2, this.bottom())
