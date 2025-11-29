@@ -2362,12 +2362,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
       this instanceof ReporterBlockMorph &&
       line[0] instanceof BlockLabelMorph
     ) {
-      x =
-        this.left() +
-        ico +
-        this.edge +
-        this.labelPadding * ((line[0] instanceof InputSlotMorph || line[0] instanceof BooleanSlotMorph) ? 1 : 1.5) + //(!(lines.length > 1) * 1.5) +
-        this.height() * ((lines.length > 1) * 0.5);
+      
     }
 
     y += lineHeight;
