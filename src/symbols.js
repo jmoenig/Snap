@@ -246,7 +246,7 @@ SymbolMorph.prototype.render = function (ctx) {
     ctx.fillRect(0, 0, this.symbolWidth(), this.size);
     ctx.restore();
   }
-  if (this.shadowColor) {
+  if (this.shadowColor && (!this.shadowOffset.eq(ZERO))) {
     ctx.save();
     ctx.translate(sx, sy);
     this.renderShape(ctx, this.getShadowRenderColor());

@@ -2003,7 +2003,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         part.size = this.fontSize * (info.scale || 1);
         part.color =
           info.color || (WHITE);
-        part.shadowColor = this.color.darker(this.labelContrast);
+        part.shadowColor = MorphicPreferences.isFlat ? undefined : this.color.darker(this.labelContrast);
         part.shadowOffset = MorphicPreferences.isFlat ? ZERO : this.embossing;
         part.fixLayout();
         break;
@@ -2206,7 +2206,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
       +tokens[4] === 0 ? 0 : +tokens[4] || 255
     );
     part.isProtectedLabel = tokens.length > 2; // zebra colors
-    part.shadowColor = this.color.darker(this.labelContrast);
+    part.shadowColor = MorphicPreferences.isFlat ? undefined : this.color.darker(this.labelContrast);
     part.shadowOffset = MorphicPreferences.isFlat ? ZERO : this.embossing;
     part.fixLayout();
   } else {
