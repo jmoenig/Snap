@@ -2363,6 +2363,11 @@ SyntaxElementMorph.prototype.fixLayout = function () {
       line[0] instanceof BlockLabelMorph
     ) {
       
+      x =
+        this.left() +
+        ico +
+        this.edge +
+        this.labelPadding * ((line[0] instanceof InputSlotMorph || line[0] instanceof BooleanSlotMorph) ? 1 : 1.5)
     }
 
     y += lineHeight;
