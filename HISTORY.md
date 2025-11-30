@@ -39,6 +39,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-11-30
+* objects: fixed a draggability control glitch in speech balloons
+
 ### 2025-11-29
 * santa: update
 

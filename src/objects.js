@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-November-28';
+modules.objects = '2025-November-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -12757,7 +12757,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         sprite = SpriteMorph.prototype,
         maxHeight = (this.stage?.dimensions?.y || 360) * this.scale -
             (this.border + this.padding + 1) * 2,
-        isInTutorial = this.stage.tutorialMode,
+        isInTutorial = this.stage?.tutorialMode,
         isText,
         img,
         scaledImg,
