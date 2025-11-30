@@ -3615,7 +3615,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
 
     // blocks afterglow //
     if (isNil(glow)) {
-        this.setBlocksAfterglow(5);
+        this.setBlocksAfterglow(0);
     } else {
         this.setBlocksAfterglow(Math.max(0, Math.min(glow, 20)));
     }

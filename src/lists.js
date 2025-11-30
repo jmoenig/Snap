@@ -1543,7 +1543,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
         new Color(120, 120, 120)
     );
 
-    this.color = new Color(220, 220, 220);
+    this.color = new Color(230, 240, 255);
     this.isDraggable = false;
     this.setExtent(new Point(80, 70).multiplyBy(
         SyntaxElementMorph.prototype.scale
@@ -1668,6 +1668,7 @@ ListWatcherMorph.prototype.update = function (anyway) {
                 idx,
                 this.parentCell
             );
+            cell.borderColor = this.cellColor.darker();
             button = new PushButtonMorph(
                 this.list.remove,
                 idx,
@@ -1772,7 +1773,7 @@ ListWatcherMorph.prototype.arrangeCells = function () {
         label = this.frame.contents.children[i + 1];
         button = this.frame.contents.children[i + 2];
         if (lastCell) {
-            cell.setTop(lastCell.bottom());
+            cell.setTop(lastCell.bottom() + 4);
         }
         if (label) {
             label.setTop(cell.center().y - label.height() / 2);

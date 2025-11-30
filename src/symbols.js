@@ -602,6 +602,10 @@ SymbolMorph.prototype.loopSymbol = new Image();
 SymbolMorph.prototype.loopSymbol.src = "src/repeat.svg";
 SymbolMorph.prototype.loopSymbolBlack = new Image();
 SymbolMorph.prototype.loopSymbolBlack.src = "src/repeat-black.svg";
+SymbolMorph.prototype.selectImage = new Image();
+SymbolMorph.prototype.selectImage.src = "src/select.svg";
+SymbolMorph.prototype.selectBlackImage = new Image();
+SymbolMorph.prototype.selectBlackImage.src = "src/select-black.svg";
 
 SymbolMorph.prototype.renderSymbolStop = function (ctx, color) {
   // draw a vertically centered square
@@ -2041,6 +2045,10 @@ SymbolMorph.prototype.renderSymbolMagnifierOutline = function (ctx, color) {
 };
 
 SymbolMorph.prototype.renderSymbolSelection = function (ctx, color) {
+  if(color.eq(WHITE) || color.eq(BLACK)) {
+    this.drawImage(ctx, this[color.eq(WHITE) ? 'selectImage' : "selectBlackImage"])
+    return
+  }
   // draw a filled arrow and a dashed rectangle
   var w = this.symbolWidth(),
     h = this.size;

@@ -275,7 +275,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
   this.corner = 3 * scale;
   this.rounding = 9 * scale;
   this.edge = scale;
-  this.flatEdge = scale * (highContrast ? 1 : 0.65);
+  this.flatEdge = scale * (0.65);
   this.jag = 10 * scale;
   this.dentPlus = 1.5 * scale;
   this.dentCorner = 3.5 * scale;
@@ -2896,7 +2896,9 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     }
     pos = anchor.center();
   }
-  bubble = new SpeechBubbleMorph(morphToShow, null, 5 * this.scale, 0);
+  bubble = new SpeechBubbleMorph(morphToShow, null, 5 * this.scale, 1);
+  bubble.color = WHITE;
+  
   bubble.popUp(wrrld, pos, isClickable);
   if (exportPic) {
     this.exportPictureWithResult(bubble);
