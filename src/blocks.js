@@ -162,7 +162,7 @@ CustomHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-November-05';
+modules.blocks = '2025-December-01';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -904,7 +904,7 @@ SyntaxElementMorph.prototype.labelParts = {
 
     '%block': {
         type: 'input',
-        tags: 'read-only static',
+        tags: 'read-only', // was also 'static'
         menu: {
             'label': ['label'],
             'definition': ['definition'],

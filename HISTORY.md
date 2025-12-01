@@ -32,7 +32,8 @@
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
-    * rearranged IDE settings menu items into "looks" submenu 
+    * rearranged IDE settings menu items into "looks" submenu
+    * meta-programming: removed "static" tag from the block-attribute getter
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
@@ -42,6 +43,7 @@
 ### 2025-12-01
 * objects: fixed an "unused blocks" glitch for tutorials
 * santa: update
+* blocks: removed "static" tag from the block-attribute getter
 
 ### 2025-11-30
 * objects: fixed a draggability control glitch in speech balloons
