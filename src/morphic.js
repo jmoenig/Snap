@@ -2463,6 +2463,10 @@ Color.prototype.solid = function () {
   return new Color(this.r, this.g, this.b);
 };
 
+Color.prototype.withAlpha = function (alpha) {
+  return new Color(this.r, this.g, this.b, alpha)
+}
+
 // Points //////////////////////////////////////////////////////////////
 
 // Point instance creation:

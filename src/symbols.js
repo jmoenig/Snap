@@ -602,10 +602,32 @@ SymbolMorph.prototype.loopSymbol = new Image();
 SymbolMorph.prototype.loopSymbol.src = "src/repeat.svg";
 SymbolMorph.prototype.loopSymbolBlack = new Image();
 SymbolMorph.prototype.loopSymbolBlack.src = "src/repeat-black.svg";
+
 SymbolMorph.prototype.selectImage = new Image();
 SymbolMorph.prototype.selectImage.src = "src/select.svg";
 SymbolMorph.prototype.selectBlackImage = new Image();
 SymbolMorph.prototype.selectBlackImage.src = "src/select-black.svg";
+SymbolMorph.prototype.shrink = new Image();
+SymbolMorph.prototype.shrink.src = "src/shrink.svg";
+SymbolMorph.prototype.shrinkBlack = new Image();
+SymbolMorph.prototype.shrinkBlack.src = "src/shrink-black.svg";
+SymbolMorph.prototype.shrinkGrey = new Image();
+SymbolMorph.prototype.shrinkGrey.src = "src/shrink-grey.svg";
+SymbolMorph.prototype.grow = new Image();
+SymbolMorph.prototype.grow.src = "src/grow.svg";
+SymbolMorph.prototype.growBlack = new Image();
+SymbolMorph.prototype.growBlack.src = "src/grow-black.svg";
+SymbolMorph.prototype.growGrey = new Image();
+SymbolMorph.prototype.growGrey.src = "src/grow-grey.svg";
+
+SymbolMorph.prototype.horiz = new Image();
+SymbolMorph.prototype.horiz.src = "src/horiz.svg";
+SymbolMorph.prototype.horizBlack = new Image();
+SymbolMorph.prototype.horizBlack.src = "src/horiz-black.svg";
+SymbolMorph.prototype.vertical = new Image();
+SymbolMorph.prototype.vertical.src = "src/vertical.svg";
+SymbolMorph.prototype.verticalBlack = new Image();
+SymbolMorph.prototype.verticalBlack.src = "src/vertical-black.svg";
 
 SymbolMorph.prototype.renderSymbolStop = function (ctx, color) {
   // draw a vertically centered square
@@ -850,6 +872,9 @@ SymbolMorph.prototype.renderSymbolFullScreen = function (ctx, color) {
 };
 
 SymbolMorph.prototype.renderSymbolGrow = function (ctx, color) {
+  if(this.isAnyUIColor(color)) {
+    return this.drawImage(ctx, this[this.isUIColor(color) ? "growGrey" : color.eq(BLACK) ? "growBlack" : "grow"])
+  }
   var h = this.size,
     width = this.symbolWidth(),
     c = width / 2,
@@ -931,8 +956,16 @@ SymbolMorph.prototype.renderSymbolNormalScreen = function (ctx, color) {
   ctx.closePath();
   ctx.fill();
 };
-
+SymbolMorph.prototype.isAnyUIColor = function (color) {
+  return color.eq(WHITE) || color.eq(BLACK) || color.eq(new Color(87, 94, 117))
+};
+SymbolMorph.prototype.isUIColor = function (color) {
+  return color.eq(new Color(87, 94, 117))
+};
 SymbolMorph.prototype.renderSymbolShrink = function (ctx, color) {
+  if(this.isAnyUIColor(color)) {
+    return this.drawImage(ctx, this[this.isUIColor(color) ? "shrinkGrey" : color.eq(BLACK) ? "shrinkBlack" : "shrink"])
+  }
   // draw 4 arrows pointing diagonally inwards
   var h = this.size,
     w = this.symbolWidth(),
@@ -2333,6 +2366,9 @@ SymbolMorph.prototype.renderSymbolVerticalEllipsis = function (ctx, color) {
 };
 
 SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
+  if(color.eq(WHITE) || color.eq(BLACK)) {
+    return this.drawImage(ctx, color.eq(WHITE) ? this.horiz : this.horizBlack)
+  }
   var w = this.symbolWidth(),
     h = this.size,
     c = w / 2,
@@ -2360,7 +2396,7 @@ SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolFlipVertical = function (ctx, color) {
   ctx.translate(0, this.size);
-  ctx.rotate(radians(-90));
+  ctx.rotate(radians(90));
   this.renderSymbolFlipHorizontal(ctx, color);
 };
 

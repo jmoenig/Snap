@@ -3950,8 +3950,8 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
 
     // init inherited stuff
     HatBlockMorph.uber.init.call(this);
-    this.color = SpriteMorph.prototype.blockColor.events;
-    this.category = 'events';
+    this.color = SpriteMorph.prototype.blockColor['my blocks'];
+    this.category = 'my blocks';
     this.add(proto);
     if (definition.variableNames.length) {
         vars = this.labelPart('%blockVars');
@@ -4084,34 +4084,21 @@ PrototypeHatBlockMorph.prototype.outlinePath = function (ctx, inset) {
     bottom = this.height() - this.corner,
     bottomCorner = this.height() - this.corner * 2,
     radius = Math.max(this.corner - inset, 0),
+    radius4 = Math.max(this.corner * 4 - inset, 0),
     s = this.hatWidth,
     h = this.hatHeight * 0.7,
     pos = this.position();
 
-  // top arc:
-  ctx.moveTo(inset, h + this.corner - radius);
-  ctx.arc(
-    radius * 4,
-    h + radius * 4,
-    radius * 4 - inset,
-    radians(-180),
-    radians(-90),
-    false
-  );
-  /*ctx.bezierCurveTo(
-        s,
-        0,
-        s,
-        h,
-        sp,
-        h
-    );*/
-
+  
+  ctx.moveTo(inset * 1, h + inset);
+  // top left:
+  ctx.arc(this.corner * 4, this.corner * 4 + h, radius4, radians(-180), radians(-90), false);
+  
   // top right:
   ctx.arc(
-    this.width() - radius * 4, 
-    h + radius * 4,
-    radius * 4 - inset,
+    this.width() - this.corner * 4,
+    this.corner * 4 + h,
+    radius4,
     radians(-90),
     radians(-0),
     false

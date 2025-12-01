@@ -189,6 +189,15 @@ PushButtonMorph.prototype.fixLayout = function () {
   }
 };
 
+
+PushButtonMorph.prototype.makeSquare = function (keepOutline) {
+  // make sure I am a square
+  this.outline = keepOutline ? this.outline : 0;
+    this.fixLayout();
+    this.labelMinExtent.x = this.height();
+    this.fixLayout();
+};
+
 // PushButtonMorph events
 
 PushButtonMorph.prototype.mouseDownLeft = function () {

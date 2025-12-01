@@ -96,7 +96,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.0.8';
+var SplitVersion = '1.1.0';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -127,6 +127,7 @@ IDE_Morph.uber = Morph.prototype;
 // IDE_Morph preferences settings and skins
 
 IDE_Morph.prototype.isBright = false;
+IDE_Morph.prototype.accentColor = new Color(239, 179, 25)
 
 IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
     MorphicPreferences.isFlat = false;
@@ -192,7 +193,7 @@ IDE_Morph.prototype.setBrightTheme = function () {
     PushButtonMorph.prototype.outlineGradient = true;
 
     SpriteMorph.prototype.paletteColor = WHITE;
-    SpriteMorph.prototype.paletteTextColor = new Color(70, 70, 70);
+    SpriteMorph.prototype.paletteTextColor = new Color(87, 94, 117);
     StageMorph.prototype.paletteTextColor
         = SpriteMorph.prototype.paletteTextColor;
     StageMorph.prototype.paletteColor = SpriteMorph.prototype.paletteColor;
@@ -204,7 +205,7 @@ IDE_Morph.prototype.setBrightTheme = function () {
 
     IDE_Morph.prototype.groupColor = WHITE;
     IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
-    IDE_Morph.prototype.buttonLabelColor = new Color(70, 70, 70);
+    IDE_Morph.prototype.buttonLabelColor = new Color(87, 94, 117);
     IDE_Morph.prototype.tabColors = [
         IDE_Morph.prototype.frameColor,
         IDE_Morph.prototype.frameColor.lighter(50),
@@ -1156,10 +1157,10 @@ IDE_Morph.prototype.createControlBar = function () {
         colors = this.isBright ? this.tabColors
             : [
                 this.groupColor,
-                this.frameColor.darker(50),
+                this.accentColor.withAlpha(0.1),//this.frameColor.darker(50),
                 this.frameColor.darker(50)
             ],
-        activeColor = new Color(153, 255, 213),
+        activeColor = this.accentColor.withAlpha(0.5),
         activeColors = [
             activeColor,
             activeColor.lighter(40),
@@ -1192,14 +1193,14 @@ IDE_Morph.prototype.createControlBar = function () {
         this, // the IDE is the target
         'toggleStageSize',
         [
-            new SymbolMorph('smallStage', 14),
-            new SymbolMorph('normalStage', 14)
+            new SymbolMorph('smallStage', 16),
+            new SymbolMorph('normalStage', 16)
         ],
         () => this.isSmallStage // query
     );
 
     button.hasNeutralBackground = true;
-    button.corner = 12;
+    button.corner = 4;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[0];
@@ -1212,7 +1213,7 @@ IDE_Morph.prototype.createControlBar = function () {
         : this.buttonLabelColor;
     button.contrast = this.buttonContrast;
     // button.hint = 'stage size\nsmall & normal';
-    button.fixLayout();
+    button.makeSquare();
     button.refresh();
     stageSizeButton = button;
     this.controlBar.add(stageSizeButton);
@@ -1224,25 +1225,26 @@ IDE_Morph.prototype.createControlBar = function () {
         this, // the IDE is the target
         'toggleAppMode',
         [
-            new SymbolMorph('fullScreen', 14),
-            new SymbolMorph('normalScreen', 14)
+            new SymbolMorph('grow', 16),
+            new SymbolMorph('shrink', 16)
         ],
         () => this.isAppMode // query
     );
 
     button.hasNeutralBackground = true;
-    button.corner = 12;
+    button.corner = 4;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[0];
     button.labelMinExtent = new Point(36, 18);
     button.padding = 0;
+    
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
     // button.hint = 'app & edit\nmodes';
-    button.fixLayout();
+    button.makeSquare();
     button.refresh();
     appModeButton = button;
     this.controlBar.add(appModeButton);
@@ -1260,7 +1262,7 @@ IDE_Morph.prototype.createControlBar = function () {
         () => Process.prototype.enableSingleStepping // query
     );
 
-    button.corner = 12;
+    button.corner = 4;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = activeColor;
@@ -1271,7 +1273,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
     button.hint = 'Visible stepping';
-    button.fixLayout();
+    button.makeSquare();
 
     button.refresh();
     steppingButton = button;
@@ -1289,8 +1291,8 @@ IDE_Morph.prototype.createControlBar = function () {
         this, // the IDE is the target
         'stopAllScripts',
         [
-            new SymbolMorph('octagon', 14),
-            new SymbolMorph('square', 14)
+            new SymbolMorph('octagon', 16),
+            new SymbolMorph('square', 16)
         ],
         () => this.stage ? // query
             myself.stage.enableCustomHatBlocks &&
@@ -1298,7 +1300,7 @@ IDE_Morph.prototype.createControlBar = function () {
             : true
     );
 
-    button.corner = 12;
+    button.corner = 4;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[2];
@@ -1318,7 +1320,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.contrast = this.buttonContrast;
     //button.alpha = 0
     // button.hint = 'stop\nevery-\nthing';
-    button.fixLayout();
+    button.makeSquare();
     button.refresh();
     stopButton = button;
     this.controlBar.add(stopButton);
@@ -1330,14 +1332,14 @@ IDE_Morph.prototype.createControlBar = function () {
         this, // the IDE is the target
         'togglePauseResume',
         [
-            new SymbolMorph('pause', 12),
-            new SymbolMorph('pointRight', 14)
+            new SymbolMorph('pause', 14),
+            new SymbolMorph('pointRight', 16)
         ],
         () => this.isPaused() // query
     );
 
     button.hasNeutralBackground = true;
-    button.corner = 12;
+    button.corner = 4;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[0];
@@ -1351,7 +1353,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.contrast = this.buttonContrast;
     button.alpha = 1
     // button.hint = 'pause/resume\nall scripts';
-    button.fixLayout();
+    button.makeSquare();
     button.refresh();
     pauseButton = button;
     this.controlBar.add(pauseButton);
@@ -1361,10 +1363,10 @@ IDE_Morph.prototype.createControlBar = function () {
     button = new PushButtonMorph(
         this,
         'pressStart',
-        new SymbolMorph('flag', 14)
+        new SymbolMorph('flag', 16)
     );
     button.stroke = 0;
-    button.corner = 12;
+    button.corner = 4;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[2];
@@ -1406,7 +1408,7 @@ IDE_Morph.prototype.createControlBar = function () {
     );
     button.contrast = this.buttonContrast;
     // button.hint = 'start green\nflag scripts';
-    button.fixLayout();
+    button.makeSquare();
     startButton = button;
     this.controlBar.add(startButton);
     this.controlBar.startButton = startButton;
@@ -1437,7 +1439,7 @@ IDE_Morph.prototype.createControlBar = function () {
         new SymbolMorph('file', 14)
         //'\u270E'
     );
-    button.corner = 12;
+    button.corner = 4;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[2];
@@ -1447,8 +1449,9 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
+    button.outline = 0;
     // button.hint = 'open, save, & annotate project';
-    button.fixLayout();
+    button.makeSquare();
     projectButton = button;
     this.controlBar.add(projectButton);
     this.controlBar.projectButton = projectButton; // for menu positioning
@@ -1460,7 +1463,8 @@ IDE_Morph.prototype.createControlBar = function () {
         new SymbolMorph('gears', 14)
         //'\u2699'
     );
-    button.corner = 12;
+    button.corner = 4;
+    button.outline = 0;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[2];
@@ -1471,7 +1475,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
     // button.hint = 'edit settings';
-    button.fixLayout();
+    button.makeSquare();
     settingsButton = button;
     this.controlBar.add(settingsButton);
     this.controlBar.settingsButton = settingsButton; // for menu positioning
@@ -1489,7 +1493,7 @@ IDE_Morph.prototype.createControlBar = function () {
     );
 
     button.hasNeutralBackground = true;
-    button.corner = 12;
+    button.corner = 4;
     button.color = colors[0];
     button.highlightColor = colors[1];
     button.pressColor = colors[0];
@@ -1500,7 +1504,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
     // button.hint = 'cloud operations';
-    button.fixLayout();
+    button.makeSquare();
     button.refresh();
     cloudButton = button;
     this.controlBar.add(cloudButton);
@@ -2421,7 +2425,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         "addNewSprite",
         new SymbolMorph("turtle", 14)
     );
-    newbutton.corner = 12;
+    newbutton.corner = 4;
     newbutton.color = colors[0];
     newbutton.highlightColor = colors[1];
     newbutton.pressColor = colors[2];
@@ -2442,7 +2446,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         "paintNewSprite",
         new SymbolMorph("brush", 15)
     );
-    paintbutton.corner = 12;
+    paintbutton.corner = 4;
     paintbutton.color = colors[0];
     paintbutton.highlightColor = colors[1];
     paintbutton.pressColor = colors[2];
@@ -2466,7 +2470,7 @@ IDE_Morph.prototype.createCorralBar = function () {
             "newCamSprite",
             new SymbolMorph("camera", 15)
         );
-        cambutton.corner = 12;
+        cambutton.corner = 4;
         cambutton.color = colors[0];
         cambutton.highlightColor = colors[1];
         cambutton.pressColor = colors[2];
@@ -2505,7 +2509,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         "undeleteSprites",
         new SymbolMorph("trash", 18)
     );
-    trashbutton.corner = 12;
+    trashbutton.corner = 4;
     trashbutton.color = colors[0];
     trashbutton.highlightColor = colors[1];
     trashbutton.pressColor = colors[2];
@@ -2776,6 +2780,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                 / this.stage.dimensions.y
             ) * 10) / 10);
             this.stage.setCenter(this.center());
+            this.controlBar.fixLayout();
             this.paletteHandle.hide()
         } else {
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
@@ -2808,6 +2813,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.stageHandle.fixLayout();
             this.paletteHandle.fixLayout();
         }
+        this.controlBar.fixLayout();
 
         // oldSpriteBar
         this.oldSpriteBar.setLeft(this.left()/*cnf.noPalette ?
@@ -12152,7 +12158,7 @@ WardrobeMorph.prototype.updateList = function () {
         new SymbolMorph("brush", 15)
     );
     paintbutton.padding = 0;
-    paintbutton.corner = 12;
+    paintbutton.corner = 4;
     paintbutton.color = IDE_Morph.prototype.groupColor;
     paintbutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
     paintbutton.pressColor = paintbutton.highlightColor;
@@ -12176,7 +12182,7 @@ WardrobeMorph.prototype.updateList = function () {
             new SymbolMorph("camera", 15)
         );
         cambutton.padding = 0;
-        cambutton.corner = 12;
+        cambutton.corner = 4;
         cambutton.color = IDE_Morph.prototype.groupColor;
         cambutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
         cambutton.pressColor = paintbutton.highlightColor;
@@ -12644,7 +12650,7 @@ JukeboxMorph.prototype.updateList = function () {
         new SymbolMorph('circleSolid', 15)
     );
     recordButton.padding = 0;
-    recordButton.corner = 12;
+    recordButton.corner = 4;
     recordButton.color = IDE_Morph.prototype.groupColor;
     recordButton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
     recordButton.pressColor = recordButton.highlightColor;
