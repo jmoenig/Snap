@@ -41,6 +41,7 @@
 
 ### 2025-12-01
 * objects: fixed an "unused blocks" glitch for tutorials
+* santa: update
 
 ### 2025-11-30
 * objects: fixed a draggability control glitch in speech balloons
