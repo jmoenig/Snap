@@ -127,7 +127,7 @@ IDE_Morph.uber = Morph.prototype;
 // IDE_Morph preferences settings and skins
 
 IDE_Morph.prototype.isBright = false;
-IDE_Morph.prototype.accentColor = new Color(239, 179, 25)
+IDE_Morph.prototype.accentColor = new Color(183, 255, 67);
 
 IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
     MorphicPreferences.isFlat = false;
@@ -11061,7 +11061,7 @@ SpriteIconMorph.prototype.init = function (aSprite) {
     colors = [
         IDE_Morph.prototype.groupColor,
         IDE_Morph.prototype.frameColor,
-        new Color(239, 179, 25)//IDE_Morph.prototype.frameColor
+        IDE_Morph.prototype.accentColor
     ];
 
     action = () => {
