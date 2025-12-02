@@ -3930,7 +3930,7 @@ Morph.prototype.world = function () {
 
 Morph.prototype.add = function (aMorph) {
   var owner = aMorph.parent;
-  if (owner !== null) {
+  if (!isNil(owner)) {
     owner.removeChild(aMorph);
   }
   this.addChild(aMorph);
@@ -3938,7 +3938,7 @@ Morph.prototype.add = function (aMorph) {
 
 Morph.prototype.addBack = function (aMorph) {
   var owner = aMorph.parent;
-  if (owner !== null) {
+  if (!isNil(owner)) {
     owner.removeChild(aMorph);
   }
   this.addChildFirst(aMorph);

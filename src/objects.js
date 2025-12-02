@@ -173,7 +173,7 @@ SpriteMorph.prototype.blockColor = {
   operators: new Color(89, 192, 89),
   variables: new Color(255, 140, 26),
   lists: new Color(255, 102, 26),
-  other: new Color(191, 191, 191),
+  other: new Color(170, 170, 170), //new Color(191, 191, 191),
   "my blocks": new Color(255, 102, 128),
 };
 SpriteMorph.prototype.isHighContrast = false;

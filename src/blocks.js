@@ -1422,7 +1422,7 @@ SyntaxElementMorph.prototype.init = function () {
 // SyntaxElementMorph accessing:
 
 SyntaxElementMorph.prototype.parts = function () {
-  // answer my non-crontrol submorphs
+  // answer my non-control submorphs
   var nb = null;
   if (this.nextBlock) {
     // if I am a CommandBlock or a HatBlock
@@ -12544,13 +12544,14 @@ InputSlotMorph.prototype.fixLayout = function () {
       arrowWidth +
       this.edge * 2 +
       this.typeInPadding * 2;
-  } else if (this.symbol) {
+  } else {
+    if (this.symbol) {
     this.symbol.fixLayout();
     this.symbol.setPosition(this.position().add(this.edge * 2));
     height = this.symbol.height() + this.edge * 4;
     width =
       this.symbol.width() + arrowWidth + this.edge * 4 + this.typeInPadding * 2;
-  } else {
+  }
     height = contents.height() + this.edge * 8; // + this.typeInPadding * 2
     if (!((this instanceof TextSlotMorph) || this.isStatic)) {
       
@@ -17728,7 +17729,7 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
   }
 };
 
-/*
+
 // register examples with the World demo menu
 // comment out to shave off a millisecond loading speed ;-)
 
@@ -17798,4 +17799,4 @@ ScriptFocusMorph.prototype.reactToKeyEvent = function (key) {
         ]
     ]);
 })();
-*/
+
