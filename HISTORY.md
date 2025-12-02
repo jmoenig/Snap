@@ -35,6 +35,7 @@
     * rearranged IDE settings menu items into "looks" submenu
     * meta-programming: removed "static" tag from the block-attribute getter
     * took out rate limit in the Microblocks library, thanks, Bernat!
+    * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
@@ -45,6 +46,7 @@
 * blocks: fixed global zooming for the color slot color picker widget
 * gui: tweaked control bar layout for low screen real-estate / hi magnification situations
 * new Microblocks library w/o rate limit, thanks, Bernat!
+* new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
 
 ### 2025-12-01
 * objects: fixed an "unused blocks" glitch for tutorials
