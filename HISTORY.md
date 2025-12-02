@@ -41,6 +41,9 @@
     * German
 
 ### 2025-12-01
+* blocks: fixed global zooming for the color slot color picker widget 
+
+### 2025-12-01
 * objects: fixed an "unused blocks" glitch for tutorials
 * santa: update
 * blocks: removed "static" tag from the block-attribute getter
