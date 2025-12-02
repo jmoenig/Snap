@@ -41,7 +41,8 @@
     * German
 
 ### 2025-12-01
-* blocks: fixed global zooming for the color slot color picker widget 
+* blocks: fixed global zooming for the color slot color picker widget
+* gui: tweaked control bar layout for low screen real-estate / hi magnification situations
 
 ### 2025-12-01
 * objects: fixed an "unused blocks" glitch for tutorials

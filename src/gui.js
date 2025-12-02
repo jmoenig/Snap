@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-November-28';
+modules.gui = '2025-December-02';
 
 // Declarations
 
@@ -1535,7 +1535,18 @@ IDE_Morph.prototype.createControlBar = function () {
         steppingButton.setRight(slider.left() - padding);
 
         settingsButton.setCenter(myself.controlBar.center());
-        settingsButton.setLeft(this.left());
+        settingsButton.setLeft(
+            Math.max(
+                this.left() - 55,
+                Math.min(
+                    this.left(),
+                    steppingButton.left() -
+                        settingsButton.width() -
+                        padding -
+                        35
+                )
+            )
+        );
 
         if (myself.config.hideSettings) {
             settingsButton.hide();
@@ -2925,7 +2936,7 @@ IDE_Morph.prototype.minWidth = function () {
     // constrained by displaying all elements in the control bar
     var buttons = this.controlBar.children.filter(morph =>
             morph instanceof PushButtonMorph);
-    return this.logo.width() +
+    return this.logo.width() - 60 +
         buttons.map(each => each.width()).reduce((a, b) => a + b) +
         this.controlBar.steppingSlider.width();
 };
