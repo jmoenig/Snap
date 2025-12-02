@@ -34,6 +34,7 @@
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
     * rearranged IDE settings menu items into "looks" submenu
     * meta-programming: removed "static" tag from the block-attribute getter
+    * took out rate limit in the Microblocks library, thanks, Bernat!
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
@@ -43,6 +44,7 @@
 ### 2025-12-01
 * blocks: fixed global zooming for the color slot color picker widget
 * gui: tweaked control bar layout for low screen real-estate / hi magnification situations
+* new Microblocks library w/o rate limit, thanks, Bernat!
 
 ### 2025-12-01
 * objects: fixed an "unused blocks" glitch for tutorials
