@@ -1497,6 +1497,13 @@ Process.prototype.evaluate = function (
         }
         return this.hyperEval(context, args);
     }
+    if (context instanceof BlockMorph) {
+        return this.evaluate(
+            context.fullCopy().reify(),
+            new List(),
+            context instanceof CommandBlockMorph
+        );
+    }
     if (!(context instanceof Context)) {
         if (isCommand) {
             return this.returnValueToParentContext(null);
@@ -8548,6 +8555,8 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return expr ? !!expr.isCustomBlock : false;
     case 'global?':
         return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
+    case 'expression':
+        return expr instanceof BlockMorph ? expr.fullCopy() : '';
     case 'type':
         return ['command', 'reporter', 'predicate', 'hat'].indexOf(
             this.reportTypeOf(block)

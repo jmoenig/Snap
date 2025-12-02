@@ -2,16 +2,156 @@
 
 ## in development:
 * **New Features:**
+    * global zoom setting ("magnification"), scales everything seamlessly
+        * new interactive "Magnification" dialog in the settings menu
+        * magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
     * templates
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
         * projects based on a template let the user restore the visibility of global blocks in the template palette
-    * tutorials: open and run a scene inside a separate dialog box
-    * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
-    * TTS library: new "started speech response?" predicate
+    * tutorials
+        * open and run a scene inside a separate modeless window
+        * new "Tutorials" library for positioning and scaling the tutorial window and interacting with the editor
+        * "scn" extension category for cloned scenes and tutorials
+        * new "scn_scale(num)" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
+        * new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
+        * new "scn_position(pane, x, y)" extension, positions the tutorial dialog into the specified pane
+        * new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
+        * new "'meta_current(asset)'" extension for tutorial needing to access the IDE for the current sprite, stage, scripts, category or tab
+    * unringed blocks as data
+        * new "expression" selector in block-attribute (metaprogramming) reporter
+        * enables expressions (unringed blocks) to be CALLed and RUN
+        * enabled unringed blocks to be shown in and dragged out of speech and result balloons
+    * files
+        * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
+        * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
+* **Notable Changes:**
+    * (EDC) Fancy Text
+        * added automatic vertical scrolling to "fancy say / think" balloons
+        * added optional "max height" input to "fancy say / think" library commands
+    * speech recognition
+        * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
+        * TTS library: new "started speech response?" predicate
+    * always "normalize" SVGs on import, avoids "cut-off" costume parts
+    * rearranged IDE settings menu items into "looks" submenu
+    * meta-programming: removed "static" tag from the block-attribute getter
+    * took out rate limit in the Microblocks library, thanks, Bernat!
+    * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
+* **Notable Fixes:**
+    * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
+    * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
 * **Translation Updates:**
     * German
 
-### 2025-12-02
+### 2025-12-01
+* blocks: fixed global zooming for the color slot color picker widget
+* gui: tweaked control bar layout for low screen real-estate / hi magnification situations
+* new Microblocks library w/o rate limit, thanks, Bernat!
+* new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
+
+### 2025-12-01
+* objects: fixed an "unused blocks" glitch for tutorials
+* santa: update
+* blocks: removed "static" tag from the block-attribute getter
+
+### 2025-11-30
+* objects: fixed a draggability control glitch in speech balloons
+
+### 2025-11-29
+* santa: update
+
+### 2025-11-28
+* gui: extended magnification gestures (shift-scroll / double click) to control bar, categories and sprite bar panes
+* gui: refactored magnification gestures
+* gui: gradually zoom the stage in up to 100% when zooming out globally
+* objects: disabled data from being dragged out of tutorial speech balloons (for now)
+* objects: disabled data from being dragged out of watchers (for now)
+* objects: fixed a dev mode context menu glitch
+* objects: refactored disabling dragging data out from tutorials (not 100% but good enough for now)
+* gui: disabled pressing ESC to close a tutorial window 
+* gui: tweaked magnification when zooming out
+* gui: refactored "Looks" menu
+
+### 2025-11-27
+* gui: refined IDE layout for global magnification zoom levels
+* gui: refined IDE "Magnification" dialog for continuous scaling
+* gui: returned "magnification" item to the settings menu
+* gui: increased scroll effect for zoom-gesture (shift-scroll on logo)
+* gui: made "magnification" dialog draggable on touch devices
+
+### 2025-11-26
+* gui: tweaked global zoom mechanism
+* gui: keep dialog boxes within the world when zooming globally
+
+### 2025-11-25
+* morphic, gui: new global zoom setting in the "looks" submenu
+* gui: save and restore the user's "zoom" setting in the browser
+* gui: rearranged IDE settings menu items into "looks" submenu
+* gui: renamed "zoom" setting into "magnification"
+* German translation update for "Magnification"
+* gui: added experimental "stage scale" persistence, commented out for now
+* gui: added magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
+
+### 2025-11-22
+* gui: let tutorials disable / enable the user to drag data (and blocks) out of watchers and balloons
+
+### 2025-11-20
+* extensions: new "meta_current_scripts" extension for tutorial needing to access the IDE
+* extensions: made "dta_import(raw?)" extension interpolated
+* extensions: generalized "meta_current(asset)" extension
+* added "exit tutorial" and "current editor (asset)" blocks to the tutorials library
+* 3D Beetle extension adjustments for tutorials support, thanks, Bernat!
+
+### 2025-11-17
+* microworlds (EDC) extension: added automatic vertical scrolling to fancy speech & thought bubbles
+* microworlds (EDC) extension: added optional "max height" input to "fancy say / think" extensions
+* (EDC) Fancy Text library: added optional "max height" inputs to "fancy say / think" library blocks
+* fancy-text-morphs: fixed some syntax issues wrt semicolons (for use with JSHint)
+* fancy-text-morphs: added "jshint: esversion: 11" comment (for use with JSHint)
+* fancy-text-morphs: added "global" comment declcaration (for use with JSHint)
+* fancy-text-morphs: fixed some variable declaration / usage glitches
+* extensions: added general "dta_export(data, name, type)" extension (for csv, json, etc.)
+* extensions: added general "dta_import(raw?)" extension (for text files, csv, json etc.)
+
+### 2025-11-13
+* frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
+
+### 2025-11-09
+* gui: optimized tutorial window layout for flat mode
+* gui, widgets: optimized tutorial window layout for default mode
+
+### 2025-11-06
+* gui: exit the tutorial window when creating or opening a new project
+* gui: make sure to switch to a non-tutorial scene when launching a tutorial
+* gui, store: retain templates and tutorials when refreshing the IDE by serializing and de-serializing the project 
+
+### 2025-11-05
+* gui, extensions: prevent programmatic downscaling of the tutorial window below its minimum size
+* extensions: reverse direction of y-axis for positioning tutorial windows, make it same as the stage
+* extensions: new "scn_dimensions(pane)" extension for observing whether ide or tutorial panes have been resized
+* new "Tutorials" library for positioning and scaling the tutorial window
+* threads: new "expression" selector in block-attribute (metaprogramming) reporter
+* threads: directly apply eval() to expressions (unringed blocks), drag unringed blocks out of result balloons
+* objects: display expressions (unringed blocks) in speech balloons, allow dragging them out into the scripting area
+* German translation update for new "expression" selector ("Term") for unringed blocks 
+
+### 2025-11-04
+* extensions: new "scn" category for cloned scenes and tutorials
+* extensions: new "scn_scale([num])" extension, scales and animates a launched tutorial, reports the scale if given no number or zero
+* gui, extensions: new "scn_exit" extension, closes the tutorial dialog and redisplays the scenes in the corral
+* extensions: animate tutorial resize actions based on the (hidden) animation preference
+* extensions: new "scn_position(pane, [x, y])" extension, positions the tutorial dialog into the specified pane
+* extensions: interpolated evaluation of tutorial scaling and positioning extensions
+
+### 2025-11-03
+* gui: always normalize SVGs on import
+* gui, objects: prevent dialog boxes to be dropped onto the palette
+* morphic: cleaned up some redunancies
+* gui: added context sensitive tutorial items to the project menu's scenes group
+* gui: removed "close" button from the tutorial dialog
+* German translation update for new "Launch tutorial..." and "Exit tutorial" strings
+* gui: refactored layout of tutorial dialog
+
+### 2025-11-02
 * widgets, gui: prevent a launched tutorial stage from automatically getting keyboard focus
 * objects, gui: disable drag & drop for assets on a launched tutorial stage
 

@@ -237,6 +237,7 @@ var snapVersion = '11.1-dev',
         'libraries/strings.xml',
         'libraries/textCostumes_module.xml',
         'libraries/textformat_module.xml',
+        'libraries/tutorial_module.xml',
         'libraries/try-catch.xml',
         'libraries/variable_declaration_module.xml',
 
