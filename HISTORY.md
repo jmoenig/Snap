@@ -39,6 +39,7 @@
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
+    * fixed some special cases for using "combine" on an empty list, thanks, @rmunn!
 * **Translation Updates:**
     * German
 
@@ -47,6 +48,7 @@
 * gui: tweaked control bar layout for low screen real-estate / hi magnification situations
 * new Microblocks library w/o rate limit, thanks, Bernat!
 * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
+* fixed some nitpick special cases for using "combine" on an empty list, sigh, thanks, @rmunn!
 
 ### 2025-12-01
 * objects: fixed an "unused blocks" glitch for tutorials

@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-October-30';
+modules.threads = '2025-December-02';
 
 var ThreadManager;
 var Process;
@@ -4016,7 +4016,7 @@ Process.prototype.emptyListValueForCombine = function (selector) {
     default:
         return 0;
     }
-}
+};
 
 Process.prototype.reportPipe = function (value, reporterList) {
     // Pipe - answer an aggregation of channeling an initial value
