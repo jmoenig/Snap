@@ -14523,8 +14523,8 @@ CellMorph.prototype.createContents = function () {
             && (this.contentsMorph.list === this.contents),
         isSameTable = this.contentsMorph instanceof TableFrameMorph
             && (this.contentsMorph.tableMorph.table === this.contents),
-        draggable = this.stage?.tutorialMode ?
-            !this.stage.tutorialMode.disableDraggingData
+        draggable = this.parentThatIsA(StageMorph)?.tutorialMode ?
+            !this.parentThatIsA(StageMorph).tutorialMode.disableDraggingData
                 : !SpriteMorph.prototype.disableDraggingData;
 
     if (this.isBig) {
