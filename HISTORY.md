@@ -43,7 +43,10 @@
 * **Translation Updates:**
     * German
 
-### 2025-12-01
+### 2025-12-03
+* objects, gui: let tutorials manage data draggability through their scene setting
+
+### 2025-12-02
 * blocks: fixed global zooming for the color slot color picker widget
 * gui: tweaked control bar layout for low screen real-estate / hi magnification situations
 * new Microblocks library w/o rate limit, thanks, Bernat!

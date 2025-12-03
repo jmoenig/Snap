@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-01';
+modules.objects = '2025-December-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -10067,7 +10067,7 @@ StageMorph.prototype.init = function (globals) {
     this.messageCallbacks = {}; // name : [functions]
 
     // Tutorial scenes, transient
-    this.tutorialMode = false;
+    this.tutorialMode = null; // or a scene back-pointer
 
     StageMorph.uber.init.call(this);
 
@@ -12757,7 +12757,9 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         sprite = SpriteMorph.prototype,
         maxHeight = (this.stage?.dimensions?.y || 360) * this.scale -
             (this.border + this.padding + 1) * 2,
-        isInTutorial = this.stage?.tutorialMode,
+        draggable = this.stage?.tutorialMode ?
+            !this.stage.tutorialMode.disableDraggingData
+                : !sprite.disableDraggingData,
         isText,
         img,
         scaledImg,
@@ -12781,8 +12783,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.cachedImage = img;
 
         // support blocks to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData && !isInTutorial;
-
+        contents.isDraggable = draggable;
         contents.selectForEdit = function () {
             var script = data.fullCopy(),
                 prepare = script.prepareToBeGrabbed,
@@ -12870,8 +12871,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.cachedImage = img;
 
         // support costumes to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData && !isInTutorial;
-
+        contents.isDraggable = draggable;
         contents.selectForEdit = function () {
             var cst = data.copy(),
                 icon,
@@ -12925,8 +12925,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents = new SymbolMorph('notes', 30);
 
         // support sounds to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData && !isInTutorial;
-
+        contents.isDraggable = draggable;
         contents.selectForEdit = function () {
             var snd = data.copy(),
                 icon,
@@ -12991,7 +12990,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             }
         }
         contents.isDraggable = false;
-        if (isInTutorial) {
+        if (!draggable) {
             contents.forAllChildren(morph => {
                 morph.isDraggable = false;
                 morph.selectForEdit = nop;
@@ -13015,8 +13014,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         };
 
         // support blocks to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData && !isInTutorial;
-
+        contents.isDraggable = draggable;
         contents.selectForEdit = function () {
             var script = data.toUserBlock(),
                 prepare = script.prepareToBeGrabbed,
@@ -14525,7 +14523,9 @@ CellMorph.prototype.createContents = function () {
             && (this.contentsMorph.list === this.contents),
         isSameTable = this.contentsMorph instanceof TableFrameMorph
             && (this.contentsMorph.tableMorph.table === this.contents),
-        isInTutorial = this.parentThatIsA(StageMorph)?.tutorialMode;
+        draggable = this.stage?.tutorialMode ?
+            !this.stage.tutorialMode.disableDraggingData
+                : !SpriteMorph.prototype.disableDraggingData;
 
     if (this.isBig) {
         fontSize = fontSize * 1.5;
@@ -14592,9 +14592,7 @@ CellMorph.prototype.createContents = function () {
             this.version = this.contents.version;
 
             // support blocks to be dragged out of watchers:
-            this.contentsMorph.isDraggable =
-                !SpriteMorph.prototype.disableDraggingData && !isInTutorial;
-
+            this.contentsMorph.isDraggable = draggable;
             this.contentsMorph.selectForEdit = function () {
                 var script = myself.contents.toUserBlock(),
                     prepare = script.prepareToBeGrabbed,
@@ -14623,9 +14621,7 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.cachedImage = img;
 
             // support costumes to be dragged out of watchers:
-            this.contentsMorph.isDraggable =
-                !SpriteMorph.prototype.disableDraggingData && !isInTutorial;
-
+            this.contentsMorph.isDraggable = draggable;
             this.contentsMorph.selectForEdit = function () {
                 var cst = myself.contents.copy(),
                     icon,
@@ -14653,9 +14649,7 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph = new SymbolMorph('notes', 30);
 
             // support sounds to be dragged out of watchers:
-            this.contentsMorph.isDraggable =
-                !SpriteMorph.prototype.disableDraggingData && !isInTutorial;
-
+            this.contentsMorph.isDraggable = draggable;
             this.contentsMorph.selectForEdit = function () {
                 var snd = myself.contents.copy(),
                     icon,
@@ -14705,7 +14699,7 @@ CellMorph.prototype.createContents = function () {
                 }
             }
             this.contentsMorph.isDraggable = false;
-            if (isInTutorial) {
+            if (!draggable) {
                 this.contentsMorph.forAllChildren(morph =>
                     morph.isDraggable = false);
             }
