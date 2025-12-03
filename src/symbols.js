@@ -624,10 +624,6 @@ SymbolMorph.prototype.horiz = new Image();
 SymbolMorph.prototype.horiz.src = "src/horiz.svg";
 SymbolMorph.prototype.horizBlack = new Image();
 SymbolMorph.prototype.horizBlack.src = "src/horiz-black.svg";
-SymbolMorph.prototype.vertical = new Image();
-SymbolMorph.prototype.vertical.src = "src/vertical.svg";
-SymbolMorph.prototype.verticalBlack = new Image();
-SymbolMorph.prototype.verticalBlack.src = "src/vertical-black.svg";
 
 SymbolMorph.prototype.renderSymbolStop = function (ctx, color) {
   // draw a vertically centered square
@@ -873,7 +869,10 @@ SymbolMorph.prototype.renderSymbolFullScreen = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolGrow = function (ctx, color) {
   if(this.isAnyUIColor(color)) {
-    return this.drawImage(ctx, this[this.isUIColor(color) ? "growGrey" : color.eq(BLACK) ? "growBlack" : "grow"])
+    var img = this[this.isUIColor(color) ? "growGrey" : color.eq(BLACK) ? "growBlack" : "grow"];
+    
+    this.drawImage(ctx, img)
+    return;
   }
   var h = this.size,
     width = this.symbolWidth(),
@@ -2367,7 +2366,10 @@ SymbolMorph.prototype.renderSymbolVerticalEllipsis = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
   if(color.eq(WHITE) || color.eq(BLACK)) {
-    return this.drawImage(ctx, color.eq(WHITE) ? this.horiz : this.horizBlack)
+    var canvas = newCanvas(new Point(this.width(), this.height()));
+    this.drawImage(canvas.getContext('2d'), color.eq(WHITE) ? this.horiz : this.horizBlack);
+    ctx.drawImage(canvas, 0, 0, this.width(), this.height());
+    return
   }
   var w = this.symbolWidth(),
     h = this.size,
@@ -2396,7 +2398,7 @@ SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolFlipVertical = function (ctx, color) {
   ctx.translate(0, this.size);
-  ctx.rotate(radians(90));
+  ctx.rotate(radians(-90));
   this.renderSymbolFlipHorizontal(ctx, color);
 };
 
