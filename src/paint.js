@@ -284,7 +284,67 @@ PaintEditorMorph.prototype.buildScaleBox = function () {
     ));
     this.scaleBox.fixLayout();
 };
+PaintEditorMorph.prototype.processKeyEvent = function (event, action) {
+  var keyName, ctrl, shift;
 
+  //console.log(event.keyCode);
+  this.world().hand.destroyTemporaries(); // remove result bubbles, if any
+  switch (event.keyCode) {
+    case 8:
+      keyName = "backspace";
+      break;
+    case 9:
+      keyName = "tab";
+      break;
+    case 13:
+      keyName = "enter";
+      break;
+    case 16:
+    case 17:
+    case 18:
+      return;
+    case 27:
+      keyName = "esc";
+      break;
+    case 32:
+      keyName = "space";
+      break;
+    case 37:
+      keyName = "left arrow";
+      break;
+    case 39:
+      keyName = "right arrow";
+      break;
+    case 38:
+      keyName = "up arrow";
+      break;
+    case 40:
+      keyName = "down arrow";
+      break;
+    default:
+      keyName = String.fromCharCode(event.keyCode || event.charCode);
+  }
+  ctrl = event.ctrlKey || event.metaKey ? "ctrl " : "";
+  shift = event.shiftKey ? "shift " : "";
+  keyName = ctrl + shift + keyName;
+  action.call(this, keyName);
+};
+PaintEditorMorph.prototype.reactToKeyEvent = function (key) {
+  var evt = key.toLowerCase(),
+    shift = 50,
+    types,
+    vNames;
+
+  console.log(evt);
+  switch (evt) {
+    case "ctrl z":
+      return this.paper.undo();
+    case "ctrl [": // ignore the first press of the Mac cmd key
+      return;
+    default:
+      return nop();
+  }
+};
 PaintEditorMorph.prototype.openIn = function (
 	world,
     oldim,
@@ -305,10 +365,12 @@ PaintEditorMorph.prototype.openIn = function (
         myself.propertiesControls.constrain.refresh();
     };
 
-    this.processKeyDown = function () {
+    this.processKeyDown = function (event) {
         myself.shift = myself.world().currentKey === 16;
         myself.propertiesControls.constrain.refresh();
+        myself.processKeyEvent(event, myself.reactToKeyEvent);
     };
+    
     //merge oldim:
     if (this.oldim) {
         this.paper.automaticCrosshairs = isNil(oldrc);

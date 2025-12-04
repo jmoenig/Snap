@@ -14563,6 +14563,22 @@ ReporterBubbleMorph.prototype.outlinePath = function (ctx, radius, inset) {
     }
   }
 };
+
+ReporterBubbleMorph.prototype.popUp = function (world, pos, isClickable) {
+  this.fixLayout();
+  this.setPosition(pos.subtract(new Point(0, this.height())));
+  this.keepWithin(world);
+  world.add(this);
+  this.fullChanged();
+  world.hand.destroyTemporaries();
+  world.hand.temporaries.push(this);
+
+  if (!isClickable) {
+    this.mouseEnter = this.destroy;
+  } else {
+    this.isClickable = true;
+  }
+};
 // MultiArgMorph ///////////////////////////////////////////////////////
 
 /*
