@@ -5767,6 +5767,8 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nJoe Otto: Morphic Testing and Debugging'
         + '\nalessandrito123: Right Click Color Picker'
         + '\ntethrarxitet: Personal Libraries mod'
+        + '\nowlssss/TheOwlCoder: Vertical Categories and Cat blocks'
+        + '\njoecooldoo/joenulldoo: Auto-default Single Palette'
         + '\n\n'
         + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes'
         + '\nare watercolor paintings by Meghan Taylor and represent'
