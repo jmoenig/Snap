@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-03';
+modules.objects = '2025-December-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -3181,6 +3181,10 @@ SpriteMorph.prototype.init = function (globals) {
     this.motionDirection = 0;
     this.frameNumber = 0;
 
+    // support for drawing on sprites
+    this.sheet = null; // a sprite - do not serialize
+    this.trailsCache = null; // a temporary costume - do not serialize
+
     SpriteMorph.uber.init.call(this);
 
     this.isFreeForm = true;
@@ -5443,10 +5447,14 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
     }
 };
 
-SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
+SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow, keepCache) {
     var w = 0,
         h = 0,
         stage;
+        
+    if (!keepCache) {
+        this.trailsCache = null;
+    }
     if (id instanceof List) { // try to turn a list of pixels into a costume
         if (id.quickShape().at(2) <= 4) {
             if (this.costume) {
@@ -7408,6 +7416,65 @@ SpriteMorph.prototype.justDropped = function () {
 // SpriteMorph drawing:
 
 SpriteMorph.prototype.drawLine = function (start, dest) {
+    if (isSnapObject(this.sheet)) {
+        this.drawLineOn(this.sheet, start, dest);
+    } else {
+        this.drawPenTrailsLine(start, dest);
+    }
+};
+
+SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
+    var targetCostume,
+        p1, p2,
+        ctx;
+
+    // only draw if the pen is down,
+    // prevent drawing an object onto itself
+    if (!this.isDown || this === target) {return; }
+
+    // check if target has a costumes,
+    // rasterize copy of target costume if it's an SVG
+    // cache the costume copy for later reuse
+    if (target.costume) {
+        if (target.trailsCache) {
+            targetCostume = target.trailsCache;
+        } else {
+            if (target.costume instanceof SVG_Costume) {
+                targetCostume = target.costume.rasterized();
+            } else {
+                targetCostume = target.costume.copy();
+            }
+            target.trailsCache = targetCostume;
+        }
+    } else {
+        return;
+    }
+
+    p1 = target.costumePoint(start);
+    p2 = target.costumePoint(dest);
+
+    // draw the line onto the target's costume copy:
+    ctx = targetCostume.contents.getContext('2d');
+    ctx.lineWidth = this.size / target.scale;
+    ctx.strokeStyle = this.color.toString();
+    if (this.useFlatLineEnds) {
+        ctx.lineCap = 'butt';
+        ctx.lineJoin = 'miter';
+    } else {
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    }
+    ctx.globalCompositeOperation = 'source-atop';
+                ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+
+    // wear & cache the changed costume
+    target.doSwitchToCostume(targetCostume, null, true); // keep cache
+};
+
+SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
     var stagePos = this.parent.bounds.origin,
         stageScale = this.parent.scale,
         context = this.parent.penTrails().getContext('2d'),
@@ -7886,6 +7953,26 @@ SpriteMorph.prototype.worldPoint = function(aSnapPoint) {
     return this.normalizePoint(aSnapPoint)
         .multiplyBy(stage.scale)
         .translateBy(stage.center());
+};
+
+SpriteMorph.prototype.costumePoint = function(aPoint) {
+    // answer the coordinates of the given world point on the current
+    // costume's pixel bitmap, if any
+    var stage = this.parentThatIsA(StageMorph),
+        flipY = new Point(1, -1),
+        stagePoint, normalized, offset, unrotated;
+    if (!this.costume || !stage) {
+        return new Point();
+    }
+    stagePoint = this.snapPoint(aPoint).multiplyBy(flipY).divideBy(this.scale);
+    normalized = stagePoint.add(this.costume.extent().divideBy(2));
+    offset = stage.center().subtract(this.rotationCenter())
+        .divideBy(stage.scale * this.scale);
+    unrotated = normalized.add(offset);
+    return unrotated.rotateBy(
+        radians(this.heading - 90),
+        this.costume.rotationCenter
+    );
 };
 
 SpriteMorph.prototype.normalizePoint = function (snapPoint) {
