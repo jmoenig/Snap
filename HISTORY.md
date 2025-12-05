@@ -22,6 +22,7 @@
         * enables expressions (unringed blocks) to be CALLed and RUN
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
     * drawing on sprites
+        * new "pen_drawOn([sprite])" extension, experimental & temporary
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
@@ -46,6 +47,7 @@
 
 ### 2025-12-05
 * objects: support drawing on sprites
+* extensions: new "pen_drawOn([sprite])" extension, experimental & temporary
 
 ### 2025-12-03
 * objects, gui: let tutorials manage data draggability through their scene setting
