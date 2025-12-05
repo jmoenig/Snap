@@ -5374,11 +5374,14 @@ SpriteMorph.prototype.addCostume = function (costume) {
     );
 };
 
-SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
+SpriteMorph.prototype.wearCostume = function (costume, noShadow, keepCache) {
     var x = this.xPosition ? this.xPosition() : null,
         y = this.yPosition ? this.yPosition() : null,
         idx = isNil(costume) ? null : this.costumes.asArray().indexOf(costume);
 
+    if (!keepCache) {
+        this.trailsCache = null;
+    }
     this.changed();
     this.costume = costume;
     this.fixLayout();
@@ -5452,9 +5455,6 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow, keepCache) {
         h = 0,
         stage;
         
-    if (!keepCache) {
-        this.trailsCache = null;
-    }
     if (id instanceof List) { // try to turn a list of pixels into a costume
         if (id.quickShape().at(2) <= 4) {
             if (this.costume) {
@@ -5509,7 +5509,7 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow, keepCache) {
             }
         }
     }
-    this.wearCostume(costume, noShadow);
+    this.wearCostume(costume, noShadow, keepCache);
 };
 
 SpriteMorph.prototype.reportCostumes = function () {
