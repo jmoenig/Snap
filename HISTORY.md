@@ -45,6 +45,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-06
+* objects: only draw on a sprites if the pen is currently not being dragged
+
 ### 2025-12-05
 * objects: support drawing on sprites
 * extensions: new "pen_drawOn([sprite])" extension, experimental & temporary

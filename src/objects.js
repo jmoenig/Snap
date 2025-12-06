@@ -92,11 +92,11 @@ localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
 embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals, display,
-CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
+CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-05';
+modules.objects = '2025-December-06';
 
 var SpriteMorph;
 var StageMorph;
@@ -7428,9 +7428,11 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
         p1, p2,
         ctx;
 
-    // only draw if the pen is down,
+    // only draw if the pen is down and not currently being dragged
     // prevent drawing an object onto itself
-    if (!this.isDown || this === target) {return; }
+    if (!this.isDown || this === target || this.parentThatIsA(HandMorph)) {
+        return;
+    }
 
     // check if target has a costumes,
     // rasterize copy of target costume if it's an SVG
