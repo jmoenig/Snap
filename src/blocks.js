@@ -11038,15 +11038,8 @@ CSlotMorph.prototype.outlinePath = function (ctx, inset, offset) {
   var block = this.nestedBlock(),
     flatEdge = true;
   if (!isNil(block)) {
-    /*while (!isNil(block) && !(block.isUnattached())) {
-    if(isNil(block) || (block.isUnattached())) {
-      flatEdge = false
-      break
-    } else {
-      block = block.nextBlock()
-    }
-  }
-    */
+    // new fix
+    if (block.bottomBlock().isStop()) flatEdge = false;
   }
   if (flatEdge) {
     ctx.save();

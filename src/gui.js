@@ -96,7 +96,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.1.3';
+var SplitVersion = '1.1.4';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5769,6 +5769,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ntethrarxitet: Personal Libraries mod'
         + '\nowlssss/TheOwlCoder: Vertical Categories and Cat blocks'
         + '\njoecooldoo/joenulldoo: Auto-default Single Palette'
+        + '\ngamercreepernoob: Flat CSlots'
         + '\n\n'
         + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes'
         + '\nare watercolor paintings by Meghan Taylor and represent'
