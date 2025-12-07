@@ -165,7 +165,7 @@ EarsMorph.prototype.render = function (ctx) {
     // Cat face
     function drawCatEyes() {
       xOffset = 23;
-      yOffset = 20;
+      yOffset = 21;
       if(prototypeHat) {
         yOffset += 5;
       }
@@ -176,7 +176,7 @@ EarsMorph.prototype.render = function (ctx) {
 
     function drawCatMouth() {
       xOffset -= 1;
-      yOffset -= 4;
+      yOffset -= 3;
       ctx.beginPath();
       ctx.moveTo(sx(45.6), sy(0.1));
       ctx.bezierCurveTo(
@@ -457,7 +457,7 @@ EarsMorph.prototype.render = function (ctx) {
     ctx.fill();
 
     xOffset = -6;
-    yOffset = 25;
+    yOffset = prototypeHat ? 30 : 25;
     drawCatMouth();
     ctx.closePath();
     ctx.fill();
