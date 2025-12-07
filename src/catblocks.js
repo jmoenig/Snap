@@ -64,7 +64,7 @@ EarsMorph.prototype.render = function (ctx) {
   ctx.fillStyle = this.parent.color;
   if (HatBlockMorph.prototype.isCatBlocks) {
     let xOffset = 2,
-      yOffset = -6 + this.parent.flatEdge;
+      yOffset = -5 + this.parent.flatEdge;
     if (prototypeHat) {
       // If I am a block definition hat
       yOffset += 10;
