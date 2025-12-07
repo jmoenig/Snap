@@ -151,7 +151,6 @@ SpriteMorph.prototype.categories = [
   "motion",
   "looks",
   "sound",
-  "pen",
   "events",
   "control",
   "sensing",
@@ -159,6 +158,7 @@ SpriteMorph.prototype.categories = [
   "variables",
   "lists",
   "other",
+  "pen",
   "my blocks",
 ];
 

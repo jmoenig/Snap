@@ -2566,7 +2566,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   // center text in ReporterBlockMorph
 
   lines.forEach((line) => {
-    if (line.length === 1 && isReporter){
+    if (((line.length == 2 && line[0].isBlockLabelBreak) || line.length === 1) && isReporter){
       line[0].moveBy(new Point(Math.floor(blockWidth - line[0].width()) / 2 - (line[0].left() - this.left()),0));
     }
   })
