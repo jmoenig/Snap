@@ -2850,7 +2850,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     // shorten the string, commented out because we now scroll it
     // txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
     txt = value;
-    txt = !(value instanceof Function || value instanceof Array) && contains(["BigInteger", "Fraction", "Complex", "Real", "ExactReal", "ExactRational", "ExactInteger"], value.constructor.name)(value instanceof Object ) ? ((x)=>{try {
+    txt = !(value instanceof Function || value instanceof Array) && !contains(["BigInteger", "Fraction", "Complex", "Real", "ExactReal", "ExactRational", "ExactInteger"], value.constructor.name) && (value instanceof Object ) ? ((x)=>{try {
       return JSON.stringify(x)
     } catch (error) {
       return display(x)
@@ -2858,7 +2858,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     
     
     maxHeight = ide.height() / 2;
-    morphToShow = new TextMorph(value, this.fontSize);
+    morphToShow = new TextMorph(txt, this.fontSize);
     if (value instanceof Function || value instanceof Array || value instanceof Object) {
       morphToShow.fontName = "monospace";
       morphToShow.fontStyle = "monospace";
