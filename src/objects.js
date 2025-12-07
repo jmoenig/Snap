@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-06';
+modules.objects = '2025-December-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -6733,15 +6733,21 @@ SpriteMorph.prototype.blitOn = function (target, mask = 'source-atop') {
 
     // check if both source and target have costumes,
     // rasterize copy of target costume if it's an SVG
+    // cache the costume copy for later reuse
     if (this.costume && target.costume) {
         sourceCostume = this.costume;
         if (sourceCostume instanceof SVG_Costume) {
             sourceCostume = sourceCostume.rasterized();
         }
-        if (target.costume instanceof SVG_Costume) {
-            targetCostume = target.costume.rasterized();
+        if (target.trailsCache) {
+            targetCostume = target.trailsCache;
         } else {
-            targetCostume = target.costume.copy();
+            if (target.costume instanceof SVG_Costume) {
+                targetCostume = target.costume.rasterized();
+            } else {
+                targetCostume = target.costume.copy();
+            }
+            target.trailsCache = targetCostume;
         }
     } else {
         return;

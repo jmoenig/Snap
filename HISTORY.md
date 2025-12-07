@@ -45,6 +45,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-07
+* objects: use trailsCache optimization developed from drawing on other sprites also for "paste on" and "cut from" primitives
+
 ### 2025-12-06
 * objects: only draw on a sprites if the pen is currently not being dragged
 
