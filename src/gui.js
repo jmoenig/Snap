@@ -127,7 +127,7 @@ IDE_Morph.uber = Morph.prototype;
 // IDE_Morph preferences settings and skins
 
 IDE_Morph.prototype.isBright = false;
-IDE_Morph.prototype.accentColor = new Color(183, 255, 67);
+IDE_Morph.prototype.accentColor = new Color(133, 92, 214);
 
 IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
     MorphicPreferences.isFlat = false;
@@ -1012,6 +1012,7 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
         this.categories.hide();
         this.palette.hide();
         this.paletteHandle.hide();
+        this.extensionButton.hide()
     }
 };
 
@@ -1673,13 +1674,19 @@ IDE_Morph.prototype.createCategories = function () {
     }
     this.categories = new ScrollFrameMorph();
     this.categories.color = this.groupColor;
+    this.extensionButton = new Morph();
+    this.extensionButton.color = this.accentColor;
+    const symb = new SymbolMorph('extension', 34);
+    symb.setLeft(13)
+    symb.setTop(7)
+    this.extensionButton.add(symb)
     
     this.catWidth = 62;
     this.categories.acceptsDrops = false;
         this.categories.contents.acceptsDrops = false;
     // this.categories.bounds.setWidth(this.paletteWidth);
     this.categories.bounds.setWidth(this.catWidth);
-    this.categories.bounds.setHeight(world.height())
+    this.categories.bounds.setHeight(world.height() - this.extensionButton.height())
     // console.log(this.paletteWidth)
     this.categories.buttons = [];
     this.categories.isVisible = flag;
@@ -1871,6 +1878,7 @@ IDE_Morph.prototype.createCategories = function () {
 
     fixCategoriesLayout();
     this.add(this.categories);
+    this.add(this.extensionButton)
 };
 
 IDE_Morph.prototype.createPalette = function (forSearching) {
@@ -2710,8 +2718,25 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.categories.setTop(
             57//this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
         );
+        this.extensionButton.setTop(world.bottom() - 52)
+        this.extensionButton.setHeight(52)
+        globalThis["showExtensions"] = () => {
+            if (location.protocol === 'file:') {
+                this.importLocalFile();
+                return;
+            }
+            this.getURL(
+                this.resourceURL('libraries', 'LIBRARIES.json'),
+                txt => {
+                    var libraries = this.parseResourceFile(txt);
+                    new LibraryImportDialogMorph(this, libraries).popUp();
+                }
+            );
+        }
+        this.extensionButton.mouseDownLeft = showExtensions
         this.categories.setWidth(this.catWidth);
-        this.categories.bounds.corner.y = this.bottom()
+        this.extensionButton.setWidth(this.catWidth);
+        this.categories.bounds.corner.y = this.bottom() - this.extensionButton.height();
         if (this.categories.scroller) {
             this.categories.scroller.setWidth(this.paletteWidth);
         }
@@ -5312,19 +5337,7 @@ IDE_Morph.prototype.projectMenu = function () {
     }
     menu.addItem(
         'Extensions...',
-        () => {
-            if (location.protocol === 'file:') {
-                this.importLocalFile();
-                return;
-            }
-            this.getURL(
-                this.resourceURL('libraries', 'LIBRARIES.json'),
-                txt => {
-                    var libraries = this.parseResourceFile(txt);
-                    new LibraryImportDialogMorph(this, libraries).popUp();
-                }
-            );
-        },
+        showExtensions,
         'Select categories of additional blocks to add to this project.'
     );
     menu.addItem(
@@ -5769,7 +5782,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\ntethrarxitet: Personal Libraries mod'
         + '\nowlssss/TheOwlCoder: Vertical Categories and Cat blocks'
         + '\njoecooldoo/joenulldoo: Auto-default Single Palette'
-        + '\ngamercreepernoob: Flat CSlots'
+        
         + '\n\n'
         + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes'
         + '\nare watercolor paintings by Meghan Taylor and represent'

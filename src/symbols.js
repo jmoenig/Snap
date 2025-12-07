@@ -152,6 +152,7 @@ SymbolMorph.prototype.names = [
   "cube",
   "cubeSolid",
   "infinity",
+  "extension"
 ];
 
 // SymbolMorph instance creation:
@@ -317,6 +318,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
       break;
     case "octagon":
       this.renderSymbolOctagon(ctx, aColor);
+      break;
+    case "extension":
+      this.renderSymbolExtension(ctx, aColor);
       break;
     case "cloud":
       this.renderSymbolCloud(ctx, aColor);
@@ -530,6 +534,8 @@ SymbolMorph.prototype.symbolWidth = function () {
   var size = this.size;
 
   switch (this.name) {
+    case "extension":
+      return size;
     case "pointRight":
       return Math.sqrt(size * size - Math.pow(size / 2, 2));
     case "verticalEllipsis":
@@ -577,6 +583,8 @@ SymbolMorph.prototype.flagSymbolRed = new Image();
 SymbolMorph.prototype.flagSymbolRed.src = "src/flag-red.svg";
 SymbolMorph.prototype.stopSymbol = new Image();
 SymbolMorph.prototype.stopSymbol.src = "src/stop.svg";
+SymbolMorph.prototype.extensionSymbol = new Image();
+SymbolMorph.prototype.extensionSymbol.src = "src/extensions.svg";
 SymbolMorph.prototype.notesImage = new Image();
 SymbolMorph.prototype.notesImage.src = "src/notes.svg";
 SymbolMorph.prototype.notesImageBlack = new Image();
@@ -1081,6 +1089,7 @@ SymbolMorph.prototype.drawImage = function (ctx, image) {
     return;
   }
   // I have a feeling that this might be turning into spagetti code...
+  // "Indeed it is" - TheOwlCoder
   var prW =
       document.getElementById("world").getAttribute("width") / document.getElementById("world").width,
       prH =
@@ -2581,6 +2590,14 @@ SymbolMorph.prototype.renderSymbolInfinity = function (ctx, color) {
   ctx.arc(r * 3 - l, r, r - l / 2, radians(-120), radians(180), false);
   ctx.stroke();
 };
+
+SymbolMorph.prototype.renderSymbolExtension = function (ctx, color) {
+  var side = this.symbolWidth(),
+    vert = (side - side * 0.383) / 2;
+  this.drawImage(ctx, this.extensionSymbol);
+
+  return;
+}
 
 /*
 // register examples with the World demo menu
