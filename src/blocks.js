@@ -2244,6 +2244,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     pos = this.position(),
     x = 0,
     y,
+    isReporter = this instanceof ReporterBlockMorph,
     lineHeight = 0,
     maxX = 0,
     blockWidth = this.minWidth,
@@ -2264,7 +2265,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
 
   if (this instanceof MultiArgMorph && this.slotSpec !== "%cs") {
     blockWidth += this.arrows().width();
-  } else if (this instanceof ReporterBlockMorph) {
+  } else if (isReporter) {
     blockWidth += this.rounding * 2 + this.edge * 2;
   } else {
     blockWidth +=
@@ -2327,7 +2328,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     if (this instanceof HatBlockMorph) {
       y += this.hatHeight;
     }
-  } else if (this instanceof ReporterBlockMorph) {
+  } else if (isReporter) {
     y = this.top() + this.edge * 2;
   } else if (this instanceof MultiArgMorph || this instanceof ArgLabelMorph) {
     y = this.top();
@@ -2359,7 +2360,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
     } else if (this instanceof MultiArgMorph || this instanceof ArgLabelMorph) {
       x = this.left();
     } else if (
-      this instanceof ReporterBlockMorph &&
+      isReporter &&
       line[0] instanceof BlockLabelMorph
     ) {
       
@@ -2492,7 +2493,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
         }
       }
     }
-    if (this instanceof ReporterBlockMorph && !this.isPredicate) {
+    if (isReporter && !this.isPredicate) {
       bottomCorrection = Math.max(
         this.bottomPadding,
         this.rounding - this.bottomPadding
@@ -2502,7 +2503,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   }
   if (this instanceof CommandBlockMorph) {
     blockHeight = y - this.top() + this.corner * 2;
-  } else if (this instanceof ReporterBlockMorph) {
+  } else if (isReporter) {
     blockHeight = y - this.top() + this.edge * 2;
   } else if (this instanceof MultiArgMorph || this instanceof ArgLabelMorph) {
     blockHeight = y - this.top();
@@ -2537,13 +2538,13 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   // adjust right padding if rightmost input in a reporter is round
   if (
     (rightMost instanceof InputSlotMorph && (!rightMost?.isSquare())) &&
-    this instanceof ReporterBlockMorph &&
+    isReporter &&
     lines.length === 1
   ) {
     blockWidth -= this.labelPadding / 2;
   }
   if(rightMost instanceof BooleanSlotMorph &&
-    this instanceof ReporterBlockMorph &&
+    isReporter &&
     lines.length === 1) {
       blockWidth -= this.labelPadding * 1.5
   }
@@ -2561,6 +2562,16 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   ) {
     blockWidth = Math.max(blockWidth, 89 * this.scale);
   }
+
+  // center text in ReporterBlockMorph
+
+  lines.forEach((line) => {
+    if (line.length === 1 && isReporter){
+      line[0].moveBy(new Point(Math.floor(blockWidth - line[0].width()) / 2 - (line[0].left() - this.left()),0));
+    }
+  })
+
+
   // set my extent (silently, because we'll redraw later anyway):
   this.bounds.setWidth(blockWidth);
   this.bounds.setHeight(
@@ -13264,8 +13275,8 @@ TemplateSlotMorph.prototype.evaluate = function () {
 
 TemplateSlotMorph.prototype.fixLayout = function () {
   var template = this.template();
-  this.bounds.setExtent(template.extent().add(this.edge * 2 + 3));
-  template.setPosition(this.position().add(this.edge + 1.5));
+  this.bounds.setExtent(template.extent().add(this.edge * 4));
+  template.setPosition(this.position().add(this.edge * 2));
   if (this.parent) {
     if (this.parent.fixLayout) {
       this.parent.fixLayout();
@@ -13593,7 +13604,7 @@ BooleanSlotMorph.prototype.fixLayout = function () {
   if (this.isWide()) {
     text = this.textLabelExtent();
     h = text.y + this.edge * 3;
-    this.bounds.setWidth(text.x + h * 1.5 + this.edge * 2);
+    this.bounds.setWidth(text.x + h * 1 + this.edge * 2);
     this.bounds.setHeight(this.fontSize * 1.3 + this.edge * 7);
   } else {
     this.bounds.setWidth((this.fontSize + this.edge * 3) * 2.2);

@@ -171,7 +171,7 @@ EarsMorph.prototype.render = function (ctx) {
       }
       ctx.beginPath();
       ctx.arc(sx(-2), sy(-2), zy(-1.5), 0, Math.PI * 2);
-      ctx.arc(sx(25), sy(-2), zy(-1.5), 0, Math.PI * 2);
+      ctx.arc(sx(23), sy(-2), zy(-1.5), 0, Math.PI * 2);
     }
 
     function drawCatMouth() {
@@ -456,7 +456,7 @@ EarsMorph.prototype.render = function (ctx) {
     ctx.closePath();
     ctx.fill();
 
-    xOffset = -6;
+    xOffset = -8;
     yOffset = prototypeHat ? 30 : 25;
     drawCatMouth();
     ctx.closePath();
