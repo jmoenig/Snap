@@ -5333,9 +5333,9 @@ IDE_Morph.prototype.projectMenu = function () {
         }
         menu.addPair('New scene', 'createNewScene');
         menu.addPair('Add scene...', 'addScene');
-        menu.addLine();
+        //menu.addLine();
     }
-    menu.addItem(
+    /*menu.addItem(
         'Extensions...',
         showExtensions,
         'Select categories of additional blocks to add to this project.'
@@ -5361,7 +5361,7 @@ IDE_Morph.prototype.projectMenu = function () {
             this.importMedia('Sounds');
         },
         'Select a sound from the media library'
-    );
+    );*/
 
     if (this.scene.trash.length) {
         menu.addLine();
@@ -12149,6 +12149,7 @@ WardrobeMorph.prototype.updateList = function () {
         oldPos = this.contents.position(),
         icon,
         txt,
+        newbutton,
         paintbutton,
         cambutton;
 
@@ -12166,6 +12167,37 @@ WardrobeMorph.prototype.updateList = function () {
     icon.setPosition(new Point(x, y));
     this.addContents(icon);
     y = icon.bottom() + padding;
+
+    newbutton = new PushButtonMorph(
+        this,
+        ()=>{
+            const ide = this.parentThatIsA(IDE_Morph);
+        if (location.protocol === 'file:') {
+            this.importLocalFile();
+            return;
+        }
+        ide.importMedia(ide.currentSprite instanceof SpriteMorph ?
+            'Costumes' : 'Backgrounds');
+        },
+        new SymbolMorph("cross", 15)
+    );
+    newbutton.padding = 0;
+    newbutton.corner = 4;
+    newbutton.color = IDE_Morph.prototype.groupColor;
+    newbutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    newbutton.pressColor = newbutton.highlightColor;
+    newbutton.labelMinExtent = new Point(36, 18);
+    newbutton.labelShadowOffset = new Point(-1, -1);
+    newbutton.labelShadowColor = newbutton.highlightColor;
+    newbutton.labelColor = TurtleIconMorph.prototype.labelColor;
+    newbutton.contrast = this.buttonContrast;
+    newbutton.hint = "new a new costume";
+    newbutton.setPosition(new Point(x, y));
+    newbutton.fixLayout();
+    newbutton.setCenter(icon.center());
+    newbutton.setLeft(icon.right() + padding * 4);
+
+    this.addContents(newbutton);
 
     paintbutton = new PushButtonMorph(
         this,
@@ -12186,7 +12218,7 @@ WardrobeMorph.prototype.updateList = function () {
     paintbutton.setPosition(new Point(x, y));
     paintbutton.fixLayout();
     paintbutton.setCenter(icon.center());
-    paintbutton.setLeft(icon.right() + padding * 4);
+    paintbutton.setLeft(newbutton.right() + toolsPadding);
 
     this.addContents(paintbutton);
 
@@ -12641,6 +12673,7 @@ JukeboxMorph.prototype.updateList = function () {
         icon,
         txt,
         ide = this.sprite.parentThatIsA(IDE_Morph),
+        newButton,
         recordButton;
 
     this.changed();
@@ -12658,12 +12691,38 @@ JukeboxMorph.prototype.updateList = function () {
     txt.setColor(SpriteMorph.prototype.paletteTextColor);
     txt.setPosition(new Point(x, y));
     this.addContents(txt);
-
+    newButton = new PushButtonMorph(
+        ide,
+        ()=>{
+        if (location.protocol === 'file:') {
+            this.importLocalFile();
+            return;
+        }
+        ide.importMedia('Sounds');
+        },
+        new SymbolMorph('cross', 15))
+    
     recordButton = new PushButtonMorph(
         ide,
         'recordNewSound',
         new SymbolMorph('circleSolid', 15)
     );
+newButton.padding = 0;
+    newButton.corner = 4;
+    newButton.color = IDE_Morph.prototype.groupColor;
+    newButton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    newButton.pressColor = newButton.highlightColor;
+    newButton.labelMinExtent = new Point(36, 18);
+    newButton.labelShadowOffset = new Point(-1, -1);
+    newButton.labelShadowColor = newButton.highlightColor;
+    newButton.labelColor = TurtleIconMorph.prototype.labelColor;
+    newButton.contrast = this.buttonContrast;
+    newButton.hint = 'Record a new sound';
+    newButton.fixLayout();
+    newButton.setPosition(txt.bottomLeft().add(new Point(0, padding * 2)));
+
+    this.addContents(newButton);
+
     recordButton.padding = 0;
     recordButton.corner = 4;
     recordButton.color = IDE_Morph.prototype.groupColor;
@@ -12677,7 +12736,7 @@ JukeboxMorph.prototype.updateList = function () {
     recordButton.hint = 'Record a new sound';
     recordButton.fixLayout();
     recordButton.label.setColor(new Color(255, 20, 20));
-    recordButton.setPosition(txt.bottomLeft().add(new Point(0, padding * 2)));
+    recordButton.setPosition(newButton.topRight().add(new Point(padding * 2, 0)));
 
     this.addContents(recordButton);
 

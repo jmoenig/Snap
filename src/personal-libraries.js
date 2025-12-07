@@ -651,11 +651,11 @@ xml=${targetLib.xml}`;
 
     let array = menu.items;
     let idx = array.findIndex((item) =>
-      contains(["Extentions...", "Libraries..."], item[0])
-    );
+      contains(["Add Scenes..."], item[0])
+    ) ;
     if (idx == -1) console.warn("Library option couldn't be found");
 
-    array.splice(idx, 0, [
+    array.push([
       "Personal libraries...",
       pl,
       0,
