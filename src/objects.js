@@ -4800,6 +4800,9 @@ SpriteMorph.prototype.freshPalette = function (category) {
       if (x === 0) {
         y += unit * 0.3;
       }
+      if(HatBlockMorph.prototype.isCatBlocks && contains(block.constructor.name, 'HatBlockMorph')) {
+        y += unit * 0.5;
+      }
       block.setPosition(new Point(x, y));
       palette.addContents(block);
       if (block instanceof ToggleMorph) {

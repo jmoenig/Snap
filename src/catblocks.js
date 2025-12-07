@@ -51,9 +51,11 @@ SyntaxElementMorph.prototype.parts = function () {
   );
 };
 
-HatBlockMorph.prototype.isCatBlocks = true;
+HatBlockMorph.prototype.isCatBlocks = IDE_Morph.prototype.getSetting('skin') === 'cat';
 EarsMorph.prototype.render = function (ctx) {
-  console.log(this.parent.color);
+  if(!HatBlockMorph.prototype.isCatBlocks) {
+    return;
+  }
   // console.log(this) // nope! you can always inspect things in dev mode!
   var w = this.parent.hatWidth,
     h = this.parent.hatHeight,
@@ -69,7 +71,7 @@ EarsMorph.prototype.render = function (ctx) {
       xOffset = 4;
     }
     const baseW = 80;
-    const baseH = 26;
+    const baseH = 25;
     function sx(ox) {
       return c + w * ((ox + xOffset) / baseW);
     }
@@ -460,4 +462,32 @@ EarsMorph.prototype.render = function (ctx) {
     ctx.closePath();
     ctx.fill();
   }
+};
+
+IDE_Morph.prototype.looksMenu = function () {
+    var menu = this.looksMenuData();
+    menu.addPreference(
+        'Cat Blocks',
+        () => {
+             HatBlockMorph.prototype.xmasSkin =
+                !HatBlockMorph.prototype.xmasSkin;
+            this.world().changed();
+            if(!HatBlockMorph.prototype.isCatBlocks) {
+              this.saveSetting('skin', 'cat');
+              HatBlockMorph.prototype.isCatBlocks = true;
+            } else {
+              this.removeSetting('skin');
+              HatBlockMorph.prototype.isCatBlocks = false;
+            }
+            this.refreshIDE()
+        },
+        HatBlockMorph.prototype.isCatBlocks,
+        'uncheck for default\nhat block skin',
+        'check for cute\n cat hat block skin',
+        false
+    );
+    menu.popup(
+        this.world(),
+        this.controlBar.settingsButton.bottomLeft()
+    );
 };
