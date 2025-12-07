@@ -4906,9 +4906,9 @@ BlockMorph.prototype.syntaxTree = function (parameterNames) {
       if (val instanceof Array) {
         val = "[" + val + "]";
       }
-      if (inp instanceof ColorSlotMorph) {
+      /*if (inp instanceof ColorSlotMorph) {
         val = val.toString();
-      }
+      }*/
       parts.add(val instanceof BlockMorph ? val.components() : val);
       expr.revertToEmptyInput(inp, true);
     }

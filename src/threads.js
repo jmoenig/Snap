@@ -6673,7 +6673,9 @@ Process.prototype.newClone = function (name) {
 Process.prototype.reportTouchingObject = function (name) {
     var thisObj = this.blockReceiver();
 
-    if (thisObj) {
+    
+
+    if (thisObj && !(thisObj instanceof StageMorph)) {
         return this.objectTouchingObject(thisObj, name);
     }
     return false;
