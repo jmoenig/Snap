@@ -4420,7 +4420,9 @@ SpriteMorph.prototype.makeVariableButton = function () {
   button.userMenu = this.helpMenu;
   button.selector = "addVariable";
   button.showHelp = BlockMorph.prototype.showHelp;
+  button.fontSize = button.fontSize * SyntaxElementMorph.prototype.scale;
   button.fixLayout()
+    
   return button;
 };
 

@@ -8246,7 +8246,7 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
   // add 3D-Effect
   var h = this.height(),
     r = Math.max(
-      !(this instanceof RingMorph) ? h / 2 : Math.min(this.rounding, h / 2),
+      !(this instanceof RingMorph) ? h / 2 : Math.min(18, h / 2),
       this.edge
     ),
     w = this.width(),
@@ -8376,7 +8376,7 @@ ReporterBlockMorph.prototype.drawEdgesOval = function (ctx) {
 };
 
 ReporterBlockMorph.prototype.drawEdgesDiamond = function (ctx) {
-  // add 3D-Effec
+  // add 3D-Effect
   var w = this.width(),
     h = this.height(),
     h2 = Math.floor(h / 2),
