@@ -547,7 +547,6 @@ SymbolMorph.prototype.symbolWidth = function () {
     case "location":
       return size * 0.6;
     case "flash":
-    case "file":
     case "list":
       return size * 0.8;
     case "smallStage":
@@ -589,6 +588,20 @@ SymbolMorph.prototype.notesImage = new Image();
 SymbolMorph.prototype.notesImage.src = "src/notes.svg";
 SymbolMorph.prototype.notesImageBlack = new Image();
 SymbolMorph.prototype.notesImageBlack.src = "src/notes-black.svg";
+
+SymbolMorph.prototype.settingsSymbol = new Image();
+SymbolMorph.prototype.settingsSymbol.src = "src/settings.svg";
+SymbolMorph.prototype.settingsSymbolBlack = new Image();
+SymbolMorph.prototype.settingsSymbolBlack.src = "src/settings-black.svg";
+SymbolMorph.prototype.settingsSymbolGrey = new Image();
+SymbolMorph.prototype.settingsSymbolGrey.src = "src/settings-grey.svg";
+
+SymbolMorph.prototype.fileSymbol = new Image();
+SymbolMorph.prototype.fileSymbol.src = "src/file.svg";
+SymbolMorph.prototype.fileSymbolBlack = new Image();
+SymbolMorph.prototype.fileSymbolBlack.src = "src/file-black.svg";
+SymbolMorph.prototype.fileSymbolGrey = new Image();
+SymbolMorph.prototype.fileSymbolGrey.src = "src/file-grey.svg";
 
 SymbolMorph.prototype.turnRightImage = new Image();
 SymbolMorph.prototype.turnRightImage.src = "src/rotate-right.svg";
@@ -669,6 +682,9 @@ SymbolMorph.prototype.renderSymbolStepForward = function (ctx, color) {
 };
 
 SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
+  if(this.isAnyUIColor(color)) {
+    return this.drawImage(ctx, this[this.isUIColor(color) ? "settingsSymbolGrey" : color.eq(BLACK) ? "settingsSymbolBlack" : "settingsSymbol"])
+  }
   // draw gears
   var w = this.symbolWidth(),
     r = w / 2,
@@ -809,6 +825,9 @@ SymbolMorph.prototype.renderSymbolGearPartial = function (ctx, color) {
 };
 
 SymbolMorph.prototype.renderSymbolFile = function (ctx, color) {
+  if(this.isAnyUIColor(color)) {
+    return this.drawImage(ctx, this[this.isUIColor(color) ? "fileSymbolGrey" : color.eq(BLACK) ? "fileSymbolBlack" : "fileSymbol"])
+  }
   // draw a page symbol
   var height = this.size,
     width = this.symbolWidth(),
