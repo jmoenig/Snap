@@ -259,7 +259,8 @@ PushButtonMorph.prototype.render = function (ctx) {
 
 PushButtonMorph.prototype.drawOutline = function (ctx) {
   var outlineStyle,
-    isFlat = MorphicPreferences.isFlat && !this.is3D;
+    isFlat = MorphicPreferences.isFlat && !this.is3D,
+    isTransparent = this.color.a < 1;
 
   if (!this.outline) {
    return null
@@ -271,12 +272,13 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
   } else {
     outlineStyle = isFlat ? this.outlineColor.lighter().toString() : this.outlineColor.toString();
   }
+  ctx.fillStyle = outlineStyle;
   ctx.strokeStyle = outlineStyle;
   ctx.lineWidth = this.outline;
   ctx.beginPath();
-  this.outlinePath(ctx, this.corner, this.outline / 2);
+  this.outlinePath(ctx, this.corner, isTransparent ? (this.outline / 2) : 0);
   ctx.closePath();
-  ctx.stroke();
+  isTransparent ? (ctx.stroke()) : (ctx.fill());
 };
 
 PushButtonMorph.prototype.drawBackground = function (ctx, color) {
