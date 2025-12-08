@@ -128,6 +128,7 @@ IDE_Morph.uber = Morph.prototype;
 
 IDE_Morph.prototype.isBright = false;
 IDE_Morph.prototype.accentColor = new Color(133, 92, 214);
+DialogBoxMorph.prototype.titleBarColor = IDE_Morph.prototype.accentColor;
 
 IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
     MorphicPreferences.isFlat = false;
