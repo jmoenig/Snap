@@ -228,8 +228,8 @@ PushButtonMorph.prototype.mouseLeave = function () {
 
 PushButtonMorph.prototype.render = function (ctx) {
   if (this.userState === "highlight") {
-    this.drawOutline(ctx);
     this.drawBackground(ctx, this.highlightColor);
+    this.drawOutline(ctx);
     this.drawEdges(
       ctx,
       this.highlightColor,
@@ -237,8 +237,8 @@ PushButtonMorph.prototype.render = function (ctx) {
       this.highlightColor.darker(this.contrast)
     );
   } else if (this.userState === "pressed") {
-    this.drawOutline(ctx);
     this.drawBackground(ctx, this.pressColor);
+    this.drawOutline(ctx);
     this.drawEdges(
       ctx,
       this.pressColor,
@@ -246,8 +246,8 @@ PushButtonMorph.prototype.render = function (ctx) {
       this.pressColor.lighter(this.contrast)
     );
   } else {
-    this.drawOutline(ctx);
     this.drawBackground(ctx, this.color);
+    this.drawOutline(ctx);
     this.drawEdges(
       ctx,
       this.color,
@@ -271,11 +271,12 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
   } else {
     outlineStyle = isFlat ? this.outlineColor.lighter().toString() : this.outlineColor.toString();
   }
-  ctx.fillStyle = outlineStyle;
+  ctx.strokeStyle = outlineStyle;
+  ctx.lineWidth = this.outline;
   ctx.beginPath();
-  this.outlinePath(ctx, this.corner, 0);
+  this.outlinePath(ctx, this.corner, this.outline / 2);
   ctx.closePath();
-  ctx.fill();
+  ctx.stroke();
 };
 
 PushButtonMorph.prototype.drawBackground = function (ctx, color) {

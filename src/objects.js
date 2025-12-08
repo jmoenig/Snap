@@ -1406,8 +1406,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
     doWarp: {
       type: "command",
       category: "other",
-      spec: "warp %c",
+      spec: "all at once %c",
       code: "warp",
+      alias: "warp",
     },
 
     // Message passing
@@ -4412,9 +4413,14 @@ SpriteMorph.prototype.makeVariableButton = function () {
     },
     "Make a variable"
   );
+  button.color = CLEAR;
+  button.labelColor = IDE_Morph.prototype.buttonLabelColor;
+  button.outlineColor = button.labelColor;
+  button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
   button.userMenu = this.helpMenu;
   button.selector = "addVariable";
   button.showHelp = BlockMorph.prototype.showHelp;
+  button.fixLayout()
   return button;
 };
 
@@ -4442,6 +4448,11 @@ SpriteMorph.prototype.deleteVariableButton = function () {
     },
     "Delete a variable"
   );
+  button.color = CLEAR;
+  button.labelColor = IDE_Morph.prototype.buttonLabelColor;
+  button.outlineColor = button.labelColor;
+  button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
+ 
   button.userMenu = this.helpMenu;
   button.selector = "deleteVariable";
   button.showHelp = BlockMorph.prototype.showHelp;
@@ -4530,7 +4541,11 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (
 SpriteMorph.prototype.makeBlockButton = function (category) {
   // answer a button that prompts the user to make a new block
   var button = new PushButtonMorph(this, "makeBlock", "Make a block");
-
+  button.color = CLEAR;
+  button.labelColor = IDE_Morph.prototype.buttonLabelColor;
+  button.outlineColor = button.labelColor;
+  button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
+ 
   button.userMenu = this.helpMenu;
   button.selector = "addCustomBlock";
   button.showHelp = BlockMorph.prototype.showHelp;
