@@ -4545,7 +4545,7 @@ SpriteMorph.prototype.makeBlockButton = function (category) {
   button.labelColor = IDE_Morph.prototype.buttonLabelColor;
   button.outlineColor = button.labelColor;
   button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
- 
+  button.fixLayout();
   button.userMenu = this.helpMenu;
   button.selector = "addCustomBlock";
   button.showHelp = BlockMorph.prototype.showHelp;
