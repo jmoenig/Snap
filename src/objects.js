@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-07';
+modules.objects = '2025-December-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -7463,7 +7463,10 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
 
     // draw the line onto the target's costume copy:
     ctx = targetCostume.contents.getContext('2d');
-    ctx.lineWidth = this.size / target.scale;
+    ctx.lineWidth = this.size;
+    if (target instanceof SpriteMorph) {
+        ctx.lineWidth /= target.scale;
+    }
     ctx.strokeStyle = this.color.toString();
     if (this.useFlatLineEnds) {
         ctx.lineCap = 'butt';
@@ -10121,6 +10124,10 @@ StageMorph.prototype.init = function (globals) {
 
     this.trailsCanvas = null;
     this.trailsLog = []; // each line being [p1, p2, color, width, cap]
+
+    // support for letting sprites directly draw on a background
+    this.trailsCache = null; // a temporary costume - do not serialize
+
     this.isThreadSafe = false;
 
     this.microphone = new Microphone(); // audio input, do not persist
@@ -11955,6 +11962,22 @@ StageMorph.prototype.trailsLogAsPolySVG = function () {
         src : svg,
         rot : new Point(-box.origin.x, box.corner.y)
     };
+};
+
+// StageMorph coordinate conversion
+
+StageMorph.prototype.costumePoint = SpriteMorph.prototype.costumePoint;
+
+StageMorph.prototype.costumePoint = function(aPoint) {
+    // answer the coordinates of the given world point on the current
+    // costume's pixel bitmap, if any
+    var flipY = new Point(1, -1),
+        stagePoint;
+    if (!this.costume) {
+        return new Point();
+    }
+    stagePoint = this.snapPoint(aPoint).multiplyBy(flipY);
+    return stagePoint.add(this.costume.extent().divideBy(2));
 };
 
 StageMorph.prototype.normalizePoint = SpriteMorph.prototype.normalizePoint;

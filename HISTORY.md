@@ -45,6 +45,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-08
+* objects: support letting sprites draw directly on the stage's background
+
 ### 2025-12-07
 * objects: use trailsCache optimization developed from drawing on other sprites also for "paste on" and "cut from" primitives
 
