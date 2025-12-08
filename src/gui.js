@@ -96,7 +96,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.1.6';
+var SplitVersion = '1.1.7';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1764,7 +1764,7 @@ IDE_Morph.prototype.createCategories = function () {
         );
 
         button.category = category;
-        button.corner = 25;
+        button.corner = 21;
         // console.log(button)
         button.padding = 0;
         button.labelShadowOffset = new Point(-1, -1);
@@ -1778,17 +1778,19 @@ IDE_Morph.prototype.createCategories = function () {
         button.hint = category[0].toUpperCase().concat(category.slice(1));
         button.fixLayout();
         button.refresh();
-        button.bounds.setHeight(25);
-        button.bounds.setWidth(25);
+        button.bounds.setHeight(21);
+        button.bounds.setWidth(21);
         myself.categories.addContents(button);
         myself.categories.buttons.push(button);
-        button.label.setPosition(new Point(0, 20))
+        button.label.isBold = false;
+        button.label.setPosition(new Point(0, 18))
         button.label.setPosition(
             new Point(
-                button.bounds.origin.x + (button.width() / 2) - ((button.label.right() - button.label.bounds.origin.x) / 2),
-                26
+                button.bounds.origin.x + (button.width() / 2) - ((button.label.right() - button.label.bounds.origin.x) / 2) + 2,
+                24
             )
         );
+
         if(color) {
             button.userMenu = () => {
                 var menu = new MenuMorph(this);
