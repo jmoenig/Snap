@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-December-03';
+modules.gui = '2025-December-09';
 
 // Declarations
 
@@ -2188,7 +2188,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors,
         null, // target
         () => tabBar.tabTo('scripts'),
-        localize('Scripts'), // label
+        [ // label
+            new SymbolMorph('blocks', 12),
+            localize('Scripts')
+        ],
         () => this.currentTab === 'scripts' // query
     );
     tab.padding = 3;
@@ -2216,9 +2219,11 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors,
         null, // target
         () => tabBar.tabTo('costumes'),
-        localize(this.currentSprite instanceof SpriteMorph ?
-            'Costumes' : 'Backgrounds'
-        ),
+        [ // label
+            new SymbolMorph('brush', 12),
+            localize(this.currentSprite instanceof SpriteMorph ? 'Costumes'
+                : 'Backgrounds')
+        ],
         () => this.currentTab === 'costumes' // query
     );
     tab.padding = 3;
@@ -2234,7 +2239,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors,
         null, // target
         () => tabBar.tabTo('sounds'),
-        localize('Sounds'), // label
+        [ // label
+            new SymbolMorph('speaker', 12),
+            localize('Sounds')
+        ],
         () => this.currentTab === 'sounds' // query
     );
     tab.padding = 3;
