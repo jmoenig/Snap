@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2024-November-24';
+modules.symbols = '2024-December-09';
 
 var SymbolMorph;
 
@@ -151,6 +151,7 @@ SymbolMorph.prototype.names = [
     'trashFull',
     'cube',
     'cubeSolid',
+    'blocks',
     'infinity'
 ];
 
@@ -509,6 +510,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'cubeSolid':
         this.renderSymbolCubeSolid(ctx, aColor);
+        break;
+    case 'blocks':
+        this.renderSymbolBlocks(ctx, aColor);
         break;
     case 'infinity':
         this.renderSymbolInfinity(ctx, aColor);
@@ -2483,6 +2487,43 @@ SymbolMorph.prototype.renderSymbolCubeSolid = function (ctx, color) {
     ctx.lineTo(side - l, side - quarter);
     ctx.lineTo(half, side - l);
     ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolBlocks = function (ctx, color) {
+    // draw a stack of 2 command blocks
+    var step = this.size * 0.1,
+        side = this.size * 0.4;
+
+    function blockPath(top, right) {
+        ctx.beginPath();
+
+        // top
+        ctx.moveTo(0, top);
+        ctx.lineTo(step * 2, top);
+        ctx.lineTo(step * 3, top + step);
+        ctx.lineTo(step * 5, top + step);
+        ctx.lineTo(step * 6, top);
+        ctx.lineTo(right, top);
+
+        // right
+        ctx.lineTo(right, top + side);
+    
+        // bottom
+        ctx.lineTo(step * 6, top + side);
+        ctx.lineTo(step * 5, top + step + side);
+        ctx.lineTo(step * 3, top + step + side);
+        ctx.lineTo(step * 2, top + side);
+        ctx.lineTo(0, top + side);
+
+        // left
+        ctx.closePath();
+    }
+
+    ctx.fillStyle = color.toString();
+    blockPath(0, this.symbolWidth() - step);
+    ctx.fill();
+    blockPath(side + step, this.symbolWidth());
     ctx.fill();
 };
 
