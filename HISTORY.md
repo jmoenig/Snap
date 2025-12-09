@@ -45,6 +45,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-09
+* widgets: added support for combined icon-text labels in tab buttons
+
 ### 2025-12-08
 * objects: support letting sprites draw directly on the stage's background
 
