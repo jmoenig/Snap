@@ -92,11 +92,11 @@ localize, TableMorph, TableFrameMorph, normalizeCanvas, VectorPaintEditorMorph,
 AlignmentMorph, Process, WorldMap, copyCanvas, useBlurredShadows, BLACK,
 BlockVisibilityDialogMorph, CostumeIconMorph, SoundIconMorph, MenuItemMorph,
 embedMetadataPNG, SnapExtensions, SnapSerializer, snapEquals, display,
-CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph*/
+CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-November-05';
+modules.objects = '2025-December-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -3181,6 +3181,10 @@ SpriteMorph.prototype.init = function (globals) {
     this.motionDirection = 0;
     this.frameNumber = 0;
 
+    // support for drawing on sprites
+    this.sheet = null; // a sprite - do not serialize
+    this.trailsCache = null; // a temporary costume - do not serialize
+
     SpriteMorph.uber.init.call(this);
 
     this.isFreeForm = true;
@@ -5370,11 +5374,14 @@ SpriteMorph.prototype.addCostume = function (costume) {
     );
 };
 
-SpriteMorph.prototype.wearCostume = function (costume, noShadow) {
+SpriteMorph.prototype.wearCostume = function (costume, noShadow, keepCache) {
     var x = this.xPosition ? this.xPosition() : null,
         y = this.yPosition ? this.yPosition() : null,
         idx = isNil(costume) ? null : this.costumes.asArray().indexOf(costume);
 
+    if (!keepCache) {
+        this.trailsCache = null;
+    }
     this.changed();
     this.costume = costume;
     this.fixLayout();
@@ -5443,10 +5450,11 @@ SpriteMorph.prototype.doWearPreviousCostume = function () {
     }
 };
 
-SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
+SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow, keepCache) {
     var w = 0,
         h = 0,
         stage;
+        
     if (id instanceof List) { // try to turn a list of pixels into a costume
         if (id.quickShape().at(2) <= 4) {
             if (this.costume) {
@@ -5501,7 +5509,7 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow) {
             }
         }
     }
-    this.wearCostume(costume, noShadow);
+    this.wearCostume(costume, noShadow, keepCache);
 };
 
 SpriteMorph.prototype.reportCostumes = function () {
@@ -6725,15 +6733,21 @@ SpriteMorph.prototype.blitOn = function (target, mask = 'source-atop') {
 
     // check if both source and target have costumes,
     // rasterize copy of target costume if it's an SVG
+    // cache the costume copy for later reuse
     if (this.costume && target.costume) {
         sourceCostume = this.costume;
         if (sourceCostume instanceof SVG_Costume) {
             sourceCostume = sourceCostume.rasterized();
         }
-        if (target.costume instanceof SVG_Costume) {
-            targetCostume = target.costume.rasterized();
+        if (target.trailsCache) {
+            targetCostume = target.trailsCache;
         } else {
-            targetCostume = target.costume.copy();
+            if (target.costume instanceof SVG_Costume) {
+                targetCostume = target.costume.rasterized();
+            } else {
+                targetCostume = target.costume.copy();
+            }
+            target.trailsCache = targetCostume;
         }
     } else {
         return;
@@ -7408,6 +7422,70 @@ SpriteMorph.prototype.justDropped = function () {
 // SpriteMorph drawing:
 
 SpriteMorph.prototype.drawLine = function (start, dest) {
+    if (isSnapObject(this.sheet)) {
+        this.drawLineOn(this.sheet, start, dest);
+    } else {
+        this.drawPenTrailsLine(start, dest);
+    }
+};
+
+SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
+    var targetCostume,
+        p1, p2,
+        ctx;
+
+    // only draw if the pen is down and not currently being dragged
+    // prevent drawing an object onto itself
+    if (!this.isDown || this === target || this.parentThatIsA(HandMorph)) {
+        return;
+    }
+
+    // check if target has a costumes,
+    // rasterize copy of target costume if it's an SVG
+    // cache the costume copy for later reuse
+    if (target.costume) {
+        if (target.trailsCache) {
+            targetCostume = target.trailsCache;
+        } else {
+            if (target.costume instanceof SVG_Costume) {
+                targetCostume = target.costume.rasterized();
+            } else {
+                targetCostume = target.costume.copy();
+            }
+            target.trailsCache = targetCostume;
+        }
+    } else {
+        return;
+    }
+
+    p1 = target.costumePoint(start);
+    p2 = target.costumePoint(dest);
+
+    // draw the line onto the target's costume copy:
+    ctx = targetCostume.contents.getContext('2d');
+    ctx.lineWidth = this.size;
+    if (target instanceof SpriteMorph) {
+        ctx.lineWidth /= target.scale;
+    }
+    ctx.strokeStyle = this.color.toString();
+    if (this.useFlatLineEnds) {
+        ctx.lineCap = 'butt';
+        ctx.lineJoin = 'miter';
+    } else {
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    }
+    ctx.globalCompositeOperation = 'source-atop';
+                ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+
+    // wear & cache the changed costume
+    target.doSwitchToCostume(targetCostume, null, true); // keep cache
+};
+
+SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
     var stagePos = this.parent.bounds.origin,
         stageScale = this.parent.scale,
         context = this.parent.penTrails().getContext('2d'),
@@ -7886,6 +7964,26 @@ SpriteMorph.prototype.worldPoint = function(aSnapPoint) {
     return this.normalizePoint(aSnapPoint)
         .multiplyBy(stage.scale)
         .translateBy(stage.center());
+};
+
+SpriteMorph.prototype.costumePoint = function(aPoint) {
+    // answer the coordinates of the given world point on the current
+    // costume's pixel bitmap, if any
+    var stage = this.parentThatIsA(StageMorph),
+        flipY = new Point(1, -1),
+        stagePoint, normalized, offset, unrotated;
+    if (!this.costume || !stage) {
+        return new Point();
+    }
+    stagePoint = this.snapPoint(aPoint).multiplyBy(flipY).divideBy(this.scale);
+    normalized = stagePoint.add(this.costume.extent().divideBy(2));
+    offset = stage.center().subtract(this.rotationCenter())
+        .divideBy(stage.scale * this.scale);
+    unrotated = normalized.add(offset);
+    return unrotated.rotateBy(
+        radians(this.heading - 90),
+        this.costume.rotationCenter
+    );
 };
 
 SpriteMorph.prototype.normalizePoint = function (snapPoint) {
@@ -8633,7 +8731,7 @@ SpriteMorph.prototype.usesBlockInstance = function (
     if (definition.isGlobal && !skipGlobals) {
         inDefinitions = [];
         this.parentThatIsA(StageMorph).globalBlocks.concat(
-            this.customizedPrimitives()
+            SpriteMorph.prototype.customizedPrimitives()
         ).forEach(def => {
             if (forRemoval && (definition === def)) {return; }
             if (skipBlocks && contains(skipBlocks, def)) {return; }
@@ -10026,6 +10124,10 @@ StageMorph.prototype.init = function (globals) {
 
     this.trailsCanvas = null;
     this.trailsLog = []; // each line being [p1, p2, color, width, cap]
+
+    // support for letting sprites directly draw on a background
+    this.trailsCache = null; // a temporary costume - do not serialize
+
     this.isThreadSafe = false;
 
     this.microphone = new Microphone(); // audio input, do not persist
@@ -10067,7 +10169,7 @@ StageMorph.prototype.init = function (globals) {
     this.messageCallbacks = {}; // name : [functions]
 
     // Tutorial scenes, transient
-    this.tutorialMode = false;
+    this.tutorialMode = null; // or a scene back-pointer
 
     StageMorph.uber.init.call(this);
 
@@ -11517,21 +11619,24 @@ StageMorph.prototype.userMenu = function () {
         'save a picture\nof the stage'
     );
     menu.addLine();
-    menu.addItem(
-        'pen trails',
-        () => {
-            var costume = ide.currentSprite.reportPenTrailsAsCostume().copy();
-            ide.currentSprite.addCostume(costume);
-            ide.currentSprite.wearCostume(costume);
-            ide.hasChangedMedia = true;
-            ide.spriteBar.tabBar.tabTo('costumes');
-        },
-        ide.currentSprite instanceof SpriteMorph ?
-            'turn all pen trails and stamps\n' +
-                'into a new costume for the\ncurrently selected sprite'
-                    : 'turn all pen trails and stamps\n' +
-                        'into a new background for the stage'
-    );
+    if (ide) {
+        menu.addItem(
+            'pen trails',
+            () => {
+                var costume =
+                    ide.currentSprite.reportPenTrailsAsCostume().copy();
+                ide.currentSprite.addCostume(costume);
+                ide.currentSprite.wearCostume(costume);
+                ide.hasChangedMedia = true;
+                ide.spriteBar.tabBar.tabTo('costumes');
+            },
+            ide.currentSprite instanceof SpriteMorph ?
+                'turn all pen trails and stamps\n' +
+                    'into a new costume for the\ncurrently selected sprite'
+                        : 'turn all pen trails and stamps\n' +
+                            'into a new background for the stage'
+        );
+    }
     if (this.trailsLog.length) {
         menu.addItem(
             'svg...',
@@ -11857,6 +11962,22 @@ StageMorph.prototype.trailsLogAsPolySVG = function () {
         src : svg,
         rot : new Point(-box.origin.x, box.corner.y)
     };
+};
+
+// StageMorph coordinate conversion
+
+StageMorph.prototype.costumePoint = SpriteMorph.prototype.costumePoint;
+
+StageMorph.prototype.costumePoint = function(aPoint) {
+    // answer the coordinates of the given world point on the current
+    // costume's pixel bitmap, if any
+    var flipY = new Point(1, -1),
+        stagePoint;
+    if (!this.costume) {
+        return new Point();
+    }
+    stagePoint = this.snapPoint(aPoint).multiplyBy(flipY);
+    return stagePoint.add(this.costume.extent().divideBy(2));
 };
 
 StageMorph.prototype.normalizePoint = SpriteMorph.prototype.normalizePoint;
@@ -12754,6 +12875,9 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         sprite = SpriteMorph.prototype,
         maxHeight = (this.stage?.dimensions?.y || 360) * this.scale -
             (this.border + this.padding + 1) * 2,
+        draggable = this.stage?.tutorialMode ?
+            !this.stage.tutorialMode.disableDraggingData
+                : !sprite.disableDraggingData,
         isText,
         img,
         scaledImg,
@@ -12777,8 +12901,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.cachedImage = img;
 
         // support blocks to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData;
-
+        contents.isDraggable = draggable;
         contents.selectForEdit = function () {
             var script = data.fullCopy(),
                 prepare = script.prepareToBeGrabbed,
@@ -12866,8 +12989,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.cachedImage = img;
 
         // support costumes to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData;
-
+        contents.isDraggable = draggable;
         contents.selectForEdit = function () {
             var cst = data.copy(),
                 icon,
@@ -12921,8 +13043,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents = new SymbolMorph('notes', 30);
 
         // support sounds to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData;
-
+        contents.isDraggable = draggable;
         contents.selectForEdit = function () {
             var snd = data.copy(),
                 icon,
@@ -12987,6 +13108,12 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             }
         }
         contents.isDraggable = false;
+        if (!draggable) {
+            contents.forAllChildren(morph => {
+                morph.isDraggable = false;
+                morph.selectForEdit = nop;
+            });
+        }
     } else if (data instanceof Context) {
         img = data.image();
         contents = new Morph();
@@ -13005,8 +13132,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         };
 
         // support blocks to be dragged out of speech balloons:
-        contents.isDraggable = !sprite.disableDraggingData;
-
+        contents.isDraggable = draggable;
         contents.selectForEdit = function () {
             var script = data.toUserBlock(),
                 prepare = script.prepareToBeGrabbed,
@@ -14514,7 +14640,10 @@ CellMorph.prototype.createContents = function () {
         isSameList = this.contentsMorph instanceof ListWatcherMorph
             && (this.contentsMorph.list === this.contents),
         isSameTable = this.contentsMorph instanceof TableFrameMorph
-            && (this.contentsMorph.tableMorph.table === this.contents);
+            && (this.contentsMorph.tableMorph.table === this.contents),
+        draggable = this.parentThatIsA(StageMorph)?.tutorialMode ?
+            !this.parentThatIsA(StageMorph).tutorialMode.disableDraggingData
+                : !SpriteMorph.prototype.disableDraggingData;
 
     if (this.isBig) {
         fontSize = fontSize * 1.5;
@@ -14581,9 +14710,7 @@ CellMorph.prototype.createContents = function () {
             this.version = this.contents.version;
 
             // support blocks to be dragged out of watchers:
-            this.contentsMorph.isDraggable =
-                !SpriteMorph.prototype.disableDraggingData;
-
+            this.contentsMorph.isDraggable = draggable;
             this.contentsMorph.selectForEdit = function () {
                 var script = myself.contents.toUserBlock(),
                     prepare = script.prepareToBeGrabbed,
@@ -14612,9 +14739,7 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.cachedImage = img;
 
             // support costumes to be dragged out of watchers:
-            this.contentsMorph.isDraggable =
-                !SpriteMorph.prototype.disableDraggingData;
-
+            this.contentsMorph.isDraggable = draggable;
             this.contentsMorph.selectForEdit = function () {
                 var cst = myself.contents.copy(),
                     icon,
@@ -14642,9 +14767,7 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph = new SymbolMorph('notes', 30);
 
             // support sounds to be dragged out of watchers:
-            this.contentsMorph.isDraggable =
-                !SpriteMorph.prototype.disableDraggingData;
-
+            this.contentsMorph.isDraggable = draggable;
             this.contentsMorph.selectForEdit = function () {
                 var snd = myself.contents.copy(),
                     icon,
@@ -14694,6 +14817,10 @@ CellMorph.prototype.createContents = function () {
                 }
             }
             this.contentsMorph.isDraggable = false;
+            if (!draggable) {
+                this.contentsMorph.forAllChildren(morph =>
+                    morph.isDraggable = false);
+            }
         } else if (this.contents instanceof Color) {
             this.contentsMorph = SpriteMorph.prototype.colorSwatch(
                 this.contents,

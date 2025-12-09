@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-November-05';
+modules.threads = '2025-December-02';
 
 var ThreadManager;
 var Process;
@@ -3850,9 +3850,9 @@ Process.prototype.reportCombine = function (list, reporter) {
                 this.returnValueToParentContext(
                     list.length() ?
                         list.at(1)
-                        : (reporter.expression.selector === 'reportJoinWords' ?
-                            ''
-                            : 0)
+                        : this.emptyListValueForCombine(
+                            reporter.expression.selector
+                        )
                 );
                 return;
             }
@@ -3892,9 +3892,9 @@ Process.prototype.reportCombine = function (list, reporter) {
                 this.returnValueToParentContext(
                     list.length() ?
                         list.at(1)
-                        : (reporter.expression.selector === 'reportJoinWords' ?
-                            ''
-                            : 0)
+                        : this.emptyListValueForCombine(
+                            reporter.expression.selector
+                        )
                 );
                 return;
             }
@@ -3999,6 +3999,23 @@ Process.prototype.canRunOptimizedForCombine = function (aContext) {
         each.selector === 'reportGetVar' &&
             contains(aContext.inputs, each.blockSpec)
     );
+};
+
+Process.prototype.emptyListValueForCombine = function (selector) {
+    switch (selector) {
+    case 'reportJoinWords':
+        return '';
+    case 'reportVariadicAnd':
+        return true;
+    case 'reportVariadicOr':
+        return false;
+    case 'reportConcatenatedLists':
+        return new List();
+    case 'reportCrossproduct':
+        return new List([new List()]);
+    default:
+        return 0;
+    }
 };
 
 Process.prototype.reportPipe = function (value, reporterList) {

@@ -2,6 +2,9 @@
 
 ## in development:
 * **New Features:**
+    * global zoom setting ("magnification"), scales everything seamlessly
+        * new interactive "Magnification" dialog in the settings menu
+        * magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
     * templates
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
         * projects based on a template let the user restore the visibility of global blocks in the template palette
@@ -18,6 +21,8 @@
         * new "expression" selector in block-attribute (metaprogramming) reporter
         * enables expressions (unringed blocks) to be CALLed and RUN
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
+    * drawing on sprites
+        * new "pen_drawOn([sprite])" extension, experimental & temporary
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
@@ -29,16 +34,92 @@
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
+    * rearranged IDE settings menu items into "looks" submenu
+    * meta-programming: removed "static" tag from the block-attribute getter
+    * took out rate limit in the Microblocks library, thanks, Bernat!
+    * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
+    * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
+    * fixed some special cases for using "combine" on an empty list, thanks, @rmunn!
 * **Translation Updates:**
     * German
+
+### 2025-12-08
+* objects: support letting sprites draw directly on the stage's background
+
+### 2025-12-07
+* objects: use trailsCache optimization developed from drawing on other sprites also for "paste on" and "cut from" primitives
+
+### 2025-12-06
+* objects: only draw on a sprites if the pen is currently not being dragged
+
+### 2025-12-05
+* objects: support drawing on sprites
+* extensions: new "pen_drawOn([sprite])" extension, experimental & temporary
+
+### 2025-12-03
+* objects, gui: let tutorials manage data draggability through their scene setting
+
+### 2025-12-02
+* blocks: fixed global zooming for the color slot color picker widget
+* gui: tweaked control bar layout for low screen real-estate / hi magnification situations
+* new Microblocks library w/o rate limit, thanks, Bernat!
+* new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
+* fixed some nitpick special cases for using "combine" on an empty list, sigh, thanks, @rmunn!
+
+### 2025-12-01
+* objects: fixed an "unused blocks" glitch for tutorials
+* santa: update
+* blocks: removed "static" tag from the block-attribute getter
+
+### 2025-11-30
+* objects: fixed a draggability control glitch in speech balloons
+
+### 2025-11-29
+* santa: update
+
+### 2025-11-28
+* gui: extended magnification gestures (shift-scroll / double click) to control bar, categories and sprite bar panes
+* gui: refactored magnification gestures
+* gui: gradually zoom the stage in up to 100% when zooming out globally
+* objects: disabled data from being dragged out of tutorial speech balloons (for now)
+* objects: disabled data from being dragged out of watchers (for now)
+* objects: fixed a dev mode context menu glitch
+* objects: refactored disabling dragging data out from tutorials (not 100% but good enough for now)
+* gui: disabled pressing ESC to close a tutorial window 
+* gui: tweaked magnification when zooming out
+* gui: refactored "Looks" menu
+
+### 2025-11-27
+* gui: refined IDE layout for global magnification zoom levels
+* gui: refined IDE "Magnification" dialog for continuous scaling
+* gui: returned "magnification" item to the settings menu
+* gui: increased scroll effect for zoom-gesture (shift-scroll on logo)
+* gui: made "magnification" dialog draggable on touch devices
+
+### 2025-11-26
+* gui: tweaked global zoom mechanism
+* gui: keep dialog boxes within the world when zooming globally
+
+### 2025-11-25
+* morphic, gui: new global zoom setting in the "looks" submenu
+* gui: save and restore the user's "zoom" setting in the browser
+* gui: rearranged IDE settings menu items into "looks" submenu
+* gui: renamed "zoom" setting into "magnification"
+* German translation update for "Magnification"
+* gui: added experimental "stage scale" persistence, commented out for now
+* gui: added magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
+
+### 2025-11-22
+* gui: let tutorials disable / enable the user to drag data (and blocks) out of watchers and balloons
 
 ### 2025-11-20
 * extensions: new "meta_current_scripts" extension for tutorial needing to access the IDE
 * extensions: made "dta_import(raw?)" extension interpolated
 * extensions: generalized "meta_current(asset)" extension
 * added "exit tutorial" and "current editor (asset)" blocks to the tutorials library
+* 3D Beetle extension adjustments for tutorials support, thanks, Bernat!
 
 ### 2025-11-17
 * microworlds (EDC) extension: added automatic vertical scrolling to fancy speech & thought bubbles

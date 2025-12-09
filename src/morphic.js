@@ -62,8 +62,9 @@
         (6) development and user modes
         (7) turtle graphics
         (8) supporting high-resolution "retina" screens
-        (9 animations
-        (10) minifying morphic.js
+        (9) global zoom
+        (10) animations
+        (11) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -1226,7 +1227,22 @@
     stage (high-resolution) into a sprite-costume (normal resolution).
 
 
-    (9) animations
+    (9) global zoom
+    ----------------
+    For better accessibility it can be useful to support magnifying a morphic
+    application to different, individual zoom levels. By default the global
+    
+        ZOOM
+    
+    factor is set to the number 1. It can be changed using the Wold's
+
+        zoom(factor)
+
+    method. The zoom level can only be used for magnification, i.e. it only
+    supports levels greater than or equals 1.
+
+
+    (10) animations
     ---------------
     Animations handle gradual transitions between one state and another over a
     period of time. Transition effects can be specified using easing functions.
@@ -1274,7 +1290,7 @@
     method.
 
 
-    (10) minifying morphic.js
+    (11) minifying morphic.js
     -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have
@@ -1351,9 +1367,10 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-November-03';
+var morphicVersion = '2025-November-25';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
+var ZOOM = 1;
 
 const ZERO = new Point();
 const BLACK = new Color();
@@ -1524,13 +1541,16 @@ function newCanvas(extentPoint, nonRetina, recycleMe) {
     // being shared among Morphs (dataset property "morphicShare")
     var canvas, ext;
     nonRetina = nonRetina || false;
-    ext = (extentPoint ||
-            (recycleMe ? new Point(recycleMe.width, recycleMe.height)
-                : new Point(0, 0))).ceil();
+    if (extentPoint) {
+        ext = extentPoint.ceil();
+    } else {
+        ext = recycleMe ? new Point(recycleMe.width, recycleMe.height)
+            : new Point();
+    }
     if (recycleMe &&
-            !recycleMe.dataset.morphicShare &&
-            (recycleMe.isRetinaEnabled || false) !== nonRetina &&
-            ext.x === recycleMe.width && ext.y === recycleMe.height
+        !recycleMe.dataset.morphicShare &&
+        (recycleMe.isRetinaEnabled || false) !== nonRetina &&
+        ext.x === recycleMe.width && ext.y === recycleMe.height
     ) {
         canvas = recycleMe;
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
@@ -1756,6 +1776,17 @@ function enableRetinaSupport() {
     // support retina mode as implemented here).
     // therefore - to ensure crisp fonts - use the ceiling of whatever
     // the devicePixelRatio is. This needs more memory, but looks nicer.
+
+    // [Jens]: As of winter 2025 non-integer devicePixelRatios are handled
+    // gracefully by all browsers tested, but now I'm adding global Morphic
+    // ZOOM, which requires avoiding subpixel antialiasing blitting artifacts
+    // by snapping clip rectangles to integer coordinates representing physical
+    // pixels in the "rectangle >> spread()" method. We could take the "retina"
+    // scaling ratio into account, but since we want to support both hi-res
+    // and normal canvasses inside a morphic world, we would need to check
+    // each canvas surface for its particular ratio property whenever we're
+    // rendering something else onto it, which would slow things down
+    // significantly. Hence I'm leaving the ratio-clipping to the ceiling in.
 
         originalDevicePixelRatio = Math.ceil(window.devicePixelRatio),
 
@@ -2937,9 +2968,11 @@ Rectangle.prototype.round = function () {
 };
 
 Rectangle.prototype.spread = function () {
-    // round me by applying floor() to my origin and ceil() to my corner
-    // avoids artefacts on retina displays
-    return this.origin.floor().corner(this.corner.ceil());
+    // tweak me so rendering me on the world canvas avoids subpixel
+    // artifacts from antialiasing by making sure my measurements
+    // snap to physical pixels and not in between
+    return this.origin.multiplyBy(ZOOM).floor().divideBy(ZOOM)
+        .corner(this.corner.multiplyBy(ZOOM).ceil().divideBy(ZOOM));
 };
 
 Rectangle.prototype.amountToTranslateWithin = function (aRect) {
@@ -11399,7 +11432,7 @@ HandMorph.prototype.processMouseDown = function (event) {
         this.setPosition(new Point(
             event.pageX - posInDocument.x,
             event.pageY - posInDocument.y
-        ));
+        ).divideBy(ZOOM));
     }
 
     // process the actual event
@@ -11462,7 +11495,7 @@ HandMorph.prototype.processTouchStart = function (event) {
         this.touchStartPosition = new Point(
             event.touches[0].pageX,
             event.touches[0].pageY
-        );
+        ).divideBy(ZOOM);
         this.touchHoldTimeout = setInterval( // simulate mouseRightClick
             () => {
                 this.processMouseDown({button: 2});
@@ -11479,7 +11512,10 @@ HandMorph.prototype.processTouchStart = function (event) {
 };
 
 HandMorph.prototype.processTouchMove = function (event) {
-    var pos = new Point(event.touches[0].pageX, event.touches[0].pageY);
+    var pos = new Point(
+            event.touches[0].pageX,
+            event.touches[0].pageY
+        ).divideBy(ZOOM);
     MorphicPreferences.isTouchDevice = true;
     if (this.touchStartPosition.distanceTo(pos) <
             MorphicPreferences.grabThreshold) {
@@ -11571,7 +11607,7 @@ HandMorph.prototype.processMouseMove = function (event) {
     pos = new Point(
         event.pageX - posInDocument.x,
         event.pageY - posInDocument.y
-    );
+    ).divideBy(ZOOM);
 
     this.setPosition(pos);
 
@@ -12062,11 +12098,15 @@ WorldMorph.prototype.fullDrawOn = function (aContext, aRect) {
 WorldMorph.prototype.updateBroken = function () {
     var ctx = this.worldCanvas.getContext('2d');
     this.condenseDamages();
+    ctx.restore(); // make sure to hit rock-bottom scale
+    ctx.save();
+    ctx.scale(ZOOM, ZOOM);
     this.broken.forEach(rect => {
         if (rect.extent().gt(ZERO)) {
             this.fullDrawOn(ctx, rect);
         }
     });
+    ctx.restore();
     this.broken = [];
 };
 
@@ -12162,15 +12202,14 @@ WorldMorph.prototype.fillPage = function () {
     }
     if (this.worldCanvas.width !== clientWidth) {
         this.worldCanvas.width = clientWidth;
-        this.setWidth(clientWidth);
     }
     if (this.worldCanvas.height !== clientHeight) {
         this.worldCanvas.height = clientHeight;
-        this.setHeight(clientHeight);
     }
+    this.setExtent(new Point(clientWidth, clientHeight).divideBy(ZOOM));
     this.children.forEach(child => {
         if (child.reactToWorldResize) {
-            child.reactToWorldResize(this.bounds.copy());
+            child.reactToWorldResize(this.bounds);
         }
     });
 };
@@ -12184,6 +12223,11 @@ WorldMorph.prototype.initRetina = function () {
     this.worldCanvas.style.height = canvasHeight + 'px';
     this.worldCanvas.height = canvasHeight;
     this.setHeight(canvasHeight);
+};
+
+WorldMorph.prototype.zoom = function (factor = 1) {
+    ZOOM = Math.max(factor, 1);
+    this.fillPage();
 };
 
 // WorldMorph scheduling:
@@ -12526,6 +12570,22 @@ WorldMorph.prototype.contextMenu = function () {
     if (this.isDevMode) {
         menu.addItem("demo...", 'userCreateMorph', 'sample morphs');
         menu.addLine();
+        menu.addItem(
+            "zoom...",
+            () => {
+                this.prompt(
+                    menu.title + '\nzoom:',
+                    num => this.zoom(num / 100),
+                    this,
+                    Math.round(ZOOM * 100).toString(),
+                    null,
+                    100,
+                    500,
+                    true
+                );
+            },
+            'set the global\nmagnification'
+        );
         menu.addItem("hide all...", 'hideAll');
         menu.addItem("show all...", 'showAllHiddens');
         menu.addItem(

@@ -156,13 +156,13 @@ Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
 SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK,
-CustomHatBlockMorph*/
+CustomHatBlockMorph, ZOOM*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-November-05';
+modules.blocks = '2025-December-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -904,7 +904,7 @@ SyntaxElementMorph.prototype.labelParts = {
 
     '%block': {
         type: 'input',
-        tags: 'read-only static',
+        tags: 'read-only', // was also 'static'
         menu: {
             'label': ['label'],
             'definition': ['definition'],
@@ -13879,7 +13879,7 @@ ColorSlotMorph.prototype.getUserColor = function () {
     ctx = Morph.prototype.fullImage.call(world).getContext('2d');
 
     hand.processMouseMove = function (event) {
-        var pos = hand.position(),
+        var pos = hand.position().divideBy(ZOOM),
             dta = ctx.getImageData(pos.x, pos.y, 1, 1).data;
         hand.setPosition(new Point(
             event.pageX - posInDocument.x,
