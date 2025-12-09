@@ -48,6 +48,7 @@
 ### 2025-12-09
 * widgets: added support for combined icon-text labels in tab buttons
 * symbols: added new "blocks" symbol
+* symbols: added new "speaker" symbol
 
 ### 2025-12-08
 * objects: support letting sprites draw directly on the stage's background

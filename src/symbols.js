@@ -152,6 +152,7 @@ SymbolMorph.prototype.names = [
     'cube',
     'cubeSolid',
     'blocks',
+    'speaker',
     'infinity'
 ];
 
@@ -513,6 +514,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'blocks':
         this.renderSymbolBlocks(ctx, aColor);
+        break;
+    case 'speaker':
+        this.renderSymbolSpeaker(ctx, aColor);
         break;
     case 'infinity':
         this.renderSymbolInfinity(ctx, aColor);
@@ -2525,6 +2529,33 @@ SymbolMorph.prototype.renderSymbolBlocks = function (ctx, color) {
     ctx.fill();
     blockPath(side + step, this.symbolWidth());
     ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolSpeaker = function (ctx, color) {
+    // draw a loudspeaker with two emerging sound waves
+    var step = this.size / 3,
+        r = this.size / 2,
+        l = this.size / 15;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(0, step);
+    ctx.lineTo(step, step);
+    ctx.lineTo(step * 2, 0);
+    ctx.lineTo(step * 2, step * 3);
+    ctx.lineTo(step, step * 2);
+    ctx.lineTo(0, step * 2);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.lineWidth = l;
+    ctx.strokeStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r - l / 2, radians(45), radians(-45), true);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(r, r, r * 0.65, radians(45), radians(-45), true);
+    ctx.stroke();
 };
 
 SymbolMorph.prototype.renderSymbolInfinity = function (ctx, color) {
