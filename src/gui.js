@@ -2189,7 +2189,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         null, // target
         () => tabBar.tabTo('scripts'),
         [ // label
-            new SymbolMorph('blocks', 12),
+            new SymbolMorph('blocks', 10),
             localize('Scripts')
         ],
         () => this.currentTab === 'scripts' // query
@@ -2220,7 +2220,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         null, // target
         () => tabBar.tabTo('costumes'),
         [ // label
-            new SymbolMorph('brush', 12),
+            new SymbolMorph('brush', 10),
             localize(this.currentSprite instanceof SpriteMorph ? 'Costumes'
                 : 'Backgrounds')
         ],
@@ -2240,7 +2240,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         null, // target
         () => tabBar.tabTo('sounds'),
         [ // label
-            new SymbolMorph('speaker', 12),
+            new SymbolMorph('speaker', 10),
             localize('Sounds')
         ],
         () => this.currentTab === 'sounds' // query
