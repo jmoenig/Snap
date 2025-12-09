@@ -96,7 +96,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.1.7';
+var SplitVersion = '1.2';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -2132,7 +2132,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
 
     nameField = new InputFieldMorph(this.currentSprite.name);
     nameField.setWidth(100); // fixed dimensions
-
+    nameField.corner = 10;
     nameField.contrast = 90;
     nameField.setPosition(rotationStyleButtons[0].topRight().add(new Point(10, 3)));
     this.spriteBar.add(nameField);

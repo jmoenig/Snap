@@ -1119,7 +1119,7 @@ PaintCanvasMorph.prototype.buildContents = function () {
             if ((i + j) / 5 % 2 === 1) {
                 bkctx.fillStyle = "rgba(255, 255, 255, 1)";
             } else {
-                bkctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+                bkctx.fillStyle = "#e7e7e7";
             }
             bkctx.fillRect(i, j, 5, 5);
         }

@@ -125,7 +125,7 @@ var ListWatcherMorph;
     columns()               - answer a 2D list with rows turned into columns
     transpose()             - answer the matrix transpose over all dimensions
     reversed()              - answer a reversed shallow copy of the list
-    ssum()                  - answer the sum of all number leafs
+    sum()                  - answer the sum of all number leafs
     reshape()               - answer a new list formatted to the given dimensions.
     crossproduct()          - answer a new list of all possible sublist tuples
     query()                 - answer a part of a list or multidimensionel struct

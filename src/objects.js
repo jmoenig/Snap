@@ -4406,7 +4406,7 @@ SpriteMorph.prototype.makeVariableButton = function () {
     null,
     function () {
       new VariableDialogMorph(null, addVar, myself).prompt(
-        "Variable name",
+        "New Variable",
         null,
         myself.world()
       );

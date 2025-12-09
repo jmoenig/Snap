@@ -3215,12 +3215,12 @@ BlockDialogMorph.prototype.setType = function (blockType) {
 BlockDialogMorph.prototype.createScopeButtons = function () {
     this.addScopeButton(
         () => this.setScope('global'),
-        "for all sprites",
+        "For all sprites",
         () => this.isGlobal
     );
     this.addScopeButton(
         () => this.setScope('local'),
-        "for this sprite only",
+        "For this sprite only",
         () => !this.isGlobal
     );
 };
@@ -5700,12 +5700,12 @@ VariableDialogMorph.prototype.init = function (target, action, environment) {
 VariableDialogMorph.prototype.createTypeButtons = function () {
     this.addTypeButton(
         () => this.setType('global'),
-        "for all sprites",
+        "For all sprites",
         () => this.isGlobal
     );
     this.addTypeButton(
         () => this.setType('local'),
-        "for this sprite only",
+        "For this sprite only",
         () => !this.isGlobal
     );
 };

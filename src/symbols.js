@@ -2425,8 +2425,8 @@ SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
 };
 
 SymbolMorph.prototype.renderSymbolFlipVertical = function (ctx, color) {
-  ctx.translate(0, this.size);
-  ctx.rotate(radians(-90));
+  ctx.translate(this.width(), 0);
+  ctx.rotate(radians(90));
   this.renderSymbolFlipHorizontal(ctx, color);
 };
 

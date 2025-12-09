@@ -119,7 +119,7 @@ PushButtonMorph.prototype.labelColor = BLACK;
 PushButtonMorph.prototype.labelShadowColor = WHITE;
 PushButtonMorph.prototype.labelShadowOffset = new Point(1, 1);
 
-PushButtonMorph.prototype.color = new Color(220, 220, 220);
+PushButtonMorph.prototype.color = WHITE;
 PushButtonMorph.prototype.pressColor = new Color(115, 180, 240);
 PushButtonMorph.prototype.highlightColor =
   PushButtonMorph.prototype.pressColor.lighter(50);
@@ -189,13 +189,16 @@ PushButtonMorph.prototype.fixLayout = function () {
   }
 };
 
-
 PushButtonMorph.prototype.makeSquare = function (keepOutline) {
   // make sure I am a square
   this.outline = keepOutline ? this.outline : 0;
-    this.fixLayout();
+  this.fixLayout();
+  if (this.width() > this.height()) {
     this.labelMinExtent.x = this.height();
-    this.fixLayout();
+  } else {
+    this.labelMinExtent.y = this.width();
+  }
+  this.fixLayout();
 };
 
 // PushButtonMorph events
@@ -263,22 +266,24 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
     isTransparent = this.color.a < 1;
 
   if (!this.outline) {
-   return null
+    return null;
   }
   if (this.outlineGradient && !(!this.outline || isFlat)) {
     outlineStyle = ctx.createLinearGradient(0, 0, 0, this.height());
     outlineStyle.addColorStop(0, this.outlineColor.darker().toString());
     outlineStyle.addColorStop(1, "white");
   } else {
-    outlineStyle = isFlat ? this.outlineColor.lighter().toString() : this.outlineColor.toString();
+    outlineStyle = isFlat
+      ? this.outlineColor.toString()
+      : this.outlineColor.toString();
   }
   ctx.fillStyle = outlineStyle;
   ctx.strokeStyle = outlineStyle;
   ctx.lineWidth = this.outline;
   ctx.beginPath();
-  this.outlinePath(ctx, this.corner, isTransparent ? (this.outline / 2) : 0);
+  this.outlinePath(ctx, this.corner, isTransparent ? this.outline / 2 : 0);
   ctx.closePath();
-  isTransparent ? (ctx.stroke()) : (ctx.fill());
+  isTransparent ? ctx.stroke() : ctx.fill();
 };
 
 PushButtonMorph.prototype.drawBackground = function (ctx, color) {
@@ -286,11 +291,7 @@ PushButtonMorph.prototype.drawBackground = function (ctx, color) {
 
   ctx.fillStyle = color.toString();
   ctx.beginPath();
-  this.outlinePath(
-    ctx,
-    Math.max(this.corner - this.outline, 0),
-    this.outline
-  );
+  this.outlinePath(ctx, Math.max(this.corner - this.outline, 0), this.outline);
   ctx.closePath();
   ctx.fill();
   ctx.lineWidth = this.outline;
@@ -967,8 +968,8 @@ TabMorph.prototype.drawBackground = function (ctx, color) {
   ctx.fillStyle = color.toString();
   ctx.beginPath();
   ctx.moveTo(0, h);
-  ctx.arc(0 + c, 0 + c, c, radians(-180),radians(-90))
-  ctx.arc(w - c, 0 + c, c, radians(-90),radians(0))
+  ctx.arc(0 + c, 0 + c, c, radians(-180), radians(-90));
+  ctx.arc(w - c, 0 + c, c, radians(-90), radians(0));
   ctx.lineTo(w, h);
   ctx.closePath();
   ctx.fill();
@@ -1467,17 +1468,17 @@ DialogBoxMorph.prototype.titleBarColor = PushButtonMorph.prototype.pressColor;
 
 DialogBoxMorph.prototype.contrast = 40;
 
-DialogBoxMorph.prototype.corner = 12;
+DialogBoxMorph.prototype.corner = 5;
 DialogBoxMorph.prototype.padding = 14;
-DialogBoxMorph.prototype.titlePadding = 6;
+DialogBoxMorph.prototype.titlePadding = 10;
 
 DialogBoxMorph.prototype.buttonContrast = 50;
 DialogBoxMorph.prototype.buttonFontSize = 12;
-DialogBoxMorph.prototype.buttonCorner = 12;
+DialogBoxMorph.prototype.buttonCorner = 5;
 DialogBoxMorph.prototype.buttonEdge = 6;
 DialogBoxMorph.prototype.buttonPadding = 0;
-DialogBoxMorph.prototype.buttonOutline = 3;
-DialogBoxMorph.prototype.buttonOutlineColor = PushButtonMorph.prototype.color;
+DialogBoxMorph.prototype.buttonOutline = 2;
+DialogBoxMorph.prototype.buttonOutlineColor = new Color(204, 204, 204);
 DialogBoxMorph.prototype.buttonOutlineGradient = true;
 
 DialogBoxMorph.prototype.instances = {}; // prevent multiple instances
@@ -1861,7 +1862,6 @@ DialogBoxMorph.prototype.promptVector = function (
 };
 
 DialogBoxMorph.prototype.promptRGB = function (world, colorSlot) {
-  
   //     iw = this.fontSize * 4,
   //     rInp = new InputFieldMorph(color.r.toString(), true),
   //     gInp = new InputFieldMorph(color.g.toString(), true),
@@ -1956,12 +1956,12 @@ DialogBoxMorph.prototype.promptRGB = function (world, colorSlot) {
   // if (pic) {this.setPicture(pic); }
 
   // this.addBody(bdy);
-  
+
   // this.addButton('ok', 'OK');
-  
+
   // this.addButton('cancel', 'Cancel');
   // this.fixLayout();
-  
+
   // this.edit = function () {
   //     rInp.edit();
   // };
@@ -1973,57 +1973,57 @@ DialogBoxMorph.prototype.promptRGB = function (world, colorSlot) {
   //         constrain(bInp.getValue())
   //     );
   // };
-  
+
   // if (!this.key) {
-    //     this.key = 'RGB' + title;
-    // }
-    
+  //     this.key = 'RGB' + title;
+  // }
+
   // this.popUp(world);
   var dialog = this;
   var editor = new Morph();
   var oldColor = colorSlot.color,
-  hInp = new InputFieldMorph(colorSlot.color.hsl()[0]*100, true),
- sInp = new InputFieldMorph(colorSlot.color.hsl()[1]*100, true),
-vInp = new InputFieldMorph(colorSlot.color.hsl()[2]*100, true);
+    hInp = new InputFieldMorph(colorSlot.color.hsl()[0] * 100, true),
+    sInp = new InputFieldMorph(colorSlot.color.hsl()[1] * 100, true),
+    vInp = new InputFieldMorph(colorSlot.color.hsl()[2] * 100, true);
 
-hInp.contents().minWidth = this.fontSize * 3
+  hInp.contents().minWidth = this.fontSize * 3;
 
-hInp.setWidth(this.fontSize * 3)
-hInp.fixLayout()
-hInp.contents().minWidth = this.fontSize * 3
+  hInp.setWidth(this.fontSize * 3);
+  hInp.fixLayout();
+  hInp.contents().minWidth = this.fontSize * 3;
 
-sInp.setWidth(this.fontSize * 3)
-sInp.fixLayout()
-sInp.contents().minWidth = this.fontSize * 3
+  sInp.setWidth(this.fontSize * 3);
+  sInp.fixLayout();
+  sInp.contents().minWidth = this.fontSize * 3;
 
-vInp.setWidth(this.fontSize * 3)
-vInp.fixLayout()
-vInp.contents().minWidth = this.fontSize * 3
+  vInp.setWidth(this.fontSize * 3);
+  vInp.fixLayout();
+  vInp.contents().minWidth = this.fontSize * 3;
   var hSlider = new SliderMorph(
-      0,
-      100,
-      colorSlot.color.hsv()[0] * 100,
-      0,
-      "horizontal",
-      new Color(0, 0, 0, 1)
-    );
-    var sSlider = new SliderMorph(
-        0,
-        100,
-        colorSlot.color.hsv()[1] * 100,
-        0,
-        "horizontal",
-        new Color(0, 0, 0, 1)
-    );
-    var vSlider = new SliderMorph(
-      0,
-      100,
-      colorSlot.color.hsv()[2] * 100,
-      0,
-      "horizontal",
-      new Color(0, 0, 0, 1)
-    );
-      var aSlider = new SliderMorph(
+    0,
+    100,
+    colorSlot.color.hsv()[0] * 100,
+    0,
+    "horizontal",
+    new Color(0, 0, 0, 1)
+  );
+  var sSlider = new SliderMorph(
+    0,
+    100,
+    colorSlot.color.hsv()[1] * 100,
+    0,
+    "horizontal",
+    new Color(0, 0, 0, 1)
+  );
+  var vSlider = new SliderMorph(
+    0,
+    100,
+    colorSlot.color.hsv()[2] * 100,
+    0,
+    "horizontal",
+    new Color(0, 0, 0, 1)
+  );
+  var aSlider = new SliderMorph(
     0,
     100,
     colorSlot.color.a * 100,
@@ -2031,79 +2031,94 @@ vInp.contents().minWidth = this.fontSize * 3
     "horizontal",
     new Color(0, 0, 0, 1)
   );
-  hInp.fixLayout()
-  sInp.fixLayout()
-  vInp.fixLayout()
-  hInp.rerender()
+  hInp.fixLayout();
+  sInp.fixLayout();
+  vInp.fixLayout();
+  hInp.rerender();
   var result = new Morph();
   result.bounds.origin = new Point(0, 62.5);
   result.bounds.corner = new Point(100, 100);
   result.color = colorSlot.evaluate();
-  
-    
+
   dialog.labelString = "Color Picker";
   dialog.createLabel();
   editor.alpha = 0;
   editor.setExtent(new Point(162.5, 90));
   hSlider.setExtent(new Point(100, 12.5));
-  hSlider.target = hInp.text
-  sSlider.target = sInp.text
-  vSlider.target = vInp.text
+  hSlider.target = hInp.text;
+  sSlider.target = sInp.text;
+  vSlider.target = vInp.text;
   hSlider.action = function (value) {
-    result.color.set_hsv(hSlider.value / 100, sSlider.value / 100, vSlider.value / 100)
+    result.color.set_hsv(
+      hSlider.value / 100,
+      sSlider.value / 100,
+      vSlider.value / 100
+    );
     hInp.text = String(value);
     hInp.children[0].text = String(value);
     hInp.children[0].children[0].text = String(value);
-    hInp.rerender()
+    hInp.rerender();
     result.fixLayout();
-    
+
     hSlider.fixLayout();
-    
+
     hSlider.parent.fixLayout();
     hSlider.parent.parent.fixLayout();
   };
   sSlider.setExtent(new Point(100, 12.5));
   sSlider.action = function (value) {
-    result.color.set_hsv(hSlider.value / 100, sSlider.value / 100, vSlider.value / 100)
+    result.color.set_hsv(
+      hSlider.value / 100,
+      sSlider.value / 100,
+      vSlider.value / 100
+    );
     sInp.text = String(value);
     sInp.children[0].text = String(value);
     sInp.children[0].children[0].text = String(value);
-    sInp.rerender()
+    sInp.rerender();
 
     result.fixLayout();
-    
+
     sSlider.fixLayout();
-    
+
     sSlider.parent.fixLayout();
     sSlider.parent.parent.fixLayout();
   };
   vSlider.setExtent(new Point(100, 12.5));
   vSlider.action = function (value) {
-    result.color.set_hsv(hSlider.value / 100, sSlider.value / 100, vSlider.value / 100)
+    result.color.set_hsv(
+      hSlider.value / 100,
+      sSlider.value / 100,
+      vSlider.value / 100
+    );
     vInp.text = String(value);
     vInp.children[0].text = String(value);
     vInp.children[0].children[0].text = String(value);
-    vInp.rerender()
+    vInp.rerender();
     result.fixLayout();
-    
+
     vSlider.fixLayout();
-    
+
     vSlider.parent.fixLayout();
     vSlider.parent.parent.fixLayout();
   };
 
   aSlider.setExtent(new Point(100, 12.5));
   aSlider.action = function (value) {
-    result.color.set_hsv(hSlider.value / 100, sSlider.value / 100, vSlider.value / 100)
+    result.color.set_hsv(
+      hSlider.value / 100,
+      sSlider.value / 100,
+      vSlider.value / 100
+    );
     result.fixLayout();
-    
+
     aSlider.color = new Color(value * 2.55, value * 2.55, value * 2.55, 1);
     aSlider.fixLayout();
-    
+
     aSlider.parent.fixLayout();
     aSlider.parent.parent.fixLayout();
   };
-  
+
   sSlider.fixLayout();
   editor.add(hSlider);
   editor.add(vSlider);
@@ -2111,55 +2126,50 @@ vInp.contents().minWidth = this.fontSize * 3
   //editor.add(aSlider);
   hInp.children[0].reactToKeystroke = function (evt) {
     setTimeout(() => {
-      hSlider.value = String(hInp.children[0].children[0].text)
-    hSlider.fixLayout(
-    )
-    this.rerender()
-    hSlider.action()
-    hInp.children[0].children[0].text = String(hSlider.value)
-    hInp.text = String(hInp.children[0].children[0].text)
-  }, 10)
-    
+      hSlider.value = String(hInp.children[0].children[0].text);
+      hSlider.fixLayout();
+      this.rerender();
+      hSlider.action();
+      hInp.children[0].children[0].text = String(hSlider.value);
+      hInp.text = String(hInp.children[0].children[0].text);
+    }, 10);
   };
   sInp.children[0].reactToKeystroke = function (evt) {
     setTimeout(() => {
-      sSlider.value = sInp.children[0].children[0].text
-    sSlider.fixLayout()
-    this.rerender()
-    sSlider.action()
-    sInp.children[0].children[0].text = String(sSlider.value)
-    sInp.text = sInp.children[0].children[0].text
-  }, 10)
-    
+      sSlider.value = sInp.children[0].children[0].text;
+      sSlider.fixLayout();
+      this.rerender();
+      sSlider.action();
+      sInp.children[0].children[0].text = String(sSlider.value);
+      sInp.text = sInp.children[0].children[0].text;
+    }, 10);
   };
   vInp.children[0].reactToKeystroke = function (evt) {
     setTimeout(() => {
-      vSlider.value = vInp.children[0].children[0].text
-    vSlider.fixLayout(
-    )
-    this.rerender()
-    vSlider.action()
-    vInp.children[0].children[0].text = String(vSlider.value)
-    vInp.text = vInp.children[0].children[0].text
-  }, 10)
-    
+      vSlider.value = vInp.children[0].children[0].text;
+      vSlider.fixLayout();
+      this.rerender();
+      vSlider.action();
+      vInp.children[0].children[0].text = String(vSlider.value);
+      vInp.text = vInp.children[0].children[0].text;
+    }, 10);
   };
   editor.add(hInp);
   editor.add(sInp);
   editor.add(vInp);
-  
+
   hInp.bounds.origin = new Point(100, 0);
   sInp.bounds.origin = new Point(100, 20);
   vInp.bounds.origin = new Point(100, 40);
-  hInp.fixLayout()
-  sInp.fixLayout()
-  vInp.fixLayout()
+  hInp.fixLayout();
+  sInp.fixLayout();
+  vInp.fixLayout();
   hSlider.bounds.origin = new Point(0, 5);
   hSlider.bounds.corner = new Point(
     hSlider.bounds.origin.x + 100,
     hSlider.bounds.origin.y + 12.5
   );
-  hSlider.fixLayout()
+  hSlider.fixLayout();
   sSlider.bounds.origin = new Point(0, 25);
   sSlider.bounds.corner = new Point(
     sSlider.bounds.origin.x + 100,
@@ -2178,17 +2188,16 @@ vInp.contents().minWidth = this.fontSize * 3
     aSlider.bounds.origin.y + 12.5
   );
   aSlider.fixLayout();
-  
-  
+
   result.fixLayout();
   editor.add(result);
-  
+
   dialog.addBody(editor);
   dialog.addButton(function () {
     colorSlot.color = result.color;
-    colorSlot.color = result.color
-    colorSlot.fixLayout()
-    colorSlot.rerender()
+    colorSlot.color = result.color;
+    colorSlot.fixLayout();
+    colorSlot.rerender();
     this.destroy();
   }, "OK");
   dialog.addButton(function () {
@@ -2214,7 +2223,7 @@ vInp.contents().minWidth = this.fontSize * 3
       constrain(aSlider.value)
     );
   };
-  
+
   dialog.popUp(world);
 };
 
@@ -2869,7 +2878,33 @@ DialogBoxMorph.prototype.createButtons = function () {
     this.buttons.destroy();
   }
   this.buttons = new AlignmentMorph("row", this.padding);
+  this.closeButton = this.addCloseButton();
   this.add(this.buttons);
+};
+
+DialogBoxMorph.prototype.addCloseButton = function () {
+  var button = new PushButtonMorph(this, "cancel", "X");
+  button.fontSize = this.buttonFontSize;
+  button.corner = 999;
+  button.edge = this.buttonEdge;
+  button.outline = 0;
+  button.outlineColor = this.buttonOutlineColor;
+  button.outlineGradient = this.buttonOutlineGradient;
+  button.padding = this.buttonPadding;
+  button.contrast = this.buttonContrast;
+  button.highlightColor = button.color;
+  button.color = this.titleBarColor.darker();
+  button.highlightColor = button.color;
+  button.pressColor = button.color;
+  button.labelColor = this.titleTextColor;
+  
+  this.add(button);
+  button.makeSquare();
+  button.setPosition(
+    this.topRight().add(new Point(-this.padding - button.width(), this.padding))
+  );
+
+  return button;
 };
 
 DialogBoxMorph.prototype.addButton = function (action, label) {
@@ -2882,10 +2917,18 @@ DialogBoxMorph.prototype.addButton = function (action, label) {
   button.corner = this.buttonCorner;
   button.edge = this.buttonEdge;
   button.outline = this.buttonOutline;
-  button.outlineColor = this.buttonOutlineColor;
+  button.outlineColor =
+    (action || "ok") === "ok"
+      ? IDE_Morph.prototype.accentColor
+      : this.buttonOutlineColor;
   button.outlineGradient = this.buttonOutlineGradient;
   button.padding = this.buttonPadding;
   button.contrast = this.buttonContrast;
+  button.color =
+    (action || "ok") === "ok" ? IDE_Morph.prototype.accentColor : button.color;
+  button.labelColor = (action || "ok") === "ok" ? WHITE : button.labelColor;
+  button.highlightColor = button.color;
+  button.pressColor = button.color;
   button.fixLayout();
   this.buttons.add(button);
   return button;
@@ -2957,6 +3000,8 @@ DialogBoxMorph.prototype.fixLayout = function () {
     }
   }
 
+  this.closeButton.setPosition(this.topRight().add(new Point(-this.padding - this.closeButton.width(), this.padding)));
+
   if (this.label) {
     this.label.setCenter(this.center());
     this.label.setTop(this.top() + (th - this.label.height()) / 2);
@@ -2971,6 +3016,7 @@ DialogBoxMorph.prototype.fixLayout = function () {
     this.buttons.setCenter(this.center());
     this.buttons.setBottom(this.bottom() - this.padding);
   }
+  
 
   // refresh a shallow shadow
   this.removeShadow();
@@ -3026,7 +3072,7 @@ DialogBoxMorph.prototype.render = function (ctx) {
     ctx.fillStyle = gradient;
   }
   ctx.beginPath();
-  this.outlinePathTitle(ctx, this.corner);//isFlat ? 0 : this.corner);
+  this.outlinePathTitle(ctx, this.corner); //isFlat ? 0 : this.corner);
   ctx.closePath();
   ctx.fill();
 
@@ -3034,7 +3080,7 @@ DialogBoxMorph.prototype.render = function (ctx) {
   // body
   ctx.fillStyle = this.color.toString();
   ctx.beginPath();
-  this.outlinePathBody(ctx, this.corner)//isFlat ? 0 : this.corner);
+  this.outlinePathBody(ctx, this.corner); //isFlat ? 0 : this.corner);
   ctx.closePath();
   ctx.fill();
 
@@ -3274,6 +3320,7 @@ InputFieldMorph.prototype.init = function (
   this.choices = choiceDict || null; // object, function or selector
   this.isReadOnly = isReadOnly || false;
   this.isNumeric = isNumeric || false;
+  this.corner = 3;
   //this.edge = 5;
 
   contents.alpha = 0;
@@ -3337,9 +3384,7 @@ InputFieldMorph.prototype.setIsNumeric = function (bool) {
 
   // adjust my shown value to conform with the numeric flag
   value = this.getValue();
-  if (this.isNumeric &&
-        !(isString(value) && value.startsWith('$_'))
-    ) {
+  if (this.isNumeric && !(isString(value) && value.startsWith("$_"))) {
     value = parseFloat(value);
     if (isNaN(value)) {
       value = null;
@@ -3389,7 +3434,11 @@ InputFieldMorph.prototype.dropDownMenu = function () {
 
 InputFieldMorph.prototype.fixLayout = function () {
   var contents = this.contents(),
-    arrow = this.arrow();
+    arrow = this.arrow(),
+    corner = Math.max(
+      0,
+      Math.min(this.corner - 6, this.height() / 2, this.width() / 2)
+    );
 
   if (!contents) {
     return null;
@@ -3417,11 +3466,14 @@ InputFieldMorph.prototype.fixLayout = function () {
     this.width() -
       this.edge -
       this.typeInPadding -
+      corner -
       (this.choices ? arrow.width() + this.typeInPadding : 0)
   );
 
   contents.setPosition(
-    new Point(this.edge, this.edge).add(this.typeInPadding).add(this.position())
+    new Point(this.edge + corner, this.edge)
+      .add(this.typeInPadding)
+      .add(this.position())
   );
 
   arrow.setPosition(
@@ -3479,33 +3531,33 @@ InputFieldMorph.prototype.render = function (ctx) {
     borderColor = new Color(120, 120, 120);
   }
   ctx.fillStyle = this.color.toString();
-  ctx.strokeStyle = this.color.darker(this.contrast/2).toString();
-  ctx.strokeWidth = 2
+  ctx.strokeStyle = this.color.darker(this.contrast / 2).toString();
+  ctx.strokeWidth = 2;
 
   // cache my border colors
   this.cachedClr = borderColor.toString();
   this.cachedClrBright = borderColor.lighter(this.contrast).toString();
   this.cachedClrDark = borderColor.darker(this.contrast).toString();
 
-  if(false) {
-  ctx.fillRect(
-    this.edge,
-    this.edge,
-    this.width() - this.edge * 2,
-    this.height() - this.edge * 2
-  );
-} else {
-  ctx.beginPath()
- ctx.roundRect(
-        this.edge,
-        this.edge,
-        this.width() - (this.edge * 2),
-        this.height() - (this.edge * 2),
-        3
+  if (false) {
+    ctx.fillRect(
+      this.edge,
+      this.edge,
+      this.width() - this.edge * 2,
+      this.height() - this.edge * 2
     );
-    ctx.fill()
-    ctx.stroke()
-}
+  } else {
+    ctx.beginPath();
+    ctx.roundRect(
+      this.edge,
+      this.edge,
+      this.width() - this.edge * 2,
+      this.height() - this.edge * 2,
+      this.corner || 3
+    );
+    ctx.fill();
+    ctx.stroke();
+  }
 
   this.drawRectBorder(ctx);
 };
@@ -3595,7 +3647,14 @@ PianoMenuMorph.uber = MenuMorph.prototype;
 
 // PianoMenuMorph instance creation:
 
-function PianoMenuMorph(target, environment, fontSize, soundType, visibleOctaves, bgColor) {
+function PianoMenuMorph(
+  target,
+  environment,
+  fontSize,
+  soundType,
+  visibleOctaves,
+  bgColor
+) {
   this.init(target, environment, fontSize, soundType, visibleOctaves, bgColor);
 }
 
@@ -3609,7 +3668,14 @@ PianoMenuMorph.prototype.init = function (
 ) {
   var choices, key;
   this.soundType = soundType;
-  PianoMenuMorph.uber.init.call(this, target, null, environment, fontSize, bgColor);
+  PianoMenuMorph.uber.init.call(
+    this,
+    target,
+    null,
+    environment,
+    fontSize,
+    bgColor
+  );
   this.bgColor = bgColor || WHITE;
   if (isNil(visibleOctaves)) {
     visibleOctaves = 2;
@@ -3939,7 +4005,7 @@ PianoKeyMorph.prototype.init = function (
     color,
     bold,
     italic,
-    doubleClickAction,
+    doubleClickAction
     //label
   );
   /*
@@ -3977,7 +4043,6 @@ PianoKeyMorph.prototype.createLabel = function () {
 
 PianoKeyMorph.prototype.mouseEnter = function () {
   var piano = this.parentThatIsA(PianoMenuMorph),
-  
     octave = Math.floor((this.action - 1) / 12),
     octaveOffset = 0;
 
@@ -4000,25 +4065,24 @@ PianoKeyMorph.prototype.mouseEnter = function () {
     this.action
   })`;
   this.feedback.fixLayout();
-  
 };
 PianoKeyMorph.prototype.mouseDownLeft = function () {
   var piano = this.parentThatIsA(PianoMenuMorph),
-  soundType = piano ? piano.soundType : 1;
+    soundType = piano ? piano.soundType : 1;
   this.note.stop(true);
   this.note.play(soundType);
   setTimeout(() => this.note.stop(true), 400);
-}
+};
 PianoKeyMorph.prototype.mouseClickLeft = function () {
-  return
-}
+  return;
+};
 PianoKeyMorph.prototype.destroy = function () {
   if (this.parent !== null) {
     this.fullChanged();
     this.parent.removeChild(this);
   }
-  this.note.stop(true)
-}
+  this.note.stop(true);
+};
 
 PianoKeyMorph.prototype.mouseLeave = function () {
   this.note.stop(true);
