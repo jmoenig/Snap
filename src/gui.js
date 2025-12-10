@@ -11597,18 +11597,18 @@ CostumeIconMorph.prototype.userMenu = function () {
       new Color(100, 0, 0)
     );
   }
-  menu.addItem("rename", "renameCostume");
   menu.addLine();
   menu.addItem("duplicate", "duplicateCostume");
-  menu.addItem("delete", "removeCostume");
+  menu.addItem("export", "exportCostume");
+  menu.addItem("rename", "renameCostume");
   menu.addLine();
+  menu.addItem("delete", "removeCostume");
   if (this.object.embeddedData) {
     menu.addItem(
       "get" + " " + this.typeOfStringData(this.object.embeddedData),
       "importEmbeddedData"
     );
   }
-  menu.addItem("export", "exportCostume");
   return menu;
 };
 

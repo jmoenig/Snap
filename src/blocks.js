@@ -2451,11 +2451,12 @@ SyntaxElementMorph.prototype.fixLayout = function () {
           part instanceof StringMorph ? part.rawHeight() : part.height()
         );
       }
-      var i = this instanceof CommandBlockMorph ? -2 : 0;
+      var i = this instanceof CommandBlockMorph ? -2 : 0,
+      isCommand = this instanceof CommandBlockMorph;
       lineHeight =
         Math.max(
           lineHeight - i,
-          this instanceof CommandBlockMorph ? this.scale * 22 : this.scale * 18
+          isCommand && index == 0 ? this.scale * 22 : (isCommand ? this.scale * 15 : this.scale * 18)
         ) + i;
     });
 

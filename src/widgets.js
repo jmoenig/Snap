@@ -1051,23 +1051,26 @@ TabMorph.prototype.refresh = function () {
 
 // TabMorph drawing:
 
-TabMorph.prototype.drawBackground = function (ctx, color) {
+TabMorph.prototype.drawBackground = function (ctx, color, inset) {
+  if(!inset) {
+    inset = 0
+  }
   var w = this.width(),
     h = this.height(),
     c = this.corner;
 
   ctx.fillStyle = color.toString();
   ctx.beginPath();
-  ctx.moveTo(0, h);
-  ctx.arc(0 + c, 0 + c, c, radians(-180), radians(-90));
-  ctx.arc(w - c, 0 + c, c, radians(-90), radians(0));
-  ctx.lineTo(w, h);
+  ctx.moveTo(inset, h);
+  ctx.arc(0 + c + inset, 0 + c + inset, c, radians(-180), radians(-90));
+  ctx.arc(w - c - inset, 0 + c + inset, c, radians(-90), radians(0));
+  ctx.lineTo(w - inset, h);
   ctx.closePath();
   ctx.fill();
 };
 
 TabMorph.prototype.drawOutline = function () {
-  nop();
+  nop()
 };
 
 TabMorph.prototype.drawEdges = function (
