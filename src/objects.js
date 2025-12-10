@@ -15316,6 +15316,7 @@ WatcherMorph.prototype.isGlobal = function (selector) {
       "getTimer",
       "reportMouseX",
       "reportMouseY",
+      "reportMouseDown",
       "reportThreadCount",
     ],
     selector

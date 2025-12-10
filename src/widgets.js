@@ -1597,6 +1597,7 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
   this.head = null;
   this.body = null;
   this.buttons = null;
+  this.closeButton = null;
 
   // initialize inherited properties:
   DialogBoxMorph.uber.init.call(this);
@@ -1609,6 +1610,7 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
   this.createLabel();
   this.createButtons();
   this.setExtent(new Point(300, 150));
+
 };
 
 // DialogBoxMorph ops
@@ -2995,12 +2997,14 @@ DialogBoxMorph.prototype.addCloseButton = function () {
   button.pressColor = button.color;
   button.labelColor = this.titleTextColor;
   
-  this.add(button);
   button.makeSquare();
-  button.setPosition(
-    this.topRight().add(new Point(-this.padding - button.width(), this.padding))
-  );
-  this.closeButton = button
+  /*button.setPosition(
+    this.topRight().add(new Point(-this.padding - button.width(), this.padding / 2))
+    );*/
+    this.closeButton = button
+    this.add(button);
+
+
 
   return button;
 };
@@ -3117,7 +3121,8 @@ DialogBoxMorph.prototype.fixLayout = function () {
 
   // refresh a shallow shadow
   this.removeShadow();
-  this.closeButton.setPosition(this.topRight().add(new Point(-this.padding - this.closeButton.width(), 0)));
+  this.closeButton.setPosition(this.topRight().add(new Point(-this.padding - this.closeButton.width(), this.padding / 2)));
+  
   this.addShadow();
 };
 

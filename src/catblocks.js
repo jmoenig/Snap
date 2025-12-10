@@ -61,7 +61,7 @@ EarsMorph.prototype.render = function (ctx) {
     h = this.parent.hatHeight,
     c = this.parent.corner,
     prototypeHat = this.parent instanceof PrototypeHatBlockMorph;
-  ctx.fillStyle = this.parent.color;
+  ctx.fillStyle = SpriteMorph.prototype.isHighContrast ? this.parent.cachedClrDark : this.parent.cachedClr;
   if (HatBlockMorph.prototype.isCatBlocks) {
     let xOffset = 2,
       yOffset = -5 + this.parent.flatEdge;
@@ -328,7 +328,7 @@ EarsMorph.prototype.render = function (ctx) {
       );
     }
     // They are in different functions because the offset breaks them if they aren't
-    ctx.fillStyle = this.parent.cachedClrDark;
+    ctx.fillStyle = !SpriteMorph.prototype.isHighContrast ? this.parent.cachedClrDark : this.parent.cachedClr;
     ctx.beginPath();
     drawLeftEarShape(this.parent.flatEdge);
     ctx.closePath();
@@ -338,7 +338,7 @@ EarsMorph.prototype.render = function (ctx) {
     ctx.closePath();
     ctx.fill();
 
-    ctx.fillStyle = this.parent.cachedClr;
+    ctx.fillStyle = SpriteMorph.prototype.isHighContrast ? this.parent.cachedClrDark : this.parent.cachedClr;
 
     ctx.beginPath();
     drawLeftEarShape(0);
@@ -451,7 +451,7 @@ EarsMorph.prototype.render = function (ctx) {
     ctx.fillStyle = "#FFD5E6";
     ctx.fill();
 
-    ctx.fillStyle = "rgba(0,0,0,0.6)";
+    ctx.fillStyle = SpriteMorph.prototype.isHighContrast ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.6)";
     drawCatEyes();
     ctx.closePath();
     ctx.fill();

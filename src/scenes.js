@@ -256,7 +256,7 @@ Scene.prototype.stop = function (forGood) {
     this.stage.removeAllClones();
     ide = this.stage.parentThatIsA(IDE_Morph);
     if (ide) {
-        ide.controlBar.pauseButton.refresh();
-        ide.controlBar.stopButton.refresh();
+        ide.projectControlBar.pauseButton.refresh();
+        ide.projectControlBar.stopButton.refresh();
     }
 };
