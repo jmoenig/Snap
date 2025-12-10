@@ -2656,6 +2656,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         cnf = this.config,
         border = cnf.border || 0,
         flag,
+        mz,
         maxPaletteWidth;
 
     // logo
@@ -2830,6 +2831,12 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.corral.setHeight(this.bottom() - this.corral.top() - border);
             this.corral.fixLayout();
         }
+    }
+
+    // adjust the global zoom if necessary
+    mz = this.maxZoom();
+    if (mz < (ZOOM * 100) && mz >= 1) {
+        this.setZoom(mz);
     }
 };
 

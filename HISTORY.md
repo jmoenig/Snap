@@ -47,6 +47,7 @@
 
 ### 2025-12-10
 * gui: tweaked IDE resizing layout for different translations
+* gui: adjust the global zoom when switching to another language
 
 ### 2025-12-09
 * widgets: added support for combined icon-text labels in tab buttons
