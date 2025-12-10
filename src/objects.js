@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-08';
+modules.objects = '2025-December-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -6661,15 +6661,92 @@ SpriteMorph.prototype.clear = function () {
     this.parent.clearPenTrails();
 };
 
+// SpriteMorph writing
+
 SpriteMorph.prototype.write = function (text, size) {
-    // thanks to Michael Ball for contributing this code!
     if (typeof text !== 'string' && typeof text !== 'number') {
         throw new Error(
             localize('can only write text or numbers, not a') + ' ' +
             typeof text
         );
     }
+    if (isSnapObject(this.sheet)) {
+        this.writeOn(this.sheet, text, size);
+    } else {
+        this.writeOnPenTrails(text, size);
+    }
+};
 
+SpriteMorph.prototype.writeOn = function (target, text, size) {
+    var targetCostume,
+        start,
+        delta,
+        dest,
+        fontSize,
+        rotation,
+        len,
+        ctx;
+
+    // only draw if the sprite is not currently being dragged
+    // prevent drawing an object onto itself
+    if (this === target || this.parentThatIsA(HandMorph)) {
+        return;
+    }
+
+    // check if target has a costumes,
+    // rasterize copy of target costume if it's an SVG
+    // cache the costume copy for later reuse
+    if (target.costume) {
+        if (target.trailsCache) {
+            targetCostume = target.trailsCache;
+        } else {
+            if (target.costume instanceof SVG_Costume) {
+                targetCostume = target.costume.rasterized();
+            } else {
+                targetCostume = target.costume.copy();
+            }
+            target.trailsCache = targetCostume;
+        }
+    } else {
+        return;
+    }
+
+    // determine the relative coordinates, rotation and font size
+    start = target.costumePoint(this.rotationCenter());
+    fontSize = size;
+    rotation = radians(this.direction() - 90);
+    if (target instanceof SpriteMorph) {
+        fontSize /= target.scale;
+        rotation -= radians(target.direction() - 90);
+    }
+
+    // write the text on the target canvas
+    ctx = targetCostume.contents.getContext('2d');
+    ctx.save();
+    ctx.font = fontSize + 'px monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = this.color.toString();
+    len = ctx.measureText(text).width;
+    ctx.translate(start.x, start.y);
+    ctx.rotate(rotation);
+    ctx.globalCompositeOperation = 'source-atop';
+    ctx.fillText(text, 0, 0);
+    ctx.translate(-start.x, -start.y);
+    ctx.restore();
+    delta = new Point(
+        len * Math.sin(radians(this.direction())),
+        len * Math.cos(radians(this.direction()))
+    );
+    dest = delta.add(new Point(this.xPosition(), this.yPosition()));
+    this.gotoXY(dest.x, dest.y, false);
+
+    // wear & cache the changed costume
+    target.doSwitchToCostume(targetCostume, null, true); // keep cache
+};
+
+SpriteMorph.prototype.writeOnPenTrails = function (text, size) {
+    // thanks to Michael Ball for contributing this code!
     var stage = this.parentThatIsA(StageMorph),
         context = stage.penTrails().getContext('2d'),
         rotation = radians(this.direction() - 90),

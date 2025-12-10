@@ -21,7 +21,7 @@
         * new "expression" selector in block-attribute (metaprogramming) reporter
         * enables expressions (unringed blocks) to be CALLed and RUN
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
-    * drawing on sprites
+    * drawing and writing on sprites
         * new "pen_drawOn([sprite])" extension, experimental & temporary
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
@@ -50,6 +50,7 @@
 ### 2025-12-10
 * gui: tweaked IDE resizing layout for different translations
 * gui: adjust the global zoom when switching to another language
+* objects: support writing on sprites (using the "pen_drawOn" extension)
 
 ### 2025-12-09
 * widgets: added support for combined icon-text labels in tab buttons
