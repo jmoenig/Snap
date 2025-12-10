@@ -10603,6 +10603,8 @@ StageMorph.prototype.moveBy = function (delta) {
 
 StageMorph.prototype.render = function (ctx) {
   ctx.save();
+  ctx.roundRect(0, 0, this.width(), this.height(), 4)
+  ctx.clip()
   ctx.fillStyle = this.color.toString();
   ctx.fillRect(0, 0, this.width(), this.height());
   if (this.costume && !(this.costume.loaded instanceof Function)) {

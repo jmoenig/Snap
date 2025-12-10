@@ -1111,10 +1111,10 @@ IDE_Morph.prototype.createLogo = function () {
             0
         );
         gradient.addColorStop(0, 'black');
-        gradient.addColorStop(0.5, myself.frameColor.toString());
+        gradient.addColorStop(0.5, myself.accentColor.toString());
         ctx.fillStyle = MorphicPreferences.isFlat ||
             IDE_Morph.prototype.isBright ?
-            myself.frameColor.toString() : gradient;
+            myself.accentColor.toString() : gradient;
         ctx.fillRect(0, 0, this.width(), this.height());
         if (this.cachedTexture) {
             this.renderCachedTexture(ctx);
@@ -1175,7 +1175,7 @@ IDE_Morph.prototype.createControlBar = function () {
     }
 
     this.controlBar = new Morph();
-    this.controlBar.color = this.frameColor;
+    this.controlBar.color = this.accentColor;
     this.controlBar.setHeight(this.logo.height()); // height is fixed
 
     // let users manually enforce re-layout when changing orientation
@@ -1677,7 +1677,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.color = this.groupColor;
     this.extensionButton = new Morph();
     this.extensionButton.color = this.accentColor;
-    const symb = new SymbolMorph('extension', 34);
+    const symb = new SymbolMorph('extension', 34, WHITE);
     symb.setLeft(13)
     symb.setTop(7)
     this.extensionButton.add(symb)
@@ -4511,11 +4511,13 @@ IDE_Morph.prototype.settingsMenu = function () {
         shiftClicked = (world.currentKey === 16),
         on = new SymbolMorph(
             'checkedBox',
-            MorphicPreferences.menuFontSize * 0.75
+            MorphicPreferences.menuFontSize * 0.75,
+            WHITE
         ),
         off = new SymbolMorph(
             'rectangle',
-            MorphicPreferences.menuFontSize * 0.75
+            MorphicPreferences.menuFontSize * 0.75,
+            WHITE
         );
 
     function addPreference(label, toggle, test, onHint, offHint, hide) {
@@ -4552,7 +4554,8 @@ IDE_Morph.prototype.settingsMenu = function () {
         [
             new SymbolMorph(
                 'globe',
-                MorphicPreferences.menuFontSize
+                MorphicPreferences.menuFontSize,
+                WHITE
             ),
             localize('Language...')
         ],
@@ -7664,7 +7667,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.toggleSingleStepping();
         }
         this.setColor(this.backgroundColor);
-        this.controlBar.setColor(this.frameColor);
+        this.controlBar.setColor(this.accentColor);
         elements.forEach(e =>
             e.show()
         );
@@ -7915,6 +7918,8 @@ IDE_Morph.prototype.languageMenu = function () {
             MorphicPreferences.menuFontSize * 0.75
         ),
         empty = tick.fullCopy();
+
+        menu.bgColor = this.accentColor;
 
     empty.render = nop;
     SnapTranslator.languages().forEach(lang =>
