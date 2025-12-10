@@ -31,6 +31,8 @@ var snapVersion = '11.0.0',
         'src/sha512.js',
         'src/FileSaver.min.js',
         'src/santa.js',
+        'src/personal-libraries.js',
+        'src/catblocks.js',
 
         // translations
         'locale/lang-ar.js',
