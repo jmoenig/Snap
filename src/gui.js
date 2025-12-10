@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-December-09';
+modules.gui = '2025-December-10';
 
 // Declarations
 
@@ -2943,10 +2943,14 @@ IDE_Morph.prototype.minWidth = function () {
     // in edit mode with all panes and UI elements,
     // constrained by displaying all elements in the control bar
     var buttons = this.controlBar.children.filter(morph =>
-            morph instanceof PushButtonMorph);
-    return this.logo.width() - 60 +
-        buttons.map(each => each.width()).reduce((a, b) => a + b) +
-        this.controlBar.steppingSlider.width();
+            morph instanceof PushButtonMorph),
+        minControlBarWidth = this.logo.width() - 60 +
+            buttons.map(each => each.width()).reduce((a, b) => a + b) +
+                this.controlBar.steppingSlider.width(),
+        minTabBarWidth = this.minStageWidth() +
+            this.spriteBar.tabBar.width() +
+            this.logo.width();
+    return Math.max(minControlBarWidth, minTabBarWidth);
 };
 
 IDE_Morph.prototype.minHeight = function () {

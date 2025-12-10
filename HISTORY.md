@@ -45,6 +45,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-10
+* gui: tweaked IDE resizing layout for different translations
+
 ### 2025-12-09
 * widgets: added support for combined icon-text labels in tab buttons
 * symbols: added new "blocks" symbol
