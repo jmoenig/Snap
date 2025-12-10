@@ -26,7 +26,10 @@
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
+    * new "blocks" and "speaker" symbols
 * **Notable Changes:**
+    * added icons to the IDE tabs (scripts, costumes, sounds)
+    * rearranged IDE settings menu items into "looks" submenu
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
         * added optional "max height" input to "fancy say / think" library commands
@@ -34,7 +37,6 @@
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
-    * rearranged IDE settings menu items into "looks" submenu
     * meta-programming: removed "static" tag from the block-attribute getter
     * took out rate limit in the Microblocks library, thanks, Bernat!
     * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
