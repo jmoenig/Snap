@@ -584,6 +584,8 @@ SymbolMorph.prototype.stopSymbol = new Image();
 SymbolMorph.prototype.stopSymbol.src = "src/stop.svg";
 SymbolMorph.prototype.extensionSymbol = new Image();
 SymbolMorph.prototype.extensionSymbol.src = "src/extensions.svg";
+SymbolMorph.prototype.extensionSymbolBlack = new Image();
+SymbolMorph.prototype.extensionSymbolBlack.src = "src/extensions-black.svg";
 SymbolMorph.prototype.notesImage = new Image();
 SymbolMorph.prototype.notesImage.src = "src/notes.svg";
 SymbolMorph.prototype.notesImageBlack = new Image();
@@ -2653,9 +2655,7 @@ SymbolMorph.prototype.renderSymbolInfinity = function (ctx, color) {
 SymbolMorph.prototype.renderSymbolExtension = function (ctx, color) {
   var side = this.symbolWidth(),
     vert = (side - side * 0.383) / 2;
-  this.drawImage(ctx, this.extensionSymbol);
-
-  return;
+  this.drawImage(ctx, color.eq(BLACK) ? this.extensionSymbolBlack : this.extensionSymbol);
 }
 
 /*
