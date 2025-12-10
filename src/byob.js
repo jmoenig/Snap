@@ -2930,8 +2930,8 @@ BlockDialogMorph.prototype.openForChange = function (
 // category buttons
 
 BlockDialogMorph.prototype.createCategoryButtons = function () {
-    SpriteMorph.prototype.categories.filter(cat=>cat!="my blocks").forEach(cat =>
-        this.addCategoryButton(cat)
+    SpriteMorph.prototype.categories.filter(cat=>cat!="my blocks").forEach((cat, i) =>
+        this.addCategoryButton(cat, i)
     );
 
     // sort alphabetically
@@ -2945,8 +2945,8 @@ BlockDialogMorph.prototype.createCategoryButtons = function () {
     );
 };
 
-BlockDialogMorph.prototype.addCategoryButton = function (category) {
-    var labelWidth = category == "other" ? 172 : 75,
+BlockDialogMorph.prototype.addCategoryButton = function (category, i) {
+    var labelWidth = i > 9 ? 172 : 75,
         colors = [
             IDE_Morph.prototype.frameColor,
             IDE_Morph.prototype.frameColor.darker

@@ -640,6 +640,29 @@ SymbolMorph.prototype.growBlack = new Image();
 SymbolMorph.prototype.growBlack.src = "src/grow-black.svg";
 SymbolMorph.prototype.growGrey = new Image();
 SymbolMorph.prototype.growGrey.src = "src/grow-grey.svg";
+SymbolMorph.prototype.brush = new Image();
+SymbolMorph.prototype.brush.src = "src/brush.svg";
+SymbolMorph.prototype.brushBlack = new Image();
+SymbolMorph.prototype.brushBlack.src = "src/brush-black.svg";
+SymbolMorph.prototype.brushGrey = new Image();
+SymbolMorph.prototype.brushGrey.src = "src/brush-grey.svg";
+
+SymbolMorph.prototype.brush = new Image();
+SymbolMorph.prototype.brush.src = "src/brush.svg";
+SymbolMorph.prototype.brushBlack = new Image();
+SymbolMorph.prototype.brushBlack.src = "src/brush-black.svg";
+SymbolMorph.prototype.eraser = new Image();
+SymbolMorph.prototype.eraser.src = "src/eraser.svg";
+SymbolMorph.prototype.eraserBlack = new Image();
+SymbolMorph.prototype.eraserBlack.src = "src/eraser-black.svg";
+SymbolMorph.prototype.paint = new Image();
+SymbolMorph.prototype.paint.src = "src/paintbucket.svg";
+SymbolMorph.prototype.paintBlack = new Image();
+SymbolMorph.prototype.paintBlack.src = "src/paintbucket-black.svg";
+SymbolMorph.prototype.pipette = new Image();
+SymbolMorph.prototype.pipette.src = "src/pipette.svg";
+SymbolMorph.prototype.pipetteBlack = new Image();
+SymbolMorph.prototype.pipetteBlack.src = "src/pipette-black.svg";
 
 SymbolMorph.prototype.horiz = new Image();
 SymbolMorph.prototype.horiz.src = "src/horiz.svg";
@@ -1103,6 +1126,9 @@ SymbolMorph.prototype.renderSymbolPause = function (ctx, color) {
   ctx.fillRect(w * 3, 0, w * 2, h);
 };
 SymbolMorph.prototype.drawImage = function (ctx, image) {
+  ctx.drawImage(image, 0, 0, this.width(), this.height());
+  //old code, now all SVGs require width and height attributes
+  /*
   if (!isRetinaEnabled()) {
     ctx.drawImage(image, 0, 0, this.width(), this.height());
     return;
@@ -1116,14 +1142,16 @@ SymbolMorph.prototype.drawImage = function (ctx, image) {
     w = this.width(),
     h = this.height(),
     ow = image.width,
-    oh = image.height
+    oh = image.height;
   image.width = (ow * prW);
   image.height = (oh * prH);
+  this.prW = prW;
+  this.prH = prH;
   var canvas = newCanvas(new Point(ow, oh));
   canvas.getContext("2d").drawImage(image, 0, 0, ow, oh);
   ctx.drawImage(canvas, 0, 0, w, h);
   image.width = ow;
-  image.height = oh;
+  image.height = oh;*/
 };
 SymbolMorph.prototype.renderSymbolFlag = function (ctx, color) {
   // draw a flag
@@ -1414,6 +1442,9 @@ SymbolMorph.prototype.renderSymbolFlash = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolBrush = function (ctx, color) {
   // draw a paintbrush
+  if(this.isAnyUIColor(color)) {
+    return ctx.drawImage(this[this.isUIColor(color) ? 'brushGrey' : color.eq(WHITE) ? 'brush' : 'brushBlack'], 0, 0, this.width(), this.height())
+  }
   var w = this.symbolWidth(),
     h = this.size,
     l = Math.max(w / 30, 0.5);
@@ -1576,6 +1607,9 @@ SymbolMorph.prototype.renderSymbolCrosshairs = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolPaintbucket = function (ctx, color) {
   // draw a paint bucket
+  if(color.eq(BLACK) || color.eq(WHITE)) {
+    return this.drawImage(ctx, this[color.eq(BLACK) ? 'paintBlack' : 'paint'])
+  }
   var w = this.symbolWidth(),
     h = this.size,
     n = w / 5,
@@ -1621,6 +1655,9 @@ SymbolMorph.prototype.renderSymbolPaintbucket = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolEraser = function (ctx, color) {
   // draw an eraser
+  if(color.eq(BLACK) || color.eq(WHITE)) {
+    return this.drawImage(ctx, this[color.eq(BLACK) ? 'eraserBlack' : 'eraser'])
+  }
   var w = this.symbolWidth(),
     h = this.size,
     n = w / 4,
@@ -1648,6 +1685,9 @@ SymbolMorph.prototype.renderSymbolEraser = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolPipette = function (ctx, color) {
   // draw an eyedropper
+  if(color.eq(BLACK) || color.eq(WHITE)) {
+    return this.drawImage(ctx, this[color.eq(BLACK) ? 'pipetteBlack' : 'pipette'])
+  }
   var w = this.symbolWidth(),
     h = this.size,
     n = w / 4,

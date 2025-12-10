@@ -498,7 +498,7 @@
     
         lockMouseFocus()
 
-    method, preferrably in one of its mouseDown methods. Afterwards the
+    method, preferably in one of its mouseDown methods. Afterwards the
     ensuing mouse events will be routed to the locked morph even after the
     mouse pointer has left its bounds, and the mouseLeave event will not
     occur until the mouse button is released again. This is useful for
@@ -7914,7 +7914,7 @@ MenuMorph.prototype.createItems = function () {
     this.border = MorphicPreferences.isFlat ? 1 : 2;
   }
   this.color = this.bgColor;
-  this.borderColor = this.bgColor.eq(WHITE) ? new Color(60, 60, 60) : this.bgColor.darker(50);
+  this.borderColor = this.bgColor.eq(WHITE) ? new Color(60, 60, 60) : this.bgColor.darker(70);
   this.setExtent(new Point(0, 0));
 
   y = 2;
@@ -7953,7 +7953,7 @@ MenuMorph.prototype.createItems = function () {
         MorphicPreferences.menuFontName,
         this.environment,
         tuple[2], // bubble help hint
-        tuple[3], // color
+        ((tuple[3] || BLACK).eq(BLACK) && !((this?.bgColor || WHITE).eq(WHITE))) ? WHITE : tuple[3], // color
         tuple[4], // bold
         tuple[5], // italic
         tuple[6], // doubleclick action

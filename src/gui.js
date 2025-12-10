@@ -96,7 +96,7 @@ modules.gui = '2025-November-23';
 // Declarations
 
 var SnapVersion = '11.0.8';
-var SplitVersion = '1.2';
+var SplitVersion = '1.2.5';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -2092,8 +2092,8 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
         button.fixLayout();
         button.refresh();
         rotationStyleButtons.push(button);
-        button.setPosition(myself.spriteBar.position().add(new Point(4, 2)));
-        button.setTop(button.top()
+        button.setPosition(myself.spriteBar.position().add(new Point(2, 4)));
+        button.setLeft(button.left()
             + ((rotationStyleButtons.length - 1) * (button.height() + 2))
         );
         myself.spriteBar.add(button);
@@ -2134,7 +2134,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     nameField.setWidth(100); // fixed dimensions
     nameField.corner = 10;
     nameField.contrast = 90;
-    nameField.setPosition(rotationStyleButtons[0].topRight().add(new Point(10, 3)));
+    nameField.setPosition(rotationStyleButtons[2].topRight().add(new Point(10, 3)));
     this.spriteBar.add(nameField);
     this.spriteBar.nameField = nameField;
     nameField.fixLayout();
@@ -4322,21 +4322,23 @@ IDE_Morph.prototype.snapMenu = function () {
             new Color(100, 0, 0)
         );
     }
+    menu.bgColor = this.accentColor;
     menu.popup(world, this.logo.bottomLeft());
 };
 
 IDE_Morph.prototype.cloudMenu = function () {
     var menu,
-        world = this.world(),
-        pos = this.controlBar.cloudButton.bottomLeft(),
+    world = this.world(),
+    pos = this.controlBar.cloudButton.bottomLeft(),
         shiftClicked = (world.currentKey === 16);
 
     if (location.protocol === 'file:' && !shiftClicked) {
         this.showMessage('cloud unavailable without a web server.');
         return;
     }
-
+    
     menu = new MenuMorph(this);
+    menu.bgColor = this.accentColor;
     if (shiftClicked) {
         menu.addItem(
             'url...',
@@ -4545,6 +4547,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     }
 
     menu = new MenuMorph(this);
+    menu.bgColor = this.accentColor;
     menu.addPair(
         [
             new SymbolMorph(
@@ -5161,6 +5164,7 @@ IDE_Morph.prototype.projectMenu = function () {
         backup = this.availableBackup(shiftClicked);
 
     menu = new MenuMorph(this);
+    menu.bgColor = this.accentColor;
     menu.addItem('Notes...', 'editNotes');
     menu.addLine();
     if (!this.config.noProjectItems) {
@@ -8027,6 +8031,7 @@ IDE_Morph.prototype.looksMenuData = function () {
             'rectangle',
             MorphicPreferences.menuFontSize * 0.75
         );
+        menu.bgColor = this.accentColor;
 
     menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
         if (!hide || shiftClicked) {

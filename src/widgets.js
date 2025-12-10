@@ -2877,8 +2877,11 @@ DialogBoxMorph.prototype.createButtons = function () {
   if (this.buttons) {
     this.buttons.destroy();
   }
+  if (this.closeButton) {
+    this.closeButton.destroy();
+  }
   this.buttons = new AlignmentMorph("row", this.padding);
-  this.closeButton = this.addCloseButton();
+  this.addCloseButton();
   this.add(this.buttons);
 };
 
@@ -2903,6 +2906,7 @@ DialogBoxMorph.prototype.addCloseButton = function () {
   button.setPosition(
     this.topRight().add(new Point(-this.padding - button.width(), this.padding))
   );
+  this.closeButton = button
 
   return button;
 };
@@ -2919,13 +2923,13 @@ DialogBoxMorph.prototype.addButton = function (action, label) {
   button.outline = this.buttonOutline;
   button.outlineColor =
     (action || "ok") === "ok"
-      ? IDE_Morph.prototype.accentColor
+      ? this.titleBarColor
       : this.buttonOutlineColor;
   button.outlineGradient = this.buttonOutlineGradient;
   button.padding = this.buttonPadding;
   button.contrast = this.buttonContrast;
   button.color =
-    (action || "ok") === "ok" ? IDE_Morph.prototype.accentColor : button.color;
+    (action || "ok") === "ok" ? this.titleBarColor : button.color;
   button.labelColor = (action || "ok") === "ok" ? WHITE : button.labelColor;
   button.highlightColor = button.color;
   button.pressColor = button.color;
@@ -3000,8 +3004,7 @@ DialogBoxMorph.prototype.fixLayout = function () {
     }
   }
 
-  this.closeButton.setPosition(this.topRight().add(new Point(-this.padding - this.closeButton.width(), this.padding)));
-
+  
   if (this.label) {
     this.label.setCenter(this.center());
     this.label.setTop(this.top() + (th - this.label.height()) / 2);
@@ -3020,6 +3023,7 @@ DialogBoxMorph.prototype.fixLayout = function () {
 
   // refresh a shallow shadow
   this.removeShadow();
+  this.closeButton.setPosition(this.topRight().add(new Point(-this.padding - this.closeButton.width(), 0)));
   this.addShadow();
 };
 
