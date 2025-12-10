@@ -1158,7 +1158,7 @@ IDE_Morph.prototype.createControlBar = function () {
         x,
         colors = this.isBright ? this.tabColors
             : [
-                this.groupColor,
+                this.accentColor,
                 this.accentColor.withAlpha(0.1),//this.frameColor.darker(50),
                 this.frameColor.darker(50)
             ],
@@ -2230,7 +2230,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
         tabColors,
         null, // target
         () => tabBar.tabTo('scripts'),
-        localize('Code'), // label
+        [new SymbolMorph('blocks', 12), localize('Code')], // label
         () => this.currentTab === 'scripts' // query
     );
     tab.padding = tabPadding;
@@ -2258,9 +2258,9 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
         tabColors,
         null, // target
         () => tabBar.tabTo('costumes'),
-        localize(this.currentSprite instanceof SpriteMorph ?
+        [new SymbolMorph('brush', 12), localize(this.currentSprite instanceof SpriteMorph ?
             'Costumes' : 'Backgrounds'
-        ),
+        )],
         () => this.currentTab === 'costumes' // query
     );
     tab.padding = tabPadding;
@@ -2276,7 +2276,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
         tabColors,
         null, // target
         () => tabBar.tabTo('sounds'),
-        localize('Sounds'), // label
+        [new SymbolMorph('speaker', 12), localize('Sounds')], // label
         () => this.currentTab === 'sounds' // query
     );
     tab.padding = tabPadding;
