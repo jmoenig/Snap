@@ -9422,7 +9422,7 @@ SpriteMorph.prototype.pauseGenericHatBlocks = function () {
   if (this.hasGenericHatBlocks()) {
     stage.enableCustomHatBlocks = true;
     stage.threads.pauseCustomHatBlocks = true;
-    ide.controlBar.stopButton.refresh();
+    ide.projectControlBar.stopButton.refresh();
   }
 };
 
@@ -11020,7 +11020,7 @@ StageMorph.prototype.scheduleFrame = function () {
     if (this.threads.wantsToPause) {
       ide = this.parentThatIsA(IDE_Morph);
       if (ide) {
-        ide.controlBar.pauseButton.refresh();
+        ide.projectControlBar.pauseButton.refresh();
       }
     }
 
@@ -11123,7 +11123,7 @@ StageMorph.prototype.stepGenericConditions = function (onlyEvents) {
     this.enableCustomHatBlocks = false;
     ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
-      ide.controlBar.stopButton.refresh();
+      ide.projectControlBar.stopButton.refresh();
     }
   }
   return animating;
@@ -11414,7 +11414,7 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
     }
   });
   if (ide) {
-    ide.controlBar.pauseButton.refresh();
+    ide.projectControlBar.pauseButton.refresh();
   }
   return procs;
 };
@@ -11474,7 +11474,7 @@ StageMorph.prototype.pauseGenericHatBlocks = function () {
   ) {
     this.enableCustomHatBlocks = true;
     this.threads.pauseCustomHatBlocks = true;
-    ide.controlBar.stopButton.refresh();
+    ide.projectControlBar.stopButton.refresh();
   }
 };
 
