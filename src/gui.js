@@ -1783,12 +1783,7 @@ IDE_Morph.prototype.createCategories = function () {
 
     button.category = category;
     button.corner = 21;
-    // console.log(button)
     button.padding = 0;
-    button.labelShadowOffset = new Point(-1, -1);
-    button.labelShadowColor = IDE_Morph.prototype.isBright
-      ? colors[1]
-      : colors[1];
     button.labelColor = myself.buttonLabelColor;
     if (IDE_Morph.prototype.isBright) {
       button.labelPressColor = BLACK;
@@ -1802,6 +1797,7 @@ IDE_Morph.prototype.createCategories = function () {
     myself.categories.addContents(button);
     myself.categories.buttons.push(button);
     button.label.isBold = false;
+    button.label.noDropShadow = true;
     button.label.setPosition(new Point(0, 18));
     button.label.setPosition(
       new Point(
@@ -1812,6 +1808,16 @@ IDE_Morph.prototype.createCategories = function () {
         24
       )
     );
+
+    button.mouseEnter = function() {
+      this.label.setColor(new Color(76, 151, 255));
+      this.refresh();
+    }
+
+    button.mouseLeave = function() {
+      this.label.setColor(this.labelColor);
+      this.refresh();
+    }
 
     if (color) {
       button.userMenu = () => {
