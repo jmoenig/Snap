@@ -5802,6 +5802,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     "\ntethrarxitet: Personal Libraries mod" +
     "\nowlssss/TheOwlCoder: Vertical Categories and Cat blocks" +
     "\njoecooldoo/joenulldoo: Auto-default Single Palette" +
+    "\ncodingisfun2831t: Several UI updates"
     "\n\n" +
     "Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes" +
     "\nare watercolor paintings by Meghan Taylor and represent" +
