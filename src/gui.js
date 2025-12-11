@@ -4587,14 +4587,14 @@ IDE_Morph.prototype.settingsMenu = function () {
 
   menu = new MenuMorph(this);
   menu.bgColor = this.accentColor;
-  menu.addPair(
+  menu.addMenu(
     [
       new SymbolMorph("globe", MorphicPreferences.menuFontSize, WHITE),
       localize("Language..."),
     ],
-    "languageMenu"
+    this.getLanguageMenu()
   );
-  menu.addItem(localize("Looks") + "...", "looksMenu");
+  menu.addMenu(localize("Looks") + "...", this.looksMenuData());
   menu.addItem("Zoom blocks...", "userSetBlocksScale");
   menu.addItem("Fade blocks...", "userFadeBlocks");
   menu.addItem("Afterglow blocks...", "userSetBlocksAfterglow");
@@ -7861,10 +7861,8 @@ IDE_Morph.prototype.microphoneMenu = function () {
 
 // IDE_Morph localization
 
-IDE_Morph.prototype.languageMenu = function () {
+IDE_Morph.prototype.getLanguageMenu = function () {
   var menu = new MenuMorph(this),
-    world = this.world(),
-    pos = this.controlBar.settingsButton.bottomLeft(),
     tick = new SymbolMorph("tick", MorphicPreferences.menuFontSize * 0.75),
     empty = tick.fullCopy();
 
@@ -7889,7 +7887,8 @@ IDE_Morph.prototype.languageMenu = function () {
       }
     )
   );
-  menu.popup(world, pos);
+
+  return menu;
 };
 
 IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
@@ -7960,13 +7959,6 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
 };
 
 // IDE_Morph design settings
-
-IDE_Morph.prototype.looksMenu = function () {
-  this.looksMenuData().popup(
-    this.world(),
-    this.controlBar.settingsButton.bottomLeft()
-  );
-};
 
 IDE_Morph.prototype.looksMenuData = function () {
   var menu = new MenuMorph(this),
