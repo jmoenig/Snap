@@ -150,7 +150,7 @@ IDE_Morph.prototype.setDefaultTheme = function () {
   PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
   PushButtonMorph.prototype.outlineGradient = false;
 
-  SpriteMorph.prototype.paletteColor = new Color(0, 0, 0);
+  SpriteMorph.prototype.paletteColor = new Color(10, 10, 10);
   SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
   StageMorph.prototype.paletteTextColor =
     SpriteMorph.prototype.paletteTextColor;
