@@ -22,7 +22,7 @@
         * enables expressions (unringed blocks) to be CALLed and RUN
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
     * drawing and writing on sprites
-        * new "pen_drawOn([sprite])" extension, experimental & temporary
+        * new "pen_drawOn(sprite, mode)" extension, experimental & temporary
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
@@ -46,6 +46,9 @@
     * fixed some special cases for using "combine" on an empty list, thanks, @rmunn!
 * **Translation Updates:**
     * German
+
+### 2025-12-11
+* objects, extensions: added support for pen modes ("paint", "erase" and "create")
 
 ### 2025-12-10
 * gui: tweaked IDE resizing layout for different translations

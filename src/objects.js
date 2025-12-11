@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-10';
+modules.objects = '2025-December-11';
 
 var SpriteMorph;
 var StageMorph;
@@ -3183,6 +3183,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     // support for drawing on sprites
     this.sheet = null; // a sprite - do not serialize
+    this.tool = null; // string describing pen mode ('paint', 'erase', 'create')
     this.trailsCache = null; // a temporary costume - do not serialize
 
     SpriteMorph.uber.init.call(this);
@@ -6730,7 +6731,17 @@ SpriteMorph.prototype.writeOn = function (target, text, size) {
     len = ctx.measureText(text).width;
     ctx.translate(start.x, start.y);
     ctx.rotate(rotation);
-    ctx.globalCompositeOperation = 'source-atop';
+    switch (this.tool) {
+    case 'erase':
+        ctx.globalCompositeOperation = 'destination-out';
+        break;
+    case 'create':
+        ctx.globalCompositeOperation = 'source-over';
+        break;
+    case 'paint':
+    default:
+        ctx.globalCompositeOperation = 'source-atop';
+    }
     ctx.fillText(text, 0, 0);
     ctx.translate(-start.x, -start.y);
     ctx.restore();
@@ -6766,6 +6777,15 @@ SpriteMorph.prototype.writeOnPenTrails = function (text, size) {
     trans = trans.multiplyBy(1 / stage.scale);
     context.translate(trans.x, trans.y);
     context.rotate(rotation);
+    switch (this.tool) {
+    case 'erase':
+        context.globalCompositeOperation = 'destination-out';
+        break;
+    case 'create':
+    case 'paint':
+    default: // on the pen trails layer we don't support 'source-atop'
+        context.globalCompositeOperation = 'source-over';
+    }
     context.fillText(text, 0, 0);
     context.translate(-trans.x, -trans.y);
     context.restore();
@@ -7552,8 +7572,18 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
     }
-    ctx.globalCompositeOperation = 'source-atop';
-                ctx.beginPath();
+    switch (this.tool) {
+    case 'erase':
+        ctx.globalCompositeOperation = 'destination-out';
+        break;
+    case 'create':
+        ctx.globalCompositeOperation = 'source-over';
+        break;
+    case 'paint':
+    default:
+        ctx.globalCompositeOperation = 'source-atop';
+    }
+    ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
     ctx.lineTo(p2.x, p2.y);
     ctx.stroke();
@@ -7598,6 +7628,15 @@ SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
         } else {
             context.lineCap = 'round';
             context.lineJoin = 'round';
+        }
+        switch (this.tool) {
+        case 'erase':
+            context.globalCompositeOperation = 'destination-out';
+            break;
+        case 'create':
+        case 'paint':
+        default: // on the pen trails layer we don't support 'source-atop'
+            context.globalCompositeOperation = 'source-over';
         }
         context.beginPath();
         context.moveTo(from.x, from.y);
