@@ -321,6 +321,7 @@ IDE_Morph.prototype.init = function (config) {
 
   this.logo = null;
   this.controlBar = null;
+  this.controlBarBackground = null;
   this.projectControlBar = null;
   this.categories = null;
   this.palette = null;
@@ -1374,7 +1375,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
 };
 IDE_Morph.prototype.createControlBar = function () {
   // assumes the logo has already been created
-  var padding = 5,
+  var padding = 10,
     button,
     slider,
     stopButton,
@@ -1398,7 +1399,18 @@ IDE_Morph.prototype.createControlBar = function () {
       activeColor.lighter(40),
       activeColor.lighter(40),
     ],
+    buttonIcon, buttonLabel, buttonArrow,
     myself = this;
+
+  if (this.controlBarBackground) {
+    this.controlBarBackground.destroy();
+  }
+
+  this.controlBarBackground = new Morph();
+  this.controlBarBackground.color = this.accentColor;
+  this.controlBarBackground.setHeight(48);
+
+  this.addChildFirst(this.controlBarBackground);
 
   if (this.controlBar) {
     this.controlBar.destroy();
@@ -1406,7 +1418,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
   this.controlBar = new Morph();
   this.controlBar.color = this.accentColor;
-  this.controlBar.setHeight(48);
+  this.controlBar.setHeight(this.controlBarBackground.height());
 
   // let users manually enforce re-layout when changing orientation
   // on mobile devices
@@ -1418,8 +1430,6 @@ IDE_Morph.prototype.createControlBar = function () {
     */
 
   this.add(this.controlBar);
-
-  
 
   //steppingButton
   button = new ToggleButtonMorph(
@@ -1470,49 +1480,71 @@ IDE_Morph.prototype.createControlBar = function () {
   this.controlBar.steppingSlider = slider;
 
   // projectButton
-  button = new PushButtonMorph(
+  button = new TriggerMorph(
     this,
-    "projectMenu",
-    new SymbolMorph("file", 14)
-    //'\u270E'
+    "projectMenu"
   );
-  button.corner = 4;
-  button.color = colors[0];
-  button.highlightColor = colors[1];
-  button.pressColor = colors[2];
-  button.labelMinExtent = new Point(36, 18);
-  button.padding = 0;
-  button.labelShadowOffset = new Point(-1, -1);
-  button.labelShadowColor = colors[1];
-  button.labelColor = WHITE;
-  button.contrast = this.buttonContrast;
-  button.outline = 0;
-  // button.hint = 'open, save, & annotate project';
-  button.makeSquare();
+  
+  buttonIcon = new SymbolMorph("file", 20);
+  buttonLabel = new TextMorph("File");
+  buttonArrow = new ArrowMorph("vertical", 16, null, colors[0]);
+  button.setHeight(48);
+  button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
+  button.color = this.accentColor;
+  button.highlightColor = this.accentColor.darker(25);
+  button.pressColor = button.highlightColor;
+
+  buttonIcon.setColor(WHITE);
+  buttonIcon.fixLayout();
+  buttonIcon.setCenter(button.center());
+  buttonIcon.setLeft(button.left() + 10);
+  buttonLabel.setColor(WHITE);
+  buttonLabel.setCenter(button.center());
+  buttonLabel.setLeft(buttonIcon.right() + 5);
+  buttonLabel.isBold = true;
+  buttonArrow.setCenter(button.center());
+  buttonArrow.setLeft(buttonLabel.right() + 5);
+  
+  button.label.destroy();
+  button.add(buttonIcon);
+  button.add(buttonLabel);
+  button.add(buttonArrow);
+
   projectButton = button;
   this.controlBar.add(projectButton);
   this.controlBar.projectButton = projectButton; // for menu positioning
 
   // settingsButton
-  button = new PushButtonMorph(
+  button = new TriggerMorph(
     this,
-    "settingsMenu",
-    new SymbolMorph("gears", 14)
-    //'\u2699'
+    "settingsMenu"
   );
-  button.corner = 4;
-  button.outline = 0;
-  button.color = colors[0];
-  button.highlightColor = colors[1];
-  button.pressColor = colors[2];
-  button.labelMinExtent = new Point(36, 18);
-  button.padding = 0;
-  button.labelShadowOffset = new Point(-1, -1);
-  button.labelShadowColor = colors[1];
-  button.labelColor = WHITE;
-  button.contrast = this.buttonContrast;
-  // button.hint = 'edit settings';
-  button.makeSquare();
+  
+  buttonIcon = new SymbolMorph("gears", 20);
+  buttonLabel = new TextMorph("Settings");
+  buttonArrow = new ArrowMorph("vertical", 16, null, colors[0]);
+  button.setHeight(48);
+  button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
+  button.color = this.accentColor;
+  button.highlightColor = this.accentColor.darker(25);
+  button.pressColor = button.highlightColor;
+
+  buttonIcon.setColor(WHITE);
+  buttonIcon.fixLayout();
+  buttonIcon.setCenter(button.center());
+  buttonIcon.setLeft(button.left() + 10);
+  buttonLabel.setColor(WHITE);
+  buttonLabel.setCenter(button.center());
+  buttonLabel.setLeft(buttonIcon.right() + 5);
+  buttonLabel.isBold = true;
+  buttonArrow.setCenter(button.center());
+  buttonArrow.setLeft(buttonLabel.right() + 5);
+  
+  button.label.destroy();
+  button.add(buttonIcon);
+  button.add(buttonLabel);
+  button.add(buttonArrow);
+
   settingsButton = button;
   this.controlBar.add(settingsButton);
   this.controlBar.settingsButton = settingsButton; // for menu positioning
@@ -2762,9 +2794,11 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
   if (situation !== "refreshPalette") {
     // controlBar
-    this.controlBar.setPosition(this.logo.topRight());
+    this.controlBar.setPosition(this.logo.topRight().add(new Point(100, 0)));
     this.controlBar.setWidth(this.right() - this.controlBar.left() - border);
     this.controlBar.fixLayout();
+    this.controlBarBackground.setWidth(this.width());
+    this.controlBarBackground.setPosition(new Point(0, 0));
     
     
     // categories
