@@ -11491,7 +11491,6 @@ HandMorph.prototype.processMouseMove = function (event) {
   // cursor handling
   var cursorMorph = this.morphAtPointer();
   var cursor = cursorMorph.hoverCursor;
-  console.log(cursorMorph); 
 
   while (!cursor && cursorMorph.parent) {
       cursorMorph = cursorMorph.parent;

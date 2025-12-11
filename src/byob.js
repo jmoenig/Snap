@@ -3450,8 +3450,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     scripts.rejectsHats = true;
     scripts.isDraggable = false;
     scripts.color = IDE_Morph.prototype.groupColor;
-    scripts.cachedTexture = MorphicPreferences.isFlat ? null
-        : IDE_Morph.prototype.scriptsTexture();
+    scripts.cachedTexture = IDE_Morph.prototype.scriptsTexture();
     scripts.cleanUpMargin = 10;
 
     proto = new PrototypeHatBlockMorph(this.definition);
@@ -4895,7 +4894,7 @@ InputSlotDialogMorph.prototype.open = function (
 
 InputSlotDialogMorph.prototype.symbolMenu = function () {
     var symbols = [],
-        symbolColor = new Color(100, 100, 130);
+        symbolColor = new Color(87, 94, 117);
     SymbolMorph.prototype.names.forEach(sym =>
         symbols.push([
             [

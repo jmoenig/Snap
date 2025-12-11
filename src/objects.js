@@ -4189,6 +4189,7 @@ SpriteMorph.prototype.blockTemplates = function (
     blocks.push(block("reportMouseX"));
     blocks.push(watcherToggle("reportMouseY"));
     blocks.push(block("reportMouseY"));
+    blocks.push(watcherToggle("reportMouseDown"));
     blocks.push(block("reportMouseDown"));
     blocks.push("-");
     blocks.push(block("reportKeyPressed"));
@@ -4417,10 +4418,13 @@ SpriteMorph.prototype.makeVariableButton = function () {
   button.labelColor = IDE_Morph.prototype.buttonLabelColor;
   button.outlineColor = button.labelColor;
   button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
+  button.corner = button.corner * SyntaxElementMorph.prototype.scale;
+  button.edge = button.edge * SyntaxElementMorph.prototype.scale;
+  button.fontSize = button.fontSize * SyntaxElementMorph.prototype.scale;
+  
   button.userMenu = this.helpMenu;
   button.selector = "addVariable";
   button.showHelp = BlockMorph.prototype.showHelp;
-  button.fontSize = button.fontSize * SyntaxElementMorph.prototype.scale;
   button.fixLayout()
     
   return button;
@@ -4454,7 +4458,9 @@ SpriteMorph.prototype.deleteVariableButton = function () {
   button.labelColor = IDE_Morph.prototype.buttonLabelColor;
   button.outlineColor = button.labelColor;
   button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
- 
+  button.corner = button.corner * SyntaxElementMorph.prototype.scale;
+  button.edge = button.edge * SyntaxElementMorph.prototype.scale;
+  button.fontSize = button.fontSize * SyntaxElementMorph.prototype.scale;  
   button.userMenu = this.helpMenu;
   button.selector = "deleteVariable";
   button.showHelp = BlockMorph.prototype.showHelp;
@@ -10929,6 +10935,17 @@ StageMorph.prototype.reportMouseY = function () {
   return 0;
 };
 
+StageMorph.prototype.reportMouseDown = function () {
+    var world;
+    if (this) {
+        world = this.world();
+        if (world) {
+            return world.hand.mouseButton === 'left';
+        }
+    }
+    return false;
+};
+
 // StageMorph drag & drop
 
 StageMorph.prototype.wantsDropOf = function (aMorph) {
@@ -11511,7 +11528,7 @@ StageMorph.prototype.blockTemplates = function (
       return null;
     }
     var info = SpriteMorph.prototype.blocks[selector];
-    return new ToggleMorph(
+    var t = new ToggleMorph(
       "checkbox",
       this,
       function () {
@@ -11527,10 +11544,13 @@ StageMorph.prototype.blockTemplates = function (
       },
       null
     );
+    t.bounds.setWidth(t.width() * SyntaxElementMorph.prototype.scale);
+    t.bounds.setHeight(t.height() * SyntaxElementMorph.prototype.scale);
+    return t
   }
 
   function variableWatcherToggle(varName, isGlobal) {
-    return new ToggleMorph(
+    var t = new ToggleMorph(
       "checkbox",
       this,
       function () {
@@ -11542,6 +11562,9 @@ StageMorph.prototype.blockTemplates = function (
       },
       null
     );
+        t.bounds.setWidth(t.width() * SyntaxElementMorph.prototype.scale);
+    t.bounds.setHeight(t.height() * SyntaxElementMorph.prototype.scale);
+    return t
   }
 
   SnapExtensions.buttons.palette.forEach((buttonDescriptor) => {
@@ -11732,6 +11755,7 @@ StageMorph.prototype.blockTemplates = function (
     blocks.push(block("reportMouseX"));
     blocks.push(watcherToggle("reportMouseY"));
     blocks.push(block("reportMouseY"));
+    blocks.push(watcherToggle("reportMouseDown"));
     blocks.push(block("reportMouseDown"));
     blocks.push("-");
     blocks.push(block("reportKeyPressed"));

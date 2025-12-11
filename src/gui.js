@@ -1786,9 +1786,9 @@ IDE_Morph.prototype.createCategories = function () {
     button.corner = 21;
     button.padding = 0;
     button.labelColor = myself.buttonLabelColor;
-    if (IDE_Morph.prototype.isBright) {
+    /*if (IDE_Morph.prototype.isBright) {
       button.labelPressColor = BLACK;
-    }
+    }*/
     button.outlineColor = button.color.darker();
     button.hint = category[0].toUpperCase().concat(category.slice(1));
     button.fixLayout();
@@ -2337,7 +2337,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     tabColors,
     null, // target
     () => tabBar.tabTo("sounds"),
-    [new SymbolMorph("speaker", 12), localize("Sounds")], // label
+    [new SymbolMorph("speakers", 12), localize("Sounds")], // label
     () => this.currentTab === "sounds" // query
   );
   tab.padding = tabPadding;

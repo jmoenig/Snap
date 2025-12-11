@@ -526,8 +526,8 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case "blocks":
       this.renderSymbolBlocks(ctx, aColor);
       break;
-    case "speaker":
-      this.renderSymbolSpeaker(ctx, aColor);
+    case "speakers":
+      this.renderSymbolSpeakers(ctx, aColor);
       break;
     default:
       throw new Error('unknown symbol name: "' + this.name + '"');
@@ -656,6 +656,12 @@ SymbolMorph.prototype.brushBlack = new Image();
 SymbolMorph.prototype.brushBlack.src = "src/brush-black.svg";
 SymbolMorph.prototype.brushGrey = new Image();
 SymbolMorph.prototype.brushGrey.src = "src/brush-grey.svg";
+SymbolMorph.prototype.trash = new Image();
+SymbolMorph.prototype.trash.src = "src/trash.svg";
+SymbolMorph.prototype.trashBlack = new Image();
+SymbolMorph.prototype.trashBlack.src = "src/trash-black.svg";
+SymbolMorph.prototype.trashGrey = new Image();
+SymbolMorph.prototype.trashGrey.src = "src/trash-grey.svg";
 
 SymbolMorph.prototype.brush = new Image();
 SymbolMorph.prototype.brush.src = "src/brush.svg";
@@ -2481,6 +2487,10 @@ SymbolMorph.prototype.renderSymbolFlipVertical = function (ctx, color) {
 };
 
 SymbolMorph.prototype.renderSymbolTrash = function (ctx, color) {
+  if(this.isAnyUIColor(color)) {
+    this.drawImage(ctx, color.eq(WHITE) ? this.trash : this.isUIColor(color) ? this.trashGrey : this.trashBlack);
+    return
+  }
   var w = this.symbolWidth(),
     h = this.size,
     step = w / 10;
@@ -2573,7 +2583,7 @@ SymbolMorph.prototype.renderSymbolBlocks = function (ctx, color) {
     ctx.fill();
 };
 
-SymbolMorph.prototype.renderSymbolSpeaker = function (ctx, color) {
+SymbolMorph.prototype.renderSymbolSpeakers = function (ctx, color) {
     // draw a loudspeaker with two emerging sound waves
     var step = this.size / 3,
         r = this.size / 2,
