@@ -150,7 +150,7 @@ IDE_Morph.prototype.setDefaultTheme = function () {
   PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
   PushButtonMorph.prototype.outlineGradient = false;
 
-  SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
+  SpriteMorph.prototype.paletteColor = new Color(0, 0, 0);
   SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
   StageMorph.prototype.paletteTextColor =
     SpriteMorph.prototype.paletteTextColor;
@@ -229,7 +229,7 @@ IDE_Morph.prototype.scriptsTexture = function () {
     x,
     y;
   ctx.fillStyle =
-    this.frameColor[this.isBright ? "darker" : "lighter"](9).toString();
+    this.frameColor[this.isBright ? "darker" : "lighter"](20).toString();
   for (y = 0; y < 100 * scale; y += 20 * scale) {
     for (x = 0; x < 100 * scale; x += 20 * scale) {
       ctx.fillRect(x, y, 2 * scale, 2 * scale);
