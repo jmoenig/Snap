@@ -1694,6 +1694,7 @@ IDE_Morph.prototype.createCategories = function () {
   this.categories.color = this.groupColor;
   this.extensionButton = new Morph();
   this.extensionButton.color = this.accentColor;
+  this.extensionButton.hoverCursor = "pointer";
   const symb = new SymbolMorph("extension", 34, WHITE);
   symb.setLeft(13);
   symb.setTop(7);
