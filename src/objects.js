@@ -3185,6 +3185,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.sheet = null; // a sprite - do not serialize
     this.tool = null; // string describing pen mode ('paint', 'erase', 'create')
     this.trailsCache = null; // a temporary costume - do not serialize
+    this.originalCostume = null; // hold on to the unmodified original costume
 
     SpriteMorph.uber.init.call(this);
 
@@ -5382,6 +5383,7 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow, keepCache) {
 
     if (!keepCache) {
         this.trailsCache = null;
+        this.originalCostume = null;
     }
     this.changed();
     this.costume = costume;
@@ -6636,6 +6638,31 @@ SpriteMorph.prototype.perimeter = function (aStage) {
 
 // SpriteMorph pen ops
 
+SpriteMorph.prototype.surface = function () {
+    // answer a version of the current costume that can be drawn on
+    // by another sprite's pen.
+    // rasterize copy of the current costume if it's an SVG
+    // cache the costume copy for later reuse
+    // and also the original costume so "clear" can reset it
+    var surface;
+    if (this.costume) {
+        if (this.trailsCache) {
+            surface = this.trailsCache;
+        } else {
+            if (this.costume instanceof SVG_Costume) {
+                surface = this.costume.rasterized();
+            } else {
+                surface = this.costume.copy();
+            }
+            this.trailsCache = surface;
+            this.originalCostume = this.costume;
+        }
+    } else {
+        surface = null;
+    }
+    return surface;
+};
+
 SpriteMorph.prototype.blendingMode = function () {
     // private - answer the globalCompositeOperation property for drawing
     var modes = { // for pen trails we don't support 'source-atop'
@@ -6716,20 +6743,9 @@ SpriteMorph.prototype.writeOn = function (target, text, size) {
         return;
     }
 
-    // check if target has a costumes,
-    // rasterize copy of target costume if it's an SVG
-    // cache the costume copy for later reuse
+    // check if target has a costume and fetch its pen surface
     if (target.costume) {
-        if (target.trailsCache) {
-            targetCostume = target.trailsCache;
-        } else {
-            if (target.costume instanceof SVG_Costume) {
-                targetCostume = target.costume.rasterized();
-            } else {
-                targetCostume = target.costume.copy();
-            }
-            target.trailsCache = targetCostume;
-        }
+        targetCostume = target.surface();
     } else {
         return;
     }
@@ -6833,23 +6849,13 @@ SpriteMorph.prototype.blitOn = function (target, mask = 'source-atop') {
     if (this === target) {return; }
 
     // check if both source and target have costumes,
-    // rasterize copy of target costume if it's an SVG
-    // cache the costume copy for later reuse
+    // fetch the target's surface
     if (this.costume && target.costume) {
         sourceCostume = this.costume;
         if (sourceCostume instanceof SVG_Costume) {
             sourceCostume = sourceCostume.rasterized();
         }
-        if (target.trailsCache) {
-            targetCostume = target.trailsCache;
-        } else {
-            if (target.costume instanceof SVG_Costume) {
-                targetCostume = target.costume.rasterized();
-            } else {
-                targetCostume = target.costume.copy();
-            }
-            target.trailsCache = targetCostume;
-        }
+        targetCostume = target.surface();
     } else {
         return;
     }
@@ -7541,20 +7547,9 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
         return;
     }
 
-    // check if target has a costumes,
-    // rasterize copy of target costume if it's an SVG
-    // cache the costume copy for later reuse
+    // check if target has a costume and fetch its pen surface
     if (target.costume) {
-        if (target.trailsCache) {
-            targetCostume = target.trailsCache;
-        } else {
-            if (target.costume instanceof SVG_Costume) {
-                targetCostume = target.costume.rasterized();
-            } else {
-                targetCostume = target.costume.copy();
-            }
-            target.trailsCache = targetCostume;
-        }
+        targetCostume = target.surface();
     } else {
         return;
     }
@@ -10229,6 +10224,7 @@ StageMorph.prototype.init = function (globals) {
 
     // support for letting sprites directly draw on a background
     this.trailsCache = null; // a temporary costume - do not serialize
+    this.originalCostume = null; // hold on to the unmodified original costume
 
     this.isThreadSafe = false;
 
@@ -12213,6 +12209,7 @@ StageMorph.prototype.getPenAttribute
 // StageMorph printing on another sprite:
 
 StageMorph.prototype.blitOn = SpriteMorph.prototype.blitOn;
+StageMorph.prototype.surface = SpriteMorph.prototype.surface;
 
 // StageMorph pseudo-inherited behavior
 
