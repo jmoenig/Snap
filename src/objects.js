@@ -3182,9 +3182,9 @@ SpriteMorph.prototype.init = function (globals) {
     this.frameNumber = 0;
 
     // support for drawing on sprites
-    this.sheet = null; // a sprite - do not serialize
+    this.sheet = null; // a sprite - surface destination to draw on
     this.tool = null; // string describing pen mode ('paint', 'erase', 'create')
-    this.trailsCache = null; // a temporary costume - do not serialize
+    this.trailsCache = null; // a temporary costume for drawing on
     this.originalCostume = null; // hold on to the unmodified original costume
 
     SpriteMorph.uber.init.call(this);
@@ -10268,7 +10268,7 @@ StageMorph.prototype.init = function (globals) {
     this.trailsLog = []; // each line being [p1, p2, color, width, cap]
 
     // support for letting sprites directly draw on a background
-    this.trailsCache = null; // a temporary costume - do not serialize
+    this.trailsCache = null; // a temporary costume for drawing on
     this.originalCostume = null; // hold on to the unmodified original costume
 
     this.isThreadSafe = false;
