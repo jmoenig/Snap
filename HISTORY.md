@@ -54,6 +54,7 @@
 * objects: refactored pen surface architecture
 * objects: support using "clear" to restore a sprite's costume that has been drawn on
 * objects: support using "fill" to draw on sprites
+* objects: prevent drawing on deleted sprites
 
 ### 2025-12-10
 * gui: tweaked IDE resizing layout for different translations

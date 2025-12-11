@@ -6638,6 +6638,14 @@ SpriteMorph.prototype.perimeter = function (aStage) {
 
 // SpriteMorph pen ops
 
+SpriteMorph.prototype.drawsOnSprite = function () {
+    if (isSnapObject(this.sheet) && !this.sheet.isCorpse) {
+        return true;
+    }
+    this.sheet = null;
+    return false;
+};
+
 SpriteMorph.prototype.surface = function () {
     // answer a version of the current costume that can be drawn on
     // by another sprite's pen.
@@ -6666,7 +6674,7 @@ SpriteMorph.prototype.surface = function () {
 SpriteMorph.prototype.blendingMode = function () {
     // private - answer the globalCompositeOperation property for drawing
     var modes = { // for pen trails we don't support 'source-atop'
-            paint : isSnapObject(this.sheet) ? 'source-atop' : 'source-over',
+            paint : this.drawsOnSprite() ? 'source-atop' : 'source-over',
             erase : 'destination-out',
             create : 'source-over'
         },
@@ -6677,7 +6685,7 @@ SpriteMorph.prototype.blendingMode = function () {
 // SpriteMorph stamping
 
 SpriteMorph.prototype.doStamp = function () {
-    if (isSnapObject(this.sheet)) {
+    if (this.drawsOnSprite()) {
         this.blitOn(this.sheet, this.blendingMode());
     } else {
         this.stampOnPenTrails();
@@ -6710,7 +6718,7 @@ SpriteMorph.prototype.stampOnPenTrails = function () {
 // SpriteMorph clearing
 
 SpriteMorph.prototype.clear = function () {
-    if (isSnapObject(this.sheet)) {
+    if (this.drawsOnSprite()) {
         if (this.sheet.originalCostume) {
             this.sheet.doSwitchToCostume(this.sheet.originalCostume);
         }
@@ -6728,7 +6736,7 @@ SpriteMorph.prototype.write = function (text, size) {
             typeof text
         );
     }
-    if (isSnapObject(this.sheet)) {
+    if (this.drawsOnSprite()) {
         this.writeOn(this.sheet, text, size);
     } else {
         this.writeOnPenTrails(text, size);
@@ -7537,7 +7545,7 @@ SpriteMorph.prototype.justDropped = function () {
 // SpriteMorph drawing:
 
 SpriteMorph.prototype.drawLine = function (start, dest) {
-    if (isSnapObject(this.sheet)) {
+    if (this.drawsOnSprite()) {
         this.drawLineOn(this.sheet, start, dest);
     } else {
         this.drawPenTrailsLine(start, dest);
@@ -7649,7 +7657,7 @@ SpriteMorph.prototype.floodFill = function () {
         this.color.a = this.color.a / 255;
     }
 
-    var onSheet = isSnapObject(this.sheet),
+    var onSheet = this.drawsOnSprite(),
         target = onSheet ? this.sheet : this.parent,
         start = (onSheet ? this.sheet : this.parent)
             .costumePoint(this.rotationCenter()),
