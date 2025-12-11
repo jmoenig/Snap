@@ -7849,10 +7849,12 @@ MenuMorph.prototype.addItem = function (
 };
 
 MenuMorph.prototype.addMenu = function (label, aMenu, indicator, verbatim) {
+  var arrow = new ArrowMorph("right", 12, null, this?.bgColor ? (this.bgColor.eq(WHITE) ? BLACK : WHITE) : BLACK);
+  arrow.scale = 1
   this.addPair(
     label,
     aMenu,
-    new ArrowMorph("right", 12, null, this.bgColor ? WHITE : BLACK), //isNil(indicator) ? "\u25ba" : indicator,
+    arrow, //isNil(indicator) ? "\u25ba" : indicator,
     null,
     verbatim // don't translate
   );

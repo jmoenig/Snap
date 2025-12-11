@@ -11370,7 +11370,7 @@ InputSlotMorph.prototype.init = function (
 
   InputSlotMorph.uber.init.call(this, null, true);
   this.color = WHITE;
-  this.hoverCursor = "text";
+  this.hoverCursor = this.isReadOnly ? "pointer" : "text";
   this.add(contents);
   this.add(arrow);
   contents.isEditable = true;
@@ -14046,12 +14046,12 @@ function ArrowMorph(direction, size, padding, color, isBlockLabel) {
   this.init(direction, size, padding, color, isBlockLabel);
 }
 
-ArrowMorph.prototype.init = function (direction, size, padding, color, isLbl) {
+ArrowMorph.prototype.init = function (direction, size, padding, color, isLbl, scale) {
   this.direction = direction || "down";
   this.size = size || (size === 0 ? 0 : 50);
   this.padding = padding || 0;
   this.isBlockLabel = isLbl || false;
-  this.scale = SyntaxElementMorph.prototype.scale;
+  this.scale = scale || SyntaxElementMorph.prototype.scale;
 
   ArrowMorph.uber.init.call(this);
   this.color = color || new Color(87, 94, 117);

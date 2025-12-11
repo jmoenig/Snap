@@ -15287,7 +15287,7 @@ WatcherMorph.prototype.init = function (
   // initialize inherited properties
   WatcherMorph.uber.init.call(
     this,
-    SyntaxElementMorph.prototype.rounding,
+    SyntaxElementMorph.prototype.rounding / 2,
     1.000001, // shadow bug in Chrome,
     new Color(120, 120, 120)
   );
@@ -15991,10 +15991,15 @@ WatcherMorph.prototype.render = function (ctx) {
   this.outlinePath(ctx, Math.max(this.edge - this.border, 0), this.border);
   ctx.closePath();
   ctx.fill();
-  if (this.border > 0 && !isFlat) {
+  if (this.border > 0 ) {
+    if(isFlat)
+    {
+      gradient = this.borderColor.toString()
+    } else {
     gradient = ctx.createLinearGradient(0, 0, 0, this.height());
     gradient.addColorStop(0, this.borderColor.lighter().toString());
     gradient.addColorStop(1, this.borderColor.darker().toString());
+    }
     ctx.lineWidth = this.border;
     ctx.strokeStyle = gradient;
     ctx.beginPath();

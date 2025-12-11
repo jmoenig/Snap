@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.3";
+var SplitVersion = "1.4.0";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1488,6 +1488,7 @@ IDE_Morph.prototype.createControlBar = function () {
   buttonIcon = new SymbolMorph("file", 20);
   buttonLabel = new TextMorph("File");
   buttonArrow = new ArrowMorph("vertical", 16, null, colors[0]);
+  buttonArrow.scale = 1;
   button.setHeight(48);
   button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
   button.color = this.accentColor;
@@ -1523,6 +1524,7 @@ IDE_Morph.prototype.createControlBar = function () {
   buttonIcon = new SymbolMorph("gears", 20);
   buttonLabel = new TextMorph("Settings");
   buttonArrow = new ArrowMorph("vertical", 16, null, colors[0]);
+  buttonArrow.scale = 1;
   button.setHeight(48);
   button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
   button.color = this.accentColor;
@@ -2533,7 +2535,7 @@ IDE_Morph.prototype.createCorralBar = function () {
   newbutton.padding = 0;
   newbutton.labelShadowOffset = new Point(-1, -1);
   newbutton.labelShadowColor = colors[1];
-  newbutton.labelColor = WHITE;
+  newbutton.labelColor = this.buttonLabelColor;
   newbutton.contrast = this.buttonContrast;
   newbutton.hint = "add a new Turtle sprite";
   newbutton.fixLayout();
@@ -2989,7 +2991,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.spriteBar.setLeft(this.corralBar.left());
     this.spriteBar.setTop(this.corralBar.bottom());
     this.spriteBar.setWidth(this.corralBar.width());
-    this.spriteBar.setHeight(Math.round(this.logo.height() * 2.2));
+    this.spriteBar.setHeight(Math.round(this.logo.height() * 1.2));
     this.spriteBar.fixLayout();
 
     // corral
@@ -7594,6 +7596,8 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
   var world = this.world(),
     elements = [
       this.logo,
+      this.controlBarBackground,
+      this.extensionButton,
       this.controlBar.cloudButton,
       this.controlBar.projectButton,
       this.controlBar.settingsButton,
