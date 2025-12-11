@@ -1644,7 +1644,8 @@ IDE_Morph.prototype.createControlBar = function () {
     name = myself.getProjectName() || localize("untitled");
     if (!myself.config.preserveTitle) {
       document.title =
-        "Split! " + (myself.getProjectName() ? name : SplitVersion);
+        myself.getProjectName() ? (name + " on Split!") : ("Split! " + SplitVersion);
+        // "Split! " + (myself.getProjectName() ? name : SplitVersion);
     }
     txt = new StringMorph(
       prefix + name + scene + suffix,
