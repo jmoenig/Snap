@@ -9857,6 +9857,8 @@ function MenuItemMorph(
     doubleClickAction,
     bakColor
   );
+
+  this.hoverCursor = "auto";
 }
 
 MenuItemMorph.prototype.createLabel = function () {
