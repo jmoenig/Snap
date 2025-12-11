@@ -52,6 +52,7 @@
 * objects: support stamping on sprites using pen modes
 * objects: refactored pen blendingMode
 * objects: refactored pen surface architecture
+* objects: support using "clear" to restore a sprite's costume that has been drawn on
 
 ### 2025-12-10
 * gui: tweaked IDE resizing layout for different translations

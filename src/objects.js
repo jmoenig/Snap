@@ -6707,8 +6707,16 @@ SpriteMorph.prototype.stampOnPenTrails = function () {
     stage.cachedPenTrailsMorph = null;
 };
 
+// SpriteMorph clearing
+
 SpriteMorph.prototype.clear = function () {
-    this.parent.clearPenTrails();
+    if (isSnapObject(this.sheet)) {
+        if (this.sheet.originalCostume) {
+            this.sheet.doSwitchToCostume(this.sheet.originalCostume);
+        }
+    } else {
+        this.parent.clearPenTrails();
+    }
 };
 
 // SpriteMorph writing
