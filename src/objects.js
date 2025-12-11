@@ -7644,32 +7644,55 @@ SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
 };
 
 SpriteMorph.prototype.floodFill = function () {
-    if (!this.parent.bounds.containsPoint(this.rotationCenter())) {
-        return;
-    }
-    this.parent.cachedPenTrailsMorph = null;
     if (this.color.a > 1) {
         // fix a legacy bug in Morphic color detection
         this.color.a = this.color.a / 255;
     }
-    var layer = normalizeCanvas(this.parent.penTrails()),
-        width = layer.width,
-        height = layer.height,
-        ctx = layer.getContext('2d'),
-        img = ctx.getImageData(0, 0, width, height),
-        dta = img.data,
-        stack = [
-            Math.floor((height / 2) - this.yPosition()) * width +
-            Math.floor(this.xPosition() + (width / 2))
-        ],
+
+    var onSheet = isSnapObject(this.sheet),
+        target = onSheet ? this.sheet : this.parent,
+        start = (onSheet ? this.sheet : this.parent)
+            .costumePoint(this.rotationCenter()),
         clr = new Color(
             Math.round(Math.min(Math.max(this.color.r, 0), 255)),
             Math.round(Math.min(Math.max(this.color.g, 0), 255)),
             Math.round(Math.min(Math.max(this.color.b, 0), 255)),
             this.color.a
         ),
+        layer,
+        width,
+        height,
+        ctx,
+        img,
+        dta,
+        stack,
+        targetCostume,
         current,
         src;
+
+    if (!target.bounds.containsPoint(this.rotationCenter())) {
+        return;
+    }
+
+    if (onSheet) {
+        // check if target has a costume and fetch its pen surface
+        if (target.costume) {
+            targetCostume = target.surface();
+        } else {
+            return;
+        }
+    } else {
+        this.parent.cachedPenTrailsMorph = null;
+    }
+
+    layer = normalizeCanvas(onSheet ? targetCostume.contents
+        : this.parent.penTrails());
+    width = layer.width;
+    height = layer.height;
+    ctx = layer.getContext('2d');
+    img = ctx.getImageData(0, 0, width, height);
+    dta = img.data;
+    stack = [Math.floor(start.y) * width + Math.floor(start.x)];
 
     function read(p) {
         var d = p * 4;
@@ -7708,7 +7731,13 @@ SpriteMorph.prototype.floodFill = function () {
         dta[current * 4 + 3] = Math.round(clr.a * 255);
     }
     ctx.putImageData(img, 0, 0);
-    this.parent.changed();
+
+    if (onSheet) {
+        // wear & cache the changed costume
+        this.sheet.doSwitchToCostume(targetCostume, null, true); // keep cache
+    } else {
+        this.parent.changed();
+    }
 };
 
 // SpriteMorph pen trails as costume

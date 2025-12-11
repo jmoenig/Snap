@@ -53,6 +53,7 @@
 * objects: refactored pen blendingMode
 * objects: refactored pen surface architecture
 * objects: support using "clear" to restore a sprite's costume that has been drawn on
+* objects: support using "fill" to draw on sprites
 
 ### 2025-12-10
 * gui: tweaked IDE resizing layout for different translations
