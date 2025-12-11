@@ -1101,7 +1101,7 @@ IDE_Morph.prototype.createLogo = function () {
   };
 
   this.logo.color = BLACK;
-  this.logo.setExtent(new Point(200, 28)); // dimensions are fixed
+  this.logo.setExtent(new Point(150, 48)); // dimensions are fixed
   this.add(this.logo);
 };
 IDE_Morph.prototype.createProjectControlBar = function () {
@@ -1137,7 +1137,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
   }
   this.projectControlBar = new Morph();
   this.projectControlBar.color = this.frameColor;
-  this.projectControlBar.setHeight(this.logo.height()); // height is fixed
+  this.projectControlBar.setHeight(28); // height is fixed
 
   this.add(this.projectControlBar);
 
@@ -1406,7 +1406,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
   this.controlBar = new Morph();
   this.controlBar.color = this.accentColor;
-  this.controlBar.setHeight(this.logo.height()); // height is fixed
+  this.controlBar.setHeight(48);
 
   // let users manually enforce re-layout when changing orientation
   // on mobile devices
@@ -2482,7 +2482,7 @@ IDE_Morph.prototype.createCorralBar = function () {
   this.corralBar = new Morph();
   this.corralBar.color = this.frameColor;
   this.corralBar.isVisible = flag;
-  this.corralBar.setHeight(this.logo.height()); // height is fixed
+  this.corralBar.setHeight(28); // height is fixed
   this.corralBar.setWidth(this.stage.width());
   this.add(this.corralBar);
 
@@ -2769,7 +2769,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // categories
     this.categories.setLeft(this.logo.left());
     this.categories.setTop(
-      57 //this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
+      77 //this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
     );
     this.extensionButton.setTop(world.bottom() - 52);
     this.extensionButton.setHeight(52);
@@ -2870,7 +2870,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
         this.stage.setTop(
             
-            cnf.hideControls ? this.top() + border : this.logo.bottom() + padding
+            cnf.hideControls ? this.top() + border : this.controlBar.bottom() + padding
       );
       this.stage.setRight(this.right() - border);
       if (cnf.noSprites) {
@@ -2907,12 +2907,12 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             : this.paletteWidth + padding + border*/
     );
     this.oldSpriteBar.setTop(
-      cnf.hideControls ? this.top() + border : this.logo.bottom() + padding
+      cnf.hideControls ? this.top() + border : this.controlBar.bottom() + padding
     );
     this.oldSpriteBar.setWidth(
       Math.max(0, this.stage.left() - padding - this.oldSpriteBar.left())
     );
-    this.oldSpriteBar.setHeight(Math.round(this.logo.height() * 1));
+    this.oldSpriteBar.setHeight(28);
     this.oldSpriteBar.fixLayout();
 
     // spriteEditor
