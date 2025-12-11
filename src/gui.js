@@ -1006,6 +1006,7 @@ IDE_Morph.prototype.createLogo = function () {
   }
 
   this.logo = new Morph();
+  this.logo.hoverCursor = "pointer";
 
   // the logo texture is not loaded dynamically as an image, but instead
   // hard-copied here to avoid tainting the world canvas. This lets us

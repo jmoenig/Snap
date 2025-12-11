@@ -3438,6 +3438,7 @@ InputFieldMorph.prototype.init = function (
   this.add(arrow);
   contents.isDraggable = false;
   this.fixLayout();
+  this.hoverCursor = "text";
 };
 
 // InputFieldMorph accessing:

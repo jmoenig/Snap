@@ -3261,6 +3261,7 @@ BlockMorph.prototype.init = function () {
   BlockMorph.uber.init.call(this);
   this.color = new Color(102, 102, 102);
   this.cachedInputs = null;
+  this.hoverCursor = "grab";
 };
 
 BlockMorph.prototype.scriptTarget = function (noError) {

@@ -9643,6 +9643,7 @@ TriggerMorph.prototype.init = function (
 
   // override inherited properites:
   this.color = bakColor || WHITE;
+  this.hoverCursor = "pointer";
   this.createLabel();
 };
 
@@ -11486,6 +11487,22 @@ HandMorph.prototype.processMouseMove = function (event) {
   });
   this.mouseOverList = mouseOverNew;
   this.mouseOverBounds = mouseOverBoundsNew;
+  
+  // cursor handling
+  var cursorMorph = this.morphAtPointer();
+  var cursor = cursorMorph.hoverCursor;
+  console.log(cursorMorph); 
+
+  while (!cursor && cursorMorph.parent) {
+      cursorMorph = cursorMorph.parent;
+      cursor = cursorMorph.hoverCursor;
+  }
+
+  if (cursor) {
+      this.world.worldCanvas.style.cursor = cursor;
+  } else {
+      this.world.worldCanvas.style.cursor = "auto";
+  }
 };
 
 HandMorph.prototype.processMouseScroll = function (event) {
