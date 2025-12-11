@@ -6636,7 +6636,29 @@ SpriteMorph.prototype.perimeter = function (aStage) {
 
 // SpriteMorph pen ops
 
+// SpriteMorph stamping
+
 SpriteMorph.prototype.doStamp = function () {
+    var rule;
+    if (isSnapObject(this.sheet)) {
+        switch (this.tool) {
+        case 'erase':
+            rule = 'destination-out';
+            break;
+        case 'create':
+            rule = 'source-over';
+            break;
+        case 'paint':
+        default:
+            rule = 'source-atop';
+        }
+        this.blitOn(this.sheet, rule);
+    } else {
+        this.stampOnPenTrails();
+    }
+};
+
+SpriteMorph.prototype.stampOnPenTrails = function () {
     var stage = this.parent,
         ctx = stage.penTrails().getContext('2d'),
         img = this.getImage();
@@ -6648,6 +6670,15 @@ SpriteMorph.prototype.doStamp = function () {
     ctx.save();
     ctx.scale(1 / stage.scale, 1 / stage.scale);
     ctx.globalAlpha = this.alpha;
+    switch (this.tool) {
+    case 'erase':
+        ctx.globalCompositeOperation = 'destination-out';
+        break;
+    case 'create':
+    case 'paint':
+    default: // on the pen trails layer we don't support 'source-atop'
+        ctx.globalCompositeOperation = 'source-over';
+    }
     ctx.drawImage(
         img,
         this.left() - stage.left(),
