@@ -5480,7 +5480,7 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow, keepCache) {
         );
     }
     if (id instanceof Costume) { // allow first-class costumes
-        this.wearCostume(id, noShadow);
+        this.wearCostume(id, noShadow, keepCache);
         return;
     }
     if (id instanceof Array && (id[0] === 'current')) {
