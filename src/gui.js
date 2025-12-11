@@ -1576,33 +1576,33 @@ IDE_Morph.prototype.createControlBar = function () {
     });*/
 
     
-    settingsButton.setCenter(myself.controlBar.center());
-    settingsButton.setLeft(this.left());
+    projectButton.setCenter(myself.controlBar.center());
+    projectButton.setLeft(this.left());
 
     slider.setCenter(myself.controlBar.center());
-    slider.setLeft(settingsButton.right() + 200 + padding);
+    slider.setLeft(projectButton.right() + 200 + padding);
     
 
     steppingButton.setCenter(myself.controlBar.center());
     steppingButton.setRight(slider.left() - padding);
 
     if (myself.config.hideSettings) {
-      settingsButton.hide();
+      projectButton.hide();
     }
 
-    projectButton.setCenter(myself.controlBar.center());
+    settingsButton.setCenter(myself.controlBar.center());
 
     if (myself.config.noImports || myself.config.hideProjects) {
-      projectButton.hide();
+      settingsButton.hide();
     }
 
     if (myself.cloud.disabled) {
       cloudButton.hide();
-      projectButton.setRight(settingsButton.left() - padding);
+      settingsButton.setRight(projectButton.left() - padding);
     } else {
       cloudButton.setCenter(myself.controlBar.center());
-      cloudButton.setRight(settingsButton.left() - padding);
-      projectButton.setRight(cloudButton.left() - padding);
+      cloudButton.setRight(projectButton.left() - padding);
+      settingsButton.setRight(cloudButton.left() - padding);
     }
 
     this.refreshSlider();
@@ -1665,12 +1665,12 @@ IDE_Morph.prototype.createControlBar = function () {
     this.label.add(txt);
     this.label.setExtent(
       new Point(
-        steppingButton.left() - settingsButton.right() - padding * 2,
+        steppingButton.left() - projectButton.right() - padding * 2,
         txt.height()
       )
     );
     this.label.setCenter(this.center());
-    this.label.setLeft(this.settingsButton.right() + padding);
+    this.label.setLeft(this.projectButton.right() + padding);
     this.add(this.label);
   };
 };
