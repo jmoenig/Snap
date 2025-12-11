@@ -50,6 +50,7 @@
 ### 2025-12-11
 * objects, extensions: added support for pen modes ("paint", "erase" and "create")
 * objects: support stamping on sprites using pen modes
+* objects: refactored pen blendingMode
 
 ### 2025-12-10
 * gui: tweaked IDE resizing layout for different translations

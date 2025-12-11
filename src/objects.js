@@ -6636,23 +6636,22 @@ SpriteMorph.prototype.perimeter = function (aStage) {
 
 // SpriteMorph pen ops
 
+SpriteMorph.prototype.blendingMode = function () {
+    // private - answer the globalCompositeOperation property for drawing
+    var modes = { // for pen trails we don't support 'source-atop'
+            paint : isSnapObject(this.sheet) ? 'source-atop' : 'source-over',
+            erase : 'destination-out',
+            create : 'source-over'
+        },
+        key = this.tool.toString().toLowerCase();
+    return modes[key] || modes.paint;
+};
+
 // SpriteMorph stamping
 
 SpriteMorph.prototype.doStamp = function () {
-    var rule;
     if (isSnapObject(this.sheet)) {
-        switch (this.tool) {
-        case 'erase':
-            rule = 'destination-out';
-            break;
-        case 'create':
-            rule = 'source-over';
-            break;
-        case 'paint':
-        default:
-            rule = 'source-atop';
-        }
-        this.blitOn(this.sheet, rule);
+        this.blitOn(this.sheet, this.blendingMode());
     } else {
         this.stampOnPenTrails();
     }
@@ -6670,15 +6669,7 @@ SpriteMorph.prototype.stampOnPenTrails = function () {
     ctx.save();
     ctx.scale(1 / stage.scale, 1 / stage.scale);
     ctx.globalAlpha = this.alpha;
-    switch (this.tool) {
-    case 'erase':
-        ctx.globalCompositeOperation = 'destination-out';
-        break;
-    case 'create':
-    case 'paint':
-    default: // on the pen trails layer we don't support 'source-atop'
-        ctx.globalCompositeOperation = 'source-over';
-    }
+    ctx.globalCompositeOperation = this.blendingMode();
     ctx.drawImage(
         img,
         this.left() - stage.left(),
@@ -6762,17 +6753,7 @@ SpriteMorph.prototype.writeOn = function (target, text, size) {
     len = ctx.measureText(text).width;
     ctx.translate(start.x, start.y);
     ctx.rotate(rotation);
-    switch (this.tool) {
-    case 'erase':
-        ctx.globalCompositeOperation = 'destination-out';
-        break;
-    case 'create':
-        ctx.globalCompositeOperation = 'source-over';
-        break;
-    case 'paint':
-    default:
-        ctx.globalCompositeOperation = 'source-atop';
-    }
+    ctx.globalCompositeOperation = this.blendingMode();
     ctx.fillText(text, 0, 0);
     ctx.translate(-start.x, -start.y);
     ctx.restore();
@@ -6808,15 +6789,7 @@ SpriteMorph.prototype.writeOnPenTrails = function (text, size) {
     trans = trans.multiplyBy(1 / stage.scale);
     context.translate(trans.x, trans.y);
     context.rotate(rotation);
-    switch (this.tool) {
-    case 'erase':
-        context.globalCompositeOperation = 'destination-out';
-        break;
-    case 'create':
-    case 'paint':
-    default: // on the pen trails layer we don't support 'source-atop'
-        context.globalCompositeOperation = 'source-over';
-    }
+    context.globalCompositeOperation = this.blendingMode();
     context.fillText(text, 0, 0);
     context.translate(-trans.x, -trans.y);
     context.restore();
@@ -7603,17 +7576,7 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
     }
-    switch (this.tool) {
-    case 'erase':
-        ctx.globalCompositeOperation = 'destination-out';
-        break;
-    case 'create':
-        ctx.globalCompositeOperation = 'source-over';
-        break;
-    case 'paint':
-    default:
-        ctx.globalCompositeOperation = 'source-atop';
-    }
+    ctx.globalCompositeOperation = this.blendingMode();
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
     ctx.lineTo(p2.x, p2.y);
@@ -7660,15 +7623,7 @@ SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
             context.lineCap = 'round';
             context.lineJoin = 'round';
         }
-        switch (this.tool) {
-        case 'erase':
-            context.globalCompositeOperation = 'destination-out';
-            break;
-        case 'create':
-        case 'paint':
-        default: // on the pen trails layer we don't support 'source-atop'
-            context.globalCompositeOperation = 'source-over';
-        }
+        context.globalCompositeOperation = this.blendingMode();
         context.beginPath();
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
