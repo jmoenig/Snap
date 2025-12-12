@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-11';
+modules.objects = '2025-December-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -1068,6 +1068,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'cut from %spr',
             code: 'cut',
             animation: true
+        },
+        doDrawOn: {
+            only: SpriteMorph,
+            type: 'command',
+            category: 'pen',
+            spec: '%msk on %srf',
+            defaults: [['paint'], ['pen trails']],
+            code: 'drawOn'
         },
         reportColor: {
             type: 'reporter',
@@ -3857,6 +3865,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doPasteOn'));
         blocks.push(block('doCutFrom'));
+        blocks.push(block('doDrawOn'));
         blocks.push('-');
         blocks.push(block('reportColor'));
         blocks.push(block('reportColorAttribute'));

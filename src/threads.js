@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-December-02';
+modules.threads = '2025-December-12';
 
 var ThreadManager;
 var Process;
@@ -6564,6 +6564,16 @@ Process.prototype.doPasteOn = function (name) {
 
 Process.prototype.doCutFrom = function (name) {
     this.blitOn(name, 'destination-out');
+};
+
+Process.prototype.doDrawOn = function (mode, surface) {
+    var rcvr = this.blockReceiver(),
+        mask = this.inputOption(mode),
+        dest = this.inputOption(surface),
+        tools = ['paint', 'erase', 'create'];
+    rcvr.sheet = (dest === 'pen trails' ? null
+        : this.reportObject(dest) || null);
+    rcvr.tool = contains(tools, mask) ? mask || null : null;
 };
 
 Process.prototype.blitOn = function (name, mask, thisObj, stage) {

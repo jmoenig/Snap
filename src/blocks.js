@@ -162,7 +162,7 @@ CustomHatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-December-02';
+modules.blocks = '2025-December-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -568,6 +568,11 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only',
         menu: 'objectsMenu'
     },
+    '%srf': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'surfacesMenu'
+    },
     '%self': {
         type: 'input',
         tags: 'read-only',
@@ -781,6 +786,16 @@ SyntaxElementMorph.prototype.labelParts = {
             'r-g-b-a' : ['r-g-b-a'],
             '~~' : null,
             sprites : ['sprites'],
+        }
+    },
+    '%msk': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            paint : ['paint'],
+            erase : ['erase'],
+            '~' : null,
+            create : ['create']
         }
     },
     '%txtfun': {
@@ -11771,6 +11786,16 @@ InputSlotMorph.prototype.clonablesMenuWithTurtle = function (searching) {
 InputSlotMorph.prototype.objectsMenuWithSelf = function (searching) {
     if (searching) {return {}; }
     return this.objectsMenu(false, true);
+};
+
+InputSlotMorph.prototype.surfacesMenu = function (searching) {
+    var obj = this.objectsMenu(),
+        dict = {
+            'pen trails' : ['pen trails']
+        };
+    if (searching) {return {}; }
+    Object.keys(obj).forEach(key => dict[key] = obj[key]);
+    return dict;
 };
 
 InputSlotMorph.prototype.objectsMenu = function (searching, includeMyself) {
