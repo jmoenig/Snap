@@ -50,6 +50,7 @@
 ### 2025-12-12
 * blocks, objects, threads: new "(paint) on (surface)" command primitive in the pen category
 * extensions: removed experimental drawing-on-sprites extension
+* gui, sw: updated dev version to 12
 
 ### 2025-12-11
 * objects, extensions: added support for pen modes ("paint", "erase" and "create")
