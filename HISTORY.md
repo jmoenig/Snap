@@ -23,7 +23,6 @@
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
     * drawing and writing on sprites
         * new "(paint) on (surface)" command primitive in the pen category
-        * new "pen_drawOn(sprite, mode)" extension, experimental & temporary
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
@@ -50,6 +49,7 @@
 
 ### 2025-12-12
 * blocks, objects, threads: new "(paint) on (surface)" command primitive in the pen category
+* extensions: removed experimental drawing-on-sprites extension
 
 ### 2025-12-11
 * objects, extensions: added support for pen modes ("paint", "erase" and "create")

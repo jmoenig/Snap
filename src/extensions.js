@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-December-11';
+modules.extensions = '2025-December-12';
 
 // Global stuff
 
@@ -1839,16 +1839,6 @@ SnapExtensions.primitives.set(
         ide = dlg ? dlg.ide : stage.parentThatIsA(IDE_Morph);
         if (!ide) {return ''; }
         return ide.currentSprite;
-    }
-);
-
-// Drawing on Sprites (pen_):
-
-SnapExtensions.primitives.set(
-    'pen_drawOn(sprite, mode)',
-    function (sprite, mode, proc) {
-        this.sheet = proc.reportObject(sprite);
-        this.tool = mode || null;
     }
 );
 
