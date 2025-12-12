@@ -173,7 +173,7 @@ IDE_Morph.prototype.setDefaultTheme = function () {
   ];
   IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
   IDE_Morph.prototype.appModeColor = BLACK;
-  IDE_Morph.prototype.padding = 1;
+  IDE_Morph.prototype.padding = 0;
 
   SpriteIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
   CostumeIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
@@ -211,7 +211,7 @@ IDE_Morph.prototype.setBrightTheme = function () {
   ];
   IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
   IDE_Morph.prototype.appModeColor = IDE_Morph.prototype.frameColor;
-  IDE_Morph.prototype.padding = 1;
+  IDE_Morph.prototype.padding = 0;
 
   SpriteIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
   CostumeIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
@@ -2809,7 +2809,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // categories
     this.categories.setLeft(this.logo.left());
     this.categories.setTop(
-      93 //this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
+      92 //this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
     );
     this.extensionButton.setTop(world.bottom() - 52);
     this.extensionButton.setHeight(52);
@@ -2838,7 +2838,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
   this.palette.setTop(
     cnf.hideControls
       ? this.top() + border
-      : this.controlBar.bottom() + padding + 45
+      : this.controlBar.bottom() + padding + 44
   );
   this.palette.setHeight(this.bottom() - this.palette.top() - border);
   this.palette.setWidth(this.paletteWidth);
