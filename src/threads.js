@@ -6573,6 +6573,9 @@ Process.prototype.doDrawOn = function (mode, surface) {
         tools = ['paint', 'erase', 'create'];
     rcvr.sheet = (dest === 'pen trails' ? null
         : this.reportObject(dest) || null);
+    if (rcvr.sheet === rcvr) {
+        rcvr.sheet = null;
+    }
     rcvr.tool = contains(tools, mask) ? mask || null : null;
 };
 
