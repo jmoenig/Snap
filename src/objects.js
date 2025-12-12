@@ -4665,6 +4665,14 @@ SpriteMorph.prototype.freshPalette = function (category) {
   palette.alpha = 1;
   palette.growth = new Point(0, MorphicPreferences.scrollBarSize);
 
+  palette.render = function (ctx) {
+    ctx.strokeStyle = ide.borderColor.toString();
+    ctx.fillStyle = this.color.toString();
+    
+    ctx.fillRect(0, 0, this.width(), this.height())
+    ctx.strokeRect(0, 0, this.width(), this.height())
+  }
+
   // toolbar:
 
   palette.toolBar = new AlignmentMorph("column");
@@ -10608,11 +10616,21 @@ StageMorph.prototype.moveBy = function (delta) {
 // StageMorph rendering
 
 StageMorph.prototype.render = function (ctx) {
+  var ide = this.parentThatIsA(IDE_Morph);
+
   ctx.save();
-  ctx.roundRect(0, 0, this.width(), this.height(), 4)
-  ctx.clip()
+  ctx.roundRect(0, 0, this.width(), this.height(), 12);
+
+  ctx.beginPath();
+  ctx.roundRect(0, 0, this.width(), this.height(), 12);
+  ctx.strokeStyle = ide.borderColor.toString();
   ctx.fillStyle = this.color.toString();
-  ctx.fillRect(0, 0, this.width(), this.height());
+  ctx.lineWidth = 1;
+  ctx.clip();
+  ctx.fill();
+  ctx.stroke();
+  ctx.closePath();
+
   if (this.costume && !(this.costume.loaded instanceof Function)) {
     ctx.scale(this.scale, this.scale);
     ctx.drawImage(

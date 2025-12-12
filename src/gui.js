@@ -161,6 +161,7 @@ IDE_Morph.prototype.setDefaultTheme = function () {
   IDE_Morph.prototype.buttonContrast = 30;
   IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
   IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
+  IDE_Morph.prototype.borderColor = new Color(64, 64, 64);
 
   IDE_Morph.prototype.groupColor =
     SpriteMorph.prototype.paletteColor.lighter(5);
@@ -200,6 +201,7 @@ IDE_Morph.prototype.setBrightTheme = function () {
   IDE_Morph.prototype.buttonContrast = 30;
   IDE_Morph.prototype.backgroundColor = new Color(220, 220, 230);
   IDE_Morph.prototype.frameColor = new Color(230, 240, 255);
+  IDE_Morph.prototype.borderColor = new Color(212, 212, 212);
 
   IDE_Morph.prototype.groupColor = WHITE;
   IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
@@ -348,7 +350,7 @@ IDE_Morph.prototype.init = function (config) {
   this.hasChangedMedia = false;
 
   this.isAnimating = true;
-  this.paletteWidth = 200; // initially same as logo width
+  this.paletteWidth = 250;
   this.stageRatio = 1; // for IDE animations, e.g. when zooming
   this.performerMode = false;
   this.performerScale = 1;
@@ -368,7 +370,7 @@ IDE_Morph.prototype.init = function (config) {
   IDE_Morph.uber.init.call(this);
 
   // override inherited properites:
-  this.color = this.backgroundColor;
+  this.color = this.frameColor;
 
   // initialize the primitive blocks dictionary
   SpriteMorph.prototype.initBlocks();
@@ -1772,6 +1774,14 @@ IDE_Morph.prototype.createCategories = function () {
     });
   };
 
+  this.categories.render = function (ctx) {
+    ctx.strokeStyle = myself.borderColor.toString();
+    ctx.fillStyle = this.color.toString();
+
+    ctx.fillRect(0, 0, this.width(), this.height())
+    ctx.strokeRect(0, 0, this.width(), this.height())
+  }
+
   function changePalette(category) {
     return () => {
       myself.currentCategory = category;
@@ -1973,6 +1983,14 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     );
     this.palette.isForSearching = true;
     this.palette.color.a = 1;
+
+    this.palette.render = function (ctx) {
+      ctx.strokeStyle = myself.borderColor.toString();
+      ctx.fillStyle = this.color.toString();
+      
+      ctx.fillRect(0, 0, this.width(), this.height())
+      ctx.strokeRect(0, 0, this.width(), this.height())
+    }
 
     // search toolbar (floating cancel button):
     /* commented out for now
@@ -2415,7 +2433,8 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
 
 IDE_Morph.prototype.createSpriteEditor = function () {
   // assumes that the logo pane and the stage have already been created
-  var scripts = this.currentSprite.scripts;
+  var myself = this,
+    scripts = this.currentSprite.scripts;
 
   if (this.spriteEditor) {
     this.spriteEditor.destroy();
@@ -3109,7 +3128,7 @@ IDE_Morph.prototype.render = function (ctx) {
     // in presentation mode
     frame = this.stage.bounds.translateBy(this.position().neg()).expandBy(2);
     ctx.strokeStyle = (
-      this.isBright ? this.backgroundColor : this.groupColor
+      this.isBright ? this.frameColor : this.groupColor
     ).toString();
     ctx.lineWidth = 1;
     ctx.beginPath();

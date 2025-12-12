@@ -8867,6 +8867,8 @@ ScriptsMorph.prototype.fullCopy = function () {
 // ScriptsMorph rendering:
 
 ScriptsMorph.prototype.render = function (aContext) {
+  var ide = this.parentThatIsA(IDE_Morph);
+
   aContext.fillStyle = this.getRenderColor().toString();
   aContext.fillRect(0, 0, this.width(), this.height());
   if (this.cachedTexture) {
@@ -8874,6 +8876,9 @@ ScriptsMorph.prototype.render = function (aContext) {
   } else if (this.texture) {
     this.renderTexture(this.texture, aContext);
   }
+
+  aContext.strokeStyle = ide.borderColor.toString();
+  aContext.strokeRect(0, 0, this.width(), this.height(0));
 };
 
 ScriptsMorph.prototype.getRenderColor = function () {
