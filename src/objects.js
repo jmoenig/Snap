@@ -3196,7 +3196,7 @@ SpriteMorph.prototype.init = function (globals) {
 
     // support for drawing on sprites
     this.sheet = null; // a sprite - surface destination to draw on
-    this.tool = null; // string describing pen mode ('paint', 'erase', 'create')
+    this.tool = null; // string: blending mode ('paint', 'erase', 'overdraw')
     this.trailsCache = null; // a temporary costume for drawing on
     this.originalCostume = null; // hold on to the unmodified original costume
 
@@ -6690,7 +6690,7 @@ SpriteMorph.prototype.blendingMode = function () {
     var modes = { // for pen trails we don't support 'source-atop'
             paint : this.drawsOnSprite() ? 'source-atop' : 'source-over',
             erase : 'destination-out',
-            create : 'source-over'
+            overdraw : 'source-over'
         },
         key = this.tool?.toString().toLowerCase();
     return modes[key] || modes.paint;

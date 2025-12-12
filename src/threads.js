@@ -6570,7 +6570,7 @@ Process.prototype.doDrawOn = function (mode, surface) {
     var rcvr = this.blockReceiver(),
         mask = this.inputOption(mode),
         dest = this.inputOption(surface),
-        tools = ['paint', 'erase', 'create'];
+        tools = ['paint', 'erase', 'overdraw'];
     rcvr.sheet = (dest === 'pen trails' ? null
         : this.reportObject(dest) || null);
     if (rcvr.sheet === rcvr) {

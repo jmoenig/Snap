@@ -52,6 +52,7 @@
 * extensions: removed experimental drawing-on-sprites extension
 * gui, sw: updated dev version to 12
 * gui: hide new "doDrawOn" primitive in old puzzles
+* blocks, objects, threads: renamed "create" drawing mode to "overdraw"
 
 ### 2025-12-11
 * objects, extensions: added support for pen modes ("paint", "erase" and "create")

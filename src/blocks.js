@@ -795,7 +795,7 @@ SyntaxElementMorph.prototype.labelParts = {
             paint : ['paint'],
             erase : ['erase'],
             '~' : null,
-            create : ['create']
+            overdraw : ['overdraw']
         }
     },
     '%txtfun': {
