@@ -2930,6 +2930,11 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'reportPoll'
         );
     }
+    if (version < 12) {
+        selectors.push(
+            'doDrawOn'
+        );
+    }
 
     return selectors;
 };
