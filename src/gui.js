@@ -1487,7 +1487,7 @@ IDE_Morph.prototype.createControlBar = function () {
   
   buttonIcon = new SymbolMorph("file", 20);
   buttonLabel = new TextMorph("File");
-  buttonArrow = new ArrowMorph("vertical", 16, null, colors[0]);
+  buttonArrow = new ArrowMorph("vertical", 16, 2, colors[0]);
   buttonArrow.scale = 1;
   button.setHeight(48);
   button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
@@ -1523,7 +1523,7 @@ IDE_Morph.prototype.createControlBar = function () {
   
   buttonIcon = new SymbolMorph("gears", 20);
   buttonLabel = new TextMorph("Settings");
-  buttonArrow = new ArrowMorph("vertical", 16, null, colors[0]);
+  buttonArrow = new ArrowMorph("vertical", 16, 2, colors[0]);
   buttonArrow.scale = 1;
   button.setHeight(48);
   button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
