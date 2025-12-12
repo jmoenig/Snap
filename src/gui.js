@@ -1207,7 +1207,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
     null, // colors
     this, // the IDE is the target
     "stopAllScripts",
-    [new SymbolMorph("octagon", 16), new SymbolMorph("square", 16)],
+    [new SymbolMorph("octagon", 20), new SymbolMorph("square", 20)],
     () =>
       this.stage // query
         ? myself.stage.enableCustomHatBlocks &&
@@ -1247,7 +1247,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
     null, //colors,
     this, // the IDE is the target
     "togglePauseResume",
-    [new SymbolMorph("pause", 14), new SymbolMorph("pointRight", 16)],
+    [new SymbolMorph("pause", 20), new SymbolMorph("pointRight", 20)],
     () => this.isPaused() // query
   );
 
@@ -1273,7 +1273,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
   this.projectControlBar.pauseButton = pauseButton; // for refreshing
 
   // startButton
-  button = new PushButtonMorph(this, "pressStart", new SymbolMorph("flag", 16));
+  button = new PushButtonMorph(this, "pressStart", new SymbolMorph("flag", 20));
   button.stroke = 0;
   button.corner = 4;
   button.color = colors[0];
@@ -1357,13 +1357,13 @@ IDE_Morph.prototype.createProjectControlBar = function () {
     ) {
       myself.stage.threads.pauseAll(myself.stage);
       pauseSymbols = [
-        new SymbolMorph("pause", 12),
-        new SymbolMorph("stepForward", 14),
+        new SymbolMorph("pause", 20),
+        new SymbolMorph("stepForward", 20),
       ];
     } else {
       pauseSymbols = [
-        new SymbolMorph("pause", 12),
-        new SymbolMorph("pointRight", 14),
+        new SymbolMorph("pause", 20),
+        new SymbolMorph("pointRight", 20),
       ];
     }
     pauseButton.labelString = pauseSymbols;
