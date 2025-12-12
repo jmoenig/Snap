@@ -199,14 +199,14 @@ IDE_Morph.prototype.setBrightTheme = function () {
 
   IDE_Morph.prototype.buttonContrast = 30;
   IDE_Morph.prototype.backgroundColor = new Color(220, 220, 230);
-  IDE_Morph.prototype.frameColor = new Color(240, 240, 245);
+  IDE_Morph.prototype.frameColor = new Color(230, 240, 255);
 
   IDE_Morph.prototype.groupColor = WHITE;
   IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
   IDE_Morph.prototype.buttonLabelColor = new Color(87, 94, 117);
   IDE_Morph.prototype.tabColors = [
-    IDE_Morph.prototype.frameColor,
-    IDE_Morph.prototype.frameColor.lighter(50),
+    new Color(217, 227, 242),
+    new Color(230, 240, 255),
     IDE_Morph.prototype.groupColor,
   ];
   IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
@@ -1138,7 +1138,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
   }
   this.projectControlBar = new Morph();
   this.projectControlBar.color = this.frameColor;
-  this.projectControlBar.setHeight(28); // height is fixed
+  this.projectControlBar.setHeight(44); // height is fixed
 
   this.add(this.projectControlBar);
 
@@ -2097,7 +2097,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     padlock,
     thumbnail,
     tabCorner = 10, //15,
-    tabPadding = 5, //3,
+    tabPadding = 10, //3,
     tabColors = this.tabColors,
     tabBar = new AlignmentMorph("row", -tabCorner * 0.5),
     tab,
@@ -2331,6 +2331,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   tab.labelShadowOffset = new Point(-1, -1);
   tab.labelShadowColor = tabColors[1];
   tab.labelColor = this.buttonLabelColor;
+  tab.fontSize = 12;
 
   tab.getPressRenderColor = function () {
     if (
@@ -2366,6 +2367,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   tab.labelShadowOffset = new Point(-1, -1);
   tab.labelShadowColor = tabColors[1];
   tab.labelColor = this.buttonLabelColor;
+  tab.fontSize = 12;
   tab.fixLayout();
   tabBar.add(tab);
 
@@ -2382,6 +2384,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   tab.labelShadowOffset = new Point(-1, -1);
   tab.labelShadowColor = tabColors[1];
   tab.labelColor = this.buttonLabelColor;
+  tab.fontSize = 12;
   tab.fixLayout();
   tabBar.add(tab);
 
@@ -2806,7 +2809,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // categories
     this.categories.setLeft(this.logo.left());
     this.categories.setTop(
-      77 //this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
+      93 //this.oldSpriteBar.bottom()//cnf.hideControls ? this.top() + border : this.oldSpriteBar.bottom()//this.logo.bottom() - this.oldSpriteBar.
     );
     this.extensionButton.setTop(world.bottom() - 52);
     this.extensionButton.setHeight(52);
@@ -2835,7 +2838,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
   this.palette.setTop(
     cnf.hideControls
       ? this.top() + border
-      : this.controlBar.bottom() + padding + 29
+      : this.controlBar.bottom() + padding + 45
   );
   this.palette.setHeight(this.bottom() - this.palette.top() - border);
   this.palette.setWidth(this.paletteWidth);
@@ -2949,7 +2952,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.oldSpriteBar.setWidth(
       Math.max(0, this.stage.left() - padding - this.oldSpriteBar.left())
     );
-    this.oldSpriteBar.setHeight(28);
+    this.oldSpriteBar.setHeight(44);
     this.oldSpriteBar.fixLayout();
 
     // spriteEditor
