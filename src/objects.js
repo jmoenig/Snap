@@ -6687,7 +6687,7 @@ SpriteMorph.prototype.blendingMode = function () {
             erase : 'destination-out',
             create : 'source-over'
         },
-        key = this.tool.toString().toLowerCase();
+        key = this.tool?.toString().toLowerCase();
     return modes[key] || modes.paint;
 };
 
