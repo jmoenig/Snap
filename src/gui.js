@@ -1743,7 +1743,6 @@ IDE_Morph.prototype.createCategories = function () {
   this.categories.bounds.setHeight(
     world.height() - this.extensionButton.height()
   );
-  // console.log(this.paletteWidth)
   this.categories.buttons = [];
   this.categories.isVisible = flag;
 
@@ -1801,7 +1800,6 @@ IDE_Morph.prototype.createCategories = function () {
   }
 
   function addCategoryButton(category, color) {
-    console.log(color);
     var labelWidth = 10,
       colors = [
         // myself.frameColor.darker(IDE_Morph.prototype.isBright ? 5 : 50),
@@ -1874,12 +1872,10 @@ IDE_Morph.prototype.createCategories = function () {
         return menu;
       };
     }
-    // console.log(button.label.right())
     return button;
   }
 
   function addCustomCategoryButton(category, color) {
-    // console.log(category, "custom")
     addCategoryButton(category, color);
     return 0;
   }
@@ -2831,7 +2827,6 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
 
     if (this.world().hand.morphAtPointer() == myself.corral.newSpriteFlyout) return;
     if (this.world().hand.morphAtPointer().parent == myself.corral.newSpriteFlyout) return;
-    console.log("a");
     myself.corral.newSpriteFlyout.hide();
   }
 
@@ -4192,7 +4187,6 @@ IDE_Morph.prototype.makeSureRecordingIsMono = function (sound) {
       sound.audioBuffer = null;
       sound.cachedSamples = null;
       sound.isDecoding = false;
-      // console.log('made mono', sound);
     };
     reader.readAsDataURL(blob);
   }
@@ -8722,7 +8716,6 @@ IDE_Morph.prototype.verifyProject = function (body) {
     return false;
   }
 
-  // console.log(encodedBody.length);
   // check if serialized data can be parsed back again
   try {
     this.serializer.parse(body.xml);
