@@ -3419,7 +3419,8 @@ InputFieldMorph.prototype.init = function (
       0,
       Math.max(Math.floor(this.fontSize / 6), 1)
     );
-
+    
+  arrow.scale = 1;
   this.choices = choiceDict || null; // object, function or selector
   this.isReadOnly = isReadOnly || false;
   this.isNumeric = isNumeric || false;

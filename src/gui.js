@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.4.0";
+var SplitVersion = "1.5.0";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3577,7 +3577,7 @@ IDE_Morph.prototype.toggleCameraSupport = function () {
 
 IDE_Morph.prototype.startFastTracking = function () {
   this.stage.isFastTracked = true;
-  this.projectControlBar.startButton.labelString = new SymbolMorph("flash", 14);
+  this.projectControlBar.startButton.labelString = new SymbolMorph("flash", 20);
   this.projectControlBar.startButton.labelColor = new Color(255, 140, 26);
   this.projectControlBar.startButton.createLabel();
   this.projectControlBar.startButton.fixLayout();
@@ -3587,7 +3587,7 @@ IDE_Morph.prototype.startFastTracking = function () {
 
 IDE_Morph.prototype.stopFastTracking = function () {
   this.stage.isFastTracked = false;
-  this.projectControlBar.startButton.labelString = new SymbolMorph("flag", 14);
+  this.projectControlBar.startButton.labelString = new SymbolMorph("flag", 20);
   this.projectControlBar.startButton.labelColor = new Color(0, 200, 0);
   this.projectControlBar.startButton.createLabel();
   this.projectControlBar.startButton.fixLayout();
