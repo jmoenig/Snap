@@ -1260,9 +1260,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
   button.padding = 0;
   button.labelShadowOffset = new Point(-1, -1);
   button.labelShadowColor = colors[1];
-  button.labelColor = this.isBright
-    ? new Color(220, 185, 0)
-    : new Color(255, 174, 0);
+  button.labelColor = new Color(255, 174, 0);
   button.contrast = this.buttonContrast;
   button.alpha = 1;
   // button.hint = 'pause/resume\nall scripts';
@@ -1285,6 +1283,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
   button.labelShadowColor = colors[1];
   button.fps = 4;
   button.isActive = false;
+  button.fixLayout();
   //button.alpha = 0
   button.show();
 
