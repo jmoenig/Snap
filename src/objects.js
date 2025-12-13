@@ -4415,6 +4415,7 @@ SpriteMorph.prototype.makeVariableButton = function () {
     "Make a variable"
   );
   button.color = CLEAR;
+  button.outline = SyntaxElementMorph.prototype.scale;
   button.labelColor = IDE_Morph.prototype.buttonLabelColor;
   button.outlineColor = button.labelColor;
   button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
@@ -4455,6 +4456,7 @@ SpriteMorph.prototype.deleteVariableButton = function () {
     "Delete a variable"
   );
   button.color = CLEAR;
+  button.outline = SyntaxElementMorph.prototype.scale;
   button.labelColor = IDE_Morph.prototype.buttonLabelColor;
   button.outlineColor = button.labelColor;
   button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
@@ -4550,6 +4552,7 @@ SpriteMorph.prototype.makeBlockButton = function (category) {
   // answer a button that prompts the user to make a new block
   var button = new PushButtonMorph(this, "makeBlock", "Make a block");
   button.color = CLEAR;
+  button.outline = SyntaxElementMorph.prototype.scale;
   button.labelColor = IDE_Morph.prototype.buttonLabelColor;
   button.outlineColor = button.labelColor;
   button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
