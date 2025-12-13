@@ -2234,9 +2234,9 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     }
     return button;
   }
-  addRotationStyleButton(1);
+  /*addRotationStyleButton(1);
   addRotationStyleButton(2);
-  addRotationStyleButton(0);
+  addRotationStyleButton(0);*/
 
   this.rotationStyleButtons = rotationStyleButtons;
 
@@ -2244,10 +2244,10 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   thumbnail.isCachingImage = true;
   thumbnail.bounds.setExtent(thumbSize);
   thumbnail.cachedImage = this.currentSprite.thumbnail(thumbSize);
-  thumbnail.setPosition(
-    rotationStyleButtons[0].topRight().add(new Point(5, 3))
-  );
-  //this.spriteBar.add(thumbnail);
+  // thumbnail.setPosition(
+  //   rotationStyleButtons[0].topRight().add(new Point(5, 3))
+  //  );
+  // this.spriteBar.add(thumbnail);
 
   thumbnail.fps = 3;
 
@@ -2267,7 +2267,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   nameField.contrast = 90;
   nameField.fontSize = 10;
   nameField.setPosition(
-    rotationStyleButtons[2].topRight().add(new Point(10, 3))
+    myself.spriteBar.position().add(new Point(4, 4))
   );
   nameField.typeInPadding = 6;
   this.spriteBar.add(nameField);
