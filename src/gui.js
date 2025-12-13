@@ -334,7 +334,6 @@ IDE_Morph.prototype.init = function (config) {
   this.spriteEditor = null;
   this.stage = null;
   this.stageHandle = null;
-  this.corralBar = null;
   this.corral = null;
 
   this.embedPlayButton = null;
@@ -974,7 +973,6 @@ IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
     this.oldSpriteBar.hide();
     this.spriteBar.hide();
     this.stageHandle.hide();
-    this.corralBar.hide();
     this.corral.hide();
   }
 
@@ -998,7 +996,6 @@ IDE_Morph.prototype.buildPanes = function () {
   this.createStage();
   this.createOldSpriteBar();
   this.createSpriteEditor();
-  this.createCorralBar();
   this.createCorral();
 };
 
@@ -2115,6 +2112,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     nameField,
     padlock,
     thumbnail,
+    trashbutton,
     tabCorner = 10, //15,
     tabPadding = 10, //3,
     tabColors = this.tabColors,
@@ -2126,7 +2124,15 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
       new SymbolMorph("arrowLeftRightThin", 10),
     ],
     labels = ["don't rotate", "can rotate", "only face left/right"],
-    myself = this;
+    myself = this,
+    colors = IDE_Morph.prototype.isBright
+      ? this.tabColors
+      : [
+          this.groupColor,
+          this.frameColor.darker(50),
+          this.frameColor.darker(50),
+        ],
+    padding = 10;
 
   if (this.oldSpriteBar) {
     this.oldSpriteBar.destroy();
@@ -2150,6 +2156,39 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   this.oldSpriteBar = new Morph();
   this.oldSpriteBar.color = this.frameColor;
   this.add(this.oldSpriteBar);
+  
+  // trashbutton
+  trashbutton = new PushButtonMorph(
+    this,
+    "undeleteSprites",
+    new SymbolMorph("trash", 18)
+  );
+
+  trashbutton.corner = 4;
+  trashbutton.color = colors[0];
+  trashbutton.highlightColor = colors[1];
+  trashbutton.pressColor = colors[2];
+  trashbutton.labelMinExtent = new Point(36, 18);
+  trashbutton.padding = 0;
+  trashbutton.labelShadowOffset = new Point(-1, -1);
+  trashbutton.labelShadowColor = colors[1];
+  trashbutton.labelColor = this.buttonLabelColor;
+  trashbutton.contrast = this.buttonContrast;
+  // trashbutton.hint = "bring back deleted sprites";
+  trashbutton.fixLayout();
+  this.spriteBar.add(trashbutton);
+
+  trashbutton.wantsDropOf = (morph) =>
+    morph instanceof SpriteMorph || morph instanceof SpriteIconMorph;
+
+  trashbutton.reactToDropOf = (droppedMorph) => {
+    if (droppedMorph instanceof SpriteMorph) {
+      this.removeSprite(droppedMorph);
+    } else if (droppedMorph instanceof SpriteIconMorph) {
+      droppedMorph.destroy();
+      this.removeSprite(droppedMorph.object);
+    }
+  };
 
   function addRotationStyleButton(rotationStyle) {
     var colors = myself.rotationStyleColors,
@@ -2428,8 +2467,8 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     this.tabBar.setBottom(this.bottom() + myself.padding);
   };
   this.spriteBar.fixLayout = function () {
-    this.setTop(myself.corralBar.bottom());
-    this.setLeft(myself.corralBar.left());
+    this.setTop(myself.stage.bottom() + padding);
+    this.setLeft(myself.stage.left());
     nameField.bounds.corner.x = Math.min(
       nameField.left() + 100,
       world.right() - 5
@@ -2440,6 +2479,9 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
       nameField.left() + 100,
       world.right() - 5
     );
+
+  trashbutton.setTop(this.top() + padding)
+  trashbutton.setRight(this.right() - padding);
   };
 };
 
@@ -2524,164 +2566,6 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
   this.spriteEditor.contents.mouseEnterDragging =
     this.spriteEditor.mouseEnterDragging;
-};
-
-IDE_Morph.prototype.createCorralBar = function () {
-  // assumes the stage has already been created
-  var padding = 5,
-    newbutton,
-    paintbutton,
-    cambutton,
-    trashbutton,
-    flag = true,
-    myself = this,
-    colors = IDE_Morph.prototype.isBright
-      ? this.tabColors
-      : [
-          this.groupColor,
-          this.frameColor.darker(50),
-          this.frameColor.darker(50),
-        ];
-
-  if (this.corralBar) {
-    flag = this.corralBar.isVisible;
-    this.corralBar.destroy();
-  }
-
-  this.corralBar = new Morph();
-  this.corralBar.color = this.frameColor;
-  this.corralBar.isVisible = flag;
-  this.corralBar.setHeight(28); // height is fixed
-  this.corralBar.setWidth(this.stage.width());
-  this.add(this.corralBar);
-
-  // new sprite button
-  newbutton = new PushButtonMorph(
-    this,
-    "addNewSprite",
-    new SymbolMorph("turtle", 14)
-  );
-  newbutton.corner = 4;
-  newbutton.color = colors[0];
-  newbutton.highlightColor = colors[1];
-  newbutton.pressColor = colors[2];
-  newbutton.labelMinExtent = new Point(36, 18);
-  newbutton.padding = 0;
-  newbutton.labelShadowOffset = new Point(-1, -1);
-  newbutton.labelShadowColor = colors[1];
-  newbutton.labelColor = this.buttonLabelColor;
-  newbutton.contrast = this.buttonContrast;
-  newbutton.hint = "add a new Turtle sprite";
-  newbutton.fixLayout();
-  newbutton.setCenter(this.corralBar.center());
-  newbutton.setLeft(this.corralBar.left() + padding);
-  this.corralBar.add(newbutton);
-
-  paintbutton = new PushButtonMorph(
-    this,
-    "paintNewSprite",
-    new SymbolMorph("brush", 15)
-  );
-  paintbutton.corner = 4;
-  paintbutton.color = colors[0];
-  paintbutton.highlightColor = colors[1];
-  paintbutton.pressColor = colors[2];
-  paintbutton.labelMinExtent = new Point(36, 18);
-  paintbutton.padding = 0;
-  paintbutton.labelShadowOffset = new Point(-1, -1);
-  paintbutton.labelShadowColor = colors[1];
-  paintbutton.labelColor = this.buttonLabelColor;
-  paintbutton.contrast = this.buttonContrast;
-  paintbutton.hint = "paint a new sprite";
-  paintbutton.fixLayout();
-  paintbutton.setCenter(this.corralBar.center());
-  paintbutton.setLeft(
-    this.corralBar.left() + padding + newbutton.width() + padding
-  );
-  this.corralBar.add(paintbutton);
-
-  if (CamSnapshotDialogMorph.prototype.enableCamera) {
-    cambutton = new PushButtonMorph(
-      this,
-      "newCamSprite",
-      new SymbolMorph("camera", 15)
-    );
-    cambutton.corner = 4;
-    cambutton.color = colors[0];
-    cambutton.highlightColor = colors[1];
-    cambutton.pressColor = colors[2];
-    cambutton.labelMinExtent = new Point(36, 18);
-    cambutton.padding = 0;
-    cambutton.labelShadowOffset = new Point(-1, -1);
-    cambutton.labelShadowColor = colors[1];
-    cambutton.labelColor = this.buttonLabelColor;
-    cambutton.contrast = this.buttonContrast;
-    cambutton.hint =
-      "take a camera snapshot and\n" + "import it as a new sprite";
-    cambutton.fixLayout();
-    cambutton.setCenter(this.corralBar.center());
-    cambutton.setLeft(
-      this.corralBar.left() +
-        padding +
-        newbutton.width() +
-        padding +
-        paintbutton.width() +
-        padding
-    );
-    this.corralBar.add(cambutton);
-    document.addEventListener("cameraDisabled", (event) => {
-      cambutton.disable();
-      cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
-    });
-  }
-
-  // trash button
-  trashbutton = new PushButtonMorph(
-    this,
-    "undeleteSprites",
-    new SymbolMorph("trash", 18)
-  );
-  trashbutton.corner = 4;
-  trashbutton.color = colors[0];
-  trashbutton.highlightColor = colors[1];
-  trashbutton.pressColor = colors[2];
-  trashbutton.labelMinExtent = new Point(36, 18);
-  trashbutton.padding = 0;
-  trashbutton.labelShadowOffset = new Point(-1, -1);
-  trashbutton.labelShadowColor = colors[1];
-  trashbutton.labelColor = this.buttonLabelColor;
-  trashbutton.contrast = this.buttonContrast;
-  // trashbutton.hint = "bring back deleted sprites";
-  trashbutton.fixLayout();
-  trashbutton.setCenter(this.corralBar.center());
-  trashbutton.setRight(this.corralBar.right() - padding);
-  this.corralBar.add(trashbutton);
-
-  trashbutton.wantsDropOf = (morph) =>
-    morph instanceof SpriteMorph || morph instanceof SpriteIconMorph;
-
-  trashbutton.reactToDropOf = (droppedMorph) => {
-    if (droppedMorph instanceof SpriteMorph) {
-      this.removeSprite(droppedMorph);
-    } else if (droppedMorph instanceof SpriteIconMorph) {
-      droppedMorph.destroy();
-      this.removeSprite(droppedMorph.object);
-    }
-  };
-
-  this.corralBar.fixLayout = function () {
-    function updateDisplayOf(button) {
-      if (button && button.right() > trashbutton.left() - padding) {
-        button.hide();
-      } else {
-        button.show();
-      }
-    }
-    this.setWidth(myself.stage.width());
-    trashbutton.setRight(this.right() - padding);
-    updateDisplayOf(cambutton);
-    updateDisplayOf(paintbutton);
-  };
 };
 
 IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
@@ -2780,6 +2664,10 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     this.newSpriteButton.setBottom(this.bottom() - padding);
     this.newSpriteButton.setRight(this.right() - padding);
 
+    this.newSpriteFlyout.setCenter(this.newSpriteButton.center());
+    this.newSpriteFlyout.setBottom(this.newSpriteButton.center().y);
+    this.newSpriteFlyout.fixLayout();
+
     this.refresh();
   };
 
@@ -2829,18 +2717,125 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     myself.fixLayout();
   };
 
+  // newSpriteFlyout
+  this.corral.newSpriteFlyout = new Morph();
+  this.corral.newSpriteFlyout.setExtent(new Point(36, 134));
+  this.corral.newSpriteFlyout.color = this.accentColor;
+  this.corral.newSpriteFlyout.hide();
+
+  this.corral.newSpriteFlyout.render = function (ctx) {
+    ctx.beginPath();
+    ctx.roundRect(0, 0, this.width(), this.height(), [18, 18, 0, 0]);
+    ctx.fillStyle = this.color.toString();
+    ctx.fill();
+  }
+  
+  this.corral.newSpriteFlyout.mouseLeave = function () {
+    if (this.world().hand.morphAtPointer() == myself.corral.newSpriteButton) return;
+
+    this.hide();
+  }
+
+  this.corral.newSpriteFlyout.fixLayout = function () {
+    this.turtle.setBottom(this.bottom() - 26);
+    this.turtle.setLeft(this.left());
+    this.turtle.label.setCenter(this.turtle.center());
+
+    this.camButton.setBottom(this.turtle.top());
+    this.camButton.setLeft(this.left());
+    this.camButton.label.setCenter(this.camButton.center());
+
+    this.paintbutton.setBottom(this.camButton.top());
+    this.paintbutton.setLeft(this.left());
+    this.paintbutton.label.setCenter(this.paintbutton.center());
+  }
+  this.corral.add(this.corral.newSpriteFlyout);
+
+  // newSpriteFlyout - turtle
+  this.corral.newSpriteFlyout.turtle = new TriggerMorph(
+    this, () => {
+      this.addNewSprite(true);
+      this.corral.newSpriteFlyout.hide();
+    }
+  );
+  this.corral.newSpriteFlyout.turtle.label.destroy();
+  this.corral.newSpriteFlyout.turtle.label = new SymbolMorph("turtle", 20, WHITE);
+  this.corral.newSpriteFlyout.turtle.add(this.corral.newSpriteFlyout.turtle.label);
+  this.corral.newSpriteFlyout.turtle.color = this.accentColor;
+  this.corral.newSpriteFlyout.turtle.highlightColor = new Color(15, 189, 140);
+  this.corral.newSpriteFlyout.turtle.setExtent(new Point(36, 36));
+  this.corral.newSpriteFlyout.turtle._render = this.corral.newSpriteFlyout.turtle.render;
+  this.corral.newSpriteFlyout.add(this.corral.newSpriteFlyout.turtle);
+
+  // newSpriteFlyout - camButton
+  this.corral.newSpriteFlyout.camButton = new TriggerMorph(
+    this, () => {
+      this.newCamSprite();
+      this.corral.newSpriteFlyout.hide();
+    }
+  );
+  this.corral.newSpriteFlyout.camButton.label.destroy();
+  this.corral.newSpriteFlyout.camButton.label = new SymbolMorph("camera", 20, WHITE);
+  this.corral.newSpriteFlyout.camButton.add(this.corral.newSpriteFlyout.camButton.label);
+  this.corral.newSpriteFlyout.camButton.color = this.accentColor;
+  this.corral.newSpriteFlyout.camButton.highlightColor = new Color(15, 189, 140);
+  this.corral.newSpriteFlyout.camButton.setExtent(new Point(36, 36));
+  this.corral.newSpriteFlyout.camButton._render = this.corral.newSpriteFlyout.camButton.render;
+  this.corral.newSpriteFlyout.add(this.corral.newSpriteFlyout.camButton);
+
+  // newSpriteFlyout - paintbutton
+  this.corral.newSpriteFlyout.paintbutton = new TriggerMorph(
+    this, () => {
+      this.paintNewSprite();
+      this.corral.newSpriteFlyout.hide();
+    }
+  );
+  this.corral.newSpriteFlyout.paintbutton.label.destroy();
+  this.corral.newSpriteFlyout.paintbutton.label = new SymbolMorph("brush", 20, WHITE);
+  this.corral.newSpriteFlyout.paintbutton.add(this.corral.newSpriteFlyout.paintbutton.label);
+  this.corral.newSpriteFlyout.paintbutton.color = this.accentColor;
+  this.corral.newSpriteFlyout.paintbutton.highlightColor = new Color(15, 189, 140);
+  this.corral.newSpriteFlyout.paintbutton.setExtent(new Point(36, 36));
+  this.corral.newSpriteFlyout.paintbutton._render = this.corral.newSpriteFlyout.paintbutton.render;
+  this.corral.newSpriteFlyout.paintbutton.render = function(ctx) {
+    ctx.beginPath();
+    ctx.roundRect(0, 0, this.width(), this.height(), [18, 18, 0, 0]);
+    ctx.closePath();
+    ctx.clip();
+
+    this._render(ctx);
+    ctx.restore();
+  }
+  this.corral.newSpriteFlyout.add(this.corral.newSpriteFlyout.paintbutton);
+
   // newSpriteButton
-  newSpriteButton = new PushButtonMorph(
+  this.corral.newSpriteButton = new PushButtonMorph(
     this, "addNewSprite",
     new SymbolMorph("newSprite", 28)
   );
-  newSpriteButton.color = this.accentColor;
-  newSpriteButton.corner = 26;
-  newSpriteButton.highlightColor = new Color(15, 189, 140);
-  newSpriteButton.outlineColor = new Color(198, 189, 239);
-  newSpriteButton.outline = 4;
-  this.corral.add(newSpriteButton);
-  this.corral.newSpriteButton = newSpriteButton;
+  this.corral.newSpriteButton.color = this.accentColor;
+  this.corral.newSpriteButton.corner = 26;
+  this.corral.newSpriteButton.highlightColor = new Color(15, 189, 140);
+  this.corral.newSpriteButton.outlineColor = new Color(198, 189, 239);
+  this.corral.newSpriteButton.outline = 4;
+
+  this.corral.newSpriteButton._mouseEnter = this.corral.newSpriteButton.mouseEnter;
+  this.corral.newSpriteButton.mouseEnter = function () {
+    this._mouseEnter();
+
+    myself.corral.newSpriteFlyout.show();
+  }
+  this.corral.newSpriteButton._mouseLeave = this.corral.newSpriteButton.mouseLeave;
+  this.corral.newSpriteButton.mouseLeave = function () {
+    this._mouseLeave();
+
+    if (this.world().hand.morphAtPointer() == myself.corral.newSpriteFlyout) return;
+    if (this.world().hand.morphAtPointer().parent == myself.corral.newSpriteFlyout) return;
+    console.log("a");
+    myself.corral.newSpriteFlyout.hide();
+  }
+
+  this.corral.add(this.corral.newSpriteButton);
 };
 
 // IDE_Morph layout
@@ -2918,7 +2913,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
       this.stage.dimensions = new Point(
         (this.width() - this.palette.width()) / this.performerScale,
         (this.palette.height() -
-          this.corralBar.height() -
           this.corral.childThatIsA(SpriteIconMorph).height()) /
           this.performerScale
       );
@@ -3046,15 +3040,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
       }
     }
 
-    // corralBar
-    this.corralBar.setLeft(this.stage.left());
-    this.corralBar.setTop(this.stage.bottom() + padding);
-    this.corralBar.setWidth(this.stage.width());
-
     // spriteBar
-    this.spriteBar.setLeft(this.corralBar.left());
-    this.spriteBar.setTop(this.corralBar.bottom());
-    this.spriteBar.setWidth(this.corralBar.width());
+    this.spriteBar.setLeft(this.stage.left());
+    this.spriteBar.setTop(this.stage.bottom() + padding);
+    this.spriteBar.setWidth(this.stage.width());
     this.spriteBar.setHeight(Math.round(this.logo.height() * 1.2));
     this.spriteBar.fixLayout();
 
@@ -3588,7 +3577,6 @@ IDE_Morph.prototype.toggleCameraSupport = function () {
   CamSnapshotDialogMorph.prototype.enableCamera =
     !CamSnapshotDialogMorph.prototype.enableCamera;
   this.oldSpriteBar.tabBar.tabTo(this.currentTab);
-  this.createCorralBar();
   this.fixLayout();
 };
 
@@ -4049,7 +4037,7 @@ IDE_Morph.prototype.restore = function () {
 
 // IDE_Morph sprite list access
 
-IDE_Morph.prototype.addNewSprite = function () {
+IDE_Morph.prototype.addNewSprite = function (useTurtle) {
   var sprite = new SpriteMorph(this.globalVariables),
     rnd = Process.prototype.reportBasicRandom;
 
@@ -4072,7 +4060,7 @@ IDE_Morph.prototype.addNewSprite = function () {
     sprite.turn(rnd.call(this, 1, 360));
   }
 
-  this.setAlonzo(sprite);
+  if (!useTurtle) this.setAlonzo(sprite);
 
   this.sprites.add(sprite);
   this.corral.addSprite(sprite);
@@ -5737,7 +5725,7 @@ IDE_Morph.prototype.undeleteSprites = function (pos) {
   // by clicking on them
 
   var menu = new MenuMorph((sprite) => this.undelete(sprite, pos), null, this);
-  pos = pos || this.corralBar.bottomRight();
+  pos = pos || this.spriteBar.bottomRight();
 
   if (!this.scene.trash.length) {
     this.showMessage("trash is empty");
@@ -7672,7 +7660,6 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
       this.paletteHandle,
       this.stageHandle,
       this.corral,
-      this.corralBar,
       this.spriteEditor,
       this.oldSpriteBar,
       this.palette,
@@ -7733,7 +7720,6 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     if (this.config.noSpriteEdits) {
       this.oldSpriteBar.hide();
       this.stageHandle.hide();
-      this.corralBar.hide();
       this.corral.hide();
     }
   }
@@ -8012,7 +7998,6 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
   this.oldSpriteBar.tabBar.tabTo("scripts");
   this.createCategories();
   this.categories.refreshEmpty();
-  this.createCorralBar();
   this.refreshCustomizedPalette();
   this.fixLayout();
   if (this.loadNewProject) {
@@ -8231,7 +8216,6 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
   this.oldSpriteBar.tabBar.tabTo("scripts");
   this.createCategories();
   this.categories.refreshEmpty();
-  this.createCorralBar();
   this.refreshCustomizedPalette();
   this.fixLayout();
   this.openProjectString(projectData);
@@ -8485,8 +8469,7 @@ IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
   callback();
   this.oldSpriteBar.tabBar.tabTo("scripts");
   this.createCategories();
-  this.categories.refreshEmpty();
-  this.createCorralBar();
+  this.categories.refreshEmpty(); 
   this.fixLayout();
   this.openProjectString(projectData, null, true); // no prims
 };
