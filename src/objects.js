@@ -10619,17 +10619,14 @@ StageMorph.prototype.render = function (ctx) {
   var ide = this.parentThatIsA(IDE_Morph);
 
   ctx.save();
-  ctx.roundRect(0, 0, this.width(), this.height(), 12);
-
   ctx.beginPath();
-  ctx.roundRect(0, 0, this.width(), this.height(), 12);
+  ctx.roundRect(0, 0, this.width(), this.height(), 8);
   ctx.strokeStyle = ide.borderColor.toString();
   ctx.fillStyle = this.color.toString();
-  ctx.lineWidth = 1;
+  ctx.lineWidth = 2;
   ctx.clip();
   ctx.fill();
   ctx.stroke();
-  ctx.closePath();
 
   if (this.costume && !(this.costume.loaded instanceof Function)) {
     ctx.scale(this.scale, this.scale);

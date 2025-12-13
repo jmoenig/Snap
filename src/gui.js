@@ -2135,7 +2135,16 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   }
 
   this.spriteBar = new Morph();
-  this.spriteBar.color = this.frameColor;
+  this.spriteBar.color = this.groupColor;
+  this.spriteBar.render = function (ctx) {
+    ctx.beginPath();
+    ctx.roundRect(0, 0, this.width(), this.height(), [8, 8, 0, 0]);
+    
+    ctx.fillStyle = this.color.toString();
+    ctx.strokeStyle = myself.borderColor;
+    ctx.fill();
+    ctx.stroke();
+  };
   this.add(this.spriteBar);
   this.oldSpriteBar = new Morph();
   this.oldSpriteBar.color = this.frameColor;
@@ -2219,14 +2228,16 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
 
   nameField = new InputFieldMorph(this.currentSprite.name);
   nameField.setWidth(100); // fixed dimensions
-  nameField.corner = 10;
   nameField.contrast = 90;
+  nameField.fontSize = 10;
   nameField.setPosition(
     rotationStyleButtons[2].topRight().add(new Point(10, 3))
   );
+  nameField.typeInPadding = 6;
   this.spriteBar.add(nameField);
   this.spriteBar.nameField = nameField;
   nameField.fixLayout();
+  nameField.corner = nameField.height() / 2;
   nameField.accept = function () {
     var newName = nameField.getValue();
     myself.currentSprite.setName(
@@ -2687,9 +2698,20 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   }
 
   this.corral = new Morph();
-  this.corral.color = this.groupColor;
+  this.corral.color = this.frameColor;
   this.corral.getRenderColor = ScriptsMorph.prototype.getRenderColor;
-
+  this.corral.render = function(ctx) {
+    ctx.fillStyle = this.color.toString();
+    ctx.fillRect(0, 0, this.width(), this.height());
+    
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, this.height());
+    ctx.moveTo(this.width(), 0);
+    ctx.lineTo(this.width(), this.height());
+    ctx.strokeStyle = myself.borderColor;
+    ctx.stroke();
+  }
   this.add(this.corral);
 
   this.corral.stageIcon = new SpriteIconMorph(this.stage);
@@ -2731,7 +2753,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
 
   this.corral.fixLayout = function () {
     this.stageIcon.setCenter(this.center());
-    this.stageIcon.setLeft(this.left());
+    this.stageIcon.setLeft(this.left() + padding);
     this.stageIcon.children[0].setRight(this.right() - padding);
 
     // scenes
@@ -2756,7 +2778,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
 
   this.corral.arrangeIcons = function () {
     var x = this.frame.left(),
-      y = this.frame.top(),
+      y = this.frame.top() + padding,
       max = this.frame.right(),
       start = this.frame.left();
 
@@ -2931,7 +2953,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             
             cnf.hideControls ? this.top() + border : this.controlBar.bottom() + padding
       );
-      this.stage.setRight(this.right() - border);
+      this.stage.setRight(this.right() - border - 10);
       if (cnf.noSprites) {
         maxPaletteWidth = Math.max(200, this.width() - border * 2);
       } else {
