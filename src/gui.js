@@ -5983,7 +5983,7 @@ IDE_Morph.prototype.editNotes = function () {
 
   frame.setHeight(size);
   frame.fixLayout = nop;
-  frame.edge = InputFieldMorph.prototype.edge;
+  frame.edge = InputFieldMorph.prototype.edge / 2;
   frame.fontSize = InputFieldMorph.prototype.fontSize;
   frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   frame.contrast = InputFieldMorph.prototype.contrast;
@@ -9252,7 +9252,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
   this.listField = new ListMorph([]);
   this.fixListFieldItemColors();
   this.listField.fixLayout = nop;
-  this.listField.edge = InputFieldMorph.prototype.edge;
+  this.listField.edge = InputFieldMorph.prototype.edge / 2;
   this.listField.fontSize = InputFieldMorph.prototype.fontSize;
   this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.listField.contrast = InputFieldMorph.prototype.contrast;
@@ -9263,7 +9263,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
 
   this.preview = new Morph();
   this.preview.fixLayout = nop;
-  this.preview.edge = InputFieldMorph.prototype.edge;
+  this.preview.edge = InputFieldMorph.prototype.edge / 2;
   this.preview.fontSize = InputFieldMorph.prototype.fontSize;
   this.preview.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.preview.contrast = InputFieldMorph.prototype.contrast;
@@ -9296,7 +9296,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
   this.notesField = new ScrollFrameMorph();
   this.notesField.fixLayout = nop;
 
-  this.notesField.edge = InputFieldMorph.prototype.edge;
+  this.notesField.edge = InputFieldMorph.prototype.edge / 2;
   this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
   this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.notesField.contrast = InputFieldMorph.prototype.contrast;
@@ -9622,7 +9622,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
 
   this.fixListFieldItemColors();
   this.listField.fixLayout = nop;
-  this.listField.edge = InputFieldMorph.prototype.edge;
+  this.listField.edge = InputFieldMorph.prototype.edge / 2;
   this.listField.fontSize = InputFieldMorph.prototype.fontSize;
   this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.listField.contrast = InputFieldMorph.prototype.contrast;
@@ -9757,7 +9757,7 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
   );
   this.fixListFieldItemColors();
   this.listField.fixLayout = nop;
-  this.listField.edge = InputFieldMorph.prototype.edge;
+  this.listField.edge = InputFieldMorph.prototype.edge / 2;
   this.listField.fontSize = InputFieldMorph.prototype.fontSize;
   this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.listField.contrast = InputFieldMorph.prototype.contrast;
@@ -10321,7 +10321,7 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
 
   this.preview = new Morph();
   this.preview.fixLayout = nop;
-  this.preview.edge = InputFieldMorph.prototype.edge;
+  this.preview.edge = InputFieldMorph.prototype.edge / 2;
   this.preview.fontSize = InputFieldMorph.prototype.fontSize;
   this.preview.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.preview.contrast = InputFieldMorph.prototype.contrast;
@@ -10346,7 +10346,7 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
   this.notesField = new ScrollFrameMorph();
   this.notesField.fixLayout = nop;
 
-  this.notesField.edge = InputFieldMorph.prototype.edge;
+  this.notesField.edge = InputFieldMorph.prototype.edge / 2;
   this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
   this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.notesField.contrast = InputFieldMorph.prototype.contrast;
@@ -10376,7 +10376,7 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
   this.listField = new ListMorph([]);
   this.fixListFieldItemColors();
   this.listField.fixLayout = nop;
-  this.listField.edge = InputFieldMorph.prototype.edge;
+  this.listField.edge = InputFieldMorph.prototype.edge / 2;
   this.listField.fontSize = InputFieldMorph.prototype.fontSize;
   this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.listField.contrast = InputFieldMorph.prototype.contrast;
@@ -10671,7 +10671,7 @@ LibraryImportDialogMorph.prototype.initializeLibraryDescription = function () {
   this.notesField = new ScrollFrameMorph();
   this.notesField.fixLayout = nop;
 
-  this.notesField.edge = InputFieldMorph.prototype.edge;
+  this.notesField.edge = InputFieldMorph.prototype.edge / 2;
   this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
   this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.notesField.contrast = InputFieldMorph.prototype.contrast;
@@ -10708,7 +10708,7 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
   this.fixListFieldItemColors();
 
   this.listField.fixLayout = nop;
-  this.listField.edge = InputFieldMorph.prototype.edge;
+  this.listField.edge = InputFieldMorph.prototype.edge / 2;
   this.listField.fontSize = InputFieldMorph.prototype.fontSize;
   this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   this.listField.contrast = InputFieldMorph.prototype.contrast;
