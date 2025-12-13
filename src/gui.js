@@ -315,6 +315,7 @@ IDE_Morph.prototype.init = function (config) {
   // editor
   this.globalVariables = this.scene.globalVariables;
   this.currentSprite = this.scene.addDefaultSprite();
+  this.setAlonzo(this.currentSprite);
   this.sprites = this.scene.sprites;
   this.currentCategory = this.scene.unifiedPalette ? "unified" : "motion";
   this.currentTab = "scripts";
@@ -9146,6 +9147,29 @@ IDE_Morph.prototype.warnAboutDev = function () {
       "for the official Snap! installation."
   ).nag = true;
 };
+
+// IDE_Morph's settings sprite's costume to Alonzo
+IDE_Morph.prototype.setAlonzo = function(spr) {
+  var url = this.resourceURL("Costumes", "alonzo.png"),
+    img = new Image();
+
+  img.onload = function() {
+    var canvas = document.createElement("canvas"),
+      ctx = canvas.getContext('2d'),
+      cst;
+
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    ctx.drawImage(img, 0, 0);
+
+    cst = new Costume(canvas);
+    cst.name = "costume1";
+    spr.addCostume(cst);
+    spr.wearCostume(cst);
+  }
+
+  img.src = url;
+}
 
 // ProjectDialogMorph ////////////////////////////////////////////////////
 
