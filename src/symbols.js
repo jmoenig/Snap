@@ -154,7 +154,8 @@ SymbolMorph.prototype.names = [
   "infinity",
   "blocks",
   "speakers",
-  "extension"
+  "extension",
+  "newSprite"
 ];
 
 // SymbolMorph instance creation:
@@ -529,6 +530,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case "speakers":
       this.renderSymbolSpeakers(ctx, aColor);
       break;
+    case "newSprite":
+      this.renderSymbolNewSprite(ctx);
+      break;
     default:
       throw new Error('unknown symbol name: "' + this.name + '"');
   }
@@ -584,6 +588,8 @@ SymbolMorph.prototype.symbolWidth = function () {
   }
 };
 
+SymbolMorph.prototype.addSpriteSymbol = new Image();
+SymbolMorph.prototype.addSpriteSymbol.src = "src/add-sprite.svg";
 SymbolMorph.prototype.flagSymbol = new Image();
 SymbolMorph.prototype.flagSymbol.src = "src/flag.svg";
 SymbolMorph.prototype.flagSymbolRed = new Image();
@@ -2739,6 +2745,10 @@ SymbolMorph.prototype.renderSymbolExtension = function (ctx, color) {
   var side = this.symbolWidth(),
     vert = (side - side * 0.383) / 2;
   this.drawImage(ctx, color.eq(BLACK) ? this.extensionSymbolBlack : this.extensionSymbol);
+}
+
+SymbolMorph.prototype.renderSymbolNewSprite = function(ctx) {
+  this.drawImage(ctx, this.addSpriteSymbol);
 }
 
 /*
