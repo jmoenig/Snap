@@ -3406,7 +3406,7 @@ Process.prototype.doPauseAll = function () {
             stage.threads.pauseAll(stage);
         }
         ide = stage.parentThatIsA(IDE_Morph);
-        if (ide) {ide.controlBar.pauseButton.refresh(); }
+        if (ide) {ide.projectControlBar.pauseButton.refresh(); }
     }
 };
 

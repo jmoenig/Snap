@@ -92,7 +92,7 @@ IDE_Morph.prototype.stop = function () {
     });
     stage.removeAllClones();
     stage.stopProjection();
-    this.controlBar.pauseButton.refresh();
+    this.projectControlBar.pauseButton.refresh();
 };
 
 IDE_Morph.prototype.broadcast = function(message, callback, payload) {

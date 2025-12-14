@@ -1009,7 +1009,7 @@ IDE_Morph.prototype.looksMenu = function () {
     );
     menu.popup(
         this.world(),
-        this.controlBar.settingsButton.bottomLeft()
+        this.projectControlBar.settingsButton.bottomLeft()
     );
 };
 DialogBoxMorph.prototype.nativeRender = DialogBoxMorph.prototype.render;

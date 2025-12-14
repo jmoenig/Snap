@@ -6459,7 +6459,7 @@ BlockMorph.prototype.snap = function () {
         stage.threads.pauseCustomHatBlocks = false;
         ide = stage.parentThatIsA(IDE_Morph);
         if (ide) {
-          ide.controlBar.stopButton.refresh();
+          ide.projectControlBar.stopButton.refresh();
         }
       }
     }
@@ -17292,7 +17292,7 @@ ScriptFocusMorph.prototype.fillInBlock = function (block) {
         stage.threads.pauseCustomHatBlocks = false;
         ide = stage.parentThatIsA(IDE_Morph);
         if (ide) {
-          ide.controlBar.stopButton.refresh();
+          ide.projectControlBar.stopButton.refresh();
         }
       }
     }
