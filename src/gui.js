@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-December-12';
+modules.gui = '2025-December-14';
 
 // Declarations
 
@@ -2835,7 +2835,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
     // adjust the global zoom if necessary
     mz = this.maxZoom();
-    if (mz < (ZOOM * 100) && mz >= 1) {
+    if (mz < (ZOOM * 100) && mz >= 100) {
         this.setZoom(mz);
     }
 };

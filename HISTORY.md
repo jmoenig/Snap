@@ -47,6 +47,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-14
+* gui: fixed a zooming layout glitch
+
 ### 2025-12-12
 * blocks, objects, threads: new "(paint) on (surface)" command primitive in the pen category
 * extensions: removed experimental drawing-on-sprites extension
