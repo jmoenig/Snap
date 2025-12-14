@@ -320,7 +320,7 @@ IDE_Morph.prototype.init = function (config) {
   this.currentCategory = this.scene.unifiedPalette ? "unified" : "motion";
   this.currentTab = "scripts";
 
-  this.logoURL = this.resourceURL("src", "split_logo_sm.png");
+  this.logoURL = this.resourceURL("src", "split_logo.svg");
 
   this.logo = null;
   this.controlBar = null;
@@ -1091,8 +1091,8 @@ IDE_Morph.prototype.createLogo = function () {
   this.logo.renderCachedTexture = function (ctx) {
     ctx.drawImage(
       this.cachedTexture,
-      5,
-      Math.round((this.height() - this.cachedTexture.height) / 2)
+       5,
+      Math.round((this.height() - this.cachedTexture.height) / 2) + 5
     );
     this.changed();
   };
