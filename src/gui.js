@@ -2897,6 +2897,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
   // this.currentTab == "scripts" ? this.paletteHandle.show() : this.palette.setPosition(new Point(-this.width(), 0))
 
   if (situation !== "refreshPalette") {
+    this.extensionButton.show();
     // stage
     if (this.performerMode) {
       this.stage.setLeft(this.palette.right() + padding);
@@ -2955,6 +2956,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
       this.stage.setCenter(this.center());
       this.controlBar.fixLayout();
       this.paletteHandle.hide();
+      this.extensionButton.hide();
     } else {
         this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
         this.stage.setTop(
@@ -2981,6 +2983,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
       this.stageHandle.fixLayout();
       this.paletteHandle.fixLayout();
     }
+    
     this.stage.moveBy(new Point(0, this.projectControlBar.height()))
     this.projectControlBar.setWidth(this.stage.width())
     this.projectControlBar.setRight(this.controlBar.right());
@@ -11101,6 +11104,7 @@ SpriteIconMorph.prototype.thumbSize = new Point(40, 40);
 SpriteIconMorph.prototype.labelShadowOffset = null;
 SpriteIconMorph.prototype.labelShadowColor = null;
 SpriteIconMorph.prototype.labelColor = WHITE;
+SpriteIconMorph.prototype.labelPressColor = WHITE;
 SpriteIconMorph.prototype.fontSize = 9;
 
 // SpriteIconMorph instance creation:
