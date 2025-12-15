@@ -21,12 +21,15 @@
         * new "expression" selector in block-attribute (metaprogramming) reporter
         * enables expressions (unringed blocks) to be CALLed and RUN
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
-    * drawing on sprites
-        * new "pen_drawOn([sprite])" extension, experimental & temporary
+    * drawing and writing on sprites
+        * new "(paint) on (surface)" command primitive in the pen category
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
+    * new "blocks" and "speaker" symbols
 * **Notable Changes:**
+    * added icons to the IDE tabs (scripts, costumes, sounds)
+    * rearranged IDE settings menu items into "looks" submenu
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
         * added optional "max height" input to "fancy say / think" library commands
@@ -34,7 +37,6 @@
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
-    * rearranged IDE settings menu items into "looks" submenu
     * meta-programming: removed "static" tag from the block-attribute getter
     * took out rate limit in the Microblocks library, thanks, Bernat!
     * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
@@ -44,6 +46,37 @@
     * fixed some special cases for using "combine" on an empty list, thanks, @rmunn!
 * **Translation Updates:**
     * German
+
+### 2025-12-14
+* gui: fixed a zooming layout glitch
+
+### 2025-12-12
+* blocks, objects, threads: new "(paint) on (surface)" command primitive in the pen category
+* extensions: removed experimental drawing-on-sprites extension
+* gui, sw: updated dev version to 12
+* gui: hide new "doDrawOn" primitive in old puzzles
+* blocks, objects, threads: renamed "create" drawing mode to "overdraw"
+* German translation update for the new drawing on sprites feature
+
+### 2025-12-11
+* objects, extensions: added support for pen modes ("paint", "erase" and "create")
+* objects: support stamping on sprites using pen modes
+* objects: refactored pen blendingMode
+* objects: refactored pen surface architecture
+* objects: support using "clear" to restore a sprite's costume that has been drawn on
+* objects: support using "fill" to draw on sprites
+* objects: prevent drawing on deleted sprites
+
+### 2025-12-10
+* gui: tweaked IDE resizing layout for different translations
+* gui: adjust the global zoom when switching to another language
+* objects: support writing on sprites (using the "pen_drawOn" extension)
+
+### 2025-12-09
+* widgets: added support for combined icon-text labels in tab buttons
+* symbols: added new "blocks" symbol
+* symbols: added new "speaker" symbol
+* gui: added icons to the tab buttons in the IDE
 
 ### 2025-12-08
 * objects: support letting sprites draw directly on the stage's background

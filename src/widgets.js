@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-November-09';
+modules.widgets = '2025-December-09';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -987,6 +987,97 @@ TabMorph.prototype.refresh = function () {
         }
     }
     TabMorph.uber.refresh.call(this);
+};
+
+// TabMorph label
+
+TabMorph.prototype.createLabel = function () {
+    if (this.label !== null) {
+        this.label.destroy();
+    }
+    this.label = this.createLabelPart(this.labelString);
+    this.add(this.label);
+};
+
+TabMorph.prototype.createLabelPart = function (source) {
+    var part, icon, lbl;
+    if (isString(source)) {
+        return this.createLabelString(source);
+    }
+    if (source instanceof Array) {
+        // assume its pattern is: [icon, string]
+        part = new Morph();
+        part.alpha = 0; // transparent
+        icon = this.createIcon(source[0]);
+        part.add(icon);
+        lbl = this.createLabelString(source[1]);
+        part.add(lbl);
+        lbl.setCenter(icon.center());
+        lbl.setLeft(icon.right() + 4);
+        part.bounds = (icon.bounds.merge(lbl.bounds));
+        part.rerender();
+        return part;
+    }
+    // assume it's either a Morph or a Canvas
+    return this.createIcon(source);
+};
+
+TabMorph.prototype.createIcon = function (source) {
+    // source can be either a SymbolMorph, any other Morph
+    // or an HTMLCanvasElement
+    var shading = !MorphicPreferences.isFlat || this.is3D,
+        icon;
+    if (source instanceof SymbolMorph) {
+        icon = source.fullCopy();
+        if (shading) {
+            icon.shadowOffset = this.labelShadowOffset;
+            icon.shadowColor = this.labelShadowColor;
+        }
+        icon.color = this.labelColor;
+        return icon;
+    }
+    if (source instanceof Morph) {
+        return source.fullCopy();
+    }
+    // assume a Canvas
+    icon = new Morph();
+    icon.isCachingImage = true;
+    icon.cachedImage = source; // should we copy the canvas?
+    icon.bounds.setWidth(source.width);
+    icon.bounds.setHeight(source.height);
+    return icon;
+};
+
+TabMorph.prototype.createLabelString = function (string) {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+    return new StringMorph(
+        localize(string),
+        this.fontSize,
+        this.fontStyle,
+        true, // !(this.labelString instanceof Array),
+        false,
+        false,
+        shading ? this.labelShadowOffset : null,
+        this.labelShadowColor,
+        this.labelColor
+    );
+};
+
+TabMorph.prototype.updateLabelColors = function () {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+    this.label.forAllChildren(morph => {
+        if (morph instanceof StringMorph ||
+            morph instanceof SymbolMorph
+        ) {
+            morph.color = this.labelColor;
+            morph.fontSize = this.fontSize;
+            if (shading) {
+                morph.shadowOffset = this.labelShadowOffset;
+                morph.shadowColor = this.labelShadowColor;
+            }
+            morph.fixLayout(true); // just me
+        }
+    });
 };
 
 // TabMorph drawing:

@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-08';
+modules.objects = '2025-December-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -1068,6 +1068,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             spec: 'cut from %spr',
             code: 'cut',
             animation: true
+        },
+        doDrawOn: {
+            only: SpriteMorph,
+            type: 'command',
+            category: 'pen',
+            spec: '%msk on %srf',
+            defaults: [['paint'], ['pen trails']],
+            code: 'drawOn'
         },
         reportColor: {
             type: 'reporter',
@@ -2922,6 +2930,11 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'reportPoll'
         );
     }
+    if (version < 12) {
+        selectors.push(
+            'doDrawOn'
+        );
+    }
 
     return selectors;
 };
@@ -3182,8 +3195,10 @@ SpriteMorph.prototype.init = function (globals) {
     this.frameNumber = 0;
 
     // support for drawing on sprites
-    this.sheet = null; // a sprite - do not serialize
-    this.trailsCache = null; // a temporary costume - do not serialize
+    this.sheet = null; // a sprite - surface destination to draw on
+    this.tool = null; // string: blending mode ('paint', 'erase', 'overdraw')
+    this.trailsCache = null; // a temporary costume for drawing on
+    this.originalCostume = null; // hold on to the unmodified original costume
 
     SpriteMorph.uber.init.call(this);
 
@@ -3855,6 +3870,7 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('doPasteOn'));
         blocks.push(block('doCutFrom'));
+        blocks.push(block('doDrawOn'));
         blocks.push('-');
         blocks.push(block('reportColor'));
         blocks.push(block('reportColorAttribute'));
@@ -5381,6 +5397,7 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow, keepCache) {
 
     if (!keepCache) {
         this.trailsCache = null;
+        this.originalCostume = null;
     }
     this.changed();
     this.costume = costume;
@@ -5477,7 +5494,7 @@ SpriteMorph.prototype.doSwitchToCostume = function (id, noShadow, keepCache) {
         );
     }
     if (id instanceof Costume) { // allow first-class costumes
-        this.wearCostume(id, noShadow);
+        this.wearCostume(id, noShadow, keepCache);
         return;
     }
     if (id instanceof Array && (id[0] === 'current')) {
@@ -6635,7 +6652,61 @@ SpriteMorph.prototype.perimeter = function (aStage) {
 
 // SpriteMorph pen ops
 
+SpriteMorph.prototype.drawsOnSprite = function () {
+    if (isSnapObject(this.sheet) && !this.sheet.isCorpse) {
+        return true;
+    }
+    this.sheet = null;
+    return false;
+};
+
+SpriteMorph.prototype.surface = function () {
+    // answer a version of the current costume that can be drawn on
+    // by another sprite's pen.
+    // rasterize copy of the current costume if it's an SVG
+    // cache the costume copy for later reuse
+    // and also the original costume so "clear" can reset it
+    var surface;
+    if (this.costume) {
+        if (this.trailsCache) {
+            surface = this.trailsCache;
+        } else {
+            if (this.costume instanceof SVG_Costume) {
+                surface = this.costume.rasterized();
+            } else {
+                surface = this.costume.copy();
+            }
+            this.trailsCache = surface;
+            this.originalCostume = this.costume;
+        }
+    } else {
+        surface = null;
+    }
+    return surface;
+};
+
+SpriteMorph.prototype.blendingMode = function () {
+    // private - answer the globalCompositeOperation property for drawing
+    var modes = { // for pen trails we don't support 'source-atop'
+            paint : this.drawsOnSprite() ? 'source-atop' : 'source-over',
+            erase : 'destination-out',
+            overdraw : 'source-over'
+        },
+        key = this.tool?.toString().toLowerCase();
+    return modes[key] || modes.paint;
+};
+
+// SpriteMorph stamping
+
 SpriteMorph.prototype.doStamp = function () {
+    if (this.drawsOnSprite()) {
+        this.blitOn(this.sheet, this.blendingMode());
+    } else {
+        this.stampOnPenTrails();
+    }
+};
+
+SpriteMorph.prototype.stampOnPenTrails = function () {
     var stage = this.parent,
         ctx = stage.penTrails().getContext('2d'),
         img = this.getImage();
@@ -6647,6 +6718,7 @@ SpriteMorph.prototype.doStamp = function () {
     ctx.save();
     ctx.scale(1 / stage.scale, 1 / stage.scale);
     ctx.globalAlpha = this.alpha;
+    ctx.globalCompositeOperation = this.blendingMode();
     ctx.drawImage(
         img,
         this.left() - stage.left(),
@@ -6657,19 +6729,93 @@ SpriteMorph.prototype.doStamp = function () {
     stage.cachedPenTrailsMorph = null;
 };
 
+// SpriteMorph clearing
+
 SpriteMorph.prototype.clear = function () {
-    this.parent.clearPenTrails();
+    if (this.drawsOnSprite()) {
+        if (this.sheet.originalCostume) {
+            this.sheet.doSwitchToCostume(this.sheet.originalCostume);
+        }
+    } else {
+        this.parent.clearPenTrails();
+    }
 };
 
+// SpriteMorph writing
+
 SpriteMorph.prototype.write = function (text, size) {
-    // thanks to Michael Ball for contributing this code!
     if (typeof text !== 'string' && typeof text !== 'number') {
         throw new Error(
             localize('can only write text or numbers, not a') + ' ' +
             typeof text
         );
     }
+    if (this.drawsOnSprite()) {
+        this.writeOn(this.sheet, text, size);
+    } else {
+        this.writeOnPenTrails(text, size);
+    }
+};
 
+SpriteMorph.prototype.writeOn = function (target, text, size) {
+    var targetCostume,
+        start,
+        delta,
+        dest,
+        fontSize,
+        rotation,
+        len,
+        ctx;
+
+    // only draw if the sprite is not currently being dragged
+    // prevent drawing an object onto itself
+    if (this === target || this.parentThatIsA(HandMorph)) {
+        return;
+    }
+
+    // check if target has a costume and fetch its pen surface
+    if (target.costume) {
+        targetCostume = target.surface();
+    } else {
+        return;
+    }
+
+    // determine the relative coordinates, rotation and font size
+    start = target.costumePoint(this.rotationCenter());
+    fontSize = size;
+    rotation = radians(this.direction() - 90);
+    if (target instanceof SpriteMorph) {
+        fontSize /= target.scale;
+        rotation -= radians(target.direction() - 90);
+    }
+
+    // write the text on the target canvas
+    ctx = targetCostume.contents.getContext('2d');
+    ctx.save();
+    ctx.font = fontSize + 'px monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = this.color.toString();
+    len = ctx.measureText(text).width;
+    ctx.translate(start.x, start.y);
+    ctx.rotate(rotation);
+    ctx.globalCompositeOperation = this.blendingMode();
+    ctx.fillText(text, 0, 0);
+    ctx.translate(-start.x, -start.y);
+    ctx.restore();
+    delta = new Point(
+        len * Math.sin(radians(this.direction())),
+        len * Math.cos(radians(this.direction()))
+    );
+    dest = delta.add(new Point(this.xPosition(), this.yPosition()));
+    this.gotoXY(dest.x, dest.y, false);
+
+    // wear & cache the changed costume
+    target.doSwitchToCostume(targetCostume, null, true); // keep cache
+};
+
+SpriteMorph.prototype.writeOnPenTrails = function (text, size) {
+    // thanks to Michael Ball for contributing this code!
     var stage = this.parentThatIsA(StageMorph),
         context = stage.penTrails().getContext('2d'),
         rotation = radians(this.direction() - 90),
@@ -6689,6 +6835,7 @@ SpriteMorph.prototype.write = function (text, size) {
     trans = trans.multiplyBy(1 / stage.scale);
     context.translate(trans.x, trans.y);
     context.rotate(rotation);
+    context.globalCompositeOperation = this.blendingMode();
     context.fillText(text, 0, 0);
     context.translate(-trans.x, -trans.y);
     context.restore();
@@ -6732,23 +6879,13 @@ SpriteMorph.prototype.blitOn = function (target, mask = 'source-atop') {
     if (this === target) {return; }
 
     // check if both source and target have costumes,
-    // rasterize copy of target costume if it's an SVG
-    // cache the costume copy for later reuse
+    // fetch the target's surface
     if (this.costume && target.costume) {
         sourceCostume = this.costume;
         if (sourceCostume instanceof SVG_Costume) {
             sourceCostume = sourceCostume.rasterized();
         }
-        if (target.trailsCache) {
-            targetCostume = target.trailsCache;
-        } else {
-            if (target.costume instanceof SVG_Costume) {
-                targetCostume = target.costume.rasterized();
-            } else {
-                targetCostume = target.costume.copy();
-            }
-            target.trailsCache = targetCostume;
-        }
+        targetCostume = target.surface();
     } else {
         return;
     }
@@ -7422,7 +7559,7 @@ SpriteMorph.prototype.justDropped = function () {
 // SpriteMorph drawing:
 
 SpriteMorph.prototype.drawLine = function (start, dest) {
-    if (isSnapObject(this.sheet)) {
+    if (this.drawsOnSprite()) {
         this.drawLineOn(this.sheet, start, dest);
     } else {
         this.drawPenTrailsLine(start, dest);
@@ -7440,20 +7577,9 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
         return;
     }
 
-    // check if target has a costumes,
-    // rasterize copy of target costume if it's an SVG
-    // cache the costume copy for later reuse
+    // check if target has a costume and fetch its pen surface
     if (target.costume) {
-        if (target.trailsCache) {
-            targetCostume = target.trailsCache;
-        } else {
-            if (target.costume instanceof SVG_Costume) {
-                targetCostume = target.costume.rasterized();
-            } else {
-                targetCostume = target.costume.copy();
-            }
-            target.trailsCache = targetCostume;
-        }
+        targetCostume = target.surface();
     } else {
         return;
     }
@@ -7475,8 +7601,8 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
     }
-    ctx.globalCompositeOperation = 'source-atop';
-                ctx.beginPath();
+    ctx.globalCompositeOperation = this.blendingMode();
+    ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
     ctx.lineTo(p2.x, p2.y);
     ctx.stroke();
@@ -7522,6 +7648,7 @@ SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
             context.lineCap = 'round';
             context.lineJoin = 'round';
         }
+        context.globalCompositeOperation = this.blendingMode();
         context.beginPath();
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
@@ -7539,32 +7666,55 @@ SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
 };
 
 SpriteMorph.prototype.floodFill = function () {
-    if (!this.parent.bounds.containsPoint(this.rotationCenter())) {
-        return;
-    }
-    this.parent.cachedPenTrailsMorph = null;
     if (this.color.a > 1) {
         // fix a legacy bug in Morphic color detection
         this.color.a = this.color.a / 255;
     }
-    var layer = normalizeCanvas(this.parent.penTrails()),
-        width = layer.width,
-        height = layer.height,
-        ctx = layer.getContext('2d'),
-        img = ctx.getImageData(0, 0, width, height),
-        dta = img.data,
-        stack = [
-            Math.floor((height / 2) - this.yPosition()) * width +
-            Math.floor(this.xPosition() + (width / 2))
-        ],
+
+    var onSheet = this.drawsOnSprite(),
+        target = onSheet ? this.sheet : this.parent,
+        start = (onSheet ? this.sheet : this.parent)
+            .costumePoint(this.rotationCenter()),
         clr = new Color(
             Math.round(Math.min(Math.max(this.color.r, 0), 255)),
             Math.round(Math.min(Math.max(this.color.g, 0), 255)),
             Math.round(Math.min(Math.max(this.color.b, 0), 255)),
             this.color.a
         ),
+        layer,
+        width,
+        height,
+        ctx,
+        img,
+        dta,
+        stack,
+        targetCostume,
         current,
         src;
+
+    if (!target.bounds.containsPoint(this.rotationCenter())) {
+        return;
+    }
+
+    if (onSheet) {
+        // check if target has a costume and fetch its pen surface
+        if (target.costume) {
+            targetCostume = target.surface();
+        } else {
+            return;
+        }
+    } else {
+        this.parent.cachedPenTrailsMorph = null;
+    }
+
+    layer = normalizeCanvas(onSheet ? targetCostume.contents
+        : this.parent.penTrails());
+    width = layer.width;
+    height = layer.height;
+    ctx = layer.getContext('2d');
+    img = ctx.getImageData(0, 0, width, height);
+    dta = img.data;
+    stack = [Math.floor(start.y) * width + Math.floor(start.x)];
 
     function read(p) {
         var d = p * 4;
@@ -7603,7 +7753,13 @@ SpriteMorph.prototype.floodFill = function () {
         dta[current * 4 + 3] = Math.round(clr.a * 255);
     }
     ctx.putImageData(img, 0, 0);
-    this.parent.changed();
+
+    if (onSheet) {
+        // wear & cache the changed costume
+        this.sheet.doSwitchToCostume(targetCostume, null, true); // keep cache
+    } else {
+        this.parent.changed();
+    }
 };
 
 // SpriteMorph pen trails as costume
@@ -10126,7 +10282,8 @@ StageMorph.prototype.init = function (globals) {
     this.trailsLog = []; // each line being [p1, p2, color, width, cap]
 
     // support for letting sprites directly draw on a background
-    this.trailsCache = null; // a temporary costume - do not serialize
+    this.trailsCache = null; // a temporary costume for drawing on
+    this.originalCostume = null; // hold on to the unmodified original costume
 
     this.isThreadSafe = false;
 
@@ -12111,6 +12268,7 @@ StageMorph.prototype.getPenAttribute
 // StageMorph printing on another sprite:
 
 StageMorph.prototype.blitOn = SpriteMorph.prototype.blitOn;
+StageMorph.prototype.surface = SpriteMorph.prototype.surface;
 
 // StageMorph pseudo-inherited behavior
 
