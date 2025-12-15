@@ -84,8 +84,8 @@ BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
 HatBlockMorph*/
 
 /* very hidden owl edit hehe */
-
 /* Not so hidden, is it? - d016 */
+/* wow these sure are.. edits - codingisfun2831t, your local UI guy */
 
 /*jshint esversion: 8*/
 
@@ -4644,6 +4644,7 @@ IDE_Morph.prototype.cloudMenu = function () {
 
 IDE_Morph.prototype.settingsMenu = function () {
   var menu,
+    advancedMenu,
     stage = this.stage,
     world = this.world(),
     pos = this.controlBar.settingsButton.bottomLeft(),
@@ -4661,7 +4662,7 @@ IDE_Morph.prototype.settingsMenu = function () {
 
   function addPreference(label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
-      menu.addItem(
+      advancedMenu.addItem(
         [test ? on : off, localize(label)],
         toggle,
         test ? onHint : offHint,
@@ -4672,7 +4673,7 @@ IDE_Morph.prototype.settingsMenu = function () {
 
   function addSubPreference(label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
-      menu.addItem(
+      advancedMenu.addItem(
         [test ? on : off, "  " + localize(label)],
         toggle,
         test ? onHint : offHint,
@@ -4682,7 +4683,9 @@ IDE_Morph.prototype.settingsMenu = function () {
   }
 
   menu = new MenuMorph(this);
+  advancedMenu = new MenuMorph(this);
   menu.bgColor = this.accentColor;
+  advancedMenu.bgColor = this.accentColor;
   menu.ideRender();
   menu.addMenu(
     [
@@ -4691,10 +4694,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     ],
     this.getLanguageMenu()
   );
+  menu.addLine();
   menu.addMenu(localize("Looks") + "...", this.looksMenuData());
   menu.addItem("Zoom blocks...", "userSetBlocksScale");
   menu.addItem("Fade blocks...", "userFadeBlocks");
   menu.addItem("Afterglow blocks...", "userSetBlocksAfterglow");
+  menu.addLine();
   menu.addItem("Stage size...", "userSetStageSize");
   if (shiftClicked) {
     menu.addItem(
@@ -4706,21 +4711,20 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
   }
   menu.addItem("Microphone resolution...", "microphoneMenu");
-  menu.addLine();
   if (shiftClicked) {
-    menu.addItem(
+    advancedMenu.addItem(
       "Primitives palette",
       () => this.stage.restorePrimitives(),
       "EXPERIMENTAL - switch (back) to\n" + "primitive blocks in the palette",
       new Color(100, 0, 0)
     );
-    menu.addItem(
+    advancedMenu.addItem(
       "Customize primitives",
       () => this.stage.customizeBlocks(),
       "EXPERIMENTAL - overload primitives\n" + "with custom block definitions",
       new Color(100, 0, 0)
     );
-    menu.addLine();
+    advancedMenu.addLine();
     addPreference(
       "Blocks all the way",
       () => {
@@ -4737,7 +4741,7 @@ IDE_Morph.prototype.settingsMenu = function () {
       new Color(100, 0, 0)
     );
     if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
-      menu.addItem(
+      advancedMenu.addItem(
         "Use custom blocks",
         () =>
           SpriteMorph.prototype.toggleAllCustomizedPrimitives(
@@ -4747,16 +4751,18 @@ IDE_Morph.prototype.settingsMenu = function () {
         "EXPERIMENTAL - use custom blocks\n" + "in all palette blocks",
         new Color(100, 0, 0)
       );
-      menu.addItem(
+      advancedMenu.addItem(
         "Use primitives",
         () =>
           SpriteMorph.prototype.toggleAllCustomizedPrimitives(this.stage, true),
         "EXPERIMENTAL - use primitives\n" + "in all palette blocks",
         new Color(100, 0, 0)
       );
-      menu.addLine();
+      advancedMenu.addLine();
     }
   }
+
+  // add advancedMenu preferences
   addPreference(
     "JavaScript extensions",
     () => {
@@ -4911,13 +4917,13 @@ IDE_Morph.prototype.settingsMenu = function () {
       "scripting area"
   );
   if (this.performerMode) {
-    menu.addItem(
+    advancedMenu.addItem(
       "Performer mode scale...",
       "userSetPerformerModeScale",
       "specify the scale of the stage\npixels in performer mode"
     );
   }
-  menu.addLine(); // everything visible below is persistent
+  advancedMenu.addLine(); // everything visible below is persistent
   addPreference(
     "Blurred shadows",
     "toggleBlurredShadows",
@@ -5120,7 +5126,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     "EXPERIMENTAL! check to enable\nsupport for compiling",
     true
   );
-  menu.addLine(); // everything below this line is stored in the project
+  advancedMenu.addLine(); // everything below this line is stored in the project
   addPreference(
     "Thread safe scripts",
     () => (stage.isThreadSafe = !stage.isThreadSafe),
@@ -5262,6 +5268,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     "disable dragging media\nand blocks out of\nwatchers and balloons",
     false
   );
+  
+  menu.addMenu("Advanced...", advancedMenu);
   menu.popup(world, pos);
 };
 
