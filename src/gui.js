@@ -87,11 +87,11 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-December-03';
+modules.gui = '2025-December-14';
 
 // Declarations
 
-var SnapVersion = '11.1-dev';
+var SnapVersion = '12-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -2188,7 +2188,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors,
         null, // target
         () => tabBar.tabTo('scripts'),
-        localize('Scripts'), // label
+        [ // label
+            new SymbolMorph('blocks', 10),
+            localize('Scripts')
+        ],
         () => this.currentTab === 'scripts' // query
     );
     tab.padding = 3;
@@ -2216,9 +2219,11 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors,
         null, // target
         () => tabBar.tabTo('costumes'),
-        localize(this.currentSprite instanceof SpriteMorph ?
-            'Costumes' : 'Backgrounds'
-        ),
+        [ // label
+            new SymbolMorph('brush', 10),
+            localize(this.currentSprite instanceof SpriteMorph ? 'Costumes'
+                : 'Backgrounds')
+        ],
         () => this.currentTab === 'costumes' // query
     );
     tab.padding = 3;
@@ -2234,7 +2239,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors,
         null, // target
         () => tabBar.tabTo('sounds'),
-        localize('Sounds'), // label
+        [ // label
+            new SymbolMorph('speaker', 10),
+            localize('Sounds')
+        ],
         () => this.currentTab === 'sounds' // query
     );
     tab.padding = 3;
@@ -2648,6 +2656,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         cnf = this.config,
         border = cnf.border || 0,
         flag,
+        mz,
         maxPaletteWidth;
 
     // logo
@@ -2823,6 +2832,12 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.corral.fixLayout();
         }
     }
+
+    // adjust the global zoom if necessary
+    mz = this.maxZoom();
+    if (mz < (ZOOM * 100) && mz >= 100) {
+        this.setZoom(mz);
+    }
 };
 
 // IDE_Morph project properties
@@ -2935,10 +2950,14 @@ IDE_Morph.prototype.minWidth = function () {
     // in edit mode with all panes and UI elements,
     // constrained by displaying all elements in the control bar
     var buttons = this.controlBar.children.filter(morph =>
-            morph instanceof PushButtonMorph);
-    return this.logo.width() - 60 +
-        buttons.map(each => each.width()).reduce((a, b) => a + b) +
-        this.controlBar.steppingSlider.width();
+            morph instanceof PushButtonMorph),
+        minControlBarWidth = this.logo.width() - 60 +
+            buttons.map(each => each.width()).reduce((a, b) => a + b) +
+                this.controlBar.steppingSlider.width(),
+        minTabBarWidth = this.minStageWidth() +
+            this.spriteBar.tabBar.width() +
+            this.logo.width();
+    return Math.max(minControlBarWidth, minTabBarWidth);
 };
 
 IDE_Morph.prototype.minHeight = function () {
