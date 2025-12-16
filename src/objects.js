@@ -7567,9 +7567,9 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 };
 
 SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
-    var targetCostume,
+    var mode = this.blendingMode(),
+        targetCostume,
         p1, p2,
-        mode,
         ctx;
 
     // only draw if the pen is down and not currently being dragged
@@ -7581,6 +7581,10 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
     // check if target has a costume and fetch its pen surface
     if (target.costume) {
         targetCostume = target.surface();
+    } else if (mode === 'source-over') {
+        target.doSwitchToCostume(new Costume(newCanvas(new Point(1, 1), true)));
+        targetCostume = target.surface();
+        target.originalCostume = ['Turtle'];
     } else {
         return;
     }
@@ -7588,7 +7592,6 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
     p1 = target.costumePoint(start);
     p2 = target.costumePoint(dest);
 
-    mode = this.blendingMode();
     if (mode === 'source-over') {
         if (targetCostume.growTo(p1)) {
             target.doSwitchToCostume(targetCostume, null, true); // keep cache
