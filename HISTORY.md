@@ -47,6 +47,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-16
+* objects: fixed a costumePoint() glitch
+
 ### 2025-12-14
 * gui: fixed a zooming layout glitch
 

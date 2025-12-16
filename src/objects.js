@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-12';
+modules.objects = '2025-December-16';
 
 var SpriteMorph;
 var StageMorph;
@@ -8132,7 +8132,7 @@ SpriteMorph.prototype.costumePoint = function(aPoint) {
         return new Point();
     }
     stagePoint = this.snapPoint(aPoint).multiplyBy(flipY).divideBy(this.scale);
-    normalized = stagePoint.add(this.costume.extent().divideBy(2));
+    normalized = stagePoint.add(this.costume.rotationCenter);
     offset = stage.center().subtract(this.rotationCenter())
         .divideBy(stage.scale * this.scale);
     unrotated = normalized.add(offset);
