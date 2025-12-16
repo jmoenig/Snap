@@ -49,6 +49,7 @@
 
 ### 2025-12-16
 * objects: fixed a costumePoint() glitch
+* objects: automatically grow a target costume when "overdrawing" it
 
 ### 2025-12-14
 * gui: fixed a zooming layout glitch
