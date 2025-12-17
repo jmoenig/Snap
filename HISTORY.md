@@ -5,6 +5,7 @@
     * global zoom setting ("magnification"), scales everything seamlessly
         * new interactive "Magnification" dialog in the settings menu
         * magnification gestures: shift-scroll on Logo zooms, shift-double-click resets zoom to 1
+        * new "zoom" api configuration key
     * templates
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
         * projects based on a template let the user restore the visibility of global blocks in the template palette
@@ -51,6 +52,7 @@
 * objects: add pen size when dynamically growing a costume to overdraw it
 * objects: shrinkWrap costumes that dynamically grow or on which the erase tool is used
 * objects: pick a unique name for dynamically overdrawn costumes
+* gui: new "zoom" api configuration key 
 
 ### 2025-12-16
 * objects: fixed a costumePoint() glitch
