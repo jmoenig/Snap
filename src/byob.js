@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2025-May-13';
+modules.byob = '2025-December-17';
 
 // Declarations
 
@@ -3061,12 +3061,6 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
                 (i > 9 ? border / 2 : 0)
         ));
     });
-
-    if (MorphicPreferences.isFlat) {
-        this.categories.corner = 0;
-        this.categories.border = 0;
-        this.categories.edge = 0;
-    }
 
     if (more > 6) {
         scroller = new ScrollFrameMorph(

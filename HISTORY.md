@@ -59,6 +59,7 @@
 * updated imbw editor with global zoom of 125%
 * disabled shift-zoom gestures when the settings menu is hidden by the configuration dictionary
 * morphic, widgets, gui: support rounded corners for widgets in flat mode, sigh
+* byob: yet more rounded rectangles in flat mode...
 
 ### 2025-12-16
 * objects: fixed a costumePoint() glitch
