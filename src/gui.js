@@ -127,12 +127,17 @@ IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
     MorphicPreferences.isFlat = false;
     IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
     SyntaxElementMorph.prototype.contrast = 65;
+    DialogBoxMorph.prototype.corner = 12;
+    DialogBoxMorph.prototype.padding = 14;
 };
 
 IDE_Morph.prototype.setFlatDesign = function () {
     MorphicPreferences.isFlat = true;
     IDE_Morph.prototype.scriptsPaneTexture = null;
     SyntaxElementMorph.prototype.contrast = 20;
+    DialogBoxMorph.prototype.corner = 8;
+    DialogBoxMorph.prototype.padding = 10;
+
 };
 
 IDE_Morph.prototype.setDefaultTheme = function () { // dark
