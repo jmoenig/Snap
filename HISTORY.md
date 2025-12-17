@@ -49,6 +49,7 @@
 
 ### 2025-12-17
 * objects: add pen size when dynamically growing a costume to overdraw it
+* objects: shrinkWrap costumes that dynamically grow or on which the erase tool is used
 
 ### 2025-12-16
 * objects: fixed a costumePoint() glitch

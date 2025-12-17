@@ -7627,6 +7627,11 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
     ctx.lineTo(p2.x, p2.y);
     ctx.stroke();
 
+    // shrink-wrap where applicable
+    if (contains(['source-over', 'destination-out'], mode)) {
+        targetCostume.shrinkWrap();
+    }
+
     // wear & cache the changed costume
     target.doSwitchToCostume(targetCostume, null, true); // keep cache
 };
