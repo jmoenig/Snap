@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-12';
+modules.objects = '2025-December-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -7567,8 +7567,10 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
 };
 
 SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
-    var targetCostume,
+    var mode = this.blendingMode(),
+        targetCostume,
         p1, p2,
+        line,
         ctx;
 
     // only draw if the pen is down and not currently being dragged
@@ -7580,12 +7582,33 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
     // check if target has a costume and fetch its pen surface
     if (target.costume) {
         targetCostume = target.surface();
+    } else if (mode === 'source-over') {
+        target.doSwitchToCostume(new Costume(
+            newCanvas(new Point(1, 1), true),
+            this.newCostumeName(localize('Costume'))
+        ));
+        targetCostume = target.surface();
+        target.originalCostume = ['Turtle'];
     } else {
         return;
     }
 
     p1 = target.costumePoint(start);
     p2 = target.costumePoint(dest);
+
+    if (mode === 'source-over') {
+        line = this.size / target.scale;
+        if (targetCostume.growTo(p1, line)) {
+            target.doSwitchToCostume(targetCostume, null, true); // keep cache
+            p1 = target.costumePoint(start);
+            p2 = target.costumePoint(dest);
+        }
+        if (targetCostume.growTo(p2, line)) {
+            target.doSwitchToCostume(targetCostume, null, true); // keep cache
+            p1 = target.costumePoint(start);
+            p2 = target.costumePoint(dest);
+        }
+    }
 
     // draw the line onto the target's costume copy:
     ctx = targetCostume.contents.getContext('2d');
@@ -7601,15 +7624,21 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
     }
-    ctx.globalCompositeOperation = this.blendingMode();
+    ctx.globalCompositeOperation = mode;
     ctx.beginPath();
     ctx.moveTo(p1.x, p1.y);
     ctx.lineTo(p2.x, p2.y);
     ctx.stroke();
 
+    // shrink-wrap where applicable
+    if (contains(['source-over', 'destination-out'], mode)) {
+        targetCostume.shrinkWrap();
+    }
+
     // wear & cache the changed costume
     target.doSwitchToCostume(targetCostume, null, true); // keep cache
 };
+
 
 SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
     var stagePos = this.parent.bounds.origin,
@@ -8132,7 +8161,7 @@ SpriteMorph.prototype.costumePoint = function(aPoint) {
         return new Point();
     }
     stagePoint = this.snapPoint(aPoint).multiplyBy(flipY).divideBy(this.scale);
-    normalized = stagePoint.add(this.costume.extent().divideBy(2));
+    normalized = stagePoint.add(this.costume.rotationCenter);
     offset = stage.center().subtract(this.rotationCenter())
         .divideBy(stage.scale * this.scale);
     unrotated = normalized.add(offset);
@@ -13666,6 +13695,42 @@ Costume.prototype.copy = function () {
     cpy = new Costume(canvas, this.name ? copy(this.name) : null);
     cpy.rotationCenter = this.rotationCenter.copy();
     return cpy;
+};
+
+// Costume growing
+
+Costume.prototype.growTo = function (point, padding = 0) {
+    // expand the canvas contents so the coordinates of the given point
+    // including an optional padding - e.g. for the line width - are within
+    // its bounds, answer false if nothing was changed
+    var bounds = this.bounds(),
+        w = bounds.width(),
+        h = bounds.height(),
+        offX = 0,
+        offY = 0,
+        canvas,
+        ctx;
+    if (bounds.insetBy(padding).containsPoint(point)) {
+        return false;
+    }
+    if (point.x - padding < 0) {
+        offX = padding - point.x;
+        w += offX;
+    } else {
+        w = Math.max(point.x + padding, w);
+    }
+    if (point.y - padding < 0) {
+        offY = padding - point.y;
+        h += offY;
+    } else {
+        h = Math.max(point.y + padding, h);
+    }
+    canvas = newCanvas(new Point(w, h), true);
+    ctx = canvas.getContext('2d');
+    ctx.drawImage(this.contents, offX, offY);
+    this.contents = canvas;
+    this.rotationCenter = this.rotationCenter.add(new Point(offX, offY));
+    return true;
 };
 
 // Costume flipping, stretching & skewing

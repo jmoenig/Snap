@@ -279,6 +279,7 @@ function IDE_Morph(config = {}) {
                                 with unsaved changes
         preserveTitle:  bool, do not set the tab title dynamically to reflect
                                 the current Snap! version
+        zoom:           num, global zoom factor, e.g. 1.25
         blocksZoom:     num, zoom factor for blocks, e.g. 1.5
         blocksFade:     num, fading percentage for blocks, e.g. 85
         zebra:          num, contrast percentage for nesting same-color blocks
@@ -3726,6 +3727,8 @@ IDE_Morph.prototype.applySavedMagnification = function () {
     var magnification = this.getSetting('magnification');
     if (magnification && magnification !== 1) {
         this.setZoom(magnification * 100);
+    } else if (this.config.zoom) {
+        this.setZoom(this.config.zoom * 100, true); // noSave
     }
 };
 
@@ -8275,11 +8278,12 @@ IDE_Morph.prototype.userZoom = function () {
     );
 };
 
-IDE_Morph.prototype.setZoom = function (percent) {
+IDE_Morph.prototype.setZoom = function (percent, noSave) {
     var wrld = this.world();
     this.controlBar.stageSizeButton.refresh();
     this.world().zoom(Math.max(Math.min(percent, this.maxZoom()), 100) / 100);
     this.siblings().forEach(morph => morph.keepWithin(wrld));
+    if (noSave) {return; }
     if (ZOOM > 1) {
         this.saveSetting('magnification', ZOOM);
     } else {
