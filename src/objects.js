@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-16';
+modules.objects = '2025-December-17';
 
 var SpriteMorph;
 var StageMorph;
@@ -7570,6 +7570,7 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
     var mode = this.blendingMode(),
         targetCostume,
         p1, p2,
+        line,
         ctx;
 
     // only draw if the pen is down and not currently being dragged
@@ -7593,12 +7594,13 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
     p2 = target.costumePoint(dest);
 
     if (mode === 'source-over') {
-        if (targetCostume.growTo(p1)) {
+        line = this.size / target.scale;
+        if (targetCostume.growTo(p1, line)) {
             target.doSwitchToCostume(targetCostume, null, true); // keep cache
             p1 = target.costumePoint(start);
             p2 = target.costumePoint(dest);
         }
-        if (targetCostume.growTo(p2)) {
+        if (targetCostume.growTo(p2, line)) {
             target.doSwitchToCostume(targetCostume, null, true); // keep cache
             p1 = target.costumePoint(start);
             p2 = target.costumePoint(dest);
@@ -13689,9 +13691,10 @@ Costume.prototype.copy = function () {
 
 // Costume growing
 
-Costume.prototype.growTo = function (point) {
+Costume.prototype.growTo = function (point, padding = 0) {
     // expand the canvas contents so the coordinates of the given point
-    // are within its bounds, answer false if nothing was changed
+    // including an optional padding - e.g. for the line width - are within
+    // its bounds, answer false if nothing was changed
     var bounds = this.bounds(),
         w = bounds.width(),
         h = bounds.height(),
@@ -13699,20 +13702,20 @@ Costume.prototype.growTo = function (point) {
         offY = 0,
         canvas,
         ctx;
-    if (bounds.containsPoint(point)) {
+    if (bounds.insetBy(padding).containsPoint(point)) {
         return false;
     }
-    if (point.x >= 0) {
-        w = Math.max(point.x, w);
-    } else {
-        offX = -point.x;
+    if (point.x - padding < 0) {
+        offX = padding - point.x;
         w += offX;
-    }
-    if (point.y >= 0) {
-        h = Math.max(point.y, h);
     } else {
-        offY = -point.y;
+        w = Math.max(point.x + padding, w);
+    }
+    if (point.y - padding < 0) {
+        offY = padding - point.y;
         h += offY;
+    } else {
+        h = Math.max(point.y + padding, h);
     }
     canvas = newCanvas(new Point(w, h), true);
     ctx = canvas.getContext('2d');

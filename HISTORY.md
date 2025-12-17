@@ -47,6 +47,9 @@
 * **Translation Updates:**
     * German
 
+### 2025-12-17
+* objects: add pen size when dynamically growing a costume to overdraw it
+
 ### 2025-12-16
 * objects: fixed a costumePoint() glitch
 * objects: automatically grow a target costume when "overdrawing" it
