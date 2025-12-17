@@ -38,6 +38,7 @@
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
+    * flat mode now supports rounded corner in widgets, sigh...
     * meta-programming: removed "static" tag from the block-attribute getter
     * took out rate limit in the Microblocks library, thanks, Bernat!
     * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
@@ -57,6 +58,7 @@
 * gui: new "zoom" api configuration key
 * updated imbw editor with global zoom of 125%
 * disabled shift-zoom gestures when the settings menu is hidden by the configuration dictionary
+* morphic, widgets, gui: support rounded corners for widgets in flat mode, sigh
 
 ### 2025-12-16
 * objects: fixed a costumePoint() glitch

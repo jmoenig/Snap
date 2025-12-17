@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-December-14';
+modules.gui = '2025-December-17';
 
 // Declarations
 
@@ -9481,6 +9481,18 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
         DialogBoxMorph.prototype.fixLayout.call(this);
         handle.setPosition(
             this.bottomRight().subtract(handle.extent().add(handle.inset))
+        );
+    };
+
+    dlg.outlinePathBody = function (ctx, radius) {
+        var th = Math.floor(fontHeight(this.titleFontSize)) +
+                this.titlePadding * 2;
+        ctx.roundRect(
+            0,
+            th,
+            this.width(),
+            this.height() - th,
+            MorphicPreferences.isFlat ? 0 : [0, 0, radius, radius]
         );
     };
 
