@@ -56,6 +56,7 @@
 * objects: pick a unique name for dynamically overdrawn costumes
 * gui: new "zoom" api configuration key
 * updated imbw editor with global zoom of 125%
+* disabled shift-zoom gestures when the settings menu is hidden by the configuration dictionary
 
 ### 2025-12-16
 * objects: fixed a costumePoint() glitch

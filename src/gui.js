@@ -3308,13 +3308,13 @@ IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
 // IDE_Morph global zoom gesture events
 
 IDE_Morph.prototype.mouseScroll = function (y) {
-    if (this.world().currentKey === 16) { // shiftClicked
+    if (this.world().currentKey === 16 && !this.config.hideSettings) {
         this.setZoom(ZOOM * 100 - y * 5);
     }
 };
 
 IDE_Morph.prototype.mouseDoubleClick = function () {
-    if (this.world().currentKey === 16) { // shiftClicked
+    if (this.world().currentKey === 16 && !this.config.hideSettings) {
         this.setZoom(100);
     }
 };
