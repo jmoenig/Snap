@@ -2349,14 +2349,14 @@ SyntaxElementMorph.prototype.fixLayout = function () {
       this.edge +
       this.labelPadding /
         ((((line[0] instanceof InputSlotMorph) || (line[0] instanceof BooleanSlotMorph)) &&
-        this.constructor.name.includes("ReporterBlockMorph") &&
+        this.constructor.name.includes("ReporterBlockMorph") && !this.isPredicate && 
         (!(line[0]?.isSquare?.())))
           ? (2)
           : 1);
     if (this instanceof RingMorph) {
       x = this.left() + space; //this.labelPadding;
     } else if (this?.isPredicate) {
-      x = this.left() + ico + this.rounding * 1.3;
+      x = this.left() + ico + this.rounding * (line[0] instanceof BlockLabelMorph || line[0] instanceof BooleanSlotMorph ? 1.3 : 1.9);
     } else if (this instanceof MultiArgMorph || this instanceof ArgLabelMorph) {
       x = this.left();
     } else if (
@@ -2424,14 +2424,6 @@ SyntaxElementMorph.prototype.fixLayout = function () {
       } else {
         if (part?.name == "loop") {
           y += part.scale * 10;
-        }
-        if (
-          (part instanceof MultiArgMorph &&
-          partIndex == 0 &&
-          this.constructor.name.includes("ReporterBlockMorph") &&
-          !(this instanceof RingMorph))
-        ) {
-          x -= this.labelPadding / 2;
         }
         if(((!line[0].isVisible && partIndex == 1) || partIndex == 0) && part instanceof BooleanSlotMorph) {
           
