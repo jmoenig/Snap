@@ -45,6 +45,8 @@
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
     * fixed some special cases for using "combine" on an empty list, thanks, @rmunn!
+* **Documentation Updates:**
+    * updated API.md with new "zoom" configuration key for global magnification
 * **Translation Updates:**
     * German
 
