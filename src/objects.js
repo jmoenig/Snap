@@ -7583,7 +7583,10 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
     if (target.costume) {
         targetCostume = target.surface();
     } else if (mode === 'source-over') {
-        target.doSwitchToCostume(new Costume(newCanvas(new Point(1, 1), true)));
+        target.doSwitchToCostume(new Costume(
+            newCanvas(new Point(1, 1), true),
+            this.newCostumeName(localize('Costume'))
+        ));
         targetCostume = target.surface();
         target.originalCostume = ['Turtle'];
     } else {
