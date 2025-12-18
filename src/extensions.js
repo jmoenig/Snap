@@ -1308,6 +1308,12 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'cst_load(url)',
     function (url, proc) {
+        if (!url) {
+            return '';
+        };
+
+        proc.assertType(url, 'text')
+
         if (!proc.context.accumulator) {
             proc.context.accumulator = {
                 img: new Image(),
@@ -1316,10 +1322,13 @@ SnapExtensions.primitives.set(
             proc.context.accumulator.img.onload = function () {
                 var canvas = newCanvas(new Point(this.width, this.height));
                 canvas.getContext('2d').drawImage(this, 0, 0);
-                proc.context.accumulator.cst = new Costume(canvas);
+                proc.context.accumulator.cst = new Costume(canvas, 'Costume');
+            };
+            proc.context.accumulator.img.onerror = function () {
+                proc.context.accumulator.cst = '';
             };
             proc.context.accumulator.img.src = url;
-        } else if (proc.context.accumulator.cst) {
+        } else if (proc.context.accumulator.cst || proc.context.accumulator.cst === '') {
             return proc.context.accumulator.cst;
         }
         proc.pushContext('doYield');
@@ -1359,6 +1368,43 @@ SnapExtensions.primitives.set(
         cst.embeddedData = data || null;
         cst.version = Date.now();
         ide.recordUnsavedChanges();
+    }
+);
+
+// Sounds (snd_):
+
+SnapExtensions.primitives.set(
+    'snd_load(url)',
+    function (url, proc) {
+        if (!url) {
+            return '';
+        };
+        
+        proc.assertType(url, 'text')
+
+        if (!proc.context.accumulator) {
+            proc.context.accumulator = {
+                snd: null,
+            };
+
+            fetch(url).then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                };
+
+                return response.blob();
+            }).catch(() => {
+                proc.context.accumulator.snd = '';
+            }).then((response) => {
+                proc.context.accumulator.snd = new Sound(
+                    new Audio(URL.createObjectURL(response))
+                );
+            });
+        } else if (proc.context.accumulator.snd || proc.context.accumulator.snd === '') {
+            return proc.context.accumulator.snd;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
     }
 );
 
