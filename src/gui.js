@@ -137,7 +137,6 @@ IDE_Morph.prototype.setFlatDesign = function () {
     SyntaxElementMorph.prototype.contrast = 20;
     DialogBoxMorph.prototype.corner = 8;
     DialogBoxMorph.prototype.padding = 10;
-
 };
 
 IDE_Morph.prototype.setDefaultTheme = function () { // dark
