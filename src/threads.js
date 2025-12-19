@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-December-12';
+modules.threads = '2025-December-19';
 
 var ThreadManager;
 var Process;
@@ -6573,7 +6573,8 @@ Process.prototype.doDrawOn = function (mode, surface) {
         tools = ['paint', 'erase', 'overdraw'];
     rcvr.sheet = (dest === 'pen trails' ? null
         : this.reportObject(dest) || null);
-    if (rcvr.sheet === rcvr) {
+    if (rcvr.sheet === rcvr || rcvr.sheet instanceof StageMorph) {
+        // drawing on the stage's costume is disabled for now.
         rcvr.sheet = null;
     }
     rcvr.tool = contains(tools, mask) ? mask || null : null;

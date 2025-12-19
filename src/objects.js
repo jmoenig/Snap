@@ -1073,8 +1073,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: '%msk on %srf',
-            defaults: [['paint'], ['pen trails']],
+            spec: '%msk on %spr',
+            defaults: [['paint'], ['Stage']],
             code: 'drawOn'
         },
         reportColor: {

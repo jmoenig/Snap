@@ -162,7 +162,7 @@ CustomHatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-December-12';
+modules.blocks = '2025-December-19';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -568,11 +568,13 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only',
         menu: 'objectsMenu'
     },
+    /* // currently unused - drawing on the stage draws on the pen trails layer
     '%srf': {
         type: 'input',
         tags: 'read-only',
         menu: 'surfacesMenu'
     },
+    */
     '%self': {
         type: 'input',
         tags: 'read-only',
@@ -11789,6 +11791,7 @@ InputSlotMorph.prototype.objectsMenuWithSelf = function (searching) {
 };
 
 InputSlotMorph.prototype.surfacesMenu = function (searching) {
+    // currently unused - drawing on the stage draws on the pen trails layer
     var obj = this.objectsMenu(),
         dict = {
             'pen trails' : ['pen trails']

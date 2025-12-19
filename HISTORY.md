@@ -56,6 +56,7 @@
 ### 2025-12-19
 * widgets, gui: made dialog boxes brighter and buttons more discernible in bright mode
 * objects: disabled CLEAR for drawing on sprites for now (CLEAR always wipes the stage's pen trails)
+* threads, objects, blocks: disabled drawing on the stage's background costume. Drawing on the stage draws on the pen trails layer.
 
 ### 2025-12-17
 * objects: add pen size when dynamically growing a costume to overdraw it
