@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-17';
+modules.objects = '2025-December-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -3198,7 +3198,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.sheet = null; // a sprite - surface destination to draw on
     this.tool = null; // string: blending mode ('paint', 'erase', 'overdraw')
     this.trailsCache = null; // a temporary costume for drawing on
-    this.originalCostume = null; // hold on to the unmodified original costume
+    // this.originalCostume = null; // hold on to the unmodified original
+    // costume, disabled for now
 
     SpriteMorph.uber.init.call(this);
 
@@ -5397,7 +5398,7 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow, keepCache) {
 
     if (!keepCache) {
         this.trailsCache = null;
-        this.originalCostume = null;
+        // this.originalCostume = null;
     }
     this.changed();
     this.costume = costume;
@@ -6677,7 +6678,7 @@ SpriteMorph.prototype.surface = function () {
                 surface = this.costume.copy();
             }
             this.trailsCache = surface;
-            this.originalCostume = this.costume;
+            // this.originalCostume = this.costume;
         }
     } else {
         surface = null;
@@ -6732,6 +6733,8 @@ SpriteMorph.prototype.stampOnPenTrails = function () {
 // SpriteMorph clearing
 
 SpriteMorph.prototype.clear = function () {
+    /* // version that resets a target costume to its original state
+    // disabled for now, because CLEAR should always clear the stage.
     if (this.drawsOnSprite()) {
         if (this.sheet.originalCostume) {
             this.sheet.doSwitchToCostume(this.sheet.originalCostume);
@@ -6739,6 +6742,8 @@ SpriteMorph.prototype.clear = function () {
     } else {
         this.parent.clearPenTrails();
     }
+    */
+    this.parent.clearPenTrails();
 };
 
 // SpriteMorph writing
@@ -7588,7 +7593,7 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
             this.newCostumeName(localize('Costume'))
         ));
         targetCostume = target.surface();
-        target.originalCostume = ['Turtle'];
+        // target.originalCostume = ['Turtle'];
     } else {
         return;
     }
@@ -10312,7 +10317,8 @@ StageMorph.prototype.init = function (globals) {
 
     // support for letting sprites directly draw on a background
     this.trailsCache = null; // a temporary costume for drawing on
-    this.originalCostume = null; // hold on to the unmodified original costume
+    // this.originalCostume = null; // hold on to the unmodified original
+    // costume, disabled for now
 
     this.isThreadSafe = false;
 
