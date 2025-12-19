@@ -1310,7 +1310,7 @@ SnapExtensions.primitives.set(
     function (url, proc) {
         if (!url) {
             return '';
-        };
+        }
 
         proc.assertType(url, 'text');
 
@@ -1337,10 +1337,10 @@ SnapExtensions.primitives.set(
             fetch(url).then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
-                };
+                }
 
                 if (response.headers.get('content-type') === 'image/svg+xml') {
-                    context.accumulator.svg = true
+                    context.accumulator.svg = true;
                 }
 
                 return response.blob();
@@ -1399,7 +1399,7 @@ SnapExtensions.primitives.set(
     function (url, proc) {
         if (!url) {
             return '';
-        };
+        }
         
         proc.assertType(url, 'text');
 
@@ -1413,7 +1413,7 @@ SnapExtensions.primitives.set(
             fetch(url).then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
-                };
+                }
 
                 return response.blob();
             }).catch(() => {
