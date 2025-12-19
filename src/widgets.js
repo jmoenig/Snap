@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-December-17';
+modules.widgets = '2025-December-19';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1634,10 +1634,10 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     DialogBoxMorph.uber.init.call(this);
 
     // override inherited properites:
+    delete this.color; // re-inherit from PushButtonMorph.prototype
     this.isDraggable = true;
     this.noDropShadow = true;
     this.fullShadowSource = false;
-    this.color = PushButtonMorph.prototype.color;
     this.createLabel();
     this.createButtons();
     this.setExtent(new Point(300, 150));

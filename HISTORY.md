@@ -30,6 +30,8 @@
     * new "blocks" and "speaker" symbols
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
+    * flat design mode now (again) supports rounded corners (sigh...)
+    * dialog boxes are more bright and their buttons more discernible in bright mode 
     * rearranged IDE settings menu items into "looks" submenu
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
@@ -50,6 +52,9 @@
     * updated API.md with new "zoom" configuration key for global magnification
 * **Translation Updates:**
     * German
+
+### 2025-12-19
+* widgets, gui: made dialog boxes brighter and buttons more discernible in bright mode
 
 ### 2025-12-17
 * objects: add pen size when dynamically growing a costume to overdraw it

@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-December-17';
+modules.gui = '2025-December-19';
 
 // Declarations
 
@@ -181,6 +181,8 @@ IDE_Morph.prototype.setDefaultTheme = function () { // dark
     SceneIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
 
+    DialogBoxMorph.prototype.color = PushButtonMorph.prototype.color;
+
     ScriptsMorph.prototype.feedbackColor = WHITE;
 };
 
@@ -223,6 +225,8 @@ IDE_Morph.prototype.setBrightTheme = function () {
         = IDE_Morph.prototype.buttonLabelColor;
     SceneIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
+
+    DialogBoxMorph.prototype.color = IDE_Morph.prototype.frameColor;
 
     ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
 };
