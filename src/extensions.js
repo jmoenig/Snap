@@ -1320,16 +1320,35 @@ SnapExtensions.primitives.set(
             context.accumulator = {
                 img: new Image(),
                 cst: null,
+                svg: false,
             };
             context.accumulator.img.onload = function () {
-                var canvas = newCanvas(new Point(this.width, this.height));
-                canvas.getContext('2d').drawImage(this, 0, 0);
-                context.accumulator.cst = new Costume(canvas, 'Costume');
+                if (context.accumulator.svg) {
+                    context.accumulator.cst = new SVG_Costume(this, 'Costume');
+                } else {
+                    var canvas = newCanvas(new Point(this.width, this.height));
+                    canvas.getContext('2d').drawImage(this, 0, 0);
+                    context.accumulator.cst = new Costume(canvas, 'Costume');
+                }
             };
             context.accumulator.img.onerror = function () {
                 context.accumulator.cst = '';
             };
-            context.accumulator.img.src = url;
+            fetch(url).then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                };
+
+                if (response.headers.get('content-type') === 'image/svg+xml') {
+                    context.accumulator.svg = true
+                }
+
+                return response.blob();
+            }).catch(() => {
+                context.accumulator.cst = '';
+            }).then((response) => {
+                context.accumulator.img.src = URL.createObjectURL(response);
+            });
         } else if (context.accumulator.cst || context.accumulator.cst === '') {
             return context.accumulator.cst;
         }
