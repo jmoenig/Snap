@@ -9,6 +9,7 @@
     * templates
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
         * projects based on a template let the user restore the visibility of global blocks in the template palette
+        * template-projects store their magnification level if it's above 100%
     * tutorials
         * open and run a scene inside a separate modeless window
         * new "Tutorials" library for positioning and scaling the tutorial window and interacting with the editor
@@ -52,6 +53,9 @@
     * updated API.md with new "zoom" configuration key for global magnification
 * **Translation Updates:**
     * German
+
+### 2025-12-20
+* store: template-projects store their magnification level if it's above 100%
 
 ### 2025-12-19
 * widgets, gui: made dialog boxes brighter and buttons more discernible in bright mode
