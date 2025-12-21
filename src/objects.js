@@ -3933,6 +3933,7 @@ SpriteMorph.prototype.blockTemplates = function (
     );
     t.bounds.setWidth(t.width() * SyntaxElementMorph.prototype.scale);
     t.bounds.setHeight(t.height() * SyntaxElementMorph.prototype.scale);
+    
     //t.fixLayout()
     return t;
   }
@@ -3952,6 +3953,7 @@ SpriteMorph.prototype.blockTemplates = function (
     );
     t.bounds.setWidth(t.width() * SyntaxElementMorph.prototype.scale);
     t.bounds.setHeight(t.height() * SyntaxElementMorph.prototype.scale);
+    
     return t;
   }
 
@@ -11564,6 +11566,7 @@ StageMorph.prototype.blockTemplates = function (
     );
     t.bounds.setWidth(t.width() * SyntaxElementMorph.prototype.scale);
     t.bounds.setHeight(t.height() * SyntaxElementMorph.prototype.scale);
+    
     return t
   }
 
@@ -11582,6 +11585,7 @@ StageMorph.prototype.blockTemplates = function (
     );
         t.bounds.setWidth(t.width() * SyntaxElementMorph.prototype.scale);
     t.bounds.setHeight(t.height() * SyntaxElementMorph.prototype.scale);
+    
     return t
   }
 
@@ -15503,7 +15507,7 @@ WatcherMorph.prototype.updateLabel = function () {
 // WatcherMorph layout:
 
 WatcherMorph.prototype.fixLayout = function () {
-  var fontSize = SyntaxElementMorph.prototype.fontSize,
+  var fontSize = 9.5,
     isList,
     myself = this;
 
@@ -15563,7 +15567,7 @@ WatcherMorph.prototype.fixLayout = function () {
     this.position().add(
       new Point(
         this.edge,
-        this.border + SyntaxElementMorph.prototype.typeInPadding
+        this.border + 3
       )
     )
   );
@@ -15572,7 +15576,7 @@ WatcherMorph.prototype.fixLayout = function () {
     this.cellMorph.setPosition(
       this.labelMorph
         .bottomLeft()
-        .add(new Point(0, SyntaxElementMorph.prototype.typeInPadding))
+        .add(new Point(0, 3))
     );
   } else {
     this.cellMorph.setPosition(
@@ -15588,7 +15592,7 @@ WatcherMorph.prototype.fixLayout = function () {
     this.sliderMorph.setPosition(
       new Point(
         this.labelMorph.left(),
-        this.cellMorph.bottom() + SyntaxElementMorph.prototype.typeInPadding
+        this.cellMorph.bottom() + 3
       )
     );
     this.sliderMorph.setWidth(this.cellMorph.right() - this.labelMorph.left());
@@ -15596,19 +15600,19 @@ WatcherMorph.prototype.fixLayout = function () {
       this.cellMorph.height() +
         this.sliderMorph.height() +
         this.border * 2 +
-        SyntaxElementMorph.prototype.typeInPadding * 3
+        3 * 3
     );
   } else {
     this.sliderMorph.hide();
     this.bounds.corner.y =
       this.cellMorph.bottom() +
       this.border +
-      SyntaxElementMorph.prototype.typeInPadding;
+      3;
   }
   this.bounds.corner.x =
     Math.max(this.cellMorph.right(), this.labelMorph.right()) +
     this.edge +
-    SyntaxElementMorph.prototype.typeInPadding;
+    3;
 };
 
 // WatcherMorph events:

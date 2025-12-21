@@ -1497,18 +1497,19 @@ SymbolMorph.prototype.renderSymbolBrush = function (ctx, color) {
 SymbolMorph.prototype.renderSymbolTick = function (ctx, color) {
   // draw a check mark
   var w = this.symbolWidth(),
-    h = this.size;
+    h = this.size,
+    edge = w / 4;
 
-  ctx.fillStyle = color.toString();
+  ctx.strokeStyle = color.toString();
+  ctx.lineWidth = w / 5;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
   ctx.beginPath();
-  ctx.moveTo(w * 0.2, h * 0.5);
-  ctx.lineTo(w * 0.5, h);
-  ctx.lineTo(w * 0.8, h * 0.3);
-  ctx.lineTo(w, 0);
-  ctx.lineTo(w * 0.65, h * 0.2);
-  ctx.lineTo(w * 0.5, h * 0.65);
+  ctx.moveTo(0 + edge, h * 0.5);
+  ctx.lineTo(w * 0.44, h * .99 - edge);
+  ctx.lineTo(w - edge, h * 0.33);
+  ctx.stroke();
   ctx.closePath();
-  ctx.fill();
 };
 
 SymbolMorph.prototype.renderSymbolCheckedBox = function (ctx, color) {

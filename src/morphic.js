@@ -7963,6 +7963,7 @@ MenuMorph.prototype.createItems = function () {
         this.color
       );
     }
+    y += 1;
     if (isLine) {
       y += 1;
     }
@@ -7973,6 +7974,7 @@ MenuMorph.prototype.createItems = function () {
     if (isLine) {
       y += 1;
     }
+    y += 1;
   });
 
   fb = this.fullBounds();
@@ -8272,6 +8274,22 @@ MenuMorph.prototype.destroy = function () {
   }
   MenuMorph.uber.destroy.call(this);
 };
+
+MenuMorph.prototype.ideRender = function () {
+  // change the rendering to only include two bottom rounded corners
+  this.outlinePath = function (ctx, corner, inset) {
+  var w = this.width(),
+    h = this.height(),
+    radius = Math.min(corner, (Math.min(w, h) - inset) / 2);
+  
+  ctx.moveTo(inset, inset)
+  ctx.lineTo(w - inset * 2, inset)
+  ctx.arc(w - radius, h - radius, radius, radians(0), radians(90))
+  ctx.arc(radius, h - radius, radius, radians(90), radians(180))
+  
+  //roundRect(inset, inset, w - inset * 2, h - inset * 2, radius);
+};
+}
 
 // StringMorph /////////////////////////////////////////////////////////
 

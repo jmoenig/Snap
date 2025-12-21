@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.5.0";
+var SplitVersion = "1.5.1";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -4419,6 +4419,9 @@ IDE_Morph.prototype.snapMenu = function () {
     world = this.world();
 
   menu = new MenuMorph(this);
+  menu.ideRender();
+  menu.bgColor = this.accentColor;
+  
   menu.addItem("About...", "aboutSnap");
   menu.addLine();
   menu.addItem("Reference manual", () => {
@@ -4454,8 +4457,7 @@ IDE_Morph.prototype.snapMenu = function () {
       "enable Morphic\ncontext menus\nand inspectors," + "\nnot user-friendly!",
       new Color(100, 0, 0)
     );
-  }
-  menu.bgColor = this.accentColor;
+  };
   menu.popup(world, this.logo.bottomLeft());
 };
 
@@ -4472,6 +4474,7 @@ IDE_Morph.prototype.cloudMenu = function () {
 
   menu = new MenuMorph(this);
   menu.bgColor = this.accentColor;
+  menu.ideRender();
   if (shiftClicked) {
     menu.addItem("url...", "setCloudURL", null, new Color(100, 0, 0));
     menu.addLine();
@@ -4639,6 +4642,7 @@ IDE_Morph.prototype.settingsMenu = function () {
 
   menu = new MenuMorph(this);
   menu.bgColor = this.accentColor;
+  menu.ideRender();
   menu.addMenu(
     [
       new SymbolMorph("globe", MorphicPreferences.menuFontSize, WHITE),
@@ -5236,6 +5240,7 @@ IDE_Morph.prototype.projectMenu = function () {
 
   menu = new MenuMorph(this);
   menu.bgColor = this.accentColor;
+  menu.ideRender();
   menu.addItem("Notes...", "editNotes");
   menu.addLine();
   if (!this.config.noProjectItems) {
@@ -8021,6 +8026,7 @@ IDE_Morph.prototype.looksMenuData = function () {
     on = new SymbolMorph("checkedBox", MorphicPreferences.menuFontSize * 0.75),
     off = new SymbolMorph("rectangle", MorphicPreferences.menuFontSize * 0.75);
   menu.bgColor = this.accentColor;
+  // menu.ideRender();
 
   menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {

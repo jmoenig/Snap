@@ -1,9 +1,9 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '11.0.0',
-    cacheName = `snap-pwa-${snapVersion}`,
+var version = '11.0.0',
+    cacheName = `snap-pwa-${version}`,
     filesToCache = [
-        'snap.html',
+        'split.html',
 
         // program
         'src/morphic.js',
@@ -846,7 +846,7 @@ var snapVersion = '11.0.0',
         'Examples/vee.xml'
     ];
 
-console.log('service worker executed', snapVersion);
+console.log('service worker executed', version);
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function(e) {
     e.waitUntil(

@@ -27,7 +27,7 @@
 
     prerequisites:
     --------------
-    needs blocks.js and objects.js
+    needs blocks.js and objects.js (and symbols.js)
 
 
     credits
@@ -930,92 +930,90 @@ function TabMorph(
 // TabMorph label
 
 TabMorph.prototype.createLabel = function () {
-    if (this.label !== null) {
-        this.label.destroy();
-    }
-    this.label = this.createLabelPart(this.labelString);
-    this.add(this.label);
+  if (this.label !== null) {
+    this.label.destroy();
+  }
+  this.label = this.createLabelPart(this.labelString);
+  this.add(this.label);
 };
 
 TabMorph.prototype.createLabelPart = function (source) {
-    var part, icon, lbl;
-    if (isString(source)) {
-        return this.createLabelString(source);
-    }
-    if (source instanceof Array) {
-        // assume its pattern is: [icon, string]
-        part = new Morph();
-        part.alpha = 0; // transparent
-        icon = this.createIcon(source[0]);
-        part.add(icon);
-        lbl = this.createLabelString(source[1]);
-        part.add(lbl);
-        lbl.setCenter(icon.center());
-        lbl.setLeft(icon.right() + 4);
-        part.bounds = (icon.bounds.merge(lbl.bounds));
-        part.rerender();
-        return part;
-    }
-    // assume it's either a Morph or a Canvas
-    return this.createIcon(source);
+  var part, icon, lbl;
+  if (isString(source)) {
+    return this.createLabelString(source);
+  }
+  if (source instanceof Array) {
+    // assume its pattern is: [icon, string]
+    part = new Morph();
+    part.alpha = 0; // transparent
+    icon = this.createIcon(source[0]);
+    part.add(icon);
+    lbl = this.createLabelString(source[1]);
+    part.add(lbl);
+    lbl.setCenter(icon.center());
+    lbl.setLeft(icon.right() + 4);
+    part.bounds = icon.bounds.merge(lbl.bounds);
+    part.rerender();
+    return part;
+  }
+  // assume it's either a Morph or a Canvas
+  return this.createIcon(source);
 };
 
 TabMorph.prototype.createIcon = function (source) {
-    // source can be either a SymbolMorph, any other Morph
-    // or an HTMLCanvasElement
-    var shading = !MorphicPreferences.isFlat || this.is3D,
-        icon;
-    if (source instanceof SymbolMorph) {
-        icon = source.fullCopy();
-        if (shading) {
-            icon.shadowOffset = this.labelShadowOffset;
-            icon.shadowColor = this.labelShadowColor;
-        }
-        icon.color = this.labelColor;
-        return icon;
+  // source can be either a SymbolMorph, any other Morph
+  // or an HTMLCanvasElement
+  var shading = !MorphicPreferences.isFlat || this.is3D,
+    icon;
+  if (source instanceof SymbolMorph) {
+    icon = source.fullCopy();
+    if (shading) {
+      icon.shadowOffset = this.labelShadowOffset;
+      icon.shadowColor = this.labelShadowColor;
     }
-    if (source instanceof Morph) {
-        return source.fullCopy();
-    }
-    // assume a Canvas
-    icon = new Morph();
-    icon.isCachingImage = true;
-    icon.cachedImage = source; // should we copy the canvas?
-    icon.bounds.setWidth(source.width);
-    icon.bounds.setHeight(source.height);
+    icon.color = this.labelColor;
     return icon;
+  }
+  if (source instanceof Morph) {
+    return source.fullCopy();
+  }
+  // assume a Canvas
+  icon = new Morph();
+  icon.isCachingImage = true;
+  icon.cachedImage = source; // should we copy the canvas?
+  icon.bounds.setWidth(source.width);
+  icon.bounds.setHeight(source.height);
+  return icon;
 };
 
 TabMorph.prototype.createLabelString = function (string) {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
-    return new StringMorph(
-        localize(string),
-        this.fontSize,
-        this.fontStyle,
-        true, // !(this.labelString instanceof Array), //true,
-        false,
-        false,
-        shading ? this.labelShadowOffset : null,
-        this.labelShadowColor,
-        this.labelColor
-    );
+  var shading = !MorphicPreferences.isFlat || this.is3D;
+  return new StringMorph(
+    localize(string),
+    this.fontSize,
+    this.fontStyle,
+    true, // !(this.labelString instanceof Array), //true,
+    false,
+    false,
+    shading ? this.labelShadowOffset : null,
+    this.labelShadowColor,
+    this.labelColor
+  );
 };
 
 TabMorph.prototype.updateLabelColors = function () {
-    var shading = !MorphicPreferences.isFlat || this.is3D;
-    this.label.forAllChildren(morph => {
-        if (morph instanceof StringMorph ||
-            morph instanceof SymbolMorph
-        ) {
-            morph.color = this.labelColor;
-            morph.fontSize = this.fontSize;
-            if (shading) {
-                morph.shadowOffset = this.labelShadowOffset;
-                morph.shadowColor = this.labelShadowColor;
-            }
-            morph.fixLayout(true); // just me
-        }
-    });
+  var shading = !MorphicPreferences.isFlat || this.is3D;
+  this.label.forAllChildren((morph) => {
+    if (morph instanceof StringMorph || morph instanceof SymbolMorph) {
+      morph.color = this.labelColor;
+      morph.fontSize = this.fontSize;
+      if (shading) {
+        morph.shadowOffset = this.labelShadowOffset;
+        morph.shadowColor = this.labelShadowColor;
+      }
+      morph.fixLayout(true); // just me
+    }
+  });
 };
 
 // TabMorph layout:
@@ -1052,8 +1050,8 @@ TabMorph.prototype.refresh = function () {
 // TabMorph drawing:
 
 TabMorph.prototype.drawBackground = function (ctx, color, inset) {
-  if(!inset) {
-    inset = 0
+  if (!inset) {
+    inset = 0;
   }
   var w = this.width(),
     h = this.height(),
@@ -1070,7 +1068,7 @@ TabMorph.prototype.drawBackground = function (ctx, color, inset) {
 };
 
 TabMorph.prototype.drawOutline = function () {
-  nop()
+  nop();
 };
 
 TabMorph.prototype.drawEdges = function (
@@ -1189,6 +1187,13 @@ ToggleMorph.prototype.init = function (
     environment,
     hint
   );
+  if (style == "checkbox") {
+    this.tick = new SymbolMorph("tick", 13);
+    this.tick.rawHeight = function () {
+      return this.height();
+    };
+  }
+  this.add(this.tick);
   this.fixLayout();
   this.refresh();
 };
@@ -1610,7 +1615,6 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
   this.createLabel();
   this.createButtons();
   this.setExtent(new Point(300, 150));
-
 };
 
 // DialogBoxMorph ops
@@ -2996,15 +3000,13 @@ DialogBoxMorph.prototype.addCloseButton = function () {
   button.highlightColor = button.color;
   button.pressColor = button.color;
   button.labelColor = this.titleTextColor;
-  
+
   button.makeSquare();
   /*button.setPosition(
     this.topRight().add(new Point(-this.padding - button.width(), this.padding / 2))
     );*/
-    this.closeButton = button
-    this.add(button);
-
-
+  this.closeButton = button;
+  this.add(button);
 
   return button;
 };
@@ -3020,14 +3022,11 @@ DialogBoxMorph.prototype.addButton = function (action, label) {
   button.edge = this.buttonEdge;
   button.outline = this.buttonOutline;
   button.outlineColor =
-    (action || "ok") === "ok"
-      ? this.titleBarColor
-      : this.buttonOutlineColor;
+    (action || "ok") === "ok" ? this.titleBarColor : this.buttonOutlineColor;
   button.outlineGradient = this.buttonOutlineGradient;
   button.padding = this.buttonPadding;
   button.contrast = this.buttonContrast;
-  button.color =
-    (action || "ok") === "ok" ? this.titleBarColor : button.color;
+  button.color = (action || "ok") === "ok" ? this.titleBarColor : button.color;
   button.labelColor = (action || "ok") === "ok" ? WHITE : button.labelColor;
   button.highlightColor = button.color;
   button.pressColor = button.color;
@@ -3102,7 +3101,6 @@ DialogBoxMorph.prototype.fixLayout = function () {
     }
   }
 
-  
   if (this.label) {
     this.label.setCenter(this.center());
     this.label.setTop(this.top() + (th - this.label.height()) / 2);
@@ -3117,12 +3115,15 @@ DialogBoxMorph.prototype.fixLayout = function () {
     this.buttons.setCenter(this.center());
     this.buttons.setBottom(this.bottom() - this.padding);
   }
-  
 
   // refresh a shallow shadow
   this.removeShadow();
-  this.closeButton.setPosition(this.topRight().add(new Point(-this.padding - this.closeButton.width(), this.padding / 2)));
-  
+  this.closeButton.setPosition(
+    this.topRight().add(
+      new Point(-this.padding - this.closeButton.width(), this.padding / 2)
+    )
+  );
+
   this.addShadow();
 };
 
@@ -3419,7 +3420,7 @@ InputFieldMorph.prototype.init = function (
       0,
       Math.max(Math.floor(this.fontSize / 6), 1)
     );
-    
+
   arrow.scale = 1;
   this.choices = choiceDict || null; // object, function or selector
   this.isReadOnly = isReadOnly || false;
