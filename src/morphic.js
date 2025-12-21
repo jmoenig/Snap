@@ -2464,8 +2464,8 @@ Color.prototype.solid = function () {
 };
 
 Color.prototype.withAlpha = function (alpha) {
-  return new Color(this.r, this.g, this.b, alpha)
-}
+  return new Color(this.r, this.g, this.b, alpha);
+};
 
 // Points //////////////////////////////////////////////////////////////
 
@@ -3674,6 +3674,7 @@ Morph.prototype.renderCachedTexture = function (ctx) {
   ctx.restore();
 };
 
+// @askofep1's anti-crash thing
 Morph.prototype.drawOn = function (ctx, rect) {
   var clipped = rect.intersect(this.bounds),
     pos = this.position(),
@@ -3706,7 +3707,21 @@ Morph.prototype.drawOn = function (ctx, rect) {
     ctx.rect(clipped.left(), clipped.top(), clipped.width(), clipped.height());
     ctx.clip();
     ctx.translate(pos.x, pos.y);
-    this.render(ctx);
+    try {
+      this.render(ctx);
+    } catch (error) {
+      console.error(error);
+      ctx.fillStyle = "#f00";
+      ctx.fillRect(0, 0, clipped.width(), clipped.height());
+      ctx.fillStyle = "#fff";
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.font = "14px serif";
+      var errorText =
+        "RenderError!\n" + error.toString() + "\nplease report the bug";
+      ctx.strokeText(errorText, 0, 0);
+      ctx.fillText(errorText, 0, 0);
+    }
     if (MorphicPreferences.showHoles) {
       // debug hole rendering
       ctx.translate(-pos.x, -pos.y);
@@ -7800,13 +7815,12 @@ MenuMorph.prototype.init = function (
   this.selection = null;
   this.submenu = null;
   this.bgColor = color || WHITE;
-  
-  
+
   // initialize inherited properties:
   MenuMorph.uber.init.call(this);
-  
+
   // override inherited properties:
-  
+
   this.isDraggable = false;
   this.noDropShadow = true;
   this.fullShadowSource = false;
@@ -7849,8 +7863,13 @@ MenuMorph.prototype.addItem = function (
 };
 
 MenuMorph.prototype.addMenu = function (label, aMenu, indicator, verbatim) {
-  var arrow = new ArrowMorph("right", 12, null, this?.bgColor ? (this.bgColor.eq(WHITE) ? BLACK : WHITE) : BLACK);
-  arrow.scale = 1
+  var arrow = new ArrowMorph(
+    "right",
+    12,
+    null,
+    this?.bgColor ? (this.bgColor.eq(WHITE) ? BLACK : WHITE) : BLACK
+  );
+  arrow.scale = 1;
   this.addPair(
     label,
     aMenu,
@@ -7916,7 +7935,9 @@ MenuMorph.prototype.createItems = function () {
     this.border = MorphicPreferences.isFlat ? 1 : 2;
   }
   this.color = this.bgColor;
-  this.borderColor = this.bgColor.eq(WHITE) ? new Color(60, 60, 60) : this.bgColor.darker(70);
+  this.borderColor = this.bgColor.eq(WHITE)
+    ? new Color(60, 60, 60)
+    : this.bgColor.darker(70);
   this.setExtent(new Point(0, 0));
 
   y = 2;
@@ -7955,7 +7976,9 @@ MenuMorph.prototype.createItems = function () {
         MorphicPreferences.menuFontName,
         this.environment,
         tuple[2], // bubble help hint
-        ((tuple[3] || BLACK).eq(BLACK) && !((this?.bgColor || WHITE).eq(WHITE))) ? WHITE : tuple[3], // color
+        (tuple[3] || BLACK).eq(BLACK) && !(this?.bgColor || WHITE).eq(WHITE)
+          ? WHITE
+          : tuple[3], // color
         tuple[4], // bold
         tuple[5], // italic
         tuple[6], // doubleclick action
@@ -7968,7 +7991,7 @@ MenuMorph.prototype.createItems = function () {
       y += 1;
     }
     item.setPosition(new Point(isLine ? x - 4 : x, y));
-    isLine && item.setLeft(this.right())
+    isLine && item.setLeft(this.right());
     this.add(item);
     y = y + item.height();
     if (isLine) {
@@ -8278,18 +8301,18 @@ MenuMorph.prototype.destroy = function () {
 MenuMorph.prototype.ideRender = function () {
   // change the rendering to only include two bottom rounded corners
   this.outlinePath = function (ctx, corner, inset) {
-  var w = this.width(),
-    h = this.height(),
-    radius = Math.min(corner, (Math.min(w, h) - inset) / 2);
-  
-  ctx.moveTo(inset, inset)
-  ctx.lineTo(w - inset * 2, inset)
-  ctx.arc(w - radius, h - radius, radius, radians(0), radians(90))
-  ctx.arc(radius, h - radius, radius, radians(90), radians(180))
-  
-  //roundRect(inset, inset, w - inset * 2, h - inset * 2, radius);
+    var w = this.width(),
+      h = this.height(),
+      radius = Math.min(corner, (Math.min(w, h) - inset) / 2);
+
+    ctx.moveTo(inset, inset);
+    ctx.lineTo(w - inset * 2, inset);
+    ctx.arc(w - radius, h - radius, radius, radians(0), radians(90));
+    ctx.arc(radius, h - radius, radius, radians(90), radians(180));
+
+    //roundRect(inset, inset, w - inset * 2, h - inset * 2, radius);
+  };
 };
-}
 
 // StringMorph /////////////////////////////////////////////////////////
 
@@ -11509,20 +11532,20 @@ HandMorph.prototype.processMouseMove = function (event) {
   });
   this.mouseOverList = mouseOverNew;
   this.mouseOverBounds = mouseOverBoundsNew;
-  
+
   // cursor handling
   var cursorMorph = this.morphAtPointer();
   var cursor = cursorMorph.hoverCursor;
 
   while (!cursor && cursorMorph.parent) {
-      cursorMorph = cursorMorph.parent;
-      cursor = cursorMorph.hoverCursor;
+    cursorMorph = cursorMorph.parent;
+    cursor = cursorMorph.hoverCursor;
   }
 
   if (cursor) {
-      this.world.worldCanvas.style.cursor = cursor;
+    this.world.worldCanvas.style.cursor = cursor;
   } else {
-      this.world.worldCanvas.style.cursor = "auto";
+    this.world.worldCanvas.style.cursor = "auto";
   }
 };
 
