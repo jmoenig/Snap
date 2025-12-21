@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.5.3";
+var SplitVersion = "1.5.4";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -8070,10 +8070,10 @@ IDE_Morph.prototype.looksMenuData = function () {
   var menu = new MenuMorph(this),
     world = this.world(),
     shiftClicked = world.currentKey === 16,
-    tick = new SymbolMorph("tick", MorphicPreferences.menuFontSize * 0.75),
+    tick = new SymbolMorph("tick", MorphicPreferences.menuFontSize * 0.75, WHITE),
     empty = tick.fullCopy(),
-    on = new SymbolMorph("checkedBox", MorphicPreferences.menuFontSize * 0.75),
-    off = new SymbolMorph("rectangle", MorphicPreferences.menuFontSize * 0.75);
+    on = new SymbolMorph("checkedBox", MorphicPreferences.menuFontSize * 0.75, WHITE),
+    off = new SymbolMorph("rectangle", MorphicPreferences.menuFontSize * 0.75, WHITE);
   menu.bgColor = this.accentColor;
   // menu.ideRender();
 
@@ -8460,7 +8460,7 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
 
   this.stageRatio = 1;
   this.isSmallStage = false;
-  this.controlBar.stageSizeButton.refresh();
+  this.projectControlBar.stageSizeButton.refresh();
   this.stage.stopVideo();
   this.setExtent(world.extent());
   Costume.prototype.maxDimensions = aPoint;
