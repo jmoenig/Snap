@@ -11464,7 +11464,6 @@ SpriteIconMorph.prototype.createThumbnail = function () {
     if (this.thumbnail) {
         this.thumbnail.destroy();
     }
-
     if (this.object.thumb) { // support nested sprites
         this.thumbnail = this.object.thumb(this.thumbSize);
         this.add(this.thumbnail);
@@ -11547,7 +11546,12 @@ SpriteIconMorph.prototype.createRotationButton = function () {
 
 SpriteIconMorph.prototype.step = function () {
     if (this.version !== this.object.version) {
-        this.createThumbnail();
+        if (!this.object.thumb) {
+            this.createThumbnail();
+        }
+        if (this.object instanceof SpriteMorph) {
+            this.createRotationButton();
+        }
         this.createLabel();
         this.fixLayout();
         this.version = this.object.version;

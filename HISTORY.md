@@ -57,6 +57,7 @@
 ### 2025-12-22
 * objects, gui: dynamically render sprite icons instead of creating bitmaps every time
 * objects, gui: dynamically render costume icons instead of creating bitmaps every time
+* gui: optimized rendering sprite and costume icons
 
 ### 2025-12-20
 * store: template-projects store their magnification level if it's above 100%
