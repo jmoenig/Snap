@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-December-19';
+modules.gui = '2025-December-22';
 
 // Declarations
 
@@ -11465,17 +11465,14 @@ SpriteIconMorph.prototype.createThumbnail = function () {
         this.thumbnail.destroy();
     }
 
-    this.thumbnail = new Morph();
-    this.thumbnail.isCachingImage = true;
-    this.thumbnail.bounds.setExtent(this.thumbSize);
-    if (this.object instanceof SpriteMorph) { // support nested sprites
-        this.thumbnail.cachedImage = this.object.fullThumbnail(
-            this.thumbSize,
-            this.thumbnail.cachedImage
-        );
+    if (this.object.thumb) { // support nested sprites
+        this.thumbnail = this.object.thumb(this.thumbSize);
         this.add(this.thumbnail);
         this.createRotationButton();
     } else {
+        this.thumbnail = new Morph();
+        this.thumbnail.isCachingImage = true;
+        this.thumbnail.bounds.setExtent(this.thumbSize);
         this.thumbnail.cachedImage = this.object.thumbnail(
             this.thumbSize,
             this.thumbnail.cachedImage

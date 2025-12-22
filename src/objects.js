@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-19';
+modules.objects = '2025-December-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -9727,6 +9727,52 @@ SpriteMorph.prototype.inheritedMethods = function () {
 };
 
 // SpriteMorph thumbnail
+
+SpriteMorph.prototype.thumb = function (extentPoint) {
+    // answer a new Morph of extentPoint dimensions that displays
+    // my thumbnail representation keeping the original aspect ratio
+    var myself = this,
+        thumb = new Morph(),
+        ext = extentPoint.divideBy(3),
+        i = 0;
+
+    thumb.render = function (ctx) {
+        var w = myself.width(),
+            h = myself.height(),
+            scale = Math.min(
+                (extentPoint.x / w),
+                (extentPoint.y / h)
+            ),
+            xOffset = (extentPoint.x - (w * scale)) / 2,
+            yOffset = (extentPoint.y - (h * scale)) / 2;
+
+        ctx.save();
+        ctx.scale(scale, scale);
+        ctx.translate(xOffset / scale, yOffset / scale);
+        myself.render(ctx);
+        ctx.restore();
+  
+        if (myself.anchor) {
+            ctx.drawImage(
+                myself.anchor.thumbnail(ext),
+                0,
+                0
+            );
+        }
+        for (i = 0; i < 3; i += 1) {
+            if (myself.parts[i]) {
+                ctx.drawImage(
+                    myself.parts[i].thumbnail(ext),
+                    i * ext.x,
+                    extentPoint.y - ext.y
+                );
+            }
+        }
+    };
+
+    thumb.setExtent(extentPoint);
+    return thumb;
+};
 
 SpriteMorph.prototype.thumbnail = function (extentPoint, recycleMe, noCorpse) {
     // answer a new Canvas of extentPoint dimensions containing
