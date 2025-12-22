@@ -13981,7 +13981,7 @@ Costume.prototype.thumb = function (extentPoint) {
             Math.floor(yOffset / scale)
         );
         ctx.restore();
-      };
+    };
 
     thumb.setExtent(extentPoint);
     return thumb;

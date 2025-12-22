@@ -11546,7 +11546,9 @@ SpriteIconMorph.prototype.createRotationButton = function () {
 
 SpriteIconMorph.prototype.step = function () {
     if (this.version !== this.object.version) {
-        if (!this.object.thumb) {
+        if (this.object.thumb) {
+            this.thumbnail.rerender();
+        } else {
             this.createThumbnail();
         }
         if (this.object instanceof SpriteMorph) {
