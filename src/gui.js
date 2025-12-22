@@ -2144,7 +2144,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   var rotationStyleButtons = [],
     thumbSize = new Point(45, 45),
     nameField,
-    padlock,
+    label,
     thumbnail,
     trashbutton,
     tabCorner = 10, //15,
@@ -2186,6 +2186,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     ctx.fill();
     ctx.stroke();
   };
+  this.spriteBar.setHeight(100);
   this.add(this.spriteBar);
   this.oldSpriteBar = new Morph();
   this.oldSpriteBar.color = this.frameColor;
@@ -2301,11 +2302,14 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   };
 
   nameField = new InputFieldMorph(this.currentSprite.name);
-  nameField.setWidth(100); // fixed dimensions
-  nameField.contrast = 90;
+  nameField.setWidth(128); // fixed dimensions
+  nameField.contrast = 0;
   nameField.fontSize = 10;
-  nameField.setPosition(myself.spriteBar.position().add(new Point(4, 4)));
-  nameField.typeInPadding = 6;
+  nameField.setPosition(
+    myself.spriteBar.position().add(new Point(0, 12))
+  );
+  nameField.doConstrastingColor = false;
+  nameField.typeInPadding = 8;
   this.spriteBar.add(nameField);
   this.spriteBar.nameField = nameField;
   nameField.fixLayout();
@@ -2318,87 +2322,13 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     nameField.setContents(myself.currentSprite.name);
   };
   this.spriteBar.reactToEdit = nameField.accept;
-  if (!(this.currentSprite instanceof StageMorph)) {
-    var xLabel = new StringMorph("x:"),
-      yLabel = new StringMorph("y:"),
-      dirLabel = new StringMorph("dir:"),
-      sizeLabel = new StringMorph("size:");
-    xLabel.color = this.buttonLabelColor;
-    xLabel.setPosition(nameField.topRight().add(new Point(0, 0)));
-    xLabel.fps = 10;
-    xLabel.step = () => (
-      (xLabel.text = `x: ${Math.round(myself.currentSprite.xPosition())}`),
-      xLabel.fixLayout(),
-      this.spriteBar.rerender()
-    );
-    this.spriteBar.add(xLabel);
 
-    yLabel.color = this.buttonLabelColor;
-    yLabel.setPosition(nameField.topRight().add(new Point(0, 10)));
-    yLabel.fps = 10;
-    yLabel.step = () => (
-      (yLabel.text = `y: ${Math.round(myself.currentSprite.yPosition())}`),
-      yLabel.fixLayout(),
-      this.spriteBar.rerender()
-    );
-    this.spriteBar.add(yLabel);
-
-    sizeLabel.color = this.buttonLabelColor;
-    sizeLabel.setPosition(xLabel.topRight().add(new Point(40, 0)));
-    sizeLabel.fps = 10;
-    sizeLabel.step = () => (
-      (sizeLabel.text = `size: ${Math.round(myself.currentSprite.getScale())}`),
-      sizeLabel.fixLayout(),
-      this.spriteBar.rerender()
-    );
-    this.spriteBar.add(sizeLabel);
-
-    dirLabel.color = this.buttonLabelColor;
-    dirLabel.setPosition(yLabel.topRight().add(new Point(40, 0)));
-    dirLabel.fps = 10;
-    dirLabel.step = () => (
-      (dirLabel.text = `dir: ${Math.round(myself.currentSprite.direction())}`),
-      dirLabel.fixLayout(),
-      this.spriteBar.rerender()
-    );
-    this.spriteBar.add(dirLabel);
-  }
-
-  // padlock
-  padlock = new ToggleMorph(
-    "checkbox",
-    null,
-    () => {
-      this.currentSprite.isDraggable = !this.currentSprite.isDraggable;
-      this.currentSprite.recordUserEdit(
-        "sprite",
-        "draggable",
-        this.currentSprite.isDraggable
-      );
-    },
-    localize("draggable"),
-    () => this.currentSprite.isDraggable
-  );
-  padlock.label.isBold = false;
-  padlock.label.setColor(this.buttonLabelColor);
-  padlock.color = tabColors[2];
-  padlock.highlightColor = tabColors[0];
-  padlock.pressColor = tabColors[1];
-
-  padlock.tick.shadowOffset = MorphicPreferences.isFlat
-    ? ZERO
-    : new Point(-1, -1);
-  padlock.tick.shadowColor = BLACK;
-  padlock.tick.color = this.buttonLabelColor;
-  padlock.tick.isBold = false;
-  padlock.tick.fixLayout();
-
-  padlock.setPosition(nameField.bottomLeft().add(2));
-  padlock.fixLayout();
-  this.spriteBar.add(padlock);
-  if (this.currentSprite instanceof StageMorph) {
-    padlock.hide();
-  }
+  label = new StringMorph("Sprite", 10, null, true);
+  label.setColor(new Color(87, 94, 117));
+  label.setCenter(nameField.center());
+  label.setLeft(myself.spriteBar.left() + 12);
+  nameField.setLeft(label.right() + 4);
+  this.spriteBar.add(label);
 
   // tab bar
   tabBar.tabTo = function (tabString) {
@@ -2501,19 +2431,9 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   this.spriteBar.fixLayout = function () {
     this.setTop(myself.stage.bottom() + padding);
     this.setLeft(myself.stage.left());
-    nameField.bounds.corner.x = Math.min(
-      nameField.left() + 100,
-      world.right() - 5
-    );
 
-    nameField.fixLayout();
-    nameField.bounds.corner.x = Math.min(
-      nameField.left() + 100,
-      world.right() - 5
-    );
-
-    trashbutton.setTop(this.top() + padding);
-    trashbutton.setRight(this.right() - padding);
+  trashbutton.setTop(this.top() + padding)
+  trashbutton.setRight(this.right() - padding);
   };
 };
 
@@ -3111,7 +3031,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.spriteBar.setLeft(this.stage.left());
     this.spriteBar.setTop(this.stage.bottom() + padding);
     this.spriteBar.setWidth(this.stage.width());
-    this.spriteBar.setHeight(Math.round(this.logo.height() * 1.2));
     this.spriteBar.fixLayout();
 
     // corral
