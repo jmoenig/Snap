@@ -7962,9 +7962,12 @@ IDE_Morph.prototype.microphoneMenu = function () {
     pos = this.controlBar.settingsButton.bottomLeft(),
     resolutions = ["low", "normal", "high", "max"],
     microphone = this.stage.microphone,
-    tick = new SymbolMorph("tick", MorphicPreferences.menuFontSize * 0.75),
-    on = new SymbolMorph("checkedBox", MorphicPreferences.menuFontSize * 0.75),
+    tick = new SymbolMorph("tick", MorphicPreferences.menuFontSize * 0.75, WHITE),
+    on = new SymbolMorph("checkedBox", MorphicPreferences.menuFontSize * 0.75, WHITE),
     empty = tick.fullCopy();
+
+    menu.ideRender();
+    menu.bgColor = this.accentColor;
 
   empty.render = nop;
   if (microphone.isReady) {
