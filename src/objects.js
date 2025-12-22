@@ -13956,6 +13956,37 @@ Costume.prototype.editRotationPointOnly = function (aWorld, anIDE) {
 
 // Costume thumbnail
 
+Costume.prototype.thumb = function (extentPoint) {
+    // answer a new Morph of extentPoint dimensions that displays
+    // my thumbnail representation keeping the original aspect ratio
+    var myself = this,
+        thumb = new Morph();
+
+    thumb.render = function (ctx) {
+        var w = myself.width(),
+            h = myself.height(),
+            scale = Math.min(
+                (extentPoint.x / w),
+                (extentPoint.y / h)
+            ),
+            xOffset = (extentPoint.x - (w * scale)) / 2,
+            yOffset = (extentPoint.y - (h * scale)) / 2;
+
+        ctx.save();
+        ctx.scale(scale, scale);
+        ctx.translate(xOffset / scale, yOffset / scale);
+        ctx.drawImage(
+            myself.contents,
+            Math.floor(xOffset / scale),
+            Math.floor(yOffset / scale)
+        );
+        ctx.restore();
+      };
+
+    thumb.setExtent(extentPoint);
+    return thumb;
+};
+
 Costume.prototype.shrinkToFit = function (extentPoint) {
     if (extentPoint.x < this.width() || (extentPoint.y < this.height())) {
         this.contents = this.thumbnail(extentPoint, null, true);

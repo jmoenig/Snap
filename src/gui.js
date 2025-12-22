@@ -11468,7 +11468,9 @@ SpriteIconMorph.prototype.createThumbnail = function () {
     if (this.object.thumb) { // support nested sprites
         this.thumbnail = this.object.thumb(this.thumbSize);
         this.add(this.thumbnail);
-        this.createRotationButton();
+        if (this.object instanceof SpriteMorph) {
+            this.createRotationButton();
+        }
     } else {
         this.thumbnail = new Morph();
         this.thumbnail.isCachingImage = true;
