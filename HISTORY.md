@@ -34,6 +34,7 @@
     * flat design mode now (again) supports rounded corners (sigh...)
     * dialog boxes are more bright and their buttons more discernible in bright mode 
     * rearranged IDE settings menu items into "looks" submenu
+    * sprite icons no longer blur when the sprite size is reduced or the zoom level increases
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
         * added optional "max height" input to "fancy say / think" library commands
@@ -58,6 +59,7 @@
 * objects, gui: dynamically render sprite icons instead of creating bitmaps every time
 * objects, gui: dynamically render costume icons instead of creating bitmaps every time
 * gui: optimized rendering sprite and costume icons
+* gui: optimized rendering of sprite icon in the sprite editor
 
 ### 2025-12-20
 * store: template-projects store their magnification level if it's above 100%
