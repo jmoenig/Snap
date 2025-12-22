@@ -2982,6 +2982,14 @@ DialogBoxMorph.prototype.createButtons = function () {
   }
   this.buttons = new AlignmentMorph("row", this.padding);
   this.addCloseButton();
+  this.buttons.fixLayout = (...args) => (
+    AlignmentMorph.prototype.fixLayout.call(this.buttons, ...args),
+    this.closeButton.setPosition(
+    this.topRight().add(
+      new Point(-this.padding - this.closeButton.width(), this.padding / 2)
+    )
+  )
+  )
   this.add(this.buttons);
 };
 

@@ -580,10 +580,12 @@ SpriteMorph.prototype.primitiveBlocks = function () {
     doSwitchToCostume: {
       type: "command",
       category: "looks",
-      spec: "set costume to %cst",
+      spec: "switch costume to %cst",//"set costume to %cst",
       animation: true,
       code: "wear",
     },
+    /*
+    // Never EVER do this:
     doSwitchToCostumeNew: {
       type: "command",
       category: "looks",
@@ -598,7 +600,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       animation: true,
       defaults: [1],
       code: "wearNum",
-    },
+    },*/
     doWearNextCostume: {
       type: "command",
       category: "looks",
@@ -3991,8 +3993,7 @@ SpriteMorph.prototype.blockTemplates = function (
     blocks.push(watcherToggle("direction"));
     blocks.push(block("direction", this.inheritsAttribute("direction")));
   } else if (category === "looks") {
-    blocks.push(block("doSwitchToCostumeNew"));
-    blocks.push(block("doSwitchToCostumeNumber"));
+    blocks.push(block("doSwitchToCostume"));
     blocks.push(block("doWearNextCostume"));
     blocks.push(watcherToggle("getCostumeIdx"));
     blocks.push(block("getCostumeIdx", this.inheritsAttribute("costume #")));
