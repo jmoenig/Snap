@@ -5705,6 +5705,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         } else if (isSVG) {
             img.onload = function () {
                 icon.object = new SVG_Costume(img, item.name);
+                icon.createThumbnail();
                 icon.refresh();
             };
             this.getURL(
@@ -5717,6 +5718,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
                 var canvas = newCanvas(new Point(img.width, img.height), true);
                 canvas.getContext('2d').drawImage(img, 0, 0);
                 icon.object = new Costume(canvas, item.name);
+                icon.createThumbnail();
                 icon.refresh();
             };
             img.src = url;
