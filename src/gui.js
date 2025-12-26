@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.5.9";
+var SplitVersion = "1.6.0";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3812,7 +3812,13 @@ IDE_Morph.prototype.applySavedSettings = function () {
     tables = this.getSetting("tables"),
     tableLines = this.getSetting("tableLines"),
     autoWrapping = this.getSetting("autowrapping"),
+    accentColor =  this.getSetting("accentColor"),
     solidshadow = this.getSetting("solidshadow");
+
+  this.accentColor = accentColor == "red" ? new Color(255, 76, 76) :
+    accentColor == "blue" ? new Color(133, 92, 214) :
+    new Color(76, 151, 255);
+    
 
   // design
   this.setFlatDesign();
@@ -8117,36 +8123,6 @@ IDE_Morph.prototype.looksMenuData = function () {
 
   empty.render = nop;
 
-  /*menu.addItem(
-        [
-            MorphicPreferences.isFlat || IDE_Morph.prototype.isBright ? empty
-                : tick,
-            localize('Default')
-        ],
-        this.defaultLooks
-    );
-    menu.addItem(
-        [
-            MorphicPreferences.isFlat && IDE_Morph.prototype.isBright ? tick
-                : empty,
-            localize('Flat Bright')
-        ],
-        this.flatBrightLooks
-    );
-    menu.addLine();*/
-  /*menu.addPreference(
-        'Flat design',
-        () => {
-            if (MorphicPreferences.isFlat) {
-                return this.defaultDesign();
-            }
-            this.flatDesign();
-        },
-        MorphicPreferences.isFlat,
-        'uncheck for default\nGUI design',
-        'check for alternative\nGUI design',
-        false
-    );*/
   menu.addPreference(
     "Bright theme",
     () => {
@@ -8196,8 +8172,37 @@ IDE_Morph.prototype.looksMenuData = function () {
     "check for square string inputs",
     false
   );
+  menu.addMenu("Accent Color...", this.accentColorMenu());
   return menu;
 };
+IDE_Morph.prototype.accentColorMenu = function () {
+  var menu = new MenuMorph(this),
+    colors = [
+      new Color(255, 76, 76),
+      new Color(133, 92, 214),
+      new Color(76, 151, 255)
+    ],
+    tick = new SymbolMorph("tick", MorphicPreferences.menuFontSize * 0.75, WHITE),
+    empty = tick.fullCopy(),
+    on = new SymbolMorph("circleSolid", MorphicPreferences.menuFontSize * 0.75, WHITE),
+    off = new SymbolMorph("circle", MorphicPreferences.menuFontSize * 0.75, WHITE);
+  menu.bgColor = this.accentColor;
+  empty.render = nop;
+    menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
+    if (!hide || shiftClicked) {
+      menu.addItem(
+        [test ? on : off, localize(label)],
+        toggle,
+        test ? onHint : offHint,
+        hide ? new Color(255, 100, 100) : null
+      );
+    }
+  };
+  menu.addPreference("Red", () => (this.accentColor = colors[0], this.saveSetting("accentColor", "red"), this.refreshIDE()), this.accentColor.eq(colors[0]));
+menu.addPreference("Purple", () => (this.accentColor = colors[1], this.saveSetting("accentColor", "purple"), this.refreshIDE()), this.accentColor.eq(colors[1]));
+  menu.addPreference("Blue", () => (this.accentColor = colors[2], this.saveSetting("accentColor", "blue"), this.refreshIDE()), this.accentColor.eq(colors[2]));
+    return menu;
+}
 
 // IDE_Morph blocks scaling
 
