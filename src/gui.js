@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.2";
+var SplitVersion = "1.6.3";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1485,7 +1485,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
   buttonIcon = new SymbolMorph("file", 20);
   buttonLabel = new TextMorph("File");
-  buttonArrow = new ArrowMorph("vertical", 16, 2, colors[0]);
+  buttonArrow = new ArrowMorph("vertical", 16, 2, WHITE);
   buttonArrow.scale = 1;
   button.setHeight(48);
   button.setWidth(
@@ -1520,7 +1520,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
   buttonIcon = new SymbolMorph("gears", 20);
   buttonLabel = new TextMorph("Settings");
-  buttonArrow = new ArrowMorph("vertical", 16, 2, colors[0]);
+  buttonArrow = new ArrowMorph("vertical", 16, 2, WHITE);
   buttonArrow.scale = 1;
   button.setHeight(48);
   button.setWidth(
@@ -1579,7 +1579,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
   buttonIcon = new SymbolMorph("cloudOutline", 11);
   buttonLabel = new TextMorph("Cloud");
-  buttonArrow = new ArrowMorph("vertical", 16, 2, colors[0]);
+  buttonArrow = new ArrowMorph("vertical", 16, 2, WHITE);
   buttonArrow.scale = 1;
   button.setHeight(48);
   button.setWidth(
