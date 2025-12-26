@@ -8074,7 +8074,7 @@ MenuMorph.prototype.popup = function (world, pos) {
 
   this.createItems();
   this.setPosition(pos);
-  this.addShadow(new Point(...([0, 0])), 50);
+  this?.noShadow || this.addShadow(new Point(...([0, 0])), 50);
   this.keepWithin(world);
 
   if (this.bottom() > world.bottom()) {
@@ -8312,6 +8312,7 @@ MenuMorph.prototype.ideRender = function () {
 
     //roundRect(inset, inset, w - inset * 2, h - inset * 2, radius);
   };
+  this.noShadow = true;
 };
 
 // StringMorph /////////////////////////////////////////////////////////
