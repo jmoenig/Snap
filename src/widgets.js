@@ -3593,6 +3593,7 @@ InputFieldMorph.prototype.fixLayout = function () {
   arrow.setPosition(
     new Point(this.right() - arrow.width() - this.edge, contents.top())
   );
+  this.hoverCursor = this.isReadOnly ? "pointer" : "text";
 };
 
 // InputFieldMorph events:

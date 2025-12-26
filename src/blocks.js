@@ -12521,6 +12521,7 @@ InputSlotMorph.prototype.fixLayout = function () {
 
   contents.isNumeric = this.isNumeric && !this.isAlphanumeric;
   contents.isEditable = !this.isReadOnly;
+  this.hoverCursor = this.isReadOnly ? "pointer" : "text";
   if (this.isReadOnly) {
     contents.disableSelecting();
     contents.color = WHITE;
