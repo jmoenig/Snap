@@ -1091,7 +1091,7 @@ IDE_Morph.prototype.createLogo = function () {
   this.logo.renderCachedTexture = function (ctx) {
     ctx.drawImage(
       this.cachedTexture,
-       5,
+      5,
       Math.round((this.height() - this.cachedTexture.height) / 2) + 5
     );
     this.changed();
@@ -1121,7 +1121,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
     cloudButton,
     x,
     colors = [
-        //*
+      //*
       this.frameColor,
       this.accentColor.withAlpha(0.1), //this.frameColor.darker(50),
       this.frameColor.darker(50),
@@ -1214,11 +1214,13 @@ IDE_Morph.prototype.createProjectControlBar = function () {
           myself.stage.threads.pauseCustomHatBlocks
         : true
   );
-  console.warn((() =>
+  console.warn(
+    (() =>
       this.stage // query
         ? myself.stage.enableCustomHatBlocks &&
           myself.stage.threads.pauseCustomHatBlocks
-        : true)())
+        : true)()
+  );
 
   button.corner = 4;
   button.color = colors[0];
@@ -1398,7 +1400,9 @@ IDE_Morph.prototype.createControlBar = function () {
       activeColor.lighter(40),
       activeColor.lighter(40),
     ],
-    buttonIcon, buttonLabel, buttonArrow,
+    buttonIcon,
+    buttonLabel,
+    buttonArrow,
     myself = this;
 
   if (this.controlBarBackground) {
@@ -1457,8 +1461,6 @@ IDE_Morph.prototype.createControlBar = function () {
   this.controlBar.add(steppingButton);
   this.controlBar.steppingButton = steppingButton; // for refreshing
 
-  
-
   // steppingSlider
   slider = new SliderMorph(
     61,
@@ -1479,17 +1481,16 @@ IDE_Morph.prototype.createControlBar = function () {
   this.controlBar.steppingSlider = slider;
 
   // projectButton
-  button = new TriggerMorph(
-    this,
-    "projectMenu"
-  );
-  
+  button = new TriggerMorph(this, "projectMenu");
+
   buttonIcon = new SymbolMorph("file", 20);
   buttonLabel = new TextMorph("File");
   buttonArrow = new ArrowMorph("vertical", 16, 2, colors[0]);
   buttonArrow.scale = 1;
   button.setHeight(48);
-  button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
+  button.setWidth(
+    buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30
+  );
   button.color = this.accentColor;
   button.highlightColor = this.accentColor.darker(25);
   button.pressColor = button.highlightColor;
@@ -1504,7 +1505,7 @@ IDE_Morph.prototype.createControlBar = function () {
   buttonLabel.isBold = true;
   buttonArrow.setCenter(button.center());
   buttonArrow.setLeft(buttonLabel.right() + 5);
-  
+
   button.label.destroy();
   button.add(buttonIcon);
   button.add(buttonLabel);
@@ -1515,17 +1516,16 @@ IDE_Morph.prototype.createControlBar = function () {
   this.controlBar.projectButton = projectButton; // for menu positioning
 
   // settingsButton
-  button = new TriggerMorph(
-    this,
-    "settingsMenu"
-  );
-  
+  button = new TriggerMorph(this, "settingsMenu");
+
   buttonIcon = new SymbolMorph("gears", 20);
   buttonLabel = new TextMorph("Settings");
   buttonArrow = new ArrowMorph("vertical", 16, 2, colors[0]);
   buttonArrow.scale = 1;
   button.setHeight(48);
-  button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
+  button.setWidth(
+    buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30
+  );
   button.color = this.accentColor;
   button.highlightColor = this.accentColor.darker(25);
   button.pressColor = button.highlightColor;
@@ -1540,7 +1540,7 @@ IDE_Morph.prototype.createControlBar = function () {
   buttonLabel.isBold = true;
   buttonArrow.setCenter(button.center());
   buttonArrow.setLeft(buttonLabel.right() + 5);
-  
+
   button.label.destroy();
   button.add(buttonIcon);
   button.add(buttonLabel);
@@ -1575,23 +1575,22 @@ IDE_Morph.prototype.createControlBar = function () {
   button.refresh();
 
   // cloudButton
-  button = new TriggerMorph(
-    this,
-    "cloudMenu"
-  );
-  
+  button = new TriggerMorph(this, "cloudMenu");
+
   buttonIcon = new SymbolMorph("cloudOutline", 11);
   buttonLabel = new TextMorph("Cloud");
   buttonArrow = new ArrowMorph("vertical", 16, 2, colors[0]);
   buttonArrow.scale = 1;
   button.setHeight(48);
-  button.setWidth(buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30);
+  button.setWidth(
+    buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30
+  );
   button.color = this.accentColor;
   button.highlightColor = this.accentColor.darker(25);
   button.pressColor = button.highlightColor;
 
-  button.refresh = function() {
-    buttonIcon.name = !isNil(myself.cloud.username) ? "cloud" : "cloudOutline"
+  button.refresh = function () {
+    buttonIcon.name = !isNil(myself.cloud.username) ? "cloud" : "cloudOutline";
   };
 
   buttonIcon.setColor(WHITE);
@@ -1604,7 +1603,7 @@ IDE_Morph.prototype.createControlBar = function () {
   buttonLabel.isBold = true;
   buttonArrow.setCenter(button.center());
   buttonArrow.setLeft(buttonLabel.right() + 5);
-  
+
   button.label.destroy();
   button.add(buttonIcon);
   button.add(buttonLabel);
@@ -1646,13 +1645,11 @@ IDE_Morph.prototype.createControlBar = function () {
       x += button.width();
     });*/
 
-    
     settingsButton.setCenter(myself.controlBar.center());
     settingsButton.setLeft(this.left());
 
     slider.setCenter(myself.controlBar.center());
     slider.setRight(this.right() - padding);
-    
 
     steppingButton.setCenter(myself.controlBar.center());
     steppingButton.setRight(slider.left() - padding);
@@ -1691,8 +1688,6 @@ IDE_Morph.prototype.createControlBar = function () {
     myself.projectControlBar.refreshResumeSymbol();
   };
 
-  
-
   this.controlBar.updateLabel = function () {
     var prefix = myself.hasUnsavedEdits() ? "\u270E " : "",
       suffix = myself.world().isDevMode
@@ -1714,9 +1709,10 @@ IDE_Morph.prototype.createControlBar = function () {
         : "";
     name = myself.getProjectName() || localize("untitled");
     if (!myself.config.preserveTitle) {
-      document.title =
-        myself.getProjectName() ? (name + " on Split!") : ("Split! " + SplitVersion);
-        // "Split! " + (myself.getProjectName() ? name : SplitVersion);
+      document.title = myself.getProjectName()
+        ? name + " on Split!"
+        : "Split! " + SplitVersion;
+      // "Split! " + (myself.getProjectName() ? name : SplitVersion);
     }
     txt = new StringMorph(
       prefix + name + scene + suffix,
@@ -1744,8 +1740,7 @@ IDE_Morph.prototype.createControlBar = function () {
     this.label.setCenter(this.center());
     if (myself.cloud.disabled)
       this.label.setLeft(this.settingsButton.right() + padding);
-    else
-      this.label.setLeft(this.cloudButton.right() + padding);
+    else this.label.setLeft(this.cloudButton.right() + padding);
     this.add(this.label);
   };
 };
@@ -1815,9 +1810,9 @@ IDE_Morph.prototype.createCategories = function () {
     ctx.strokeStyle = myself.borderColor.toString();
     ctx.fillStyle = this.color.toString();
 
-    ctx.fillRect(0, 0, this.width(), this.height())
-    ctx.strokeRect(0, 0, this.width(), this.height())
-  }
+    ctx.fillRect(0, 0, this.width(), this.height());
+    ctx.strokeRect(0, 0, this.width(), this.height());
+  };
 
   function changePalette(category) {
     return () => {
@@ -1892,15 +1887,15 @@ IDE_Morph.prototype.createCategories = function () {
       )
     );
 
-    button.mouseEnter = function() {
+    button.mouseEnter = function () {
       this.label.setColor(new Color(76, 151, 255));
       this.refresh();
-    }
+    };
 
-    button.mouseLeave = function() {
+    button.mouseLeave = function () {
       this.label.setColor(this.labelColor);
       this.refresh();
-    }
+    };
 
     if (color) {
       button.userMenu = () => {
@@ -2021,10 +2016,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     this.palette.render = function (ctx) {
       ctx.strokeStyle = myself.borderColor.toString();
       ctx.fillStyle = this.color.toString();
-      
-      ctx.fillRect(0, 0, this.width(), this.height())
-      ctx.strokeRect(0, 0, this.width(), this.height())
-    }
+
+      ctx.fillRect(0, 0, this.width(), this.height());
+      ctx.strokeRect(0, 0, this.width(), this.height());
+    };
 
     // search toolbar (floating cancel button):
     /* commented out for now
@@ -2182,7 +2177,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   this.spriteBar.render = function (ctx) {
     ctx.beginPath();
     ctx.roundRect(0, 0, this.width(), this.height(), [8, 8, 0, 0]);
-    
+
     ctx.fillStyle = this.color.toString();
     ctx.strokeStyle = myself.borderColor;
     ctx.fill();
@@ -2192,7 +2187,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   this.oldSpriteBar = new Morph();
   this.oldSpriteBar.color = this.frameColor;
   this.add(this.oldSpriteBar);
-  
+
   // trashbutton
   trashbutton = new PushButtonMorph(
     this,
@@ -2306,9 +2301,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   nameField.setWidth(100); // fixed dimensions
   nameField.contrast = 90;
   nameField.fontSize = 10;
-  nameField.setPosition(
-    myself.spriteBar.position().add(new Point(4, 4))
-  );
+  nameField.setPosition(myself.spriteBar.position().add(new Point(4, 4)));
   nameField.typeInPadding = 6;
   this.spriteBar.add(nameField);
   this.spriteBar.nameField = nameField;
@@ -2516,8 +2509,8 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
       world.right() - 5
     );
 
-  trashbutton.setTop(this.top() + padding)
-  trashbutton.setRight(this.right() - padding);
+    trashbutton.setTop(this.top() + padding);
+    trashbutton.setRight(this.right() - padding);
   };
 };
 
@@ -2621,10 +2614,10 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   this.corral = new Morph();
   this.corral.color = this.frameColor;
   this.corral.getRenderColor = ScriptsMorph.prototype.getRenderColor;
-  this.corral.render = function(ctx) {
+  this.corral.render = function (ctx) {
     ctx.fillStyle = this.color.toString();
     ctx.fillRect(0, 0, this.width(), this.height());
-    
+
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(0, this.height());
@@ -2632,7 +2625,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     ctx.lineTo(this.width(), this.height());
     ctx.strokeStyle = myself.borderColor;
     ctx.stroke();
-  }
+  };
   this.add(this.corral);
 
   this.corral.stageIcon = new SpriteIconMorph(this.stage);
@@ -2764,13 +2757,14 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     ctx.roundRect(0, 0, this.width(), this.height(), [18, 18, 0, 0]);
     ctx.fillStyle = this.color.toString();
     ctx.fill();
-  }
-  
+  };
+
   this.corral.newSpriteFlyout.mouseLeave = function () {
-    if (this.world().hand.morphAtPointer() == myself.corral.newSpriteButton) return;
+    if (this.world().hand.morphAtPointer() == myself.corral.newSpriteButton)
+      return;
 
     this.hide();
-  }
+  };
 
   this.corral.newSpriteFlyout.fixLayout = function () {
     this.turtle.setBottom(this.bottom() - 26);
@@ -2784,56 +2778,79 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     this.paintbutton.setBottom(this.camButton.top());
     this.paintbutton.setLeft(this.left());
     this.paintbutton.label.setCenter(this.paintbutton.center());
-  }
+  };
   this.corral.add(this.corral.newSpriteFlyout);
 
   // newSpriteFlyout - turtle
-  this.corral.newSpriteFlyout.turtle = new TriggerMorph(
-    this, () => {
-      this.addNewSprite(true);
-      this.corral.newSpriteFlyout.hide();
-    }
-  );
+  this.corral.newSpriteFlyout.turtle = new TriggerMorph(this, () => {
+    this.addNewSprite(true);
+    this.corral.newSpriteFlyout.hide();
+  });
   this.corral.newSpriteFlyout.turtle.label.destroy();
-  this.corral.newSpriteFlyout.turtle.label = new SymbolMorph("turtle", 20, WHITE);
-  this.corral.newSpriteFlyout.turtle.add(this.corral.newSpriteFlyout.turtle.label);
+  this.corral.newSpriteFlyout.turtle.label = new SymbolMorph(
+    "turtle",
+    20,
+    WHITE
+  );
+  this.corral.newSpriteFlyout.turtle.add(
+    this.corral.newSpriteFlyout.turtle.label
+  );
   this.corral.newSpriteFlyout.turtle.color = this.accentColor;
   this.corral.newSpriteFlyout.turtle.highlightColor = new Color(15, 189, 140);
   this.corral.newSpriteFlyout.turtle.setExtent(new Point(36, 36));
-  this.corral.newSpriteFlyout.turtle._render = this.corral.newSpriteFlyout.turtle.render;
+  this.corral.newSpriteFlyout.turtle._render =
+    this.corral.newSpriteFlyout.turtle.render;
   this.corral.newSpriteFlyout.add(this.corral.newSpriteFlyout.turtle);
 
   // newSpriteFlyout - camButton
-  this.corral.newSpriteFlyout.camButton = new TriggerMorph(
-    this, () => {
-      this.newCamSprite();
-      this.corral.newSpriteFlyout.hide();
-    }
-  );
+  this.corral.newSpriteFlyout.camButton = new TriggerMorph(this, () => {
+    this.newCamSprite();
+    this.corral.newSpriteFlyout.hide();
+  });
   this.corral.newSpriteFlyout.camButton.label.destroy();
-  this.corral.newSpriteFlyout.camButton.label = new SymbolMorph("camera", 20, WHITE);
-  this.corral.newSpriteFlyout.camButton.add(this.corral.newSpriteFlyout.camButton.label);
+  this.corral.newSpriteFlyout.camButton.label = new SymbolMorph(
+    "camera",
+    20,
+    WHITE
+  );
+  this.corral.newSpriteFlyout.camButton.add(
+    this.corral.newSpriteFlyout.camButton.label
+  );
   this.corral.newSpriteFlyout.camButton.color = this.accentColor;
-  this.corral.newSpriteFlyout.camButton.highlightColor = new Color(15, 189, 140);
+  this.corral.newSpriteFlyout.camButton.highlightColor = new Color(
+    15,
+    189,
+    140
+  );
   this.corral.newSpriteFlyout.camButton.setExtent(new Point(36, 36));
-  this.corral.newSpriteFlyout.camButton._render = this.corral.newSpriteFlyout.camButton.render;
+  this.corral.newSpriteFlyout.camButton._render =
+    this.corral.newSpriteFlyout.camButton.render;
   this.corral.newSpriteFlyout.add(this.corral.newSpriteFlyout.camButton);
 
   // newSpriteFlyout - paintbutton
-  this.corral.newSpriteFlyout.paintbutton = new TriggerMorph(
-    this, () => {
-      this.paintNewSprite();
-      this.corral.newSpriteFlyout.hide();
-    }
-  );
+  this.corral.newSpriteFlyout.paintbutton = new TriggerMorph(this, () => {
+    this.paintNewSprite();
+    this.corral.newSpriteFlyout.hide();
+  });
   this.corral.newSpriteFlyout.paintbutton.label.destroy();
-  this.corral.newSpriteFlyout.paintbutton.label = new SymbolMorph("brush", 20, WHITE);
-  this.corral.newSpriteFlyout.paintbutton.add(this.corral.newSpriteFlyout.paintbutton.label);
+  this.corral.newSpriteFlyout.paintbutton.label = new SymbolMorph(
+    "brush",
+    20,
+    WHITE
+  );
+  this.corral.newSpriteFlyout.paintbutton.add(
+    this.corral.newSpriteFlyout.paintbutton.label
+  );
   this.corral.newSpriteFlyout.paintbutton.color = this.accentColor;
-  this.corral.newSpriteFlyout.paintbutton.highlightColor = new Color(15, 189, 140);
+  this.corral.newSpriteFlyout.paintbutton.highlightColor = new Color(
+    15,
+    189,
+    140
+  );
   this.corral.newSpriteFlyout.paintbutton.setExtent(new Point(36, 36));
-  this.corral.newSpriteFlyout.paintbutton._render = this.corral.newSpriteFlyout.paintbutton.render;
-  this.corral.newSpriteFlyout.paintbutton.render = function(ctx) {
+  this.corral.newSpriteFlyout.paintbutton._render =
+    this.corral.newSpriteFlyout.paintbutton.render;
+  this.corral.newSpriteFlyout.paintbutton.render = function (ctx) {
     ctx.beginPath();
     ctx.roundRect(0, 0, this.width(), this.height(), [18, 18, 0, 0]);
     ctx.closePath();
@@ -2841,12 +2858,13 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
 
     this._render(ctx);
     ctx.restore();
-  }
+  };
   this.corral.newSpriteFlyout.add(this.corral.newSpriteFlyout.paintbutton);
 
   // newSpriteButton
   this.corral.newSpriteButton = new PushButtonMorph(
-    this, "addNewSprite",
+    this,
+    "addNewSprite",
     new SymbolMorph("newSprite", 28)
   );
   this.corral.newSpriteButton.color = this.accentColor;
@@ -2855,20 +2873,26 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   this.corral.newSpriteButton.outlineColor = new Color(198, 189, 239);
   this.corral.newSpriteButton.outline = 4;
 
-  this.corral.newSpriteButton._mouseEnter = this.corral.newSpriteButton.mouseEnter;
+  this.corral.newSpriteButton._mouseEnter =
+    this.corral.newSpriteButton.mouseEnter;
   this.corral.newSpriteButton.mouseEnter = function () {
     this._mouseEnter();
 
     myself.corral.newSpriteFlyout.show();
-  }
-  this.corral.newSpriteButton._mouseLeave = this.corral.newSpriteButton.mouseLeave;
+  };
+  this.corral.newSpriteButton._mouseLeave =
+    this.corral.newSpriteButton.mouseLeave;
   this.corral.newSpriteButton.mouseLeave = function () {
     this._mouseLeave();
 
-    if (this.world().hand.morphAtPointer() == myself.corral.newSpriteFlyout) return;
-    if (this.world().hand.morphAtPointer().parent == myself.corral.newSpriteFlyout) return;
+    if (this.world().hand.morphAtPointer() == myself.corral.newSpriteFlyout)
+      return;
+    if (
+      this.world().hand.morphAtPointer().parent == myself.corral.newSpriteFlyout
+    )
+      return;
     myself.corral.newSpriteFlyout.hide();
-  }
+  };
 
   this.corral.add(this.corral.newSpriteButton);
 };
@@ -2895,8 +2919,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     this.controlBar.fixLayout();
     this.controlBarBackground.setWidth(this.width());
     this.controlBarBackground.setPosition(new Point(0, 0));
-    
-    
+
     // categories
     this.categories.setLeft(this.logo.left());
     this.categories.setTop(
@@ -2999,10 +3022,11 @@ IDE_Morph.prototype.fixLayout = function (situation) {
       this.paletteHandle.hide();
       this.extensionButton.hide();
     } else {
-        this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
-        this.stage.setTop(
-            
-            cnf.hideControls ? this.top() + border : this.controlBar.bottom() + padding
+      this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
+      this.stage.setTop(
+        cnf.hideControls
+          ? this.top() + border
+          : this.controlBar.bottom() + padding
       );
       this.stage.setRight(this.right() - border - 10);
       if (cnf.noSprites) {
@@ -3024,13 +3048,13 @@ IDE_Morph.prototype.fixLayout = function (situation) {
       this.stageHandle.fixLayout();
       this.paletteHandle.fixLayout();
     }
-    
-    this.stage.moveBy(new Point(0, this.projectControlBar.height()))
-    this.projectControlBar.setWidth(this.stage.width())
+
+    this.stage.moveBy(new Point(0, this.projectControlBar.height()));
+    this.projectControlBar.setWidth(this.stage.width());
     this.projectControlBar.setRight(this.controlBar.right());
-    this.projectControlBar.setTop(this.controlBar.bottom())
+    this.projectControlBar.setTop(this.controlBar.bottom());
     this.projectControlBar.fixLayout();
-    
+
     this.controlBar.fixLayout();
 
     // oldSpriteBar
@@ -3040,7 +3064,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             : this.paletteWidth + padding + border*/
     );
     this.oldSpriteBar.setTop(
-      cnf.hideControls ? this.top() + border : this.controlBar.bottom() + padding
+      cnf.hideControls
+        ? this.top() + border
+        : this.controlBar.bottom() + padding
     );
     this.oldSpriteBar.setWidth(
       Math.max(0, this.stage.left() - padding - this.oldSpriteBar.left())
@@ -3812,13 +3838,15 @@ IDE_Morph.prototype.applySavedSettings = function () {
     tables = this.getSetting("tables"),
     tableLines = this.getSetting("tableLines"),
     autoWrapping = this.getSetting("autowrapping"),
-    accentColor =  this.getSetting("accentColor"),
+    accentColor = this.getSetting("accentColor"),
     solidshadow = this.getSetting("solidshadow");
 
-  this.accentColor = accentColor == "red" ? new Color(255, 76, 76) :
-    accentColor == "blue" ? new Color(133, 92, 214) :
-    new Color(76, 151, 255);
-    
+  this.accentColor =
+    accentColor == "red"
+      ? new Color(255, 76, 76)
+      : accentColor == "blue"
+      ? new Color(133, 92, 214)
+      : new Color(76, 151, 255);
 
   // design
   this.setFlatDesign();
@@ -4468,7 +4496,7 @@ IDE_Morph.prototype.snapMenu = function () {
   menu = new MenuMorph(this);
   menu.ideRender();
   menu.bgColor = this.accentColor;
-  
+
   menu.addItem("About...", "aboutSnap");
   menu.addLine();
   menu.addItem("Reference manual", () => {
@@ -4504,7 +4532,7 @@ IDE_Morph.prototype.snapMenu = function () {
       "enable Morphic\ncontext menus\nand inspectors," + "\nnot user-friendly!",
       new Color(255, 100, 100)
     );
-  };
+  }
   menu.popup(world, this.logo.bottomLeft());
 };
 
@@ -4679,7 +4707,7 @@ IDE_Morph.prototype.settingsMenu = function () {
   function addPreference(label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
       menu.addItem(
-        [hide ? (test ? Hon : Hoff) :(test ? on : off), localize(label)],
+        [hide ? (test ? Hon : Hoff) : test ? on : off, localize(label)],
         toggle,
         test ? onHint : offHint,
         hide ? new Color(255, 100, 100) : null
@@ -4690,7 +4718,7 @@ IDE_Morph.prototype.settingsMenu = function () {
   function addAdvancedPreference(label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
       advancedMenu.addItem(
-        [hide ? (test ? Hon : Hoff) :(test ? on : off), localize(label)],
+        [hide ? (test ? Hon : Hoff) : test ? on : off, localize(label)],
         toggle,
         test ? onHint : offHint,
         hide ? new Color(255, 100, 100) : null
@@ -4701,7 +4729,7 @@ IDE_Morph.prototype.settingsMenu = function () {
   function addSubPreference(label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
       advancedMenu.addItem(
-        [hide ? (test ? Hon : Hoff) :(test ? on : off), "  " + localize(label)],
+        [hide ? (test ? Hon : Hoff) : test ? on : off, "  " + localize(label)],
         toggle,
         test ? onHint : offHint,
         hide ? new Color(255, 100, 100) : null
@@ -4941,7 +4969,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     "EXPERIMENTAL! check to enable\nsupport for compiling",
     true
   );
-  menu.addLine()
+  menu.addLine();
   if (shiftClicked) {
     advancedMenu.addItem(
       "Primitives palette",
@@ -5154,7 +5182,7 @@ IDE_Morph.prototype.settingsMenu = function () {
       "specify the scale of the stage\npixels in performer mode"
     );
   }
-  
+
   advancedMenu.addLine();
   // everything below this line is stored in the project
   addAdvancedPreference(
@@ -5298,7 +5326,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     "disable dragging media\nand blocks out of\nwatchers and balloons",
     false
   );
-  
+
   menu.addMenu("Advanced...", advancedMenu);
   menu.popup(world, pos);
 };
@@ -5938,8 +5966,8 @@ IDE_Morph.prototype.aboutSnap = function () {
     "\ntethrarxitet: Personal Libraries mod" +
     "\nowlssss/TheOwlCoder: Vertical Categories and Cat blocks" +
     "\njoecooldoo/joenulldoo: Auto-default Single Palette" +
-    "\ncodingisfun2831t: Several UI updates"
-    "\n\n" +
+    "\ncodingisfun2831t: Several UI updates";
+  "\n\n" +
     "Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes" +
     "\nare watercolor paintings by Meghan Taylor and represent" +
     "\n characters from her webcomic Prophecy of the Circle," +
@@ -7978,12 +8006,20 @@ IDE_Morph.prototype.microphoneMenu = function () {
     pos = this.controlBar.settingsButton.bottomLeft(),
     resolutions = ["low", "normal", "high", "max"],
     microphone = this.stage.microphone,
-    tick = new SymbolMorph("tick", MorphicPreferences.menuFontSize * 0.75, WHITE),
-    on = new SymbolMorph("checkedBox", MorphicPreferences.menuFontSize * 0.75, WHITE),
+    tick = new SymbolMorph(
+      "tick",
+      MorphicPreferences.menuFontSize * 0.75,
+      WHITE
+    ),
+    on = new SymbolMorph(
+      "checkedBox",
+      MorphicPreferences.menuFontSize * 0.75,
+      WHITE
+    ),
     empty = tick.fullCopy();
 
-    menu.ideRender();
-    menu.bgColor = this.accentColor;
+  menu.ideRender();
+  menu.bgColor = this.accentColor;
 
   empty.render = nop;
   if (microphone.isReady) {
@@ -8103,10 +8139,22 @@ IDE_Morph.prototype.looksMenuData = function () {
   var menu = new MenuMorph(this),
     world = this.world(),
     shiftClicked = world.currentKey === 16,
-    tick = new SymbolMorph("tick", MorphicPreferences.menuFontSize * 0.75, WHITE),
+    tick = new SymbolMorph(
+      "tick",
+      MorphicPreferences.menuFontSize * 0.75,
+      WHITE
+    ),
     empty = tick.fullCopy(),
-    on = new SymbolMorph("checkedBox", MorphicPreferences.menuFontSize * 0.75, WHITE),
-    off = new SymbolMorph("rectangle", MorphicPreferences.menuFontSize * 0.75, WHITE);
+    on = new SymbolMorph(
+      "checkedBox",
+      MorphicPreferences.menuFontSize * 0.75,
+      WHITE
+    ),
+    off = new SymbolMorph(
+      "rectangle",
+      MorphicPreferences.menuFontSize * 0.75,
+      WHITE
+    );
   menu.bgColor = this.accentColor;
   // menu.ideRender();
 
@@ -8180,15 +8228,27 @@ IDE_Morph.prototype.accentColorMenu = function () {
     colors = [
       new Color(255, 76, 76),
       new Color(133, 92, 214),
-      new Color(76, 151, 255)
+      new Color(76, 151, 255),
     ],
-    tick = new SymbolMorph("tick", MorphicPreferences.menuFontSize * 0.75, WHITE),
+    tick = new SymbolMorph(
+      "tick",
+      MorphicPreferences.menuFontSize * 0.75,
+      WHITE
+    ),
     empty = tick.fullCopy(),
-    on = new SymbolMorph("circleSolid", MorphicPreferences.menuFontSize * 0.75, WHITE),
-    off = new SymbolMorph("circle", MorphicPreferences.menuFontSize * 0.75, WHITE);
+    on = new SymbolMorph(
+      "circleSolid",
+      MorphicPreferences.menuFontSize * 0.75,
+      WHITE
+    ),
+    off = new SymbolMorph(
+      "circle",
+      MorphicPreferences.menuFontSize * 0.75,
+      WHITE
+    );
   menu.bgColor = this.accentColor;
   empty.render = nop;
-    menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
+  menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
       menu.addItem(
         [test ? on : off, localize(label)],
@@ -8198,11 +8258,38 @@ IDE_Morph.prototype.accentColorMenu = function () {
       );
     }
   };
-  menu.addPreference("Red", () => (this.accentColor = colors[0], this.saveSetting("accentColor", "red"), this.refreshIDE()), this.accentColor.eq(colors[0]));
-menu.addPreference("Purple", () => (this.accentColor = colors[1], this.saveSetting("accentColor", "purple"), this.refreshIDE()), this.accentColor.eq(colors[1]));
-  menu.addPreference("Blue", () => (this.accentColor = colors[2], this.saveSetting("accentColor", "blue"), this.refreshIDE()), this.accentColor.eq(colors[2]));
-    return menu;
-}
+  menu.addPreference(
+    "Red",
+    () => (
+      (this.accentColor = colors[0]),
+      this.saveSetting("accentColor", "red"),
+      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      this.refreshIDE()
+    ),
+    this.accentColor.eq(colors[0])
+  );
+  menu.addPreference(
+    "Purple",
+    () => (
+      (this.accentColor = colors[1]),
+      this.saveSetting("accentColor", "purple"),
+      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      this.refreshIDE()
+    ),
+    this.accentColor.eq(colors[1])
+  );
+  menu.addPreference(
+    "Blue",
+    () => (
+      (this.accentColor = colors[2]),
+      this.saveSetting("accentColor", "blue"),
+      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      this.refreshIDE()
+    ),
+    this.accentColor.eq(colors[2])
+  );
+  return menu;
+};
 
 // IDE_Morph blocks scaling
 
@@ -8552,7 +8639,7 @@ IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
   callback();
   this.oldSpriteBar.tabBar.tabTo("scripts");
   this.createCategories();
-  this.categories.refreshEmpty(); 
+  this.categories.refreshEmpty();
   this.fixLayout();
   this.openProjectString(projectData, null, true); // no prims
 };
@@ -9235,12 +9322,12 @@ IDE_Morph.prototype.warnAboutDev = function () {
 };
 
 // IDE_Morph's settings sprite's costume to Alonzo
-IDE_Morph.prototype.setAlonzo = function(spr) {
+IDE_Morph.prototype.setAlonzo = function (spr) {
   var img = new Image();
 
-  img.onload = function() {
+  img.onload = function () {
     var canvas = document.createElement("canvas"),
-      ctx = canvas.getContext('2d'),
+      ctx = canvas.getContext("2d"),
       cst;
 
     canvas.width = img.naturalWidth;
@@ -9251,81 +9338,81 @@ IDE_Morph.prototype.setAlonzo = function(spr) {
     cst.name = "costume1";
     spr.addCostume(cst);
     spr.wearCostume(cst);
-  }
+  };
 
   // we have to embed it as a data URI as you cant really load a image from a file:// url
   // without it tweaking out
-  img.src = 
-    "data:image/png;base64,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" + 
-    "8LMAD+AQZ4wr1PDQAAAABJRU5ErkJggg=="
-}
+  img.src =
+    "data:image/png;base64,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" +
+    "8LMAD+AQZ4wr1PDQAAAABJRU5ErkJggg==";
+};
 
 // ProjectDialogMorph ////////////////////////////////////////////////////
 
