@@ -1153,7 +1153,7 @@ SymbolMorph.prototype.renderSymbolTurtle = function (ctx, color) {
   ctx.moveTo(0, 0);
   ctx.lineTo(w, h / 2);
   ctx.lineTo(0, h);
-  ctx.lineTo(h / 2, h / 2);
+  ctx.lineTo(h / 2.5, h / 2);
   ctx.closePath();
   ctx.fill();
 };
@@ -1168,7 +1168,7 @@ SymbolMorph.prototype.renderSymbolTurtleOutline = function (ctx, color) {
   ctx.moveTo(0, 0);
   ctx.lineTo(w, h / 2);
   ctx.lineTo(0, h);
-  ctx.lineTo(h / 2, h / 2);
+  ctx.lineTo(h / 2.5, h / 2);
   ctx.closePath();
   ctx.stroke();
 };
