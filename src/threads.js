@@ -4157,6 +4157,17 @@ Process.prototype.doPlaySoundUntilDone = function (name) {
     this.pushContext();
 };
 
+Process.prototype.doStopSound = function (name) {
+    var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
+    var rcvr = this.blockReceiver();
+    rcvr.shadowAttribute('sounds');
+
+    if (stage && rcvr.sounds.contents.some(sound => sound.name === name)) {
+        stage.stopSound(rcvr.sounds.contents.find(
+            sound => sound.name === name).audio.src);
+    }
+};
+
 Process.prototype.doStopAllSounds = function () {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     if (stage) {
