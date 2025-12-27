@@ -202,7 +202,7 @@ IDE_Morph.prototype.setBrightTheme = function () {
   SpriteMorph.prototype.sliderColor = SpriteMorph.prototype.paletteColor;
 
   IDE_Morph.prototype.buttonContrast = 30;
-  IDE_Morph.prototype.backgroundColor = new Color(220, 220, 230);
+  IDE_Morph.prototype.backgroundColor = new Color(230, 240, 255);
   IDE_Morph.prototype.frameColor = new Color(230, 240, 255);
   IDE_Morph.prototype.borderColor = new Color(212, 212, 212);
 
@@ -3804,7 +3804,7 @@ IDE_Morph.prototype.refreshIDE = function () {
         new Project(this.scenes, this.scene)
       );
     } catch (err) {
-      this.showMessage("Serialization failed: " + err);
+      window.alert("Serialization failed: " + err);
     }
   } else {
     projectData = this.serializer.serialize(
@@ -4568,7 +4568,7 @@ IDE_Morph.prototype.cloudMenu = function () {
     shiftClicked = world.currentKey === 16;
 
   if (location.protocol === "file:" && !shiftClicked) {
-    this.showMessage("cloud unavailable without a web server.");
+    window.alert("cloud unavailable without a web server.");
     return;
   }
 
@@ -5861,7 +5861,7 @@ IDE_Morph.prototype.undeleteSprites = function (pos) {
   pos = pos || this.spriteBar.bottomRight();
 
   if (!this.scene.trash.length) {
-    this.showMessage("trash is empty");
+    window.alert("Trash is empty") //this.showMessage("trash is empty");
     return;
   }
   this.scene.trash.forEach((sprite) =>
@@ -13358,10 +13358,11 @@ StageHandleMorph.prototype.init = function (target) {
   this.userState = "normal"; // or 'highlight'
   HandleMorph.uber.init.call(this);
   this.color = IDE_Morph.prototype.isBright
-    ? IDE_Morph.prototype.backgroundColor
+    ? IDE_Morph.prototype.backgroundColor.darker()
     : new Color(190, 190, 190);
   this.isDraggable = false;
   this.setExtent(new Point(12, 50));
+  this.hoverCursor = "ew-resize";
 };
 
 // StageHandleMorph drawing:
