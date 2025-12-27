@@ -3949,8 +3949,8 @@ PrototypeHatBlockMorph.prototype.init = function (definition) {
 
     // init inherited stuff
     HatBlockMorph.uber.init.call(this);
-    this.color = SpriteMorph.prototype.blockColor['my blocks'];
-    this.category = 'my blocks';
+    this.color = SpriteMorph.prototype.blockColor['events'];
+    this.category = 'events';
     this.add(proto);
     if (definition.variableNames.length) {
         vars = this.labelPart('%blockVars');

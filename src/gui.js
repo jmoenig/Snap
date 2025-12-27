@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.5";
+var SplitVersion = "1.6.6";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3844,9 +3844,9 @@ IDE_Morph.prototype.applySavedSettings = function () {
   this.accentColor =
     accentColor == "red"
       ? new Color(255, 76, 76)
-      : accentColor == "blue"
+      : accentColor == "purple"
       ? new Color(133, 92, 214)
-      : new Color(76, 151, 255);
+      : accentColor == "orange" ? new Color (204, 85, 0) : accentColor == "green" ? new Color (15, 189, 140) : new Color(76, 151, 255);
   DialogBoxMorph.prototype.titleBarColor = this.accentColor;
 
   // design
@@ -4490,12 +4490,30 @@ IDE_Morph.prototype.userMenu = function () {
   return menu;
 };
 
+IDE_Morph.prototype.ideRender = function (menu) {
+  // change the rendering to only include two bottom rounded corners
+  menu.outlinePath = function (ctx, corner, inset) {
+    var w = this.width(),
+      h = this.height(),
+      radius = Math.min(corner, (Math.min(w, h) - inset) / 2);
+
+    ctx.moveTo(inset, inset);
+    ctx.lineTo(w - inset * 2, inset);
+    ctx.arc(w - radius, h - radius, radius, radians(0), radians(90));
+    ctx.arc(radius, h - radius, radius, radians(90), radians(180));
+
+    //roundRect(inset, inset, w - inset * 2, h - inset * 2, radius);
+  };
+  menu.noShadow = true;
+};
+
 IDE_Morph.prototype.snapMenu = function () {
   var menu,
     world = this.world();
 
   menu = new MenuMorph(this);
-  menu.ideRender();
+  this.ideRender(menu);
+  console.log(menu.outlinePath)
   menu.bgColor = this.accentColor;
 
   menu.addItem("About...", "aboutSnap");
@@ -4550,7 +4568,7 @@ IDE_Morph.prototype.cloudMenu = function () {
 
   menu = new MenuMorph(this);
   menu.bgColor = this.accentColor;
-  menu.ideRender();
+  this.ideRender(menu);
   if (shiftClicked) {
     menu.addItem("url...", "setCloudURL", null, new Color(255, 100, 100));
     menu.addLine();
@@ -4742,7 +4760,7 @@ IDE_Morph.prototype.settingsMenu = function () {
   advancedMenu = new MenuMorph(this);
   menu.bgColor = this.accentColor;
   advancedMenu.bgColor = this.accentColor;
-  menu.ideRender();
+  this.ideRender(menu);
   menu.addMenu(
     [
       new SymbolMorph("globe", MorphicPreferences.menuFontSize, WHITE),
@@ -5348,7 +5366,7 @@ IDE_Morph.prototype.projectMenu = function () {
 
   menu = new MenuMorph(this);
   menu.bgColor = this.accentColor;
-  menu.ideRender();
+  this.ideRender(menu);
   menu.addItem("Notes...", "editNotes");
   menu.addLine();
   if (!this.config.noProjectItems) {
@@ -8019,7 +8037,7 @@ IDE_Morph.prototype.microphoneMenu = function () {
     ),
     empty = tick.fullCopy();
 
-  menu.ideRender();
+  this.ideRender(menu);
   menu.bgColor = this.accentColor;
 
   empty.render = nop;
@@ -8157,7 +8175,7 @@ IDE_Morph.prototype.looksMenuData = function () {
       WHITE
     );
   menu.bgColor = this.accentColor;
-  // menu.ideRender();
+  // this.ideRender(menu);
 
   menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
@@ -8230,6 +8248,8 @@ IDE_Morph.prototype.accentColorMenu = function () {
       new Color(255, 76, 76),
       new Color(133, 92, 214),
       new Color(76, 151, 255),
+      new Color(204, 85, 0),
+      new Color (15, 189, 140)
     ],
     tick = new SymbolMorph(
       "tick",
@@ -8268,6 +8288,26 @@ IDE_Morph.prototype.accentColorMenu = function () {
       this.refreshIDE()
     ),
     this.accentColor.eq(colors[0])
+  );
+  menu.addPreference(
+    "Orange",
+    () => (
+      (this.accentColor = colors[3]),
+      this.saveSetting("accentColor", "orange"),
+      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      this.refreshIDE()
+    ),
+    this.accentColor.eq(colors[3])
+  );
+  menu.addPreference(
+    "Green",
+    () => (
+      (this.accentColor = colors[4]),
+      this.saveSetting("accentColor", "green"),
+      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      this.refreshIDE()
+    ),
+    this.accentColor.eq(colors[4])
   );
   menu.addPreference(
     "Purple",

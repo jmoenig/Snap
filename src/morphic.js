@@ -7911,9 +7911,9 @@ MenuMorph.prototype.createLabel = function () {
   text.backgroundColor = this.borderColor;
   text.fixLayout();
   this.label = new BoxMorph(3, 0);
-  if (MorphicPreferences.isFlat) {
+  /*if (MorphicPreferences.isFlat) {
     this.label.edge = 0;
-  }
+  }*/
   this.label.color = this.borderColor;
   this.label.borderColor = this.borderColor;
   this.label.setExtent(text.extent().add(4));
@@ -7931,13 +7931,13 @@ MenuMorph.prototype.createItems = function () {
   this.children.forEach((m) => m.destroy());
   this.children = [];
   if (!this.isListContents) {
-    this.edge = 5; //MorphicPreferences.isFlat ? 0 : 5;
+    this.edge = this.noShadow ? 10 : 4; //MorphicPreferences.isFlat ? 0 : 5;
     this.border = MorphicPreferences.isFlat ? 1 : 2;
   }
   this.color = this.bgColor;
   this.borderColor = this.bgColor.eq(WHITE)
-    ? new Color(60, 60, 60)
-    : this.bgColor.darker(70);
+    ? new Color(200, 200, 200)
+    : this.bgColor.darker(50);
   this.setExtent(new Point(0, 0));
 
   y = 2;
@@ -8298,22 +8298,7 @@ MenuMorph.prototype.destroy = function () {
   MenuMorph.uber.destroy.call(this);
 };
 
-MenuMorph.prototype.ideRender = function () {
-  // change the rendering to only include two bottom rounded corners
-  this.outlinePath = function (ctx, corner, inset) {
-    var w = this.width(),
-      h = this.height(),
-      radius = Math.min(corner, (Math.min(w, h) - inset) / 2);
 
-    ctx.moveTo(inset, inset);
-    ctx.lineTo(w - inset * 2, inset);
-    ctx.arc(w - radius, h - radius, radius, radians(0), radians(90));
-    ctx.arc(radius, h - radius, radius, radians(90), radians(180));
-
-    //roundRect(inset, inset, w - inset * 2, h - inset * 2, radius);
-  };
-  this.noShadow = true;
-};
 
 // StringMorph /////////////////////////////////////////////////////////
 
