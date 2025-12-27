@@ -7908,14 +7908,14 @@ MenuMorph.prototype.createLabel = function () {
   );
   text.alignment = "center";
   text.color = this.bgColor;
-  text.backgroundColor = this.borderColor;
+  text.backgroundColor = new Color(60, 60, 60);
   text.fixLayout();
   this.label = new BoxMorph(3, 0);
   /*if (MorphicPreferences.isFlat) {
     this.label.edge = 0;
   }*/
-  this.label.color = this.borderColor;
-  this.label.borderColor = this.borderColor;
+  this.label.color = new Color(60, 60, 60);
+  this.label.borderColor = new Color(60, 60, 60);
   this.label.setExtent(text.extent().add(4));
   this.label.add(text);
   this.label.text = text;
