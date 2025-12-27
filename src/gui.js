@@ -4806,7 +4806,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     BlockMorph.prototype.zebraContrast,
     "uncheck to disable alternating\ncolors for nested block",
     "check to enable alternating\ncolors for nested blocks",
-    true
+    false
   );
   addPreference(
     "Dynamic input labels",
