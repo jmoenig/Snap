@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.8";
+var SplitVersion = "1.6.9";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -128,7 +128,10 @@ IDE_Morph.uber = Morph.prototype;
 
 IDE_Morph.prototype.isBright = false;
 IDE_Morph.prototype.accentColor = new Color(133, 92, 214);
-DialogBoxMorph.prototype.titleBarColor = IDE_Morph.prototype.accentColor;
+DialogBoxMorph.prototype.titleBarColor = IDE_Morph.prototype.accentColor; 
+PushButtonMorph.prototype.pressColor = IDE_Morph.prototype.accentColor;
+PushButtonMorph.prototype.highlightColor =
+  PushButtonMorph.prototype.pressColor.lighter(50);
 
 IDE_Morph.prototype.setDefaultDesign = function () {
   // skeuomorphic
@@ -3848,6 +3851,9 @@ IDE_Morph.prototype.applySavedSettings = function () {
       ? new Color(133, 92, 214)
       : accentColor == "orange" ? new Color (204, 85, 0) : accentColor == "green" ? new Color (15, 189, 140) : new Color(76, 151, 255);
   DialogBoxMorph.prototype.titleBarColor = this.accentColor;
+  PushButtonMorph.prototype.pressColor = this.accentColor;
+PushButtonMorph.prototype.highlightColor =
+  PushButtonMorph.prototype.pressColor.lighter(50);
 
   // design
   this.setFlatDesign();
@@ -8270,6 +8276,12 @@ IDE_Morph.prototype.accentColorMenu = function () {
     );
   menu.bgColor = this.accentColor;
   empty.render = nop;
+  function setAccent() {
+    DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      (PushButtonMorph.prototype.pressColor = this.accentColor),
+(PushButtonMorph.prototype.highlightColor =
+  PushButtonMorph.prototype.pressColor.lighter(50));
+  }
   menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
       menu.addItem(
@@ -8285,7 +8297,7 @@ IDE_Morph.prototype.accentColorMenu = function () {
     () => (
       (this.accentColor = colors[0]),
       this.saveSetting("accentColor", "red"),
-      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      setAccent(),
       this.refreshIDE()
     ),
     this.accentColor.eq(colors[0])
@@ -8295,7 +8307,7 @@ IDE_Morph.prototype.accentColorMenu = function () {
     () => (
       (this.accentColor = colors[3]),
       this.saveSetting("accentColor", "orange"),
-      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      setAccent(),
       this.refreshIDE()
     ),
     this.accentColor.eq(colors[3])
@@ -8305,7 +8317,7 @@ IDE_Morph.prototype.accentColorMenu = function () {
     () => (
       (this.accentColor = colors[4]),
       this.saveSetting("accentColor", "green"),
-      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      setAccent(),
       this.refreshIDE()
     ),
     this.accentColor.eq(colors[4])
@@ -8315,7 +8327,7 @@ IDE_Morph.prototype.accentColorMenu = function () {
     () => (
       (this.accentColor = colors[1]),
       this.saveSetting("accentColor", "purple"),
-      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      setAccent(),
       this.refreshIDE()
     ),
     this.accentColor.eq(colors[1])
@@ -8325,7 +8337,7 @@ IDE_Morph.prototype.accentColorMenu = function () {
     () => (
       (this.accentColor = colors[2]),
       this.saveSetting("accentColor", "blue"),
-      DialogBoxMorph.prototype.titleBarColor = this.accentColor,
+      setAccent(),
       this.refreshIDE()
     ),
     this.accentColor.eq(colors[2])
