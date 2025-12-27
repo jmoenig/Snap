@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.6";
+var SplitVersion = "1.6.7";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5948,6 +5948,12 @@ IDE_Morph.prototype.aboutSnap = function () {
 
   creditsTxt =
     localize("Contributors") +
+    "\n\nalessandrito123: Right Click Color Picker" +
+    "\ntethrarxitet: Personal Libraries mod" +
+    "\nowlssss/TheOwlCoder: Vertical Categories and Cat blocks" +
+    "\njoecooldoo/joenulldoo: Auto-default Single Palette" +
+    "\ncodingisfun2831t: Several UI updates" +
+    "\nmark4sisb: Split! logo" + 
     "\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, " +
     "\ncountless bugfixes and optimizations" +
     "\nMichael Ball: Time/Date UI, Library Import Dialog," +
@@ -5980,12 +5986,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     "\nego-lay-atman-bay: Piano Keyboard Octave Switching" +
     "\nDavide Della Casa: Morphic Optimizations" +
     "\nAchal Dave: Web Audio" +
-    "\nJoe Otto: Morphic Testing and Debugging" +
-    "\nalessandrito123: Right Click Color Picker" +
-    "\ntethrarxitet: Personal Libraries mod" +
-    "\nowlssss/TheOwlCoder: Vertical Categories and Cat blocks" +
-    "\njoecooldoo/joenulldoo: Auto-default Single Palette" +
-    "\ncodingisfun2831t: Several UI updates";
+    "\nJoe Otto: Morphic Testing and Debugging";
   "\n\n" +
     "Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes" +
     "\nare watercolor paintings by Meghan Taylor and represent" +
