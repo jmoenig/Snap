@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.7";
+var SplitVersion = "1.6.8";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -188,7 +188,7 @@ IDE_Morph.prototype.setDefaultTheme = function () {
 IDE_Morph.prototype.setBrightTheme = function () {
   IDE_Morph.prototype.isBright = true;
 
-  PushButtonMorph.prototype.outlineColor = new Color(255, 255, 255);
+  PushButtonMorph.prototype.outlineColor = new Color(200, 200, 200);
   PushButtonMorph.prototype.outlineGradient = true;
 
   SpriteMorph.prototype.paletteColor = WHITE;

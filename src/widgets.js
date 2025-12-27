@@ -268,14 +268,12 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
   if (!this.outline) {
     return null;
   }
-  if (this.outlineGradient && !(!this.outline || isFlat)) {
+  if (false){//this.outlineGradient && !(!this.outline || isFlat)) {
     outlineStyle = ctx.createLinearGradient(0, 0, 0, this.height());
     outlineStyle.addColorStop(0, this.outlineColor.darker().toString());
     outlineStyle.addColorStop(1, "white");
   } else {
-    outlineStyle = isFlat
-      ? this.outlineColor.toString()
-      : this.outlineColor.toString();
+    outlineStyle = this.outlineColor.toString();
   }
   ctx.fillStyle = outlineStyle;
   ctx.strokeStyle = outlineStyle;
@@ -1166,7 +1164,7 @@ ToggleMorph.prototype.init = function (
   style = style || "checkbox";
   this.corner =
     style === "checkbox"
-      ? 0
+      ? 1
       : fontHeight(this.fontSize) / 2 + this.outline + this.padding;
   this.state = false;
   this.query = query || (() => true);
