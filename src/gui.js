@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.9";
+var SplitVersion = "1.6.10";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -8276,12 +8276,13 @@ IDE_Morph.prototype.accentColorMenu = function () {
     );
   menu.bgColor = this.accentColor;
   empty.render = nop;
-  function setAccent() {
-    DialogBoxMorph.prototype.titleBarColor = this.accentColor,
-      (PushButtonMorph.prototype.pressColor = this.accentColor),
-(PushButtonMorph.prototype.highlightColor =
-  PushButtonMorph.prototype.pressColor.lighter(50));
-  }
+  const setAccent = () => {
+    DialogBoxMorph.prototype.titleBarColor = this.accentColor;
+      PushButtonMorph.prototype.pressColor = this.accentColor;
+      console.log(this.accentColor)
+PushButtonMorph.prototype.highlightColor =
+  PushButtonMorph.prototype.pressColor.lighter(50);
+  };
   menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
       menu.addItem(
