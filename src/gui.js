@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.4";
+var SplitVersion = "1.6.5";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1974,7 +1974,7 @@ IDE_Morph.prototype.createCategories = function () {
   }
 
   SpriteMorph.prototype.categories.forEach((cat) => {
-    if (!contains(["other"], cat)) {
+    if (!contains(["other", "my blocks"], cat)) {
       addCategoryButton(cat);
     }
   });

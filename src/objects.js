@@ -159,7 +159,6 @@ SpriteMorph.prototype.categories = [
   "lists",
   "other",
   "pen",
-  "my blocks",
 ];
 
 SpriteMorph.prototype.blockColor = {
@@ -173,8 +172,7 @@ SpriteMorph.prototype.blockColor = {
   operators: new Color(89, 192, 89),
   variables: new Color(255, 140, 26),
   lists: new Color(255, 102, 26),
-  other: new Color(170, 170, 170), //new Color(191, 191, 191),
-  "my blocks": new Color(255, 102, 128),
+  other: new Color(170, 170, 170),
 };
 SpriteMorph.prototype.isHighContrast = false;
 SpriteMorph.prototype.setDefaultBlockColor = function () {
@@ -4514,7 +4512,7 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (
   function addCustomBlock(definition) {
     if (
       (!definition.isHelper || includeHidden) &&
-      (category == "my blocks" ? true : definition.category === category)
+      (definition.category === category)
     ) {
       block = definition.templateInstance();
       if (isInherited) {
@@ -4587,7 +4585,7 @@ SpriteMorph.prototype.makeBlock = function () {
       ide.currentCategory === "unified"
         ? ide.topVisibleCategoryInPalette()
         : ide.currentCategory;
-  category = category == "my blocks" ? "other" : category;
+  category = category;
   var clr = SpriteMorph.prototype.blockColorFor(category),
     dlg;
 

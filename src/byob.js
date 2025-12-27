@@ -4005,7 +4005,7 @@ PrototypeHatBlockMorph.prototype.fixBlockColor = function (
             this.alternateBlockColor();
         }
     } else if (this.category && !this.color.eq(
-            SpriteMorph.prototype.blockColorFor(this.category)
+            new Color(255, 102, 128)
         )) {
         this.alternateBlockColor();
     }
