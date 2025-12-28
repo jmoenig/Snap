@@ -1164,7 +1164,7 @@ ToggleMorph.prototype.init = function (
   style = style || "checkbox";
   this.corner =
     style === "checkbox"
-      ? 1
+      ? 4
       : fontHeight(this.fontSize) / 2 + this.outline + this.padding;
   this.state = false;
   this.query = query || (() => true);

@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.11";
+var SplitVersion = "1.6.13";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3846,10 +3846,13 @@ IDE_Morph.prototype.applySavedSettings = function () {
 
   this.accentColor =
     accentColor == "red"
-      ? new Color(255, 76, 76)
+      ? this.accentColors[0]
       : accentColor == "purple"
-      ? new Color(133, 92, 214)
-      : accentColor == "orange" ? new Color (204, 85, 0) : accentColor == "green" ? new Color (15, 189, 140) : new Color(76, 151, 255);
+      ? this.accentColors[1]
+      : accentColor == "orange" ? this.accentColors[3] 
+      : accentColor == "green" ? this.accentColors[4] 
+      : accentColor == "yellow" ? this.accentColors[5] 
+      : accentColor == "indigo" ? this.accentColors[6] : this.accentColors[2];
   DialogBoxMorph.prototype.titleBarColor = this.accentColor;
   PushButtonMorph.prototype.pressColor = this.accentColor;
 PushButtonMorph.prototype.highlightColor =
@@ -8249,15 +8252,19 @@ IDE_Morph.prototype.looksMenuData = function () {
   menu.addMenu("Accent Color...", this.accentColorMenu());
   return menu;
 };
-IDE_Morph.prototype.accentColorMenu = function () {
-  var menu = new MenuMorph(this),
-    colors = [
+IDE_Morph.prototype.accentColors = [
       new Color(255, 76, 76),
       new Color(133, 92, 214),
       new Color(76, 151, 255),
       new Color(204, 85, 0),
-      new Color (15, 189, 140)
-    ],
+      new Color (15, 189, 140),
+      new Color(228, 171, 24),
+      new Color(71, 102, 204),
+      new Color(0, 195, 255)
+    ];
+IDE_Morph.prototype.accentColorMenu = function () {
+  var menu = new MenuMorph(this),
+    colors = this.accentColors,
     tick = new SymbolMorph(
       "tick",
       MorphicPreferences.menuFontSize * 0.75,
@@ -8314,6 +8321,16 @@ PushButtonMorph.prototype.highlightColor =
     this.accentColor.eq(colors[3])
   );
   menu.addPreference(
+    "Yellow",
+    () => (
+      (this.accentColor = colors[5]),
+      this.saveSetting("accentColor", "yellow"),
+      setAccent(),
+      this.refreshIDE()
+    ),
+    this.accentColor.eq(colors[5])
+  );
+  menu.addPreference(
     "Green",
     () => (
       (this.accentColor = colors[4]),
@@ -8322,6 +8339,16 @@ PushButtonMorph.prototype.highlightColor =
       this.refreshIDE()
     ),
     this.accentColor.eq(colors[4])
+  );
+  menu.addPreference(
+    "Indigo",
+    () => (
+      (this.accentColor = colors[6]),
+      this.saveSetting("accentColor", "indigo"),
+      setAccent(),
+      this.refreshIDE()
+    ),
+    this.accentColor.eq(colors[6])
   );
   menu.addPreference(
     "Purple",
