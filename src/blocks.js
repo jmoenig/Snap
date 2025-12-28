@@ -8227,13 +8227,13 @@ ReporterBlockMorph.prototype.outlinePath = function (ctx, inset) {
 ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
   // draw the 'flat' shape
   var h = this.height(),
+  w = this.width(),
     r =
       this instanceof TemplateSlotMorph ||
       (this?.alwaysRound && !(this instanceof RingMorph))
-        ? h / 2
+        ? Math.min(h / 2, w / 2)
         : Math.min(Math.round(1.5 * this.rounding), h / 2),
     radius = Math.max(r - inset, 0),
-    w = this.width(),
     pos = this.position();
 
   // top left:
