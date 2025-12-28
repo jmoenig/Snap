@@ -2590,10 +2590,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   });
 
   // set my extent (silently, because we'll redraw later anyway):
-  if (this instanceof ReporterBlockMorph) {
-    this.alwaysRound = !(blockHeight < 50 * this.scale) || lines.length == 1;
-    console.warn(this.blockSpec, blockHeight < 50 * this.scale, blockHeight, lines.length)
-  }
+    this.alwaysRound = lines.length == 1;
   this.bounds.setWidth(blockWidth);
   this.bounds.setHeight(
     blockHeight + (this instanceof CommandBlockMorph ? this.dentPlus : 0)
