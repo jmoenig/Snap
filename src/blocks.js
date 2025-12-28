@@ -8020,7 +8020,7 @@ ReporterBlockMorph.prototype.prepareToBeGrabbed = function (handMorph) {
   }
   ReporterBlockMorph.uber.prepareToBeGrabbed.call(this, handMorph);
   if (handMorph) {
-    handMorph.alpha = this.alpha < 1 ? 1 : 0.85;
+    handMorph.alpha = 1;
   }
   this.cachedSlotSpec = null;
 };
@@ -14298,6 +14298,32 @@ ColorSlotMorph.prototype.setColor = function (clr) {
 // ColorSlotMorph  color sensing:
 
 ColorSlotMorph.prototype.getUserColor = function () {
+  /*var menu = new MenuMorph();
+  var hSlider = new SliderMorph(0, 255, this.color.r, null),
+  sSlider = new SliderMorph(0, 255, this.color.g, null),
+  vSlider = new SliderMorph(0, 255, this.color.v, null),
+  newColor = new Color(this.color.r, this.color.g, this.color.b);
+  hSlider.action = (r) => (newColor.r = r, this.color = newColor, this.rerender());
+  vSlider.action = (g) => (newColor.g = g, this.color = newColor, this.rerender());
+  sSlider.action = (b) => (newColor.b = b, this.color = newColor, this.rerender());
+  hSlider.toggleOrientation();
+  sSlider.toggleOrientation();
+  vSlider.toggleOrientation();
+  hSlider.fixLayout();
+
+  var hContainer = new Morph(),
+  hText = new StringMorph("R:");
+  hContainer.color = CLEAR;
+  hContainer.add(hText);
+  hContainer.add(hSlider);
+  hText.setPosition(hContainer.position());
+  hSlider.setLeft(hContainer.left());
+  hSlider.setBottom(hContainer.top() + hText.rawHeight())
+  menu.addItem(hContainer, nop);
+  menu.addItem(sSlider, nop);
+  menu.addItem(vSlider, nop);
+  menu.popup(this.world(), this.bottomCenter())
+  return;*/
   var myself = this,
     world = this.world(),
     hand = world.hand,
