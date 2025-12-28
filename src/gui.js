@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.13";
+var SplitVersion = "1.6.14";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -2968,7 +2968,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // stage
     if (this.performerMode) {
       this.stage.setLeft(this.palette.right() + padding);
-      this.stage.setTop(this.oldSpriteBar.bottom() + padding);
+      this.stage.setTop(this.controlBar.bottom() + padding);
       this.stage.setScale(1);
       this.stageRatio = 1;
       this.isSmallStage = false;
@@ -2988,7 +2988,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
       this.stage.resizePenTrails();
       Costume.prototype.maxDimensions = this.stage.dimensions;
       this.paletteHandle.fixLayout();
-      this.controlBar.stageSizeButton.hide();
+      this.projectControlBar.stageSizeButton.hide();
     } else if (this.isEmbedMode) {
       this.stage.setScale(
         Math.floor(

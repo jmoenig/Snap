@@ -3329,7 +3329,10 @@ Process.prototype.reportIsFastTracking = function () {
 Process.prototype.doSetGlobalFlag = function (name, bool) {
     var stage = this.homeContext.receiver.parentThatIsA(StageMorph);
     name = this.inputOption(name);
-    this.assertType(bool, 'Boolean');
+    this.assertType(bool, ['Boolean', "Nothing"]);
+    if(isNil(bool)) {
+        bool = false;
+    }
     switch (name) {
     case 'turbo mode':
         this.doSetFastTracking(bool);
