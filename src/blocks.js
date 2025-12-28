@@ -2577,7 +2577,8 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   lines.forEach((line) => {
     if (
       ((line.length == 2 && line[0].isBlockLabelBreak) || line.length === 1) &&
-      isReporter && !parts.some((part)=>(part instanceof CSlotMorph))
+      isReporter &&
+      !parts.some((part) => part instanceof CSlotMorph)
     ) {
       line[0].moveBy(
         new Point(
@@ -2590,7 +2591,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   });
 
   // set my extent (silently, because we'll redraw later anyway):
-    this.alwaysRound = lines.length == 1;
+  this.alwaysRound = lines.length == 1;
   this.bounds.setWidth(blockWidth);
   this.bounds.setHeight(
     blockHeight + (this instanceof CommandBlockMorph ? this.dentPlus : 0)
@@ -8224,7 +8225,7 @@ ReporterBlockMorph.prototype.outlinePath = function (ctx, inset) {
 ReporterBlockMorph.prototype.outlinePathOval = function (ctx, inset) {
   // draw the 'flat' shape
   var h = this.height(),
-  w = this.width(),
+    w = this.width(),
     r =
       this instanceof TemplateSlotMorph ||
       (this?.alwaysRound && !(this instanceof RingMorph))
@@ -14375,57 +14376,104 @@ ColorSlotMorph.prototype.setColor = function (clr) {
 
 // ColorSlotMorph  color sensing:
 
-ColorSlotMorph.prototype.getUserColor = function () {
-  /*var menu = new MenuMorph();
-  var hSlider = new SliderMorph(0, 255, this.color.r, null),
-  sSlider = new SliderMorph(0, 255, this.color.g, null),
-  vSlider = new SliderMorph(0, 255, this.color.v, null),
-  newColor = new Color(this.color.r, this.color.g, this.color.b);
-  hSlider.action = (r) => (newColor.r = r, this.color = newColor, this.rerender());
-  vSlider.action = (g) => (newColor.g = g, this.color = newColor, this.rerender());
-  sSlider.action = (b) => (newColor.b = b, this.color = newColor, this.rerender());
+ColorSlotMorph.prototype.getUserColor = function (model) {
+  model = model || "hsv"; // hsv, hsl, or rgb
+  var nextModel
+
+  var menu = new MenuMorph(),
+    hSlider = new SliderMorph(0, 100, this.color[model]()[0] * 100, null),
+    sSlider = new SliderMorph(0, 100, this.color[model]()[1] * 100, null),
+    vSlider = new SliderMorph(0, 100, this.color[model]()[2] * 100, null),
+    newColor = new Color(
+      this.color.r,
+      this.color.g,
+      this.color.b,
+      this.color.a
+    );
+
+    menu.doNotClick = true;
+
+  hSlider.action = (h) => (
+    newColor["set_" + model](
+      h / 100,
+      this.color[model]()[1],
+      this.color[model]()[2]
+    ),
+    (this.color = newColor),
+    this.rerender()
+  );
+  sSlider.action = (s) => (
+    newColor["set_" + model](
+      this.color[model]()[0],
+      s / 100,
+      this.color[model]()[2]
+    ),
+    (this.color = newColor),
+    this.rerender()
+  );
+  vSlider.action = (v) => (
+    newColor["set_" + model](
+      this.color[model]()[0],
+      this.color[model]()[1],
+      v / 100
+    ),
+    (this.color = newColor),
+    this.rerender()
+  );
   hSlider.toggleOrientation();
   sSlider.toggleOrientation();
   vSlider.toggleOrientation();
   hSlider.fixLayout();
 
+  function createSliderGroup(container, text, slider) {
+    container.mouseMove = nop;
+    container.color = CLEAR;
+    container.add(text);
+    container.add(slider);
+    text.setPosition(container.position());
+    slider.setLeft(container.left());
+    slider.setTop(container.top() + text.rawHeight());
+    container.bounds.corner.y = slider.bottom();
+    container.setWidth(slider.width());
+  }
+
+  function refreshLabels() {
+    (hText = new StringMorph(model == "rgb" ? "R:" : "H:")),
+      (sText = new StringMorph(model == "rgb" ? "G:" : "S:")),
+      (vText = new StringMorph(
+        model == "rgb" ? "B:" : model == "hsl" ? "L:" : "B:"
+      ));
+  }
+
   var hContainer = new Morph(),
-  hText = new StringMorph("R:");
-  hContainer.color = CLEAR;
-  hContainer.add(hText);
-  hContainer.add(hSlider);
-  hText.setPosition(hContainer.position());
-  hSlider.setLeft(hContainer.left());
-  hSlider.setBottom(hContainer.top() + hText.rawHeight())
+    sContainer = new Morph(),
+    vContainer = new Morph(),
+    buttonContainer = new Morph(),
+    hText = new StringMorph(model == "rgb" ? "R:" : "H:"),
+    sText = new StringMorph(model == "rgb" ? "G:" : "S:"),
+    vText = new StringMorph(
+      model == "rgb" ? "B:" : model == "hsl" ? "L:" : "B:"
+    );
+  createSliderGroup(hContainer, hText, hSlider);
+  createSliderGroup(sContainer, sText, sSlider);
+  createSliderGroup(vContainer, vText, vSlider);
   menu.addItem(hContainer, nop);
-  menu.addItem(sSlider, nop);
-  menu.addItem(vSlider, nop);
-  menu.popup(this.world(), this.bottomCenter())
-  return;*/
-  var myself = this,
+  menu.addItem(sContainer, nop);
+  menu.addItem(vContainer, nop);
+
+  nextModel = model == "hsv" ? "hsl" : model == "hsl" ? "rgb" : "hsv";
+
+
+  function getScreenColor() {
+    var myself = this,
     world = this.world(),
     hand = world.hand,
     posInDocument = getDocumentPositionOf(world.worldCanvas),
     mouseMoveBak = hand.processMouseMove,
     mouseDownBak = hand.processMouseDown,
     mouseUpBak = hand.processMouseUp,
-    pal = new ColorPaletteMorph(
-      null,
-      new Point(this.fontSize * 16, this.fontSize * 10)
-    ),
-    gPal = new GrayPaletteMorph(
-      null,
-      new Point(this.fontSize * 16, this.fontSize * 1)
-    ),
     ctx;
-  world.add(pal);
-  world.add(gPal);
-  pal.setPosition(this.bottomLeft().add(new Point(0, this.edge)));
-  gPal.setPosition(
-    this.bottomLeft().add(new Point(0, this.edge + this.fontSize * 10))
-  );
-
-  // cache the world surface property (its full image)
+    // cache the world surface property (its full image)
   // to prevent memory issues from constantly generating
   // huge canvasses and and reading back pixel data only once
   // note: this optimization makes it hard / impossible for the
@@ -14445,23 +14493,45 @@ ColorSlotMorph.prototype.getUserColor = function () {
   };
 
   hand.processMouseDown = nop;
-
   hand.processMouseUp = function () {
-    pal.destroy();
-    gPal.destroy();
     hand.processMouseMove = mouseMoveBak;
     hand.processMouseDown = mouseDownBak;
     hand.processMouseUp = mouseUpBak;
   };
+  }
+
+  var switchModelButton = new PushButtonMorph(
+      this,
+      () => (
+        (model = nextModel),
+        menu.destroy(),
+        this.getUserColor(model)
+      ),
+      "to " + nextModel.toLocaleUpperCase()
+    ),
+    pickColorButton = new PushButtonMorph(this, getScreenColor, new SymbolMorph("pipette", 10));
+    buttonContainer.mouseMove = nop;
+    buttonContainer.color = CLEAR;
+  buttonContainer.add(switchModelButton);
+  buttonContainer.add(pickColorButton);
+  buttonContainer.setWidth(hContainer.width());
+  buttonContainer.setHeight(switchModelButton.height())
+  switchModelButton.setPosition(buttonContainer.position());
+  pickColorButton.setTop(buttonContainer.top())
+  pickColorButton.setRight(buttonContainer.right())
+
+
+  menu.addItem(
+    buttonContainer,
+    nop
+  );
+  menu.popup(this.world(), this.bottomCenter());
 };
 
 // ColorSlotMorph events:
 
 ColorSlotMorph.prototype.mouseClickLeft = function () {
   this.selectForEdit().getUserColor();
-};
-ColorSlotMorph.prototype.mouseClickRight = function () {
-  new DialogBoxMorph().promptRGB(this.parentThatIsA(IDE_Morph), this);
 };
 ColorSlotMorph.prototype.userMenu = function () {
   return new MenuMorph();

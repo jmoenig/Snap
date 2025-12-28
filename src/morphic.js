@@ -2415,6 +2415,18 @@ Color.prototype.set_hsl = function (h, s, l) {
   this.b *= 255;
 };
 
+// Color conversion (rgb, from 0 to 1; or 0 to 100 when setting)
+
+Color.prototype.rgb = function () {
+  return [this.r / 255, this.g / 255, this.b / 255]
+}
+
+Color.prototype.set_rgb = function (r, g, b) {
+  this.r = r * 255;
+  this.g = g * 255;
+  this.b = b * 255;
+}
+
 // Color mixing:
 
 Color.prototype.mixed = function (proportion, otherColor) {
@@ -7237,7 +7249,7 @@ SliderMorph.prototype.mouseMove = function (pos) {
 
 // MouseSensorMorph ////////////////////////////////////////////////////
 
-// for demo and debuggin purposes only, to be removed later
+// for demo and debugging purposes only, to be removed later
 
 var MouseSensorMorph;
 
@@ -8295,6 +8307,7 @@ MenuMorph.prototype.destroy = function () {
   if (!this.isListContents && this.world.activeMenu === this) {
     this.world.activeMenu = null;
   }
+  console.trace()
   MenuMorph.uber.destroy.call(this);
 };
 
@@ -9983,7 +9996,7 @@ MenuItemMorph.prototype.mouseEnter = function () {
     menu.closeSubmenu();
   }
   if (!this.isListItem()) {
-    this.userState = "highlight";
+    menu.doNotClick || (this.userState = "highlight");
     this.rerender();
   }
   if (this.action instanceof MenuMorph) {
@@ -10011,11 +10024,12 @@ MenuItemMorph.prototype.mouseLeave = function () {
 };
 
 MenuItemMorph.prototype.mouseDownLeft = function (pos) {
+  var menu = this.parentThatIsA(MenuMorph);
   if (this.isListItem()) {
-    this.parentThatIsA(MenuMorph).unselectAllItems();
+    menu.unselectAllItems();
     this.escalateEvent("mouseDownLeft", pos);
-  }
-  this.userState = "pressed";
+  };
+  menu.doNotClick || (this.userState = "pressed");
   this.rerender();
 };
 
@@ -10029,11 +10043,12 @@ MenuItemMorph.prototype.mouseClickLeft = function () {
   if (this.action instanceof MenuMorph) {
     this.popUpSubmenu();
   } else {
-    if (!this.isListItem()) {
-      this.parentThatIsA(MenuMorph).closeRootMenu();
+    var menu = this.parentThatIsA(MenuMorph)
+    if (!menu.doNotClick && !this.isListItem()) {
+      menu.closeRootMenu();
       this.world().activeMenu = null;
     }
-    this.trigger();
+    menu.doNotClick || this.trigger();
   }
 };
 

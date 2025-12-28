@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.6.15";
+var SplitVersion = "1.7.0";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3857,6 +3857,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
   PushButtonMorph.prototype.pressColor = this.accentColor;
 PushButtonMorph.prototype.highlightColor =
   PushButtonMorph.prototype.pressColor.lighter(50);
+  
 
   // design
   this.setFlatDesign();
@@ -11568,6 +11569,10 @@ SpriteIconMorph.prototype.fixLayout = function () {
   );
   this.label.setCenter(this.center());
   this.label.setTop(this.thumbnail.bottom() + this.padding);
+  
+  this.color = IDE_Morph.prototype.groupColor;
+  this.highlightColor = IDE_Morph.prototype.frameColor;
+  this.pressColor = this.parentThatIsA(IDE_Morph)?.accentColor || IDE_Morph.prototype.accentColor;
 };
 
 // SpriteIconMorph menu
