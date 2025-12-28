@@ -2577,7 +2577,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   lines.forEach((line) => {
     if (
       ((line.length == 2 && line[0].isBlockLabelBreak) || line.length === 1) &&
-      isReporter
+      isReporter && !parts.some((part)=>(part instanceof CSlotMorph))
     ) {
       line[0].moveBy(
         new Point(
