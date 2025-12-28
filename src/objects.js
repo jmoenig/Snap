@@ -15310,11 +15310,11 @@ WatcherMorph.prototype.init = function (
     this,
     SyntaxElementMorph.prototype.rounding / 2,
     1.000001, // shadow bug in Chrome,
-    new Color(120, 120, 120)
+    new Color(0, 0, 0, 0.15)
   );
 
   // override inherited behavior
-  this.color = new Color(220, 220, 220);
+  this.color = new Color (230, 240, 255);
   this.readoutColor = color;
   this.style = "normal";
   this.target = target || null; // target obj (Sprite) or VariableFrame
