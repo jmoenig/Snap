@@ -155,7 +155,7 @@ IDE_Morph.prototype.setDefaultTheme = function () {
   PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
   PushButtonMorph.prototype.outlineGradient = false;
 
-  SpriteMorph.prototype.paletteColor = new Color(10, 10, 10);
+  SpriteMorph.prototype.paletteColor = new Color(17, 17, 17);
   SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
   StageMorph.prototype.paletteTextColor =
     SpriteMorph.prototype.paletteTextColor;
@@ -2154,7 +2154,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   }
 
   this.spriteBar = new Morph();
-  this.spriteBar.color = this.groupColor;
+  this.spriteBar.color = this.frameColor;
   this.spriteBar.render = function (ctx) {
     ctx.beginPath();
     ctx.roundRect(0, 0, this.width(), this.height(), [8, 8, 0, 0]);
@@ -2514,7 +2514,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   }
 
   this.corral = new Morph();
-  this.corral.color = this.frameColor;
+  this.corral.color = this.groupColor;
   this.corral.getRenderColor = ScriptsMorph.prototype.getRenderColor;
   this.corral.render = function (ctx) {
     ctx.fillStyle = this.color.toString();
@@ -2570,7 +2570,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
       this.album.hide();
       this.frame.setLeft(this.left() + padding);
       this.frame.setExtent(
-        new Point(this.right() - this.frame.left() - 72, this.height())
+        new Point(this.width() - padding, this.height())
       );
     } else {
       this.album.show();
@@ -3015,7 +3015,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // corral
     if (!contains(["selectSprite", "tabEditor"], situation)) {
       this.corral.setPosition(this.spriteBar.bottomLeft());
-      this.corral.setWidth(this.stage.width());
+      this.corral.setWidth(this.stage.width() - 72);
       this.corral.setHeight(this.bottom() - this.corral.top() - border);
       this.corral.fixLayout();
     }
