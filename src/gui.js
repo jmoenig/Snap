@@ -113,6 +113,7 @@ var StageHandleMorph;
 var PaletteHandleMorph;
 var CamSnapshotDialogMorph;
 var SoundRecorderDialogMorph;
+var CorralStageMorph;
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -2431,6 +2432,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   this.spriteBar.fixLayout = function () {
     this.setTop(myself.stage.bottom() + padding);
     this.setLeft(myself.stage.left());
+    this.setWidth(myself.stage.width() - 72);
 
   trashbutton.setTop(this.top() + padding)
   trashbutton.setRight(this.right() - padding);
@@ -2551,15 +2553,12 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   };
   this.add(this.corral);
 
-  this.corral.stageIcon = new SpriteIconMorph(this.stage);
-  this.corral.stageIcon.isDraggable = false;
-  this.corral.stageIcon.setPosition(
-    new Point(
-      this.corral.right() - this.corral.stageIcon.width(),
-      this.corral.stageIcon.bounds.origin.y
-    )
-  );
-  this.corral.add(this.corral.stageIcon);
+  // stage
+  this.corral.stage = new CorralStageMorph(this.stage, this);
+  this.corral.stage.color = this.groupColor;
+  this.corral.stage.borderColor = this.borderColor;
+  this.corral.stage.border = 1;
+  this.corral.add(this.corral.stage);
 
   frame = new ScrollFrameMorph(null, null, this.sliderColor);
   frame.acceptsDrops = false;
@@ -2589,36 +2588,39 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   this.corral.add(this.corral.album);
 
   this.corral.fixLayout = function () {
-    this.stageIcon.setCenter(this.center());
-    this.stageIcon.setLeft(this.left() + padding);
-    this.stageIcon.children[0].setRight(this.right() - padding);
-
     // scenes
     if (myself.scenes.length() < 2) {
       this.album.hide();
+      this.frame.setLeft(this.left() + padding);
+      this.frame.setExtent(
+        new Point(this.right() - this.frame.left() - 72, this.height())
+      );
     } else {
-      this.stageIcon.setTop(this.top());
       this.album.show();
-      this.album.setLeft(this.right() - (this.stageIcon.width() + padding * 2));
-      this.album.setTop(this.stageIcon.bottom() + padding);
-      this.album.setWidth(this.stageIcon.width() + padding * 2);
-      this.album.setHeight(this.height() - this.stageIcon.height() - padding);
+      this.album.setLeft(this.left() + padding);
+      this.album.setTop(this.top() + padding);
+      this.album.setWidth(50);
+      this.album.setHeight(this.height()  - padding);
+      this.frame.setLeft(this.album.right() + padding);
+      this.frame.setExtent(
+        new Point(this.right() - this.album.right() - 72, this.height())
+      );
     }
 
-    this.frame.setLeft(this.stageIcon.right() + padding);
-    this.frame.setExtent(
-      new Point(this.right() - this.frame.left(), this.height())
-    );
     this.arrangeIcons();
+
+    this.stage.setPosition(myself.spriteBar.topRight().add(new Point(padding, 0)));
+    this.stage.setExtent(new Point(72, this.height() + myself.spriteBar.height()));
 
     this.newSpriteButton.bounds.setExtent(new Point(52, 52));
     this.newSpriteButton.label.setCenter(this.newSpriteButton.center());
-    this.newSpriteButton.setBottom(this.bottom() - padding);
-    this.newSpriteButton.setRight(this.right() - padding);
+    this.newSpriteButton.setBottom(this.frame.bottom() - padding);
+    this.newSpriteButton.setRight(this.frame.right() - padding);
 
     this.newSpriteFlyout.setCenter(this.newSpriteButton.center());
     this.newSpriteFlyout.setBottom(this.newSpriteButton.center().y);
     this.newSpriteFlyout.fixLayout();
+
 
     this.refresh();
   };
@@ -2649,7 +2651,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   };
 
   this.corral.refresh = function () {
-    this.stageIcon.refresh();
+    this.stage.refresh();
     this.frame.contents.children.forEach((icon) => icon.refresh());
   };
 
@@ -3121,7 +3123,7 @@ IDE_Morph.prototype.setExtent = function (point) {
         ext.x - (200 + this.oldSpriteBar.tabBar.width() + this.padding * 2);
       minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
       maxHeight = ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5;
-      minRatio = minWidth / this.stage.dimensions.x;
+      minRatio = 1;
       maxRatio = Math.min(
         maxWidth / this.stage.dimensions.x,
         maxHeight / this.stage.dimensions.y
@@ -7747,7 +7749,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     if (this.wasSingleStepping && !Process.prototype.enableSingleStepping) {
       this.toggleSingleStepping();
     }
-    this.setColor(this.backgroundColor);
+    this.setColor(this.frameColor);
     this.controlBar.setColor(this.accentColor);
     elements.forEach((e) => e.show());
     this.stage.setScale(1);
@@ -13896,3 +13898,129 @@ SoundRecorderDialogMorph.prototype.destroy = function () {
   }
   SoundRecorderDialogMorph.uber.destroy.call(this);
 };
+
+
+// CorralStageMorph
+
+// The IDE_Morph corral contains a instance of me.
+
+// CorralStageMorph inherits from BoxMorph:
+
+CorralStageMorph.prototype = new BoxMorph();
+CorralStageMorph.prototype.constructor = CorralStageMorph;
+CorralStageMorph.uber = BoxMorph.prototype;
+
+CorralStageMorph.prototype.thumbSize = new Point(60, 45);
+
+// CorralStageMorph instance creation
+
+function CorralStageMorph(stage, ide) {
+  this.init(stage, ide);
+}
+
+CorralStageMorph.prototype.init = function(stage, ide) {
+  CorralStageMorph.uber.init.call(this);
+
+  this.stage = stage;
+  this.ide = ide
+  this.corner = 10;
+  this.hoverCursor = "pointer";
+
+  this.header = null;
+  this.label = null;
+  this.thumbnail = null;
+  this.backdrops = null;
+
+  this.buildContents();
+
+  // monkey-patch the stage's costumes list
+  var myself = this;
+  this.stage.costumes._changed = this.stage.costumes.changed;
+  this.stage.costumes.changed = function () {
+    this._changed();
+
+    myself.updateBackdrops();
+  }
+}
+
+CorralStageMorph.prototype.buildContents = function() {
+  var myself = this;
+
+  this.header = new Morph();
+  this.header.render = function(ctx) {
+    ctx.beginPath();
+    ctx.roundRect(0, 0, this.width(), this.height(), [myself.corner, myself.corner, 0, 0]);
+    
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = myself.borderColor;
+    ctx.lineWidth = 2;
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.closePath();
+  }
+  this.header.color = WHITE;
+  this.add(this.header);
+
+  this.label = new TextMorph("Stage", 10);
+  this.label.color = BLACK;
+  this.add(this.label);
+
+  this.backdrops = new TextMorph("...", 10, null, null, null, "center");
+  this.backdrops.color = BLACK;
+  this.add(this.backdrops);
+
+  this.createThumbnail();
+  this.updateBackdrops();
+}
+
+CorralStageMorph.prototype.fixLayout = function() {
+  this.header.setPosition(this.topLeft());
+  this.header.setExtent(new Point(this.width(), 40));
+
+  this.label.setCenter(this.header.center());
+
+  this.thumbnail.setCenter(this.center());
+  this.thumbnail.setTop(this.header.bottom() + 5);
+
+  this.backdrops.setCenter(this.center());
+  this.backdrops.setTop(this.thumbnail.bottom() + 10);
+}
+
+CorralStageMorph.prototype.refresh = function() {
+  if (this.ide.currentSprite == this.stage) {
+    this.header.setColor(this.ide.accentColor);
+    this.label.setColor(WHITE);
+  } else {
+    this.header.setColor(WHITE);
+    this.label.setColor(BLACK);
+  }
+}
+
+CorralStageMorph.prototype.mouseClickLeft = function() {
+  this.ide.selectSprite(this.stage);
+}
+
+CorralStageMorph.prototype.createThumbnail = function () {
+  if (this.thumbnail) {
+    this.thumbnail.destroy();
+  }
+
+  this.thumbnail = new Morph();
+  this.thumbnail.isCachingImage = true;
+  this.thumbnail.bounds.setExtent(this.thumbSize);
+  this.thumbnail.cachedImage = this.stage.thumbnail(
+    this.thumbSize,
+    this.thumbnail.cachedImage
+  );
+  this.add(this.thumbnail);
+
+  this.fixLayout();
+};
+
+CorralStageMorph.prototype.updateBackdrops = function () {
+  this.backdrops.text = "Backdrops\n\n" + (this.stage.costumes.length() + 1); // count the always existant "empty" as one
+  this.backdrops.rerender();
+  this.backdrops.fixLayout();
+  this.fixLayout();
+}
