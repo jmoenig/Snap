@@ -155,7 +155,7 @@ IDE_Morph.prototype.setDefaultTheme = function () {
   PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
   PushButtonMorph.prototype.outlineGradient = false;
 
-  SpriteMorph.prototype.paletteColor = new Color(17, 17, 17);
+  SpriteMorph.prototype.paletteColor = new Color(20, 20, 20);
   SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
   StageMorph.prototype.paletteTextColor =
     SpriteMorph.prototype.paletteTextColor;
@@ -165,17 +165,16 @@ IDE_Morph.prototype.setDefaultTheme = function () {
 
   IDE_Morph.prototype.buttonContrast = 30;
   IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
-  IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
+  IDE_Morph.prototype.frameColor = new Color(17, 17, 17);
   IDE_Morph.prototype.borderColor = new Color(64, 64, 64);
 
-  IDE_Morph.prototype.groupColor =
-    SpriteMorph.prototype.paletteColor.lighter(5);
+  IDE_Morph.prototype.groupColor = new Color(30, 30, 30);
   IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
   IDE_Morph.prototype.buttonLabelColor = WHITE;
   IDE_Morph.prototype.tabColors = [
-    IDE_Morph.prototype.groupColor.darker(50),
-    IDE_Morph.prototype.groupColor.darker(25),
-    IDE_Morph.prototype.groupColor,
+    new Color(46, 46, 46),
+    IDE_Morph.prototype.frameColor,
+    IDE_Morph.prototype.frameColor,
   ];
   IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
   IDE_Morph.prototype.appModeColor = BLACK;
@@ -1742,7 +1741,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.destroy();
   }
   this.categories = new ScrollFrameMorph();
-  this.categories.color = this.groupColor;
+  this.categories.color = this.frameColor;
   this.extensionButton = new Morph();
   this.extensionButton.color = this.accentColor;
   this.extensionButton.hoverCursor = "pointer";
