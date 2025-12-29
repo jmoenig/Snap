@@ -7503,8 +7503,8 @@ IDE_Morph.prototype.switchToDevMode = function () {
   this.controlBar.updateLabel();
   this.isAutoFill = false;
   this.isDraggable = true;
-  this.setExtent(world.extent().subtract(100));
-  this.setPosition(world.position().add(20));
+  // this.setExtent(world.extent().subtract(100));
+  // this.setPosition(world.position().add(20));
   this.flushBlocksCache();
   this.refreshPalette();
   this.categories.refreshEmpty();
@@ -13955,9 +13955,19 @@ CorralStageMorph.prototype.buildContents = function() {
     ctx.strokeStyle = myself.borderColor;
     ctx.lineWidth = 2;
     ctx.fill();
+    ctx.closePath();
+    ctx.beginPath();
+
+    ctx.moveTo(0, myself.corner / 2);
+    ctx.lineTo(0, this.height())
+
+    ctx.moveTo(this.width(), myself.corner / 2);
+    ctx.lineTo(this.width(), this.height())
+
+    ctx.moveTo(myself.corner / 2, 0);
+    ctx.lineTo(this.width() - myself.corner / 2, 0)
     ctx.stroke();
 
-    ctx.closePath();
   }
   this.header.color = WHITE;
   this.add(this.header);
