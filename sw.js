@@ -78,6 +78,7 @@ var snapVersion = '12-dev',
         'locale/lang-ua.js',
         'locale/lang-zh_CN.js',
         'locale/lang-zh_TW.js',
+        'locale/lang-vi.js',
 
         //libraries
         'libraries/LIBRARIES.json',

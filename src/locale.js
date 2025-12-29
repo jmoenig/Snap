@@ -704,3 +704,13 @@ SnapTranslator.dict.hy = {
     'last_changed':
         '2025-03-13',
 };
+SnapTranslator.dict.vi = {
+    'language_name':
+        'Tiếng Việt',
+    'language_translator':
+        'Antigravity gemini 3, and Qwen3-Max',
+    'translator_e-mail':
+        'seeergefaure@gmail.com',
+    'last_changed':
+        '2025-11-21'
+};
