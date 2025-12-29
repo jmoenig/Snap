@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.7.0";
+var SplitVersion = "1.7.2";
 
 var IDE_Morph;
 var ProjectDialogMorph;

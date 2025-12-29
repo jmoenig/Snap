@@ -463,9 +463,9 @@ EarsMorph.prototype.render = function (ctx) {
     ctx.fill();
   }
 };
-
-IDE_Morph.prototype.looksMenu = function () {
-    var menu = this.looksMenuData();
+IDE_Morph.prototype.oldLooksMenuData = IDE_Morph.prototype.looksMenuData
+IDE_Morph.prototype.looksMenuData = function () {
+    var menu = this.oldLooksMenuData()
     menu.addPreference(
         'Cat Blocks',
         () => {
@@ -486,8 +486,5 @@ IDE_Morph.prototype.looksMenu = function () {
         'check for cute\n cat hat block skin',
         false
     );
-    menu.popup(
-        this.world(),
-        this.projectControlBar.settingsButton.bottomLeft()
-    );
+    return menu
 };
