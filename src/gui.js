@@ -14024,3 +14024,71 @@ CorralStageMorph.prototype.updateBackdrops = function () {
   this.backdrops.fixLayout();
   this.fixLayout();
 }
+
+// CorralStageMorph drag & drop
+
+CorralStageMorph.prototype.wantsDropOf = function (morph) {
+  // allow scripts & media to be copied from one sprite to another
+  // by drag & drop
+  return (
+    morph instanceof BlockMorph ||
+    morph instanceof CommentMorph ||
+    morph instanceof CostumeIconMorph ||
+    morph instanceof SoundIconMorph
+  );
+};
+
+CorralStageMorph.prototype.reactToDropOf = function (morph, hand) {
+  if (morph instanceof BlockMorph || morph instanceof CommentMorph) {
+    if (!(morph instanceof HatBlockMorph && morph.isCustomBlockSpecific())) {
+      this.copyStack(morph);
+    }
+  } else if (morph instanceof CostumeIconMorph) {
+    this.copyCostume(morph.object);
+  } else if (morph instanceof SoundIconMorph) {
+    this.copySound(morph.object);
+  }
+  this.world().add(morph);
+  morph.slideBackTo(hand.grabOrigin);
+};
+
+CorralStageMorph.prototype.copyStack = function (block) {
+  var stage = this.stage,
+    dup = block.fullCopy(),
+    y = Math.max(
+      stage.scripts.children
+        .map((stack) => stack.fullBounds().bottom())
+        .concat([stage.scripts.top()])
+    );
+
+  dup.setPosition(new Point(stage.scripts.left() + 20, y + 20));
+  stage.scripts.add(dup);
+  if (dup instanceof BlockMorph) {
+    dup.allComments().forEach((comment) => comment.align(dup));
+  }
+  stage.scripts.adjustBounds();
+
+  // delete all local custom blocks (methods) that the receiver
+  // doesn't understand
+  dup.allChildren().forEach((morph) => {
+    if (
+      morph.isCustomBlock &&
+      !morph.isGlobal &&
+      !sprite.getMethod(morph.blockSpec)
+    ) {
+      morph.deleteBlock();
+    }
+  });
+};
+
+CorralStageMorph.prototype.copyCostume = function (costume) {
+  var dup = costume.copy();
+  dup.name = this.stage.newCostumeName(dup.name);
+  this.stage.addCostume(dup);
+  this.stage.wearCostume(dup);
+};
+
+CorralStageMorph.prototype.copySound = function (sound) {
+  var dup = sound.copy();
+  this.stage.addSound(dup.audio, dup.name);
+};
