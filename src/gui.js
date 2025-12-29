@@ -129,6 +129,7 @@ IDE_Morph.uber = Morph.prototype;
 
 IDE_Morph.prototype.isBright = false;
 IDE_Morph.prototype.accentColor = new Color(133, 92, 214);
+IDE_Morph.prototype.darkControlBarColor = new Color(51, 51, 51);
 DialogBoxMorph.prototype.titleBarColor = IDE_Morph.prototype.accentColor; 
 PushButtonMorph.prototype.pressColor = IDE_Morph.prototype.accentColor;
 PushButtonMorph.prototype.highlightColor =
@@ -1081,9 +1082,9 @@ IDE_Morph.prototype.createLogo = function () {
     gradient.addColorStop(0, "black");
     gradient.addColorStop(0.5, myself.accentColor.toString());
     ctx.fillStyle =
-      MorphicPreferences.isFlat || IDE_Morph.prototype.isBright
+      IDE_Morph.prototype.isBright
         ? myself.accentColor.toString()
-        : gradient;
+        : myself.darkControlBarColor.toString();
     ctx.fillRect(0, 0, this.width(), this.height());
     if (this.cachedTexture) {
       this.renderCachedTexture(ctx);
@@ -1394,7 +1395,7 @@ IDE_Morph.prototype.createControlBar = function () {
     cloudButton,
     x,
     colors = [
-      this.accentColor,
+      this.isBright ? this.accentColor : this.darkControlBarColor,
       this.accentColor.withAlpha(0.1), //this.frameColor.darker(50),
       this.frameColor.darker(50),
     ],
@@ -1414,7 +1415,7 @@ IDE_Morph.prototype.createControlBar = function () {
   }
 
   this.controlBarBackground = new Morph();
-  this.controlBarBackground.color = this.accentColor;
+  this.controlBarBackground.color = colors[0];
   this.controlBarBackground.setHeight(48);
 
   this.addChildFirst(this.controlBarBackground);
@@ -1424,7 +1425,7 @@ IDE_Morph.prototype.createControlBar = function () {
   }
 
   this.controlBar = new Morph();
-  this.controlBar.color = this.accentColor;
+  this.controlBar.color = colors[0];
   this.controlBar.setHeight(this.controlBarBackground.height());
 
   // let users manually enforce re-layout when changing orientation
@@ -1495,8 +1496,8 @@ IDE_Morph.prototype.createControlBar = function () {
   button.setWidth(
     buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30
   );
-  button.color = this.accentColor;
-  button.highlightColor = this.accentColor.darker(25);
+  button.color = colors[0];
+  button.highlightColor = colors[0].darker(25);
   button.pressColor = button.highlightColor;
 
   buttonIcon.setColor(WHITE);
@@ -1530,8 +1531,8 @@ IDE_Morph.prototype.createControlBar = function () {
   button.setWidth(
     buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30
   );
-  button.color = this.accentColor;
-  button.highlightColor = this.accentColor.darker(25);
+  button.color = colors[0];
+  button.highlightColor = colors[0].darker(25);
   button.pressColor = button.highlightColor;
 
   buttonIcon.setColor(WHITE);
@@ -1555,30 +1556,6 @@ IDE_Morph.prototype.createControlBar = function () {
   this.controlBar.settingsButton = settingsButton; // for menu positioning
 
   // cloudButton
-  button = new ToggleButtonMorph(
-    null, //colors,
-    this, // the IDE is the target
-    "cloudMenu",
-    [new SymbolMorph("cloudOutline", 11), new SymbolMorph("cloud", 11)],
-    () => !isNil(this.cloud.username) // query
-  );
-
-  button.hasNeutralBackground = true;
-  button.corner = 4;
-  button.color = colors[0];
-  button.highlightColor = colors[1];
-  button.pressColor = colors[0];
-  button.labelMinExtent = new Point(36, 18);
-  button.padding = 0;
-  button.labelShadowOffset = new Point(-1, -1);
-  button.labelShadowColor = colors[1];
-  button.labelColor = WHITE;
-  button.contrast = this.buttonContrast;
-  // button.hint = 'cloud operations';
-  button.makeSquare();
-  button.refresh();
-
-  // cloudButton
   button = new TriggerMorph(this, "cloudMenu");
 
   buttonIcon = new SymbolMorph("cloudOutline", 11);
@@ -1589,8 +1566,8 @@ IDE_Morph.prototype.createControlBar = function () {
   button.setWidth(
     buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30
   );
-  button.color = this.accentColor;
-  button.highlightColor = this.accentColor.darker(25);
+  button.color = colors[0];
+  button.highlightColor = colors[0].darker(25);
   button.pressColor = button.highlightColor;
 
   button.refresh = function () {
@@ -2976,7 +2953,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
     this.stage.moveBy(new Point(0, this.projectControlBar.height()));
     this.projectControlBar.setWidth(this.stage.width());
-    this.projectControlBar.setRight(this.controlBar.right());
+    this.projectControlBar.setLeft(this.stage.left());
     this.projectControlBar.setTop(this.controlBar.bottom());
     this.projectControlBar.fixLayout();
 
@@ -7750,7 +7727,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
       this.toggleSingleStepping();
     }
     this.setColor(this.frameColor);
-    this.controlBar.setColor(this.accentColor);
+    this.controlBar.setColor(this.isBright ? this.accentColor : this.darkControlBarColor);
     elements.forEach((e) => e.show());
     this.stage.setScale(1);
     // show all hidden dialogs
