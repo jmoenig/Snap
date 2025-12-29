@@ -179,6 +179,8 @@ IDE_Morph.prototype.setDefaultTheme = function () {
   IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
   IDE_Morph.prototype.appModeColor = BLACK;
   IDE_Morph.prototype.padding = 0;
+  IDE_Morph.prototype.spriteBarColor = IDE_Morph.prototype.frameColor;
+  IDE_Morph.prototype.corralColor = IDE_Morph.prototype.groupColor;
 
   SpriteIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
   CostumeIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
@@ -218,6 +220,8 @@ IDE_Morph.prototype.setBrightTheme = function () {
   IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
   IDE_Morph.prototype.appModeColor = IDE_Morph.prototype.frameColor;
   IDE_Morph.prototype.padding = 0;
+  IDE_Morph.prototype.spriteBarColor = IDE_Morph.prototype.groupColor;
+  IDE_Morph.prototype.corralColor = IDE_Morph.prototype.frameColor;
 
   SpriteIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
   CostumeIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
@@ -2153,7 +2157,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   }
 
   this.spriteBar = new Morph();
-  this.spriteBar.color = this.frameColor;
+  this.spriteBar.color = this.spriteBarColor;
   this.spriteBar.render = function (ctx) {
     ctx.beginPath();
     ctx.roundRect(0, 0, this.width(), this.height(), [8, 8, 0, 0]);
@@ -2513,7 +2517,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
   }
 
   this.corral = new Morph();
-  this.corral.color = this.groupColor;
+  this.corral.color = this.corralColor;
   this.corral.getRenderColor = ScriptsMorph.prototype.getRenderColor;
   this.corral.render = function (ctx) {
     ctx.fillStyle = this.color.toString();
