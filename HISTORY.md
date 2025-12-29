@@ -53,7 +53,11 @@
 * **Documentation Updates:**
     * updated API.md with new "zoom" configuration key for global magnification
 * **Translation Updates:**
+    * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
+
+### 2025-12-29
+* new Vietnamese translation, thank you, @seeeerge !!
 
 ### 2025-12-22
 * objects, gui: dynamically render sprite icons instead of creating bitmaps every time
