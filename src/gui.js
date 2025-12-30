@@ -181,6 +181,7 @@ IDE_Morph.prototype.setDefaultTheme = function () {
   IDE_Morph.prototype.padding = 0;
   IDE_Morph.prototype.spriteBarColor = IDE_Morph.prototype.frameColor;
   IDE_Morph.prototype.corralColor = IDE_Morph.prototype.groupColor;
+  IDE_Morph.prototype.categoriesColor = IDE_Morph.prototype.frameColor;
 
   SpriteIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
   CostumeIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
@@ -222,6 +223,7 @@ IDE_Morph.prototype.setBrightTheme = function () {
   IDE_Morph.prototype.padding = 0;
   IDE_Morph.prototype.spriteBarColor = IDE_Morph.prototype.groupColor;
   IDE_Morph.prototype.corralColor = IDE_Morph.prototype.frameColor;
+  IDE_Morph.prototype.categoriesColor = IDE_Morph.prototype.groupColor;
 
   SpriteIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
   CostumeIconMorph.prototype.labelColor = IDE_Morph.prototype.buttonLabelColor;
@@ -1745,7 +1747,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.destroy();
   }
   this.categories = new ScrollFrameMorph();
-  this.categories.color = this.groupColor; // look!
+  this.categories.color = this.categoriesColor;
   this.extensionButton = new Morph();
   this.extensionButton.color = this.accentColor;
   this.extensionButton.hoverCursor = "pointer";
