@@ -2535,7 +2535,7 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
 
   // stage
   this.corral.stage = new CorralStageMorph(this.stage, this);
-  this.corral.stage.color = this.frameColor;
+  this.corral.stage.color = this.groupColor;
   this.corral.stage.borderColor = this.borderColor;
   this.corral.stage.border = 1;
   this.corral.add(this.corral.stage);
@@ -14009,8 +14009,20 @@ CorralStageMorph.prototype.createThumbnail = function () {
   ctx.roundRect(0, 0, this.width(), this.height(), 3);
   ctx.closePath();
   ctx.clip();
-  this.renderCachedTexture(aContext);
+  ctx.beginPath();
+  if(this.cachedImage) {
+    this.renderCachedTexture(aContext);
+  } else {
+    ctx.fillStyle = "white";
+    ctx.rect(0,0, this.width(), this.height())
+  }
+  ctx.strokeStyle = this.ide.borderColor;
+  ctx.closePath();
   ctx.restore();
+  ctx.beginPath();
+  ctx.roundRect(0, 0, this.width(), this.height(), 3);
+  ctx.closePath();
+  ctx.stroke()
 };
 
   this.fixLayout();
