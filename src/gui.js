@@ -1110,7 +1110,7 @@ IDE_Morph.prototype.createLogo = function () {
   };
 
   this.logo.color = BLACK;
-  this.logo.setExtent(new Point(150, 48)); // dimensions are fixed
+  this.logo.setExtent(new Point(90, 48)); // dimensions are fixed
   this.add(this.logo);
 };
 IDE_Morph.prototype.createProjectControlBar = function () {
