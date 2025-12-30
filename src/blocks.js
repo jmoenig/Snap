@@ -14538,7 +14538,7 @@ ColorSlotMorph.prototype.getUserColor = function (model) {
         menu.destroy(),
         this.getUserColor(model)
       ),
-      "to " + nextModel.toLocaleUpperCase()
+      new SymbolMorph("arrowRight", 14)
     ),
     pickColorButton = new PushButtonMorph(this, getScreenColor, new SymbolMorph("pipette", 10));
     buttonContainer.mouseMove = nop;
