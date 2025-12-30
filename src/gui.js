@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.7.2";
+var SplitVersion = "1.8.0";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1745,7 +1745,7 @@ IDE_Morph.prototype.createCategories = function () {
     this.categories.destroy();
   }
   this.categories = new ScrollFrameMorph();
-  this.categories.color = this.frameColor;
+  this.categories.color = this.groupColor; // look!
   this.extensionButton = new Morph();
   this.extensionButton.color = this.accentColor;
   this.extensionButton.hoverCursor = "pointer";
@@ -2305,7 +2305,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   this.spriteBar.reactToEdit = nameField.accept;
 
   label = new StringMorph("Sprite", 10, null, true);
-  label.setColor(new Color(87, 94, 117));
+  label.setColor(this.buttonLabelColor); // PLEASE!
   label.setCenter(nameField.center());
   label.setLeft(myself.spriteBar.left() + 12);
   nameField.setLeft(label.right() + 4);
@@ -14004,6 +14004,14 @@ CorralStageMorph.prototype.createThumbnail = function () {
     this.thumbnail.cachedImage
   );
   this.add(this.thumbnail);
+  this.thumbnail.render = function (aContext) {
+  ctx.beginPath();
+  ctx.roundRect(0, 0, this.width(), this.height(), 3);
+  ctx.closePath();
+  ctx.clip();
+  this.renderCachedTexture(aContext);
+  ctx.restore();
+};
 
   this.fixLayout();
 };

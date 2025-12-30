@@ -11618,11 +11618,11 @@ StageMorph.prototype.blockTemplates = function (
     blocks.push(block("setEffect"));
     blocks.push(block("clearEffects"));
     blocks.push(block("getEffect"));
-    blocks.push("-");
+    /*blocks.push("-");
     blocks.push(block("show"));
     blocks.push(block("hide"));
     blocks.push(watcherToggle("reportShown"));
-    blocks.push(block("reportShown"));
+    blocks.push(block("reportShown"));*/
 
     // for debugging: ///////////////
     if (this.world().isDevMode) {

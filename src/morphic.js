@@ -826,7 +826,7 @@
     original one received by the World or by the IME element.
 
     Note that the "reactToKeystroke" event gets triggered before the input
-    changes, and thus befgore the "reactToInput" event fires.
+    changes, and thus before the "reactToInput" event fires.
 
     Once the user has completed the edit, the following events are
     dispatched:
@@ -4909,6 +4909,10 @@ HandleMorph.prototype.init = function (
   this.isDraggable = false;
   if (this.type === "movePivot") {
     size *= 2;
+  } else if (this.type == "resize") {
+    this.hoverCursor = "nwse-resize"
+  } else if (this.type == "move") {
+    this.hoverCursor = "move"
   }
   this.setExtent(new Point(size, size));
   this.fixLayout();

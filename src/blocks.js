@@ -14378,12 +14378,13 @@ ColorSlotMorph.prototype.setColor = function (clr) {
 
 ColorSlotMorph.prototype.getUserColor = function (model) {
   model = model || "hsv"; // hsv, hsl, or rgb
-  var nextModel
+  var nextModel,
+  myself = this;
 
   var menu = new MenuMorph(),
-    hSlider = new SliderMorph(0, 100, this.color[model]()[0] * 100, null),
-    sSlider = new SliderMorph(0, 100, this.color[model]()[1] * 100, null),
-    vSlider = new SliderMorph(0, 100, this.color[model]()[2] * 100, null),
+    hSlider = new SliderMorph(0, 100, this.color[model]()[0] * 100, 8),
+    sSlider = new SliderMorph(0, 100, this.color[model]()[1] * 100, 8),
+    vSlider = new SliderMorph(0, 100, this.color[model]()[2] * 100, 8),
     newColor = new Color(
       this.color.r,
       this.color.g,
@@ -14400,6 +14401,11 @@ ColorSlotMorph.prototype.getUserColor = function (model) {
       this.color[model]()[2]
     ),
     (this.color = newColor),
+    hInp.text = String(h),
+    hInp.children[0].text = String(h),
+    hInp.children[0].children[0].text = String(h),
+    hInp.rerender(),
+    hSlider.fixLayout(),
     this.rerender()
   );
   sSlider.action = (s) => (
@@ -14409,6 +14415,10 @@ ColorSlotMorph.prototype.getUserColor = function (model) {
       this.color[model]()[2]
     ),
     (this.color = newColor),
+    sInp.text = String(s),
+    sInp.children[0].text = String(s),
+    sInp.children[0].children[0].text = String(s),
+    sInp.rerender(),
     this.rerender()
   );
   vSlider.action = (v) => (
@@ -14418,6 +14428,10 @@ ColorSlotMorph.prototype.getUserColor = function (model) {
       v / 100
     ),
     (this.color = newColor),
+    vInp.text = String(v),
+    vInp.children[0].text = String(v),
+    vInp.children[0].children[0].text = String(v),
+    vInp.rerender(),
     this.rerender()
   );
   hSlider.toggleOrientation();
@@ -14425,16 +14439,30 @@ ColorSlotMorph.prototype.getUserColor = function (model) {
   vSlider.toggleOrientation();
   hSlider.fixLayout();
 
-  function createSliderGroup(container, text, slider) {
+  function createSliderGroup(container, text, slider, input) {
+    input.children[0].reactToKeyStroke = function (evt) {
+    setTimeout(() => {
+      slider.value = String(input.children[0].children[0].text);
+      slider.fixLayout();
+      this.rerender();
+      slider.action();
+      input.children[0].children[0].text = String(slider.value);
+      input.text = String(input.children[0].children[0].text);
+    }, 10); // ugh
+  };
     container.mouseMove = nop;
     container.color = CLEAR;
     container.add(text);
     container.add(slider);
+    // container.add(input); WHY DOESN'T ANYTHING WORK?!?!?!?!?!
     text.setPosition(container.position());
     slider.setLeft(container.left());
-    slider.setTop(container.top() + text.rawHeight());
+    slider.setTop(container.top() + text.rawHeight() + 5);
     container.bounds.corner.y = slider.bottom();
     container.setWidth(slider.width());
+    input.contents().minWidth = 50;
+    input.setWidth(50);
+    input.setRight(container.right());
   }
 
   function refreshLabels() {
@@ -14453,10 +14481,13 @@ ColorSlotMorph.prototype.getUserColor = function (model) {
     sText = new StringMorph(model == "rgb" ? "G:" : "S:"),
     vText = new StringMorph(
       model == "rgb" ? "B:" : model == "hsl" ? "L:" : "B:"
-    );
-  createSliderGroup(hContainer, hText, hSlider);
-  createSliderGroup(sContainer, sText, sSlider);
-  createSliderGroup(vContainer, vText, vSlider);
+    ),
+    hInp = new InputFieldMorph(hSlider.value, true),
+    sInp = new InputFieldMorph(sSlider.value, true),
+    vInp = new InputFieldMorph(vSlider.value, true);
+  createSliderGroup(hContainer, hText, hSlider, hInp);
+  createSliderGroup(sContainer, sText, sSlider, sInp);
+  createSliderGroup(vContainer, vText, vSlider, vInp);
   menu.addItem(hContainer, nop);
   menu.addItem(sContainer, nop);
   menu.addItem(vContainer, nop);
