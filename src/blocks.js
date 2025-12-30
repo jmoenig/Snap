@@ -270,7 +270,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
   } catch (error) {
     highContrast = false;
   }
-  this.contrast = highContrast ? 70 : 25; //65;
+  this.contrast = highContrast ? 70 : 20; //65;
   this.scale = scale;
   this.corner = 3 * scale;
   this.rounding = 9 * scale;
@@ -1927,7 +1927,7 @@ SyntaxElementMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
     this instanceof BlockMorph
       ? SpriteMorph.prototype.isHighContrast
         ? 70
-        : 25
+        : 20
       : this.contrast;
   this.children.forEach((morph) => {
     if (morph instanceof SyntaxElementMorph) {
@@ -6021,7 +6021,7 @@ BlockMorph.prototype.outline = function (color, border) {
 // BlockMorph zebra coloring
 
 BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
-  this.contrast = SpriteMorph.prototype.isHighContrast ? 70 : 25;
+  this.contrast = SpriteMorph.prototype.isHighContrast ? 70 : 20;
   var nearest = nearestBlock,
     clr,
     cslot;
