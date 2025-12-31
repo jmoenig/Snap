@@ -1169,8 +1169,8 @@ IDE_Morph.prototype.createProjectControlBar = function () {
 
   button.hasNeutralBackground = true;
   button.corner = 4;
-  button.color = WHITE;
-  button.highlightColor = WHITE;
+  button.color = this.groupColor;
+  button.highlightColor = this.groupColor;
   button.pressColor = colors[1];
   button.labelMinExtent = new Point(36, 18);
   button.padding = 0;
@@ -1196,8 +1196,8 @@ IDE_Morph.prototype.createProjectControlBar = function () {
 
   button.hasNeutralBackground = true;
   button.corner = 4;
-  button.color = WHITE;
-  button.highlightColor = WHITE;
+  button.color = this.groupColor;
+  button.highlightColor = this.groupColor;
   button.pressColor = colors[1];
   button.labelMinExtent = new Point(36, 18);
   button.padding = 0;
@@ -4723,9 +4723,6 @@ IDE_Morph.prototype.settingsMenu = function () {
   );
   menu.addLine();
   menu.addMenu(localize("Looks") + "...", this.looksMenuData());
-  menu.addItem("Zoom blocks...", "userSetBlocksScale");
-  menu.addItem("Fade blocks...", "userFadeBlocks");
-  menu.addItem("Afterglow blocks...", "userSetBlocksAfterglow");
   menu.addLine();
   menu.addItem("Stage size...", "userSetStageSize");
   if (shiftClicked) {
@@ -4739,22 +4736,7 @@ IDE_Morph.prototype.settingsMenu = function () {
   }
   menu.addItem("Microphone resolution...", "microphoneMenu");
   menu.addLine();
-  addPreference(
-    "Blurred shadows",
-    "toggleBlurredShadows",
-    useBlurredShadows,
-    "uncheck to use solid drop\nshadows and highlights",
-    "check to use blurred drop\nshadows and highlights",
-    true
-  );
-  addPreference(
-    "Zebra coloring",
-    "toggleZebraColoring",
-    BlockMorph.prototype.zebraContrast,
-    "uncheck to disable alternating\ncolors for nested block",
-    "check to enable alternating\ncolors for nested blocks",
-    false
-  );
+  
   addPreference(
     "Dynamic input labels",
     "toggleDynamicInputLabels",
@@ -8249,6 +8231,27 @@ IDE_Morph.prototype.looksMenuData = function () {
     false
   );
   menu.addMenu("Accent Color...", this.accentColorMenu());
+  menu.addLine();
+  menu.addItem("Zoom blocks...", "userSetBlocksScale");
+  menu.addItem("Fade blocks...", "userFadeBlocks");
+  menu.addItem("Afterglow blocks...", "userSetBlocksAfterglow");
+  menu.addLine();
+  menu.addPreference(
+    "Blurred shadows",
+    "toggleBlurredShadows",
+    useBlurredShadows,
+    "uncheck to use solid drop\nshadows and highlights",
+    "check to use blurred drop\nshadows and highlights",
+    true
+  );
+  menu.addPreference(
+    "Zebra coloring",
+    "toggleZebraColoring",
+    BlockMorph.prototype.zebraContrast,
+    "uncheck to disable alternating\ncolors for nested block",
+    "check to enable alternating\ncolors for nested blocks",
+    false
+  );
   return menu;
 };
 IDE_Morph.prototype.accentColors = [
