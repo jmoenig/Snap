@@ -12106,7 +12106,7 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
 CostumeIconMorph.prototype.removeCostume = function () {
   var wardrobe = this.parentThatIsA(WardrobeMorph),
     idx = this.parent.children.indexOf(this),
-    off = CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2;
+    off = (CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2) - 1;
   wardrobe.removeCostumeAt(idx - off); // ignore paintbrush and camera buttons
   if (wardrobe.sprite.costume === this.object) {
     wardrobe.sprite.wearCostume(null);
