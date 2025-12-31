@@ -1,4 +1,4 @@
-![Split! Logo](src/split_logo_sm.png)
+![Split! Logo](logo.png)
 # Split<em>!</em> Snap! but Scratch
 A mod of Snap! that looks more like Scratch.
 
