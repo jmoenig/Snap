@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.9.0";
+var SplitVersion = "1.9.1";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -12106,7 +12106,7 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
 CostumeIconMorph.prototype.removeCostume = function () {
   var wardrobe = this.parentThatIsA(WardrobeMorph),
     idx = this.parent.children.indexOf(this),
-    off = (CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2) - 1;
+    off = (CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2) + 1;
   wardrobe.removeCostumeAt(idx - off); // ignore paintbrush and camera buttons
   if (wardrobe.sprite.costume === this.object) {
     wardrobe.sprite.wearCostume(null);
