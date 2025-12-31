@@ -3796,6 +3796,10 @@ IDE_Morph.prototype.applySavedSettings = function () {
       ? this.accentColors[5]
       : accentColor == "indigo"
       ? this.accentColors[6]
+      : accentColor == "cyan"
+      ? this.accentColors[7]
+      : accentColor == "lime"
+      ? this.accentColors[8]
       : this.accentColors[2];
   DialogBoxMorph.prototype.titleBarColor = this.accentColor;
   PushButtonMorph.prototype.pressColor = this.accentColor;
@@ -8252,6 +8256,7 @@ IDE_Morph.prototype.accentColors = [
   new Color(228, 171, 24),
   new Color(71, 102, 204),
   new Color(0, 195, 255),
+  new Color(140, 210, 30),
 ];
 IDE_Morph.prototype.accentColorMenu = function () {
   var menu = new MenuMorph(this),
@@ -8322,6 +8327,16 @@ IDE_Morph.prototype.accentColorMenu = function () {
     this.accentColor.eq(colors[5])
   );
   menu.addPreference(
+    "Lime",
+    () => (
+      (this.accentColor = colors[8]),
+      this.saveSetting("accentColor", "lime"),
+      setAccent(),
+      this.refreshIDE()
+    ),
+    this.accentColor.eq(colors[8])
+  );
+  menu.addPreference(
     "Green",
     () => (
       (this.accentColor = colors[4]),
@@ -8330,6 +8345,16 @@ IDE_Morph.prototype.accentColorMenu = function () {
       this.refreshIDE()
     ),
     this.accentColor.eq(colors[4])
+  );
+  menu.addPreference(
+    "Cyan",
+    () => (
+      (this.accentColor = colors[7]),
+      this.saveSetting("accentColor", "cyan"),
+      setAccent(),
+      this.refreshIDE()
+    ),
+    this.accentColor.eq(colors[7])
   );
   menu.addPreference(
     "Indigo",
