@@ -1631,8 +1631,8 @@ IDE_Morph.prototype.createControlBar = function () {
       x += button.width();
     });*/
 
-    settingsButton.setCenter(myself.controlBar.center());
     settingsButton.setLeft(this.left());
+    projectButton.setLeft(settingsButton.right() + padding);
 
     slider.setCenter(myself.controlBar.center());
     slider.setRight(this.right() - padding);
@@ -1641,22 +1641,18 @@ IDE_Morph.prototype.createControlBar = function () {
     steppingButton.setRight(slider.left() - padding);
 
     if (myself.config.hideSettings) {
-      projectButton.hide();
+      settingsButton.hide();
     }
 
-    settingsButton.setCenter(myself.controlBar.center());
-
     if (myself.config.noImports || myself.config.hideProjects) {
-      settingsButton.hide();
+      projectButton.hide();
     }
 
     if (myself.cloud.disabled) {
       cloudButton.hide();
-      settingsButton.setLeft(projectButton.right() + padding);
     } else {
-      settingsButton.setLeft(projectButton.right() + padding);
       cloudButton.setCenter(myself.controlBar.center());
-      cloudButton.setLeft(settingsButton.right() + padding);
+      cloudButton.setLeft(projectButton.right() + padding);
     }
 
     this.refreshSlider();
@@ -1718,7 +1714,7 @@ IDE_Morph.prototype.createControlBar = function () {
     txt.setPosition(this.label.position());
     this.label.add(txt);
     if (myself.cloud.disabled)
-      this.label.setLeft(this.settingsButton.right() + padding);
+      this.label.setLeft(this.projectButton.right() + padding);
     else this.label.setLeft(this.cloudButton.right() + padding);
     this.label.setExtent(
       new Point(
