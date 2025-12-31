@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.9.6";
+var SplitVersion = "1.9.7";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -2955,7 +2955,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         Math.floor(
           Math.min(
             (this.width() - padding * 2) / this.stage.dimensions.x,
-            (this.height() - this.controlBar.height() * 2 - padding * 2) /
+            (this.height() - this.projectControlBar.height() * 1 - padding * 2) /
               this.stage.dimensions.y
           ) * 10
         ) / 10
@@ -2992,11 +2992,11 @@ IDE_Morph.prototype.fixLayout = function (situation) {
       this.paletteHandle.fixLayout();
     }
 
-    this.stage.moveBy(new Point(0, this.projectControlBar.height()));
     this.projectControlBar.setWidth(this.stage.width());
     this.projectControlBar.setLeft(this.stage.left());
-    this.projectControlBar.setTop(this.controlBar.bottom());
+    this.projectControlBar.setTop(this.isAppMode ? this.controlBar.top() : this.controlBar.bottom());
     this.projectControlBar.fixLayout();
+    this.stage.setTop(this.projectControlBar.bottom());
 
     this.controlBar.fixLayout();
 
@@ -7758,6 +7758,8 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
   var world = this.world(),
     elements = [
       this.logo,
+      this.controlBar,
+      this.spriteBar,
       this.controlBarBackground,
       this.extensionButton,
       this.controlBar.cloudButton,
