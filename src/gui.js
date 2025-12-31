@@ -1394,6 +1394,7 @@ IDE_Morph.prototype.createControlBar = function () {
     startButton,
     projectButton,
     settingsButton,
+    editButton,
     stageSizeButton,
     appModeButton,
     steppingButton,
@@ -1560,6 +1561,41 @@ IDE_Morph.prototype.createControlBar = function () {
   this.controlBar.add(settingsButton);
   this.controlBar.settingsButton = settingsButton; // for menu positioning
 
+  // editButton
+  button = new TriggerMorph(this, "editMenu");
+
+  buttonIcon = new SymbolMorph("edit", 20);
+  buttonLabel = new TextMorph("Edit");
+  buttonArrow = new ArrowMorph("vertical", 16, 2, WHITE);
+  buttonArrow.scale = 1;
+  button.setHeight(48);
+  button.setWidth(
+    buttonIcon.width() + buttonLabel.width() + buttonArrow.width() + 30
+  );
+  button.color = colors[0];
+  button.highlightColor = colors[0].darker(25);
+  button.pressColor = button.highlightColor;
+
+  buttonIcon.setColor(WHITE);
+  buttonIcon.fixLayout();
+  buttonIcon.setCenter(button.center());
+  buttonIcon.setLeft(button.left() + 10);
+  buttonLabel.setColor(WHITE);
+  buttonLabel.setCenter(button.center());
+  buttonLabel.setLeft(buttonIcon.right() + 5);
+  buttonLabel.isBold = true;
+  buttonArrow.setCenter(button.center());
+  buttonArrow.setLeft(buttonLabel.right() + 5);
+
+  button.label.destroy();
+  button.add(buttonIcon);
+  button.add(buttonLabel);
+  button.add(buttonArrow);
+
+  editButton = button;
+  this.controlBar.add(editButton);
+  this.controlBar.editButton = editButton; // for menu positioning
+
   // cloudButton
   button = new TriggerMorph(this, "cloudMenu");
 
@@ -1633,6 +1669,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
     settingsButton.setLeft(this.left());
     projectButton.setLeft(settingsButton.right() + padding);
+    editButton.setLeft(projectButton.right() + padding)
 
     slider.setCenter(myself.controlBar.center());
     slider.setRight(this.right() - padding);
@@ -1652,7 +1689,7 @@ IDE_Morph.prototype.createControlBar = function () {
       cloudButton.hide();
     } else {
       cloudButton.setCenter(myself.controlBar.center());
-      cloudButton.setLeft(projectButton.right() + padding);
+      cloudButton.setLeft(editButton.right() + padding);
     }
 
     this.refreshSlider();
@@ -1714,7 +1751,7 @@ IDE_Morph.prototype.createControlBar = function () {
     txt.setPosition(this.label.position());
     this.label.add(txt);
     if (myself.cloud.disabled)
-      this.label.setLeft(this.projectButton.right() + padding);
+      this.label.setLeft(this.editButton.right() + padding);
     else this.label.setLeft(this.cloudButton.right() + padding);
     this.label.setExtent(
       new Point(
@@ -2868,7 +2905,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
   // this.currentTab == "scripts" ? this.paletteHandle.show() : this.palette.setPosition(new Point(-this.width(), 0))
 
   if (situation !== "refreshPalette") {
-    if (!this.isAppMode)this.extensionButton.show();
+    if (!this.isAppMode) this.extensionButton.show();
     // stage
     if (this.performerMode) {
       this.stage.setLeft(this.palette.right() + padding);
@@ -5490,6 +5527,46 @@ IDE_Morph.prototype.projectMenu = function () {
   menu.popup(world, pos);
 };
 
+// addAdvancedPreference(
+//     "Turbo mode",
+//     "toggleFastTracking",
+//     this.stage.isFastTracked,
+//     "uncheck to run scripts\nat normal speed",
+//     "check to prioritize\nscript execution"
+//   );
+
+IDE_Morph.prototype.editMenu = function () {
+  var menu,
+    world = this.world(),
+    pos = this.controlBar.editButton.bottomLeft(),
+    myself = this;
+
+  menu = new MenuMorph(this);
+  menu.bgColor = this.accentColor;
+  this.ideRender(menu);
+
+  menu.addItem(
+    "Restore",
+    () => {
+      if (this.scene.trash.length) {
+        myself.undelete(myself.scene.trash.pop());
+      }
+    },
+    null,
+    this.scene.trash.length ? null :
+      new Color(255, 255, 255, 0.5)
+  );
+  
+  menu.addItem(
+    this.stage.isFastTracked ?
+      "Turn off Turbo Mode" : 
+      "Turn on Turbo Mode",
+    "toggleFastTracking"
+  );
+
+  menu.popup(world, pos);
+};
+
 IDE_Morph.prototype.resourceURL = function () {
   // Take in variadic inputs that represent an a nested folder structure.
   // Method can be easily overridden if running in a custom location.
@@ -5784,29 +5861,37 @@ IDE_Morph.prototype.undeleteSprites = function (pos) {
 };
 
 IDE_Morph.prototype.undelete = function (aSprite, pos) {
-  var rnd = Process.prototype.reportBasicRandom;
+  var rnd = Process.prototype.reportBasicRandom,
+    myself = this;
 
-  aSprite.setCenter(pos);
-  this.world().add(aSprite);
-  aSprite.glideTo(
-    this.stage.center().subtract(aSprite.extent().divideBy(2)),
-    this.isAnimating ? 100 : 0,
-    null, // easing
-    () => {
-      aSprite.isCorpse = false;
-      aSprite.version = Date.now();
-      aSprite.name = this.newSpriteName(aSprite.name);
-      this.stage.add(aSprite);
-      aSprite.setXPosition(rnd.call(this, -50, 50));
-      aSprite.setYPosition(rnd.call(this, -50, 59));
-      aSprite.fixLayout();
-      aSprite.rerender();
-      this.sprites.add(aSprite);
-      this.corral.addSprite(aSprite);
-      this.selectSprite(aSprite);
-      this.scene.updateTrash();
-    }
-  );
+  function restore() {
+    aSprite.isCorpse = false;
+    aSprite.version = Date.now();
+    aSprite.name = myself.newSpriteName(aSprite.name);
+    myself.stage.add(aSprite);
+    aSprite.setXPosition(rnd.call(myself, -50, 50));
+    aSprite.setYPosition(rnd.call(myself, -50, 59));
+    aSprite.fixLayout();
+    aSprite.rerender();
+    myself.sprites.add(aSprite);
+    myself.corral.addSprite(aSprite);
+    myself.selectSprite(aSprite);
+    myself.scene.updateTrash();
+  }
+
+  if (pos == null) restore();
+  else {
+    aSprite.setCenter(pos);
+    this.world().add(aSprite);
+    aSprite.glideTo(
+      this.stage.center().subtract(aSprite.extent().divideBy(2)),
+      this.isAnimating ? 100 : 0,
+      null, // easing
+      () => {
+        restore();
+      }
+    );
+  }
 };
 
 // IDE_Morph menu actions

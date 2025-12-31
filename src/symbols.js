@@ -73,6 +73,7 @@ SymbolMorph.prototype.names = [
   "gearPartial",
   "gearBig",
   "file",
+  "edit",
   "fullScreen",
   "grow",
   "normalScreen",
@@ -285,6 +286,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
       break;
     case "file":
       this.renderSymbolFile(ctx, aColor);
+      break;
+    case "edit":
+      this.renderSymbolEdit(ctx, aColor);
       break;
     case "fullScreen":
       this.renderSymbolFullScreen(ctx, aColor);
@@ -619,6 +623,9 @@ SymbolMorph.prototype.fileSymbolBlack.src = "src/file-black.svg";
 SymbolMorph.prototype.fileSymbolGrey = new Image();
 SymbolMorph.prototype.fileSymbolGrey.src = "src/file-grey.svg";
 
+SymbolMorph.prototype.editSymbol = new Image();
+SymbolMorph.prototype.editSymbol.src = "src/edit.svg";
+
 SymbolMorph.prototype.turnRightImage = new Image();
 SymbolMorph.prototype.turnRightImage.src = "src/rotate-right.svg";
 SymbolMorph.prototype.turnRightImageBlack = new Image();
@@ -915,6 +922,13 @@ SymbolMorph.prototype.renderSymbolFile = function (ctx, color) {
   ctx.lineTo(w, 0);
   ctx.closePath();
   ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolEdit = function (ctx, color) {
+  return this.drawImage(
+    ctx,
+    this.editSymbol
+  );
 };
 
 SymbolMorph.prototype.renderSymbolFullScreen = function (ctx, color) {
