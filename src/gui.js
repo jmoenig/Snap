@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.9.3";
+var SplitVersion = "1.9.4";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1169,9 +1169,9 @@ IDE_Morph.prototype.createProjectControlBar = function () {
 
   button.hasNeutralBackground = true;
   button.corner = 4;
-  button.color = colors[0];
-  button.highlightColor = colors[1];
-  button.pressColor = colors[0];
+  button.color = WHITE;
+  button.highlightColor = WHITE;
+  button.pressColor = colors[1];
   button.labelMinExtent = new Point(36, 18);
   button.padding = 0;
   button.labelShadowOffset = new Point(-1, -1);
@@ -1190,15 +1190,15 @@ IDE_Morph.prototype.createProjectControlBar = function () {
     null, //colors,
     this, // the IDE is the target
     "toggleAppMode",
-    [new SymbolMorph("grow", 16), new SymbolMorph("shrink", 16)],
+    [new SymbolMorph("grow", 20), new SymbolMorph("shrink", 20)],
     () => this.isAppMode // query
   );
 
   button.hasNeutralBackground = true;
   button.corner = 4;
-  button.color = colors[0];
-  button.highlightColor = colors[1];
-  button.pressColor = colors[0];
+  button.color = WHITE;
+  button.highlightColor = WHITE;
+  button.pressColor = colors[1];
   button.labelMinExtent = new Point(36, 18);
   button.padding = 0;
 
@@ -1335,7 +1335,10 @@ IDE_Morph.prototype.createProjectControlBar = function () {
   this.projectControlBar.add(startButton);
   this.projectControlBar.startButton = startButton;
 
+
   this.projectControlBar.fixLayout = function () {
+    myself.projectControlBar.setWidth(myself.stage.width());
+    myself.projectControlBar.setLeft(myself.stage.left())
     x = this.right() - padding;
     [appModeButton, stageSizeButton].forEach((button) => {
       button.setCenter(myself.projectControlBar.center());
@@ -1346,13 +1349,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
 
     x = stageSizeButton.left() - (3 * padding + 3 * stageSizeButton.width());
     if (!myself.config.noSprites) {
-      x = Math.min(
-        x,
-        myself.right() -
-          myself.stage.dimensions.x *
-            (myself.isSmallStage ? myself.stageRatio : 1) -
-          (myself.config.border || 0)
-      );
+      x = myself.stage.left();
       x = Math.max(x, this.left());
     }
     if (myself.performerMode) {
