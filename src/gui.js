@@ -7791,6 +7791,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
       this.controlBar.cloudButton,
       this.controlBar.projectButton,
       this.controlBar.settingsButton,
+      this.controlBar.editButton,
       this.controlBar.steppingButton,
       this.projectControlBar.stageSizeButton,
       this.paletteHandle,
