@@ -2892,7 +2892,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
           "ExactRational",
           "ExactInteger",
         ],
-        value.constructor.name
+        value != null ? value.constructor.name : ""
       ) &&
       value instanceof Object
         ? ((x) => {
