@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.9.1";
+var SplitVersion = "1.9.2";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -399,7 +399,7 @@ function IDE_Morph(config = {}) {
 
 IDE_Morph.prototype.init = function (config) {
   // global font setting
-  MorphicPreferences.globalFontFamily = "Helvetica, Arial";
+  MorphicPreferences.globalFontFamily = "\"Helvetical Nue\", Helvetica, Arial";
 
   // additional properties:
   this.cloud = new Cloud();

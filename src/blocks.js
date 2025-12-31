@@ -2613,8 +2613,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
       } else {
         part.setRight(this.left() + this.width());
         part.setLeft(this.left() + this.labelPadding);
-        part.bounds.corner.x =
-          part.bounds.origin.x + (this.width() - this.labelPadding);
+        part.bounds.setWidth(blockWidth - (part.left() - this.left()));
         //part.setWidth(this.width() - this.labelPadding);
         //adjustMultiWidth = this.corner + this.edge;
       }
