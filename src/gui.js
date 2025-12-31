@@ -1744,6 +1744,11 @@ IDE_Morph.prototype.createCategories = function () {
   }
   this.categories = new ScrollFrameMorph();
   this.categories.color = this.categoriesColor;
+
+  if (this.extensionButton) {
+    this.extensionButton.destroy();
+  }
+
   this.extensionButton = new Morph();
   this.extensionButton.color = this.accentColor;
   this.extensionButton.hoverCursor = "pointer";
@@ -1758,7 +1763,7 @@ IDE_Morph.prototype.createCategories = function () {
   // this.categories.bounds.setWidth(this.paletteWidth);
   this.categories.bounds.setWidth(this.catWidth);
   this.categories.bounds.setHeight(
-    world.height() - this.extensionButton.height()
+    this.height() - this.extensionButton.height() - this.categories.top()
   );
   this.categories.buttons = [];
   this.categories.isVisible = flag;
@@ -1952,7 +1957,6 @@ IDE_Morph.prototype.createCategories = function () {
         }
         myself.categories.add(scroller);
         myself.categories.scroller = scroller;*/
-    myself.categories.bounds.corner.y = myself.bottom();
   }
 
   SpriteMorph.prototype.categories.forEach((cat) => {
@@ -2864,7 +2868,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
   // this.currentTab == "scripts" ? this.paletteHandle.show() : this.palette.setPosition(new Point(-this.width(), 0))
 
   if (situation !== "refreshPalette") {
-    this.extensionButton.show();
+    if (!this.isAppMode)this.extensionButton.show();
     // stage
     if (this.performerMode) {
       this.stage.setLeft(this.palette.right() + padding);
