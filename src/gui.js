@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.9.2";
+var SplitVersion = "1.9.3";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -130,7 +130,7 @@ IDE_Morph.uber = Morph.prototype;
 IDE_Morph.prototype.isBright = false;
 IDE_Morph.prototype.accentColor = new Color(133, 92, 214);
 IDE_Morph.prototype.darkControlBarColor = new Color(51, 51, 51);
-DialogBoxMorph.prototype.titleBarColor = IDE_Morph.prototype.accentColor; 
+DialogBoxMorph.prototype.titleBarColor = IDE_Morph.prototype.accentColor;
 PushButtonMorph.prototype.pressColor = IDE_Morph.prototype.accentColor;
 PushButtonMorph.prototype.highlightColor =
   PushButtonMorph.prototype.pressColor.lighter(50);
@@ -256,100 +256,9 @@ IDE_Morph.prototype.setFlatDesign();
 // Scratch blocks XML
 // Doesn't contain all blocks yet, original in "scratch_blocks.xml"
 // in src (this directory), for editing
+// by the way... did you put the + manually?
 IDE_Morph.prototype.scratchBlocksXml =
-  '<blocks app="Snap! 11.0.8, https://snap.berkeley.edu" version="2"><block-definition s="set rotat' + 
-  'ion style to %&apos;style&apos;" type="command" category="motion"><header></header><code></code>' + 
-  '<translations></translations><inputs><input type="%s" readonly="true" irreplaceable="true" initi' + 
-  'al="1">$_all around<options>$_all around&#xD;$_left-right&#xD;$_don&apos;t rotate</options></inp' + 
-  'ut></inputs><script><block s="doIf"><block s="reportVariadicEquals"><list><block s="reportTextFu' + 
-  'nction"><l><option>unselect</option></l><block var="style"/></block><l>all around</l></list></bl' + 
-  'ock><script><block s="doSetVar"><l><option>my rotation style</option></l><l>1</l></block></scrip' + 
-  't><list><block s="reportVariadicEquals"><list><block s="reportTextFunction"><l><option>unselect<' + 
-  '/option></l><block var="style"/></block><l>left-right</l></list></block><script><block s="doSetV' + 
-  'ar"><l><option>my rotation style</option></l><l>2</l></block></script><block s="reportVariadicEq' + 
-  'uals"><list><block s="reportTextFunction"><l><option>unselect</option></l><block var="style"/></' + 
-  'block><l>don&apos;t rotate</l></list></block><script><block s="doSetVar"><l><option>my rotation ' + 
-  'style</option></l><l>0</l></block></script></list></block></script></block-definition><block-def' + 
-  'inition s="glide %&apos;secs&apos; secs to %&apos;dest&apos;" type="command" category="motion"><' + 
-  'header></header><code></code><translations></translations><inputs><input type="%n" initial="1">1' + 
-  '</input><input type="%s" readonly="true" initial="1">$_random position<options>§_destinationsMen' + 
-  'u</options></input></inputs><script><block s="doGlide"><block var="secs"/><block s="reportAttrib' + 
-  'uteOf"><l><option>x position</option></l><block var="dest"/></block><block s="reportAttributeOf"' + 
-  '><l><option>y position</option></l><block var="dest"/></block></block></script></block-definitio' + 
-  'n><block-definition s="switch backdrop to %&apos;name&apos;" type="command" category="looks"><he' + 
-  'ader></header><code></code><translations></translations><inputs><input type="%s" readonly="true"' + 
-  ' initial="1"><options>§_dynamicMenu</options></input></inputs><script><block s="doIf"><block s="' + 
-  'reportVariadicEquals"><list><block var="name"/><l>next backdrop</l></list></block><script><block' + 
-  ' s="doTellTo"><l>Stage</l><block s="reifyScript"><script><block s="doWearNextCostume"></block></' + 
-  'script><list></list></block><list></list></block></script><list><block s="reportVariadicEquals">' + 
-  '<list><block var="name"/><l>previous backdrop</l></list></block><script><block s="doTellTo"><l>S' + 
-  'tage</l><block s="reifyScript"><script><block s="doDeclareVariables"><list><l>prev</l></list></b' + 
-  'lock><block s="doSetVar"><l>prev</l><block s="reportDifference"><block s="getCostumeIdx"></block' + 
-  '><l>1</l></block></block><block s="doIf"><block s="reportVariadicLessThan"><list><block var="pre' + 
-  'v"/><l>1</l></list></block><script><block s="doSetVar"><l>prev</l><block s="reportListAttribute"' + 
-  '><l><option>length</option></l><block s="reportGet"><l><option>costumes</option></l></block></bl' + 
-  'ock></block></script><list></list></block><block s="doSwitchToCostume"><block var="prev"/></bloc' + 
-  'k></script><list></list></block><list></list></block></script><block s="reportVariadicEquals"><l' + 
-  'ist><block var="name"/><l>random backdrop</l></list></block><script><block s="doTellTo"><l>Stage' + 
-  '</l><block s="reifyScript"><script><block s="doSwitchToCostume"><block s="reportRandom"><l>1</l>' + 
-  '<block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><block s="reportListAtt' + 
-  'ribute"><l><option>length</option></l><block s="reportGet"><l><option>costumes</option></l></blo' + 
-  'ck></block></autolambda><list></list></block><list></list></block></block></block></script><list' + 
-  '></list></block><list></list></block></script><l><bool>true</bool></l><script><block s="doTellTo' + 
-  '"><l>Stage</l><block s="reifyScript"><script><block s="doSwitchToCostume"><l></l></block></scrip' + 
-  't><list></list></block><list><block var="name"/></list></block></script></list></block></script>' + 
-  '<scripts><script x="528" y="413.44999999999976"><block s="receiveSlotEvent"><l>name</l><l><optio' + 
-  'n>menu</option></l></block><block s="doDeclareVariables"><list><l>costs</l></list></block><block' + 
-  ' s="doSetVar"><l>costs</l><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolamb' + 
-  'da><block s="reportMap"><block s="reifyReporter"><autolambda><block s="reportGetImageAttribute">' + 
-  '<l><option>name</option></l><l></l></block></autolambda><list></list></block><block s="reportGet' + 
-  '"><l><option>costumes</option></l></block></block></autolambda><list></list></block><list></list' + 
-  '></block></block><block s="doReport"><block s="reportConcatenatedLists"><list><block s="reportNe' + 
-  'wList"><list><l>Empty</l><l>&#126;</l></list></block><block var="costs"/><block s="reportNewList' + 
-  '"><list><l>next backdrop</l><l>previous backdrop</l><l>random backdrop</l></list></block></list>' + 
-  '</block></block></script></scripts></block-definition><block-definition s="next backdrop" type="' + 
-  'command" category="looks"><header></header><code></code><translations></translations><inputs></i' + 
-  'nputs><script><block s="doTellTo"><l>Stage</l><block s="reifyScript"><script><block s="doWearNex' + 
-  'tCostume"></block></script><list></list></block><list></list></block></script></block-definition' + 
-  '><block-definition s="costume %&apos;gettype&apos;" type="reporter" category="looks" space="true' + 
-  '"><header></header><code></code><translations></translations><inputs><input type="%s" readonly="' + 
-  'true" initial="1">name<options>number&#xD;name</options></input></inputs><script><block s="doRep' + 
-  'ort"><block s="reportIfElse"><block s="reportVariadicEquals"><list><block var="gettype"/><l>numb' + 
-  'er</l></list></block><block s="getCostumeIdx"></block><block s="reportGetImageAttribute"><l><opt' + 
-  'ion>name</option></l><l><option>current</option></l></block></block></block></script></block-def' + 
-  'inition><block-definition s="backdrop %&apos;gettype&apos;" type="reporter" category="looks"><he' + 
-  'ader></header><code></code><translations></translations><inputs><input type="%s" readonly="true"' + 
-  ' initial="1">name<options>number&#xD;name</options></input></inputs><script><block s="doDeclareV' + 
-  'ariables"><list><l>a</l></list></block><block s="doIfElse"><block s="reportVariadicEquals"><list' + 
-  '><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><block s="getCostumeId' + 
-  'x"></block></autolambda><list></list></block><list></list></block><l>0</l></list></block><script' + 
-  '><block s="doReport"><block s="reportIfElse"><block s="reportVariadicEquals"><list><block var="g' + 
-  'ettype"/><l>numbwe</l></list></block><l>0</l><l>Empty</l></block></block></script><script><block' + 
-  ' s="doReport"><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><custom-b' + 
-  'lock s="costume %s"><l></l></custom-block></autolambda><list></list></block><list><block var="ge' + 
-  'ttype"/></list></block></block></script></block></script></block-definition><block-definition s=' + 
-  '"when backdrop switches to %&apos;backdrop&apos;" type="hat" category="events"><variables><list ' + 
-  'struct="atomic" id="326">last</list></variables><header></header><code></code><translations></tr' + 
-  'anslations><inputs><input type="%s" readonly="true" irreplaceable="true" initial="1"><options>§_' + 
-  'dynamicMenu</options></input></inputs><script><block s="doIf"><block s="reportVariadicNotEquals"' + 
-  '><list><block var="last"/><custom-block s="backdrop %s"><l>name</l></custom-block></list></block' + 
-  '><script><block s="doSetVar"><l>last</l><custom-block s="backdrop %s"><l>name</l></custom-block>' + 
-  '</block><block s="doIf"><block s="reportVariadicEquals"><list><custom-block s="backdrop %s"><l>n' + 
-  'ame</l></custom-block><block var="backdrop"/></list></block><script><block s="doReport"><block s' + 
-  '="reportBoolean"><l><bool>true</bool></l></block></block></script><list></list></block></script>' + 
-  '<list></list></block><block s="doReport"><block s="reportBoolean"><l><bool>false</bool></l></blo' + 
-  'ck></block></script><scripts><script x="10" y="337.45"><block s="receiveSlotEvent"><l>backdrop</' + 
-  'l><l><option>menu</option></l></block><block s="doReport"><block s="reportConcatenatedLists"><li' + 
-  'st><block s="reportNewList"><list><l>Empty</l><l>&#126;</l></list></block><block s="reportAskFor' + 
-  '"><l>Stage</l><block s="reifyReporter"><autolambda><block s="reportMap"><block s="reifyReporter"' + 
-  '><autolambda><block s="reportGetImageAttribute"><l><option>name</option></l><l></l></block></aut' + 
-  'olambda><list></list></block><block s="reportGet"><l><option>costumes</option></l></block></bloc' + 
-  'k></autolambda><list></list></block><list></list></block></list></block></block></script></scrip' + 
-  'ts></block-definition><block-definition s="set drag mode %&apos;drag?&apos;" type="command" cate' + 
-  'gory="sensing"><header></header><code></code><translations></translations><inputs><input type="%' + 
-  's" initial="1">draggable<options>draggable&#xD;not draggable</options></input></inputs><script><' + 
-  'block s="doSetVar"><l><option>my draggable?</option></l><block s="reportVariadicEquals"><list><b' + 
-  'lock var="drag?"/><l>draggable</l></list></block></block></script></block-definition></blocks>';
+  '<blocks app="Snap! 11.0.8, https://snap.berkeley.edu" version="2"><block-definition s="set rotation style to %&apos;style&apos;" type="command" category="motion"><header></header><code></code><translations></translations><inputs><input type="%s" readonly="true" irreplaceable="true" initial="1">$_all around<options>$_all around&#xD;$_left-right&#xD;$_don&apos;t rotate</options></input></inputs><script><block s="doIf"><block s="reportVariadicEquals"><list><block s="reportTextFunction"><l><option>unselect</option></l><block var="style"/></block><l>all around</l></list></block><script><block s="doSetVar"><l><option>my rotation style</option></l><l>1</l></block></script><list><block s="reportVariadicEquals"><list><block s="reportTextFunction"><l><option>unselect</option></l><block var="style"/></block><l>left-right</l></list></block><script><block s="doSetVar"><l><option>my rotation style</option></l><l>2</l></block></script><block s="reportVariadicEquals"><list><block s="reportTextFunction"><l><option>unselect</option></l><block var="style"/></block><l>don&apos;t rotate</l></list></block><script><block s="doSetVar"><l><option>my rotation style</option></l><l>0</l></block></script></list></block></script></block-definition><block-definition s="glide %&apos;secs&apos; secs to %&apos;dest&apos;" type="command" category="motion"><header></header><code></code><translations></translations><inputs><input type="%n" initial="1">1</input><input type="%s" readonly="true" initial="1">$_random position<options>§_destinationsMenu</options></input></inputs><script><block s="doGlide"><block var="secs"/><block s="reportAttributeOf"><l><option>x position</option></l><block var="dest"/></block><block s="reportAttributeOf"><l><option>y position</option></l><block var="dest"/></block></block></script></block-definition><block-definition s="switch backdrop to %&apos;name&apos;" type="command" category="looks"><header></header><code></code><translations></translations><inputs><input type="%s" readonly="true" initial="1"><options>§_dynamicMenu</options></input></inputs><script><block s="doIf"><block s="reportVariadicEquals"><list><block var="name"/><l>next backdrop</l></list></block><script><block s="doTellTo"><l>Stage</l><block s="reifyScript"><script><block s="doWearNextCostume"></block></script><list></list></block><list></list></block></script><list><block s="reportVariadicEquals"><list><block var="name"/><l>previous backdrop</l></list></block><script><block s="doTellTo"><l>Stage</l><block s="reifyScript"><script><block s="doDeclareVariables"><list><l>prev</l></list></block><block s="doSetVar"><l>prev</l><block s="reportDifference"><block s="getCostumeIdx"></block><l>1</l></block></block><block s="doIf"><block s="reportVariadicLessThan"><list><block var="prev"/><l>1</l></list></block><script><block s="doSetVar"><l>prev</l><block s="reportListAttribute"><l><option>length</option></l><block s="reportGet"><l><option>costumes</option></l></block></block></block></script><list></list></block><block s="doSwitchToCostume"><block var="prev"/></block></script><list></list></block><list></list></block></script><block s="reportVariadicEquals"><list><block var="name"/><l>random backdrop</l></list></block><script><block s="doTellTo"><l>Stage</l><block s="reifyScript"><script><block s="doSwitchToCostume"><block s="reportRandom"><l>1</l><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><block s="reportListAttribute"><l><option>length</option></l><block s="reportGet"><l><option>costumes</option></l></block></block></autolambda><list></list></block><list></list></block></block></block></script><list></list></block><list></list></block></script><l><bool>true</bool></l><script><block s="doTellTo"><l>Stage</l><block s="reifyScript"><script><block s="doSwitchToCostume"><l></l></block></script><list></list></block><list><block var="name"/></list></block></script></list></block></script><scripts><script x="528" y="413.44999999999976"><block s="receiveSlotEvent"><l>name</l><l><option>menu</option></l></block><block s="doDeclareVariables"><list><l>costs</l></list></block><block s="doSetVar"><l>costs</l><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><block s="reportMap"><block s="reifyReporter"><autolambda><block s="reportGetImageAttribute"><l><option>name</option></l><l></l></block></autolambda><list></list></block><block s="reportGet"><l><option>costumes</option></l></block></block></autolambda><list></list></block><list></list></block></block><block s="doReport"><block s="reportConcatenatedLists"><list><block s="reportNewList"><list><l>Empty</l><l>&#126;</l></list></block><block var="costs"/><block s="reportNewList"><list><l>next backdrop</l><l>previous backdrop</l><l>random backdrop</l></list></block></list></block></block></script></scripts></block-definition><block-definition s="next backdrop" type="command" category="looks"><header></header><code></code><translations></translations><inputs></inputs><script><block s="doTellTo"><l>Stage</l><block s="reifyScript"><script><block s="doWearNextCostume"></block></script><list></list></block><list></list></block></script></block-definition><block-definition s="costume %&apos;gettype&apos;" type="reporter" category="looks" space="true"><header></header><code></code><translations></translations><inputs><input type="%s" readonly="true" irreplaceable="true" initial="1">name<options>number&#xD;name</options></input></inputs><script><block s="doReport"><block s="reportIfElse"><block s="reportVariadicEquals"><list><block var="gettype"/><l>number</l></list></block><block s="getCostumeIdx"></block><block s="reportGetImageAttribute"><l><option>name</option></l><l><option>current</option></l></block></block></block></script></block-definition><block-definition s="backdrop %&apos;gettype&apos;" type="reporter" category="looks"><header></header><code></code><translations></translations><inputs><input type="%s" readonly="true" irreplaceable="true" initial="1">name<options>number&#xD;name</options></input></inputs><script><block s="doDeclareVariables"><list><l>a</l></list></block><block s="doIfElse"><block s="reportVariadicEquals"><list><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><block s="getCostumeIdx"></block></autolambda><list></list></block><list></list></block><l>0</l></list></block><script><block s="doReport"><block s="reportIfElse"><block s="reportVariadicEquals"><list><block var="gettype"/><l>numbwe</l></list></block><l>0</l><l>Empty</l></block></block></script><script><block s="doReport"><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><custom-block s="costume %s"><l></l></custom-block></autolambda><list></list></block><list><block var="gettype"/></list></block></block></script></block></script></block-definition><block-definition s="when backdrop switches to %&apos;backdrop&apos;" type="hat" category="events"><variables><list struct="atomic" id="326">last</list></variables><header></header><code></code><translations></translations><inputs><input type="%s" readonly="true" irreplaceable="true" initial="1"><options>§_dynamicMenu</options></input></inputs><script><block s="doIf"><block s="reportVariadicNotEquals"><list><block var="last"/><custom-block s="backdrop %s"><l>name</l></custom-block></list></block><script><block s="doSetVar"><l>last</l><custom-block s="backdrop %s"><l>name</l></custom-block></block><block s="doIf"><block s="reportVariadicEquals"><list><custom-block s="backdrop %s"><l>name</l></custom-block><block var="backdrop"/></list></block><script><block s="doReport"><block s="reportBoolean"><l><bool>true</bool></l></block></block></script><list></list></block></script><list></list></block><block s="doReport"><block s="reportBoolean"><l><bool>false</bool></l></block></block></script><scripts><script x="10" y="349.45"><block s="receiveSlotEvent"><l>backdrop</l><l><option>menu</option></l></block><block s="doReport"><block s="reportConcatenatedLists"><list><block s="reportNewList"><list><l>Empty</l></list></block><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><block s="reportMap"><block s="reifyReporter"><autolambda><block s="reportGetImageAttribute"><l><option>name</option></l><l></l></block></autolambda><list></list></block><block s="reportGet"><l><option>costumes</option></l></block></block></autolambda><list></list></block><list></list></block></list></block></block></script></scripts></block-definition><block-definition s="set drag mode %&apos;drag?&apos;" type="command" category="sensing"><header></header><code></code><translations></translations><inputs><input type="%s" readonly="true" irreplaceable="true" initial="1">draggable<options>draggable&#xD;not draggable</options></input></inputs><script><block s="doSetVar"><l><option>my draggable?</option></l><block s="reportVariadicEquals"><list><block var="drag?"/><l>draggable</l></list></block></block></script></block-definition></blocks>';
 
 // IDE_Morph instance creation:
 
@@ -399,7 +308,7 @@ function IDE_Morph(config = {}) {
 
 IDE_Morph.prototype.init = function (config) {
   // global font setting
-  MorphicPreferences.globalFontFamily = "\"Helvetical Nue\", Helvetica, Arial";
+  MorphicPreferences.globalFontFamily = '"Helvetical Nue", Helvetica, Arial';
 
   // additional properties:
   this.cloud = new Cloud();
@@ -1184,10 +1093,9 @@ IDE_Morph.prototype.createLogo = function () {
     var gradient = ctx.createLinearGradient(0, 0, this.width(), 0);
     gradient.addColorStop(0, "black");
     gradient.addColorStop(0.5, myself.accentColor.toString());
-    ctx.fillStyle =
-      IDE_Morph.prototype.isBright
-        ? myself.accentColor.toString()
-        : myself.darkControlBarColor.toString();
+    ctx.fillStyle = IDE_Morph.prototype.isBright
+      ? myself.accentColor.toString()
+      : myself.darkControlBarColor.toString();
     ctx.fillRect(0, 0, this.width(), this.height());
     if (this.cachedTexture) {
       this.renderCachedTexture(ctx);
@@ -1767,7 +1675,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
     settingsButton.setLeft(this.left());
     projectButton.setLeft(settingsButton.right() + padding);
-    editButton.setLeft(projectButton.right() + padding)
+    editButton.setLeft(projectButton.right() + padding);
 
     slider.setCenter(myself.controlBar.center());
     slider.setRight(this.right() - padding);
@@ -1852,10 +1760,7 @@ IDE_Morph.prototype.createControlBar = function () {
       this.label.setLeft(this.editButton.right() + padding);
     else this.label.setLeft(this.cloudButton.right() + padding);
     this.label.setExtent(
-      new Point(
-        steppingButton.left() - this.label.left(),
-        txt.height()
-      )
+      new Point(steppingButton.left() - this.label.left(), txt.height())
     );
     this.label.setCenter(new Point(this.label.center().x, this.center().y));
     this.add(this.label);
@@ -2423,9 +2328,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   nameField.setWidth(128); // fixed dimensions
   nameField.contrast = 0;
   nameField.fontSize = 10;
-  nameField.setPosition(
-    myself.spriteBar.position().add(new Point(0, 12))
-  );
+  nameField.setPosition(myself.spriteBar.position().add(new Point(0, 12)));
   nameField.doConstrastingColor = false;
   nameField.typeInPadding = 8;
   this.spriteBar.add(nameField);
@@ -2551,8 +2454,8 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
     this.setLeft(myself.stage.left());
     this.setWidth(myself.stage.width() - 72);
 
-  trashbutton.setTop(this.top() + padding)
-  trashbutton.setRight(this.right() - padding);
+    trashbutton.setTop(this.top() + padding);
+    trashbutton.setRight(this.right() - padding);
   };
 };
 
@@ -2709,15 +2612,13 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     if (myself.scenes.length() < 2) {
       this.album.hide();
       this.frame.setLeft(this.left() + padding);
-      this.frame.setExtent(
-        new Point(this.width() - padding, this.height())
-      );
+      this.frame.setExtent(new Point(this.width() - padding, this.height()));
     } else {
       this.album.show();
       this.album.setLeft(this.left() + padding);
       this.album.setTop(this.top() + padding);
       this.album.setWidth(50);
-      this.album.setHeight(this.height()  - padding);
+      this.album.setHeight(this.height() - padding);
       this.frame.setLeft(this.album.right() + padding);
       this.frame.setExtent(
         new Point(this.right() - this.album.right() - 72, this.height())
@@ -2726,8 +2627,12 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
 
     this.arrangeIcons();
 
-    this.stage.setPosition(myself.spriteBar.topRight().add(new Point(padding, 0)));
-    this.stage.setExtent(new Point(72, this.height() + myself.spriteBar.height()));
+    this.stage.setPosition(
+      myself.spriteBar.topRight().add(new Point(padding, 0))
+    );
+    this.stage.setExtent(
+      new Point(72, this.height() + myself.spriteBar.height())
+    );
 
     this.newSpriteButton.bounds.setExtent(new Point(52, 52));
     this.newSpriteButton.label.setCenter(this.newSpriteButton.center());
@@ -2737,7 +2642,6 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     this.newSpriteFlyout.setCenter(this.newSpriteButton.center());
     this.newSpriteFlyout.setBottom(this.newSpriteButton.center().y);
     this.newSpriteFlyout.fixLayout();
-
 
     this.refresh();
   };
@@ -3887,15 +3791,19 @@ IDE_Morph.prototype.applySavedSettings = function () {
       ? this.accentColors[0]
       : accentColor == "purple"
       ? this.accentColors[1]
-      : accentColor == "orange" ? this.accentColors[3] 
-      : accentColor == "green" ? this.accentColors[4] 
-      : accentColor == "yellow" ? this.accentColors[5] 
-      : accentColor == "indigo" ? this.accentColors[6] : this.accentColors[2];
+      : accentColor == "orange"
+      ? this.accentColors[3]
+      : accentColor == "green"
+      ? this.accentColors[4]
+      : accentColor == "yellow"
+      ? this.accentColors[5]
+      : accentColor == "indigo"
+      ? this.accentColors[6]
+      : this.accentColors[2];
   DialogBoxMorph.prototype.titleBarColor = this.accentColor;
   PushButtonMorph.prototype.pressColor = this.accentColor;
-PushButtonMorph.prototype.highlightColor =
-  PushButtonMorph.prototype.pressColor.lighter(50);
-  
+  PushButtonMorph.prototype.highlightColor =
+    PushButtonMorph.prototype.pressColor.lighter(50);
 
   // design
   this.setFlatDesign();
@@ -4561,7 +4469,7 @@ IDE_Morph.prototype.snapMenu = function () {
 
   menu = new MenuMorph(this);
   this.ideRender(menu);
-  console.log(menu.outlinePath)
+  console.log(menu.outlinePath);
   menu.bgColor = this.accentColor;
 
   menu.addItem("About...", "aboutSnap");
@@ -5447,9 +5355,10 @@ IDE_Morph.prototype.projectMenu = function () {
     );
     menu.addItem(
       "Import Scratch Blocks",
-      () => this.rawOpenBlocksString(this.scratchBlocksXml, "Scratch Blocks", true),
+      () =>
+        this.rawOpenBlocksString(this.scratchBlocksXml, "Scratch Blocks", true),
       "import the library containing replications\n" +
-      "of scratch blocks for Split!"
+        "of scratch blocks for Split!"
     );
     menu.addItem(
       "Export project...",
@@ -5657,14 +5566,11 @@ IDE_Morph.prototype.editMenu = function () {
       }
     },
     null,
-    this.scene.trash.length ? null :
-      new Color(255, 255, 255, 0.5)
+    this.scene.trash.length ? null : new Color(255, 255, 255, 0.5)
   );
-  
+
   menu.addItem(
-    this.stage.isFastTracked ?
-      "Turn off Turbo Mode" : 
-      "Turn on Turbo Mode",
+    this.stage.isFastTracked ? "Turn off Turbo Mode" : "Turn on Turbo Mode",
     "toggleFastTracking"
   );
 
@@ -5949,7 +5855,7 @@ IDE_Morph.prototype.undeleteSprites = function (pos) {
   pos = pos || this.spriteBar.bottomRight();
 
   if (!this.scene.trash.length) {
-    window.alert("Trash is empty") //this.showMessage("trash is empty");
+    window.alert("Trash is empty"); //this.showMessage("trash is empty");
     return;
   }
   this.scene.trash.forEach((sprite) =>
@@ -6055,7 +5961,7 @@ IDE_Morph.prototype.aboutSnap = function () {
     "\nowlssss/TheOwlCoder: Vertical Categories and Cat blocks" +
     "\njoecooldoo/joenulldoo: Auto-default Single Palette" +
     "\ncodingisfun2831t: Several UI updates" +
-    "\nmark4sisb: Split! logo" + 
+    "\nmark4sisb: Split! logo" +
     "\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, " +
     "\ncountless bugfixes and optimizations" +
     "\nMichael Ball: Time/Date UI, Library Import Dialog," +
@@ -7921,7 +7827,9 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
       this.toggleSingleStepping();
     }
     this.setColor(this.frameColor);
-    this.controlBar.setColor(this.isBright ? this.accentColor : this.darkControlBarColor);
+    this.controlBar.setColor(
+      this.isBright ? this.accentColor : this.darkControlBarColor
+    );
     elements.forEach((e) => e.show());
     this.stage.setScale(1);
     // show all hidden dialogs
@@ -8346,15 +8254,15 @@ IDE_Morph.prototype.looksMenuData = function () {
   return menu;
 };
 IDE_Morph.prototype.accentColors = [
-      new Color(255, 76, 76),
-      new Color(133, 92, 214),
-      new Color(76, 151, 255),
-      new Color(204, 85, 0),
-      new Color (15, 189, 140),
-      new Color(228, 171, 24),
-      new Color(71, 102, 204),
-      new Color(0, 195, 255)
-    ];
+  new Color(255, 76, 76),
+  new Color(133, 92, 214),
+  new Color(76, 151, 255),
+  new Color(204, 85, 0),
+  new Color(15, 189, 140),
+  new Color(228, 171, 24),
+  new Color(71, 102, 204),
+  new Color(0, 195, 255),
+];
 IDE_Morph.prototype.accentColorMenu = function () {
   var menu = new MenuMorph(this),
     colors = this.accentColors,
@@ -8378,10 +8286,10 @@ IDE_Morph.prototype.accentColorMenu = function () {
   empty.render = nop;
   const setAccent = () => {
     DialogBoxMorph.prototype.titleBarColor = this.accentColor;
-      PushButtonMorph.prototype.pressColor = this.accentColor;
-      console.log(this.accentColor)
-PushButtonMorph.prototype.highlightColor =
-  PushButtonMorph.prototype.pressColor.lighter(50);
+    PushButtonMorph.prototype.pressColor = this.accentColor;
+    console.log(this.accentColor);
+    PushButtonMorph.prototype.highlightColor =
+      PushButtonMorph.prototype.pressColor.lighter(50);
   };
   menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
     if (!hide || shiftClicked) {
@@ -11661,10 +11569,12 @@ SpriteIconMorph.prototype.fixLayout = function () {
   );
   this.label.setCenter(this.center());
   this.label.setTop(this.thumbnail.bottom() + this.padding);
-  
+
   this.color = IDE_Morph.prototype.groupColor;
   this.highlightColor = IDE_Morph.prototype.frameColor;
-  this.pressColor = this.parentThatIsA(IDE_Morph)?.accentColor || IDE_Morph.prototype.accentColor;
+  this.pressColor =
+    this.parentThatIsA(IDE_Morph)?.accentColor ||
+    IDE_Morph.prototype.accentColor;
 };
 
 // SpriteIconMorph menu
@@ -14070,7 +13980,6 @@ SoundRecorderDialogMorph.prototype.destroy = function () {
   SoundRecorderDialogMorph.uber.destroy.call(this);
 };
 
-
 // CorralStageMorph
 
 // The IDE_Morph corral contains a instance of me.
@@ -14089,11 +13998,11 @@ function CorralStageMorph(stage, ide) {
   this.init(stage, ide);
 }
 
-CorralStageMorph.prototype.init = function(stage, ide) {
+CorralStageMorph.prototype.init = function (stage, ide) {
   CorralStageMorph.uber.init.call(this);
 
   this.stage = stage;
-  this.ide = ide
+  this.ide = ide;
   this.corner = 10;
   this.hoverCursor = "pointer";
 
@@ -14111,17 +14020,17 @@ CorralStageMorph.prototype.init = function(stage, ide) {
     this._changed();
 
     myself.updateBackdrops();
-  }
-}
+  };
+};
 
-CorralStageMorph.prototype.buildContents = function() {
+CorralStageMorph.prototype.buildContents = function () {
   var myself = this;
 
   this.header = new Morph();
-  this.header.render = function(ctx) {
+  this.header.render = function (ctx) {
     ctx.beginPath();
-    ctx.roundRect(1, 1, this.width()-2, this.height()-2, [4, 4, 0, 0]);
-    
+    ctx.roundRect(1, 1, this.width() - 2, this.height() - 2, [4, 4, 0, 0]);
+
     ctx.fillStyle = this.color;
     ctx.strokeStyle = myself.borderColor;
     ctx.lineWidth = 2;
@@ -14138,8 +14047,7 @@ CorralStageMorph.prototype.buildContents = function() {
     // ctx.moveTo(myself.corner / 2, 0);
     // ctx.lineTo(this.width() - myself.corner / 2, 0)
     // ctx.stroke();
-
-  }
+  };
   this.header.color = this.color;
   this.add(this.header);
 
@@ -14153,9 +14061,9 @@ CorralStageMorph.prototype.buildContents = function() {
 
   this.createThumbnail();
   this.updateBackdrops();
-}
+};
 
-CorralStageMorph.prototype.fixLayout = function() {
+CorralStageMorph.prototype.fixLayout = function () {
   this.header.setPosition(this.topLeft());
   this.header.setExtent(new Point(this.width(), 40));
 
@@ -14166,9 +14074,9 @@ CorralStageMorph.prototype.fixLayout = function() {
 
   this.backdrops.setCenter(this.center());
   this.backdrops.setTop(this.thumbnail.bottom() + 10);
-}
+};
 
-CorralStageMorph.prototype.refresh = function() {
+CorralStageMorph.prototype.refresh = function () {
   if (this.ide.currentSprite == this.stage) {
     this.header.setColor(this.ide.accentColor);
     this.label.setColor(WHITE);
@@ -14176,11 +14084,11 @@ CorralStageMorph.prototype.refresh = function() {
     this.header.setColor(this.color);
     this.label.setColor(this.ide.buttonLabelColor);
   }
-}
+};
 
-CorralStageMorph.prototype.mouseClickLeft = function() {
+CorralStageMorph.prototype.mouseClickLeft = function () {
   this.ide.selectSprite(this.stage);
-}
+};
 
 CorralStageMorph.prototype.createThumbnail = function () {
   if (this.thumbnail) {
@@ -14196,25 +14104,25 @@ CorralStageMorph.prototype.createThumbnail = function () {
   );
   this.add(this.thumbnail);
   this.thumbnail.render = function (aContext) {
-  ctx.beginPath();
-  ctx.roundRect(0, 0, this.width(), this.height(), 3);
-  ctx.closePath();
-  ctx.clip();
-  ctx.beginPath();
-  if(this.cachedImage) {
-    this.renderCachedTexture(aContext);
-  } else {
-    ctx.fillStyle = "white";
-    ctx.rect(0,0, this.width(), this.height())
-  }
-  ctx.strokeStyle = this.ide.borderColor;
-  ctx.closePath();
-  ctx.restore();
-  ctx.beginPath();
-  ctx.roundRect(0, 0, this.width(), this.height(), 3);
-  ctx.closePath();
-  ctx.stroke()
-};
+    ctx.beginPath();
+    ctx.roundRect(0, 0, this.width(), this.height(), 3);
+    ctx.closePath();
+    ctx.clip();
+    ctx.beginPath();
+    if (this.cachedImage) {
+      this.renderCachedTexture(aContext);
+    } else {
+      ctx.fillStyle = "white";
+      ctx.rect(0, 0, this.width(), this.height());
+    }
+    ctx.strokeStyle = this.ide.borderColor;
+    ctx.closePath();
+    ctx.restore();
+    ctx.beginPath();
+    ctx.roundRect(0, 0, this.width(), this.height(), 3);
+    ctx.closePath();
+    ctx.stroke();
+  };
 
   this.fixLayout();
 };
@@ -14224,7 +14132,7 @@ CorralStageMorph.prototype.updateBackdrops = function () {
   this.backdrops.rerender();
   this.backdrops.fixLayout();
   this.fixLayout();
-}
+};
 
 // CorralStageMorph drag & drop
 
