@@ -1717,10 +1717,13 @@ IDE_Morph.prototype.createControlBar = function () {
         : "",
       name,
       scene,
-      txt;
+      suffixText;
 
     if (this.label) {
       this.label.destroy();
+    }
+    if (this.suffixText) {
+      this.suffixText.destroy();
     }
     if (myself.isAppMode || myself.config.hideProjectName) {
       return;
@@ -1736,8 +1739,8 @@ IDE_Morph.prototype.createControlBar = function () {
         : "Split! " + SplitVersion;
       // "Split! " + (myself.getProjectName() ? name : SplitVersion);
     }
-    txt = new StringMorph(
-      prefix + name + scene + suffix,
+    suffixText = new StringMorph(
+      scene + suffix,
       14,
       "sans-serif",
       true,
@@ -1746,20 +1749,30 @@ IDE_Morph.prototype.createControlBar = function () {
       IDE_Morph.prototype.isBright ? null : new Point(2, 1),
       myself.frameColor.darker(myself.buttonContrast)
     );
-    txt.color = WHITE;
+    suffixText.color = WHITE;
 
-    this.label = new FrameMorph();
+    this.label = new InputFieldMorph(name)//new FrameMorph();
+    this.label.fontSize = 12;
+    this.label.fixLayout();
+    this.label.reactToEdit = (name) => (
+      myself.setProjectName(name.text)
+    );
     this.label.acceptsDrops = false;
-    this.label.alpha = 0;
-    txt.setPosition(this.label.position());
-    this.label.add(txt);
-    if (myself.cloud.disabled)
+    //this.label.add(txt);
+    if (myself.cloud.disabled) {
       this.label.setLeft(this.editButton.right() + padding);
-    else this.label.setLeft(this.cloudButton.right() + padding);
+    }
+    else {
+      this.label.setLeft(this.cloudButton.right() + padding);
+    }
     this.label.setExtent(
-      new Point(steppingButton.left() - this.label.left(), txt.height())
+      new Point(Math.min(steppingButton.left() - this.label.left(), 100), this.height())
     );
     this.label.setCenter(new Point(this.label.center().x, this.center().y));
+    suffixText.setPosition(this.label.position());
+    suffixText.setLeft(this.label.right() + padding)
+    this.suffixText = suffixText;
+    this.add(this.suffixText);
     this.add(this.label);
   };
 };
