@@ -253,6 +253,104 @@ IDE_Morph.prototype.scriptsTexture = function () {
 IDE_Morph.prototype.setDefaultTheme();
 IDE_Morph.prototype.setFlatDesign();
 
+// Scratch blocks XML
+// Doesn't contain all blocks yet, original in "scratch_blocks.xml"
+// in src (this directory), for editing
+IDE_Morph.prototype.scratchBlocksXml =
+  '<blocks app="Snap! 11.0.8, https://snap.berkeley.edu" version="2"><block-definition s="set rotat' + 
+  'ion style to %&apos;style&apos;" type="command" category="motion"><header></header><code></code>' + 
+  '<translations></translations><inputs><input type="%s" readonly="true" irreplaceable="true" initi' + 
+  'al="1">$_all around<options>$_all around&#xD;$_left-right&#xD;$_don&apos;t rotate</options></inp' + 
+  'ut></inputs><script><block s="doIf"><block s="reportVariadicEquals"><list><block s="reportTextFu' + 
+  'nction"><l><option>unselect</option></l><block var="style"/></block><l>all around</l></list></bl' + 
+  'ock><script><block s="doSetVar"><l><option>my rotation style</option></l><l>1</l></block></scrip' + 
+  't><list><block s="reportVariadicEquals"><list><block s="reportTextFunction"><l><option>unselect<' + 
+  '/option></l><block var="style"/></block><l>left-right</l></list></block><script><block s="doSetV' + 
+  'ar"><l><option>my rotation style</option></l><l>2</l></block></script><block s="reportVariadicEq' + 
+  'uals"><list><block s="reportTextFunction"><l><option>unselect</option></l><block var="style"/></' + 
+  'block><l>don&apos;t rotate</l></list></block><script><block s="doSetVar"><l><option>my rotation ' + 
+  'style</option></l><l>0</l></block></script></list></block></script></block-definition><block-def' + 
+  'inition s="glide %&apos;secs&apos; secs to %&apos;dest&apos;" type="command" category="motion"><' + 
+  'header></header><code></code><translations></translations><inputs><input type="%n" initial="1">1' + 
+  '</input><input type="%s" readonly="true" initial="1">$_random position<options>§_destinationsMen' + 
+  'u</options></input></inputs><script><block s="doGlide"><block var="secs"/><block s="reportAttrib' + 
+  'uteOf"><l><option>x position</option></l><block var="dest"/></block><block s="reportAttributeOf"' + 
+  '><l><option>y position</option></l><block var="dest"/></block></block></script></block-definitio' + 
+  'n><block-definition s="switch backdrop to %&apos;name&apos;" type="command" category="looks"><he' + 
+  'ader></header><code></code><translations></translations><inputs><input type="%s" readonly="true"' + 
+  ' initial="1"><options>§_dynamicMenu</options></input></inputs><script><block s="doIf"><block s="' + 
+  'reportVariadicEquals"><list><block var="name"/><l>next backdrop</l></list></block><script><block' + 
+  ' s="doTellTo"><l>Stage</l><block s="reifyScript"><script><block s="doWearNextCostume"></block></' + 
+  'script><list></list></block><list></list></block></script><list><block s="reportVariadicEquals">' + 
+  '<list><block var="name"/><l>previous backdrop</l></list></block><script><block s="doTellTo"><l>S' + 
+  'tage</l><block s="reifyScript"><script><block s="doDeclareVariables"><list><l>prev</l></list></b' + 
+  'lock><block s="doSetVar"><l>prev</l><block s="reportDifference"><block s="getCostumeIdx"></block' + 
+  '><l>1</l></block></block><block s="doIf"><block s="reportVariadicLessThan"><list><block var="pre' + 
+  'v"/><l>1</l></list></block><script><block s="doSetVar"><l>prev</l><block s="reportListAttribute"' + 
+  '><l><option>length</option></l><block s="reportGet"><l><option>costumes</option></l></block></bl' + 
+  'ock></block></script><list></list></block><block s="doSwitchToCostume"><block var="prev"/></bloc' + 
+  'k></script><list></list></block><list></list></block></script><block s="reportVariadicEquals"><l' + 
+  'ist><block var="name"/><l>random backdrop</l></list></block><script><block s="doTellTo"><l>Stage' + 
+  '</l><block s="reifyScript"><script><block s="doSwitchToCostume"><block s="reportRandom"><l>1</l>' + 
+  '<block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><block s="reportListAtt' + 
+  'ribute"><l><option>length</option></l><block s="reportGet"><l><option>costumes</option></l></blo' + 
+  'ck></block></autolambda><list></list></block><list></list></block></block></block></script><list' + 
+  '></list></block><list></list></block></script><l><bool>true</bool></l><script><block s="doTellTo' + 
+  '"><l>Stage</l><block s="reifyScript"><script><block s="doSwitchToCostume"><l></l></block></scrip' + 
+  't><list></list></block><list><block var="name"/></list></block></script></list></block></script>' + 
+  '<scripts><script x="528" y="413.44999999999976"><block s="receiveSlotEvent"><l>name</l><l><optio' + 
+  'n>menu</option></l></block><block s="doDeclareVariables"><list><l>costs</l></list></block><block' + 
+  ' s="doSetVar"><l>costs</l><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolamb' + 
+  'da><block s="reportMap"><block s="reifyReporter"><autolambda><block s="reportGetImageAttribute">' + 
+  '<l><option>name</option></l><l></l></block></autolambda><list></list></block><block s="reportGet' + 
+  '"><l><option>costumes</option></l></block></block></autolambda><list></list></block><list></list' + 
+  '></block></block><block s="doReport"><block s="reportConcatenatedLists"><list><block s="reportNe' + 
+  'wList"><list><l>Empty</l><l>&#126;</l></list></block><block var="costs"/><block s="reportNewList' + 
+  '"><list><l>next backdrop</l><l>previous backdrop</l><l>random backdrop</l></list></block></list>' + 
+  '</block></block></script></scripts></block-definition><block-definition s="next backdrop" type="' + 
+  'command" category="looks"><header></header><code></code><translations></translations><inputs></i' + 
+  'nputs><script><block s="doTellTo"><l>Stage</l><block s="reifyScript"><script><block s="doWearNex' + 
+  'tCostume"></block></script><list></list></block><list></list></block></script></block-definition' + 
+  '><block-definition s="costume %&apos;gettype&apos;" type="reporter" category="looks" space="true' + 
+  '"><header></header><code></code><translations></translations><inputs><input type="%s" readonly="' + 
+  'true" initial="1">name<options>number&#xD;name</options></input></inputs><script><block s="doRep' + 
+  'ort"><block s="reportIfElse"><block s="reportVariadicEquals"><list><block var="gettype"/><l>numb' + 
+  'er</l></list></block><block s="getCostumeIdx"></block><block s="reportGetImageAttribute"><l><opt' + 
+  'ion>name</option></l><l><option>current</option></l></block></block></block></script></block-def' + 
+  'inition><block-definition s="backdrop %&apos;gettype&apos;" type="reporter" category="looks"><he' + 
+  'ader></header><code></code><translations></translations><inputs><input type="%s" readonly="true"' + 
+  ' initial="1">name<options>number&#xD;name</options></input></inputs><script><block s="doDeclareV' + 
+  'ariables"><list><l>a</l></list></block><block s="doIfElse"><block s="reportVariadicEquals"><list' + 
+  '><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><block s="getCostumeId' + 
+  'x"></block></autolambda><list></list></block><list></list></block><l>0</l></list></block><script' + 
+  '><block s="doReport"><block s="reportIfElse"><block s="reportVariadicEquals"><list><block var="g' + 
+  'ettype"/><l>numbwe</l></list></block><l>0</l><l>Empty</l></block></block></script><script><block' + 
+  ' s="doReport"><block s="reportAskFor"><l>Stage</l><block s="reifyReporter"><autolambda><custom-b' + 
+  'lock s="costume %s"><l></l></custom-block></autolambda><list></list></block><list><block var="ge' + 
+  'ttype"/></list></block></block></script></block></script></block-definition><block-definition s=' + 
+  '"when backdrop switches to %&apos;backdrop&apos;" type="hat" category="events"><variables><list ' + 
+  'struct="atomic" id="326">last</list></variables><header></header><code></code><translations></tr' + 
+  'anslations><inputs><input type="%s" readonly="true" irreplaceable="true" initial="1"><options>§_' + 
+  'dynamicMenu</options></input></inputs><script><block s="doIf"><block s="reportVariadicNotEquals"' + 
+  '><list><block var="last"/><custom-block s="backdrop %s"><l>name</l></custom-block></list></block' + 
+  '><script><block s="doSetVar"><l>last</l><custom-block s="backdrop %s"><l>name</l></custom-block>' + 
+  '</block><block s="doIf"><block s="reportVariadicEquals"><list><custom-block s="backdrop %s"><l>n' + 
+  'ame</l></custom-block><block var="backdrop"/></list></block><script><block s="doReport"><block s' + 
+  '="reportBoolean"><l><bool>true</bool></l></block></block></script><list></list></block></script>' + 
+  '<list></list></block><block s="doReport"><block s="reportBoolean"><l><bool>false</bool></l></blo' + 
+  'ck></block></script><scripts><script x="10" y="337.45"><block s="receiveSlotEvent"><l>backdrop</' + 
+  'l><l><option>menu</option></l></block><block s="doReport"><block s="reportConcatenatedLists"><li' + 
+  'st><block s="reportNewList"><list><l>Empty</l><l>&#126;</l></list></block><block s="reportAskFor' + 
+  '"><l>Stage</l><block s="reifyReporter"><autolambda><block s="reportMap"><block s="reifyReporter"' + 
+  '><autolambda><block s="reportGetImageAttribute"><l><option>name</option></l><l></l></block></aut' + 
+  'olambda><list></list></block><block s="reportGet"><l><option>costumes</option></l></block></bloc' + 
+  'k></autolambda><list></list></block><list></list></block></list></block></block></script></scrip' + 
+  'ts></block-definition><block-definition s="set drag mode %&apos;drag?&apos;" type="command" cate' + 
+  'gory="sensing"><header></header><code></code><translations></translations><inputs><input type="%' + 
+  's" initial="1">draggable<options>draggable&#xD;not draggable</options></input></inputs><script><' + 
+  'block s="doSetVar"><l><option>my draggable?</option></l><block s="reportVariadicEquals"><list><b' + 
+  'lock var="drag?"/><l>draggable</l></list></block></block></script></block-definition></blocks>';
+
 // IDE_Morph instance creation:
 
 function IDE_Morph(config = {}) {
@@ -5346,6 +5444,12 @@ IDE_Morph.prototype.projectMenu = function () {
       "importLocalFile",
       "file menu import hint"
       // looks up the actual text in the translator
+    );
+    menu.addItem(
+      "Import Scratch Blocks",
+      () => this.rawOpenBlocksString(this.scratchBlocksXml, "Scratch Blocks", true),
+      "import the library containing replications\n" +
+      "of scratch blocks for Split!"
     );
     menu.addItem(
       "Export project...",
