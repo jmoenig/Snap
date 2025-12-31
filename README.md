@@ -1,6 +1,6 @@
 ![Split! Logo](logo.png)
-# Split<em>!</em> Snap! but Scratch
-A mod of Snap! that looks more like Scratch.
+# Split<em>!</em>: Snap! but Scratch
+A mod of [Snap!](http://www.github.com/jmoenig/snap) that looks more like Scratch.
 
 ## License
 Copyright (C) 2008-2025 by Jens Mönig and Brian Harvey
