@@ -5047,22 +5047,7 @@ IDE_Morph.prototype.settingsMenu = function () {
       "uncheck to suppress\nrunning scripts\nwhen moving the slider",
       "check to run\nthe edited script\nwhen moving the slider"
     );
-  }
-  addAdvancedPreference(
-    "Turbo mode",
-    "toggleFastTracking",
-    this.stage.isFastTracked,
-    "uncheck to run scripts\nat normal speed",
-    "check to prioritize\nscript execution"
-  );
-  addAdvancedPreference(
-    "Visible stepping",
-    "toggleSingleStepping",
-    Process.prototype.enableSingleStepping,
-    "uncheck to turn off\nvisible stepping",
-    "check to turn on\n visible stepping (slow)",
-    false
-  );
+  };
   addAdvancedPreference(
     "Log pen vectors",
     () =>
@@ -5551,6 +5536,10 @@ IDE_Morph.prototype.editMenu = function () {
   menu.addItem(
     this.stage.isFastTracked ? "Turn off Turbo Mode" : "Turn on Turbo Mode",
     "toggleFastTracking"
+  );
+  menu.addItem(
+    this.stage.isFastTracked ? "Turn off Visible Stepping" : "Turn on Visible Stepping",
+    "toggleSingleStepping"
   );
 
   menu.popup(world, pos);
