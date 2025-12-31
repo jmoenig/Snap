@@ -1827,7 +1827,7 @@ DialogBoxMorph.prototype.promptCode = function (
 
   frame.setHeight(size / 4);
   frame.fixLayout = nop;
-  frame.edge = InputFieldMorph.prototype.edge;
+  frame.edge = InputFieldMorph.prototype.edge / 2;
   frame.fontSize = InputFieldMorph.prototype.fontSize;
   frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
   frame.contrast = InputFieldMorph.prototype.contrast;

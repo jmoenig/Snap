@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "1.9.7";
+var SplitVersion = "2.0.0";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1717,10 +1717,14 @@ IDE_Morph.prototype.createControlBar = function () {
         : "",
       name,
       scene,
+      prefixText,
       suffixText;
 
     if (this.label) {
       this.label.destroy();
+    }
+    if (this.prefixText) {
+      this.prefixText.destroy();
     }
     if (this.suffixText) {
       this.suffixText.destroy();
@@ -1738,7 +1742,18 @@ IDE_Morph.prototype.createControlBar = function () {
         ? name + " on Split!"
         : "Split! " + SplitVersion;
       // "Split! " + (myself.getProjectName() ? name : SplitVersion);
-    }
+    };
+    prefixText = new StringMorph(
+      prefix,
+      14,
+      "sans-serif",
+      true,
+      false,
+      false,
+      IDE_Morph.prototype.isBright ? null : new Point(2, 1),
+      myself.frameColor.darker(myself.buttonContrast)
+    );
+    prefixText.color = WHITE;
     suffixText = new StringMorph(
       scene + suffix,
       14,
@@ -1750,9 +1765,11 @@ IDE_Morph.prototype.createControlBar = function () {
       myself.frameColor.darker(myself.buttonContrast)
     );
     suffixText.color = WHITE;
-
+    
     this.label = new InputFieldMorph(name)//new FrameMorph();
-    this.label.fontSize = 12;
+    this.label.doConstrastingColor = false;
+    this.label.color = this.color[IDE_Morph.prototype.isBright ? 'lighter' : 'darker'](10);
+    this.label.contents().text.color = WHITE
     this.label.fixLayout();
     this.label.reactToEdit = (name) => (
       myself.setProjectName(name.text)
@@ -1760,20 +1777,25 @@ IDE_Morph.prototype.createControlBar = function () {
     this.label.acceptsDrops = false;
     //this.label.add(txt);
     if (myself.cloud.disabled) {
-      this.label.setLeft(this.editButton.right() + padding);
+      prefixText.setLeft(this.editButton.right() + padding);
     }
     else {
-      this.label.setLeft(this.cloudButton.right() + padding);
+      prefixText.setLeft(this.cloudButton.right() + padding);
     }
+    this.label.setLeft(prefixText.right() + padding / 2)
     this.label.setExtent(
       new Point(Math.min(steppingButton.left() - this.label.left(), 100), this.height())
     );
     this.label.setCenter(new Point(this.label.center().x, this.center().y));
-    suffixText.setPosition(this.label.position());
-    suffixText.setLeft(this.label.right() + padding)
+    prefixText.setCenter(new Point(prefixText.center().x, this.center().y))
+    suffixText.setCenter(new Point(suffixText.center().x, this.center().y))
+    suffixText.setLeft(this.label.right() + padding / 2)
+    this.prefixText = prefixText;
     this.suffixText = suffixText;
+    this.add(this.prefixText);
     this.add(this.suffixText);
     this.add(this.label);
+    this.label.contents().rerender()
   };
 };
 
