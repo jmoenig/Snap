@@ -13931,24 +13931,24 @@ CorralStageMorph.prototype.buildContents = function() {
   this.header = new Morph();
   this.header.render = function(ctx) {
     ctx.beginPath();
-    ctx.roundRect(0, 0, this.width(), this.height(), [myself.corner, myself.corner, 0, 0]);
+    ctx.roundRect(1, 1, this.width()-2, this.height()-2, [4, 4, 0, 0]);
     
     ctx.fillStyle = this.color;
     ctx.strokeStyle = myself.borderColor;
     ctx.lineWidth = 2;
     ctx.fill();
     ctx.closePath();
-    ctx.beginPath();
+    // ctx.beginPath();
 
-    ctx.moveTo(0, myself.corner / 2);
-    ctx.lineTo(0, this.height())
+    // ctx.moveTo(0, myself.corner / 2);
+    // ctx.lineTo(0, this.height())
 
-    ctx.moveTo(this.width(), myself.corner / 2);
-    ctx.lineTo(this.width(), this.height())
+    // ctx.moveTo(this.width(), myself.corner / 2);
+    // ctx.lineTo(this.width(), this.height())
 
-    ctx.moveTo(myself.corner / 2, 0);
-    ctx.lineTo(this.width() - myself.corner / 2, 0)
-    ctx.stroke();
+    // ctx.moveTo(myself.corner / 2, 0);
+    // ctx.lineTo(this.width() - myself.corner / 2, 0)
+    // ctx.stroke();
 
   }
   this.header.color = this.color;
