@@ -1717,16 +1717,16 @@ IDE_Morph.prototype.createControlBar = function () {
     this.label.alpha = 0;
     txt.setPosition(this.label.position());
     this.label.add(txt);
-    this.label.setExtent(
-      new Point(
-        steppingButton.left() - projectButton.right() - padding * 2,
-        txt.height()
-      )
-    );
-    this.label.setCenter(this.center());
     if (myself.cloud.disabled)
       this.label.setLeft(this.settingsButton.right() + padding);
     else this.label.setLeft(this.cloudButton.right() + padding);
+    this.label.setExtent(
+      new Point(
+        steppingButton.left() - this.label.left(),
+        txt.height()
+      )
+    );
+    this.label.setCenter(new Point(this.label.center().x, this.center().y));
     this.add(this.label);
   };
 };
