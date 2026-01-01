@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.0.0";
+var SplitVersion = "2.1.0";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1093,9 +1093,7 @@ IDE_Morph.prototype.createLogo = function () {
     var gradient = ctx.createLinearGradient(0, 0, this.width(), 0);
     gradient.addColorStop(0, "black");
     gradient.addColorStop(0.5, myself.accentColor.toString());
-    ctx.fillStyle = IDE_Morph.prototype.isBright
-      ? myself.accentColor.toString()
-      : myself.darkControlBarColor.toString();
+    ctx.fillStyle = myself.accentColor.toString();
     ctx.fillRect(0, 0, this.width(), this.height());
     if (this.cachedTexture) {
       this.renderCachedTexture(ctx);
@@ -1404,7 +1402,7 @@ IDE_Morph.prototype.createControlBar = function () {
     cloudButton,
     x,
     colors = [
-      this.isBright ? this.accentColor : this.darkControlBarColor,
+      this.accentColor,
       this.accentColor.withAlpha(0.1), //this.frameColor.darker(50),
       this.frameColor.darker(50),
     ],
@@ -1460,7 +1458,7 @@ IDE_Morph.prototype.createControlBar = function () {
   button.corner = 4;
   button.color = colors[0];
   button.highlightColor = colors[1];
-  button.pressColor = activeColor;
+  button.pressColor = this.accentColor.darker();
   button.labelMinExtent = new Point(36, 18);
   button.padding = 0;
   button.labelShadowOffset = new Point(-1, -1);
@@ -1488,7 +1486,7 @@ IDE_Morph.prototype.createControlBar = function () {
     this.projectControlBar.refreshResumeSymbol();
   };
   // slider.alpha = MorphicPreferences.isFlat ? 0.1 : 0.3;
-  slider.color = activeColor;
+  slider.color = this.accentColor.darker();
   slider.alpha = 0.3;
   slider.setExtent(new Point(50, 14));
   this.controlBar.add(slider);
@@ -1674,20 +1672,15 @@ IDE_Morph.prototype.createControlBar = function () {
     projectButton.setLeft(settingsButton.right() + padding);
     editButton.setLeft(projectButton.right() + padding);
 
-    slider.setCenter(myself.controlBar.center());
-    slider.setRight(this.right() - padding);
-
-    steppingButton.setCenter(myself.controlBar.center());
-    steppingButton.setRight(slider.left() - padding);
-
+    
     if (myself.config.hideSettings) {
       settingsButton.hide();
     }
-
+    
     if (myself.config.noImports || myself.config.hideProjects) {
       projectButton.hide();
     }
-
+    
     if (myself.cloud.disabled) {
       cloudButton.hide();
     } else {
@@ -1695,9 +1688,18 @@ IDE_Morph.prototype.createControlBar = function () {
       cloudButton.setLeft(editButton.right() + padding);
     }
 
-    this.refreshSlider();
     this.updateLabel();
+    this.refreshSlider();
+    this.fixSingleSteppingLayout()
   };
+  
+  this.controlBar.fixSingleSteppingLayout = function () {
+    slider.setCenter(myself.controlBar.center());
+    slider.setRight((myself.hasUnsavedEdits() ? this.prefixButton.left() : this.right()) - padding);
+  
+    steppingButton.setCenter(myself.controlBar.center());
+    steppingButton.setRight(slider.left() - padding);
+  }
 
   this.controlBar.refreshSlider = function () {
     if (Process.prototype.enableSingleStepping && !myself.isAppMode) {
@@ -1708,23 +1710,23 @@ IDE_Morph.prototype.createControlBar = function () {
       slider.hide();
     }
     myself.projectControlBar.refreshResumeSymbol();
+    this.fixSingleSteppingLayout()
   };
 
   this.controlBar.updateLabel = function () {
-    var prefix = myself.hasUnsavedEdits() ? "\u270E " : "",
-      suffix = myself.world().isDevMode
+    var suffix = myself.world().isDevMode
         ? " - " + localize("development mode")
         : "",
       name,
       scene,
-      prefixText,
+      prefixButton,
       suffixText;
 
     if (this.label) {
       this.label.destroy();
     }
-    if (this.prefixText) {
-      this.prefixText.destroy();
+    if (this.prefixButton) {
+      this.prefixButton.destroy();
     }
     if (this.suffixText) {
       this.suffixText.destroy();
@@ -1743,17 +1745,16 @@ IDE_Morph.prototype.createControlBar = function () {
         : "Split! " + SplitVersion;
       // "Split! " + (myself.getProjectName() ? name : SplitVersion);
     };
-    prefixText = new StringMorph(
-      prefix,
-      14,
-      "sans-serif",
-      true,
-      false,
-      false,
-      IDE_Morph.prototype.isBright ? null : new Point(2, 1),
-      myself.frameColor.darker(myself.buttonContrast)
-    );
-    prefixText.color = WHITE;
+    prefixButton = new TriggerMorph(myself, 'save', "Save Now", 14, null, this, null, WHITE, true, false, null);
+    prefixButton.color = this.color;
+  prefixButton.highlightColor = this.color.darker(25);
+  prefixButton.pressColor = prefixButton.highlightColor;
+  prefixButton.labelColor = WHITE;
+    prefixButton.labelBold = true;
+    prefixButton.bakColor = this.color;
+    prefixButton.color = this.color;
+    prefixButton.children[0].setColor(WHITE);
+    prefixButton.setExtent(new Point(100, this.height()))
     suffixText = new StringMorph(
       scene + suffix,
       14,
@@ -1761,14 +1762,14 @@ IDE_Morph.prototype.createControlBar = function () {
       true,
       false,
       false,
-      IDE_Morph.prototype.isBright ? null : new Point(2, 1),
+      null,
       myself.frameColor.darker(myself.buttonContrast)
     );
     suffixText.color = WHITE;
     
     this.label = new InputFieldMorph(name)//new FrameMorph();
     this.label.doConstrastingColor = false;
-    this.label.color = this.color[IDE_Morph.prototype.isBright ? 'lighter' : 'darker'](10);
+    this.label.color = this.color.lighter(10);
     this.label.contents().text.color = WHITE
     this.label.fixLayout();
     this.label.reactToEdit = (name) => (
@@ -1777,25 +1778,29 @@ IDE_Morph.prototype.createControlBar = function () {
     this.label.acceptsDrops = false;
     //this.label.add(txt);
     if (myself.cloud.disabled) {
-      prefixText.setLeft(this.editButton.right() + padding);
+      this.label.setLeft(this.editButton.right() + padding);
     }
     else {
-      prefixText.setLeft(this.cloudButton.right() + padding);
+      this.label.setLeft(this.cloudButton.right() + padding);
     }
-    this.label.setLeft(prefixText.right() + padding / 2)
     this.label.setExtent(
       new Point(Math.min(steppingButton.left() - this.label.left(), 100), this.height())
     );
     this.label.setCenter(new Point(this.label.center().x, this.center().y));
-    prefixText.setCenter(new Point(prefixText.center().x, this.center().y))
     suffixText.setCenter(new Point(suffixText.center().x, this.center().y))
     suffixText.setLeft(this.label.right() + padding / 2)
-    this.prefixText = prefixText;
+    prefixButton.setRight(this.right() - padding)
+    prefixButton.setCenter(new Point(prefixButton.center().x, this.center().y))
+    this.prefixButton = prefixButton;
     this.suffixText = suffixText;
-    this.add(this.prefixText);
+    if (myself.hasUnsavedEdits() ) {
+    this.add(this.prefixButton);
+    }
     this.add(this.suffixText);
     this.add(this.label);
+    this.rerender();
     this.label.contents().rerender()
+    this.fixSingleSteppingLayout();
   };
 };
 
@@ -7838,7 +7843,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     }
     this.setColor(this.frameColor);
     this.controlBar.setColor(
-      this.isBright ? this.accentColor : this.darkControlBarColor
+      this.accentColor
     );
     elements.forEach((e) => e.show());
     this.stage.setScale(1);
@@ -9747,18 +9752,18 @@ ProjectDialogMorph.prototype.buildContents = function () {
   this.body.add(this.notesField);
 
   if (this.task === "open") {
-    this.addButton("openProject", "Open");
+    this.addButton("openProject", "Open", null, true);
     this.action = "openProject";
-    this.recoverButton = this.addButton("recoveryDialog", "Recover", true);
+    this.recoverButton = this.addButton("recoveryDialog", "Recover", true, true);
     this.recoverButton.hide();
   } else if (this.task === "add") {
-    this.addButton("addScene", "Add");
+    this.addButton("addScene", "Add", null, true);
     this.action = "addScene";
-    this.recoverButton = this.addButton("recoveryDialog", "Recover", true);
+    this.recoverButton = this.addButton("recoveryDialog", "Recover", true, true);
     this.recoverButton.hide();
   } else {
     // 'save'
-    this.addButton("saveProject", "Save");
+    this.addButton("saveProject", "Save", null, true);
     this.action = "saveProject";
   }
   this.shareButton = this.addButton("shareProject", "Share", true);
@@ -9817,7 +9822,7 @@ ProjectDialogMorph.prototype.createButtons = function () {
   };
 };
 
-ProjectDialogMorph.prototype.addButton = function (action, label, topRow) {
+ProjectDialogMorph.prototype.addButton = function (action, label, topRow, accentOption) {
   var button = new PushButtonMorph(
     this,
     action || "ok",
@@ -9827,10 +9832,13 @@ ProjectDialogMorph.prototype.addButton = function (action, label, topRow) {
   button.corner = this.buttonCorner;
   button.edge = this.buttonEdge;
   button.outline = this.buttonOutline;
-  button.outlineColor = this.buttonOutlineColor;
+  button.outlineColor =
+    accentOption ? this.titleBarColor : this.buttonOutlineColor;
   button.outlineGradient = this.buttonOutlineGradient;
   button.padding = this.buttonPadding;
   button.contrast = this.buttonContrast;
+  button.color = accentOption ? this.titleBarColor : button.color;
+  button.labelColor = accentOption ? WHITE : button.labelColor;
   button.fixLayout();
   if (topRow) {
     this.buttons.topRow.add(button);

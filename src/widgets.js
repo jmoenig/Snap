@@ -3017,7 +3017,8 @@ DialogBoxMorph.prototype.addCloseButton = function () {
   return button;
 };
 
-DialogBoxMorph.prototype.addButton = function (action, label) {
+DialogBoxMorph.prototype.addButton = function (action, label, accentOption) {
+  accentOption = accentOption || "ok";
   var button = new PushButtonMorph(
     this,
     action || "ok",
@@ -3028,12 +3029,12 @@ DialogBoxMorph.prototype.addButton = function (action, label) {
   button.edge = this.buttonEdge;
   button.outline = this.buttonOutline;
   button.outlineColor =
-    (action || "ok") === "ok" ? this.titleBarColor : this.buttonOutlineColor;
+    (action || "ok") === accentOption ? this.titleBarColor : this.buttonOutlineColor;
   button.outlineGradient = this.buttonOutlineGradient;
   button.padding = this.buttonPadding;
   button.contrast = this.buttonContrast;
-  button.color = (action || "ok") === "ok" ? this.titleBarColor : button.color;
-  button.labelColor = (action || "ok") === "ok" ? WHITE : button.labelColor;
+  button.color = (action || "ok") === accentOption ? this.titleBarColor : button.color;
+  button.labelColor = (action || "ok") === accentOption ? WHITE : button.labelColor;
   button.highlightColor = button.color;
   button.pressColor = button.color;
   button.fixLayout();
