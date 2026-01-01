@@ -4750,6 +4750,11 @@ InputSlotDialogMorph.prototype.createTypeButtons = function () {
             this.fixLayout();
             this.rerender();
             this.edit();
+            this.closeButton.setPosition(
+    this.topRight().add(
+      new Point(-this.padding - this.closeButton.width(), this.padding / 2)
+    )
+  );
         }
     };
 
