@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.1.1";
+var SplitVersion = "2.1.2";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1333,10 +1333,9 @@ IDE_Morph.prototype.createProjectControlBar = function () {
   this.projectControlBar.add(startButton);
   this.projectControlBar.startButton = startButton;
 
-
   this.projectControlBar.fixLayout = function () {
     myself.projectControlBar.setWidth(myself.stage.width());
-    myself.projectControlBar.setLeft(myself.stage.left())
+    myself.projectControlBar.setLeft(myself.stage.left());
     x = this.right() - padding;
     [appModeButton, stageSizeButton].forEach((button) => {
       button.setCenter(myself.projectControlBar.center());
@@ -1672,15 +1671,14 @@ IDE_Morph.prototype.createControlBar = function () {
     projectButton.setLeft(settingsButton.right() + padding);
     editButton.setLeft(projectButton.right() + padding);
 
-    
     if (myself.config.hideSettings) {
       settingsButton.hide();
     }
-    
+
     if (myself.config.noImports || myself.config.hideProjects) {
       projectButton.hide();
     }
-    
+
     if (myself.cloud.disabled) {
       cloudButton.hide();
     } else {
@@ -1690,16 +1688,19 @@ IDE_Morph.prototype.createControlBar = function () {
 
     this.updateLabel();
     this.refreshSlider();
-    this.fixSingleSteppingLayout()
+    this.fixSingleSteppingLayout();
   };
-  
+
   this.controlBar.fixSingleSteppingLayout = function () {
     slider.setCenter(myself.controlBar.center());
-    slider.setRight((myself.hasUnsavedEdits() ? this.prefixButton.left() : this.right()) - padding);
-  
+    slider.setRight(
+      (myself.hasUnsavedEdits() ? this.prefixButton.left() : this.right()) -
+        padding
+    );
+
     steppingButton.setCenter(myself.controlBar.center());
     steppingButton.setRight(slider.left() - padding);
-  }
+  };
 
   this.controlBar.refreshSlider = function () {
     if (Process.prototype.enableSingleStepping && !myself.isAppMode) {
@@ -1710,7 +1711,7 @@ IDE_Morph.prototype.createControlBar = function () {
       slider.hide();
     }
     myself.projectControlBar.refreshResumeSymbol();
-    this.fixSingleSteppingLayout()
+    this.fixSingleSteppingLayout();
   };
 
   this.controlBar.updateLabel = function () {
@@ -1744,17 +1745,29 @@ IDE_Morph.prototype.createControlBar = function () {
         ? name + " on Split!"
         : "Split! " + SplitVersion;
       // "Split! " + (myself.getProjectName() ? name : SplitVersion);
-    };
-    prefixButton = new TriggerMorph(myself, 'save', "Save Now", 14, null, this, null, WHITE, true, false, null);
+    }
+    prefixButton = new TriggerMorph(
+      myself,
+      "save",
+      "Save Now",
+      14,
+      null,
+      this,
+      null,
+      WHITE,
+      true,
+      false,
+      null
+    );
     prefixButton.color = this.color;
-  prefixButton.highlightColor = this.color.darker(25);
-  prefixButton.pressColor = prefixButton.highlightColor;
-  prefixButton.labelColor = WHITE;
+    prefixButton.highlightColor = this.color.darker(25);
+    prefixButton.pressColor = prefixButton.highlightColor;
+    prefixButton.labelColor = WHITE;
     prefixButton.labelBold = true;
     prefixButton.bakColor = this.color;
     prefixButton.color = this.color;
     prefixButton.children[0].setColor(WHITE);
-    prefixButton.setExtent(new Point(100, this.height()))
+    prefixButton.setExtent(new Point(100, this.height()));
     suffixText = new StringMorph(
       scene + suffix,
       14,
@@ -1766,40 +1779,40 @@ IDE_Morph.prototype.createControlBar = function () {
       myself.frameColor.darker(myself.buttonContrast)
     );
     suffixText.color = WHITE;
-    
-    this.label = new InputFieldMorph(name)//new FrameMorph();
+
+    this.label = new InputFieldMorph(name); //new FrameMorph();
     this.label.doConstrastingColor = false;
     this.label.color = this.color.lighter(10);
-    this.label.contents().text.color = WHITE
+    this.label.contents().text.color = WHITE;
     this.label.fixLayout();
-    this.label.reactToEdit = (name) => (
-      myself.setProjectName(name.text)
-    );
+    this.label.reactToEdit = (name) => myself.setProjectName(name.text);
     this.label.acceptsDrops = false;
     //this.label.add(txt);
     if (myself.cloud.disabled) {
       this.label.setLeft(this.editButton.right() + padding);
-    }
-    else {
+    } else {
       this.label.setLeft(this.cloudButton.right() + padding);
     }
     this.label.setExtent(
-      new Point(Math.min(steppingButton.left() - this.label.left(), 100), this.height())
+      new Point(
+        Math.min(steppingButton.left() - this.label.left(), 100),
+        this.height()
+      )
     );
     this.label.setCenter(new Point(this.label.center().x, this.center().y));
-    suffixText.setCenter(new Point(suffixText.center().x, this.center().y))
-    suffixText.setLeft(this.label.right() + padding / 2)
-    prefixButton.setRight(this.right() - padding)
-    prefixButton.setCenter(new Point(prefixButton.center().x, this.center().y))
+    suffixText.setCenter(new Point(suffixText.center().x, this.center().y));
+    suffixText.setLeft(this.label.right() + padding / 2);
+    prefixButton.setRight(this.right() - padding);
+    prefixButton.setCenter(new Point(prefixButton.center().x, this.center().y));
     this.prefixButton = prefixButton;
     this.suffixText = suffixText;
-    if (myself.hasUnsavedEdits() ) {
-    this.add(this.prefixButton);
+    if (myself.hasUnsavedEdits()) {
+      this.add(this.prefixButton);
     }
     this.add(this.suffixText);
     this.add(this.label);
     this.rerender();
-    this.label.contents().rerender()
+    this.label.contents().rerender();
     this.fixSingleSteppingLayout();
   };
 };
@@ -2995,7 +3008,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         Math.floor(
           Math.min(
             (this.width() - padding * 2) / this.stage.dimensions.x,
-            (this.height() - this.projectControlBar.height() * 1 - padding * 2) /
+            (this.height() -
+              this.projectControlBar.height() * 1 -
+              padding * 2) /
               this.stage.dimensions.y
           ) * 10
         ) / 10
@@ -3034,7 +3049,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
     this.projectControlBar.setWidth(this.stage.width());
     this.projectControlBar.setLeft(this.stage.left());
-    this.projectControlBar.setTop(this.isAppMode ? this.controlBar.top() : this.controlBar.bottom());
+    this.projectControlBar.setTop(
+      this.isAppMode ? this.controlBar.top() : this.controlBar.bottom()
+    );
     this.projectControlBar.fixLayout();
     this.stage.setTop(this.projectControlBar.bottom());
 
@@ -4780,7 +4797,7 @@ IDE_Morph.prototype.settingsMenu = function () {
   }
   menu.addItem("Microphone resolution...", "microphoneMenu");
   menu.addLine();
-  
+
   addPreference(
     "Dynamic input labels",
     "toggleDynamicInputLabels",
@@ -5091,7 +5108,7 @@ IDE_Morph.prototype.settingsMenu = function () {
       "uncheck to suppress\nrunning scripts\nwhen moving the slider",
       "check to run\nthe edited script\nwhen moving the slider"
     );
-  };
+  }
   addAdvancedPreference(
     "Log pen vectors",
     () =>
@@ -5576,15 +5593,35 @@ IDE_Morph.prototype.editMenu = function () {
     null,
     this.scene.trash.length ? null : new Color(255, 255, 255, 0.5)
   );
+  if (this.currentSprite.scripts.dropRecord?.lastRecord) {
+    menu.addItem(
+      "Undrop",
+      () => this.currentSprite.scripts.undrop() // we do this to dynamically get the currentSprite when called
+    );
+  }
+  if (this.currentSprite.scripts.dropRecord?.nextRecord) {
+    menu.addItem(
+      "Redrop",
+      () => this.currentSprite.scripts.redrop() // we do this to dynamically get the currentSprite when called
+    );
+  }
+  menu.addItem(
+    "Clean Up",
+    () => this.currentSprite.scripts.cleanUp() // we do this to dynamically get the currentSprite when called
+  );
+  menu.addLine();
 
   menu.addItem(
     this.stage.isFastTracked ? "Turn off Turbo Mode" : "Turn on Turbo Mode",
     "toggleFastTracking"
   );
   menu.addItem(
-    Process.prototype.enableSingleStepping ? "Turn off Visible Stepping" : "Turn on Visible Stepping",
+    Process.prototype.enableSingleStepping
+      ? "Turn off Visible Stepping"
+      : "Turn on Visible Stepping",
     "toggleSingleStepping"
   );
+  // ide.currentSprite.scripts.undrop();
 
   menu.popup(world, pos);
 };
@@ -7842,9 +7879,7 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
       this.toggleSingleStepping();
     }
     this.setColor(this.frameColor);
-    this.controlBar.setColor(
-      this.accentColor
-    );
+    this.controlBar.setColor(this.accentColor);
     elements.forEach((e) => e.show());
     this.stage.setScale(1);
     // show all hidden dialogs
@@ -9754,12 +9789,22 @@ ProjectDialogMorph.prototype.buildContents = function () {
   if (this.task === "open") {
     this.addButton("openProject", "Open", null, true);
     this.action = "openProject";
-    this.recoverButton = this.addButton("recoveryDialog", "Recover", true, true);
+    this.recoverButton = this.addButton(
+      "recoveryDialog",
+      "Recover",
+      true,
+      true
+    );
     this.recoverButton.hide();
   } else if (this.task === "add") {
     this.addButton("addScene", "Add", null, true);
     this.action = "addScene";
-    this.recoverButton = this.addButton("recoveryDialog", "Recover", true, true);
+    this.recoverButton = this.addButton(
+      "recoveryDialog",
+      "Recover",
+      true,
+      true
+    );
     this.recoverButton.hide();
   } else {
     // 'save'
@@ -9822,7 +9867,12 @@ ProjectDialogMorph.prototype.createButtons = function () {
   };
 };
 
-ProjectDialogMorph.prototype.addButton = function (action, label, topRow, accentOption) {
+ProjectDialogMorph.prototype.addButton = function (
+  action,
+  label,
+  topRow,
+  accentOption
+) {
   var button = new PushButtonMorph(
     this,
     action || "ok",
@@ -9832,8 +9882,9 @@ ProjectDialogMorph.prototype.addButton = function (action, label, topRow, accent
   button.corner = this.buttonCorner;
   button.edge = this.buttonEdge;
   button.outline = this.buttonOutline;
-  button.outlineColor =
-    accentOption ? this.titleBarColor : this.buttonOutlineColor;
+  button.outlineColor = accentOption
+    ? this.titleBarColor
+    : this.buttonOutlineColor;
   button.outlineGradient = this.buttonOutlineGradient;
   button.padding = this.buttonPadding;
   button.contrast = this.buttonContrast;
@@ -14096,11 +14147,10 @@ CorralStageMorph.prototype.buildContents = function () {
     ctx.lineWidth = 2;
     ctx.fill();
     ctx.closePath();
-    ctx.beginPath()
-    ctx.moveTo(0, this.height()),
-    ctx.lineTo(this.width(), this.height())
-    ctx.closePath()
-    ctx.stroke()
+    ctx.beginPath();
+    ctx.moveTo(0, this.height()), ctx.lineTo(this.width(), this.height());
+    ctx.closePath();
+    ctx.stroke();
     // ctx.beginPath();
 
     // ctx.moveTo(0, myself.corner / 2);
