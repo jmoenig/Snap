@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2025-December-17';
+modules.byob = '2026-January-03';
 
 // Declarations
 
@@ -1140,7 +1140,7 @@ CustomBlockDefinition.prototype.bootstrap = function (actor) {
             ide = rcvr.parentThatIsA(IDE_Morph);
             if (ide) {
                 ide.flushBlocksCache();
-                ide.categories.refreshEmpty();
+                ide.refreshEmptyCategories();
                 ide.refreshPalette(true);
             }
             rcvr.recordUserEdit(
@@ -1165,7 +1165,7 @@ CustomBlockDefinition.prototype.unBootstrap = function (actor) {
             if (ide) {
                 // ide.flushPaletteCache();
                 ide.flushBlocksCache();
-                ide.categories.refreshEmpty();
+                ide.refreshEmptyCategories();
                 ide.refreshPalette(true);
             }
             rcvr.recordUserEdit(
@@ -2092,7 +2092,7 @@ CustomCommandBlockMorph.prototype.moveInPalette = function (dir = 'up') {
     }
     if (ide) {
         ide.flushPaletteCache();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
         ide.refreshPalette();
     }    
 };
@@ -2203,7 +2203,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
             ide = rcvr.parentThatIsA(IDE_Morph);
             if (ide) {
                 ide.flushPaletteCache();
-                ide.categories.refreshEmpty();
+                ide.refreshEmptyCategories();
                 ide.refreshPalette();
             }
             rcvr.recordUserEdit(
@@ -3744,7 +3744,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     this.refreshAllBlockInstances(oldSpec);
     ide = this.target.parentThatIsA(IDE_Morph);
     ide.flushPaletteCache();
-    ide.categories.refreshEmpty();
+    ide.refreshEmptyCategories();
     ide.refreshPalette();
     this.target.recordUserEdit(
         'scripts',
@@ -6066,7 +6066,7 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
             }
         });
         ide.flushPaletteCache();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
         ide.refreshPalette();
         ide.showMessage(
             'Imported Blocks Module' + (name ? ': ' + name : '') + '.',
@@ -6243,7 +6243,7 @@ BlockRemovalDialogMorph.prototype.removeBlocks = function () {
             }
         });
         ide.flushPaletteCache();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
         ide.refreshPalette();
         ide.showMessage(
             this.blocks.length + ' ' + localize('unused block(s) removed'),
@@ -6449,7 +6449,7 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
     }
     ide.flushBlocksCache();
     ide.refreshPalette();
-    ide.categories.refreshEmpty();
+    ide.refreshEmptyCategories();
     this.target.recordUserEdit(
         'palette',
         'hide block'

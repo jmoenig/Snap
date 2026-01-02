@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-December-12';
+modules.extensions = '2026-January-03';
 
 // Global stuff
 
@@ -1516,7 +1516,7 @@ SnapExtensions.primitives.set(
         this.changeBlockVisibility(context.expression, true);
         ide.flushBlocksCache();
         ide.refreshPalette();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
     }
 );
 
@@ -1528,7 +1528,7 @@ SnapExtensions.primitives.set(
         this.changeBlockVisibility(context.expression, false);
         ide.flushBlocksCache();
         ide.refreshPalette();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
     }
 );
 

@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-22';
+modules.objects = '2026-January-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -4144,7 +4144,7 @@ SpriteMorph.prototype.blockTemplates = function (
         }
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -4349,7 +4349,7 @@ SpriteMorph.prototype.makeBlock = function () {
                     this.customBlocks.push(definition);
                 }
                 ide.flushPaletteCache();
-                ide.categories.refreshEmpty();
+                ide.refreshEmptyCategories();
                 ide.refreshPalette();
                 this.recordUserEdit(
                     'palette',
@@ -4725,6 +4725,14 @@ SpriteMorph.prototype.emptyCategories = function () {
                 this.customBlockTemplatesForCategory(category).some(hasBlocks));
     }
     return this.categoriesCache;
+};
+
+SpriteMorph.prototype.primitiveCategories = function () {
+    // - currently unused -
+    // answer an array of all active primitive block categories that are
+    // showing at least one block in the palette
+    var cache = this.emptyCategories();
+    return this.categories.filter(prim => cache[prim]);
 };
 
 SpriteMorph.prototype.hasPrimitiveCategories = function () {
@@ -11445,7 +11453,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportShown'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11488,7 +11496,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('stopFreq'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11569,7 +11577,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetSlot'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11621,7 +11629,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetGlobalFlag'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11683,7 +11691,7 @@ StageMorph.prototype.blockTemplates = function (
         }
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11769,7 +11777,7 @@ StageMorph.prototype.blockTemplates = function (
         }
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11826,7 +11834,7 @@ StageMorph.prototype.restoreHiddenGlobalBlocks = function (
 
     ide.flushBlocksCache();
     ide.refreshPalette();
-    ide.categories.refreshEmpty();
+    ide.refreshEmptyCategories();
     this.recordUserEdit(
         'palette',
         'restore microworld'
@@ -12418,6 +12426,9 @@ StageMorph.prototype.changeVarBlockVisibility
 
 StageMorph.prototype.emptyCategories =
     SpriteMorph.prototype.emptyCategories;
+
+StageMorph.prototype.primitiveCategories =
+    SpriteMorph.prototype.primitiveCategories;
 
 StageMorph.prototype.hasPrimitiveCategories =
     SpriteMorph.prototype.hasPrimitiveCategories;

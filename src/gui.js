@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2025-December-22';
+modules.gui = '2026-January-03';
 
 // Declarations
 
@@ -1693,15 +1693,8 @@ IDE_Morph.prototype.createCategories = function () {
     };
 
     this.categories.refreshEmpty = function () {
-        var dict = myself.currentSprite.emptyCategories();
-        dict.variables = dict.variables || dict.lists || dict.other;
-        this.buttons.forEach(cat => {
-            if (Object.hasOwn(dict, cat.category) && (dict[cat.category])) {
-                cat.enable();
-            } else {
-                cat.disable();
-            }
-        });
+        // retained for backwards compatibility in 3rd party extensions
+        myself.refreshEmptyCategories();
     };
 
     function changePalette(category) {
@@ -1887,6 +1880,18 @@ IDE_Morph.prototype.createCategories = function () {
 
     fixCategoriesLayout();
     this.add(this.categories);
+};
+
+IDE_Morph.prototype.refreshEmptyCategories = function () {
+    var dict = this.currentSprite.emptyCategories();
+    dict.variables = dict.variables || dict.lists || dict.other;
+    this.categories.buttons.forEach(cat => {
+        if (Object.hasOwn(dict, cat.category) && (dict[cat.category])) {
+            cat.enable();
+        } else {
+            cat.disable();
+        }
+    });
 };
 
 IDE_Morph.prototype.createPalette = function (forSearching) {
@@ -3512,7 +3517,7 @@ IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {
     this.currentSprite = sprite;
     this.scene.currentSprite = sprite;
     if (!noEmptyRefresh) {
-        this.categories.refreshEmpty();
+        this.refreshEmptyCategories();
     }
     this.createPalette();
     this.createSpriteBar();
@@ -4705,7 +4710,7 @@ IDE_Morph.prototype.settingsMenu = function () {
             }
             this.flushBlocksCache('operators');
             this.refreshPalette();
-            this.categories.refreshEmpty();
+            this.refreshEmptyCategories();
         },
         Process.prototype.enableJS,
         'uncheck to disable support for\nnative JavaScript functions',
@@ -4721,7 +4726,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !SpriteMorph.prototype.showingExtensions;
             this.flushBlocksCache('variables');
             this.refreshPalette();
-            this.categories.refreshEmpty();
+            this.refreshEmptyCategories();
         },
         SpriteMorph.prototype.showingExtensions,
         'uncheck to hide extension\nprimitives in the palette',
@@ -4943,7 +4948,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !SpriteMorph.prototype.enableFirstClass;
             this.flushBlocksCache('sensing');
             this.refreshPalette();
-            this.categories.refreshEmpty();
+            this.refreshEmptyCategories();
         },
         SpriteMorph.prototype.enableFirstClass,
         'uncheck to disable support\nfor first-class sprites',
@@ -5017,7 +5022,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !Process.prototype.enableCompiling;
             this.flushBlocksCache('operators');
             this.refreshPalette();
-            this.categories.refreshEmpty();
+            this.refreshEmptyCategories();
         },
         Process.prototype.enableCompiling,
         'EXPERIMENTAL! uncheck to disable live\nsupport for compiling',
@@ -5063,7 +5068,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !StageMorph.prototype.enableCodeMapping;
             this.flushBlocksCache('variables');
             this.refreshPalette();
-            this.categories.refreshEmpty();
+            this.refreshEmptyCategories();
         },
         StageMorph.prototype.enableCodeMapping,
         'uncheck to disable\nblock to text mapping features',
@@ -5077,7 +5082,7 @@ IDE_Morph.prototype.settingsMenu = function () {
                 !StageMorph.prototype.enableInheritance;
             this.flushBlocksCache('variables');
             this.refreshPalette();
-            this.categories.refreshEmpty();
+            this.refreshEmptyCategories();
         },
         StageMorph.prototype.enableInheritance,
         'uncheck to disable\nsprite inheritance features',
@@ -5794,7 +5799,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         world = this.world();
 
     aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2008-2025 Jens M\u00F6nig and '
+        + 'Copyright \u24B8 2008-2026 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
         + '        Snap! is developed by the University of California, '
@@ -6102,7 +6107,7 @@ IDE_Morph.prototype.addPaletteCategory = function (name, color) {
     if (name === '') {return; }
     SpriteMorph.prototype.customCategories.set(name, color);
     this.createCategories();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.fixLayout();
@@ -6165,7 +6170,7 @@ IDE_Morph.prototype.deletePaletteCategory = function (name) {
     this.categories.fixLayout();
     this.flushPaletteCache();
     this.refreshPalette(true);
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
     this.fixLayout();
     this.recordUnsavedChanges();
 };
@@ -6384,7 +6389,7 @@ IDE_Morph.prototype.generatePuzzle = function () {
     // refresh
     this.flushBlocksCache();
     this.refreshPalette();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
 
     // generate a new puzzle sprite by duplicating the current one
     this.duplicateSprite(current);
@@ -6453,7 +6458,7 @@ IDE_Morph.prototype.addToPuzzle = function () {
     // refresh
     this.flushBlocksCache();
     this.refreshPalette();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
 
     // generate a new puzzle sprite by duplicating the current one
     this.duplicateSprite(current);
@@ -6967,7 +6972,7 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
         ).popUp();
     }
     this.createCategories();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.fixLayout();
@@ -7023,7 +7028,7 @@ IDE_Morph.prototype.deserializeSpritesString = function (str) {
         this.flushPaletteCache();
         this.refreshPalette();
         this.createCategories();
-        this.categories.refreshEmpty();
+        this.refreshEmptyCategories();
         this.createPaletteHandle();
         this.categories.fixLayout();
         this.fixLayout();
@@ -7117,7 +7122,7 @@ IDE_Morph.prototype.deserializeScriptString = function (str) {
         this.flushPaletteCache();
         this.refreshPalette();
         this.createCategories();
-        this.categories.refreshEmpty();
+        this.refreshEmptyCategories();
         this.createPaletteHandle();
         this.categories.fixLayout();
         this.fixLayout();
@@ -7355,7 +7360,7 @@ IDE_Morph.prototype.switchToScene = function (
         this.categories.fixLayout();
         this.fixLayout();
         this.flushBlocksCache();
-        this.categories.refreshEmpty();
+        this.refreshEmptyCategories();
         this.currentSprite.palette(this.currentCategory);
         this.refreshPalette(true);
     }
@@ -7479,7 +7484,7 @@ IDE_Morph.prototype.switchToUserMode = function () {
     });
     this.flushBlocksCache();
     this.refreshPalette();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
     world.reactToDropOf = (morph) => {
@@ -7507,7 +7512,7 @@ IDE_Morph.prototype.switchToDevMode = function () {
     this.setPosition(world.position().add(20));
     this.flushBlocksCache();
     this.refreshPalette();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
     // enable non-DialogBoxMorphs to be dropped
     // onto the World in dev-mode
     delete world.reactToDropOf;
@@ -7873,7 +7878,7 @@ IDE_Morph.prototype.setUnifiedPalette = function (bool) {
     this.categories.fixLayout();
     this.fixLayout();
     this.flushBlocksCache();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
     this.currentSprite.palette(this.currentCategory);
     this.refreshPalette(true);
     return true;
@@ -8098,7 +8103,7 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
     this.createCorralBar();
     this.refreshCustomizedPalette();
     this.fixLayout();
@@ -8430,7 +8435,7 @@ IDE_Morph.prototype.setBlocksScale = function (num) {
     CommentMorph.prototype.refreshScale();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
     this.createCorralBar();
     this.refreshCustomizedPalette();
     this.fixLayout();
@@ -8717,7 +8722,7 @@ IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
     callback();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
-    this.categories.refreshEmpty();
+    this.refreshEmptyCategories();
     this.createCorralBar();
     this.fixLayout();
     this.openProjectString(

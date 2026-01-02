@@ -56,6 +56,9 @@
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
 
+### 2026-01-03
+* gui, objects, threads, extensions, byob: refactored refreshing empty block category buttons
+
 ### 2025-12-29
 * new Vietnamese translation, thank you, @seeeerge !!
 
