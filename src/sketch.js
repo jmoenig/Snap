@@ -1213,9 +1213,13 @@ VectorPaintEditorMorph.prototype.buildContents = function() {
     VectorPaintEditorMorph.uber.buildContents.call(this);
 
     this.paper.destroy();
+    this.scrollPaper.destroy();
     this.paper = new VectorPaintCanvasMorph(myself.shift);
     this.paper.setExtent(this.ide.stage.dimensions);
-    this.body.add(this.paper);
+    this.scrollPaper = new ScrollFrameMorph();
+    this.scrollPaper.setExtent(new Point(480, 360).multiplyBy(1));
+    this.scrollPaper.addContents(this.paper);
+    this.body.add(this.scrollPaper);
 
     this.refreshToolButtons();
     this.fixLayout();
