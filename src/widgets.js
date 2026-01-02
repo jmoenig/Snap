@@ -1185,6 +1185,10 @@ ToggleMorph.prototype.init = function (
     environment,
     hint
   );
+  this.labelColor = WHITE;
+  if (this.tick) {
+  this.tick.setColor(WHITE);
+  }
   if (style == "checkbox") {
     this.tick = new SymbolMorph("tick", 13, WHITE);
     this.tick.rawHeight = function () {
@@ -1261,7 +1265,7 @@ ToggleMorph.prototype.createLabel = function () {
       false,
       false,
       shading ? new Point(1, 1) : null,
-      new Color(240, 240, 240)
+      WHITE
     );
     this.add(this.tick);
   }
