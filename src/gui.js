@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.1.3";
+var SplitVersion = "2.1.4";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1940,6 +1940,7 @@ IDE_Morph.prototype.createCategories = function () {
     button.corner = 21;
     button.padding = 0;
     button.labelColor = myself.buttonLabelColor;
+    button.labelPressColor = myself.buttonLabelColor;
     /*if (IDE_Morph.prototype.isBright) {
       button.labelPressColor = BLACK;
     }*/
@@ -12468,7 +12469,7 @@ TurtleIconMorph.prototype.createLabel = function () {
   txt.setPosition(this.label.position());
   this.label.add(txt);
   this.add(this.label);
-  this.label.setColor = (clr) => (txt.setColor(clr))
+  this.label.setColor = (clr) => (txt.setColor(clr), this.thumbnail?.setColor?.(clr))
 };
 
 // TurtleIconMorph layout
