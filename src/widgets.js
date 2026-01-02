@@ -509,7 +509,7 @@ ToggleButtonMorph.uber = PushButtonMorph.prototype;
 // ToggleButton settings
 
 ToggleButtonMorph.prototype.contrast = 30;
-ToggleButtonMorph.prototype.labelPressColor = null;
+ToggleButtonMorph.prototype.labelPressColor = WHITE;
 
 // ToggleButtonMorph instance creation:
 

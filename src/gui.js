@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.1.2";
+var SplitVersion = "2.1.3";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -2284,7 +2284,7 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   trashbutton.contrast = this.buttonContrast;
   // trashbutton.hint = "bring back deleted sprites";
   trashbutton.fixLayout();
-  this.spriteBar.add(trashbutton);
+  // this.spriteBar.add(trashbutton);
 
   trashbutton.wantsDropOf = (morph) =>
     morph instanceof SpriteMorph || morph instanceof SpriteIconMorph;
@@ -11599,7 +11599,9 @@ SpriteIconMorph.prototype.createLabel = function () {
   this.label.setExtent(txt.extent());
   txt.setPosition(this.label.position());
   this.label.add(txt);
+  this.txt = txt;
   this.add(this.label);
+  this.label.setColor = (clr) => (txt.setColor(clr))
 };
 
 SpriteIconMorph.prototype.createRotationButton = function () {
@@ -11833,6 +11835,35 @@ SpriteIconMorph.prototype.showSpriteOnStage = function () {
   this.object.showOnStage();
 };
 
+SpriteIconMorph.prototype.refresh = function () {
+  if (typeof this.query === "function") {
+    this.state = this.query.call(this.target);
+  } else {
+    // assume it's a String
+    this.state = this.target[this.query]();
+  }
+  if (this.state) {
+    this.userState = "pressed";
+    if (this.labelPressColor) {
+      this.txt.setColor(this.labelPressColor);
+    }
+    if (this.trueStateLabel) {
+      this.label.hide();
+      this.trueStateLabel.show();
+    }
+  } else {
+    this.userState = "normal";
+    if (this.labelPressColor) {
+      this.txt.setColor(this.labelColor);
+    }
+    if (this.trueStateLabel) {
+      this.txt.show();
+      this.trueStateLabel.hide();
+    }
+  }
+  this.rerender();
+};
+
 // SpriteIconMorph events
 
 SpriteIconMorph.prototype.mouseDoubleClick = function () {
@@ -12010,7 +12041,7 @@ SpriteIconMorph.prototype.flashOff = function () {
 
 /*
     I am a selectable element in the SpriteEditor's "Costumes" tab, keeping
-    a self-updating thumbnail of the costume I'm respresenting, and a
+    a self-updating thumbnail of the costume I'm representing, and a
     self-updating label of the costume's name (in case it is changed
     elsewhere)
 */
@@ -12437,6 +12468,7 @@ TurtleIconMorph.prototype.createLabel = function () {
   txt.setPosition(this.label.position());
   this.label.add(txt);
   this.add(this.label);
+  this.label.setColor = (clr) => (txt.setColor(clr))
 };
 
 // TurtleIconMorph layout
@@ -13257,6 +13289,7 @@ SceneIconMorph.prototype.createLabel = function () {
   txt.setPosition(this.label.position());
   this.label.add(txt);
   this.add(this.label);
+  this.label.setColor = (clr) => (txt.setColor(clr))
 };
 
 // SceneIconMorph stepping
