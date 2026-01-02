@@ -142,7 +142,10 @@ PaintEditorMorph.prototype.buildContents = function () {
     this.body.color = this.color;
 
     this.body.add(this.controls);
-    this.body.add(this.paper);
+    this.scrollPaper = new ScrollFrameMorph();
+    this.scrollPaper.setExtent(new Point(480, 360).multiplyBy(1));
+    this.scrollPaper.addContents(this.paper);
+    this.body.add(this.scrollPaper);
 
     this.toolbox = new BoxMorph();
     this.toolbox.color = SpriteMorph.prototype.paletteColor.lighter(8);
