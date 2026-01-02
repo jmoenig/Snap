@@ -1186,7 +1186,7 @@ ToggleMorph.prototype.init = function (
     hint
   );
   if (style == "checkbox") {
-    this.tick = new SymbolMorph("tick", 13);
+    this.tick = new SymbolMorph("tick", 13, WHITE);
     this.tick.rawHeight = function () {
       return this.height();
     };
@@ -1321,8 +1321,10 @@ ToggleMorph.prototype.refresh = function () {
     this.state = this.target[this.query]();
   }
   if (this.state) {
+    this.userState = "pressed";
     this.tick.show();
   } else {
+    this.userState = "normal";
     this.tick.hide();
   }
   if (
@@ -1332,6 +1334,7 @@ ToggleMorph.prototype.refresh = function () {
   ) {
     this.toggleElement.refresh();
   }
+  this.rerender();
 };
 
 // ToggleMorph events
@@ -1344,17 +1347,27 @@ ToggleMorph.prototype.mouseDownLeft = function () {
 };
 
 ToggleMorph.prototype.mouseClickLeft = function () {
-  PushButtonMorph.uber.mouseClickLeft.call(this);
+  // PushButtonMorph.uber.mouseClickLeft.call(this);
+  this.trigger();
   if (this.tick) {
     this.tick.setCenter(this.center());
   }
+  this.userState = this.state ? "pressed" : "highlight"
+  this.rerender();
 };
 
 ToggleMorph.prototype.mouseLeave = function () {
-  PushButtonMorph.uber.mouseLeave.call(this);
+  // PushButtonMorph.uber.mouseLeave.call(this);
+  this.userState = this.state ? "pressed" : "normal"
   if (this.tick) {
     this.tick.setCenter(this.center());
   }
+  this.rerender();
+};
+ToggleMorph.prototype.mouseEnter = function () {
+  PushButtonMorph.uber.mouseLeave.call(this);
+  this.userState = this.state ? "pressed" : "highlight";
+  this.rerender();
 };
 
 // ToggleElementMorph /////////////////////////////////////////////////////
