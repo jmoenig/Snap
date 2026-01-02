@@ -308,7 +308,7 @@ function IDE_Morph(config = {}) {
 
 IDE_Morph.prototype.init = function (config) {
   // global font setting
-  MorphicPreferences.globalFontFamily = '"Helvetical Nue", Helvetica, Arial';
+  MorphicPreferences.globalFontFamily = '"Helvetica Nue", Helvetica, Arial';
 
   // additional properties:
   this.cloud = new Cloud();
