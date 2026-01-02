@@ -2382,6 +2382,8 @@ IDE_Morph.prototype.createOldSpriteBar = function () {
   nameField.setPosition(myself.spriteBar.position().add(new Point(0, 12)));
   nameField.doConstrastingColor = false;
   nameField.typeInPadding = 8;
+  nameField.setColor(this.groupColor);
+  nameField.contents().text.color = this.buttonLabelColor;
   this.spriteBar.add(nameField);
   this.spriteBar.nameField = nameField;
   nameField.fixLayout();
