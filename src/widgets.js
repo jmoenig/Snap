@@ -1713,7 +1713,7 @@ DialogBoxMorph.prototype.prompt = function (
     head,
     precision = Math.pow(10, decimals),
     txt = new InputFieldMorph(
-      defaultString,
+      defaultString || "",
       isNumeric || false, // numeric?
       choices || null, // drop-down dict, optional
       choices ? isReadOnly || false : false
