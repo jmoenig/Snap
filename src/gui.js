@@ -4832,18 +4832,6 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     addPreference(
-        'Hide empty categories',
-        () => {
-            this.scene.hideEmptyCategories = !this.scene.hideEmptyCategories;
-            this.createCategories();
-            this.fixLayout();
-        },
-        this.scene.hideEmptyCategories,
-        'uncheck to show all primitive block categories',
-        'check to hide empty primitive block categories',
-        false
-    );
-    addPreference(
         'Ternary Boolean slots',
         () => BooleanSlotMorph.prototype.isTernary =
             !BooleanSlotMorph.prototype.isTernary,
@@ -5164,6 +5152,18 @@ IDE_Morph.prototype.settingsMenu = function () {
             'check to show buttons\nin the palette'
         );
     }
+    addPreference(
+        'Hide empty categories',
+        () => {
+            this.scene.hideEmptyCategories = !this.scene.hideEmptyCategories;
+            this.createCategories();
+            this.fixLayout();
+        },
+        this.scene.hideEmptyCategories,
+        'uncheck to show all primitive block categories',
+        'check to hide empty primitive block categories',
+        false
+    );
     addPreference(
         'Wrap list indices',
         () => {
