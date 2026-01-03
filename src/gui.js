@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-January-03';
+modules.gui = '2026-January-04';
 
 // Declarations
 
@@ -1662,6 +1662,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
 IDE_Morph.prototype.createCategories = function () {
     var myself = this,
+        primCats = this.primitiveCategories(),
         categorySelectionAction = this.scene.unifiedPalette ? scrollToCategory
             : changePalette,
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
@@ -1720,6 +1721,13 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     function addCategoryButton(category) {
+        var button = categoryButton(category);
+        myself.categories.add(button);
+        myself.categories.buttons.push(button);
+        return button;
+    }
+
+    function categoryButton(category) {
         var labelWidth = 75,
             colors = [
                 myself.frameColor,
@@ -1752,8 +1760,6 @@ IDE_Morph.prototype.createCategories = function () {
         }
         button.fixLayout();
         button.refresh();
-        myself.categories.add(button);
-        myself.categories.buttons.push(button);
         return button;
     }
 
@@ -1796,9 +1802,12 @@ IDE_Morph.prototype.createCategories = function () {
     }
 
     function fixCategoriesLayout() {
-        var buttonWidth = myself.categories.children[0].width(),
-            buttonHeight = myself.categories.children[0].height(),
+        var button = categoryButton('motion'),
+            buttonWidth = button.width(),
+            buttonHeight = button.height(),
             more = SpriteMorph.prototype.customCategories.size,
+            len = primCats.length,
+            halve = Math.ceil(len / 2),
             border = 3,
             xPadding = (200 // myself.logo.width()
                 - border
@@ -1812,18 +1821,18 @@ IDE_Morph.prototype.createCategories = function () {
             i;
 
         myself.categories.children.forEach((button, i) => {
-            row = i < 8 ? i % 4 : i - 4;
-            col = (i < 4 || i > 7) ? 1 : 2;
+            row = i < len ? i % halve : i - Math.floor(len / 2);
+            col = (i < halve || i > (len - 1)) ? 1 : 2;
             button.setPosition(new Point(
                 l + (col * xPadding + ((col - 1) * buttonWidth)),
                 t + (((row - shift) + 1) * yPadding + ((row - shift) *
                         buttonHeight) + border) +
-                    (i > 7 ? border + 2 : 0)
+                    (i > (len - 1) ? border + 2 : 0)
             ));
         });
 
         if (shift) { // hide the built-in category buttons
-            for (i = 0; i < 8; i += 1) {
+            for (i = 0; i < len; i += 1) {
                 myself.categories.children[i].hide();
             }
         }
@@ -1834,26 +1843,26 @@ IDE_Morph.prototype.createCategories = function () {
             scroller.acceptsDrops = false;
             scroller.contents.acceptsDrops = false;
             scroller.setPosition(
-                new Point(0, myself.categories.children[8].top())
+                new Point(0, myself.categories.children[len].top())
             );
             scroller.setWidth(myself.paletteWidth);
             scroller.setHeight(buttonHeight * 6 + yPadding * 5);
 
             for (i = 0; i < more; i += 1) {
-                scroller.addContents(myself.categories.children[8]);
+                scroller.addContents(myself.categories.children[len]);
             }
             myself.categories.add(scroller);
             myself.categories.scroller = scroller;
             myself.categories.setHeight(
-                (4 + 1 - shift) * yPadding
-                    + (4 - shift) * buttonHeight
+                (halve + 1 - shift) * yPadding
+                    + (halve - shift) * buttonHeight
                     + 6 * (yPadding + buttonHeight) + border + 2
                     + 2 * border
             );
         } else {
             myself.categories.setHeight(
-                (4 + 1 - shift) * yPadding
-                    + (4 - shift) * buttonHeight
+                (halve + 1 - shift) * yPadding
+                    + (halve - shift) * buttonHeight
                     + (more ?
                         (more * (yPadding + buttonHeight) + border + 2)
                             : 0)
@@ -1862,11 +1871,7 @@ IDE_Morph.prototype.createCategories = function () {
         }
     }
 
-    SpriteMorph.prototype.categories.forEach(cat => {
-        if (!contains(['lists', 'other'], cat)) {
-            addCategoryButton(cat);
-        }
-    });
+    primCats.forEach(cat => addCategoryButton(cat));
 
     // sort alphabetically
     Array.from(
@@ -1882,9 +1887,34 @@ IDE_Morph.prototype.createCategories = function () {
     this.add(this.categories);
 };
 
+IDE_Morph.prototype.primitiveCategories = function () {
+    // answer an array of categories for primitive blocks to be displayed
+    // as buttons. By default these are all the usual ones, e.g. motion, looks
+    // etc. but if the "hideEmptyCategories" setting is active only categories
+    // that are populated with at least one block in at least one agent (sprite
+    // or stage) in the current scene are answered
+    var categories = SpriteMorph.prototype.categories.filter(cat =>
+        !contains(['lists', 'other'], cat)),
+        all;
+    if (!this.scene.hideEmptyCategories) {
+        return categories;
+    }
+    all = this.sprites.asArray();
+    if (this.stage) {
+        all = all.concat(this.stage);
+    }
+    return categories.filter(prim =>
+        all.some(agent =>
+            agent.populatedCategories()[prim]));
+};
+
 IDE_Morph.prototype.refreshEmptyCategories = function () {
-    var dict = this.currentSprite.emptyCategories();
+    var dict = this.currentSprite.populatedCategories();
     dict.variables = dict.variables || dict.lists || dict.other;
+    if (this.scene.hideEmptyCategories) {
+        this.createCategories();
+        this.fixLayout();
+    }
     this.categories.buttons.forEach(cat => {
         if (Object.hasOwn(dict, cat.category) && (dict[cat.category])) {
             cat.enable();
@@ -4799,6 +4829,18 @@ IDE_Morph.prototype.settingsMenu = function () {
         !Process.prototype.isCaseInsensitive,
         'uncheck to ignore upper- and\n lowercase when comparing texts',
         'check to distinguish upper- and\n lowercase when comparing texts',
+        false
+    );
+    addPreference(
+        'Hide empty categories',
+        () => {
+            this.scene.hideEmptyCategories = !this.scene.hideEmptyCategories;
+            this.createCategories();
+            this.fixLayout();
+        },
+        this.scene.hideEmptyCategories,
+        'uncheck to show all primitive block categories',
+        'check to hide empty primitive block categories',
         false
     );
     addPreference(

@@ -29,6 +29,7 @@
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
     * new "blocks" and "speaker" symbols
+    * new "hide empty categories" setting
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)
@@ -55,6 +56,9 @@
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
+
+### 2026-01-04
+* gui, objects, scenes: new "hide empty categories" setting
 
 ### 2026-01-03
 * gui, objects, threads, extensions, byob: refactored refreshing empty block category buttons

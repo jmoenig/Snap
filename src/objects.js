@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-January-03';
+modules.objects = '2026-January-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -4712,7 +4712,7 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     );
 };
 
-SpriteMorph.prototype.emptyCategories = function () {
+SpriteMorph.prototype.populatedCategories = function () {
     // return a dictionary that indicates for each category whether
     // it has any shown blocks in it (true) or is empty (false)
     var hasBlocks = (any) => any instanceof BlockMorph &&
@@ -4731,7 +4731,7 @@ SpriteMorph.prototype.primitiveCategories = function () {
     // - currently unused -
     // answer an array of all active primitive block categories that are
     // showing at least one block in the palette
-    var cache = this.emptyCategories();
+    var cache = this.populatedCategories();
     return this.categories.filter(prim => cache[prim]);
 };
 
@@ -4741,7 +4741,7 @@ SpriteMorph.prototype.hasPrimitiveCategories = function () {
     // showing at least one block in the palette, else <false>
     // in which case the pane with primitive categories can be
     // hidden altogether
-    var cache = this.emptyCategories();
+    var cache = this.populatedCategories();
     return this.categories.some(prim => cache[prim]);
 };
 
@@ -12424,8 +12424,8 @@ StageMorph.prototype.changeCustomBlockVisibility
 StageMorph.prototype.changeVarBlockVisibility
     = SpriteMorph.prototype.changeVarBlockVisibility;
 
-StageMorph.prototype.emptyCategories =
-    SpriteMorph.prototype.emptyCategories;
+StageMorph.prototype.populatedCategories =
+    SpriteMorph.prototype.populatedCategories;
 
 StageMorph.prototype.primitiveCategories =
     SpriteMorph.prototype.primitiveCategories;
