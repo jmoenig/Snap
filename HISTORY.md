@@ -60,6 +60,7 @@
 ### 2026-01-03
 * gui, objects, scenes: new "hide empty categories" setting
 * store: serialize "hide empty categories" setting in the project file
+* German translation update for new "Hide empty categories" menu item
 
 ### 2026-01-02
 * gui, objects, threads, extensions, byob: refactored refreshing empty block category buttons
