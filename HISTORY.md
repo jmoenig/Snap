@@ -57,11 +57,11 @@
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
 
-### 2026-01-04
+### 2026-01-03
 * gui, objects, scenes: new "hide empty categories" setting
 * store: serialize "hide empty categories" setting in the project file
 
-### 2026-01-03
+### 2026-01-02
 * gui, objects, threads, extensions, byob: refactored refreshing empty block category buttons
 
 ### 2025-12-29
