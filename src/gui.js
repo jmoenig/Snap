@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.1.6";
+var SplitVersion = "2.1.7";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5557,14 +5557,7 @@ IDE_Morph.prototype.projectMenu = function () {
         'Select a sound from the media library'
     );*/
 
-  if (this.scene.trash.length) {
-    menu.addLine();
-    menu.addItem(
-      "Undelete sprites...",
-      () => this.undeleteSprites(this.controlBar.projectButton.bottomLeft()),
-      "Bring back deleted sprites"
-    );
-  }
+  
   menu.popup(world, pos);
 };
 
@@ -5586,16 +5579,12 @@ IDE_Morph.prototype.editMenu = function () {
   menu.bgColor = this.accentColor;
   this.ideRender(menu);
 
-  menu.addItem(
-    "Restore",
-    () => {
-      if (this.scene.trash.length) {
-        myself.undelete(myself.scene.trash.pop());
-      }
-    },
-    null,
-    this.scene.trash.length ? null : new Color(255, 255, 255, 0.5)
-  );
+    menu.addItem(
+      "Restore Deleted Sprites",
+      () => this.undeleteSprites(this.controlBar.editButton.bottomLeft()),
+      "Bring back deleted sprites",
+      this.scene.trash.length ? null : new Color(255, 255, 255, 0.5)
+    );
   if (this.currentSprite.scripts.dropRecord?.lastRecord) {
     menu.addItem(
       "Undrop",
