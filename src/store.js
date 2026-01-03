@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-December-20';
+modules.store = '2026-January-04';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -418,6 +418,7 @@ SnapSerializer.prototype.loadScene = function (
     scene.showPaletteButtons = model.scene.attributes.buttons !== 'false';
     scene.disableClickToRun = model.scene.attributes.clickrun === 'false';
     scene.disableDraggingData = model.scene.attributes.dragdata === 'false';
+    scene.hideEmptyCategories = model.scene.attributes.empty === 'false';
     scene.penColorModel = model.scene.attributes.colormodel === 'hsl' ?
         'hsl' : 'hsv';
     model.notes = model.scene.childNamed('notes');
@@ -2141,7 +2142,7 @@ Scene.prototype.toXML = function (serializer) {
     SpriteMorph.prototype.blocks = this.blocks;
 
     xml = serializer.format(
-        '<scene name="@"%%%%%%%>' +
+        '<scene name="@"%%%%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
@@ -2163,6 +2164,7 @@ Scene.prototype.toXML = function (serializer) {
         this.disableClickToRun ? ' clickrun="false"' : '',
         this.disableDraggingData ? ' dragdata="false"' : '',
         this.penColorModel === 'hsl' ? ' colormodel="hsl"' : '',
+        this.hideEmptyCategories ? ' empty="false"' : '',
         this.notes || '',
         serializer.paletteToXML(this.customCategories),
         Object.keys(this.hiddenPrimitives).reduce(
