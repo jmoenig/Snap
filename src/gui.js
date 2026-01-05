@@ -1787,6 +1787,7 @@ IDE_Morph.prototype.createControlBar = function () {
     this.label.fixLayout();
     this.label.reactToEdit = (name) => myself.setProjectName(name.text);
     this.label.acceptsDrops = false;
+    this.label.typeInPadding = 10;
     //this.label.add(txt);
     if (myself.cloud.disabled) {
       this.label.setLeft(this.editButton.right() + padding);
@@ -1795,7 +1796,7 @@ IDE_Morph.prototype.createControlBar = function () {
     }
     this.label.setExtent(
       new Point(
-        Math.min(steppingButton.left() - this.label.left(), 100),
+        Math.min(steppingButton.left() - this.label.left(), 200),
         this.height()
       )
     );
