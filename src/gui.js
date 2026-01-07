@@ -4508,8 +4508,8 @@ IDE_Morph.prototype.ideRender = function (menu) {
       h = this.height(),
       radius = Math.min(corner, (Math.min(w, h) - inset) / 2);
 
-    ctx.moveTo(inset, inset);
-    ctx.lineTo(w - inset * 2, inset);
+    ctx.moveTo(inset, -inset);
+    ctx.lineTo(w - inset * 2, -inset);
     ctx.arc(w - radius, h - radius, radius, radians(0), radians(90));
     ctx.arc(radius, h - radius, radius, radians(90), radians(180));
 
