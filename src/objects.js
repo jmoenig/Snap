@@ -4467,10 +4467,12 @@ SpriteMorph.prototype.deleteVariableButton = function () {
   button.highlightColor = SpriteMorph.prototype.paletteColor.darker(20);
   button.corner = button.corner * SyntaxElementMorph.prototype.scale;
   button.edge = button.edge * SyntaxElementMorph.prototype.scale;
-  button.fontSize = button.fontSize * SyntaxElementMorph.prototype.scale;  
+  button.fontSize = button.fontSize * SyntaxElementMorph.prototype.scale;
+
   button.userMenu = this.helpMenu;
   button.selector = "deleteVariable";
   button.showHelp = BlockMorph.prototype.showHelp;
+  button.fixLayout()
   return button;
 };
 
