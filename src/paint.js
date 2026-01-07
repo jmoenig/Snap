@@ -775,6 +775,7 @@ PaintCanvasMorph.prototype.scale = function (x, y) {
     this.paper = c;
     this.drawNew();
     this.changed();
+    this.parentThatIsA(PaintEditorMorph).ok()
 };
 
 PaintCanvasMorph.prototype.cacheUndo = function () {

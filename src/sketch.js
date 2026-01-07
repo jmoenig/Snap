@@ -1011,7 +1011,7 @@ VectorPaintEditorMorph.prototype.convertToBitmap = function () {
 
 VectorPaintEditorMorph.prototype.buildScaleBox = function () {
   var myself = this;
-  ["Top", "Bottom", "Up", "Down"].forEach(function (label) {
+  ["Front", "Back", "Up", "Down"].forEach(function (label) {
     myself.scaleBox.add(
       myself.pushButton(label, function () {
         myself.changeSelectionLayer(label.toLowerCase());
@@ -1114,12 +1114,12 @@ VectorPaintEditorMorph.prototype.openIn = function (
         break;
       /* End key */
       case 35:
-        myself.changeSelectionLayer("bottom");
+        myself.changeSelectionLayer("back");
         break;
 
       /* Home key */
       case 36:
-        myself.changeSelectionLayer("top");
+        myself.changeSelectionLayer("front");
         break;
       case 90:
         /* Ctrl + Z */
@@ -1428,13 +1428,13 @@ VectorPaintEditorMorph.prototype.changeSelectionLayer = function (destination) {
   this.sortSelection();
 
   switch (destination) {
-    case "top":
+    case "front":
       this.selection.forEach(function (shape) {
         myself.shapes.splice(myself.shapes.indexOf(shape), 1);
         myself.shapes.push(shape);
       });
       break;
-    case "bottom":
+    case "back":
       this.selection
         .slice()
         .reverse()
