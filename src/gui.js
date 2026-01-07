@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.2.0";
+var SplitVersion = "2.2.1";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -3193,9 +3193,9 @@ IDE_Morph.prototype.setExtent = function (point) {
     if (!cnf.noSprites) {
       maxWidth =
         ext.x - (200 + this.oldSpriteBar.tabBar.width() + this.padding * 2);
-      minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
+      minWidth = CorralStageMorph.prototype.thumbSize.x * 3;
       maxHeight = ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5;
-      minRatio = 1;
+      minRatio = 0.5;
       maxRatio = Math.min(
         maxWidth / this.stage.dimensions.x,
         maxHeight / this.stage.dimensions.y
