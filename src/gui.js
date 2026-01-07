@@ -1777,6 +1777,8 @@ IDE_Morph.prototype.createControlBar = function () {
     this.label.doConstrastingColor = false;
     this.label.color = this.color.lighter(10);
     this.label.contents().text.color = WHITE;
+    this.label.contents().text.isBold = true;
+    this.label.contents().isBold = true;
     this.label.fixLayout();
     this.label.reactToEdit = (name) => myself.setProjectName(name.text);
     this.label.acceptsDrops = false;
