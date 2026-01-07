@@ -96,7 +96,7 @@ modules.gui = "2025-November-23";
 // Declarations
 
 var SnapVersion = "11.0.8";
-var SplitVersion = "2.1.7";
+var SplitVersion = "2.2.0";
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1227,13 +1227,6 @@ IDE_Morph.prototype.createProjectControlBar = function () {
         ? myself.stage.enableCustomHatBlocks &&
           myself.stage.threads.pauseCustomHatBlocks
         : true
-  );
-  console.warn(
-    (() =>
-      this.stage // query
-        ? myself.stage.enableCustomHatBlocks &&
-          myself.stage.threads.pauseCustomHatBlocks
-        : true)()
   );
 
   button.corner = 4;
@@ -5558,7 +5551,6 @@ IDE_Morph.prototype.projectMenu = function () {
         'Select a sound from the media library'
     );*/
 
-  
   menu.popup(world, pos);
 };
 
@@ -5580,12 +5572,12 @@ IDE_Morph.prototype.editMenu = function () {
   menu.bgColor = this.accentColor;
   this.ideRender(menu);
 
-    menu.addItem(
-      "Restore Deleted Sprites",
-      () => this.undeleteSprites(this.controlBar.editButton.bottomLeft()),
-      "Bring back deleted sprites",
-      this.scene.trash.length ? null : new Color(255, 255, 255, 0.5)
-    );
+  menu.addItem(
+    "Restore Deleted Sprites",
+    () => this.undeleteSprites(this.controlBar.editButton.bottomLeft()),
+    "Bring back deleted sprites",
+    this.scene.trash.length ? null : new Color(255, 255, 255, 0.5)
+  );
   if (this.currentSprite.scripts.dropRecord?.lastRecord) {
     menu.addItem(
       "Undrop",
@@ -11594,7 +11586,7 @@ SpriteIconMorph.prototype.createLabel = function () {
   this.label.add(txt);
   this.txt = txt;
   this.add(this.label);
-  this.label.setColor = (clr) => (txt.setColor(clr))
+  this.label.setColor = (clr) => txt.setColor(clr);
 };
 
 SpriteIconMorph.prototype.createRotationButton = function () {
@@ -12072,13 +12064,15 @@ CostumeIconMorph.prototype.init = function (aCostume) {
   action = () => {
     // make my costume the current one
     var ide = this.parentThatIsA(IDE_Morph),
-      wardrobe = this.parentThatIsA(WardrobeMorph);
+      wardrobe = this.parentThatIsA(WardrobeMorph),
+      oldQuery = query();
 
     if (ide) {
       ide.currentSprite.wearCostume(this.object);
     }
     if (wardrobe) {
       wardrobe.updateSelection();
+      oldQuery != query() && wardrobe.createEditor();
     }
   };
 
@@ -12163,17 +12157,6 @@ CostumeIconMorph.prototype.userMenu = function () {
   if (!(this.object instanceof Costume)) {
     return null;
   }
-  menu.addItem("edit", "editCostume");
-  if (this.world().currentKey === 16) {
-    // shift clicked
-    menu.addItem(
-      "edit rotation point only...",
-      "editRotationPointOnly",
-      null,
-      new Color(255, 100, 100)
-    );
-  }
-  menu.addLine();
   menu.addItem("duplicate", "duplicateCostume");
   menu.addItem("export", "exportCostume");
   menu.addItem("rename", "renameCostume");
@@ -12461,7 +12444,9 @@ TurtleIconMorph.prototype.createLabel = function () {
   txt.setPosition(this.label.position());
   this.label.add(txt);
   this.add(this.label);
-  this.label.setColor = (clr) => (txt.setColor(clr), this.thumbnail?.setColor?.(clr))
+  this.label.setColor = (clr) => (
+    txt.setColor(clr), this.thumbnail?.setColor?.(clr)
+  );
 };
 
 // TurtleIconMorph layout
@@ -12563,6 +12548,7 @@ WardrobeMorph.prototype.updateList = function () {
   icon = new TurtleIconMorph(this.sprite);
   icon.setPosition(new Point(x, y));
   this.addContents(icon);
+  this.icon = icon;
   y = icon.bottom() + padding;
 
   newbutton = new PushButtonMorph(
@@ -12589,7 +12575,7 @@ WardrobeMorph.prototype.updateList = function () {
   newbutton.labelShadowColor = newbutton.highlightColor;
   newbutton.labelColor = TurtleIconMorph.prototype.labelColor;
   newbutton.contrast = this.buttonContrast;
-  newbutton.hint = "new a new costume";
+  newbutton.hint = "get a costume";
   newbutton.setPosition(new Point(x, y));
   newbutton.fixLayout();
   newbutton.setCenter(icon.center());
@@ -12654,18 +12640,7 @@ WardrobeMorph.prototype.updateList = function () {
       cambutton.hint = CamSnapshotDialogMorph.prototype.notSupportedMessage;
     });
   }
-
-  txt = new TextMorph(
-    localize(
-      "costumes tab help" // look up long string in translator
-    )
-  );
-  txt.fontSize = 9;
-  txt.setColor(SpriteMorph.prototype.paletteTextColor);
-
-  txt.setPosition(new Point(x, y));
-  this.addContents(txt);
-  y = txt.bottom() + padding;
+  y = icon.bottom() + padding;
 
   this.sprite.costumes.asArray().forEach((costume) => {
     icon = new CostumeIconMorph(costume);
@@ -12680,6 +12655,87 @@ WardrobeMorph.prototype.updateList = function () {
   this.changed();
 
   this.updateSelection();
+  this.editor || this.createEditor();
+};
+
+WardrobeMorph.prototype.createEditor = function (isNew) {
+  if (this.editor) {
+    this.editor.destroy();
+  }
+  var ide = this.sprite.parentThatIsA(IDE_Morph),
+    costume = this.sprite.costume,
+    isSvg = this.sprite.costume instanceof SVG_Costume;
+
+  this.editor = isSvg ? new VectorPaintEditorMorph() : new PaintEditorMorph();
+  if (!isNew && !costume) {
+    isNew = true;
+  }
+  if (true) {
+    if (isSvg && costume.shapes.length === 0) {
+      try {
+        costume.parseShapes();
+      } catch (e) {
+        // this.editRotationPointOnly();
+        return;
+      }
+    }
+    console.warn(isNew)
+    this.editor.openIn(
+      this,
+      isNew ? newCanvas(ide.stage.dimensions) : this.sprite.costume.contents,
+      isNew ? isSvg ? (new Point(240, 180)) : null : this.sprite.costume.rotationCenter,
+      costume
+        ? (img, rc, shapes) => (
+            (costume.contents = img),
+            (costume.rotationCenter = rc),
+            (costume.version = Date.now()),
+            (costume.shapes = shapes),
+            this.changed(),
+            isSvg ||
+              (this.sprite instanceof SpriteMorph && costume.shrinkWrap()),
+            this.sprite.wearCostume(costume, true), // don't shadow
+            (ide.hasChangedMedia = true)
+          )
+        : nop,
+      ide,
+      isNew ? [] : costume.shapes || [],
+      this.sprite.costume
+    );
+    this.fixLayout();
+  }
+};
+
+WardrobeMorph.prototype.switchToVector = function () {
+  var ide = this.sprite.parentThatIsA(IDE_Morph);
+  index = this.sprite.costumes.indexOf(this.sprite.costume);
+  this.sprite.costume = new SVG_Costume(
+    new Image(),
+    this.sprite.costume.name,
+    new Point(0, 0)
+  );
+  this.sprite.costume.contents.src = `data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIHZpZXdCb3g9IjAgMCAxIDEiLz4=`;
+  this.sprite.costume.shapes = []
+  this.sprite.costume.rotationCenter = new Point(240, 180);
+  this.sprite.costume.version = Date.now();
+  this.sprite.costumes.bind(index, this.sprite.costume);
+  this.sprite.wearCostume(this.sprite.costume, true);
+  this.changed();
+  ide.hasChangedMedia = true;
+  this.createEditor(true);
+};
+
+WardrobeMorph.prototype.fixLayout = function () {
+  WardrobeMorph.uber.fixLayout.call(this);
+  if (this.editor && this.editor?.scrollPaper) {
+    this.editor.setLeft(this.icon.right() + 5);
+    this.editor.setTop(this.icon.bottom() + 5);
+    this.editor.scrollPaper.bounds.corner.x = Math.min(
+      this.editor.paper.right(),
+      this.right() - 5
+    );
+    this.editor.scrollPaper.fixLayout();
+    this.editor.scrollPaper.adjustScrollBars();
+  }
 };
 
 WardrobeMorph.prototype.updateSelection = function () {
@@ -12719,14 +12775,13 @@ WardrobeMorph.prototype.paintNew = function () {
       null, // don't shrink-to-fit
       ide.stage.dimensions // max extent
     );
+    cos.rotationCenter = new Point(240, 180);
 
-  cos.edit(this.world(), ide, true, null, () => {
-    this.sprite.shadowAttribute("costumes");
-    this.sprite.addCostume(cos);
-    this.updateList();
-    this.sprite.wearCostume(cos);
-    this.sprite.recordUserEdit("costume", "draw", cos.name);
-  });
+  this.sprite.shadowAttribute("costumes");
+  this.sprite.addCostume(cos);
+  this.sprite.wearCostume(cos);
+  this.updateList();
+  this.sprite.recordUserEdit("costume", "draw", cos.name);
 };
 
 WardrobeMorph.prototype.newFromCam = function () {
@@ -13282,7 +13337,7 @@ SceneIconMorph.prototype.createLabel = function () {
   txt.setPosition(this.label.position());
   this.label.add(txt);
   this.add(this.label);
-  this.label.setColor = (clr) => (txt.setColor(clr))
+  this.label.setColor = (clr) => txt.setColor(clr);
 };
 
 // SceneIconMorph stepping

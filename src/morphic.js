@@ -10162,7 +10162,7 @@ FrameMorph.prototype.fullDrawOn = function (ctx, aRect) {
   if (!this.isVisible) {
     return;
   }
-  clipped = this.bounds.intersect(aRect);
+  clipped = this.bounds.intersect(aRect).insetBy(this.border || 0);
   if (!clipped.extent().gt(ZERO)) {
     return;
   }
@@ -10426,7 +10426,7 @@ ScrollFrameMorph.prototype.scrollX = function (steps) {
   var cl = this.contents.left(),
     l = this.left(),
     cw = this.contents.width(),
-    r = this.right(),
+    r = this.right() + (this.vBar.isVisible ? this.vBar.width() : 0),
     newX;
 
   if (this.vBar.isVisible) {
@@ -10449,7 +10449,7 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
   var ct = this.contents.top(),
     t = this.top(),
     ch = this.contents.height(),
-    b = this.bottom(),
+    b = this.bottom() + (this.hBar.isVisible ? this.hBar.height() : 0),
     newY;
 
   if (this.hBar.isVisible) {

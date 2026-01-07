@@ -97,9 +97,9 @@ var PaintColorPickerMorph;
 
 // A complete paint editor
 
-PaintEditorMorph.prototype = new DialogBoxMorph();
+PaintEditorMorph.prototype = new Morph();
 PaintEditorMorph.prototype.constructor = PaintEditorMorph;
-PaintEditorMorph.uber = DialogBoxMorph.prototype;
+PaintEditorMorph.uber = Morph.prototype;
 
 PaintEditorMorph.prototype.padding = 10;
 
@@ -117,8 +117,8 @@ PaintEditorMorph.prototype.init = function () {
     PaintEditorMorph.uber.init.call(this);
 
     // override inherited properties:
+    this.color = CLEAR;
     this.labelString = "Paint Editor";
-    this.createLabel();
 
     // building the contents happens when I am opened with an IDE
     // so my extent can be adjusted accordingly (jens)
@@ -130,8 +130,8 @@ PaintEditorMorph.prototype.buildContents = function () {
 
     this.paper = new PaintCanvasMorph(function () {return myself.shift; });
     this.paper.setExtent(this.ide.stage.dimensions);
-
-    this.addBody(new AlignmentMorph('row', this.padding));
+    this.body = new AlignmentMorph('row', this.padding)
+    this.add(this.body);
     this.controls = new AlignmentMorph('column', this.padding / 2);
     this.controls.alignment = 'center';
 
@@ -148,8 +148,8 @@ PaintEditorMorph.prototype.buildContents = function () {
     this.body.add(this.scrollPaper);
 
     this.toolbox = new BoxMorph();
-    this.toolbox.color = SpriteMorph.prototype.paletteColor.lighter(8);
-    this.toolbox.borderColor = this.toolbox.color.lighter(40);
+    this.toolbox.color = CLEAR;
+    this.toolbox.borderColor = CLEAR;//this.toolbox.color.lighter(40);
     if (MorphicPreferences.isFlat) {
         this.toolbox.edge = 0;
     }
@@ -171,8 +171,8 @@ PaintEditorMorph.prototype.buildContents = function () {
     };
     this.populatePropertiesMenu();
 
-    this.addButton("ok", "OK");
-    this.addButton("cancel", "Cancel");
+    // this.addButton("ok", "OK");
+    // this.addButton("cancel", "Cancel");
 
     this.refreshToolButtons();
     this.fixLayout();
@@ -353,10 +353,13 @@ PaintEditorMorph.prototype.openIn = function (
     oldim,
     oldrc,
     callback,
-    anIDE
+    anIDE,
+    shapes,
+    costume
 ) {
     var myself = this;
     // Open the editor in a world with an optional image to edit
+    this.object = costume;
     this.oldim = oldim;
     this.callback = callback || nop;
     this.ide = anIDE;
@@ -389,7 +392,10 @@ PaintEditorMorph.prototype.openIn = function (
     }
 
     this.key = 'paint';
-    this.popUp(world);
+    world.add(this)//this.popUp(world);
+    world.keyboardFocus = this;
+    this.rerender()
+    world.rerender();
 };
 
 PaintEditorMorph.prototype.fixLayout = function () {
@@ -399,7 +405,11 @@ PaintEditorMorph.prototype.fixLayout = function () {
         this.paper.drawNew();
     }
     if (this.controls) {this.controls.fixLayout(); }
-    if (this.body) {this.body.fixLayout(); }
+    if (this.body) {
+        this.body.fixLayout(); 
+        this.bounds.setExtent(this.body.extent().add(5))
+        this.body.setCenter(this.center());
+    }
     PaintEditorMorph.uber.fixLayout.call(this);
     this.changed();
 };
@@ -416,7 +426,6 @@ PaintEditorMorph.prototype.ok = function () {
         this.paper.paper,
         this.paper.rotationCenter
     );
-    this.destroy();
 };
 
 PaintEditorMorph.prototype.cancel = function () {
@@ -425,13 +434,9 @@ PaintEditorMorph.prototype.cancel = function () {
 };
 
 PaintEditorMorph.prototype.switchToVector = function () {
-
-    this.object = new SVG_Costume(new Image(), '', new Point(0,0));
-    this.object.edit(
-        this.world(),
-        this.ide,
-        true
-    );
+    var parent = this.parent;
+    this.destroy();
+    parent.switchToVector();
 };
 
 PaintEditorMorph.prototype.populatePropertiesMenu = function () {
@@ -526,12 +531,15 @@ PaintEditorMorph.prototype.populatePropertiesMenu = function () {
         function () {return myself.shift; }
     );
     pc.constrain.label.isBold = false;
+    pc.constrain.label.color = IDE_Morph.prototype.buttonLabelColor;
 
     c.add(pc.colorpicker);
     //c.add(pc.primaryColorButton);
     c.add(pc.primaryColorViewer);
+    var label = new StringMorph(localize("Brush size") + ":", 10, null, true);
+    label.color = IDE_Morph.prototype.buttonLabelColor;
     brushControl.add(
-        new StringMorph(localize("Brush size") + ":", 10, null, true)
+        label
     );
     brushControl.add(alpen);
     brushControl.add(pc.constrain);
@@ -783,6 +791,7 @@ PaintCanvasMorph.prototype.undo = function () {
         this.drawNew();
         this.changed();
     }
+    this.ok();
 };
 
 PaintCanvasMorph.prototype.merge = function (a, b) {
@@ -801,6 +810,7 @@ PaintCanvasMorph.prototype.clearCanvas = function () {
     this.buildContents();
     this.drawNew();
     this.changed();
+    this.ok()
 };
 
 PaintCanvasMorph.prototype.toolChanged = function (tool) {
@@ -962,10 +972,10 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
         pctx = this.paper.getContext("2d"),
         x = this.dragRect.origin.x, // original drag X
         y = this.dragRect.origin.y, // original drag y
-        p = relpos.x,               // current drag x
-        q = relpos.y,               // current drag y
-        w = (p - x) / 2,            // half the rect width
-        h = (q - y) / 2,            // half the rect height
+        dx = relpos.x,               // current drag x
+        dy = relpos.y,               // current drag y
+        w = (dx - x) / 2,            // half the rect width
+        h = (dy - y) / 2,            // half the rect height
         i,                          // iterator number
         width = this.paper.width;
 
@@ -976,7 +986,7 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
     function newH() {
         return Math.max(Math.abs(w), Math.abs(h)) * (h / Math.abs(h));
     }
-    this.brushBuffer.push([p, q]);
+    this.brushBuffer.push([dx, dy]);
     mctx.lineWidth = this.settings.linewidth;
     mctx.clearRect(0, 0, this.bounds.width(), this.bounds.height()); // mask
 
@@ -1021,12 +1031,12 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
         mctx.moveTo(x, y);
         if (this.isShiftPressed()) {
             if (Math.abs(h) > Math.abs(w)) {
-                mctx.lineTo(x, q);
+                mctx.lineTo(x, dy);
             } else {
-                mctx.lineTo(p, y);
+                mctx.lineTo(dx, y);
             }
         } else {
-            mctx.lineTo(p, q);
+            mctx.lineTo(dx, dy);
         }
         mctx.stroke();
         break;
@@ -1037,7 +1047,7 @@ PaintCanvasMorph.prototype.mouseMove = function (pos) {
             mctx.arc(
                 x,
                 y,
-                new Point(x, y).distanceTo(new Point(p, q)),
+                new Point(x, y).distanceTo(new Point(dx, dy)),
                 0,
                 Math.PI * 2,
                 false
@@ -1106,6 +1116,7 @@ PaintCanvasMorph.prototype.mouseClickLeft = function () {
         this.merge(this.mask, this.paper);
     }
     this.brushBuffer = [];
+    this.parentThatIsA(PaintEditorMorph).ok()
 };
 
 PaintCanvasMorph.prototype.mouseLeaveDragging

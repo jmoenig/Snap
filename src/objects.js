@@ -3704,7 +3704,11 @@ SpriteMorph.prototype.render = function (ctx) {
     ctx.scale(this.scale * stageScale, this.scale * stageScale);
     ctx.translate(this.imageOffset.x, this.imageOffset.y);
     ctx.rotate(radians(facing - 90));
+    try {
     ctx.drawImage(pic.contents, 0, 0);
+    } catch(e) {
+      console.warn(e)
+    }
     ctx.restore();
   } else {
     facing = isFlipped ? -90 : facing;
