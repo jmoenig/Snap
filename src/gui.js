@@ -262,51 +262,11 @@ IDE_Morph.prototype.scratchBlocksXml =
 
 // IDE_Morph instance creation:
 
-function IDE_Morph(config = {}) {
-  this.init(config);
+function IDE_Morph() {
+  this.init();
 }
 
-/*
-    Configuring the IDE for specialized uses, e.g. as DSL inside another IDE
-    can be achieved by passing in an optional configuration dictionary when
-    creating an instance. This is still very much under construction. Currently
-    the following options are available:
-
-        noAutoFill      bool, do not let the IDE fill the whole World canvas
-        path            str, path to additional resources (translations)
-        load:           str, microworld file name (xml)
-        onload:         callback, called when the microworld is loaded
-        design:         str, currently "flat" (bright) or "classic" (dark)
-        border:         num, pixels surrounding the IDE, default is none (zero)
-        lang:           str, translation to be used, e.g. "de" for German
-        mode:           str, currently "presentation" or "edit"
-        hideControls:   bool, hide/show the tool bar
-        hideCategories: bool, hide/show the palette block category buttons
-        hideProjectName:bool, hide/show the project title in the tool bar
-        noProjectItems: bood, hide/show project specific menu items
-        noDefaultCat:   bool, hide/show the buit-in bloc category buttons
-        noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
-        noSprites:      bool, hide/show the stage, corral, sprite editor
-        noPalette:      bool, hide/show the palette including the categories
-        noImports:      bool, disable/allow importing files via drag&drop
-        noOwnBlocks:    bool, hider/show "make a block" and "make a category"
-        noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
-        noUserSettings: bool, disable/enable persistent user preferences
-        noDevWarning:   bool, ignore development version incompatibility warning
-        noExitWarning:  bool, do not show a browser warning when closing the IDE
-                                with unsaved changes
-        preserveTitle:  bool, do not set the tab title dynamically to reflect
-                                the current Snap! version
-        blocksZoom:     num, zoom factor for blocks, e.g. 1.5
-        blocksFade:     num, fading percentage for blocks, e.g. 85
-        zebra:          num, contrast percentage for nesting same-color blocks
-
-    Note that such configurations will not affect the user's own preference
-    settings, e.g. configuring the blocks zoom or language will not overwrite
-    the user's own settings which are kept in localstorage.
-*/
-
-IDE_Morph.prototype.init = function (config) {
+IDE_Morph.prototype.init = function () {
   // global font setting
   MorphicPreferences.globalFontFamily = '"Helvetica Nue", Helvetica, Arial';
 
@@ -316,7 +276,6 @@ IDE_Morph.prototype.init = function (config) {
   this.cloudMsg = null;
   this.source = null;
   this.serializer = new SnapSerializer();
-  this.config = config;
   this.version = Date.now(); // for outside observers
 
   // restore saved user preferences
@@ -357,7 +316,7 @@ IDE_Morph.prototype.init = function (config) {
   this.embedOverlay = null;
   this.isEmbedMode = false;
 
-  this.isAutoFill = !config.noAutoFill;
+  this.isAutoFill = true;
   this.isAppMode = false;
   this.isSmallStage = false;
   this.filePicker = null;
@@ -830,176 +789,8 @@ IDE_Morph.prototype.openIn = function (world) {
   world.keyboardFocus = this.stage;
   this.warnAboutIE();
 
-  // configure optional settings
-  this.applyConfigurations();
-
   this.warnAboutDev();
   return this;
-};
-
-// IDE_Morph configuration
-
-IDE_Morph.prototype.applyConfigurations = function () {
-  var cnf = this.config,
-    refreshLater = false,
-    lang,
-    translation,
-    src,
-    refresh = () => {
-      // load project
-      if (cnf.load) {
-        this.getURL(cnf.load, (projectData) => {
-          this.buildPanes();
-          this.fixLayout();
-          if (projectData.indexOf("<snapdata") === 0) {
-            this.rawOpenCloudDataString(projectData);
-          } else if (projectData.indexOf("<project") === 0) {
-            this.rawOpenProjectString(projectData);
-          }
-          this.hasChangedMedia = true;
-          this.applyPaneHidingConfigurations();
-          if (cnf.onload) {
-            cnf.onload();
-          }
-        });
-      } else {
-        this.buildPanes();
-        this.fixLayout();
-        this.newProject();
-        this.applyPaneHidingConfigurations();
-      }
-    };
-
-  if (!Object.keys(cnf).length) {
-    return;
-  }
-
-  // design
-  this.setFlatDesign();
-  if (false) {
-    //cnf.design) {
-    if (cnf.design === "flat") {
-    } else if (cnf.design === "classic") {
-      this.setDefaultDesign();
-    }
-  }
-
-  // theme
-  if (cnf.theme) {
-    if (cnf.theme === "bright") {
-      this.setBrightTheme();
-    } else if (cnf.theme === "dark") {
-      this.setDefaultTheme();
-    }
-  }
-
-  // interaction mode
-  if (cnf.mode === "presentation") {
-    this.toggleAppMode(true);
-  } else {
-    this.toggleAppMode(false);
-  }
-
-  // blocks size
-  if (cnf.blocksZoom) {
-    SyntaxElementMorph.prototype.setScale(
-      Math.max(1, Math.min(cnf.blocksZoom, 12))
-    );
-    CommentMorph.prototype.refreshScale();
-  }
-
-  // blocks fade
-  if (cnf.blocksFade) {
-    SyntaxElementMorph.prototype.setAlphaScaled(100 - cnf.blocksFade);
-  }
-
-  // zebra coloring //
-  if (isNil(cnf.zebra)) {
-    BlockMorph.prototype.zebraContrast = 40;
-  } else {
-    BlockMorph.prototype.zebraContrast = cnf.zebra;
-  }
-
-  // language
-  if (cnf.lang) {
-    lang = cnf.lang;
-    translation = document.getElementById("language");
-
-    // this needs to be directed to something more generic:
-    src = this.resourceURL("locale", "lang-" + lang + ".js");
-
-    SnapTranslator.unload();
-    if (translation) {
-      document.head.removeChild(translation);
-    }
-    SnapTranslator.language = lang;
-    if (lang !== "en") {
-      refreshLater = true;
-      translation = document.createElement("script");
-      translation.id = "language";
-      translation.onload = () => refresh();
-      document.head.appendChild(translation);
-      translation.src = src;
-    }
-  }
-
-  // no palette
-  if (cnf.noPalette) {
-    ScriptsMorph.prototype.enableKeyboard = false;
-  }
-
-  if (!refreshLater) {
-    refresh();
-  }
-
-  // disable cloud access
-  if (cnf.noCloud) {
-    this.cloud.disable();
-    this.fixLayout();
-  }
-
-  // disable onbeforeunload close warning
-  if (cnf.noExitWarning) {
-    window.onbeforeunload = window.cachedOnbeforeunload;
-  }
-};
-
-IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
-  var cnf = this.config;
-
-  // hide controls
-  if (cnf.hideControls) {
-    this.logo.hide();
-    this.controlBar.hide();
-    window.onbeforeunload = nop;
-  }
-
-  // hide categories
-  if (cnf.hideCategories) {
-    this.categories.hide();
-  }
-
-  // no sprites
-  if (cnf.noSprites) {
-    this.stage.hide();
-    cnf.noSpriteEdits = true;
-  }
-
-  // hide sprite editing widgets
-  if (cnf.noSpriteEdits) {
-    this.oldSpriteBar.hide();
-    this.spriteBar.hide();
-    this.stageHandle.hide();
-    this.corral.hide();
-  }
-
-  // no palette
-  if (cnf.noPalette) {
-    this.categories.hide();
-    this.palette.hide();
-    this.paletteHandle.hide();
-    this.extensionButton.hide();
-  }
 };
 
 // IDE_Morph construction
@@ -1338,10 +1129,8 @@ IDE_Morph.prototype.createProjectControlBar = function () {
     });
 
     x = stageSizeButton.left() - (3 * padding + 3 * stageSizeButton.width());
-    if (!myself.config.noSprites) {
-      x = myself.stage.left();
+    x = myself.stage.left();
       x = Math.max(x, this.left());
-    }
     if (myself.performerMode) {
       x =
         myself.right() - (3 * padding + 3 * stageSizeButton.width()) - padding;
@@ -1630,47 +1419,9 @@ IDE_Morph.prototype.createControlBar = function () {
   this.controlBar.cloudButton = cloudButton; // for menu positioning & refresh
 
   this.controlBar.fixLayout = function () {
-    /*x = this.right() - padding;
-    [appModeButton, stageSizeButton].forEach((button) => {
-      button.setCenter(myself.controlBar.center());
-      button.setRight(x);
-      x -= button.width();
-      x -= padding;
-    });
-
-    x = stageSizeButton.left() - (3 * padding + 3 * stageSizeButton.width());
-    if (!myself.config.noSprites) {
-      x = Math.min(
-        x,
-        myself.right() -
-          myself.stage.dimensions.x *
-            (myself.isSmallStage ? myself.stageRatio : 1) -
-          (myself.config.border || 0)
-      );
-      x = Math.max(x, this.left());
-    }
-    if (myself.performerMode) {
-      x =
-        myself.right() - (3 * padding + 3 * stageSizeButton.width()) - padding;
-    }
-    [startButton, pauseButton, stopButton].forEach((button) => {
-      x += padding;
-      button.setCenter(myself.controlBar.center());
-      button.setLeft(x);
-      x += button.width();
-    });*/
-
     settingsButton.setLeft(this.left());
     projectButton.setLeft(settingsButton.right() + padding);
     editButton.setLeft(projectButton.right() + padding);
-
-    if (myself.config.hideSettings) {
-      settingsButton.hide();
-    }
-
-    if (myself.config.noImports || myself.config.hideProjects) {
-      projectButton.hide();
-    }
 
     if (myself.cloud.disabled) {
       cloudButton.hide();
@@ -1725,7 +1476,7 @@ IDE_Morph.prototype.createControlBar = function () {
     if (this.suffixText) {
       this.suffixText.destroy();
     }
-    if (myself.isAppMode || myself.config.hideProjectName) {
+    if (myself.isAppMode) {
       return;
     }
     scene =
@@ -1733,12 +1484,9 @@ IDE_Morph.prototype.createControlBar = function () {
         ? " (" + myself.scene.name + ")"
         : "";
     name = myself.getProjectName() || localize("untitled");
-    if (!myself.config.preserveTitle) {
-      document.title = myself.getProjectName()
+    document.title = myself.getProjectName()
         ? name + " on Split!"
         : "Split! " + SplitVersion;
-      // "Split! " + (myself.getProjectName() ? name : SplitVersion);
-    }
     prefixButton = new TriggerMorph(
       myself,
       "save",
@@ -1821,7 +1569,6 @@ IDE_Morph.prototype.createCategories = function () {
     categoryQueryAction = this.scene.unifiedPalette
       ? queryTopCategory
       : queryCurrentCategory,
-    shift = this.config.noDefaultCat ? 4 : 0,
     flag = true;
 
   if (this.categories) {
@@ -2021,13 +1768,6 @@ IDE_Morph.prototype.createCategories = function () {
         )
       );
     });
-
-    if (shift) {
-      // hide the built-in category buttons
-      for (i = 0; i < 8; i += 1) {
-        myself.categories.children[i].hide();
-      }
-    }
 
     /*scroller = new ScrollFrameMorph(null, null, myself.sliderColor);
         scroller.setColor(myself.groupColor);
@@ -2898,8 +2638,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
   // situation is a string, i.e.
   // 'selectSprite' or 'refreshPalette' or 'tabEditor'
   var padding = this.padding,
-    cnf = this.config,
-    border = cnf.border || 0,
+    border = 0,
     flag,
     maxPaletteWidth;
 
@@ -2945,9 +2684,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
   // palette
   this.palette.setLeft(this.logo.left() + this.catWidth);
   this.palette.setTop(
-    cnf.hideControls
-      ? this.top() + border
-      : this.controlBar.bottom() + padding + 44
+    this.controlBar.bottom() + padding + 44
   );
   this.palette.setHeight(this.bottom() - this.palette.top() - border);
   this.palette.setWidth(this.paletteWidth);
@@ -3021,15 +2758,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     } else {
       this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
       this.stage.setTop(
-        cnf.hideControls
-          ? this.top() + border
-          : this.controlBar.bottom() + padding
+        this.controlBar.bottom() + padding
       );
       this.stage.setRight(this.right() - border - 10);
-      if (cnf.noSprites) {
-        maxPaletteWidth = Math.max(200, this.width() - border * 2);
-      } else {
-        maxPaletteWidth = Math.max(
+      maxPaletteWidth = Math.max(
           200,
           this.width() -
             this.stage.width() -
@@ -3037,7 +2769,6 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             padding * 2 -
             border * 2
         );
-      }
       if (this.paletteWidth > maxPaletteWidth) {
         this.paletteWidth = maxPaletteWidth;
         this.fixLayout();
@@ -3058,14 +2789,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
     // oldSpriteBar
     this.oldSpriteBar.setLeft(
-      this.left() /*cnf.noPalette ?
-            this.left() + border
-            : this.paletteWidth + padding + border*/
+      this.left()
     );
     this.oldSpriteBar.setTop(
-      cnf.hideControls
-        ? this.top() + border
-        : this.controlBar.bottom() + padding
+      this.controlBar.bottom() + padding
     );
     this.oldSpriteBar.setWidth(
       Math.max(0, this.stage.left() - padding - this.oldSpriteBar.left())
@@ -3086,16 +2813,10 @@ IDE_Morph.prototype.fixLayout = function (situation) {
           this.currentTab == "scripts" ? this.palette.right() : 0
         ); //this.oldSpriteBar.left());
         this.spriteEditor.setTop(
-          cnf.noSprites || cnf.noSpriteEdits
-            ? cnf.hideControls
-              ? this.top() + border
-              : this.controlBar.bottom() + padding
-            : this.oldSpriteBar.bottom() + padding
+          this.oldSpriteBar.bottom() + padding
         );
         this.spriteEditor.setWidth(
-          cnf.noSprites
-            ? this.right() - this.spriteEditor.left() - border
-            : this.oldSpriteBar.width() - this.spriteEditor.left() - 10
+          this.oldSpriteBar.width() - this.spriteEditor.left() - 10
         );
         this.spriteEditor.setHeight(
           this.bottom() - this.spriteEditor.top() - border
@@ -3159,8 +2880,7 @@ IDE_Morph.prototype.setProjectNotes = function (string) {
 // IDE_Morph resizing
 
 IDE_Morph.prototype.setExtent = function (point) {
-  var cnf = this.config,
-    padding = new Point(430, 110),
+  var padding = new Point(430, 110),
     minExt,
     ext,
     maxWidth,
@@ -3175,8 +2895,6 @@ IDE_Morph.prototype.setExtent = function (point) {
     if (!this.isEmbedMode) {
       minExt = minExt.add(this.controlBar.height() + 10);
     }
-  } else if (cnf.noSprites) {
-    minExt = new Point(100, 100);
   } else {
     if (this.stageRatio > 1) {
       minExt = padding.add(this.stage.dimensions);
@@ -3192,8 +2910,7 @@ IDE_Morph.prototype.setExtent = function (point) {
   if (!this.isAppMode) {
     // in edit mode adjust stage ratio if necessary
     // (in presentation mode this is already handled separately)
-    if (!cnf.noSprites) {
-      maxWidth =
+    maxWidth =
         ext.x - (200 + this.oldSpriteBar.tabBar.width() + this.padding * 2);
       minWidth = CorralStageMorph.prototype.thumbSize.x * 3;
       maxHeight = ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5;
@@ -3203,7 +2920,6 @@ IDE_Morph.prototype.setExtent = function (point) {
         maxHeight / this.stage.dimensions.y
       );
       this.stageRatio = Math.min(maxRatio, Math.max(minRatio, this.stageRatio));
-    }
   }
 
   // apply
@@ -3260,10 +2976,6 @@ IDE_Morph.prototype.endBulkDrop = function () {
 };
 
 IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
-  if (this.config.noImports) {
-    return;
-  }
-
   var costume = new Costume(
     aCanvas,
     this.currentSprite.newCostumeName(
@@ -3310,10 +3022,6 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
 };
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
-  if (this.config.noImports) {
-    return;
-  }
-
   var myself,
     viewBox,
     w = 300,
@@ -3395,10 +3103,6 @@ IDE_Morph.prototype.loadSVG = function (anImage, name) {
 };
 
 IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
-  if (this.config.noImports) {
-    return;
-  }
-
   if (anAudio.src.indexOf("data:audio") !== 0) {
     // fetch and base 64 encode samples using FileReader
     this.getURL(
@@ -3424,10 +3128,6 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
 };
 
 IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
-  if (this.config.noImports) {
-    return;
-  }
-
   var lbl = name ? name.split(".")[0] : "",
     ext = name ? name.slice(name.lastIndexOf(".") + 1).toLowerCase() : "",
     setting = this.isAddingScenes;
@@ -3494,10 +3194,6 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
 };
 
 IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
-  if (this.config.noImports) {
-    return;
-  }
-
   // dynamically load ypr->Snap!
   var ypr = document.getElementById("ypr"),
     myself = this,
@@ -3819,10 +3515,6 @@ IDE_Morph.prototype.refreshIDE = function () {
 // IDE_Morph settings persistance
 
 IDE_Morph.prototype.applySavedSettings = function () {
-  if (this.config.noUserSettings) {
-    return;
-  }
-
   var design = this.getSetting("design"),
     theme = this.getSetting("theme"),
     zoom = this.getSetting("zoom"),
@@ -3956,7 +3648,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
 };
 
 IDE_Morph.prototype.saveSetting = function (key, value) {
-  if (!this.savingPreferences || this.config.noUserSettings) {
+  if (!this.savingPreferences) {
     return;
   }
   if (this.hasLocalStorage()) {
@@ -5349,182 +5041,180 @@ IDE_Morph.prototype.projectMenu = function () {
   this.ideRender(menu);
   menu.addItem("Notes...", "editNotes");
   menu.addLine();
-  if (!this.config.noProjectItems) {
-    menu.addPair("New", "createNewProject", "^N");
-    menu.addPair("Open...", "openProjectsBrowser", "^O");
-    menu.addPair("Save", "save", "^S");
-    menu.addItem("Save As...", "saveProjectsBrowser");
-    if (backup) {
-      menu.addItem(
-        "Restore unsaved project",
-        "restore",
-        backup,
-        shiftClicked ? new Color(255, 100, 100) : null
-      );
-      if (shiftClicked) {
-        menu.addItem(
-          "Clear backup",
-          "clearBackup",
-          backup,
-          new Color(255, 100, 100)
-        );
-      }
-    }
-    menu.addLine();
+  menu.addPair("New", "createNewProject", "^N");
+  menu.addPair("Open...", "openProjectsBrowser", "^O");
+  menu.addPair("Save", "save", "^S");
+  menu.addItem("Save As...", "saveProjectsBrowser");
+  if (backup) {
     menu.addItem(
-      "Import...",
-      "importLocalFile",
-      "file menu import hint"
-      // looks up the actual text in the translator
-    );
-    menu.addItem(
-      "Import Scratch Blocks",
-      () =>
-        this.rawOpenBlocksString(this.scratchBlocksXml, "Scratch Blocks", true),
-      "import the library containing replications\n" +
-        "of scratch blocks for Split!"
-    );
-    menu.addItem(
-      "Export project...",
-      () => {
-        var pn = this.getProjectName();
-        if (pn) {
-          this.exportProject(pn);
-        } else {
-          this.prompt(
-            "Export Project As...",
-            (name) => this.exportProject(name),
-            null,
-            "exportProject"
-          );
-        }
-      },
-      "save project data as XML\nto your downloads folder"
-    );
-    menu.addItem(
-      "Export summary...",
-      () => this.exportProjectSummary(),
-      "save a summary\nof this project"
+      "Restore unsaved project",
+      "restore",
+      backup,
+      shiftClicked ? new Color(255, 100, 100) : null
     );
     if (shiftClicked) {
       menu.addItem(
-        "Export summary with drop-shadows...",
-        () => this.exportProjectSummary(true),
-        "download and save" +
-          "\nwith a summary of this project" +
-          "\nwith drop-shadows on all pictures." +
-          "\nnot supported by all browsers",
-        new Color(255, 100, 100)
-      );
-      menu.addItem(
-        "Export all scripts as pic...",
-        () => this.exportScriptsPicture(),
-        "show a picture of all scripts\nand block definitions",
+        "Clear backup",
+        "clearBackup",
+        backup,
         new Color(255, 100, 100)
       );
     }
-    if (this.stage.trailsLog.length) {
-      tm = new MenuMorph(this);
-      tm.addItem(
-        "png...",
-        () =>
-          this.saveCanvasAs(
-            this.currentSprite.reportPenTrailsAsCostume().contents,
-            this.getProjectName() || this.stage.name
-          ),
-        "export pen trails\nas PNG image"
-      );
-      tm.addItem(
-        "svg...",
-        () => this.stage.exportTrailsLogAsSVG(),
-        "export pen trails\nline segments as SVG"
-      );
-      tm.addItem(
-        "poly svg...",
-        () => this.stage.exportTrailsLogAsPolySVG(),
-        "export pen trails\nline segments as polyline SVG"
-      );
-      tm.addItem(
-        "dst...",
-        () => this.stage.exportTrailsLogAsDST(),
-        "export pen trails\nas DST embroidery file"
-      );
-      tm.addItem(
-        "exp...",
-        () => this.stage.exportTrailsLogAsEXP(),
-        "export pen trails\nas EXP embroidery file"
-      );
-      menu.addMenu("Export pen trails", tm);
-    } else {
-      menu.addItem(
-        "Export pen trails...",
-        () =>
-          this.saveCanvasAs(
-            this.currentSprite.reportPenTrailsAsCostume().contents,
-            this.getProjectName() || this.stage.name
-          ),
-        "export pen trails\nas PNG image"
-      );
-    }
-    menu.addLine();
-    if (
-      this.stage.globalBlocks.length ||
-      SpriteMorph.prototype.hasCustomizedPrimitives()
-    ) {
-      menu.addItem(
-        "Export blocks...",
-        () => this.exportGlobalBlocks(),
-        "save global custom block\ndefinitions as XML"
-      );
-    }
-    if (this.stage.globalBlocks.length) {
-      menu.addItem(
-        "Unused blocks...",
-        () => this.removeUnusedBlocks(),
-        "find unused global custom blocks" + "\nand remove their definitions"
-      );
-    }
-    if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
-      if (shiftClicked) {
-        menu.addItem(
-          "Export customized primitives...",
-          () => this.exportCustomizedPrimitives(),
-          "EXPERIMENTAL!",
-          new Color(255, 100, 100)
+  }
+  menu.addLine();
+  menu.addItem(
+    "Import...",
+    "importLocalFile",
+    "file menu import hint"
+    // looks up the actual text in the translator
+  );
+  menu.addItem(
+    "Import Scratch Blocks",
+    () =>
+      this.rawOpenBlocksString(this.scratchBlocksXml, "Scratch Blocks", true),
+    "import the library containing replications\n" +
+      "of scratch blocks for Split!"
+  );
+  menu.addItem(
+    "Export project...",
+    () => {
+      var pn = this.getProjectName();
+      if (pn) {
+        this.exportProject(pn);
+      } else {
+        this.prompt(
+          "Export Project As...",
+          (name) => this.exportProject(name),
+          null,
+          "exportProject"
         );
       }
-      menu.addItem(
-        "Restore primitives",
-        () => this.stage.restorePrimitives(),
-        "switch (back) to primitive blocks in the palette,\n" +
-          "CAUTION - can break extensions."
-      );
-    }
-    menu.addItem("Hide blocks...", () =>
-      new BlockVisibilityDialogMorph(this.currentSprite).popUp(world)
+    },
+    "save project data as XML\nto your downloads folder"
+  );
+  menu.addItem(
+    "Export summary...",
+    () => this.exportProjectSummary(),
+    "save a summary\nof this project"
+  );
+  if (shiftClicked) {
+    menu.addItem(
+      "Export summary with drop-shadows...",
+      () => this.exportProjectSummary(true),
+      "download and save" +
+        "\nwith a summary of this project" +
+        "\nwith drop-shadows on all pictures." +
+        "\nnot supported by all browsers",
+      new Color(255, 100, 100)
     );
-    menu.addItem("New category...", () => this.createNewCategory());
-    if (SpriteMorph.prototype.customCategories.size) {
-      menu.addItem("Remove a category...", () => this.deleteUserCategory(pos));
-    }
-    if (
-      this.currentSprite instanceof SpriteMorph &&
-      !this.currentSprite.solution
-    ) {
+    menu.addItem(
+      "Export all scripts as pic...",
+      () => this.exportScriptsPicture(),
+      "show a picture of all scripts\nand block definitions",
+      new Color(255, 100, 100)
+    );
+  }
+  if (this.stage.trailsLog.length) {
+    tm = new MenuMorph(this);
+    tm.addItem(
+      "png...",
+      () =>
+        this.saveCanvasAs(
+          this.currentSprite.reportPenTrailsAsCostume().contents,
+          this.getProjectName() || this.stage.name
+        ),
+      "export pen trails\nas PNG image"
+    );
+    tm.addItem(
+      "svg...",
+      () => this.stage.exportTrailsLogAsSVG(),
+      "export pen trails\nline segments as SVG"
+    );
+    tm.addItem(
+      "poly svg...",
+      () => this.stage.exportTrailsLogAsPolySVG(),
+      "export pen trails\nline segments as polyline SVG"
+    );
+    tm.addItem(
+      "dst...",
+      () => this.stage.exportTrailsLogAsDST(),
+      "export pen trails\nas DST embroidery file"
+    );
+    tm.addItem(
+      "exp...",
+      () => this.stage.exportTrailsLogAsEXP(),
+      "export pen trails\nas EXP embroidery file"
+    );
+    menu.addMenu("Export pen trails", tm);
+  } else {
+    menu.addItem(
+      "Export pen trails...",
+      () =>
+        this.saveCanvasAs(
+          this.currentSprite.reportPenTrailsAsCostume().contents,
+          this.getProjectName() || this.stage.name
+        ),
+      "export pen trails\nas PNG image"
+    );
+  }
+  menu.addLine();
+  if (
+    this.stage.globalBlocks.length ||
+    SpriteMorph.prototype.hasCustomizedPrimitives()
+  ) {
+    menu.addItem(
+      "Export blocks...",
+      () => this.exportGlobalBlocks(),
+      "save global custom block\ndefinitions as XML"
+    );
+  }
+  if (this.stage.globalBlocks.length) {
+    menu.addItem(
+      "Unused blocks...",
+      () => this.removeUnusedBlocks(),
+      "find unused global custom blocks" + "\nand remove their definitions"
+    );
+  }
+  if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
+    if (shiftClicked) {
       menu.addItem(
-        "Generate puzzle",
-        "generatePuzzle",
-        "generate a Parson's Puzzle\n" + "from the current sprite"
+        "Export customized primitives...",
+        () => this.exportCustomizedPrimitives(),
+        "EXPERIMENTAL!",
+        new Color(255, 100, 100)
       );
     }
-    menu.addLine();
-    if (this.scenes.length() > 1) {
-      menu.addItem("Scenes...", "scenesMenu");
-    }
-    menu.addPair("New scene", "createNewScene");
-    menu.addPair("Add scene...", "addScene");
-    //menu.addLine();
+    menu.addItem(
+      "Restore primitives",
+      () => this.stage.restorePrimitives(),
+      "switch (back) to primitive blocks in the palette,\n" +
+        "CAUTION - can break extensions."
+    );
   }
+  menu.addItem("Hide blocks...", () =>
+    new BlockVisibilityDialogMorph(this.currentSprite).popUp(world)
+  );
+  menu.addItem("New category...", () => this.createNewCategory());
+  if (SpriteMorph.prototype.customCategories.size) {
+    menu.addItem("Remove a category...", () => this.deleteUserCategory(pos));
+  }
+  if (
+    this.currentSprite instanceof SpriteMorph &&
+    !this.currentSprite.solution
+  ) {
+    menu.addItem(
+      "Generate puzzle",
+      "generatePuzzle",
+      "generate a Parson's Puzzle\n" + "from the current sprite"
+    );
+  }
+  menu.addLine();
+  if (this.scenes.length() > 1) {
+    menu.addItem("Scenes...", "scenesMenu");
+  }
+  menu.addPair("New scene", "createNewScene");
+  menu.addPair("Add scene...", "addScene");
+  //menu.addLine();
   /*menu.addItem(
         'Extensions...',
         showExtensions,
@@ -5617,13 +5307,8 @@ IDE_Morph.prototype.resourceURL = function () {
   // Take in variadic inputs that represent an a nested folder structure.
   // Method can be easily overridden if running in a custom location.
   // Default Snap! simply returns a path (relative to snap.html)
-  // Note: You can specify a base path to the root directory in the
-  // configuration object's "path" property that's passed when creating
-  // an IDE instance, e.g. either a relative one: {path: '../' }
-  // or a full url, depending on where (your) Snap! distro ist hosted
-  var args = Array.prototype.slice.call(arguments, 0),
-    path = this.config.path ? [this.config.path] : [];
-  return path.concat(args).join("/");
+  var args = Array.prototype.slice.call(arguments, 0);
+  return args.join("/");
 };
 
 IDE_Morph.prototype.getMediaList = function (dirname, callback) {
@@ -7891,12 +7576,6 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
     }
     // update undrop controls
     this.currentSprite.scripts.updateToolbar();
-    // hide hidden panes
-    if (this.config.noSpriteEdits) {
-      this.oldSpriteBar.hide();
-      this.stageHandle.hide();
-      this.corral.hide();
-    }
   }
   this.setExtent(this.world().extent());
   this.controlBar.fixLayout();
@@ -9468,7 +9147,7 @@ IDE_Morph.prototype.isIE = function () {
 // IDE_Morph warn about saving project in the dev version
 
 IDE_Morph.prototype.warnAboutDev = function () {
-  if (!SplitVersion.includes("-dev") || this.config.noDevWarning) {
+  if (!SplitVersion.includes("-dev")) {
     return;
   }
   this.inform(
@@ -13763,14 +13442,10 @@ PaletteHandleMorph.prototype.mouseDownLeft = function (pos) {
 
 PaletteHandleMorph.prototype.mouseMove = function (pos) {
   var ide = this.target.parentThatIsA(IDE_Morph),
-    cnf = ide.config,
-    border = cnf.border || 0,
     newPos = pos.x + this.offset;
   ide.paletteWidth = Math.min(
-    Math.max(200, newPos - ide.left() - border * 2),
-    cnf.noSprites
-      ? ide.width() - border * 2
-      : ide.stageHandle.left() - ide.oldSpriteBar.tabBar.width()
+    Math.max(200, newPos - ide.left()),
+    ide.stageHandle.left() - ide.oldSpriteBar.tabBar.width()
   );
   ide.setExtent(ide.world().extent());
 };

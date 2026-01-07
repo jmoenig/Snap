@@ -4701,8 +4701,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
   searchButton.fixLayout();
   palette.toolBar.add(searchButton);
 
-  if (!ide || !ide.config.noOwnBlocks) {
-    makeButton = new PushButtonMorph(
+  makeButton = new PushButtonMorph(
       this,
       "makeBlock",
       new SymbolMorph("cross", 16)
@@ -4715,7 +4714,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
     makeButton.padding = 3;
     makeButton.fixLayout();
     palette.toolBar.add(makeButton);
-  }
 
   palette.toolBar.fixLayout();
   palette.add(palette.toolBar);
@@ -4733,8 +4731,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
       () => myself.searchBlocks(),
       "^F"
     );
-    if (!ide.config.noOwnBlocks) {
-      menu.addItem("hide blocks...", () =>
+    menu.addItem("hide blocks...", () =>
         new BlockVisibilityDialogMorph(myself).popUp(myself.world())
       );
       menu.addLine();
@@ -4746,7 +4743,6 @@ SpriteMorph.prototype.freshPalette = function (category) {
           this.parentThatIsA(IDE_Morph).deleteUserCategory()
         );
       }
-    }
     return menu;
   };
 
@@ -4803,10 +4799,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
 
   if (category !== "unified" || showButtons) {
     ide = ide || this.parentThatIsA(IDE_Morph);
-    if (!ide || !ide.config.noOwnBlocks) {
-      blocks.push("=");
-      blocks.push(this.makeBlockButton(category));
-    }
+    blocks.push("=");
+    blocks.push(this.makeBlockButton(category));
   }
 
   if (category !== "unified") {
@@ -6132,7 +6126,7 @@ SpriteMorph.prototype.userMenu = function () {
     allParts,
     anchors;
 
-  if (ide && (ide.isAppMode || ide.config.noSpriteEdits)) {
+  if (ide && ide.isAppMode) {
     // menu.addItem('help', 'nop');
     return menu;
   }
@@ -6207,7 +6201,7 @@ SpriteMorph.prototype.exportSprite = function () {
 
 SpriteMorph.prototype.edit = function () {
   var ide = this.parentThatIsA(IDE_Morph);
-  if (ide && !ide.isAppMode && !ide.config.noSpriteEdits) {
+  if (ide && !ide.isAppMode) {
     ide.selectSprite(this);
   }
 };
@@ -12020,7 +12014,7 @@ StageMorph.prototype.userMenu = function () {
   var ide = this.parentThatIsA(IDE_Morph),
     menu = new MenuMorph(this);
 
-  if (ide && (ide.isAppMode || ide.config.noSpriteEdits)) {
+  if (ide && ide.isAppMode) {
     // menu.addItem('help', 'nop');
     return menu;
   }

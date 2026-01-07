@@ -4111,7 +4111,7 @@ BlockMorph.prototype.userMenu = function () {
       menu.addLine();
     }
     rcvr = rcvr || this.scriptTarget(true);
-    if (rcvr && !rcvr.parentThatIsA(IDE_Morph).config.noRingify) {
+    if (rcvr) {
       menu.addItem("ringify", "ringify", undefined, WHITE);
     }
   }
@@ -9315,8 +9315,7 @@ ScriptsMorph.prototype.userMenu = function () {
         localize("check to inherit\nfrom") + " " + obj.exemplar.name
       );
     }
-    if (!ide.config.noOwnBlocks) {
-      menu.addItem("make a block...", () =>
+    menu.addItem("make a block...", () =>
         new BlockDialogMorph(
           null,
           (definition) => {
@@ -9334,7 +9333,6 @@ ScriptsMorph.prototype.userMenu = function () {
           this
         ).prompt("Make a block", null, this.world())
       );
-    }
   }
   return menu;
 };

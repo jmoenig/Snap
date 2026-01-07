@@ -1895,9 +1895,6 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         );
     } else {
         menu = this.constructor.uber.userMenu.call(this);
-        if (rcvr.parentThatIsA(IDE_Morph).config.noOwnBlocks) {
-            return menu;
-        }
         dlg = this.parentThatIsA(DialogBoxMorph);
         if (dlg && !(dlg instanceof BlockEditorMorph)) {
             return menu;
