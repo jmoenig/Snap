@@ -1575,3 +1575,15 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "your own": "你自己",
     "z": "z"
 };
+
+// zh_CN additions for visible UI strings (kept minimal for upstream)
+SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
+    "CAUTION! Development Version": "注意！开发版本",
+    "This version of Snap! is being developed.\n*** It is NOT supported for end users. ***\nSaving a project in THIS version is likely to\nmake it UNUSABLE or DEFECTIVE for current and\neven future official versions!\n\nvisit https://snap.berkeley.edu/run\nfor the official Snap! installation.": "当前 Snap! 处于开发版本。\n*** 本版本不面向终端用户。***\n在此版本中保存的项目很可能\n无法在当前或未来的正式版本中正常使用或会出现缺陷！\n\n请访问 https://snap.berkeley.edu/run\n获取官方 Snap! 安装与运行入口。",
+    "Dynamic scheduling": "动态调度",
+    "uncheck to schedule\nthreads framewise": "取消勾选后以逐帧方式调度线程",
+    "check to quickstep\nthreads atomically": "勾选后以原子快速步进方式调度线程",
+    "Performer mode scale...": "演示模式缩放...",
+    "specify the scale of the stage\npixels in performer mode": "设置演示模式下舞台像素缩放比例",
+    "Constrain proportions of shapes?\n(you can also hold shift)": "只画正方形/圆形/垂直或水平线\n(相当于按住shift键)"
+};
