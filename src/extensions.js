@@ -745,7 +745,11 @@ SnapExtensions.primitives.set(
             );
             inp.addEventListener(
                 "cancel",
-                () => acc.data = '',
+                () => {
+                    acc.data = '';
+                    document.body.removeChild(inp);
+                    ide.filePicker = null;
+                },
                 false
             );
             document.body.appendChild(inp);
