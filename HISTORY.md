@@ -57,6 +57,9 @@
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
 
+### 2026-01-12
+* extensions: tweaked dta_import extension for iOS
+
 ### 2026-01-03
 * gui, objects, scenes: new "hide empty categories" setting
 * store: serialize "hide empty categories" setting in the project file

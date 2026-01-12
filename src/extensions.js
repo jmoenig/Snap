@@ -35,7 +35,7 @@ BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-January-03';
+modules.extensions = '2026-January-12';
 
 // Global stuff
 
@@ -655,6 +655,7 @@ SnapExtensions.primitives.set(
     function (raw, proc) {
         // raw is a Boolean flag selecting to keep the data unparsed
         var ide = this.parentThatIsA(IDE_Morph),
+            center = ide.world().center(),
             acc = proc.context.accumulator,
             inp;
 
@@ -733,11 +734,10 @@ SnapExtensions.primitives.set(
             inp.style.border = "none";
             inp.style.outline = "none";
             inp.style.position = "absolute";
-            inp.style.top = "0px";
-            inp.style.left = "0px";
+            inp.style.top = center.y + 'px';
+            inp.style.left = center.x + 'px';
             inp.style.width = "0px";
             inp.style.height = "0px";
-            inp.style.display = "none";
             inp.addEventListener(
                 "change",
                 userImport,
