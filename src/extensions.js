@@ -655,7 +655,7 @@ SnapExtensions.primitives.set(
     function (raw, proc) {
         // raw is a Boolean flag selecting to keep the data unparsed
         var ide = this.parentThatIsA(IDE_Morph),
-            center = ide.world().center(),
+            wrld = ide.world(),
             acc = proc.context.accumulator,
             inp;
 
@@ -734,10 +734,10 @@ SnapExtensions.primitives.set(
             inp.style.border = "none";
             inp.style.outline = "none";
             inp.style.position = "absolute";
-            inp.style.top = center.y + 'px';
-            inp.style.left = center.x + 'px';
-            inp.style.width = "0px";
-            inp.style.height = "0px";
+            inp.style.top = "0px";
+            inp.style.left = "0px";
+            inp.style.width = wrld.width() + 'px';
+            inp.style.height = wrld.height() + 'px';
             inp.addEventListener(
                 "change",
                 userImport,
