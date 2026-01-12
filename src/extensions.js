@@ -685,7 +685,8 @@ SnapExtensions.primitives.set(
                 }
 
                 function isType(aFile, string) {
-                    return aFile.type.indexOf(string) !== -1 || (ext === string);
+                    return aFile.type.indexOf(string) !== -1 ||
+                        (ext === string);
                 }
 
                 frd.onloadend = function (e) {
