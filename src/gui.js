@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-January-04';
+modules.gui = '2026-January-16';
 
 // Declarations
 
@@ -2789,11 +2789,11 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             flag.setCenter(this.embedPlayButton.center());
             flag.setLeft(flag.left() + flag.size * 0.1); // account for slight asymmetry
         } else if (this.isAppMode) {
-            this.stage.setScale(Math.floor(Math.min(
+            this.stage.setScale(Math.min(
                 (this.width() - padding * 2) / this.stage.dimensions.x,
                 (this.height() - this.controlBar.height() * 2 - padding * 2)
                     / this.stage.dimensions.y
-            ) * 10) / 10);
+            ));
             this.stage.setCenter(this.center());
         } else {
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);

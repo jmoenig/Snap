@@ -44,6 +44,7 @@
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
     * flat mode now supports rounded corner in widgets, sigh...
+    * resizing the browser / window in presentation ("app") mode scales the stage smoothly
     * meta-programming: removed "static" tag from the block-attribute getter
     * took out rate limit in the Microblocks library, thanks, Bernat!
     * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
@@ -56,6 +57,9 @@
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
+
+### 2026-01-16
+* gui: removed scale-clipping for the stage in presentation ("app") mode, now resizing the window scales the stage smoothly
 
 ### 2026-01-12
 * extensions: tweaked dta_import extension for iOS
