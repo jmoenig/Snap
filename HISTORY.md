@@ -60,6 +60,7 @@
 
 ### 2026-01-16
 * gui: removed scale-clipping for the stage in presentation ("app") mode, now resizing the window scales the stage smoothly
+* lists: experimental asTable(colNames) method
 
 ### 2026-01-12
 * extensions: tweaked dta_import extension for iOS

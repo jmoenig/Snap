@@ -7,7 +7,7 @@
     written by Jens Mönig and Brian Harvey
     jens@moenig.org, bh@cs.berkeley.edu
 
-    Copyright (C) 2025 by Jens Mönig and Brian Harvey
+    Copyright (C) 2026 by Jens Mönig and Brian Harvey
 
     This file is part of Snap!.
 
@@ -59,13 +59,13 @@ Color, Point, WatcherMorph, StringMorph, SpriteMorph, ScrollFrameMorph, isNil,
 CellMorph, ArrowMorph, MenuMorph, snapEquals, localize, isString, IDE_Morph,
 MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
-Context, ZERO, WHITE, ReadStream, Process*/
+Context, ZERO, WHITE, ReadStream, Process, Table*/
 
 /*jshint esversion: 6*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2025-October-23';
+modules.lists = '2026-January-16';
 
 var List;
 var ListWatcherMorph;
@@ -1221,6 +1221,16 @@ List.prototype.asWords = function () {
     return this.itemsArray().map(each =>
         each instanceof List ? each.asWords() : each.toString().trim()
     ).filter(word => word.length).join(' ');
+};
+
+List.prototype.asTable = function (columnNamesList) {
+    // experimental - create an internal table object with a specifiable
+    // list of column names to be displayed in a table view
+    // currently unused - not needed except for Shriram's tables extension
+    var dim = this.quickShape(),
+        table = new Table(dim.at(1), dim.at(2));
+    table.setRows(this.itemsArray(), columnNamesList);
+    return table;
 };
 
 // List to blocks parsing and encoding, highly experimental for v10
