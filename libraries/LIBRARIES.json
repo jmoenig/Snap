@@ -139,7 +139,8 @@
         ]
       },
       "ca": {
-        "name": "Colors"
+        "name": "Colors",
+        "description": "Modifica, barreja i obté transicions de colors."
       },
       "es": {
         "name": "Colores"
@@ -190,6 +191,10 @@
           "Objekt _",
           "klone _ _"
         ]
+      },
+      "ca": {
+        "name": "Xarxes Neuronals",
+        "description": "Classifica dades vectoritzades utilitzant xarxes neuronals. Entrena i valida els teus propis models interns."
       }
     }
   },
@@ -869,6 +874,10 @@
         "searchData": [
           "Neigung _\rar"
         ]
+      },
+      "ca": {
+        "name": "Sensors de dispositius mòbils",
+        "description": "Lectures dels sensors de mòbils i tauletes."
       }
     }
   },
@@ -896,7 +905,7 @@
   {
     "fileName": "s4aConn.xml",
     "name": "S4A Connector",
-    "description": "Snap for All firmata boards Connector. Connecting Snap! to any Firmata compatible board: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... to dynamically control their functionalities. Firmata firmware uploaded is required.",
+    "description": "Snap for All firmata boards Connector, Adding all Snap4Arduino features. Connecting Snap! to any Firmata compatible board: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... to dynamically control their functionalities. Firmata firmware uploaded is required.",
     "searchData": [
       "set digital pin %&apos;pin&apos; to %&apos;value&apos;",
       "set pin %&apos;pin&apos; to value %&apos;value&apos;",
@@ -908,7 +917,7 @@
     "translations": {
       "ca": {
         "name": "Connector S4A",
-        "description": "Connector de Snap! a per totes les plaques compatibles amb firmata: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... per controlar dinàmicament les seves funcionalitats. Necessita que la placa tingui el Firmata carregat prèviament."
+        "description": "Connector per a qualsevol placa amb Firmata, implementant totes les funcionalitats de Snap4Arduino. Connecta Snap! amb totes les plaques compatibles amb firmata: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... per controlar dinàmicament les seves funcionalitats. Necessita que la placa tingui el Firmata carregat prèviament."
       }
     }
   },
@@ -3105,7 +3114,12 @@
     ],
     "categories": [
       "tutorials"
-    ]
+    ],
+    "translations": {
+      "ca": {
+        "description": "Posiciona i ajusta la mida de la finstra del tutorial."
+      }
+    }
   },
   {
     "fileName": "metaprogramming_module.xml",
