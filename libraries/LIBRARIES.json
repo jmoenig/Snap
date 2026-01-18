@@ -139,7 +139,8 @@
         ]
       },
       "ca": {
-        "name": "Colors"
+        "name": "Colors",
+        "description": "Modifica, barreja i obté transicions de colors."
       },
       "es": {
         "name": "Colores"
@@ -190,6 +191,10 @@
           "Objekt _",
           "klone _ _"
         ]
+      },
+      "ca": {
+        "name": "Xarxes Neuronals",
+        "description": "Classifica dades vectoritzades utilitzant xarxes neuronals. Entrena i valida els teus propis models interns."
       }
     }
   },
@@ -869,6 +874,10 @@
         "searchData": [
           "Neigung _\rar"
         ]
+      },
+      "ca": {
+        "name": "Sensors de dispositius mòbils",
+        "description": "Lectures dels sensors de mòbils i tauletes."
       }
     }
   },
@@ -3105,7 +3114,12 @@
     ],
     "categories": [
       "tutorials"
-    ]
+    ],
+    "translations": {
+      "ca": {
+        "description": "Posiciona i ajusta la mida de la finstra del tutorial."
+      }
+    }
   },
   {
     "fileName": "metaprogramming_module.xml",
