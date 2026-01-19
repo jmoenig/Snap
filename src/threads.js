@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-January-03';
+modules.threads = '2026-January-19';
 
 var ThreadManager;
 var Process;
@@ -467,15 +467,27 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                     proc.onComplete(result);
                 } else {
                     if (result instanceof List) {
-                        proc.topBlock.showBubble(
-                            result.isTable() ?
-                                    new TableFrameMorph(
-                                        new TableMorph(result, 10)
-                                    )
-                                    : new ListWatcherMorph(result),
-                            proc.exportResult,
-                            proc.receiver
-                        );
+                        if (result.isADT()) {
+                            proc.topBlock.showBubble(
+                                invoke(
+                                    result.lookup('_morph'),
+                                    new List([result]),
+                                    result // support "this(object)"
+                                ),
+                                proc.exportResult,
+                                proc.receiver
+                            );
+                        } else {
+                            proc.topBlock.showBubble(
+                                result.isTable() ?
+                                        new TableFrameMorph(
+                                            new TableMorph(result)
+                                        )
+                                        : new ListWatcherMorph(result),
+                                proc.exportResult,
+                                proc.receiver
+                            );
+                        }
                     } else {
                         proc.topBlock.showBubble(
                             result,
@@ -8376,7 +8388,7 @@ Process.prototype.returnValueToParentContext = function (value) {
             if (value instanceof List) {
                 anchor.showBubble(
                     value.isTable() ?
-                        new TableFrameMorph(new TableMorph(value, 10))
+                        new TableFrameMorph(new TableMorph(value))
                         : new ListWatcherMorph(value),
                     this.exportResult,
                     this.receiver

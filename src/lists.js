@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process, Table*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2026-January-16';
+modules.lists = '2026-January-19';
 
 var List;
 var ListWatcherMorph;
@@ -413,6 +413,10 @@ List.prototype.forget = function (key) {
 
 List.prototype.isTable = function () {
     return this.enableTables && (this.length() > 100 || this.cols() > 1);
+};
+
+List.prototype.isADT = function () {
+    return this.lookup('_morph') instanceof Context;
 };
 
 List.prototype.get = function (col, row) {
@@ -1228,8 +1232,11 @@ List.prototype.asTable = function (columnNamesList) {
     // list of column names to be displayed in a table view
     // currently unused - not needed except for Shriram's tables extension
     var dim = this.quickShape(),
-        table = new Table(dim.at(1), dim.at(2));
-    table.setRows(this.itemsArray(), columnNamesList);
+        table = new Table(dim.at(2), dim.at(1));
+    table.setRows(
+        this.itemsArray().map(row => row.itemsArray()),
+        columnNamesList.itemsArray()
+    );
     return table;
 };
 

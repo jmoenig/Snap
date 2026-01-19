@@ -28,6 +28,7 @@
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
+    * Abstract Data Types (ADT) - experimental - include a ring entry named underscore + morph in data
     * new "blocks" and "speaker" symbols
     * new "hide empty categories" setting
 * **Notable Changes:**
@@ -57,6 +58,9 @@
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
+
+### 2026-01-19
+* threads, extensions, tables, lists: experimental support for user-defined ADTs
 
 ### 2026-01-16
 * gui: removed scale-clipping for the stage in presentation ("app") mode, now resizing the window scales the stage smoothly

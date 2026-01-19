@@ -31,11 +31,12 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke, isNil,
-BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, console*/
+BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, TableMorph,
+TableFrameMorph, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-January-12';
+modules.extensions = '2026-January-19';
 
 // Global stuff
 
@@ -760,6 +761,20 @@ SnapExtensions.primitives.set(
         }
         proc.pushContext('doYield');
         proc.pushContext();
+    }
+);
+
+// Custom Data Types (adt_):
+
+SnapExtensions.primitives.set(
+    'adt_table(data)',
+    function (data, proc) {
+        proc.assertType(data, 'list');
+        return new TableFrameMorph(
+            new TableMorph(
+                data.lookup('cells').asTable(data.lookup('header'))
+            )
+        );
     }
 );
 
