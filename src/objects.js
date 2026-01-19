@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-January-04';
+modules.objects = '2026-January-19';
 
 var SpriteMorph;
 var StageMorph;
@@ -13340,13 +13340,14 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
     } else if (data instanceof List) {
-        if (data.isTable()) {
-            contents = new TableFrameMorph(new TableMorph(data, 10));
-            if (this.stage) {
-                contents.expand(this.stage.extent().translateBy(
-                    -2 * (this.edge + this.border + this.padding)
-                ));
-            }
+        if (data.isADT()) {
+            contents = invoke(
+                data.lookup('_morph'),
+                new List([data]),
+                data // support "this(object)"
+            );
+        } else if (data.isTable()) {
+            contents = new TableFrameMorph(new TableMorph(data));
         } else {
             contents = new ListWatcherMorph(data);
             contents.update(true);
@@ -13356,6 +13357,11 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
                     -2 * (this.edge + this.border + this.padding)
                 ));
             }
+        }
+        if (contents instanceof TableFrameMorph && this.stage) {
+            contents.expand(this.stage.extent().translateBy(
+                -2 * (this.edge + this.border + this.padding)
+            ));
         }
         contents.isDraggable = false;
         if (!draggable) {
