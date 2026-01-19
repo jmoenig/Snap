@@ -173,6 +173,10 @@ Table.prototype.columnNames = function () {
     return this.colNames;
 };
 
+Table.prototype.recordNames = function () {
+    return this.rowNames;
+};
+
 // Table setting:
 
 Table.prototype.set = function (data, col, row) {
@@ -942,7 +946,7 @@ TableMorph.prototype.rowLabelsWidth = function () {
         0,
         Math.max.apply(
             null,
-            this.table.columnNames().map(
+            this.table.recordNames().map(
                 name => name ? ctx.measureText(name).width : 0
             )
         )

@@ -61,6 +61,7 @@
 
 ### 2026-01-19
 * threads, extensions, tables, lists: experimental support for user-defined ADTs
+* tables, lists: fixed a layout issue for rendering non-list-based table structures
 
 ### 2026-01-16
 * gui: removed scale-clipping for the stage in presentation ("app") mode, now resizing the window scales the stage smoothly

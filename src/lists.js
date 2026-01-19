@@ -484,6 +484,10 @@ List.prototype.columnNames = function () {
     return [];
 };
 
+List.prototype.recordNames = function () {
+    return [];
+};
+
 List.prototype.version = function (startRow, rows, startCol, cols) {
     var l = Math.min(startRow + rows, this.length()),
         v = this.lastChanged,
