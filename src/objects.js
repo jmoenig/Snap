@@ -15115,12 +15115,16 @@ CellMorph.prototype.createContents = function () {
                 return icon;
             };
         } else if (this.contents instanceof List) {
-            if (this.contents.isTable()) {
-                this.contentsMorph = new TableFrameMorph(new TableMorph(
-                    this.contents,
-                    10
-                ));
-                this.contentsMorph.expand(new Point(200, 150));
+            if (this.contents.isADT()) {
+                this.contentsMorph = invoke(
+                    this.contents.lookup('_morph'),
+                    new List([this.contents]),
+                    this.contents // support "this(object)"
+                );
+            } else if (this.contents.isTable()) {
+                this.contentsMorph = new TableFrameMorph(
+                    new TableMorph(this.contents)
+                );
             } else {
                 if (this.isCircular()) {
                     this.contentsMorph = new TextMorph(
@@ -15138,6 +15142,9 @@ CellMorph.prototype.createContents = function () {
                         this
                     );
                 }
+            }
+            if (this.contentsMorph instanceof TableFrameMorph) {
+                this.contentsMorph.expand(new Point(200, 150));
             }
             this.contentsMorph.isDraggable = false;
             if (!draggable) {
