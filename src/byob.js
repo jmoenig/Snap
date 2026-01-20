@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-January-03';
+modules.byob = '2026-January-20';
 
 // Declarations
 
@@ -1284,7 +1284,9 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
                 inp.isStatic = def.isIrreplaceableInputIdx(i);
                 inp.canBeEmpty = !inp.isStatic;
             }
-            if (inp instanceof InputSlotMorph) {
+            if (inp instanceof InputSlotMorph ||
+                inp instanceof MultiArgMorph
+            ) {
                 inp.setChoices.apply(inp, def.inputOptionsOfIdx(i));
             }
         });

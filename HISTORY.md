@@ -31,6 +31,7 @@
     * Abstract Data Types (ADT) - experimental - include a ring entry named underscore + morph in data
     * new "blocks" and "speaker" symbols
     * new "hide empty categories" setting
+    * support for dynamic dropdown menus and read-only settings in variadic input slots
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)
@@ -58,6 +59,9 @@
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
+
+### 2026-01-19
+* blocks, byob: added support for dynamic dropdown menus and read-only settings in variadic input slots
 
 ### 2026-01-19
 * threads, extensions, tables, lists: experimental support for user-defined ADTs

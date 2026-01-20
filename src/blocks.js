@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -162,7 +162,7 @@ CustomHatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-December-19';
+modules.blocks = '2026-January-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1577,7 +1577,7 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
 SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
     var deflt = this.revertToEmptyInput(arg),
         inp = this.inputs().indexOf(deflt),
-        def;
+        def, rcvr;
     if (noValues || inp < 0) {
         return deflt;
     }
@@ -1594,6 +1594,21 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
                     def.defaultValueOfInputIdx(inp)
                 );
             }
+        }
+    } else if (this instanceof MultiArgMorph && this.parent.isCustomBlock) {
+        if (this.parent.isGlobal) {
+            def = this.parent.definition;
+        } else {
+            rcvr = this.parent.scriptTarget(true);
+            if (rcvr) {
+                def = rcvr.getMethod(this.parent.blockSpec);
+            }
+        }
+        if (def && deflt instanceof InputSlotMorph) {
+            deflt.setChoices.apply(
+                deflt,
+                def.inputOptionsOfIdx(this.parent.inputs().indexOf(this))
+            );
         }
     }
     if (deflt instanceof MultiArgMorph && !inp) {
@@ -1637,7 +1652,9 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
                         deflt.isStatic = def.isIrreplaceableInputIdx(inp);
                         deflt.canBeEmpty = !deflt.isStatic;
                     }
-                    if (deflt instanceof InputSlotMorph) {
+                    if (deflt instanceof InputSlotMorph ||
+                        deflt instanceof MultiArgMorph
+                    ) {
                         deflt.setChoices.apply(
                             deflt,
                             def.inputOptionsOfIdx(inp)
@@ -1655,6 +1672,24 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
             }
         } else if (this instanceof MultiArgMorph) {
             deflt = this.labelPart(this.slotSpecFor(inp));
+            if (this.parent.isCustomBlock) {
+                if (this.parent.isGlobal) {
+                    def = this.parent.definition;
+                } else {
+                    rcvr = this.parent.scriptTarget(true);
+                    if (rcvr) {
+                        def = rcvr.getMethod(this.parent.blockSpec);
+                    }
+                }
+                if (def && deflt instanceof InputSlotMorph) {
+                    deflt.setChoices.apply(
+                        deflt,
+                        def.inputOptionsOfIdx(
+                            this.parent.inputs().indexOf(this)
+                        )
+                    );
+                }
+            }
         } else if (this instanceof ReporterSlotMorph) {
             deflt = this.emptySlot();
         }
@@ -3281,7 +3316,9 @@ BlockMorph.prototype.setSpec = function (spec, definition) {
             this.add(this.placeHolder());
         }
         if (this.isCustomBlock) {
-            if (part instanceof InputSlotMorph) {
+            if (part instanceof InputSlotMorph ||
+                part instanceof MultiArgMorph
+            ) {
                 part.setChoices.apply(
                     part,
                     (definition || this.definition).inputOptionsOfIdx(inputIdx)
@@ -11382,7 +11419,9 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
         def = block.isGlobal ? block.definition
             : rcvr.getMethod(block.blockSpec),
         names = def.inputNames(),
-        inputName = names[block.inputs().indexOf(this)],
+        inputName = names[block.inputs().indexOf(
+            this.parent instanceof MultiArgMorph ? this.parent : this
+        )],
         script = detect(def.scripts, each =>
             each.selector === 'receiveSlotEvent' &&
                 each.inputs()[0].evaluate() === inputName &&
@@ -14410,6 +14449,16 @@ MultiArgMorph.prototype.setMaxSlots = function (maxSlots) {
     }
 };
 
+MultiArgMorph.prototype.setChoices = function (dict, readonly) {
+    // externally specify choices and read-only status,
+    // used for custom blocks
+    this.inputs().forEach(subslot => {
+        if (subslot instanceof InputSlotMorph) {
+            subslot.setChoices(dict, readonly);
+        }
+    });
+};
+
 // MultiArgMorph defaults:
 
 MultiArgMorph.prototype.setContents = function (anArray) {
@@ -14669,7 +14718,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     var len = this.inputs().length,
         newPart = this.labelPart(this.slotSpecFor(len)),
         value = isNil(contents) ? this.defaultValueFor(len) : contents,
-        i, name, idx;
+        i, name, idx, def, rcvr;
 
     this.addInfix();
     idx = this.children.length - 1;
@@ -14708,6 +14757,24 @@ MultiArgMorph.prototype.addInput = function (contents) {
     this.addPostfix();
     newPart.fixLayout();
     if (this.parent instanceof BlockMorph) {
+        if (this.parent.isCustomBlock) {
+            if (this.parent.isGlobal) {
+                def = this.parent.definition;
+            } else {
+                rcvr = this.parent.scriptTarget(true);
+                if (rcvr) {
+                    def = rcvr.getMethod(this.parent.blockSpec);
+                }
+            }
+            if (def && newPart instanceof InputSlotMorph) {
+                newPart.setChoices.apply(
+                    newPart,
+                    def.inputOptionsOfIdx(
+                        this.parent.inputs().indexOf(this)
+                    )
+                );
+            }
+        }
         this.parent.fixLabelColor();
     }
     this.fixLayout();
