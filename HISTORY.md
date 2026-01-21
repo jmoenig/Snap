@@ -60,7 +60,10 @@
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
 
-### 2026-01-19
+### 2026-01-21
+* objects: made table-adt views resizable inside variable watchers
+
+### 2026-01-20
 * blocks, byob: added support for dynamic dropdown menus and read-only settings in variadic input slots
 
 ### 2026-01-19

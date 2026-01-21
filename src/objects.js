@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-January-19';
+modules.objects = '2026-January-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -14963,7 +14963,8 @@ CellMorph.prototype.createContents = function () {
         isSameList = this.contentsMorph instanceof ListWatcherMorph
             && (this.contentsMorph.list === this.contents),
         isSameTable = this.contentsMorph instanceof TableFrameMorph
-            && (this.contentsMorph.tableMorph.table === this.contents),
+            && (this.contentsMorph.tableMorph.table === this.contents ||
+                this.contents.isADT()),
         draggable = this.parentThatIsA(StageMorph)?.tutorialMode ?
             !this.parentThatIsA(StageMorph).tutorialMode.disableDraggingData
                 : !SpriteMorph.prototype.disableDraggingData;
