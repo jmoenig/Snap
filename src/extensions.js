@@ -36,7 +36,7 @@ TableFrameMorph, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-January-19';
+modules.extensions = '2026-January-21';
 
 // Global stuff
 
@@ -1762,7 +1762,7 @@ SnapExtensions.primitives.set(
                     300, // msecs
                     t => Math.pow(t, 6), // easing
                     () => {
-                        dlg.keepWithin(wrld);
+                        // dlg.keepWithin(wrld);
                         acc.progress = false;
                     }
                 );
@@ -1773,7 +1773,7 @@ SnapExtensions.primitives.set(
             proc.pushContext();
         } else {
             dlg.setPosition(target);
-            dlg.keepWithin(wrld);
+            // dlg.keepWithin(wrld);
         }
     }
 );
