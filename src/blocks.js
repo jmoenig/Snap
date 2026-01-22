@@ -11493,6 +11493,7 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
 };
 
 InputSlotMorph.prototype.dynamicContents = function () {
+    if (this.isUnevaluated) {return; }
     var block = this.parentThatIsA(BlockMorph),
         rcvr = block.scriptTarget(),
         def = block.isGlobal ? block.definition
