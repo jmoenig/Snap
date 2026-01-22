@@ -32,6 +32,8 @@
     * new "blocks" and "speaker" symbols
     * new "hide empty categories" setting
     * support for dynamic dropdown menus and read-only settings in variadic input slots
+    * support for variadic upvars in custom blocks
+    * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)
@@ -59,6 +61,10 @@
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
+
+### 2026-01-22
+* blocks, byob: added support for dynamically setting the contents of expanded variadic input slots by a user script in the block definition
+* byob: added support for variadic upvars
 
 ### 2026-01-21
 * objects: made table-adt views resizable inside variable watchers

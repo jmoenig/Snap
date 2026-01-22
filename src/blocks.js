@@ -162,7 +162,7 @@ CustomHatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-January-20';
+modules.blocks = '2026-January-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -691,7 +691,8 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             menu : ['menu'],
-            edited : ['edited']
+            edited : ['edited'],
+            expand : ['expand']
         }
     },
     '%att': {
@@ -11486,6 +11487,46 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
     );
 };
 
+InputSlotMorph.prototype.dynamicContents = function () {
+    var block = this.parentThatIsA(BlockMorph),
+        rcvr = block.scriptTarget(),
+        def = block.isGlobal ? block.definition
+            : rcvr.getMethod(block.blockSpec),
+        names = def.inputNames(),
+        inputName = names[block.inputs().indexOf(this.parent)], // multi-slot
+        script = detect(def.scripts, each =>
+            each.selector === 'receiveSlotEvent' &&
+                each.inputs()[0].evaluate() === inputName &&
+                each.inputs()[1].evaluateOption() === 'expand'),
+        stage = rcvr.parentThatIsA(StageMorph),
+        isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta,
+        vars, fill;
+
+    fill = (result = new List()) => {
+        if (isTxtOrNum(result)) {
+            this.setContents(result);
+        }
+    };
+
+    if (!script) {return; }
+
+    // fully evaluate the block's inputs, including embedded reporters, if any
+    vars = new InputList(block, names);
+
+    // evaluate the script that makes the menu
+    stage.threads.startProcess(
+        script,
+        rcvr,
+        null, // threadsafe
+        null, // export result
+        fill, // callback
+        null, // clicked
+        true, // right away
+        null, // atomic
+        vars
+    );
+};
+
 InputSlotMorph.prototype.menuSelectorsMenu = function () {
     var blockEditor = this.parentThatIsA(BlockEditorMorph),
         dict = {};
@@ -13075,6 +13116,11 @@ TemplateSlotMorph.prototype.flash = function (aColor) {
 TemplateSlotMorph.prototype.unflash = function () {
     this.template().unflash();
 };
+
+// TemplateSlotMorph dynamic, user-scriptable contents
+
+TemplateSlotMorph.prototype.dynamicContents =
+    InputSlotMorph.prototype.dynamicContents;
 
 // BooleanSlotMorph ////////////////////////////////////////////////////
 
@@ -14949,7 +14995,8 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     // prevent expansion in the palette
     // (because it can be hard or impossible to collapse again)
     var block = this.parentThatIsA(BlockMorph),
-        sprite = block.scriptTarget();
+        sprite = block.scriptTarget(),
+        slot;
     if (!this.parentThatIsA(ScriptsMorph)) {
         this.escalateEvent('mouseClickLeft', pos);
         return;
@@ -14978,7 +15025,10 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
             }
             for (i = 0; i < repetition; i += 1) {
                 if (rightArrow.isVisible) {
-                    target.addInput();
+                    slot = target.addInput();
+                    if (this.parent?.isCustomBlock && slot.dynamicContents) {
+                        slot.dynamicContents();
+                    }
                 }
             }
             sprite.recordUserEdit(
@@ -16797,11 +16847,14 @@ ScriptFocusMorph.prototype.manifestExpression = function () {
 
 ScriptFocusMorph.prototype.trigger = function () {
     var current = this.element,
-        i;
+        i, slot;
     if (current instanceof MultiArgMorph) {
         for (i = 0; i < current.groupInputs; i += 1) {
             if (current.arrows().children[1].isVisible) {
-                current.addInput();
+                slot = current.addInput();
+                if (current.parent?.isCustomBlock && slot.dynamicContents) {
+                    slot.dynamicContents();
+                }
                 this.fixLayout();
             }
         }

@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-January-20';
+modules.byob = '2026-January-22';
 
 // Declarations
 
@@ -5303,6 +5303,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
     addSpecialSlotType('object', '%obj');
+    addSpecialSlotType('variable', '%upvar');
     menu.addLine();
     addSpecialSlotType('variables', '%scriptVars');
     addSpecialSlotType('receivers', '%receive');
