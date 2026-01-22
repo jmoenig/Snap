@@ -7787,6 +7787,9 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         } else if (this.parent.parent.elementSpec === '%blockVars') {
             label = "Block variable name";
         } else {
+            if (this.parent?.parentThatIsA(BlockMorph)?.isCustomBlock) {
+                return this.parent.dynamicMenu();
+            }
             label = "Script variable name";
         }
         new DialogBoxMorph(
@@ -11547,7 +11550,7 @@ InputSlotMorph.prototype.inputSlotsMenu = function () {
         blockEditor.prototypeSlots().forEach((value, key) => {
             let info = SyntaxElementMorph.prototype.labelParts[value[0]];
             if (value[0].startsWith('%mult') ||
-                (info && ['input', 'boolean'].includes(info.type))
+                (info && ['input', 'boolean', 'template'].includes(info.type))
             ) {
                 dict[key] = key;
             }
@@ -13121,6 +13124,99 @@ TemplateSlotMorph.prototype.unflash = function () {
 
 TemplateSlotMorph.prototype.dynamicContents =
     InputSlotMorph.prototype.dynamicContents;
+
+TemplateSlotMorph.prototype.dynamicMenu = function () {
+    var tmp = this.template(),
+        block = this.parentThatIsA(BlockMorph),
+        rcvr = block.scriptTarget(),
+        def = block.isGlobal ? block.definition
+            : rcvr.getMethod(block.blockSpec),
+        names = def.inputNames(),
+        inputName = names[block.inputs().indexOf(
+            this.parent instanceof MultiArgMorph ? this.parent : this
+        )],
+        script = detect(def.scripts, each =>
+            each.selector === 'receiveSlotEvent' &&
+                each.inputs()[0].evaluate() === inputName &&
+                each.inputs()[1].evaluateOption() === 'menu'),
+        stage = rcvr.parentThatIsA(StageMorph),
+        isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta,
+        vars, ask, show, format;
+
+    ask = () =>
+    new DialogBoxMorph(
+        tmp,
+        tmp.userSetSpec,
+        tmp
+    ).prompt(
+        "Script variable name",
+        tmp.blockSpec,
+        tmp.world()
+    );
+
+    format = list => {
+        var dict = {};
+        if (!(list instanceof List)) {
+            return dict;
+        }
+        list.map(item => {
+            var key, val;
+            if (item instanceof List && item.length() === 2) {
+                key = item.at(1);
+                val = item.at(2);
+                if (isTxtOrNum(key)) {
+                    if (val instanceof List) {
+                        dict[key.toString()] = format(val);
+                    } else if (isTxtOrNum(val)) {
+                        dict[key.toString()] = val.toString();
+                    }
+                }
+            } else if (isTxtOrNum(item)) {
+                dict[item.toString()] = item.toString();
+            }
+        });
+        return dict;
+    };
+
+    show = (result = new List()) => {
+        var menu = this.menuFromDict(format(result), true); // no empty choice
+        if (!menu) { // has already happened
+            return;
+        }
+        if (menu.items.length > 0) {
+            menu.addLine();
+            menu.addItem('rename...', ask);
+            menu.popup(this.world(), this.bottomLeft());
+        } else {
+            ask();
+        }
+
+    };
+
+    if (!script) {return show(); }
+
+    // fully evaluate the block's inputs, including embedded reporters, if any
+    vars = new InputList(block, names);
+
+    // evaluate the script that makes the menu
+    stage.threads.startProcess(
+        script,
+        rcvr,
+        null, // threadsafe
+        null, // export result
+        show, // callback
+        null, // clicked
+        true, // right away
+        null, // atomic
+        vars
+    );
+};
+
+TemplateSlotMorph.prototype.menuFromDict =
+    InputSlotMorph.prototype.menuFromDict;
+
+TemplateSlotMorph.prototype.userSetContents =
+    TemplateSlotMorph.prototype.setContents;
 
 // BooleanSlotMorph ////////////////////////////////////////////////////
 

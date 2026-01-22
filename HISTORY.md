@@ -34,6 +34,7 @@
     * support for dynamic dropdown menus and read-only settings in variadic input slots
     * support for variadic upvars in custom blocks
     * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
+    * support for user-scriptable rename-menus in upvars, including variadic ones
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)
@@ -65,6 +66,7 @@
 ### 2026-01-22
 * blocks, byob: added support for dynamically setting the contents of expanded variadic input slots by a user script in the block definition
 * byob: added support for variadic upvars
+* blocks: added support for user-scriptable rename-menus in upvars, including variadic ones
 
 ### 2026-01-21
 * objects: made table-adt views resizable inside variable watchers
