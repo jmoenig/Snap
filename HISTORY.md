@@ -67,6 +67,7 @@
 * blocks, byob: added support for dynamically setting the contents of expanded variadic input slots by a user script in the block definition
 * byob: added support for variadic upvars
 * blocks: added support for user-scriptable rename-menus in upvars, including variadic ones
+* blocks: disable user-scripted dropdowns for unevaluated variadic subslots
 
 ### 2026-01-21
 * objects: made table-adt views resizable inside variable watchers

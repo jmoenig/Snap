@@ -1605,7 +1605,7 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
                 def = rcvr.getMethod(this.parent.blockSpec);
             }
         }
-        if (def && deflt instanceof InputSlotMorph) {
+        if (def && deflt instanceof InputSlotMorph && !deflt.isUnevaluated) {
             deflt.setChoices.apply(
                 deflt,
                 def.inputOptionsOfIdx(this.parent.inputs().indexOf(this))
@@ -1682,7 +1682,9 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
                         def = rcvr.getMethod(this.parent.blockSpec);
                     }
                 }
-                if (def && deflt instanceof InputSlotMorph) {
+                if (def && deflt instanceof InputSlotMorph &&
+                    !deflt.isUnevaluated
+                ) {
                     deflt.setChoices.apply(
                         deflt,
                         def.inputOptionsOfIdx(
@@ -14595,7 +14597,7 @@ MultiArgMorph.prototype.setChoices = function (dict, readonly) {
     // externally specify choices and read-only status,
     // used for custom blocks
     this.inputs().forEach(subslot => {
-        if (subslot instanceof InputSlotMorph) {
+        if (subslot instanceof InputSlotMorph && !subslot.isUnevaluated) {
             subslot.setChoices(dict, readonly);
         }
     });
@@ -14908,7 +14910,9 @@ MultiArgMorph.prototype.addInput = function (contents) {
                     def = rcvr.getMethod(this.parent.blockSpec);
                 }
             }
-            if (def && newPart instanceof InputSlotMorph) {
+            if (def && newPart instanceof InputSlotMorph &&
+                !newPart.isUnevaluated
+            ) {
                 newPart.setChoices.apply(
                     newPart,
                     def.inputOptionsOfIdx(
