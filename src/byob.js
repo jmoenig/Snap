@@ -5253,7 +5253,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
         menu.addMenu(
             (contains(
                 ['%mlt', '%code', '%obj', '%scriptVars', '%receive', '%send',
-                    '%elseif'],
+                    '%elseif', '%upvar', '%mult%upvar'],
                 this.fragment.type
             ) ? on : off) +
             localize('special'),
@@ -5295,7 +5295,9 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     function addSpecialSlotType(label, spec) {
         menu.addItem(
-            (myself.fragment.type === spec ? on : off) + localize(label),
+            (myself.fragment.type === spec ||
+                myself.fragment.type === '%mult' + spec ?
+                    on : off) + localize(label),
             spec
         );
     }
