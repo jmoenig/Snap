@@ -33,6 +33,7 @@
     * new "hide empty categories" setting
     * support for dynamic dropdown menus and read-only settings in variadic input slots
     * support for variadic upvars in custom blocks
+    * new 'parameter' custom block input type, same as 'upvar', but doesn't add a script variable when evaluated, supports variadicity
     * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
     * support for user-scriptable rename-menus in upvars, including variadic ones
 * **Notable Changes:**
@@ -62,6 +63,9 @@
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
+
+### 2026-01-26
+* blocks, byob: new %parameter custom block input type, same as %upvar, but doesn't add a script variable when evaluated, supports variadicity
 
 ### 2026-01-22
 * blocks, byob: added support for dynamically setting the contents of expanded variadic input slots by a user script in the block definition

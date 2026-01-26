@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-January-22';
+modules.byob = '2026-January-26';
 
 // Declarations
 
@@ -4844,12 +4844,14 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         if (this.isExpanded && contains(
                 [
                     '%s', '%n', '%txt', '%anyUE', '%b', '%boolUE',
-                    '%mlt', '%code', '%upvar', '%clr'
+                    '%mlt', '%code', '%upvar', '%parameter', '%clr'
                 ],
                 this.fragment.type
             )) {
             defLabel.changed();
-            defLabel.text = this.fragment.type === '%upvar' ?
+            defLabel.text = ['%upvar', '%parameter'].includes(
+                this.fragment.type
+            ) ?
                 localize('Default Name:')
                 : localize('Default Value:');
             defLabel.fixLayout();
@@ -4868,7 +4870,8 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput.setWidth(50);
     defInput.refresh = () => {
         if (this.isExpanded && contains(
-            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code', '%upvar'],
+            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code', '%upvar',
+                '%parameter'],
             this.fragment.type
         )) {
             defInput.show();
@@ -5167,7 +5170,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                 ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
                 this.fragment.type
             );
-        if(this.fragment.type === '%upvar') {
+        if (['%upvar', '%parameter'].includes(this.fragment.type)) {
             return this.specialSlotsMenu();
         }
         if (isEditable) {
@@ -5253,7 +5256,8 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
         menu.addMenu(
             (contains(
                 ['%mlt', '%code', '%obj', '%scriptVars', '%receive', '%send',
-                    '%elseif', '%upvar', '%mult%upvar'],
+                    '%elseif', '%upvar', '%mult%upvar', '%parameter',
+                    '%mult%parameter'],
                 this.fragment.type
             ) ? on : off) +
             localize('special'),
@@ -5305,7 +5309,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
     addSpecialSlotType('object', '%obj');
-    addSpecialSlotType('variable', '%upvar');
+    addSpecialSlotType('parameter', '%parameter');
     menu.addLine();
     addSpecialSlotType('variables', '%scriptVars');
     addSpecialSlotType('receivers', '%receive');

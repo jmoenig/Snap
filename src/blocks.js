@@ -162,7 +162,7 @@ CustomHatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-January-22';
+modules.blocks = '2026-January-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1173,6 +1173,10 @@ SyntaxElementMorph.prototype.labelParts = {
         label: '\xa0' // non-breaking space, appears blank
     },
     '%upvar': {
+        type: 'template',
+        label: '\xa0' // non-breaking space, appears blank
+    },
+    '%parameter': {
         type: 'template',
         label: '\xa0' // non-breaking space, appears blank
     },
