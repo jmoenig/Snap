@@ -162,7 +162,7 @@ CustomHatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-January-26';
+modules.blocks = '2026-January-27';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11465,7 +11465,20 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
     };
 
     show = (result = new List()) => {
-        var menu = this.menuFromDict(format(result), null, enableKeyboard);
+        var first = result.at(1),
+            src, subslotIdx, menuIdx, menu;
+
+        if (this.parent instanceof MultiArgMorph &&
+            first instanceof List &&
+            first.isEmpty()
+        ) {
+            subslotIdx = this.parent.inputs().indexOf(this);
+            menuIdx = (subslotIdx % (result.length() - 1)) + 2;
+            src = result.at(menuIdx);
+        } else {
+            src = result;
+        }
+        menu = this.menuFromDict(format(src), null, enableKeyboard);
         if (!menu) { // has already happened
             return;
         }

@@ -35,7 +35,7 @@
     * support for variadic upvars in custom blocks
     * new 'parameter' custom block input type, same as 'upvar', but doesn't add a script variable when evaluated, supports variadicity
     * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
-    * support for user-scriptable rename-menus in upvars, including variadic ones
+    * support for user-scriptable rename-menus in upvars, including variadic ones (a single menu is repeated in each non-unevaluated slot, a list of menu-lists whose first item is an empty list gets repeated across all subslots)
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)
@@ -63,6 +63,9 @@
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * German
+
+### 2026-01-27
+* blocks: added support for different dropdowns in different variadic subslots by returning a list of menu-lists with the first item being an empty list
 
 ### 2026-01-26
 * blocks, byob: new %parameter custom block input type, same as %upvar, but doesn't add a script variable when evaluated, supports variadicity
