@@ -62,6 +62,7 @@
     * updated API.md with new "zoom" configuration key for global magnification
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
+    * Catalan, thanks, Joan!
     * German
 
 ### 2026-01-27
