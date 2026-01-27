@@ -66,6 +66,7 @@
 
 ### 2026-01-27
 * blocks: added support for different dropdowns in different variadic subslots by returning a list of menu-lists with the first item being an empty list
+* threads: added metaprogramming support for the new "parameter" input slot type (No. 19)
 
 ### 2026-01-26
 * blocks, byob: new %parameter custom block input type, same as %upvar, but doesn't add a script variable when evaluated, supports variadicity
