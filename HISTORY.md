@@ -53,6 +53,7 @@
     * resizing the browser / window in presentation ("app") mode scales the stage smoothly
     * meta-programming: removed "static" tag from the block-attribute getter
     * took out rate limit in the Microblocks library, thanks, Bernat!
+    * silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
     * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
@@ -64,6 +65,9 @@
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * Catalan, thanks, Joan!
     * German
+
+### 2026-01-27
+* blocks, threads: silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
 
 ### 2026-01-27
 * blocks: added support for different dropdowns in different variadic subslots by returning a list of menu-lists with the first item being an empty list

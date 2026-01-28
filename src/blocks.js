@@ -162,7 +162,7 @@ CustomHatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-January-27';
+modules.blocks = '2026-January-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11505,7 +11505,10 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
         null, // clicked
         true, // right away
         null, // atomic
-        vars
+        vars,
+        null,
+        null,
+        true // silent variable reference - dynamic user-scripted widgets
     );
 };
 
@@ -11546,7 +11549,10 @@ InputSlotMorph.prototype.dynamicContents = function () {
         null, // clicked
         true, // right away
         null, // atomic
-        vars
+        vars,
+        null,
+        null,
+        true // silent variable reference - dynamic user-scripted widgets
     );
 };
 

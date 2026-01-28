@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-January-27';
+modules.threads = '2026-January-28';
 
 var ThreadManager;
 var Process;
@@ -257,7 +257,8 @@ ThreadManager.prototype.startProcess = function (
     atomic, // special option used (only) for "onStop" scripts
     variables, // optional variable frame, used for WHEN hats
     noHalo,
-    genericCondition
+    genericCondition,
+    silentVars // for dynamic, user-scripted widgets, ignores missing variables
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
@@ -275,6 +276,7 @@ ThreadManager.prototype.startProcess = function (
     newProc.isClicked = isClicked || false;
     newProc.isAtomic = atomic || false;
     newProc.isGenericCondition = genericCondition || false;
+    newProc.isSilentVar = silentVars || false;
 
     // in case an optional variable frame has been passed,
     // copy it into the new outer context.
@@ -676,7 +678,8 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.canBroadcast = true; // used to control "when I am stopped"
     this.isAnimated = false; // temporary - used to control yields for animation
     this.isGenericCondition = false; // used for displaying halos
-    this.hasFiredGenericCondition = false; // ised for displaying halos
+    this.hasFiredGenericCondition = false; // used for displaying halos
+    this.isSilentVar = false; // silences missing variable references in widgets
 
     if (topBlock) {
         this.homeContext.variables.parentFrame =
@@ -10611,6 +10614,11 @@ VariableFrame.prototype.getVar = function (name, proc) {
     if (typeof name === 'number') {
         // empty input with a Binding-ID called without an argument
         return '';
+    }
+    if (proc?.isSilentVar) {
+        // don't throw an error inside a user-scripted dynamic dropdown etc.
+        // instead return an empty list, because this is the basis for ADTs
+        return new List();
     }
     this.variableError(name);
 };
