@@ -67,9 +67,10 @@
     * Catalan, thanks, Joan!
     * German
 
-### 2026-01-27
+### 2026-01-28
 * blocks, threads: silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
 * new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
+* added new experimental "let ... then report ..." reporter to the tables library
 
 ### 2026-01-27
 * blocks: added support for different dropdowns in different variadic subslots by returning a list of menu-lists with the first item being an empty list

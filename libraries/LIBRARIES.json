@@ -179,11 +179,14 @@
       "running min of _",
       "running max of _",
       "running reduce _",
-      "running fold _ _"
+      "running fold _ _",
+      "pipe _",
+      "let _ then report _"
     ],
     "categories": [
       "control",
       "operators",
+      "other",
       "Tables"
     ]
   },
