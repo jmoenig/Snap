@@ -160,6 +160,34 @@
     }
   },
   {
+    "fileName": "tables_module.xml",
+    "name": "Tables",
+    "description": "Create, select, filter, order, transform, extend and analyze tabular data sets with powerful functions. Modeled after Pyret's Tables, see https://pyret.org/docs/latest/tables.html. Thanks to Shriram Krishnamurthi for his inspiration, feedback and advice. Example project (under development): https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode",
+    "searchData": [
+      "table from _",
+      "header of _",
+      "cells of _",
+      "select _ from _",
+      "sieve _ using _ _",
+      "order _ _",
+      "transform _ using _ _",
+      "extend _ using _ _",
+      "running sum of _",
+      "difference of _",
+      "difference from _ of _",
+      "running mean of _",
+      "running min of _",
+      "running max of _",
+      "running reduce _",
+      "running fold _ _"
+    ],
+    "categories": [
+      "control",
+      "operators",
+      "Tables"
+    ]
+  },
+  {
     "fileName": "neural_networks_module.xml",
     "name": "Neural Networks",
     "description": "Classify data vectors using neural networks, train and validate your own deep neural models",

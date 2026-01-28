@@ -29,6 +29,7 @@
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
     * Abstract Data Types (ADT) - experimental - include a ring entry named underscore + morph in data
+    * new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
     * new "blocks" and "speaker" symbols
     * new "hide empty categories" setting
     * support for dynamic dropdown menus and read-only settings in variadic input slots
@@ -68,6 +69,7 @@
 
 ### 2026-01-27
 * blocks, threads: silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
+* new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
 
 ### 2026-01-27
 * blocks: added support for different dropdowns in different variadic subslots by returning a list of menu-lists with the first item being an empty list
