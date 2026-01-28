@@ -13234,7 +13234,10 @@ TemplateSlotMorph.prototype.dynamicMenu = function () {
         null, // clicked
         true, // right away
         null, // atomic
-        vars
+        vars,
+        null,
+        null,
+        true // silent variable reference - dynamic user-scripted widgets
     );
 };
 
