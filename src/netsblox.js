@@ -130,7 +130,6 @@ NetsBloxMorph.prototype.cloudMenu = async function () {
                 'manageCollaborators'
             );
         }
-
         const friendMenu = new MenuMorph(this);
         friendMenu.addItem('View Friends...', 'manageFriends');
         friendMenu.addItem('Send Friend Request...', 'sendFriendRequest');
@@ -159,6 +158,38 @@ NetsBloxMorph.prototype.cloudMenu = async function () {
                 inviteMenu
             );
         }
+
+        menu.addLine();
+
+        if (user.data.groupId) {
+            menu.addItem(
+                'Leave Group',
+                () => this.confirm("Are you sure you want to leave this group? \n You'll need a new join code to rejoin.", "Leave Group?",
+                  () => {
+                    this.cloud.leaveGroup().then((_u) =>
+                          this.showMessage("Left group successfully", 10)
+                    )
+                  }),
+                'Leave your current group'
+            );
+        } else {
+            menu.addItem(
+                'Join Group',
+                () => this.prompt('Enter Join Code',
+                      (code) => {
+                        this.cloud.redeemJoinCode(code)
+                        .then((_u) => {
+                          this.showMessage("Joined group successfully!", 10)
+                        })
+                      },
+                      null,
+                      'joinGroup'
+                ),
+                'Join a group using a group join code'
+            );
+            
+        }
+
     }
 
     return menu;

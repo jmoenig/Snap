@@ -13,7 +13,7 @@ async function getConfiguration(serverUrl) {
                                                                                        // It would add a small payload size increase and avoid two network calls. 
     config.cloudUrl = serverUrl;  // TODO: Update the server?
     if(config.username) {        
-        config.groupId = (await (await fetch(serverUrl + `/users/${config.username}`)).json()).groupId
+        config.groupId = (await (await fetch(serverUrl + `/users/${config.username}`, opts)).json()).groupId
     }
     return config;
 }
