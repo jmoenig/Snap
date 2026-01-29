@@ -71,7 +71,8 @@
 
 ### 2026-01-29
 * create-variables-extension: changed "let" block semantics to enable use of previously declared variables in subsequent declarations inside the same blocks
-* create-variables-extension: added a new reporter version of "let" 
+* create-variables-extension: added a new reporter version of "let"
+* updated tables extension with new "let ... then report ..." block
 
 ### 2026-01-28
 * blocks, threads: silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
