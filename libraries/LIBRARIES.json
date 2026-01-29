@@ -195,15 +195,21 @@
     "name": "Neural Networks",
     "description": "Classify data vectors using neural networks, train and validate your own deep neural models",
     "searchData": [
-      "plot bars _ fill _ center _ clear _",
-      "object _",
-      "clone _ _",
-      "new neural network _",
-      "classify _ with network _",
-      "_ network _ on _",
-      "_ of network _",
+      "plot bars _ _",
       "render neural model _ _",
-      "_ of network _ to _"
+      "normalize table _",
+      "normalization for table _",
+      "partition table _ by _",
+      "generate _ for _ in _ _",
+      "clone _ _",
+      "object _",
+      "new neural network _",
+      "_ network _ on _",
+      "_ _ with network _",
+      "_ of network _",
+      "_ of network _ to _",
+      "blockify _",
+      "new perceptron sprite"
     ],
     "categories": [
       "pen",
@@ -218,15 +224,49 @@
           "klone _ _"
         ],
         "searchData": [
-          "male Balken _ gefüllt _ zentriert _ wische _",
-          "Objekt _",
-          "klone _ _"
+          "male Balken _ _\rca",
+          "male neurales Modell _ _\rca",
+          "normalisiere Tabelle _\rca",
+          "Normalisierung für Tabelle _\rca",
+          "teile Tabelle _ im Verhältnis _\rca",
+          "generiere _ für _ in _ _",
+          "klone _ _\rca",
+          "Objekt _\rca",
+          "neues neuronales Netzwerk _\rca",
+          "_ Netzwerk _ mit _\rca",
+          "_ _ mit Netzwerk _\rca",
+          "_ von Netzwerk _\rca",
+          "_ von Netzwerk _ auf _\rca",
+          "blockifiziere _",
+          "neues Perzeptron Objekt"
         ]
       },
       "ca": {
         "name": "Xarxes Neuronals",
         "description": "Classifica dades vectoritzades utilitzant xarxes neuronals. Entrena i valida els teus propis models interns."
       }
+    }
+  },
+  {
+    "fileName": "edge AI.xml",
+    "name": "Edge Computer Vision",
+    "description": "Detect hand, face and body features or gestures by using Google's AI Edge computer vision API",
+    "searchData": [
+      "hand landmarks on _",
+      "hand handedness on _",
+      "hand gesture on _",
+      "finger _ in hand landmarks _",
+      "face landmarks on _",
+      "feature _ in face landmarks _",
+      "face bounds on _",
+      "body landmarks on _",
+      "feature _ in body landmarks _",
+      "feature _ touching _"
+    ],
+    "categories": [
+      "Edge Computer Vision"
+    ],
+    "translations": {
     }
   },
   {
@@ -938,9 +978,12 @@
     "name": "S4A Connector",
     "description": "Snap for All firmata boards Connector, Adding all Snap4Arduino features. Connecting Snap! to any Firmata compatible board: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... to dynamically control their functionalities. Firmata firmware uploaded is required.",
     "searchData": [
-      "set digital pin %&apos;pin&apos; to %&apos;value&apos;",
-      "set pin %&apos;pin&apos; to value %&apos;value&apos;",
-      "set servo %&apos;pin&apos; to %&apos;value&apos;"
+      "board connected ?",
+      "set digital pin _ to _",
+      "set pin _ to value _",
+      "set servo _ to _",
+      "analog reading _",
+      "digital reading _"
     ],
     "categories": [
       "S4A Connector"
@@ -948,7 +991,15 @@
     "translations": {
       "ca": {
         "name": "Connector S4A",
-        "description": "Connector per a qualsevol placa amb Firmata, implementant totes les funcionalitats de Snap4Arduino. Connecta Snap! amb totes les plaques compatibles amb firmata: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... per controlar dinàmicament les seves funcionalitats. Necessita que la placa tingui el Firmata carregat prèviament."
+        "description": "Connector de Snap! a per totes les plaques compatibles amb firmata: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... per controlar dinàmicament les seves funcionalitats. Necessita que la placa tingui el Firmata carregat prèviament.",
+        "searchData": [
+          "placa connectada?\res",
+          "posa el pin digital _ a _\res",
+          "posa el pin _ al valor _\res",
+          "posa el servo _ a _\res",
+          "lectura analògica _\res",
+          "lectura digital _\res"
+        ]
       }
     }
   },
@@ -958,26 +1009,26 @@
     "description": "Generate 3D geometry by extruding points, lines or polygons along a path in 3D space.",
     "searchData": [
       "reset",
+      "set _ scale to _",
+      "set shape offset to _",
       "go home",
-      "move _ steps",
       "go to _",
-      "set _ position to _",
-      "change absolute _ by _",
+      "stop extruding",
+      "move _ steps",
       "change relative _ by _",
+      "set _ position to _",
       "_ position",
+      "change absolute _ by _",
       "rotate _ by _",
       "set _ rotation to _",
-      "point to _",
+      "push position",
       "_ rotation",
+      "point to _",
       "start extruding _",
-      "stop extruding",
       "log sprite positions in _",
       "shape points",
-      "set shape offset to _",
-      "set _ scale to _",
       "change _ scale by _",
       "_ scale",
-      "push position",
       "pop position",
       "beetle view"
     ],
@@ -1015,26 +1066,26 @@
         ],
         "searchData": [
           "reinicia",
+          "fixa l'escala de _ a _",
+          "fixa el desplaçament de la base a _",
           "torna a casa",
-          "mou-te _ passos",
           "vés a _",
-          "fixa la coordenada _ a _",
-          "augmenta la coordenada _ en _",
+          "deixa d'extrudir",
+          "mou-te _ passos",
           "mou-te en la _ pròpia _ passos",
+          "fixa la coordenada _ a _",
           "posició _",
+          "augmenta la coordenada _ en _",
           "gira sobre _ propi en _ graus",
           "fixa l'angle _ propi a _",
-          "apunta cap a _",
+          "enregistra posició actual",
           "angle _",
+          "apunta cap a _",
           "comença a extrudir amb _ de base",
-          "deixa d'extrudir",
           "enregistra les posicions de la tortuga _",
           "punts de la base",
-          "fixa el desplaçament de la base a _",
-          "fixa l'escala de _ a _",
           "augmenta l'escala de _ en _",
           "escala de _",
-          "enregistra posició actual",
           "torna a la posició enregistrada",
           "vista de l'escarbat"
         ]
@@ -1221,6 +1272,8 @@
           "sprich _ mit _ Aussprache _ und Höhe _ Geschwindigkeit _\rpt",
           "sprich _ mit _ Aussprache _ und Höhe _ Geschwindigkeit _ und warte\rpt",
           "erkenne Gesprochenes\rar",
+          "Sprachantwort begonnen?",
+          "aktiviere Sprachausgabe _",
           "stoppe Spracherkennung"
         ]
       },
@@ -1251,6 +1304,8 @@
       "speak _ with _ accent  and pitch _ rate _",
       "speak _ with _ accent  and pitch _ rate _ and wait",
       "recognize speech",
+      "started speech response?",
+      "activate speech synthesis _",
       "stop speech recognition"
     ],
     "categories": [
@@ -2161,7 +2216,7 @@
       }
     },
     "searchData": [
-      "plot bars _ fill _ center _ clear _"
+      "plot bars _ _"
     ],
     "categories": [
       "pen"
@@ -3142,7 +3197,9 @@
       "when _ bounds change",
       "position tutorial at _ _",
       "set tutorial size to _ %",
-      "tutorial size"
+      "tutorial size",
+      "current editor _",
+      "exit tutorial"
     ],
     "categories": [
       "tutorials"
@@ -3230,10 +3287,10 @@
     "name": "(EDC) Fancy Text",
     "description": "Text formatting and basic fraction support for SAY and THINK blocks.",
     "searchData": [
-      "fancy think _ size: _ max width: _ color: _ in my _ for _ seconds",
-      "fancy think _ size: _ max width: _ color: _ in my _",
-      "fancy say _ size: _ max width: _ color: _ in my _ for _ seconds",
-      "fancy say _ size: _ max width: _ color: _ in my _",
+      "fancy think _ size: _ max width: _ max height: _ color: _ in my _ for _ seconds",
+      "fancy think _ size: _ max width: _ max height: _ color: _ in my _",
+      "fancy say _ size: _ max width: _ max height: _ color: _ in my _ for _ seconds",
+      "fancy say _ size: _ max width: _ max height: _ color: _ in my _",
       "fancy text costume _ size: _ max width: _ color: _ align: _ font: _"
     ],
     "categories": [
