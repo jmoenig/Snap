@@ -125,6 +125,12 @@ var snapVersion = '12-dev',
         'libraries/continuations_module.xml',
         'libraries/crayons.xml',
         'libraries/Eisenbergification.xml',
+
+        // Edge
+        'libraries/edge AI.xml',
+        'libraries/edge/init.js',
+        'libraries/edge/edge.js',
+
         'libraries/embroidery_module.xml',
         'libraries/events_module.xml',
         'libraries/frequency_distribution_module.xml',

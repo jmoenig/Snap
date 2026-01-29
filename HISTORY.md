@@ -28,6 +28,7 @@
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
+    * Edge AI Computer Vision extension - thank you, Bernat!
     * Abstract Data Types (ADT) - experimental - include a ring entry named underscore + morph in data
     * new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
     * new "blocks" and "speaker" symbols
@@ -73,6 +74,7 @@
 * create-variables-extension: changed "let" block semantics to enable use of previously declared variables in subsequent declarations inside the same blocks
 * create-variables-extension: added a new reporter version of "let"
 * updated tables extension with new "let ... then report ..." block
+* new Edge AI Computer Vision extension, thank you, Bernat!
 
 ### 2026-01-28
 * blocks, threads: silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
