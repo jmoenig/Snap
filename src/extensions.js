@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -31,11 +31,12 @@
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke, isNil,
-BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, console*/
+BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, TableMorph,
+TableFrameMorph, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-December-12';
+modules.extensions = '2026-January-21';
 
 // Global stuff
 
@@ -655,6 +656,7 @@ SnapExtensions.primitives.set(
     function (raw, proc) {
         // raw is a Boolean flag selecting to keep the data unparsed
         var ide = this.parentThatIsA(IDE_Morph),
+            wrld = ide.world(),
             acc = proc.context.accumulator,
             inp;
 
@@ -685,7 +687,8 @@ SnapExtensions.primitives.set(
                 }
 
                 function isType(aFile, string) {
-                    return aFile.type.indexOf(string) !== -1 || (ext === string);
+                    return aFile.type.indexOf(string) !== -1 ||
+                        (ext === string);
                 }
 
                 frd.onloadend = function (e) {
@@ -734,9 +737,8 @@ SnapExtensions.primitives.set(
             inp.style.position = "absolute";
             inp.style.top = "0px";
             inp.style.left = "0px";
-            inp.style.width = "0px";
-            inp.style.height = "0px";
-            inp.style.display = "none";
+            inp.style.width = wrld.width() + 'px';
+            inp.style.height = wrld.height() + 'px';
             inp.addEventListener(
                 "change",
                 userImport,
@@ -744,7 +746,11 @@ SnapExtensions.primitives.set(
             );
             inp.addEventListener(
                 "cancel",
-                () => acc.data = '',
+                () => {
+                    acc.data = '';
+                    document.body.removeChild(inp);
+                    ide.filePicker = null;
+                },
                 false
             );
             document.body.appendChild(inp);
@@ -755,6 +761,20 @@ SnapExtensions.primitives.set(
         }
         proc.pushContext('doYield');
         proc.pushContext();
+    }
+);
+
+// Custom Data Types (adt_):
+
+SnapExtensions.primitives.set(
+    'adt_table(data)',
+    function (data, proc) {
+        proc.assertType(data, 'list');
+        return new TableFrameMorph(
+            new TableMorph(
+                data.lookup('cells').asTable(data.lookup('header'))
+            )
+        );
     }
 );
 
@@ -1516,7 +1536,7 @@ SnapExtensions.primitives.set(
         this.changeBlockVisibility(context.expression, true);
         ide.flushBlocksCache();
         ide.refreshPalette();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
     }
 );
 
@@ -1528,7 +1548,7 @@ SnapExtensions.primitives.set(
         this.changeBlockVisibility(context.expression, false);
         ide.flushBlocksCache();
         ide.refreshPalette();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
     }
 );
 
@@ -1742,7 +1762,7 @@ SnapExtensions.primitives.set(
                     300, // msecs
                     t => Math.pow(t, 6), // easing
                     () => {
-                        dlg.keepWithin(wrld);
+                        // dlg.keepWithin(wrld);
                         acc.progress = false;
                     }
                 );
@@ -1753,7 +1773,7 @@ SnapExtensions.primitives.set(
             proc.pushContext();
         } else {
             dlg.setPosition(target);
-            dlg.keepWithin(wrld);
+            // dlg.keepWithin(wrld);
         }
     }
 );

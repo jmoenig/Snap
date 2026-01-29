@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-December-09';
+modules.widgets = '2025-December-19';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -278,7 +278,7 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
     ctx.beginPath();
     this.outlinePath(
         ctx,
-        isFlat ? 0 : this.corner,
+        this.corner,
         0
     );
     ctx.closePath();
@@ -286,13 +286,11 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
 };
 
 PushButtonMorph.prototype.drawBackground = function (ctx, color) {
-    var isFlat = MorphicPreferences.isFlat && !this.is3D;
-
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     this.outlinePath(
         ctx,
-        isFlat ? 0 : Math.max(this.corner - this.outline, 0),
+        Math.max(this.corner - this.outline, 0),
         this.outline
     );
     ctx.closePath();
@@ -1636,10 +1634,10 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     DialogBoxMorph.uber.init.call(this);
 
     // override inherited properites:
+    delete this.color; // re-inherit from PushButtonMorph.prototype
     this.isDraggable = true;
     this.noDropShadow = true;
     this.fullShadowSource = false;
-    this.color = PushButtonMorph.prototype.color;
     this.createLabel();
     this.createButtons();
     this.setExtent(new Point(300, 150));
@@ -2935,7 +2933,7 @@ DialogBoxMorph.prototype.render = function (ctx) {
     ctx.beginPath();
     this.outlinePathTitle(
         ctx,
-        isFlat ? 0 : this.corner
+        this.corner
     );
     ctx.closePath();
     ctx.fill();
@@ -2946,7 +2944,7 @@ DialogBoxMorph.prototype.render = function (ctx) {
     ctx.beginPath();
     this.outlinePathBody(
         ctx,
-        isFlat ? 0 : this.corner
+        this.corner
     );
     ctx.closePath();
     ctx.fill();
@@ -3609,7 +3607,7 @@ PianoMenuMorph.prototype.createItems = function () {
     this.children.forEach(m => m.destroy());
     this.children = [];
     if (!this.isListContents) {
-        this.edge = MorphicPreferences.isFlat ? 0 : 5;
+        this.edge = MorphicPreferences.isFlat ? 3 : 5;
         this.border = MorphicPreferences.isFlat ? 1 : 2;
     }
     this.color = WHITE;

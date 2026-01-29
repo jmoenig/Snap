@@ -139,7 +139,8 @@
         ]
       },
       "ca": {
-        "name": "Colors"
+        "name": "Colors",
+        "description": "Modifica, barreja i obté transicions de colors."
       },
       "es": {
         "name": "Colores"
@@ -157,6 +158,37 @@
         "name": "颜色"
       }
     }
+  },
+  {
+    "fileName": "tables_module.xml",
+    "name": "Tables",
+    "description": "Create, select, filter, order, transform, extend and analyze tabular data sets with powerful functions. Modeled after Pyret's Tables, see https://pyret.org/docs/latest/tables.html. Thanks to Shriram Krishnamurthi for his inspiration, feedback and advice. Example project (under development): https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode",
+    "searchData": [
+      "table from _",
+      "header of _",
+      "cells of _",
+      "select _ from _",
+      "sieve _ using _ _",
+      "order _ _",
+      "transform _ using _ _",
+      "extend _ using _ _",
+      "running sum of _",
+      "difference of _",
+      "difference from _ of _",
+      "running mean of _",
+      "running min of _",
+      "running max of _",
+      "running reduce _",
+      "running fold _ _",
+      "pipe _",
+      "let _ then report _"
+    ],
+    "categories": [
+      "control",
+      "operators",
+      "other",
+      "Tables"
+    ]
   },
   {
     "fileName": "neural_networks_module.xml",
@@ -208,6 +240,10 @@
           "blockifiziere _",
           "neues Perzeptron Objekt"
         ]
+      },
+      "ca": {
+        "name": "Xarxes Neuronals",
+        "description": "Classifica dades vectoritzades utilitzant xarxes neuronals. Entrena i valida els teus propis models interns."
       }
     }
   },
@@ -909,6 +945,10 @@
         "searchData": [
           "Neigung _\rar"
         ]
+      },
+      "ca": {
+        "name": "Sensors de dispositius mòbils",
+        "description": "Lectures dels sensors de mòbils i tauletes."
       }
     }
   },
@@ -936,7 +976,7 @@
   {
     "fileName": "s4aConn.xml",
     "name": "S4A Connector",
-    "description": "Snap for All firmata boards Connector. Connecting Snap! to any Firmata compatible board: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... to dynamically control their functionalities. Firmata firmware uploaded is required.",
+    "description": "Snap for All firmata boards Connector, Adding all Snap4Arduino features. Connecting Snap! to any Firmata compatible board: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... to dynamically control their functionalities. Firmata firmware uploaded is required.",
     "searchData": [
       "board connected ?",
       "set digital pin _ to _",
@@ -2272,18 +2312,19 @@
     "name": "Declare & Initialize Script Variables",
     "description": "Declare and initialize multiple script variables",
     "searchData": [
-      "let _"
+      "let _",
+      "let _ then report _"
     ],
     "categories": [
       "other"
     ],
     "translations": {
       "de": {
+        "name": "Skriptvariablen deklarieren und initialisieren",
+        "description": "Mehrere Skriptvariablen auf einmal anlegen und mit Werten initialisieren",
         "searchData": [
-          "deklariere _"
-        ],
-        "searchData": [
-          "deklariere _"
+          "deklariere _",
+          "deklariere _ dann berichte _"
         ]
       },
       "ca": {
@@ -3161,9 +3202,12 @@
       "exit tutorial"
     ],
     "categories": [
-      "Tutorials"
+      "tutorials"
     ],
     "translations": {
+      "ca": {
+        "description": "Posiciona i ajusta la mida de la finstra del tutorial."
+      }
     }
   },
   {

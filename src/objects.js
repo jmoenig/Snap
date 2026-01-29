@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2025-December-17';
+modules.objects = '2026-January-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -1073,8 +1073,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: '%msk on %srf',
-            defaults: [['paint'], ['pen trails']],
+            spec: '%msk on %spr',
+            defaults: [['paint'], ['Stage']],
             code: 'drawOn'
         },
         reportColor: {
@@ -3198,7 +3198,8 @@ SpriteMorph.prototype.init = function (globals) {
     this.sheet = null; // a sprite - surface destination to draw on
     this.tool = null; // string: blending mode ('paint', 'erase', 'overdraw')
     this.trailsCache = null; // a temporary costume for drawing on
-    this.originalCostume = null; // hold on to the unmodified original costume
+    // this.originalCostume = null; // hold on to the unmodified original
+    // costume, disabled for now
 
     SpriteMorph.uber.init.call(this);
 
@@ -4143,7 +4144,7 @@ SpriteMorph.prototype.blockTemplates = function (
         }
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -4348,7 +4349,7 @@ SpriteMorph.prototype.makeBlock = function () {
                     this.customBlocks.push(definition);
                 }
                 ide.flushPaletteCache();
-                ide.categories.refreshEmpty();
+                ide.refreshEmptyCategories();
                 ide.refreshPalette();
                 this.recordUserEdit(
                     'palette',
@@ -4711,7 +4712,7 @@ SpriteMorph.prototype.changeBlockVisibility = function (aBlock, hideIt, quick) {
     );
 };
 
-SpriteMorph.prototype.emptyCategories = function () {
+SpriteMorph.prototype.populatedCategories = function () {
     // return a dictionary that indicates for each category whether
     // it has any shown blocks in it (true) or is empty (false)
     var hasBlocks = (any) => any instanceof BlockMorph &&
@@ -4726,13 +4727,21 @@ SpriteMorph.prototype.emptyCategories = function () {
     return this.categoriesCache;
 };
 
+SpriteMorph.prototype.primitiveCategories = function () {
+    // - currently unused -
+    // answer an array of all active primitive block categories that are
+    // showing at least one block in the palette
+    var cache = this.populatedCategories();
+    return this.categories.filter(prim => cache[prim]);
+};
+
 SpriteMorph.prototype.hasPrimitiveCategories = function () {
     // - currently unused -
     // answer <true> if at least one category of primitive blocks is
     // showing at least one block in the palette, else <false>
     // in which case the pane with primitive categories can be
     // hidden altogether
-    var cache = this.emptyCategories();
+    var cache = this.populatedCategories();
     return this.categories.some(prim => cache[prim]);
 };
 
@@ -5397,7 +5406,7 @@ SpriteMorph.prototype.wearCostume = function (costume, noShadow, keepCache) {
 
     if (!keepCache) {
         this.trailsCache = null;
-        this.originalCostume = null;
+        // this.originalCostume = null;
     }
     this.changed();
     this.costume = costume;
@@ -6677,7 +6686,7 @@ SpriteMorph.prototype.surface = function () {
                 surface = this.costume.copy();
             }
             this.trailsCache = surface;
-            this.originalCostume = this.costume;
+            // this.originalCostume = this.costume;
         }
     } else {
         surface = null;
@@ -6732,6 +6741,8 @@ SpriteMorph.prototype.stampOnPenTrails = function () {
 // SpriteMorph clearing
 
 SpriteMorph.prototype.clear = function () {
+    /* // version that resets a target costume to its original state
+    // disabled for now, because CLEAR should always clear the stage.
     if (this.drawsOnSprite()) {
         if (this.sheet.originalCostume) {
             this.sheet.doSwitchToCostume(this.sheet.originalCostume);
@@ -6739,6 +6750,8 @@ SpriteMorph.prototype.clear = function () {
     } else {
         this.parent.clearPenTrails();
     }
+    */
+    this.parent.clearPenTrails();
 };
 
 // SpriteMorph writing
@@ -7588,7 +7601,7 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
             this.newCostumeName(localize('Costume'))
         ));
         targetCostume = target.surface();
-        target.originalCostume = ['Turtle'];
+        // target.originalCostume = ['Turtle'];
     } else {
         return;
     }
@@ -9723,6 +9736,52 @@ SpriteMorph.prototype.inheritedMethods = function () {
 
 // SpriteMorph thumbnail
 
+SpriteMorph.prototype.thumb = function (extentPoint) {
+    // answer a new Morph of extentPoint dimensions that displays
+    // my thumbnail representation keeping the original aspect ratio
+    var myself = this,
+        thumb = new Morph(),
+        ext = extentPoint.divideBy(3),
+        i = 0;
+
+    thumb.render = function (ctx) {
+        var w = myself.width(),
+            h = myself.height(),
+            scale = Math.min(
+                (extentPoint.x / w),
+                (extentPoint.y / h)
+            ),
+            xOffset = (extentPoint.x - (w * scale)) / 2,
+            yOffset = (extentPoint.y - (h * scale)) / 2;
+
+        ctx.save();
+        ctx.scale(scale, scale);
+        ctx.translate(xOffset / scale, yOffset / scale);
+        myself.render(ctx);
+        ctx.restore();
+  
+        if (myself.anchor) {
+            ctx.drawImage(
+                myself.anchor.thumbnail(ext),
+                0,
+                0
+            );
+        }
+        for (i = 0; i < 3; i += 1) {
+            if (myself.parts[i]) {
+                ctx.drawImage(
+                    myself.parts[i].thumbnail(ext),
+                    i * ext.x,
+                    extentPoint.y - ext.y
+                );
+            }
+        }
+    };
+
+    thumb.setExtent(extentPoint);
+    return thumb;
+};
+
 SpriteMorph.prototype.thumbnail = function (extentPoint, recycleMe, noCorpse) {
     // answer a new Canvas of extentPoint dimensions containing
     // my thumbnail representation keeping the originial aspect ratio
@@ -10312,7 +10371,8 @@ StageMorph.prototype.init = function (globals) {
 
     // support for letting sprites directly draw on a background
     this.trailsCache = null; // a temporary costume for drawing on
-    this.originalCostume = null; // hold on to the unmodified original costume
+    // this.originalCostume = null; // hold on to the unmodified original
+    // costume, disabled for now
 
     this.isThreadSafe = false;
 
@@ -11393,7 +11453,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportShown'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11436,7 +11496,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('stopFreq'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11517,7 +11577,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetSlot'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11569,7 +11629,7 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('doSetGlobalFlag'));
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11631,7 +11691,7 @@ StageMorph.prototype.blockTemplates = function (
         }
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11717,7 +11777,7 @@ StageMorph.prototype.blockTemplates = function (
         }
 
         // for debugging: ///////////////
-        if (this.world().isDevMode) {
+        if (this.world()?.isDevMode) {
             blocks.push('-');
             blocks.push(this.devModeText());
             blocks.push('-');
@@ -11774,7 +11834,7 @@ StageMorph.prototype.restoreHiddenGlobalBlocks = function (
 
     ide.flushBlocksCache();
     ide.refreshPalette();
-    ide.categories.refreshEmpty();
+    ide.refreshEmptyCategories();
     this.recordUserEdit(
         'palette',
         'restore microworld'
@@ -12364,8 +12424,11 @@ StageMorph.prototype.changeCustomBlockVisibility
 StageMorph.prototype.changeVarBlockVisibility
     = SpriteMorph.prototype.changeVarBlockVisibility;
 
-StageMorph.prototype.emptyCategories =
-    SpriteMorph.prototype.emptyCategories;
+StageMorph.prototype.populatedCategories =
+    SpriteMorph.prototype.populatedCategories;
+
+StageMorph.prototype.primitiveCategories =
+    SpriteMorph.prototype.primitiveCategories;
 
 StageMorph.prototype.hasPrimitiveCategories =
     SpriteMorph.prototype.hasPrimitiveCategories;
@@ -13277,13 +13340,14 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
     } else if (data instanceof List) {
-        if (data.isTable()) {
-            contents = new TableFrameMorph(new TableMorph(data, 10));
-            if (this.stage) {
-                contents.expand(this.stage.extent().translateBy(
-                    -2 * (this.edge + this.border + this.padding)
-                ));
-            }
+        if (data.isADT()) {
+            contents = invoke(
+                data.lookup('_morph'),
+                new List([data]),
+                data // support "this(object)"
+            );
+        } else if (data.isTable()) {
+            contents = new TableFrameMorph(new TableMorph(data));
         } else {
             contents = new ListWatcherMorph(data);
             contents.update(true);
@@ -13293,6 +13357,11 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
                     -2 * (this.edge + this.border + this.padding)
                 ));
             }
+        }
+        if (contents instanceof TableFrameMorph && this.stage) {
+            contents.expand(this.stage.extent().translateBy(
+                -2 * (this.edge + this.border + this.padding)
+            ));
         }
         contents.isDraggable = false;
         if (!draggable) {
@@ -13903,6 +13972,37 @@ Costume.prototype.editRotationPointOnly = function (aWorld, anIDE) {
 };
 
 // Costume thumbnail
+
+Costume.prototype.thumb = function (extentPoint) {
+    // answer a new Morph of extentPoint dimensions that displays
+    // my thumbnail representation keeping the original aspect ratio
+    var myself = this,
+        thumb = new Morph();
+
+    thumb.render = function (ctx) {
+        var w = myself.width(),
+            h = myself.height(),
+            scale = Math.min(
+                (extentPoint.x / w),
+                (extentPoint.y / h)
+            ),
+            xOffset = (extentPoint.x - (w * scale)) / 2,
+            yOffset = (extentPoint.y - (h * scale)) / 2;
+
+        ctx.save();
+        ctx.scale(scale, scale);
+        ctx.translate(xOffset / scale, yOffset / scale);
+        ctx.drawImage(
+            myself.contents,
+            Math.floor(xOffset / scale),
+            Math.floor(yOffset / scale)
+        );
+        ctx.restore();
+    };
+
+    thumb.setExtent(extentPoint);
+    return thumb;
+};
 
 Costume.prototype.shrinkToFit = function (extentPoint) {
     if (extentPoint.x < this.width() || (extentPoint.y < this.height())) {
@@ -14863,7 +14963,8 @@ CellMorph.prototype.createContents = function () {
         isSameList = this.contentsMorph instanceof ListWatcherMorph
             && (this.contentsMorph.list === this.contents),
         isSameTable = this.contentsMorph instanceof TableFrameMorph
-            && (this.contentsMorph.tableMorph.table === this.contents),
+            && (this.contentsMorph.tableMorph.table === this.contents ||
+                this.contents.isADT()),
         draggable = this.parentThatIsA(StageMorph)?.tutorialMode ?
             !this.parentThatIsA(StageMorph).tutorialMode.disableDraggingData
                 : !SpriteMorph.prototype.disableDraggingData;
@@ -15015,12 +15116,16 @@ CellMorph.prototype.createContents = function () {
                 return icon;
             };
         } else if (this.contents instanceof List) {
-            if (this.contents.isTable()) {
-                this.contentsMorph = new TableFrameMorph(new TableMorph(
-                    this.contents,
-                    10
-                ));
-                this.contentsMorph.expand(new Point(200, 150));
+            if (this.contents.isADT()) {
+                this.contentsMorph = invoke(
+                    this.contents.lookup('_morph'),
+                    new List([this.contents]),
+                    this.contents // support "this(object)"
+                );
+            } else if (this.contents.isTable()) {
+                this.contentsMorph = new TableFrameMorph(
+                    new TableMorph(this.contents)
+                );
             } else {
                 if (this.isCircular()) {
                     this.contentsMorph = new TextMorph(
@@ -15038,6 +15143,9 @@ CellMorph.prototype.createContents = function () {
                         this
                     );
                 }
+            }
+            if (this.contentsMorph instanceof TableFrameMorph) {
+                this.contentsMorph.expand(new Point(200, 150));
             }
             this.contentsMorph.isDraggable = false;
             if (!draggable) {

@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -50,7 +50,7 @@
 
 // Global stuff
 
-modules.locale = '2025-December-12';
+modules.locale = '2026-January-18';
 
 var Localizer;
 var SnapTranslator = new Localizer();
@@ -207,7 +207,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org, jadga.huegle@sap.com',
     'last_changed':
-        '2025-12-12'
+        '2026-01-04'
 };
 
 SnapTranslator.dict.it = {
@@ -416,7 +416,7 @@ SnapTranslator.dict.ca = {
     'translator_e-mail':
         'jguille2@xtec.cat, bernat@snap4arduino.rocks',
     'last_changed':
-        '2025-05-15'
+        '2026-01-18'
 };
 
 SnapTranslator.dict.ca_VA = {
@@ -703,4 +703,14 @@ SnapTranslator.dict.hy = {
         'info@symotec.am and info@armath.am',
     'last_changed':
         '2025-03-13',
+};
+SnapTranslator.dict.vi = {
+    'language_name':
+        'Tiếng Việt',
+    'language_translator':
+        'Antigravity gemini 3, and Qwen3-Max',
+    'translator_e-mail':
+        'seeergefaure@gmail.com',
+    'last_changed':
+        '2025-11-21'
 };

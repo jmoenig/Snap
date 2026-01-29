@@ -9,6 +9,7 @@
     * templates
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
         * projects based on a template let the user restore the visibility of global blocks in the template palette
+        * template-projects store their magnification level if it's above 100%
     * tutorials
         * open and run a scene inside a separate modeless window
         * new "Tutorials" library for positioning and scaling the tutorial window and interacting with the editor
@@ -27,10 +28,22 @@
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
+    * Abstract Data Types (ADT) - experimental - include a ring entry named underscore + morph in data
+    * new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
     * new "blocks" and "speaker" symbols
+    * new "hide empty categories" setting
+    * support for dynamic dropdown menus and read-only settings in variadic input slots
+    * support for variadic upvars in custom blocks
+    * new 'parameter' custom block input type, same as 'upvar', but doesn't add a script variable when evaluated, supports variadicity
+    * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
+    * support for user-scriptable rename-menus in upvars, including variadic ones (a single menu is repeated in each non-unevaluated slot, a list of menu-lists whose first item is an empty list gets repeated across all subslots)
+    * new reporter version of "let" in the variables declaration extension
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
+    * flat design mode now (again) supports rounded corners (sigh...)
+    * dialog boxes are more bright and their buttons more discernible in bright mode 
     * rearranged IDE settings menu items into "looks" submenu
+    * sprite icons no longer blur when the sprite size is reduced or the zoom level increases
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
         * added optional "max height" input to "fancy say / think" library commands
@@ -38,9 +51,13 @@
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
     * always "normalize" SVGs on import, avoids "cut-off" costume parts
+    * flat mode now supports rounded corner in widgets, sigh...
+    * resizing the browser / window in presentation ("app") mode scales the stage smoothly
     * meta-programming: removed "static" tag from the block-attribute getter
     * took out rate limit in the Microblocks library, thanks, Bernat!
+    * silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
     * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
+    * changed the evaluation semantics of the "let" block in the variables declaration extension to enable reuse of previously declared variables inside the same block
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
@@ -48,7 +65,77 @@
 * **Documentation Updates:**
     * updated API.md with new "zoom" configuration key for global magnification
 * **Translation Updates:**
+    * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
+    * Catalan, thanks, Joan!
     * German
+
+### 2026-01-29
+* create-variables-extension: changed "let" block semantics to enable use of previously declared variables in subsequent declarations inside the same blocks
+* create-variables-extension: added a new reporter version of "let"
+* updated tables extension with new "let ... then report ..." block
+
+### 2026-01-28
+* blocks, threads: silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
+* new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
+* added new experimental "let ... then report ..." reporter to the tables library
+
+### 2026-01-27
+* blocks: added support for different dropdowns in different variadic subslots by returning a list of menu-lists with the first item being an empty list
+* threads: added metaprogramming support for the new "parameter" input slot type (No. 19)
+
+### 2026-01-26
+* blocks, byob: new %parameter custom block input type, same as %upvar, but doesn't add a script variable when evaluated, supports variadicity
+
+### 2026-01-22
+* blocks, byob: added support for dynamically setting the contents of expanded variadic input slots by a user script in the block definition
+* byob: added support for variadic upvars
+* blocks: added support for user-scriptable rename-menus in upvars, including variadic ones
+* blocks: disable user-scripted dropdowns for unevaluated variadic subslots
+
+### 2026-01-21
+* objects: made table-adt views resizable inside variable watchers
+* extensions: tweaked positioning the tuturial window
+
+### 2026-01-20
+* blocks, byob: added support for dynamic dropdown menus and read-only settings in variadic input slots
+
+### 2026-01-19
+* threads, extensions, tables, lists: experimental support for user-defined ADTs
+* tables, lists: fixed a layout issue for rendering non-list-based table structures
+* objects: added support for displaying ADTs in speech balloons
+* objects: added support for displaying ADTs in variable watchers
+
+### 2026-01-16
+* gui: removed scale-clipping for the stage in presentation ("app") mode, now resizing the window scales the stage smoothly
+* lists: experimental asTable(colNames) method
+
+### 2026-01-12
+* extensions: tweaked dta_import extension for iOS
+
+### 2026-01-03
+* gui, objects, scenes: new "hide empty categories" setting
+* store: serialize "hide empty categories" setting in the project file
+* German translation update for new "Hide empty categories" menu item
+
+### 2026-01-02
+* gui, objects, threads, extensions, byob: refactored refreshing empty block category buttons
+
+### 2025-12-29
+* new Vietnamese translation, thank you, @seeeerge !!
+
+### 2025-12-22
+* objects, gui: dynamically render sprite icons instead of creating bitmaps every time
+* objects, gui: dynamically render costume icons instead of creating bitmaps every time
+* gui: optimized rendering sprite and costume icons
+* gui: optimized rendering of sprite icon in the sprite editor
+
+### 2025-12-20
+* store: template-projects store their magnification level if it's above 100%
+
+### 2025-12-19
+* widgets, gui: made dialog boxes brighter and buttons more discernible in bright mode
+* objects: disabled CLEAR for drawing on sprites for now (CLEAR always wipes the stage's pen trails)
+* threads, objects, blocks: disabled drawing on the stage's background costume. Drawing on the stage draws on the pen trails layer.
 
 ### 2025-12-17
 * objects: add pen size when dynamically growing a costume to overdraw it
@@ -56,6 +143,10 @@
 * objects: pick a unique name for dynamically overdrawn costumes
 * gui: new "zoom" api configuration key
 * updated imbw editor with global zoom of 125%
+* disabled shift-zoom gestures when the settings menu is hidden by the configuration dictionary
+* morphic, widgets, gui: support rounded corners for widgets in flat mode, sigh
+* byob: yet more rounded rectangles in flat mode...
+* gui: adjust rounded corners and padding of dialog boxes in flat mode
 
 ### 2025-12-16
 * objects: fixed a costumePoint() glitch
