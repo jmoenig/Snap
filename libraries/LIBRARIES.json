@@ -2257,18 +2257,19 @@
     "name": "Declare & Initialize Script Variables",
     "description": "Declare and initialize multiple script variables",
     "searchData": [
-      "let _"
+      "let _",
+      "let _ then report _"
     ],
     "categories": [
       "other"
     ],
     "translations": {
       "de": {
+        "name": "Skriptvariablen deklarieren und initialisieren",
+        "description": "Mehrere Skriptvariablen auf einmal anlegen und mit Werten initialisieren",
         "searchData": [
-          "deklariere _"
-        ],
-        "searchData": [
-          "deklariere _"
+          "deklariere _",
+          "deklariere _ dann berichte _"
         ]
       },
       "ca": {

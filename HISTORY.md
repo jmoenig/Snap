@@ -37,6 +37,7 @@
     * new 'parameter' custom block input type, same as 'upvar', but doesn't add a script variable when evaluated, supports variadicity
     * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
     * support for user-scriptable rename-menus in upvars, including variadic ones (a single menu is repeated in each non-unevaluated slot, a list of menu-lists whose first item is an empty list gets repeated across all subslots)
+    * new reporter version of "let" in the variables declaration extension
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)
@@ -56,6 +57,7 @@
     * took out rate limit in the Microblocks library, thanks, Bernat!
     * silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
     * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
+    * changed the evaluation semantics of the "let" block in the variables declaration extension to enable reuse of previously declared variables inside the same block
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
@@ -66,6 +68,10 @@
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * Catalan, thanks, Joan!
     * German
+
+### 2026-01-29
+* create-variables-extension: changed "let" block semantics to enable use of previously declared variables in subsequent declarations inside the same blocks
+* create-variables-extension: added a new reporter version of "let" 
 
 ### 2026-01-28
 * blocks, threads: silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
