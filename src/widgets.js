@@ -1209,6 +1209,13 @@ ToggleMorph.prototype.init = function (
         environment,
         hint
     );
+    // increase contrast for checkboxes/radio in bright theme for accessibility
+    if (IDE_Morph && IDE_Morph.prototype && IDE_Morph.prototype.isBright) {
+        this.outlineColor = new Color(120, 120, 120);
+        this.outlineGradient = false;
+        // slightly darker fill than panel background for clearer contrast
+        this.color = new Color(210, 210, 210);
+    }
     this.fixLayout();
     this.refresh();
 };
@@ -1272,15 +1279,20 @@ ToggleMorph.prototype.createLabel = function () {
         }
     }
     if (this.tick === null) {
+        var isBright = (IDE_Morph && IDE_Morph.prototype && IDE_Morph.prototype.isBright),
+            tickColor = isBright
+                ? IDE_Morph.prototype.buttonLabelColor || new Color(70, 70, 70)
+                : new Color(240, 240, 240),
+            tickSize = this.fontSize + (isBright ? 2 : 0); // enlarge tick a bit in bright mode
         this.tick = new StringMorph(
             localize(this.labelString),
-            this.fontSize,
+            tickSize,
             this.fontStyle,
             true,
             false,
             false,
             shading ? new Point(1, 1) : null,
-            new Color(240, 240, 240)
+            tickColor
         );
         this.add(this.tick);
     }
