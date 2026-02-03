@@ -124,6 +124,7 @@ var snapVersion = '12-dev',
         'libraries/colors_module.xml',
         'libraries/continuations_module.xml',
         'libraries/crayons.xml',
+        'libraries/drawPath_module.xml',
         'libraries/Eisenbergification.xml',
 
         // Edge

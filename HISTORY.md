@@ -40,6 +40,7 @@
     * support for user-scriptable rename-menus in upvars, including variadic ones (a single menu is repeated in each non-unevaluated slot, a list of menu-lists whose first item is an empty list gets repeated across all subslots)
     * new reporter version of "let" in the variables declaration extension
     * new "pen_path(points, [fill, close]" extension for drawing precise, filled shapes
+    * new "Draw Paths" library for directly drawing filled or stroked polylines and polygons without moving the pen sprite
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)

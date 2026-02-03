@@ -3257,6 +3257,23 @@
     }
   },
   {
+    "fileName": "drawPath_module.xml",
+    "name": "Draw Paths",
+    "description": "Draw filled or stroked polylines and polygons without moving the pen sprite",
+    "searchData": [
+      "draw path _ _"
+    ],
+    "categories": [
+      "pen"
+    ],
+    "translations": {
+      "de": {
+        "name": "Male Pfade",
+        "description": "Male Vektorpfade und Polygone direkt, ohne den Stift zu bewegen, wahlweise ausgefüllt oder umrandet"
+      }
+    }
+  },
+  {
     "fileName": "~",
     "name": "~"
   },
