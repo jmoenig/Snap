@@ -36,7 +36,7 @@ TableFrameMorph, console*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-January-21';
+modules.extensions = '2026-February-03';
 
 // Global stuff
 
@@ -1722,8 +1722,7 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'scn_position(pane, x, y)',
     function (pane, x = 0, y = 0, proc = null) {
-        var wrld = this.world(),
-            stage = this.parentThatIsA(StageMorph),
+        var stage = this.parentThatIsA(StageMorph),
             acc = proc.context.accumulator,
             dlg, rect, area, target;
 
@@ -1773,7 +1772,6 @@ SnapExtensions.primitives.set(
             proc.pushContext();
         } else {
             dlg.setPosition(target);
-            // dlg.keepWithin(wrld);
         }
     }
 );
@@ -1872,6 +1870,20 @@ SnapExtensions.primitives.set(
         }
         proc.assertType(xml, 'text');
         this.synchScriptsFrom(xml);
+    }
+);
+
+// Pen - drawing shapes
+
+SnapExtensions.primitives.set(
+    'pen_path(points, [fill, close])',
+    function (points, fill, close, proc) {
+        proc.assertType(this, 'sprite');
+        proc.assertType(points, 'list');
+        if (points.itemsArray().some(any => !proc.isCoordinate(any))) {
+            throw new Error('expecting a list of x/y coordinates');
+        }
+        this.drawPath(points, fill, close);
     }
 );
 

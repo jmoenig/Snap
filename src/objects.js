@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-January-21';
+modules.objects = '2026-February-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -7579,6 +7579,17 @@ SpriteMorph.prototype.drawLine = function (start, dest) {
     }
 };
 
+SpriteMorph.prototype.drawPath = function (pointList, filled, closed) {
+    var path = pointList.map(tuple => this.worldPoint(
+        new Point(+tuple.at(1), +tuple.at(2)))
+    );
+    if (this.drawsOnSprite()) {
+        this.drawPathOn(this.sheet, path, closed, filled);
+    } else {
+        this.drawPathOnPentrails(path, closed, filled);
+    }
+};
+
 SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
     var mode = this.blendingMode(),
         targetCostume,
@@ -7652,6 +7663,92 @@ SpriteMorph.prototype.drawLineOn = function (target, start, dest) {
     target.doSwitchToCostume(targetCostume, null, true); // keep cache
 };
 
+SpriteMorph.prototype.drawPathOn = function (
+    target,
+    path = new List(),
+    closed = false,
+    filled = false
+) {
+    var mode = this.blendingMode(),
+        targetCostume,
+        points,
+        line,
+        ctx,
+        first,
+        i,
+
+        projection = () => path.map(each => target.costumePoint(each));
+
+    // check if target has a costume and fetch its pen surface
+    if (target.costume) {
+        targetCostume = target.surface();
+    } else if (mode === 'source-over') {
+        target.doSwitchToCostume(new Costume(
+            newCanvas(new Point(1, 1), true),
+            this.newCostumeName(localize('Costume'))
+        ));
+        targetCostume = target.surface();
+        // target.originalCostume = ['Turtle'];
+    } else {
+        return;
+    }
+
+    points = projection();
+
+    if (mode === 'source-over') {
+        line = this.size / target.scale;
+        for (i = 1; i <= points.length(); i += 1) {
+            if (targetCostume.growTo(points.at(i), line)) {
+                target.doSwitchToCostume(targetCostume, null, true); // keep cache
+                points = projection();
+            }
+        }
+    }
+
+    // draw the path onto the target's costume copy:
+    ctx = targetCostume.contents.getContext('2d');
+    ctx.save();
+    if (filled) {
+        ctx.fillStyle = this.color.toString();
+    } else {
+        ctx.lineWidth = this.size;
+        if (target instanceof SpriteMorph) {
+            ctx.lineWidth /= target.scale;
+        }
+        ctx.strokeStyle = this.color.toString();
+        if (this.useFlatLineEnds) {
+            ctx.lineCap = 'butt';
+            ctx.lineJoin = 'miter';
+        } else {
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+    }
+    ctx.globalCompositeOperation = mode;
+    ctx.beginPath();
+    first = points.at(1);
+    ctx.moveTo(first.x, first.y);
+    points.cdr().map(each =>
+        ctx.lineTo(each.x, each.y)
+    );
+    if (closed || filled) {
+        ctx.closePath();
+    }
+    if (filled) {
+        ctx.fill();
+    } else {
+        ctx.stroke();
+    }
+    ctx.restore();
+
+    // shrink-wrap where applicable
+    if (contains(['source-over', 'destination-out'], mode)) {
+        targetCostume.shrinkWrap();
+    }
+
+    // wear & cache the changed costume
+    target.doSwitchToCostume(targetCostume, null, true); // keep cache
+};
 
 SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
     var stagePos = this.parent.bounds.origin,
@@ -7705,6 +7802,54 @@ SpriteMorph.prototype.drawPenTrailsLine = function (start, dest) {
         }
         this.parent.cachedPenTrailsMorph = null;
     }
+};
+
+SpriteMorph.prototype.drawPathOnPentrails = function (
+    path = new List(),
+    closed = false,
+    filled = false
+) {
+    var stagePos = this.parent.bounds.origin,
+        stageScale = this.parent.scale,
+        ctx = this.parent.penTrails().getContext('2d'),
+        ide = this.parentThatIsA(IDE_Morph),
+        points = path.map(each => each.subtract(stagePos).divideBy(stageScale)),
+        first = points.at(1);
+
+    if (ide?.performerMode) { stageScale = ide.performerScale; }
+
+    // draw on the pen-trails layer
+    ctx.save();
+    if (filled) {
+        ctx.fillStyle = this.color.toString();
+    } else {
+        ctx.lineWidth = this.size;
+        ctx.strokeStyle = this.color.toString();
+        if (this.useFlatLineEnds) {
+            ctx.lineCap = 'butt';
+            ctx.lineJoin = 'miter';
+        } else {
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+    }
+    ctx.globalCompositeOperation = this.blendingMode();
+    ctx.beginPath();
+    ctx.moveTo(first.x, first.y);
+    points.cdr().map(each =>
+        ctx.lineTo(each.x, each.y)
+    );
+    if (closed || filled) {
+        ctx.closePath();
+    }
+    if (filled) {
+        ctx.fill();
+    } else {
+        ctx.stroke();
+    }
+    ctx.restore();
+    this.parent.changed();
+    this.parent.cachedPenTrailsMorph = null;
 };
 
 SpriteMorph.prototype.floodFill = function () {

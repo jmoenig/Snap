@@ -39,6 +39,7 @@
     * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
     * support for user-scriptable rename-menus in upvars, including variadic ones (a single menu is repeated in each non-unevaluated slot, a list of menu-lists whose first item is an empty list gets repeated across all subslots)
     * new reporter version of "let" in the variables declaration extension
+    * new "pen_path(points, [fill, close]" extension for drawing precise, filled shapes
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)
@@ -69,6 +70,9 @@
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * Catalan, thanks, Joan!
     * German
+
+### 2026-02-03
+* objects, extensions: new "pen_path(points, [fill, close]" extension for drawing precise, filled shapes
 
 ### 2026-01-29
 * create-variables-extension: changed "let" block semantics to enable use of previously declared variables in subsequent declarations inside the same blocks
