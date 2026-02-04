@@ -41,6 +41,7 @@
     * new reporter version of "let" in the variables declaration extension
     * new "pen_path(points, [fill, close]" extension for drawing precise, filled shapes
     * new "Draw Paths" library for directly drawing filled or stroked polylines and polygons without moving the pen sprite
+    * new "... times ..." reporter for quantifying results
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)
@@ -65,12 +66,16 @@
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
     * fixed some special cases for using "combine" on an empty list, thanks, @rmunn!
+    * neural networks extension: fixed normalization to disregard redundant features and no longer throw a divide-by-zero induced error
 * **Documentation Updates:**
     * updated API.md with new "zoom" configuration key for global magnification
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * Catalan, thanks, Joan!
     * German
+
+### 2026-02-04
+* neural networks extension: added "... times ..." reporter for quantifying results, changed normalization to disregard redundant features and no longer throw a divide-by-zero induced error
 
 ### 2026-02-03
 * objects, extensions: new "pen_path(points, [fill, close]" extension for drawing precise, filled shapes

@@ -197,6 +197,7 @@
     "searchData": [
       "plot bars _ _",
       "render neural model _ _",
+      "_ times _",
       "normalize table _",
       "normalization for table _",
       "partition table _ by _",
@@ -213,30 +214,29 @@
     ],
     "categories": [
       "pen",
+      "control",
       "lists",
       "Neural Networks"
     ],
     "translations": {
       "de": {
+        "name": "Neuronale Netzwerke",
+        "description": "Datenvektoren mit eigenen tiefen neuronalen Netzwerken klassifizieren",
         "searchData": [
-          "male Balken _ gefüllt _ zentriert _ wische _",
-          "Objekt _",
-          "klone _ _"
-        ],
-        "searchData": [
-          "male Balken _ _\rca",
-          "male neurales Modell _ _\rca",
-          "normalisiere Tabelle _\rca",
-          "Normalisierung für Tabelle _\rca",
-          "teile Tabelle _ im Verhältnis _\rca",
+          "male Balken _ _",
+          "male neurales Modell _ _",
+          "_ mal _",
+          "normalisiere Tabelle _",
+          "Normalisierung für Tabelle _",
+          "teile Tabelle _ im Verhältnis _",
           "generiere _ für _ in _ _",
-          "klone _ _\rca",
-          "Objekt _\rca",
-          "neues neuronales Netzwerk _\rca",
-          "_ Netzwerk _ mit _\rca",
-          "_ _ mit Netzwerk _\rca",
-          "_ von Netzwerk _\rca",
-          "_ von Netzwerk _ auf _\rca",
+          "klone _ _",
+          "Objekt _",
+          "neues neuronales Netzwerk _",
+          "_ Netzwerk _ mit _",
+          "_ _ mit Netzwerk _",
+          "_ von Netzwerk _",
+          "_ von Netzwerk _ auf _",
           "blockifiziere _",
           "neues Perzeptron Objekt"
         ]
