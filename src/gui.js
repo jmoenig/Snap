@@ -308,6 +308,7 @@ IDE_Morph.prototype.init = function (config) {
     this.serializer = new SnapSerializer();
     this.config = config;
     this.version = Date.now(); // for outside observers
+    this.devWarned = false; // ensure dev warning shown once and after i18n ready
 
     // restore saved user preferences
     this.userLanguage = null; // user language preference for startup
@@ -8114,6 +8115,10 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
     var projectData, onComplete, name, tutorial,
         urlBar = location.hash;
     SnapTranslator.language = lang;
+    // ensure dev warning after language set
+    if (!this.devWarned) {
+        this.warnAboutDev();
+    }
     if (!this.loadNewProject) {
         if (this.scene.createdFromTemplate) {
             name = this.scene.name;
@@ -9455,16 +9460,20 @@ IDE_Morph.prototype.warnAboutDev = function () {
     if (!SnapVersion.includes('-dev') || this.config.noDevWarning) {
         return;
     }
+    if (this.devWarned) { return; }
     this.inform(
-        "CAUTION! Development Version",
-        'This version of Snap! is being developed.\n' +
+        localize("CAUTION! Development Version"),
+        localize(
+            'This version of Snap! is being developed.\n' +
             '*** It is NOT supported for end users. ***\n' +
             'Saving a project in THIS version is likely to\n' +
             'make it UNUSABLE or DEFECTIVE for current and\n' +
             'even future official versions!\n\n' +
             'visit https://snap.berkeley.edu/run\n' +
             'for the official Snap! installation.'
+        )
     ).nag = true;
+    this.devWarned = true;
 };
 
 // IDE_Morph tutorial scene
