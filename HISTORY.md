@@ -74,6 +74,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2026-02-10
+* threads, objects: made dynamic views for ADTs use Snap's process instead of JS-invoke()
+
 ### 2026-02-04
 * neural networks extension: added "... times ..." reporter for quantifying results, changed normalization to disregard redundant features and no longer throw a divide-by-zero induced error
 

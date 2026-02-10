@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-January-28';
+modules.threads = '2026-February-10';
 
 var ThreadManager;
 var Process;
@@ -470,15 +470,13 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                 } else {
                     if (result instanceof List) {
                         if (result.isADT()) {
-                            proc.topBlock.showBubble(
-                                invoke(
-                                    result.lookup('_morph'),
-                                    new List([result]),
-                                    result // support "this(object)"
-                                ),
-                                proc.exportResult,
-                                proc.receiver
+                            // compute the ADT's dynamic view
+                            proc.pushContext();
+                            proc.homeContext.inputs.pop();
+                            proc.evaluate(
+                                proc.reportListItem('_morph', result)
                             );
+                            remaining.push(proc);
                         } else {
                             proc.topBlock.showBubble(
                                 result.isTable() ?
@@ -4108,7 +4106,26 @@ Process.prototype.doGlide = function (secs, endX, endY) {
     this.pushContext();
 };
 
+// Process SAY and THINK primitives
+
+Process.prototype.bubble = function (data) {
+    if (data instanceof List && data.isADT()) {
+        return this.dynamicViewFor(data);
+    }
+    this.blockReceiver().bubble(data);
+};
+
+Process.prototype.doThink = function (data) {
+    if (data instanceof List && data.isADT()) {
+        return this.dynamicViewFor(data);
+    }
+    this.blockReceiver().doThink(data);
+};
+
 Process.prototype.doSayFor = function (data, secs) {
+    if (data instanceof List && data.isADT()) {
+        return this.dynamicViewFor(data);
+    }
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.blockReceiver().bubble(data);
@@ -4122,6 +4139,9 @@ Process.prototype.doSayFor = function (data, secs) {
 };
 
 Process.prototype.doThinkFor = function (data, secs) {
+    if (data instanceof List && data.isADT()) {
+        return this.dynamicViewFor(data);
+    }
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.blockReceiver().doThink(data);
@@ -4132,6 +4152,13 @@ Process.prototype.doThinkFor = function (data, secs) {
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.dynamicViewFor = function (data) {
+    // private - compute the dynamic view for an ADT
+    this.context.inputs = [];
+    this.pushContext();
+    this.evaluate(this.reportListItem('_morph', data));
 };
 
 Process.prototype.blockReceiver = function () {

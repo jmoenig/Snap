@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-February-03';
+modules.objects = '2026-February-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -13336,6 +13336,11 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         } else {
             contents = data;
         }
+        if (contents instanceof TableFrameMorph && this.stage) {
+            contents.expand(this.stage.extent().translateBy(
+                -2 * (this.edge + this.border + this.padding)
+            ));
+        }
     } else if (isString(data)) {
         isText = true;
         contents = new TextMorph(
@@ -13485,13 +13490,7 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.bounds.setHeight(img.height);
         contents.cachedImage = img;
     } else if (data instanceof List) {
-        if (data.isADT()) {
-            contents = invoke(
-                data.lookup('_morph'),
-                new List([data]),
-                data // support "this(object)"
-            );
-        } else if (data.isTable()) {
+        if (data.isTable()) {
             contents = new TableFrameMorph(new TableMorph(data));
         } else {
             contents = new ListWatcherMorph(data);
@@ -15112,7 +15111,31 @@ CellMorph.prototype.createContents = function () {
                 this.contents.isADT()),
         draggable = this.parentThatIsA(StageMorph)?.tutorialMode ?
             !this.parentThatIsA(StageMorph).tutorialMode.disableDraggingData
-                : !SpriteMorph.prototype.disableDraggingData;
+                : !SpriteMorph.prototype.disableDraggingData,
+        setupList = () => {
+            if (this.contents.isTable()) {
+                this.contentsMorph = new TableFrameMorph(
+                    new TableMorph(this.contents)
+                );
+            } else {
+                if (this.isCircular()) {
+                    this.contentsMorph = new TextMorph(
+                        '(...)',
+                        fontSize,
+                        null,
+                        false, // bold
+                        true, // italic
+                        'center'
+                    );
+                    this.contentsMorph.setColor(WHITE);
+                } else {
+                    this.contentsMorph = new ListWatcherMorph(
+                        this.contents,
+                        this
+                    );
+                }
+            }
+        };
 
     if (this.isBig) {
         fontSize = fontSize * 1.5;
@@ -15262,32 +15285,22 @@ CellMorph.prototype.createContents = function () {
             };
         } else if (this.contents instanceof List) {
             if (this.contents.isADT()) {
-                this.contentsMorph = invoke(
-                    this.contents.lookup('_morph'),
-                    new List([this.contents]),
-                    this.contents // support "this(object)"
-                );
-            } else if (this.contents.isTable()) {
-                this.contentsMorph = new TableFrameMorph(
-                    new TableMorph(this.contents)
-                );
-            } else {
-                if (this.isCircular()) {
-                    this.contentsMorph = new TextMorph(
-                        '(...)',
-                        fontSize,
-                        null,
-                        false, // bold
-                        true, // italic
-                        'center'
+                // attempt to render the '_morph' method for a custom view.
+                // since in this situation we don't have a full Snap! process
+                // this will fail in most cases (unless there is a JS extension)
+                // as a fallback render the ADT in table form
+                try {
+                    this.contentsMorph = invoke(
+                        this.contents.lookup('_morph'),
+                        new List([this.contents]),
+                        this.contents, // support "this(object)"
+                        500
                     );
-                    this.contentsMorph.setColor(WHITE);
-                } else {
-                    this.contentsMorph = new ListWatcherMorph(
-                        this.contents,
-                        this
-                    );
+                } catch {
+                    setupList();
                 }
+            } else {
+                setupList();
             }
             if (this.contentsMorph instanceof TableFrameMorph) {
                 this.contentsMorph.expand(new Point(200, 150));
