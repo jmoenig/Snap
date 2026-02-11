@@ -162,7 +162,7 @@ CustomHatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-January-28';
+modules.blocks = '2026-February-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2874,6 +2874,29 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     } else if (sf) {
         bubble.keepWithin(sf);
     }
+
+    // let the bubble follow the anchor (e.g. when scrolling the scripts pane)
+    // but keep it within its context area and prevent it from disappearing
+    // out of view
+
+    bubble.step = () => {
+        var pos, area;
+
+        if (ide && (ide.currentSprite !== target)) {
+            pos = anchor.center();
+        } else {
+            pos = anchor.rightCenter().subtract(new Point(0, bubble.height()));
+        }
+
+        if (anchor instanceof SpriteIconMorph) {
+            area = ide.corral;
+        } else {
+            area = (sf ? sf : wrrld);
+        }
+
+        bubble.setPosition(pos);
+        bubble.keepWithin(area);
+    };
 };
 
 SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {

@@ -64,6 +64,7 @@
     * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
     * changed the evaluation semantics of the "let" block in the variables declaration extension to enable reuse of previously declared variables inside the same block
     * added a custom visualization for the neural network data type to the neural networks extensions
+    * keep result balloons "attached" to their originating block / script when scrolling
 * **Notable Fixes:**
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
@@ -79,6 +80,7 @@
 ### 2026-02-11
 * extensions: new "cst_morph(cst)" extension for specifying custom ADT visualizations
 * added a custom visualization for the neural network data type to the neural networks extensions
+* blocks: keep result balloons "attached" to their originating block / script when scrolling
 
 ### 2026-02-10
 * threads, objects: made dynamic views for ADTs use Snap's process instead of JS-invoke()
