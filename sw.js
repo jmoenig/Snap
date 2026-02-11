@@ -85,6 +85,7 @@ var snapVersion = '12-dev',
 
         'libraries/animation_module.xml',
         'libraries/apl.xml',
+        'libraries/arcs_module.xml',
         'libraries/audioComp_module.xml',
         'libraries/bar-charts.xml',
 
@@ -143,7 +144,6 @@ var snapVersion = '12-dev',
         'libraries/list-utilities.xml',
         'libraries/localstorage_module.xml',
         'libraries/tiles_module.xml',
-        'libraries/arcs_module.xml',
         'libraries/make-variables.xml',
         'libraries/maps_module.xml',
         'libraries/menu_module.xml',
@@ -186,6 +186,7 @@ var snapVersion = '12-dev',
         'libraries/SciSnap3Extensions.js',
         // 'libraries/SciSnap3Costumedata.js', // commented out b/c it crashes Chrome
 
+        'libraries/shapes_module.xml',
         'libraries/sprite_api_module.xml',
 
         // TuneScope

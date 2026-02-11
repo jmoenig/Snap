@@ -3274,6 +3274,40 @@
     }
   },
   {
+    "fileName": "shapes_module.xml",
+    "name": "Shapes",
+    "description": "Create, combine, transform and display geometric shapes for a functions-first approach to teaching programming. Inspired by Pyret's image library, see: https://pyret.org/docs/horizon/image.html - under development",
+    "searchData": [
+      "draw  _",
+      "costume from _",
+      "square _ _",
+      "circle _ _",
+      "rectangle w: _ h: _ _",
+      "ellipse w: _ h: _ _",
+      "path _",
+      "rotate _ by _",
+      "scale _ by _",
+      "move _ by _",
+      "beside _ _ _ align y: _",
+      "above _ _ _ align x: _",
+      "overlay _ _ _ align x: _ y: _",
+      "layer _",
+      "left of _",
+      "right of _",
+      "bottom of _",
+      "top of _",
+      "center x of _",
+      "center y of _",
+      "centroid x of _",
+      "centroid y of _",
+      "width of _",
+      "height of _"
+    ],
+    "categories": [
+      "tables"
+    ]
+  },
+  {
     "fileName": "~",
     "name": "~"
   },

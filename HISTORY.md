@@ -31,6 +31,7 @@
     * Edge AI Computer Vision extension - thank you, Bernat!
     * Abstract Data Types (ADT) - experimental - include a ring entry named underscore + morph in data
     * new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
+    * new "Shapes" extension for working with geometrical figures, modeled after Pyret's images. Under construction
     * new "blocks" and "speaker" symbols
     * new "hide empty categories" setting
     * support for dynamic dropdown menus and read-only settings in variadic input slots
@@ -81,6 +82,7 @@
 * extensions: new "cst_morph(cst)" extension for specifying custom ADT visualizations
 * added a custom visualization for the neural network data type to the neural networks extensions
 * blocks: keep result balloons "attached" to their originating block / script when scrolling
+* new "Shapes" extension for working with geometrical figures, modeled after Pyret's images. Under construction
 
 ### 2026-02-10
 * threads, objects: made dynamic views for ADTs use Snap's process instead of JS-invoke()
