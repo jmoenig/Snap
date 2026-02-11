@@ -32,11 +32,11 @@ IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke, isNil,
 BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, TableMorph,
-TableFrameMorph, console*/
+TableFrameMorph, console, Morph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-February-03';
+modules.extensions = '2026-February-11';
 
 // Global stuff
 
@@ -1379,6 +1379,21 @@ SnapExtensions.primitives.set(
         cst.embeddedData = data || null;
         cst.version = Date.now();
         ide.recordUnsavedChanges();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'cst_morph(cst)',
+    function (costume, proc) {
+        var m = new Morph(),
+            img;
+        proc.assertType(costume, 'costume');
+        img = costume.contents;
+        m.isCachingImage = true;
+        m.bounds.setWidth(img.width);
+        m.bounds.setHeight(img.height);
+        m.cachedImage = img;
+        return m;
     }
 );
 
