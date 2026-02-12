@@ -78,6 +78,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2026-02-12
+* optimized the experimental "Shapes" library
+
 ### 2026-02-11
 * extensions: new "cst_morph(cst)" extension for specifying custom ADT visualizations
 * added a custom visualization for the neural network data type to the neural networks extensions
