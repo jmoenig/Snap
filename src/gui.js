@@ -11706,6 +11706,7 @@ SpriteIconMorph.prototype.userMenu = function () {
     }
     if (!(this.object instanceof SpriteMorph)) {return null; }
     menu.addItem("show", 'showSpriteOnStage');
+    menu.addItem("rename", 'renameSprite')
     menu.addLine();
     menu.addItem("duplicate", 'duplicateSprite');
     if (StageMorph.prototype.enableInheritance) {
@@ -11779,6 +11780,14 @@ SpriteIconMorph.prototype.duplicateSprite = function () {
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
         ide.duplicateSprite(this.object);
+    }
+};
+
+SpriteIconMorph.prototype.renameSprite = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.selectSprite(this.object);
+        ide.spriteBar.nameField.edit();
     }
 };
 
