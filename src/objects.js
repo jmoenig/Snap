@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-February-10';
+modules.objects = '2026-February-12';
 
 var SpriteMorph;
 var StageMorph;
@@ -15100,42 +15100,12 @@ CellMorph.prototype.fixLayout = function (justMe) {
 
 CellMorph.prototype.createContents = function () {
     // re-build my contents
-    var txt,
-        img,
-        myself = this,
-        fontSize = SyntaxElementMorph.prototype.fontSize,
+    var fontSize = SyntaxElementMorph.prototype.fontSize,
         isSameList = this.contentsMorph instanceof ListWatcherMorph
             && (this.contentsMorph.list === this.contents),
         isSameTable = this.contentsMorph instanceof TableFrameMorph
             && (this.contentsMorph.tableMorph.table === this.contents ||
-                this.contents.isADT()),
-        draggable = this.parentThatIsA(StageMorph)?.tutorialMode ?
-            !this.parentThatIsA(StageMorph).tutorialMode.disableDraggingData
-                : !SpriteMorph.prototype.disableDraggingData,
-        setupList = () => {
-            if (this.contents.isTable()) {
-                this.contentsMorph = new TableFrameMorph(
-                    new TableMorph(this.contents)
-                );
-            } else {
-                if (this.isCircular()) {
-                    this.contentsMorph = new TextMorph(
-                        '(...)',
-                        fontSize,
-                        null,
-                        false, // bold
-                        true, // italic
-                        'center'
-                    );
-                    this.contentsMorph.setColor(WHITE);
-                } else {
-                    this.contentsMorph = new ListWatcherMorph(
-                        this.contents,
-                        this
-                    );
-                }
-            }
-        };
+                (this.contents?.isADT && this.contents.isADT()));
 
     if (this.isBig) {
         fontSize = fontSize * 1.5;
@@ -15147,191 +15117,231 @@ CellMorph.prototype.createContents = function () {
     }
 
     if (!isSameList && !isSameTable) {
-        if (this.contents instanceof Morph) {
-            if (isSnapObject(this.contents)) {
-                img = this.contents.thumbnail(new Point(40, 40));
-            } else {
-                img = this.contents.fullImage();
-            }
-            this.contentsMorph = new Morph();
-            this.contentsMorph.isCachingImage = true;
-            this.contentsMorph.bounds.setWidth(img.width);
-            this.contentsMorph.bounds.setHeight(img.height);
-            this.contentsMorph.cachedImage = img;
-            this.version = this.contents.version;
-        } else if (isString(this.contents)) {
-            txt  = this.contents.length > 500 ?
-                    this.contents.slice(0, 500) + '...' : this.contents;
-            this.contentsMorph = new TextMorph(
-                txt,
-                fontSize,
-                null,
-                true,
-                false,
-                'left' // was formerly 'center', reverted b/c of code-mapping
-            );
-            if (this.isEditable) {
-                this.contentsMorph.isEditable = true;
-                this.contentsMorph.enableSelecting();
-            }
-            this.contentsMorph.setColor(WHITE);
-        } else if (typeof this.contents === 'boolean') {
-            img = SpriteMorph.prototype.booleanMorph.call(
-                null,
-                this.contents
-            ).fullImage();
-            this.contentsMorph = new Morph();
-            this.contentsMorph.isCachingImage = true;
-            this.contentsMorph.bounds.setWidth(img.width);
-            this.contentsMorph.bounds.setHeight(img.height);
-            this.contentsMorph.cachedImage = img;
-        } else if (this.contents instanceof HTMLCanvasElement) {
-            img = this.contents;
-            this.contentsMorph = new Morph();
-            this.contentsMorph.isCachingImage = true;
-            this.contentsMorph.bounds.setWidth(img.width);
-            this.contentsMorph.bounds.setHeight(img.height);
-            this.contentsMorph.cachedImage = img;
-        } else if (this.contents instanceof Context) {
-            img = this.contents.image();
-            this.contentsMorph = new Morph();
-            this.contentsMorph.isCachingImage = true;
-            this.contentsMorph.bounds.setWidth(img.width);
-            this.contentsMorph.bounds.setHeight(img.height);
-            this.contentsMorph.cachedImage = img;
-            this.version = this.contents.version;
-
-            // support blocks to be dragged out of watchers:
-            this.contentsMorph.isDraggable = draggable;
-            this.contentsMorph.selectForEdit = function () {
-                var script = myself.contents.toUserBlock(),
-                    prepare = script.prepareToBeGrabbed,
-                    ide = this.parentThatIsA(IDE_Morph) ||
-                        this.world().childThatIsA(IDE_Morph);
-
-                script.prepareToBeGrabbed = function (hand) {
-                    prepare.call(this, hand);
-                    hand.grabOrigin = {
-                        origin: ide.palette,
-                        position: ide.palette.center()
-                    };
-                    this.prepareToBeGrabbed = prepare;
-                };
-
-                if (ide.isAppMode) {return; }
-                script.setPosition(this.position());
-                return script;
-            };
-        } else if (this.contents instanceof Costume) {
-            img = this.contents.thumbnail(new Point(40, 40));
-            this.contentsMorph = new Morph();
-            this.contentsMorph.isCachingImage = true;
-            this.contentsMorph.bounds.setWidth(img.width);
-            this.contentsMorph.bounds.setHeight(img.height);
-            this.contentsMorph.cachedImage = img;
-
-            // support costumes to be dragged out of watchers:
-            this.contentsMorph.isDraggable = draggable;
-            this.contentsMorph.selectForEdit = function () {
-                var cst = myself.contents.copy(),
-                    icon,
-                    prepare,
-                    ide = this.parentThatIsA(IDE_Morph)||
-                        this.world().childThatIsA(IDE_Morph);
-
-                cst.name = ide.currentSprite.newCostumeName(cst.name);
-                icon = new CostumeIconMorph(cst);
-                prepare = icon.prepareToBeGrabbed;
-
-                icon.prepareToBeGrabbed = function (hand) {
-                    hand.grabOrigin = {
-                        origin: ide.palette,
-                        position: ide.palette.center()
-                    };
-                    this.prepareToBeGrabbed = prepare;
-                };
-
-                if (ide.isAppMode) {return; }
-                icon.setCenter(this.center());
-                return icon;
-            };
-        } else if (this.contents instanceof Sound) {
-            this.contentsMorph = new SymbolMorph('notes', 30);
-
-            // support sounds to be dragged out of watchers:
-            this.contentsMorph.isDraggable = draggable;
-            this.contentsMorph.selectForEdit = function () {
-                var snd = myself.contents.copy(),
-                    icon,
-                    prepare,
-                    ide = this.parentThatIsA(IDE_Morph)||
-                        this.world().childThatIsA(IDE_Morph);
-
-                snd.name = ide.currentSprite.newCostumeName(snd.name);
-                icon = new SoundIconMorph(snd);
-                prepare = icon.prepareToBeGrabbed;
-
-                icon.prepareToBeGrabbed = function (hand) {
-                    hand.grabOrigin = {
-                        origin: ide.palette,
-                        position: ide.palette.center()
-                    };
-                    this.prepareToBeGrabbed = prepare;
-                };
-
-                if (ide.isAppMode) {return; }
-                icon.setCenter(this.center());
-                return icon;
-            };
-        } else if (this.contents instanceof List) {
-            if (this.contents.isADT()) {
-                // attempt to render the '_morph' method for a custom view.
-                // since in this situation we don't have a full Snap! process
-                // this will fail in most cases (unless there is a JS extension)
-                // as a fallback render the ADT in table form
-                try {
-                    this.contentsMorph = invoke(
-                        this.contents.lookup('_morph'),
-                        new List([this.contents]),
-                        this.contents, // support "this(object)"
-                        500
-                    );
-                } catch {
-                    setupList();
-                }
-            } else {
-                setupList();
-            }
-            if (this.contentsMorph instanceof TableFrameMorph) {
-                this.contentsMorph.expand(new Point(200, 150));
-            }
-            this.contentsMorph.isDraggable = false;
-            if (!draggable) {
-                this.contentsMorph.forAllChildren(morph =>
-                    morph.isDraggable = false);
-            }
-        } else if (this.contents instanceof Color) {
-            this.contentsMorph = SpriteMorph.prototype.colorSwatch(
-                this.contents,
-                fontSize * 1.4
-            );
-        } else {
-            this.contentsMorph = new TextMorph(
-                display(this.contents),
-                fontSize,
-                null,
-                true,
-                false,
-                'center'
-            );
-            if (this.isEditable) {
-                this.contentsMorph.isEditable = true;
-                this.contentsMorph.enableSelecting();
-            }
-            this.contentsMorph.setColor(WHITE);
-        }
+        this.contentsMorph = this.dataAsMorph(this.contents);
         this.add(this.contentsMorph);
     }
+};
+
+CellMorph.prototype.dataAsMorph = function (data) {
+    var txt,
+        img,
+        myself = this,
+        fontSize = SyntaxElementMorph.prototype.fontSize,
+        draggable = this.parentThatIsA(StageMorph)?.tutorialMode ?
+            !this.parentThatIsA(StageMorph).tutorialMode.disableDraggingData
+                : !SpriteMorph.prototype.disableDraggingData,
+        contents,
+        setupList = () => {
+            if (data.isTable()) {
+                contents = new TableFrameMorph(
+                    new TableMorph(data)
+                );
+            } else {
+                if (this.isCircular()) {
+                    contents = new TextMorph(
+                        '(...)',
+                        fontSize,
+                        null,
+                        false, // bold
+                        true, // italic
+                        'center'
+                    );
+                    contents.setColor(WHITE);
+                } else {
+                    contents = new ListWatcherMorph(
+                        data,
+                        this
+                    );
+                }
+            }
+        };
+
+    if (data instanceof Morph) {
+        if (isSnapObject(data)) {
+            img = data.thumbnail(new Point(40, 40));
+        } else {
+            img = data.fullImage();
+        }
+        contents = new Morph();
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
+        this.version = data.version;
+    } else if (isString(data)) {
+        txt  = data.length > 500 ?
+                data.slice(0, 500) + '...' : data;
+        contents = new TextMorph(
+            txt,
+            fontSize,
+            null,
+            true,
+            false,
+            'left' // was formerly 'center', reverted b/c of code-mapping
+        );
+        if (this.isEditable) {
+            contents.isEditable = true;
+            contents.enableSelecting();
+        }
+        contents.setColor(WHITE);
+    } else if (typeof data === 'boolean') {
+        img = SpriteMorph.prototype.booleanMorph.call(
+            null,
+            data
+        ).fullImage();
+        contents = new Morph();
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
+    } else if (data instanceof HTMLCanvasElement) {
+        img = data;
+        contents = new Morph();
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
+    } else if (data instanceof Context) {
+        img = data.image();
+        contents = new Morph();
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
+        this.version = data.version;
+
+        // support blocks to be dragged out of watchers:
+        contents.isDraggable = draggable;
+        contents.selectForEdit = function () {
+            var script = myself.contents.toUserBlock(),
+                prepare = script.prepareToBeGrabbed,
+                ide = this.parentThatIsA(IDE_Morph) ||
+                    this.world().childThatIsA(IDE_Morph);
+
+            script.prepareToBeGrabbed = function (hand) {
+                prepare.call(this, hand);
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            script.setPosition(this.position());
+            return script;
+        };
+    } else if (data instanceof Costume) {
+        img = data.thumbnail(new Point(40, 40));
+        contents = new Morph();
+        contents.isCachingImage = true;
+        contents.bounds.setWidth(img.width);
+        contents.bounds.setHeight(img.height);
+        contents.cachedImage = img;
+
+        // support costumes to be dragged out of watchers:
+        contents.isDraggable = draggable;
+        contents.selectForEdit = function () {
+            var cst = myself.contents.copy(),
+                icon,
+                prepare,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            cst.name = ide.currentSprite.newCostumeName(cst.name);
+            icon = new CostumeIconMorph(cst);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            icon.setCenter(this.center());
+            return icon;
+        };
+    } else if (data instanceof Sound) {
+        contents = new SymbolMorph('notes', 30);
+
+        // support sounds to be dragged out of watchers:
+        contents.isDraggable = draggable;
+        contents.selectForEdit = function () {
+            var snd = myself.contents.copy(),
+                icon,
+                prepare,
+                ide = this.parentThatIsA(IDE_Morph)||
+                    this.world().childThatIsA(IDE_Morph);
+
+            snd.name = ide.currentSprite.newCostumeName(snd.name);
+            icon = new SoundIconMorph(snd);
+            prepare = icon.prepareToBeGrabbed;
+
+            icon.prepareToBeGrabbed = function (hand) {
+                hand.grabOrigin = {
+                    origin: ide.palette,
+                    position: ide.palette.center()
+                };
+                this.prepareToBeGrabbed = prepare;
+            };
+
+            if (ide.isAppMode) {return; }
+            icon.setCenter(this.center());
+            return icon;
+        };
+    } else if (data instanceof List) {
+        if (data.isADT()) {
+            // attempt to render the '_morph' method for a custom view.
+            // since in this situation we don't have a full Snap! process
+            // this will fail in most cases (unless there is a JS extension)
+            // as a fallback render the ADT in table form
+            try {
+                return this.dataAsMorph(
+                    invoke(
+                        data.lookup('_morph'),
+                        new List([data]),
+                        data, // support "this(object)"
+                        500
+                    )
+                );
+            } catch {
+                setupList();
+            }
+        } else {
+            setupList();
+        }
+        if (contents instanceof TableFrameMorph) {
+            contents.expand(new Point(200, 150));
+        }
+        contents.isDraggable = false;
+        if (!draggable) {
+            contents.forAllChildren(morph =>
+                morph.isDraggable = false);
+        }
+    } else if (data instanceof Color) {
+        contents = SpriteMorph.prototype.colorSwatch(
+            data,
+            fontSize * 1.4
+        );
+    } else {
+        contents = new TextMorph(
+            display(data),
+            fontSize,
+            null,
+            true,
+            false,
+            'center'
+        );
+        if (this.isEditable) {
+            contents.isEditable = true;
+            contents.enableSelecting();
+        }
+        contents.setColor(WHITE);
+    }
+    return contents;
 };
 
 // CellMorph drawing:
