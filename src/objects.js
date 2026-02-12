@@ -15299,14 +15299,15 @@ CellMorph.prototype.dataAsMorph = function (data) {
             // this will fail in most cases (unless there is a JS extension)
             // as a fallback render the ADT in table form
             try {
-                return this.dataAsMorph(
-                    invoke(
-                        data.lookup('_morph'),
-                        new List([data]),
-                        data, // support "this(object)"
-                        500
-                    )
+                contents = invoke(
+                    data.lookup('_morph'),
+                    new List([data]),
+                    data, // support "this(object)"
+                    500
                 );
+                if (!(contents instanceof Morph)) {
+                    return this.dataAsMorph(contents);
+                }
             } catch {
                 setupList();
             }
