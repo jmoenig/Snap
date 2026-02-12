@@ -162,7 +162,7 @@ CustomHatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-February-11';
+modules.blocks = '2026-February-12';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2885,7 +2885,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         if (ide && (ide.currentSprite !== target)) {
             pos = anchor.center();
         } else {
-            pos = anchor.rightCenter().subtract(new Point(0, bubble.height()));
+            pos = anchor.rightCenter().subtract(new Point(-2, bubble.height()));
         }
 
         if (anchor instanceof SpriteIconMorph) {

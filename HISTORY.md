@@ -82,6 +82,7 @@
 * optimized the experimental "Shapes" library
 * improved rendering of neural networks ADT-view
 * objects: refactored watcher-cell readout creation for ADTs
+* blocks: tweaked block result balloon dynamic positioning
 
 ### 2026-02-11
 * extensions: new "cst_morph(cst)" extension for specifying custom ADT visualizations
