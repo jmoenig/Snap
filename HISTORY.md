@@ -80,6 +80,7 @@
 
 ### 2026-02-12
 * optimized the experimental "Shapes" library
+* improved rendering of neural networks ADT-view
 
 ### 2026-02-11
 * extensions: new "cst_morph(cst)" extension for specifying custom ADT visualizations
