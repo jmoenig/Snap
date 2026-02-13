@@ -1,6 +1,6 @@
 /*global self, caches*/
 /*jshint esversion: 6*/
-var snapVersion = '11.1-dev',
+var snapVersion = '12-dev',
     cacheName = `snap-pwa-${snapVersion}`,
     filesToCache = [
         'snap.html',
@@ -42,6 +42,7 @@ var snapVersion = '11.1-dev',
         'locale/lang-de.js',
         'locale/lang-dk.js',
         'locale/lang-el.js',
+        'locale/lang-en_BR.js',
         'locale/lang-eo.js',
         'locale/lang-es.js',
         'locale/lang-et.js',
@@ -78,12 +79,14 @@ var snapVersion = '11.1-dev',
         'locale/lang-ua.js',
         'locale/lang-zh_CN.js',
         'locale/lang-zh_TW.js',
+        'locale/lang-vi.js',
 
         //libraries
         'libraries/LIBRARIES.json',
 
         'libraries/animation_module.xml',
         'libraries/apl.xml',
+        'libraries/arcs_module.xml',
         'libraries/audioComp_module.xml',
         'libraries/bar-charts.xml',
 
@@ -123,7 +126,14 @@ var snapVersion = '11.1-dev',
         'libraries/colors_module.xml',
         'libraries/continuations_module.xml',
         'libraries/crayons.xml',
+        'libraries/drawPath_module.xml',
         'libraries/Eisenbergification.xml',
+
+        // Edge
+        'libraries/edge AI.xml',
+        'libraries/edge/init.js',
+        'libraries/edge/edge.js',
+
         'libraries/embroidery_module.xml',
         'libraries/events_module.xml',
         'libraries/frequency_distribution_module.xml',
@@ -135,7 +145,6 @@ var snapVersion = '11.1-dev',
         'libraries/list-utilities.xml',
         'libraries/localstorage_module.xml',
         'libraries/tiles_module.xml',
-        'libraries/arcs_module.xml',
         'libraries/make-variables.xml',
         'libraries/maps_module.xml',
         'libraries/menu_module.xml',
@@ -178,6 +187,7 @@ var snapVersion = '11.1-dev',
         'libraries/SciSnap3Extensions.js',
         // 'libraries/SciSnap3Costumedata.js', // commented out b/c it crashes Chrome
 
+        'libraries/shapes_module.xml',
         'libraries/sprite_api_module.xml',
 
         // TuneScope
@@ -235,8 +245,10 @@ var snapVersion = '11.1-dev',
         'libraries/speech_module.xml',
         'libraries/stream-tools.xml',
         'libraries/strings.xml',
+        'libraries/tables_module.xml',
         'libraries/textCostumes_module.xml',
         'libraries/textformat_module.xml',
+        'libraries/tutorial_module.xml',
         'libraries/try-catch.xml',
         'libraries/variable_declaration_module.xml',
 

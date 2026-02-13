@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2025-October-23';
+modules.threads = '2026-February-10';
 
 var ThreadManager;
 var Process;
@@ -257,7 +257,8 @@ ThreadManager.prototype.startProcess = function (
     atomic, // special option used (only) for "onStop" scripts
     variables, // optional variable frame, used for WHEN hats
     noHalo,
-    genericCondition
+    genericCondition,
+    silentVars // for dynamic, user-scripted widgets, ignores missing variables
 ) {
     var top = block.topBlock(),
         active = this.findProcess(top, receiver),
@@ -275,6 +276,7 @@ ThreadManager.prototype.startProcess = function (
     newProc.isClicked = isClicked || false;
     newProc.isAtomic = atomic || false;
     newProc.isGenericCondition = genericCondition || false;
+    newProc.isSilentVar = silentVars || false;
 
     // in case an optional variable frame has been passed,
     // copy it into the new outer context.
@@ -467,15 +469,25 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                     proc.onComplete(result);
                 } else {
                     if (result instanceof List) {
-                        proc.topBlock.showBubble(
-                            result.isTable() ?
-                                    new TableFrameMorph(
-                                        new TableMorph(result, 10)
-                                    )
-                                    : new ListWatcherMorph(result),
-                            proc.exportResult,
-                            proc.receiver
-                        );
+                        if (result.isADT()) {
+                            // compute the ADT's dynamic view
+                            proc.pushContext();
+                            proc.homeContext.inputs.pop();
+                            proc.evaluate(
+                                proc.reportListItem('_morph', result)
+                            );
+                            remaining.push(proc);
+                        } else {
+                            proc.topBlock.showBubble(
+                                result.isTable() ?
+                                        new TableFrameMorph(
+                                            new TableMorph(result)
+                                        )
+                                        : new ListWatcherMorph(result),
+                                proc.exportResult,
+                                proc.receiver
+                            );
+                        }
                     } else {
                         proc.topBlock.showBubble(
                             result,
@@ -664,7 +676,8 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.canBroadcast = true; // used to control "when I am stopped"
     this.isAnimated = false; // temporary - used to control yields for animation
     this.isGenericCondition = false; // used for displaying halos
-    this.hasFiredGenericCondition = false; // ised for displaying halos
+    this.hasFiredGenericCondition = false; // used for displaying halos
+    this.isSilentVar = false; // silences missing variable references in widgets
 
     if (topBlock) {
         this.homeContext.variables.parentFrame =
@@ -1496,6 +1509,13 @@ Process.prototype.evaluate = function (
             return;
         }
         return this.hyperEval(context, args);
+    }
+    if (context instanceof BlockMorph) {
+        return this.evaluate(
+            context.fullCopy().reify(),
+            new List(),
+            context instanceof CommandBlockMorph
+        );
     }
     if (!(context instanceof Context)) {
         if (isCommand) {
@@ -3843,9 +3863,9 @@ Process.prototype.reportCombine = function (list, reporter) {
                 this.returnValueToParentContext(
                     list.length() ?
                         list.at(1)
-                        : (reporter.expression.selector === 'reportJoinWords' ?
-                            ''
-                            : 0)
+                        : this.emptyListValueForCombine(
+                            reporter.expression.selector
+                        )
                 );
                 return;
             }
@@ -3885,9 +3905,9 @@ Process.prototype.reportCombine = function (list, reporter) {
                 this.returnValueToParentContext(
                     list.length() ?
                         list.at(1)
-                        : (reporter.expression.selector === 'reportJoinWords' ?
-                            ''
-                            : 0)
+                        : this.emptyListValueForCombine(
+                            reporter.expression.selector
+                        )
                 );
                 return;
             }
@@ -3994,6 +4014,23 @@ Process.prototype.canRunOptimizedForCombine = function (aContext) {
     );
 };
 
+Process.prototype.emptyListValueForCombine = function (selector) {
+    switch (selector) {
+    case 'reportJoinWords':
+        return '';
+    case 'reportVariadicAnd':
+        return true;
+    case 'reportVariadicOr':
+        return false;
+    case 'reportConcatenatedLists':
+        return new List();
+    case 'reportCrossproduct':
+        return new List([new List()]);
+    default:
+        return 0;
+    }
+};
+
 Process.prototype.reportPipe = function (value, reporterList) {
     // Pipe - answer an aggregation of channeling an initial value
     // through a sequence of monadic functions
@@ -4069,7 +4106,26 @@ Process.prototype.doGlide = function (secs, endX, endY) {
     this.pushContext();
 };
 
+// Process SAY and THINK primitives
+
+Process.prototype.bubble = function (data) {
+    if (data instanceof List && data.isADT()) {
+        return this.dynamicViewFor(data);
+    }
+    this.blockReceiver().bubble(data);
+};
+
+Process.prototype.doThink = function (data) {
+    if (data instanceof List && data.isADT()) {
+        return this.dynamicViewFor(data);
+    }
+    this.blockReceiver().doThink(data);
+};
+
 Process.prototype.doSayFor = function (data, secs) {
+    if (data instanceof List && data.isADT()) {
+        return this.dynamicViewFor(data);
+    }
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.blockReceiver().bubble(data);
@@ -4083,6 +4139,9 @@ Process.prototype.doSayFor = function (data, secs) {
 };
 
 Process.prototype.doThinkFor = function (data, secs) {
+    if (data instanceof List && data.isADT()) {
+        return this.dynamicViewFor(data);
+    }
     if (!this.context.startTime) {
         this.context.startTime = Date.now();
         this.blockReceiver().doThink(data);
@@ -4093,6 +4152,13 @@ Process.prototype.doThinkFor = function (data, secs) {
     }
     this.pushContext('doYield');
     this.pushContext();
+};
+
+Process.prototype.dynamicViewFor = function (data) {
+    // private - compute the dynamic view for an ADT
+    this.context.inputs = [];
+    this.pushContext();
+    this.evaluate(this.reportListItem('_morph', data));
 };
 
 Process.prototype.blockReceiver = function () {
@@ -6542,6 +6608,20 @@ Process.prototype.doCutFrom = function (name) {
     this.blitOn(name, 'destination-out');
 };
 
+Process.prototype.doDrawOn = function (mode, surface) {
+    var rcvr = this.blockReceiver(),
+        mask = this.inputOption(mode),
+        dest = this.inputOption(surface),
+        tools = ['paint', 'erase', 'overdraw'];
+    rcvr.sheet = (dest === 'pen trails' ? null
+        : this.reportObject(dest) || null);
+    if (rcvr.sheet === rcvr || rcvr.sheet instanceof StageMorph) {
+        // drawing on the stage's costume is disabled for now.
+        rcvr.sheet = null;
+    }
+    rcvr.tool = contains(tools, mask) ? mask || null : null;
+};
+
 Process.prototype.blitOn = function (name, mask, thisObj, stage) {
     // allow for lists of sprites and also check for temparary clones,
     // as in Scratch 2.0,
@@ -8338,7 +8418,7 @@ Process.prototype.returnValueToParentContext = function (value) {
             if (value instanceof List) {
                 anchor.showBubble(
                     value.isTable() ?
-                        new TableFrameMorph(new TableMorph(value, 10))
+                        new TableFrameMorph(new TableMorph(value))
                         : new ListWatcherMorph(value),
                     this.exportResult,
                     this.receiver
@@ -8531,6 +8611,8 @@ Process.prototype.reportBasicBlockAttribute = function (attribute, block) {
         return expr ? !!expr.isCustomBlock : false;
     case 'global?':
         return (expr && expr.isCustomBlock) ? !!expr.isGlobal : true;
+    case 'expression':
+        return expr instanceof BlockMorph ? expr.fullCopy() : '';
     case 'type':
         return ['command', 'reporter', 'predicate', 'hat'].indexOf(
             this.reportTypeOf(block)
@@ -8978,7 +9060,12 @@ Process.prototype.slotType = function (spec) {
         '18':           18,
         'elseif':       18, // spec
         // mnemonics:
-        'conditionals': 18
+        'conditionals': 18,
+
+        '19':           19,
+        'parameter':    19, // spec
+        // mnemonics:
+        'parm':         19
 
     }[key];
     if (num === undefined) {
@@ -9007,7 +9094,7 @@ Process.prototype.slotSpec = function (num) {
 
     spec = ['s', 'n', 'b', 'l', 'mlt', 'cs', 'cmdRing', 'repRing', 'predRing',
     'anyUE', 'boolUE', 'obj', 'upvar', 'clr', 'scriptVars', 'loop', 'receive',
-    'send', 'elseif'][id];
+    'send', 'elseif', 'parameter'][id];
 
     if (spec === undefined) {
         return null;
@@ -9417,7 +9504,7 @@ Process.prototype.doSetBlockAttribute = function (attribute, block, val) {
         template.refreshDefaults();
     }
     ide.flushPaletteCache();
-    ide.categories.refreshEmpty();
+    ide.refreshEmptyCategories();
     ide.refreshPalette();
     rcvr.recordUserEdit(
         'scripts',
@@ -9493,7 +9580,7 @@ Process.prototype.doDefineBlock = function (upvar, label, context) {
 
     // update the IDE
     ide.flushPaletteCache();
-    ide.categories.refreshEmpty();
+    ide.refreshEmptyCategories();
     ide.refreshPalette();
     rcvr.recordUserEdit(
         'palette',
@@ -9601,7 +9688,7 @@ Process.prototype.doDeleteBlock = function (context) {
 
     // update the IDE
     ide.flushPaletteCache();
-    ide.categories.refreshEmpty();
+    ide.refreshEmptyCategories();
     ide.refreshPalette();
     rcvr.recordUserEdit(
         'palette',
@@ -10554,6 +10641,11 @@ VariableFrame.prototype.getVar = function (name, proc) {
     if (typeof name === 'number') {
         // empty input with a Binding-ID called without an argument
         return '';
+    }
+    if (proc?.isSilentVar) {
+        // don't throw an error inside a user-scripted dynamic dropdown etc.
+        // instead return an empty list, because this is the basis for ADTs
+        return new List();
     }
     this.variableError(name);
 };

@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -30,12 +30,13 @@
 /*global modules, List, StageMorph, Costume, SpeechSynthesisUtterance, Sound,
 IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
-SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke,
-BigUint64Array, DeviceOrientationEvent, console*/
+SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke, isNil,
+BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, TableMorph,
+TableFrameMorph, console, Morph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2025-October-24';
+modules.extensions = '2026-February-13';
 
 // Global stuff
 
@@ -363,6 +364,13 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'snap_extensionexists(prim)',
+    function (prim) {
+        return !isNil(SnapExtensions.primitives.get(prim));
+    }
+);
+
 // errors & exceptions (err_):
 
 SnapExtensions.primitives.set(
@@ -629,6 +637,144 @@ SnapExtensions.primitives.set(
     function (data, delta, proc) {
         proc.assertType(data, 'list');
         proc.hyperChangeBy(data, delta);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'dta_export(data, name, type)',
+    function (data, mime, name, proc) {
+        var ide = this.parentThatIsA(IDE_Morph),
+            type = mime.toString() || 'text/txt'; // also for 'text/csv' etc.
+        name = name || localize('data');
+        name = name.toString();
+        ide.saveFileAs(data, type, name);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'dta_import(raw?)',
+    function (raw, proc) {
+        // raw is a Boolean flag selecting to keep the data unparsed
+        var ide = this.parentThatIsA(IDE_Morph),
+            wrld = ide.world(),
+            acc = proc.context.accumulator,
+            inp;
+
+        function userImport() {
+
+            function txtOnlyMsg(ftype, anyway) {
+                ide.confirm(
+                    localize(
+                        'Can only import "text" files. ' +
+                            'You selected a file of type "' +
+                            ftype +
+                            '".'
+                    ) + '\n\n' + localize('Open anyway?'),
+                    'Unable to import',
+                    anyway // callback
+                );
+            }
+
+            function readText(aFile) {
+                var frd = new FileReader(),
+                    ext = aFile.name.split('.').pop().toLowerCase();
+
+                function isTextFile(aFile) {
+                    // special cases for Windows
+                    // check the file extension for text-like-ness
+                    return aFile.type.indexOf('text') !== -1 ||
+                        contains(['txt', 'csv', 'xml', 'json', 'tsv'], ext);
+                }
+
+                function isType(aFile, string) {
+                    return aFile.type.indexOf(string) !== -1 ||
+                        (ext === string);
+                }
+
+                frd.onloadend = function (e) {
+                    if (!raw && isType(aFile, 'csv')) {
+                        acc.data = Process.prototype.parseCSV(e.target.result);
+                    } else if (!raw && isType(aFile, 'json')) {
+                        acc.data = Process.prototype.parseJSON(e.target.result);
+                    } else {
+                        acc.data = e.target.result;
+                    }
+                };
+
+                if (raw || isTextFile(aFile)) {
+                    frd.readAsText(aFile);
+                } else {
+                    // show a warning and an option
+                    // letting the user load the file anyway
+                    txtOnlyMsg(
+                        aFile.type,
+                        () => frd.readAsText(aFile)
+                    );
+                }
+            }
+
+            document.body.removeChild(inp);
+            ide.filePicker = null;
+            if (inp.files.length > 0) {
+                readText(inp.files[inp.files.length - 1]);
+            }
+        }
+
+        if (!acc) {
+            acc = proc.context.accumulator = {
+                data: null
+            };
+            if (ide.filePicker) {
+                document.body.removeChild(ide.filePicker);
+                ide.filePicker = null;
+            }
+            inp = document.createElement('input');
+            inp.type = 'file';
+            inp.style.color = "transparent";
+            inp.style.backgroundColor = "transparent";
+            inp.style.border = "none";
+            inp.style.outline = "none";
+            inp.style.position = "absolute";
+            inp.style.top = "0px";
+            inp.style.left = "0px";
+            inp.style.width = wrld.width() + 'px';
+            inp.style.height = wrld.height() + 'px';
+            inp.addEventListener(
+                "change",
+                userImport,
+                false
+            );
+            inp.addEventListener(
+                "cancel",
+                () => {
+                    acc.data = '';
+                    document.body.removeChild(inp);
+                    ide.filePicker = null;
+                },
+                false
+            );
+            document.body.appendChild(inp);
+            ide.filePicker = inp;
+            inp.click();
+        } else if (acc.data !== null) {
+            return acc.data;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
+    }
+);
+
+// Custom Data Types (adt_):
+
+SnapExtensions.primitives.set(
+    'adt_table(data)',
+    function (data, proc) {
+        proc.assertType(data, 'list');
+        return new TableFrameMorph(
+            new TableMorph(
+                data.lookup('cells').asTable(data.lookup('header'))
+            )
+        );
     }
 );
 
@@ -1182,19 +1328,49 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'cst_load(url)',
     function (url, proc) {
-        if (!proc.context.accumulator) {
-            proc.context.accumulator = {
+        if (!url) {
+            return '';
+        }
+
+        proc.assertType(url, 'text');
+
+        let context = proc.context;
+
+        if (!context.accumulator) {
+            context.accumulator = {
                 img: new Image(),
                 cst: null,
+                svg: false,
             };
-            proc.context.accumulator.img.onload = function () {
-                var canvas = newCanvas(new Point(this.width, this.height));
-                canvas.getContext('2d').drawImage(this, 0, 0);
-                proc.context.accumulator.cst = new Costume(canvas);
+            context.accumulator.img.onload = function () {
+                if (context.accumulator.svg) {
+                    context.accumulator.cst = new SVG_Costume(this, 'Costume');
+                } else {
+                    var canvas = newCanvas(new Point(this.width, this.height));
+                    canvas.getContext('2d').drawImage(this, 0, 0);
+                    context.accumulator.cst = new Costume(canvas, 'Costume');
+                }
             };
-            proc.context.accumulator.img.src = url;
-        } else if (proc.context.accumulator.cst) {
-            return proc.context.accumulator.cst;
+            context.accumulator.img.onerror = function () {
+                context.accumulator.cst = '';
+            };
+            fetch(url).then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                if (response.headers.get('content-type') === 'image/svg+xml') {
+                    context.accumulator.svg = true;
+                }
+
+                return response.blob();
+            }).catch(() => {
+                context.accumulator.cst = '';
+            }).then((response) => {
+                context.accumulator.img.src = URL.createObjectURL(response);
+            });
+        } else if (context.accumulator.cst || context.accumulator.cst === '') {
+            return context.accumulator.cst;
         }
         proc.pushContext('doYield');
         proc.pushContext();
@@ -1233,6 +1409,60 @@ SnapExtensions.primitives.set(
         cst.embeddedData = data || null;
         cst.version = Date.now();
         ide.recordUnsavedChanges();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'cst_morph(cst)',
+    function (costume, proc) {
+        var m = new Morph(),
+            img;
+        proc.assertType(costume, 'costume');
+        img = costume.contents;
+        m.isCachingImage = true;
+        m.bounds.setWidth(img.width);
+        m.bounds.setHeight(img.height);
+        m.cachedImage = img;
+        return m;
+    }
+);
+
+// Sounds (snd_):
+
+SnapExtensions.primitives.set(
+    'snd_load(url)',
+    function (url, proc) {
+        if (!url) {
+            return '';
+        }
+        
+        proc.assertType(url, 'text');
+
+        let context = proc.context;
+
+        if (!context.accumulator) {
+            context.accumulator = {
+                snd: null,
+            };
+
+            fetch(url).then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                return response.blob();
+            }).catch(() => {
+                context.accumulator.snd = '';
+            }).then((response) => {
+                context.accumulator.snd = new Sound(
+                    new Audio(URL.createObjectURL(response))
+                );
+            });
+        } else if (context.accumulator.snd || context.accumulator.snd === '') {
+            return context.accumulator.snd;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
     }
 );
 
@@ -1390,7 +1620,7 @@ SnapExtensions.primitives.set(
         this.changeBlockVisibility(context.expression, true);
         ide.flushBlocksCache();
         ide.refreshPalette();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
     }
 );
 
@@ -1402,7 +1632,7 @@ SnapExtensions.primitives.set(
         this.changeBlockVisibility(context.expression, false);
         ide.flushBlocksCache();
         ide.refreshPalette();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
     }
 );
 
@@ -1520,6 +1750,200 @@ SnapExtensions.primitives.set(
     }
 );
 
+// Tutorials & Cloned Scenes (scn_)
+
+SnapExtensions.primitives.set(
+    'scn_exit',
+    function () {
+        var stage = this.parentThatIsA(StageMorph);
+        if (!stage.tutorialMode) {return; }
+        stage.parentThatIsA(DialogBoxMorph).ok();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'scn_scale(num)',
+    function (scale, proc) {
+        var wrld = this.world(),
+            stage = this.parentThatIsA(StageMorph),
+            acc = proc.context.accumulator,
+            dlg, center;
+        if (!stage.tutorialMode) {return; }
+        if (!scale) {return stage.scale; }
+        dlg = stage.parentThatIsA(DialogBoxMorph);
+        center = dlg.center();
+        if (dlg.ide.isAnimating) {
+            if (!proc.context.accumulator) {
+                acc = proc.context.accumulator = {progress: true };
+                wrld.animations.push(new Animation(
+                    s => { // setter
+                        stage.setScale(s);
+                        dlg.fixLayout();
+                        dlg.setCenter(center);
+                        dlg.keepWithin(wrld);
+                        center = dlg.center();
+                    },
+                    () => stage.scale, // getter
+                    Math.max(scale, dlg.minScale) - stage.scale, // delta
+                    300, // duration in ms
+                    t => Math.pow(t, 6), // easing
+                    () => acc.progress = false // null // onComplete
+                ));
+            } else if (!acc.progress) {
+                return;
+            }
+            proc.pushContext('doYield');
+            proc.pushContext();
+        } else {
+            stage.setScale(scale);
+            dlg.fixLayout();
+            dlg.setCenter(center);
+            dlg.keepWithin(wrld);
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'scn_position(pane, x, y)',
+    function (pane, x = 0, y = 0, proc = null) {
+        var stage = this.parentThatIsA(StageMorph),
+            acc = proc.context.accumulator,
+            dlg, rect, area, target;
+
+        if (!stage.tutorialMode) {return; }
+        dlg = stage.parentThatIsA(DialogBoxMorph);
+
+        switch(pane.toLowerCase()) {
+        case 'ide':
+            rect = dlg.ide.bounds;
+            break;
+        case 'stage':
+            rect = dlg.ide.stage.bounds;
+            break;
+        case 'palette':
+            rect = dlg.ide.palette.bounds;
+            break;
+        case 'corral':
+            rect = dlg.ide.corral.bounds;
+            break;
+        case 'scripts':
+            rect = dlg.ide.spriteEditor.bounds;
+            break;
+        default:
+            return;
+        }
+        area = rect.extent().subtract(dlg.extent());
+        target = rect.origin.add(
+            area.multiplyBy(new Point(+x, -(+y)).add(1).divideBy(2))
+        );
+
+        if (dlg.ide.isAnimating) {
+            if (!proc.context.accumulator) {
+                acc = proc.context.accumulator = {progress: true };
+                dlg.glideTo(
+                    target,
+                    300, // msecs
+                    t => Math.pow(t, 6), // easing
+                    () => {
+                        // dlg.keepWithin(wrld);
+                        acc.progress = false;
+                    }
+                );
+            } else if (!acc.progress) {
+                return;
+            }
+            proc.pushContext('doYield');
+            proc.pushContext();
+        } else {
+            dlg.setPosition(target);
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'scn_dimensions(pane)',
+    function (pane) {
+        var stage = this.parentThatIsA(StageMorph),
+            dlg, rect;
+
+        if (!stage.tutorialMode) {return ''; }
+        dlg = stage.parentThatIsA(DialogBoxMorph);
+
+        switch(pane.toLowerCase()) {
+        case 'ide':
+            rect = dlg.ide.bounds;
+            break;
+        case 'stage':
+            rect = dlg.ide.stage.bounds;
+            break;
+        case 'palette':
+            rect = dlg.ide.palette.bounds;
+            break;
+        case 'corral':
+            rect = dlg.ide.corral.bounds;
+            break;
+        case 'scripts':
+            rect = dlg.ide.spriteEditor.bounds;
+            break;
+        case 'tutorial':
+            rect = dlg.bounds;
+            break;
+        default:
+            return;
+        }
+        return new List([rect.left(), rect.top(), rect.right(), rect.bottom()]);
+    }
+);
+
+// Autograding / Code-critique / structural help - mostly for tutorials (meta_)
+
+SnapExtensions.primitives.set(
+    'meta_current(asset)', // sprite, sprites, stage, scripts, category, tab
+    function (choice, proc) {
+        var stage = this.parentThatIsA(StageMorph),
+            dlg, ide;
+        if (!stage.tutorialMode) {return; }
+        dlg = stage.parentThatIsA(DialogBoxMorph);
+        ide = dlg ? dlg.ide : stage.parentThatIsA(IDE_Morph);
+        if (!ide) {return ''; }
+
+        switch (choice) {
+        case 'scripts':
+            return new List(
+                ide.currentSprite.scripts.sortedElements().filter(
+                    each => each instanceof BlockMorph
+                ).map(
+                    each => each.fullCopy().reify()
+                )
+            );
+        case 'sprites':
+            return ide.sprites;
+        case 'stage':
+            return ide.stage;
+        case 'tab':
+            return ide.currentTab;
+        case 'category':
+            return ide.categories.buttons.find(each =>
+                each.state).category;
+        default: // 'sprite'
+            return ide.currentSprite;
+        }
+    }
+);
+
+SnapExtensions.primitives.set(
+    'meta_current_sprite',
+    function (proc) {
+        var stage = this.parentThatIsA(StageMorph),
+            dlg, ide;
+        if (!stage.tutorialMode) {return; }
+        dlg = stage.parentThatIsA(DialogBoxMorph);
+        ide = dlg ? dlg.ide : stage.parentThatIsA(IDE_Morph);
+        if (!ide) {return ''; }
+        return ide.currentSprite;
+    }
+);
+
 // Synchronization
 
 SnapExtensions.primitives.set(
@@ -1530,6 +1954,20 @@ SnapExtensions.primitives.set(
         }
         proc.assertType(xml, 'text');
         this.synchScriptsFrom(xml);
+    }
+);
+
+// Pen - drawing shapes
+
+SnapExtensions.primitives.set(
+    'pen_path(points, [fill, close])',
+    function (points, fill, close, proc) {
+        proc.assertType(this, 'sprite');
+        proc.assertType(points, 'list');
+        if (points.itemsArray().some(any => !proc.isCoordinate(any))) {
+            throw new Error('expecting a list of x/y coordinates');
+        }
+        this.drawPath(points, fill, close);
     }
 );
 
