@@ -95,6 +95,7 @@
 * morphic: tweaked GrayPaletteMorph to allow easer selection of pure black / white colors
 * blocks: added a black-gray-white palette to the bottom of the color picker for color input slots
 * Chinese translation update, thank you, @Ayist14 !
+* disabled santa hats again
 
 ### 2026-02-12
 * optimized the experimental "Shapes" library
