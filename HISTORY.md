@@ -23,52 +23,62 @@
         * new "expression" selector in block-attribute (metaprogramming) reporter
         * enables expressions (unringed blocks) to be CALLed and RUN
         * enabled unringed blocks to be shown in and dragged out of speech and result balloons
-    * drawing and writing on sprites
-        * new "(paint) on (surface)" command primitive in the pen category
+    * graphics & visualization
+        * drawing and writing on sprites: new "(paint) on (surface)" command primitive in the pen category
+        * new "pen_path(points, [fill, close]" extension for drawing precise, filled shapes
+        * new "Draw Paths" library for directly drawing filled or stroked polylines and polygons without moving the pen sprite
+        * new "Shapes" extension for working with geometrical figures, modeled after Pyret's images. Under construction
+    * custom data types (ADTs)
+        * include a ring entry named underscore + morph in data to specify a dynamic view
+        * new "cst_morph(cst)" extension for specifying custom ADT visualizations
+    * domain-specific languages (DSL) support
+        * support for dynamic dropdown menus and read-only settings in variadic input slots
+        * support for variadic upvars in custom blocks
+        * new 'parameter' custom block input type, same as 'upvar', but doesn't add a script variable when evaluated, supports variadicity
+        * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
+        * support for user-scriptable rename-menus in upvars, including variadic ones (a single menu is repeated in each non-unevaluated slot, a list of menu-lists whose first item is an empty list gets repeated across all subslots)
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
-    * Edge AI Computer Vision extension - thank you, Bernat!
-    * Abstract Data Types (ADT) - experimental - include a ring entry named underscore + morph in data
-    * new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
-    * new "Shapes" extension for working with geometrical figures, modeled after Pyret's images. Under construction
-    * new "blocks" and "speaker" symbols
-    * new "hide empty categories" setting
-    * support for dynamic dropdown menus and read-only settings in variadic input slots
-    * support for variadic upvars in custom blocks
-    * new 'parameter' custom block input type, same as 'upvar', but doesn't add a script variable when evaluated, supports variadicity
-    * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
-    * support for user-scriptable rename-menus in upvars, including variadic ones (a single menu is repeated in each non-unevaluated slot, a list of menu-lists whose first item is an empty list gets repeated across all subslots)
-    * new reporter version of "let" in the variables declaration extension
-    * new "pen_path(points, [fill, close]" extension for drawing precise, filled shapes
-    * new "Draw Paths" library for directly drawing filled or stroked polylines and polygons without moving the pen sprite
-    * new "... times ..." reporter in the neural networks library for quantifying results
-    * new "cst_morph(cst)" extension for specifying custom ADT visualizations
-    * added a black-gray-white palette to the bottom of the color picker for color input slots
+    * ui
+        * new "blocks" and "speaker" symbols, icons for the sprite-editor tabs
+        * new "hide empty categories" setting
+        * added a black-gray-white palette to the bottom of the color picker for color input slots
+    * more extensions
+        * Edge AI Computer Vision extension - thank you, Bernat!
+        * new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
+        * new reporter version of "let" in the variables declaration extension
+        * new "... times ..." reporter in the neural networks library for quantifying results
+    * new help screens
+        * new help screens for "combinations" and
+        * "pipe" reporters, thanks, Brian and gang!
 * **Notable Changes:**
-    * added icons to the IDE tabs (scripts, costumes, sounds)
-    * added "plus" signs to the buttons in the corral bar to emphasize that a new sprite is created by clicking them
-    * flat design mode now (again) supports rounded corners (sigh...)
-    * dialog boxes are more bright and their buttons more discernible in bright mode 
-    * rearranged IDE settings menu items into "looks" submenu
-    * sprite icons no longer blur when the sprite size is reduced or the zoom level increases
+    * ui
+        * keep result balloons "attached" to their originating block / script when scrolling
+        * added icons to the IDE tabs (scripts, costumes, sounds)
+        * added "plus" signs to the buttons in the corral bar to emphasize that a new sprite is created by clicking them
+        * flat design mode now (again) supports rounded corners (sigh...)
+        * dialog boxes are more bright and their buttons more discernible in bright mode 
+        * rearranged IDE settings menu items into "looks" submenu
+        * sprite icons no longer blur when the sprite size is reduced or the zoom level increases
+        * resizing the browser / window in presentation ("app") mode scales the stage smoothly
+    * meta-programming
+        * silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
+        * removed "static" tag from the block-attribute getter
     * (EDC) Fancy Text
         * added automatic vertical scrolling to "fancy say / think" balloons
         * added optional "max height" input to "fancy say / think" library commands
     * speech recognition
         * new "tts_started" extension, reports (in a separate process) whether the user has started speaking in response to a "tts_recognize" query
         * TTS library: new "started speech response?" predicate
-    * always "normalize" SVGs on import, avoids "cut-off" costume parts
-    * flat mode now supports rounded corner in widgets, sigh...
-    * resizing the browser / window in presentation ("app") mode scales the stage smoothly
-    * meta-programming: removed "static" tag from the block-attribute getter
-    * took out rate limit in the Microblocks library, thanks, Bernat!
-    * silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
-    * new help screens for "combinations" and "pipe" reporters, thanks, Brian and gang!
-    * changed the evaluation semantics of the "let" block in the variables declaration extension to enable reuse of previously declared variables inside the same block
-    * added a custom visualization for the neural network data type to the neural networks extensions
-    * keep result balloons "attached" to their originating block / script when scrolling
+    * neural networks extension
+        * added a custom visualization for the neural network data type to the neural networks extensions
+        * refined normalization to handle redundant features (columns with all the same value)
+    * in other extensions
+        * took out rate limit in the Microblocks library, thanks, Bernat!
+        * changed the evaluation semantics of the "let" block in the variables declaration extension to enable reuse of previously declared variables inside the same block
 * **Notable Fixes:**
+    * always "normalize" SVGs on import, avoids "cut-off" costume parts
     * frequency distribution analysis library: fixed "plot bars" block to handle zero values gracefully
     * fixed occasional rendering artifacts on screens with a fractional devicePixelRatio
     * fixed some special cases for using "combine" on an empty list, thanks, @rmunn!
