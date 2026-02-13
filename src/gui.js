@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-January-16';
+modules.gui = '2026-Februars-13';
 
 // Declarations
 
@@ -2442,7 +2442,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     newbutton = new PushButtonMorph(
         this,
         "addNewSprite",
-        new SymbolMorph("turtle", 14)
+        new SymbolMorph("turtlePlus", 14)
     );
     newbutton.corner = 12;
     newbutton.color = colors[0];
@@ -2463,7 +2463,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     paintbutton = new PushButtonMorph(
         this,
         "paintNewSprite",
-        new SymbolMorph("brush", 15)
+        new SymbolMorph("brushPlus", 15)
     );
     paintbutton.corner = 12;
     paintbutton.color = colors[0];
@@ -2487,7 +2487,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         cambutton = new PushButtonMorph(
                 this,
                 "newCamSprite",
-                new SymbolMorph("camera", 15)
+                new SymbolMorph("cameraPlus", 15)
                 );
         cambutton.corner = 12;
         cambutton.color = colors[0];

@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2024-December-09';
+modules.symbols = '2026-February-13';
 
 var SymbolMorph;
 
@@ -80,6 +80,7 @@ SymbolMorph.prototype.names = [
     'smallStage',
     'normalStage',
     'turtle',
+    'turtlePlus',
     'turtleOutline',
     'stage',
     'pause',
@@ -301,6 +302,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'turtle':
         this.renderSymbolTurtle(ctx, aColor);
         break;
+    case 'turtlePlus':
+        this.renderPlus(this.renderSymbolTurtle, 0.8, 'right', ctx, aColor);
+        break;
     case 'turtleOutline':
         this.renderSymbolTurtleOutline(ctx, aColor);
         break;
@@ -345,6 +349,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'brush':
         this.renderSymbolBrush(ctx, aColor);
+        break;
+    case 'brushPlus':
+        this.renderPlus(this.renderSymbolBrush, 0.8, 'left', ctx, aColor);
         break;
     case 'tick':
         this.renderSymbolTick(ctx, aColor);
@@ -469,6 +476,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'camera':
         this.renderSymbolCamera(ctx, aColor);
         break;
+    case 'cameraPlus':
+        this.renderPlus(this.renderSymbolCamera, 0.7, 'right', ctx, aColor);
+        break;
     case 'location':
         this.renderSymbolLocation(ctx, aColor);
         break;
@@ -549,6 +559,7 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'normalStage':
         return size * 1.2;
     case 'turtle':
+    case 'turtlePlus':
     case 'turtleOutline':
     case 'stage':
         return size * 1.3;
@@ -2574,6 +2585,58 @@ SymbolMorph.prototype.renderSymbolInfinity = function (ctx, color) {
     // right arc
     ctx.beginPath();
     ctx.arc(r * 3 - l, r, r - l / 2, radians(-120), radians(180), false);
+    ctx.stroke();
+};
+
+// Decorations
+
+SymbolMorph.prototype.renderPlus = function (
+        renderer, scale, orientation, ctx, color) {
+    // draw a smaller version of another symbol with a little plus sign
+    // at the top right corner
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 12, 0.5),
+        l2 = l / 2,
+        side = h / 3,
+
+        tp = l2,
+        bt = l2 + side,
+        y_middle = l2 + side / 2,
+
+        lt = w - side - l2,
+        x_middle = w - (side / 2) - l2,
+        rt = w - l2;
+
+    if (orientation === 'left') {
+        lt = l2;
+        x_middle = side / 2 + l2;
+        rt = side + l2;
+    }
+
+    ctx.save();
+    ctx.translate(orientation === 'left' ?
+        w * (1 - scale)
+        : 0, h * (1 - scale));
+    ctx.scale(scale, scale);
+    renderer.call(this, ctx, color);
+    ctx.restore();
+
+    // draw a little "plus" sign in the upper right corner
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l;
+    ctx.lineCap = 'square';
+   
+    // vertical line
+    ctx.beginPath();
+    ctx.moveTo(x_middle, tp);
+    ctx.lineTo(x_middle, bt);
+    ctx.stroke();
+ 
+     // horizontal line
+    ctx.beginPath();
+    ctx.moveTo(lt, y_middle);
+    ctx.lineTo(rt, y_middle);
     ctx.stroke();
 };
 

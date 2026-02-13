@@ -47,6 +47,7 @@
     * added a black-gray-white palette to the bottom of the color picker for color input slots
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
+    * added "plus" signs to the buttons in the corral bar to emphasize that a new sprite is created by clicking them
     * flat design mode now (again) supports rounded corners (sigh...)
     * dialog boxes are more bright and their buttons more discernible in bright mode 
     * rearranged IDE settings menu items into "looks" submenu
