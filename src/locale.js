@@ -714,3 +714,13 @@ SnapTranslator.dict.vi = {
     'last_changed':
         '2025-11-21'
 };
+SnapTranslator.dict.en_BR = {
+    'language_name':
+        'English - Britain',
+    'language_translator':
+        'Mark de Boer',
+    'translator_e-mail':
+        'markjosdb@hotmail.com',
+    'last_changed':
+        '2026-02-13'
+};
