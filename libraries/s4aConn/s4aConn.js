@@ -821,12 +821,11 @@ SnapExtensions.primitives.set(
         if (message === undefined || coder === undefined) {
             throw new Error("Message and coder are required");
         }
-        var smessage = parseInt(message,16);
+        var scoder = 0,
+            smessage = parseInt(message,16);
         smessage = smessage & parseInt("FFFFFF",16);
         if (coder == "RC5") {
             scoder = 1;
-        } else {
-            scoder = 0;
         }
         var data =[0xF0, //START_SYSEX
             0xCE,  //Send IR
