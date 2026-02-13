@@ -87,12 +87,14 @@
     * updated API.md with new "zoom" configuration key for global magnification
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
+    * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
     * German
 
-### 2026-02-12
+### 2026-02-13
 * morphic: tweaked GrayPaletteMorph to allow easer selection of pure black / white colors
 * blocks: added a black-gray-white palette to the bottom of the color picker for color input slots
+* Chinese translation update, thank you, @Ayist14 !
 
 ### 2026-02-12
 * optimized the experimental "Shapes" library
