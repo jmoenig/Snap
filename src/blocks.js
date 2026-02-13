@@ -156,13 +156,13 @@ Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
 SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK,
-CustomHatBlockMorph, ZOOM*/
+CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-February-12';
+modules.blocks = '2026-February-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -14123,13 +14123,19 @@ ColorSlotMorph.prototype.getUserColor = function () {
         mouseMoveBak = hand.processMouseMove,
         mouseDownBak = hand.processMouseDown,
         mouseUpBak = hand.processMouseUp,
-        pal = new ColorPaletteMorph(null, new Point(
+        cpal = new ColorPaletteMorph(null, new Point(
             this.fontSize * 16,
             this.fontSize * 10
         )),
+        gpal = new GrayPaletteMorph(null, new Point(
+            this.fontSize * 16,
+            this.fontSize
+        )),
         ctx;
-    world.add(pal);
-    pal.setPosition(this.bottomLeft().add(new Point(0, this.edge)));
+    world.add(cpal);
+    cpal.setPosition(this.bottomLeft().add(new Point(0, this.edge)));
+    world.add(gpal);
+    gpal.setPosition(cpal.bottomLeft().subtract(new Point(0, 1)));
 
     // cache the world surface property (its full image)
     // to prevent memory issues from constantly generating
@@ -14152,7 +14158,8 @@ ColorSlotMorph.prototype.getUserColor = function () {
     hand.processMouseDown = nop;
 
     hand.processMouseUp = function () {
-        pal.destroy();
+        cpal.destroy();
+        gpal.destroy();
         hand.processMouseMove = mouseMoveBak;
         hand.processMouseDown = mouseDownBak;
         hand.processMouseUp = mouseUpBak;

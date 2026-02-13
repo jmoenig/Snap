@@ -44,6 +44,7 @@
     * new "Draw Paths" library for directly drawing filled or stroked polylines and polygons without moving the pen sprite
     * new "... times ..." reporter in the neural networks library for quantifying results
     * new "cst_morph(cst)" extension for specifying custom ADT visualizations
+    * added a black-gray-white palette to the bottom of the color picker for color input slots
 * **Notable Changes:**
     * added icons to the IDE tabs (scripts, costumes, sounds)
     * flat design mode now (again) supports rounded corners (sigh...)
@@ -77,6 +78,10 @@
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
     * Catalan, thanks, Joan!
     * German
+
+### 2026-02-12
+* morphic: tweaked GrayPaletteMorph to allow easer selection of pure black / white colors
+* blocks: added a black-gray-white palette to the bottom of the color picker for color input slots
 
 ### 2026-02-12
 * optimized the experimental "Shapes" library

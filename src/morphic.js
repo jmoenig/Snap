@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2010-2025 by Jens Mönig
+    Copyright (C) 2010-2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -1367,7 +1367,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2025-December-17';
+var morphicVersion = '2026-February-13';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 var ZOOM = 1;
@@ -5581,6 +5581,8 @@ GrayPaletteMorph.prototype.render = function (ctx) {
     this.choice = BLACK;
     gradient = ctx.createLinearGradient(0, 0, ext.x, ext.y);
     gradient.addColorStop(0, 'black');
+    gradient.addColorStop(0.1, 'black');
+    gradient.addColorStop(0.9, 'white');
     gradient.addColorStop(1, 'white');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, ext.x, ext.y);
