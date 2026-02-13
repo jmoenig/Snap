@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-February-11';
+modules.extensions = '2026-February-13';
 
 // Global stuff
 
@@ -1412,6 +1412,21 @@ SnapExtensions.primitives.set(
     }
 );
 
+SnapExtensions.primitives.set(
+    'cst_morph(cst)',
+    function (costume, proc) {
+        var m = new Morph(),
+            img;
+        proc.assertType(costume, 'costume');
+        img = costume.contents;
+        m.isCachingImage = true;
+        m.bounds.setWidth(img.width);
+        m.bounds.setHeight(img.height);
+        m.cachedImage = img;
+        return m;
+    }
+);
+
 // Sounds (snd_):
 
 SnapExtensions.primitives.set(
@@ -1448,18 +1463,6 @@ SnapExtensions.primitives.set(
         }
         proc.pushContext('doYield');
         proc.pushContext();
-SnapExtensions.primitives.set(
-    'cst_morph(cst)',
-    function (costume, proc) {
-        var m = new Morph(),
-            img;
-        proc.assertType(costume, 'costume');
-        img = costume.contents;
-        m.isCachingImage = true;
-        m.bounds.setWidth(img.width);
-        m.bounds.setHeight(img.height);
-        m.cachedImage = img;
-        return m;
     }
 );
 

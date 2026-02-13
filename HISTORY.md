@@ -49,6 +49,7 @@
         * new "Tables" extension for working with tabular data sets, modeled after Pyret's tables. Thanks, Shriram Krishnamurthi for your inspiration, feedback and advice!
         * new reporter version of "let" in the variables declaration extension
         * new "... times ..." reporter in the neural networks library for quantifying results
+        * new blocks to load costumes and sounds from a url in the web-services library, thanks, @ego-lay-atman-bay!
     * new help screens
         * new help screens for "combinations" and
         * "pipe" reporters, thanks, Brian and gang!
@@ -97,6 +98,7 @@
 * Chinese translation update, thank you, @Ayist14 !
 * disabled santa hats again
 * new British-English translation, thank you, Mark de Boer!
+* integrated extension blocks to load costumes and sounds from a url, thanks, @ego-lay-atman-bay!
 
 ### 2026-02-12
 * optimized the experimental "Shapes" library
