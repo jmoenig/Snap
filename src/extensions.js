@@ -1328,19 +1328,49 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'cst_load(url)',
     function (url, proc) {
-        if (!proc.context.accumulator) {
-            proc.context.accumulator = {
+        if (!url) {
+            return '';
+        }
+
+        proc.assertType(url, 'text');
+
+        let context = proc.context;
+
+        if (!context.accumulator) {
+            context.accumulator = {
                 img: new Image(),
                 cst: null,
+                svg: false,
             };
-            proc.context.accumulator.img.onload = function () {
-                var canvas = newCanvas(new Point(this.width, this.height));
-                canvas.getContext('2d').drawImage(this, 0, 0);
-                proc.context.accumulator.cst = new Costume(canvas);
+            context.accumulator.img.onload = function () {
+                if (context.accumulator.svg) {
+                    context.accumulator.cst = new SVG_Costume(this, 'Costume');
+                } else {
+                    var canvas = newCanvas(new Point(this.width, this.height));
+                    canvas.getContext('2d').drawImage(this, 0, 0);
+                    context.accumulator.cst = new Costume(canvas, 'Costume');
+                }
             };
-            proc.context.accumulator.img.src = url;
-        } else if (proc.context.accumulator.cst) {
-            return proc.context.accumulator.cst;
+            context.accumulator.img.onerror = function () {
+                context.accumulator.cst = '';
+            };
+            fetch(url).then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                if (response.headers.get('content-type') === 'image/svg+xml') {
+                    context.accumulator.svg = true;
+                }
+
+                return response.blob();
+            }).catch(() => {
+                context.accumulator.cst = '';
+            }).then((response) => {
+                context.accumulator.img.src = URL.createObjectURL(response);
+            });
+        } else if (context.accumulator.cst || context.accumulator.cst === '') {
+            return context.accumulator.cst;
         }
         proc.pushContext('doYield');
         proc.pushContext();
@@ -1382,6 +1412,42 @@ SnapExtensions.primitives.set(
     }
 );
 
+// Sounds (snd_):
+
+SnapExtensions.primitives.set(
+    'snd_load(url)',
+    function (url, proc) {
+        if (!url) {
+            return '';
+        }
+        
+        proc.assertType(url, 'text');
+
+        let context = proc.context;
+
+        if (!context.accumulator) {
+            context.accumulator = {
+                snd: null,
+            };
+
+            fetch(url).then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                return response.blob();
+            }).catch(() => {
+                context.accumulator.snd = '';
+            }).then((response) => {
+                context.accumulator.snd = new Sound(
+                    new Audio(URL.createObjectURL(response))
+                );
+            });
+        } else if (context.accumulator.snd || context.accumulator.snd === '') {
+            return context.accumulator.snd;
+        }
+        proc.pushContext('doYield');
+        proc.pushContext();
 SnapExtensions.primitives.set(
     'cst_morph(cst)',
     function (costume, proc) {
