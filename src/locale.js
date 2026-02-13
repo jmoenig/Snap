@@ -361,7 +361,7 @@ SnapTranslator.dict.pl = {
     'translator_e-mail':
         'witek@oeiizk.waw.pl',
     'last_changed':
-        '2024-08-23'
+        '2026-02-13'
 };
 
 SnapTranslator.dict.zh_TW = {
