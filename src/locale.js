@@ -704,6 +704,7 @@ SnapTranslator.dict.hy = {
     'last_changed':
         '2025-03-13',
 };
+
 SnapTranslator.dict.vi = {
     'language_name':
         'Tiếng Việt',
@@ -714,6 +715,7 @@ SnapTranslator.dict.vi = {
     'last_changed':
         '2025-11-21'
 };
+
 SnapTranslator.dict.en_BR = {
     'language_name':
         'English - Britain',

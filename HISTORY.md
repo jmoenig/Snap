@@ -96,6 +96,7 @@
 * blocks: added a black-gray-white palette to the bottom of the color picker for color input slots
 * Chinese translation update, thank you, @Ayist14 !
 * disabled santa hats again
+* new British-English translation, thank you, Mark de Boer!
 
 ### 2026-02-12
 * optimized the experimental "Shapes" library
