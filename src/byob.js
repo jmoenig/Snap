@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -112,7 +112,7 @@ ArgLabelMorph, embedMetadataPNG, ArgMorph, RingMorph, InputList, MultiArgMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2025-May-13';
+modules.byob = '2026-January-26';
 
 // Declarations
 
@@ -1140,7 +1140,7 @@ CustomBlockDefinition.prototype.bootstrap = function (actor) {
             ide = rcvr.parentThatIsA(IDE_Morph);
             if (ide) {
                 ide.flushBlocksCache();
-                ide.categories.refreshEmpty();
+                ide.refreshEmptyCategories();
                 ide.refreshPalette(true);
             }
             rcvr.recordUserEdit(
@@ -1165,7 +1165,7 @@ CustomBlockDefinition.prototype.unBootstrap = function (actor) {
             if (ide) {
                 // ide.flushPaletteCache();
                 ide.flushBlocksCache();
-                ide.categories.refreshEmpty();
+                ide.refreshEmptyCategories();
                 ide.refreshPalette(true);
             }
             rcvr.recordUserEdit(
@@ -1284,7 +1284,9 @@ CustomCommandBlockMorph.prototype.refresh = function (aDefinition, offset) {
                 inp.isStatic = def.isIrreplaceableInputIdx(i);
                 inp.canBeEmpty = !inp.isStatic;
             }
-            if (inp instanceof InputSlotMorph) {
+            if (inp instanceof InputSlotMorph ||
+                inp instanceof MultiArgMorph
+            ) {
                 inp.setChoices.apply(inp, def.inputOptionsOfIdx(i));
             }
         });
@@ -2092,7 +2094,7 @@ CustomCommandBlockMorph.prototype.moveInPalette = function (dir = 'up') {
     }
     if (ide) {
         ide.flushPaletteCache();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
         ide.refreshPalette();
     }    
 };
@@ -2203,7 +2205,7 @@ CustomCommandBlockMorph.prototype.deleteBlockDefinition = function () {
             ide = rcvr.parentThatIsA(IDE_Morph);
             if (ide) {
                 ide.flushPaletteCache();
-                ide.categories.refreshEmpty();
+                ide.refreshEmptyCategories();
                 ide.refreshPalette();
             }
             rcvr.recordUserEdit(
@@ -3062,12 +3064,6 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
         ));
     });
 
-    if (MorphicPreferences.isFlat) {
-        this.categories.corner = 0;
-        this.categories.border = 0;
-        this.categories.edge = 0;
-    }
-
     if (more > 6) {
         scroller = new ScrollFrameMorph(
             null,
@@ -3750,7 +3746,7 @@ BlockEditorMorph.prototype.updateDefinition = function () {
     this.refreshAllBlockInstances(oldSpec);
     ide = this.target.parentThatIsA(IDE_Morph);
     ide.flushPaletteCache();
-    ide.categories.refreshEmpty();
+    ide.refreshEmptyCategories();
     ide.refreshPalette();
     this.target.recordUserEdit(
         'scripts',
@@ -4848,12 +4844,14 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
         if (this.isExpanded && contains(
                 [
                     '%s', '%n', '%txt', '%anyUE', '%b', '%boolUE',
-                    '%mlt', '%code', '%upvar', '%clr'
+                    '%mlt', '%code', '%upvar', '%parameter', '%clr'
                 ],
                 this.fragment.type
             )) {
             defLabel.changed();
-            defLabel.text = this.fragment.type === '%upvar' ?
+            defLabel.text = ['%upvar', '%parameter'].includes(
+                this.fragment.type
+            ) ?
                 localize('Default Name:')
                 : localize('Default Value:');
             defLabel.fixLayout();
@@ -4872,7 +4870,8 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput.setWidth(50);
     defInput.refresh = () => {
         if (this.isExpanded && contains(
-            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code', '%upvar'],
+            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code', '%upvar',
+                '%parameter'],
             this.fragment.type
         )) {
             defInput.show();
@@ -5171,7 +5170,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
                 ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
                 this.fragment.type
             );
-        if(this.fragment.type === '%upvar') {
+        if (['%upvar', '%parameter'].includes(this.fragment.type)) {
             return this.specialSlotsMenu();
         }
         if (isEditable) {
@@ -5257,7 +5256,8 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
         menu.addMenu(
             (contains(
                 ['%mlt', '%code', '%obj', '%scriptVars', '%receive', '%send',
-                    '%elseif'],
+                    '%elseif', '%upvar', '%mult%upvar', '%parameter',
+                    '%mult%parameter'],
                 this.fragment.type
             ) ? on : off) +
             localize('special'),
@@ -5299,7 +5299,9 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     function addSpecialSlotType(label, spec) {
         menu.addItem(
-            (myself.fragment.type === spec ? on : off) + localize(label),
+            (myself.fragment.type === spec ||
+                myself.fragment.type === '%mult' + spec ?
+                    on : off) + localize(label),
             spec
         );
     }
@@ -5307,6 +5309,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
     addSpecialSlotType('object', '%obj');
+    addSpecialSlotType('parameter', '%parameter');
     menu.addLine();
     addSpecialSlotType('variables', '%scriptVars');
     addSpecialSlotType('receivers', '%receive');
@@ -6072,7 +6075,7 @@ BlockImportDialogMorph.prototype.importBlocks = function (name) {
             }
         });
         ide.flushPaletteCache();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
         ide.refreshPalette();
         ide.showMessage(
             'Imported Blocks Module' + (name ? ': ' + name : '') + '.',
@@ -6249,7 +6252,7 @@ BlockRemovalDialogMorph.prototype.removeBlocks = function () {
             }
         });
         ide.flushPaletteCache();
-        ide.categories.refreshEmpty();
+        ide.refreshEmptyCategories();
         ide.refreshPalette();
         ide.showMessage(
             this.blocks.length + ' ' + localize('unused block(s) removed'),
@@ -6455,7 +6458,7 @@ BlockVisibilityDialogMorph.prototype.hideBlocks = function () {
     }
     ide.flushBlocksCache();
     ide.refreshPalette();
-    ide.categories.refreshEmpty();
+    ide.refreshEmptyCategories();
     this.target.recordUserEdit(
         'palette',
         'hide block'

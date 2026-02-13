@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-November-09';
+modules.widgets = '2025-December-19';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -278,7 +278,7 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
     ctx.beginPath();
     this.outlinePath(
         ctx,
-        isFlat ? 0 : this.corner,
+        this.corner,
         0
     );
     ctx.closePath();
@@ -286,13 +286,11 @@ PushButtonMorph.prototype.drawOutline = function (ctx) {
 };
 
 PushButtonMorph.prototype.drawBackground = function (ctx, color) {
-    var isFlat = MorphicPreferences.isFlat && !this.is3D;
-
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     this.outlinePath(
         ctx,
-        isFlat ? 0 : Math.max(this.corner - this.outline, 0),
+        Math.max(this.corner - this.outline, 0),
         this.outline
     );
     ctx.closePath();
@@ -989,6 +987,97 @@ TabMorph.prototype.refresh = function () {
     TabMorph.uber.refresh.call(this);
 };
 
+// TabMorph label
+
+TabMorph.prototype.createLabel = function () {
+    if (this.label !== null) {
+        this.label.destroy();
+    }
+    this.label = this.createLabelPart(this.labelString);
+    this.add(this.label);
+};
+
+TabMorph.prototype.createLabelPart = function (source) {
+    var part, icon, lbl;
+    if (isString(source)) {
+        return this.createLabelString(source);
+    }
+    if (source instanceof Array) {
+        // assume its pattern is: [icon, string]
+        part = new Morph();
+        part.alpha = 0; // transparent
+        icon = this.createIcon(source[0]);
+        part.add(icon);
+        lbl = this.createLabelString(source[1]);
+        part.add(lbl);
+        lbl.setCenter(icon.center());
+        lbl.setLeft(icon.right() + 4);
+        part.bounds = (icon.bounds.merge(lbl.bounds));
+        part.rerender();
+        return part;
+    }
+    // assume it's either a Morph or a Canvas
+    return this.createIcon(source);
+};
+
+TabMorph.prototype.createIcon = function (source) {
+    // source can be either a SymbolMorph, any other Morph
+    // or an HTMLCanvasElement
+    var shading = !MorphicPreferences.isFlat || this.is3D,
+        icon;
+    if (source instanceof SymbolMorph) {
+        icon = source.fullCopy();
+        if (shading) {
+            icon.shadowOffset = this.labelShadowOffset;
+            icon.shadowColor = this.labelShadowColor;
+        }
+        icon.color = this.labelColor;
+        return icon;
+    }
+    if (source instanceof Morph) {
+        return source.fullCopy();
+    }
+    // assume a Canvas
+    icon = new Morph();
+    icon.isCachingImage = true;
+    icon.cachedImage = source; // should we copy the canvas?
+    icon.bounds.setWidth(source.width);
+    icon.bounds.setHeight(source.height);
+    return icon;
+};
+
+TabMorph.prototype.createLabelString = function (string) {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+    return new StringMorph(
+        localize(string),
+        this.fontSize,
+        this.fontStyle,
+        true, // !(this.labelString instanceof Array),
+        false,
+        false,
+        shading ? this.labelShadowOffset : null,
+        this.labelShadowColor,
+        this.labelColor
+    );
+};
+
+TabMorph.prototype.updateLabelColors = function () {
+    var shading = !MorphicPreferences.isFlat || this.is3D;
+    this.label.forAllChildren(morph => {
+        if (morph instanceof StringMorph ||
+            morph instanceof SymbolMorph
+        ) {
+            morph.color = this.labelColor;
+            morph.fontSize = this.fontSize;
+            if (shading) {
+                morph.shadowOffset = this.labelShadowOffset;
+                morph.shadowColor = this.labelShadowColor;
+            }
+            morph.fixLayout(true); // just me
+        }
+    });
+};
+
 // TabMorph drawing:
 
 TabMorph.prototype.drawBackground = function (context, color) {
@@ -1545,10 +1634,10 @@ DialogBoxMorph.prototype.init = function (target, action, environment) {
     DialogBoxMorph.uber.init.call(this);
 
     // override inherited properites:
+    delete this.color; // re-inherit from PushButtonMorph.prototype
     this.isDraggable = true;
     this.noDropShadow = true;
     this.fullShadowSource = false;
-    this.color = PushButtonMorph.prototype.color;
     this.createLabel();
     this.createButtons();
     this.setExtent(new Point(300, 150));
@@ -2844,7 +2933,7 @@ DialogBoxMorph.prototype.render = function (ctx) {
     ctx.beginPath();
     this.outlinePathTitle(
         ctx,
-        isFlat ? 0 : this.corner
+        this.corner
     );
     ctx.closePath();
     ctx.fill();
@@ -2855,7 +2944,7 @@ DialogBoxMorph.prototype.render = function (ctx) {
     ctx.beginPath();
     this.outlinePathBody(
         ctx,
-        isFlat ? 0 : this.corner
+        this.corner
     );
     ctx.closePath();
     ctx.fill();
@@ -3518,7 +3607,7 @@ PianoMenuMorph.prototype.createItems = function () {
     this.children.forEach(m => m.destroy());
     this.children = [];
     if (!this.isListContents) {
-        this.edge = MorphicPreferences.isFlat ? 0 : 5;
+        this.edge = MorphicPreferences.isFlat ? 3 : 5;
         this.border = MorphicPreferences.isFlat ? 1 : 2;
     }
     this.color = WHITE;

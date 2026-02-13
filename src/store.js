@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -53,7 +53,7 @@
 WatcherMorph, Point, CustomBlockDefinition, Context, ReporterBlockMorph, Sound,
 CommandBlockMorph, detect, CustomCommandBlockMorph, CustomReporterBlockMorph,
 Color, List, newCanvas, Costume, Audio, IDE_Morph, ScriptsMorph, ArgLabelMorph,
-BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph,
+BlockMorph, ArgMorph, InputSlotMorph, TemplateSlotMorph, CommandSlotMorph, ZOOM,
 FunctionSlotMorph, MultiArgMorph, ColorSlotMorph, nop, CommentMorph, isNil,
 localize, SVG_Costume, MorphicPreferences, Process, isSnapObject, Variable,
 SyntaxElementMorph, BooleanSlotMorph, normalizeCanvas, contains, Scene,
@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2025-November-06';
+modules.store = '2026-January-04';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -345,6 +345,7 @@ SnapSerializer.prototype.loadProjectModel = function (
         app = appInfo ? appInfo.split(' ')[0] : null,
         appVersion = appInfo ? parseFloat(appInfo.split(' ')[1]) || 0 : 0,
         scenesModel = xmlNode.childNamed('scenes'),
+        zoom = xmlNode.attributes.zoom,
         project = new Project();
 
     if (ide && app && app !== this.app.split(' ')[0]) {
@@ -370,6 +371,9 @@ SnapSerializer.prototype.loadProjectModel = function (
         project.scenes.add(
             this.loadScene(xmlNode, appVersion, remixID, keepRoles)
         );
+    }
+    if (ide && zoom) {
+        ide.setZoom(+zoom, true); // no save
     }
     return project.initialize();
 };
@@ -414,6 +418,7 @@ SnapSerializer.prototype.loadScene = function (
     scene.showPaletteButtons = model.scene.attributes.buttons !== 'false';
     scene.disableClickToRun = model.scene.attributes.clickrun === 'false';
     scene.disableDraggingData = model.scene.attributes.dragdata === 'false';
+    scene.hideEmptyCategories = model.scene.attributes.empty === 'false';
     scene.penColorModel = model.scene.attributes.colormodel === 'hsl' ?
         'hsl' : 'hsv';
     model.notes = model.scene.childNamed('notes');
@@ -2058,7 +2063,8 @@ Array.prototype.toXML = function (serializer) {
 
 Project.prototype.toXML = function (serializer) {
     var thumbdata,
-        scenes = this.scenes.asArray();
+        scenes = this.scenes.asArray(),
+        hasTemplate = scenes.some(any => any.role === 'template');
 
     // thumb data catch cross-origin tainting exception when using SVG costumes
     try {
@@ -2067,14 +2073,12 @@ Project.prototype.toXML = function (serializer) {
         thumbdata = null;
     }
 
-    if (scenes.some(any => any.createdFromTemplate) &&
-        !(scenes.some(any => any.role === 'template'))
-    ) {
+    if (scenes.some(any => any.createdFromTemplate) && !hasTemplate) {
         scenes = scenes.filter(each => each.role !== 'tutorial');
     }
 
     return serializer.format(
-        '<project name="@" app="@" version="@">' +
+        '<project name="@" app="@" version="@"%>' +
             '<notes>$</notes>' +
             '<thumbnail>$</thumbnail>' +
             '<scenes select="@">%</scenes>' +
@@ -2082,6 +2086,8 @@ Project.prototype.toXML = function (serializer) {
         this.name || localize('Untitled'),
         serializer.app,
         serializer.version,
+        hasTemplate && (ZOOM > 1) ?
+            ' zoom="' + Math.round(ZOOM * 100) + '"' : '',
         this.notes || '',
         thumbdata,
         scenes.indexOf(this.currentScene) + 1,
@@ -2136,7 +2142,7 @@ Scene.prototype.toXML = function (serializer) {
     SpriteMorph.prototype.blocks = this.blocks;
 
     xml = serializer.format(
-        '<scene name="@"%%%%%%%>' +
+        '<scene name="@"%%%%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
@@ -2158,6 +2164,7 @@ Scene.prototype.toXML = function (serializer) {
         this.disableClickToRun ? ' clickrun="false"' : '',
         this.disableDraggingData ? ' dragdata="false"' : '',
         this.penColorModel === 'hsl' ? ' colormodel="hsl"' : '',
+        this.hideEmptyCategories ? ' empty="false"' : '',
         this.notes || '',
         serializer.paletteToXML(this.customCategories),
         Object.keys(this.hiddenPrimitives).reduce(

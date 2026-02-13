@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -156,13 +156,13 @@ Costume, IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, CLEAR, Point,
 isSnapObject, PushButtonMorph, SpriteIconMorph, Process, AlignmentMorph, List,
 ToggleButtonMorph, DialMorph, SnapExtensions, CostumeIconMorph, SoundIconMorph,
 SVG_Costume, embedMetadataPNG, ThreadManager, snapEquals, InputList, BLACK,
-CustomHatBlockMorph, ZOOM*/
+CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 /*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2025-December-02';
+modules.blocks = '2026-February-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -568,6 +568,13 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only',
         menu: 'objectsMenu'
     },
+    /* // currently unused - drawing on the stage draws on the pen trails layer
+    '%srf': {
+        type: 'input',
+        tags: 'read-only',
+        menu: 'surfacesMenu'
+    },
+    */
     '%self': {
         type: 'input',
         tags: 'read-only',
@@ -684,7 +691,8 @@ SyntaxElementMorph.prototype.labelParts = {
         tags: 'read-only static',
         menu: {
             menu : ['menu'],
-            edited : ['edited']
+            edited : ['edited'],
+            expand : ['expand']
         }
     },
     '%att': {
@@ -781,6 +789,16 @@ SyntaxElementMorph.prototype.labelParts = {
             'r-g-b-a' : ['r-g-b-a'],
             '~~' : null,
             sprites : ['sprites'],
+        }
+    },
+    '%msk': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            paint : ['paint'],
+            erase : ['erase'],
+            '~' : null,
+            overdraw : ['overdraw']
         }
     },
     '%txtfun': {
@@ -1155,6 +1173,10 @@ SyntaxElementMorph.prototype.labelParts = {
         label: '\xa0' // non-breaking space, appears blank
     },
     '%upvar': {
+        type: 'template',
+        label: '\xa0' // non-breaking space, appears blank
+    },
+    '%parameter': {
         type: 'template',
         label: '\xa0' // non-breaking space, appears blank
     },
@@ -1560,7 +1582,7 @@ SyntaxElementMorph.prototype.replaceInput = function (oldArg, newArg) {
 SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
     var deflt = this.revertToEmptyInput(arg),
         inp = this.inputs().indexOf(deflt),
-        def;
+        def, rcvr;
     if (noValues || inp < 0) {
         return deflt;
     }
@@ -1577,6 +1599,21 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
                     def.defaultValueOfInputIdx(inp)
                 );
             }
+        }
+    } else if (this instanceof MultiArgMorph && this.parent.isCustomBlock) {
+        if (this.parent.isGlobal) {
+            def = this.parent.definition;
+        } else {
+            rcvr = this.parent.scriptTarget(true);
+            if (rcvr) {
+                def = rcvr.getMethod(this.parent.blockSpec);
+            }
+        }
+        if (def && deflt instanceof InputSlotMorph && !deflt.isUnevaluated) {
+            deflt.setChoices.apply(
+                deflt,
+                def.inputOptionsOfIdx(this.parent.inputs().indexOf(this))
+            );
         }
     }
     if (deflt instanceof MultiArgMorph && !inp) {
@@ -1620,7 +1657,9 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
                         deflt.isStatic = def.isIrreplaceableInputIdx(inp);
                         deflt.canBeEmpty = !deflt.isStatic;
                     }
-                    if (deflt instanceof InputSlotMorph) {
+                    if (deflt instanceof InputSlotMorph ||
+                        deflt instanceof MultiArgMorph
+                    ) {
                         deflt.setChoices.apply(
                             deflt,
                             def.inputOptionsOfIdx(inp)
@@ -1638,6 +1677,26 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
             }
         } else if (this instanceof MultiArgMorph) {
             deflt = this.labelPart(this.slotSpecFor(inp));
+            if (this.parent.isCustomBlock) {
+                if (this.parent.isGlobal) {
+                    def = this.parent.definition;
+                } else {
+                    rcvr = this.parent.scriptTarget(true);
+                    if (rcvr) {
+                        def = rcvr.getMethod(this.parent.blockSpec);
+                    }
+                }
+                if (def && deflt instanceof InputSlotMorph &&
+                    !deflt.isUnevaluated
+                ) {
+                    deflt.setChoices.apply(
+                        deflt,
+                        def.inputOptionsOfIdx(
+                            this.parent.inputs().indexOf(this)
+                        )
+                    );
+                }
+            }
         } else if (this instanceof ReporterSlotMorph) {
             deflt = this.emptySlot();
         }
@@ -2815,6 +2874,29 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     } else if (sf) {
         bubble.keepWithin(sf);
     }
+
+    // let the bubble follow the anchor (e.g. when scrolling the scripts pane)
+    // but keep it within its context area and prevent it from disappearing
+    // out of view
+
+    bubble.step = () => {
+        var pos, area;
+
+        if (ide && (ide.currentSprite !== target)) {
+            pos = anchor.center();
+        } else {
+            pos = anchor.rightCenter().subtract(new Point(-2, bubble.height()));
+        }
+
+        if (anchor instanceof SpriteIconMorph) {
+            area = ide.corral;
+        } else {
+            area = (sf ? sf : wrrld);
+        }
+
+        bubble.setPosition(pos);
+        bubble.keepWithin(area);
+    };
 };
 
 SyntaxElementMorph.prototype.exportPictureWithResult = function (aBubble) {
@@ -3264,7 +3346,9 @@ BlockMorph.prototype.setSpec = function (spec, definition) {
             this.add(this.placeHolder());
         }
         if (this.isCustomBlock) {
-            if (part instanceof InputSlotMorph) {
+            if (part instanceof InputSlotMorph ||
+                part instanceof MultiArgMorph
+            ) {
                 part.setChoices.apply(
                     part,
                     (definition || this.definition).inputOptionsOfIdx(inputIdx)
@@ -7732,6 +7816,9 @@ ReporterBlockMorph.prototype.mouseClickLeft = function (pos) {
         } else if (this.parent.parent.elementSpec === '%blockVars') {
             label = "Block variable name";
         } else {
+            if (this.parent?.parentThatIsA(BlockMorph)?.isCustomBlock) {
+                return this.parent.dynamicMenu();
+            }
             label = "Script variable name";
         }
         new DialogBoxMorph(
@@ -11365,7 +11452,9 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
         def = block.isGlobal ? block.definition
             : rcvr.getMethod(block.blockSpec),
         names = def.inputNames(),
-        inputName = names[block.inputs().indexOf(this)],
+        inputName = names[block.inputs().indexOf(
+            this.parent instanceof MultiArgMorph ? this.parent : this
+        )],
         script = detect(def.scripts, each =>
             each.selector === 'receiveSlotEvent' &&
                 each.inputs()[0].evaluate() === inputName &&
@@ -11399,7 +11488,20 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
     };
 
     show = (result = new List()) => {
-        var menu = this.menuFromDict(format(result), null, enableKeyboard);
+        var first = result.at(1),
+            src, subslotIdx, menuIdx, menu;
+
+        if (this.parent instanceof MultiArgMorph &&
+            first instanceof List &&
+            first.isEmpty()
+        ) {
+            subslotIdx = this.parent.inputs().indexOf(this);
+            menuIdx = (subslotIdx % (result.length() - 1)) + 2;
+            src = result.at(menuIdx);
+        } else {
+            src = result;
+        }
+        menu = this.menuFromDict(format(src), null, enableKeyboard);
         if (!menu) { // has already happened
             return;
         }
@@ -11426,7 +11528,54 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
         null, // clicked
         true, // right away
         null, // atomic
-        vars
+        vars,
+        null,
+        null,
+        true // silent variable reference - dynamic user-scripted widgets
+    );
+};
+
+InputSlotMorph.prototype.dynamicContents = function () {
+    if (this.isUnevaluated) {return; }
+    var block = this.parentThatIsA(BlockMorph),
+        rcvr = block.scriptTarget(),
+        def = block.isGlobal ? block.definition
+            : rcvr.getMethod(block.blockSpec),
+        names = def.inputNames(),
+        inputName = names[block.inputs().indexOf(this.parent)], // multi-slot
+        script = detect(def.scripts, each =>
+            each.selector === 'receiveSlotEvent' &&
+                each.inputs()[0].evaluate() === inputName &&
+                each.inputs()[1].evaluateOption() === 'expand'),
+        stage = rcvr.parentThatIsA(StageMorph),
+        isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta,
+        vars, fill;
+
+    fill = (result = new List()) => {
+        if (isTxtOrNum(result)) {
+            this.setContents(result);
+        }
+    };
+
+    if (!script) {return; }
+
+    // fully evaluate the block's inputs, including embedded reporters, if any
+    vars = new InputList(block, names);
+
+    // evaluate the script that makes the menu
+    stage.threads.startProcess(
+        script,
+        rcvr,
+        null, // threadsafe
+        null, // export result
+        fill, // callback
+        null, // clicked
+        true, // right away
+        null, // atomic
+        vars,
+        null,
+        null,
+        true // silent variable reference - dynamic user-scripted widgets
     );
 };
 
@@ -11449,8 +11598,8 @@ InputSlotMorph.prototype.inputSlotsMenu = function () {
     if (blockEditor) {
         blockEditor.prototypeSlots().forEach((value, key) => {
             let info = SyntaxElementMorph.prototype.labelParts[value[0]];
-            if (value[0].startsWith('%mult') ||
-                (info && ['input', 'boolean'].includes(info.type))
+            if (value[0].startsWith('%mult') || value[0].startsWith('%group') ||
+                (info && ['input', 'boolean', 'template'].includes(info.type))
             ) {
                 dict[key] = key;
             }
@@ -11771,6 +11920,17 @@ InputSlotMorph.prototype.clonablesMenuWithTurtle = function (searching) {
 InputSlotMorph.prototype.objectsMenuWithSelf = function (searching) {
     if (searching) {return {}; }
     return this.objectsMenu(false, true);
+};
+
+InputSlotMorph.prototype.surfacesMenu = function (searching) {
+    // currently unused - drawing on the stage draws on the pen trails layer
+    var obj = this.objectsMenu(),
+        dict = {
+            'pen trails' : ['pen trails']
+        };
+    if (searching) {return {}; }
+    Object.keys(obj).forEach(key => dict[key] = obj[key]);
+    return dict;
 };
 
 InputSlotMorph.prototype.objectsMenu = function (searching, includeMyself) {
@@ -13009,6 +13169,107 @@ TemplateSlotMorph.prototype.unflash = function () {
     this.template().unflash();
 };
 
+// TemplateSlotMorph dynamic, user-scriptable contents
+
+TemplateSlotMorph.prototype.dynamicContents =
+    InputSlotMorph.prototype.dynamicContents;
+
+TemplateSlotMorph.prototype.dynamicMenu = function () {
+    var tmp = this.template(),
+        block = this.parentThatIsA(BlockMorph),
+        rcvr = block.scriptTarget(),
+        def = block.isGlobal ? block.definition
+            : rcvr.getMethod(block.blockSpec),
+        names = def.inputNames(),
+        inputName = names[block.inputs().indexOf(
+            this.parent instanceof MultiArgMorph ? this.parent : this
+        )],
+        script = detect(def.scripts, each =>
+            each.selector === 'receiveSlotEvent' &&
+                each.inputs()[0].evaluate() === inputName &&
+                each.inputs()[1].evaluateOption() === 'menu'),
+        stage = rcvr.parentThatIsA(StageMorph),
+        isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta,
+        vars, ask, show, format;
+
+    ask = () =>
+    new DialogBoxMorph(
+        tmp,
+        tmp.userSetSpec,
+        tmp
+    ).prompt(
+        "Script variable name",
+        tmp.blockSpec,
+        tmp.world()
+    );
+
+    format = list => {
+        var dict = {};
+        if (!(list instanceof List)) {
+            return dict;
+        }
+        list.map(item => {
+            var key, val;
+            if (item instanceof List && item.length() === 2) {
+                key = item.at(1);
+                val = item.at(2);
+                if (isTxtOrNum(key)) {
+                    if (val instanceof List) {
+                        dict[key.toString()] = format(val);
+                    } else if (isTxtOrNum(val)) {
+                        dict[key.toString()] = val.toString();
+                    }
+                }
+            } else if (isTxtOrNum(item)) {
+                dict[item.toString()] = item.toString();
+            }
+        });
+        return dict;
+    };
+
+    show = (result = new List()) => {
+        var menu = this.menuFromDict(format(result), true); // no empty choice
+        if (!menu) { // has already happened
+            return;
+        }
+        if (menu.items.length > 0) {
+            menu.addLine();
+            menu.addItem('rename...', ask);
+            menu.popup(this.world(), this.bottomLeft());
+        } else {
+            ask();
+        }
+
+    };
+
+    if (!script) {return show(); }
+
+    // fully evaluate the block's inputs, including embedded reporters, if any
+    vars = new InputList(block, names);
+
+    // evaluate the script that makes the menu
+    stage.threads.startProcess(
+        script,
+        rcvr,
+        null, // threadsafe
+        null, // export result
+        show, // callback
+        null, // clicked
+        true, // right away
+        null, // atomic
+        vars,
+        null,
+        null,
+        true // silent variable reference - dynamic user-scripted widgets
+    );
+};
+
+TemplateSlotMorph.prototype.menuFromDict =
+    InputSlotMorph.prototype.menuFromDict;
+
+TemplateSlotMorph.prototype.userSetContents =
+    TemplateSlotMorph.prototype.setContents;
+
 // BooleanSlotMorph ////////////////////////////////////////////////////
 
 /*
@@ -13862,13 +14123,19 @@ ColorSlotMorph.prototype.getUserColor = function () {
         mouseMoveBak = hand.processMouseMove,
         mouseDownBak = hand.processMouseDown,
         mouseUpBak = hand.processMouseUp,
-        pal = new ColorPaletteMorph(null, new Point(
+        cpal = new ColorPaletteMorph(null, new Point(
             this.fontSize * 16,
             this.fontSize * 10
         )),
+        gpal = new GrayPaletteMorph(null, new Point(
+            this.fontSize * 16,
+            this.fontSize
+        )),
         ctx;
-    world.add(pal);
-    pal.setPosition(this.bottomLeft().add(new Point(0, this.edge)));
+    world.add(cpal);
+    cpal.setPosition(this.bottomLeft().add(new Point(0, this.edge)));
+    world.add(gpal);
+    gpal.setPosition(cpal.bottomLeft().subtract(new Point(0, 1)));
 
     // cache the world surface property (its full image)
     // to prevent memory issues from constantly generating
@@ -13891,7 +14158,8 @@ ColorSlotMorph.prototype.getUserColor = function () {
     hand.processMouseDown = nop;
 
     hand.processMouseUp = function () {
-        pal.destroy();
+        cpal.destroy();
+        gpal.destroy();
         hand.processMouseMove = mouseMoveBak;
         hand.processMouseDown = mouseDownBak;
         hand.processMouseUp = mouseUpBak;
@@ -14382,6 +14650,16 @@ MultiArgMorph.prototype.setMaxSlots = function (maxSlots) {
     }
 };
 
+MultiArgMorph.prototype.setChoices = function (dict, readonly) {
+    // externally specify choices and read-only status,
+    // used for custom blocks
+    this.inputs().forEach(subslot => {
+        if (subslot instanceof InputSlotMorph && !subslot.isUnevaluated) {
+            subslot.setChoices(dict, readonly);
+        }
+    });
+};
+
 // MultiArgMorph defaults:
 
 MultiArgMorph.prototype.setContents = function (anArray) {
@@ -14641,7 +14919,7 @@ MultiArgMorph.prototype.addInput = function (contents) {
     var len = this.inputs().length,
         newPart = this.labelPart(this.slotSpecFor(len)),
         value = isNil(contents) ? this.defaultValueFor(len) : contents,
-        i, name, idx;
+        i, name, idx, def, rcvr;
 
     this.addInfix();
     idx = this.children.length - 1;
@@ -14680,6 +14958,26 @@ MultiArgMorph.prototype.addInput = function (contents) {
     this.addPostfix();
     newPart.fixLayout();
     if (this.parent instanceof BlockMorph) {
+        if (this.parent.isCustomBlock) {
+            if (this.parent.isGlobal) {
+                def = this.parent.definition;
+            } else {
+                rcvr = this.parent.scriptTarget(true);
+                if (rcvr) {
+                    def = rcvr.getMethod(this.parent.blockSpec);
+                }
+            }
+            if (def && newPart instanceof InputSlotMorph &&
+                !newPart.isUnevaluated
+            ) {
+                newPart.setChoices.apply(
+                    newPart,
+                    def.inputOptionsOfIdx(
+                        this.parent.inputs().indexOf(this)
+                    )
+                );
+            }
+        }
         this.parent.fixLabelColor();
     }
     this.fixLayout();
@@ -14854,7 +15152,8 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
     // prevent expansion in the palette
     // (because it can be hard or impossible to collapse again)
     var block = this.parentThatIsA(BlockMorph),
-        sprite = block.scriptTarget();
+        sprite = block.scriptTarget(),
+        slot;
     if (!this.parentThatIsA(ScriptsMorph)) {
         this.escalateEvent('mouseClickLeft', pos);
         return;
@@ -14883,7 +15182,10 @@ MultiArgMorph.prototype.mouseClickLeft = function (pos) {
             }
             for (i = 0; i < repetition; i += 1) {
                 if (rightArrow.isVisible) {
-                    target.addInput();
+                    slot = target.addInput();
+                    if (this.parent?.isCustomBlock && slot.dynamicContents) {
+                        slot.dynamicContents();
+                    }
                 }
             }
             sprite.recordUserEdit(
@@ -16702,11 +17004,14 @@ ScriptFocusMorph.prototype.manifestExpression = function () {
 
 ScriptFocusMorph.prototype.trigger = function () {
     var current = this.element,
-        i;
+        i, slot;
     if (current instanceof MultiArgMorph) {
         for (i = 0; i < current.groupInputs; i += 1) {
             if (current.arrows().children[1].isVisible) {
-                current.addInput();
+                slot = current.addInput();
+                if (current.parent?.isCustomBlock && slot.dynamicContents) {
+                    slot.dynamicContents();
+                }
                 this.fixLayout();
             }
         }

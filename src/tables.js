@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, localize, display*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2025-April-03';
+modules.tables = '2026-January-19';
 
 var Table;
 var TableCellMorph;
@@ -171,6 +171,10 @@ Table.prototype.cols = function () {
 
 Table.prototype.columnNames = function () {
     return this.colNames;
+};
+
+Table.prototype.recordNames = function () {
+    return this.rowNames;
 };
 
 // Table setting:
@@ -942,7 +946,7 @@ TableMorph.prototype.rowLabelsWidth = function () {
         0,
         Math.max.apply(
             null,
-            this.table.columnNames().map(
+            this.table.recordNames().map(
                 name => name ? ctx.measureText(name).width : 0
             )
         )
@@ -1177,38 +1181,40 @@ TableMorph.prototype.userMenu = function () {
     if (this.colWidths.length) {
         menu.addItem('reset columns', 'resetColumns');
     }
-    menu.addItem('list view...', 'showListView');
-    if (this.table instanceof List && this.table.canBeJSON()) {
-        menu.addItem(
-            'blockify',
-            () => {
-                this.table.blockify().pickUp(world);
-                world.hand.grabOrigin = {
-                    origin: ide.palette,
-                    position: ide.palette.center()
-                };
-            }
-        );
-        menu.addItem(
-            'export',
-            () => {
-                if (this.table.canBeCSV()) {
-                    ide.saveFileAs(
-                        this.table.asCSV(),
-                        'text/csv;charset=utf-8', // RFC 4180
-                        localize('data') // name
-                    );
-                } else {
-                    ide.saveFileAs(
-                        this.table.asJSON(true), // guessObjects
-                        'text/json;charset=utf-8',
-                        localize('data') // name
-                    );
+    if (this.table instanceof List) {
+        menu.addItem('list view...', 'showListView');
+        if (this.table.canBeJSON()) {
+            menu.addItem(
+                'blockify',
+                () => {
+                    this.table.blockify().pickUp(world);
+                    world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
                 }
-            }
-        );
+            );
+            menu.addItem(
+                'export',
+                () => {
+                    if (this.table.canBeCSV()) {
+                        ide.saveFileAs(
+                            this.table.asCSV(),
+                            'text/csv;charset=utf-8', // RFC 4180
+                            localize('data') // name
+                        );
+                    } else {
+                        ide.saveFileAs(
+                            this.table.asJSON(true), // guessObjects
+                            'text/json;charset=utf-8',
+                            localize('data') // name
+                        );
+                    }
+                }
+            );
+        }
+        menu.addLine();
     }
-    menu.addLine();
     menu.addItem('open in dialog...', 'openInDialog');
     return menu;
 };
