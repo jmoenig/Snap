@@ -89,6 +89,7 @@
     * updated API.md with new "zoom" configuration key for global magnification
 * **Translation Updates:**
     * new Vietnamese translation, thank you, Serge Faure @seeeerge !!
+    * new British-English translation, thank you, Mark de Boer !
     * Polish, thank you, @P1neF0rest935 !
     * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
