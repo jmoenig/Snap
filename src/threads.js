@@ -9605,7 +9605,7 @@ Process.prototype.compileBlockReferences = function (context, varName) {
     }
 
     if (context.expression.allChildren().some(any =>
-        any.selector === 'reportGetVar' && any.parentThatIsA(RingMorph)
+        any.selector === 'reportGetVar' && any.parentThatIsA(RingMorph) && !any.parentThatIsA(TemplateSlotMorph)
     )) {
         if (context.expression instanceof ReporterBlockMorph) {
             // turn into a REPORT script
@@ -9635,7 +9635,7 @@ Process.prototype.compileBlockReferences = function (context, varName) {
         context.expression.forAllChildren(morph => {
             var ref;
             if (morph.selector === 'reportGetVar' &&
-                (morph.blockSpec === varName))
+                (morph.blockSpec === varName) && !(morph.parent instanceof TemplateSlotMorph))
             {
                 ref = block('reportEnvironment');
                 ref.inputs()[0].setContents(['script']);
