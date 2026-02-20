@@ -1637,6 +1637,7 @@ DialogBoxMorph.prototype.DEFAULT_LOOKS = {
 
     corner: 12,
     padding: 14,
+    stackPadding: null,
     titlePadding: 6,
 
     buttonContrast: 50,
