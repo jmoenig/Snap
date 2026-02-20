@@ -2,7 +2,7 @@
 
     santa.js
 
-    XMas themed skin for Snap! hat blocks
+    XMas themed skin for Snap! hat blocks and dialogs
 
     written by Jens Mönig
     jens@moenig.org
@@ -31,16 +31,17 @@
 
 */
 
-/*global modules, HatBlockMorph, MorphicPreferences, Color, radians, degrees,
-WHITE, IDE_Morph, BLACK, PrototypeHatBlockMorph, SnapTranslator*/
+/*global modules, HatBlockMorph, DialogBoxMorph, MorphicPreferences, Color,
+radians, degrees, WHITE, IDE_Morph, BLACK, PrototypeHatBlockMorph, fontHeight,
+SnapTranslator*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.santa = '2024-December-07';
+modules.santa = '2025-December-01';
 
-// HatBlockMorph Xmas Skin (2024)
+// HatBlockMorph Xmas Skin (2024, 2025)
 
 HatBlockMorph.prototype.xmasSkin =
     IDE_Morph.prototype.getSetting('skin') === 'xmas';
@@ -964,6 +965,132 @@ IDE_Morph.prototype.looksMenu = function () {
         this.world(),
         this.controlBar.settingsButton.bottomLeft()
     );
+};
+
+// DialogBoxMorph Xmas Skin (2025)
+
+DialogBoxMorph.prototype.nativeRender = DialogBoxMorph.prototype.render;
+
+DialogBoxMorph.prototype.render = function (ctx) {
+    this.nativeRender(ctx);
+    if (HatBlockMorph.prototype.xmasSkin) {
+        this.renderTreeHat(ctx);
+    }
+};
+
+DialogBoxMorph.prototype.nativeOutlinePathTitle =
+    DialogBoxMorph.prototype.outlinePathTitle;
+
+DialogBoxMorph.prototype.outlinePathTitle = function (ctx, radius) {
+    var h = Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2;
+    if (HatBlockMorph.prototype.xmasSkin) {
+        ctx.roundRect(
+            h * 1.5,
+            0,
+            this.width() - h * 1.5,
+            Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2,
+            [radius, radius, 0, 0]
+        );
+    } else {
+        this.nativeOutlinePathTitle(ctx, radius);
+    }
+};
+
+DialogBoxMorph.prototype.renderTreeHat = function (ctx) {
+    var h = Math.ceil(fontHeight(this.titleFontSize)) + this.titlePadding * 2,
+        b = h / 4,
+        l = this.titlePadding / 6,
+
+        green = new Color(0, 200, 0).toString(),
+        darkGreen = new Color(0, 100, 0).toString(),
+        darkGray = new Color(150, 150, 150).toString(),
+        red = new Color(200, 0, 0).toString(),
+        white = WHITE.toString();
+
+    // tree
+    ctx.beginPath();
+    ctx.moveTo(h, 0);
+    ctx.lineTo(b * 2, b);
+    ctx.lineTo(b * 3, b);
+    ctx.lineTo(b, b * 2);
+    ctx.lineTo(b * 3, b * 2);
+    ctx.lineTo(0, b * 3);
+    ctx.lineTo(b * 3.7, b * 3);
+    ctx.lineTo(b * 3.7, h);
+    ctx.lineTo(b * 4.3, h);
+    ctx.lineTo(b * 4.3, b * 3);
+    ctx.lineTo(h * 2, b * 3);
+    ctx.lineTo(b * 5, b * 2);
+    ctx.lineTo(b * 7, b * 2);
+    ctx.lineTo(b * 5, b);
+    ctx.lineTo(b * 6, b);
+    ctx.closePath();
+
+    ctx.strokeStyle = green;
+    ctx.fillStyle = darkGreen;
+    ctx.lineWidth = l;
+    ctx.lineCap = 'miter';
+    ctx.fill();
+    ctx.stroke();
+
+    // snow
+    ctx.beginPath();
+    ctx.moveTo(h, l);
+    ctx.lineTo(b * 2, b);
+    ctx.moveTo(b * 3, b);
+    ctx.lineTo(b, b * 2);
+    ctx.moveTo(b * 3, b * 2);
+    ctx.lineTo(0, b * 3);
+
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = darkGray;
+    ctx.lineWidth = l * 2.5;
+    ctx.stroke();
+    ctx.strokeStyle = white;
+    ctx.lineWidth = l * 1.5;
+    ctx.stroke();
+
+    // baubles
+    [
+        [b * 2, b],
+        [b * 3.5, b * 0.7],
+        [b * 5, b],
+
+        [b, b * 2],
+        [b * 2.7, b * 1.8],
+        [b * 4.3, b * 1.8],
+        [b * 6, b * 2],
+
+        [0, b * 3],
+        [b * 1.5, b * 3],
+        [b * 3, b * 2.8],
+        [b * 5.3, b * 2.8],
+        [b * 7, b * 3]
+    ].forEach(p => {
+        ctx.fillStyle = white;
+        ctx.beginPath();
+        ctx.arc(
+            p[0] + (b / 2),
+            p[1] + l / 2,
+            b / 2.8,
+            radians(0),
+            radians(360),
+            false
+        );
+        ctx.fill();
+
+        ctx.fillStyle = red;
+        ctx.beginPath();
+        ctx.arc(
+            p[0] + (b / 2),
+            p[1] + (b / 5),
+            b / 3,
+            radians(0),
+            radians(360),
+            false
+        );
+        ctx.fill();
+    });
 };
 
 IDE_Morph.prototype.bakeYourOwnBlocks = function () {

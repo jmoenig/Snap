@@ -1,4 +1,10 @@
-// Update 2023-01-02
+// Update 2025-11-17 (jens - automatic vertical scrolling in fancy text bubbles)
+
+/*global SnapExtensions, StageMorph, Color, isNil, SpriteMorph, Point,
+TextMorph, fontHeight, SpriteBubbleMorph, isString, MenuMorph, IDE_Morph,
+localize, ScrollFrameMorph, Costume, newCanvas, radians*/
+
+/*jshint esversion: 11*/
 
 var prefix = 'ftx_';
 
@@ -7,44 +13,44 @@ SnapExtensions.primitives.set(
     function (data, size, maxWidth, color, proc) {
         makeFancyBubble(this, data, false, false, proc, size, maxWidth, color);
     }
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'say(data, size, maxWidth, color, anchor)',
-    function (data, size, maxWidth, color, anchor, proc) {
-        makeFancyBubble(this, data, false, false, proc, size, maxWidth, color, anchor);
+    function (data, size, maxWidth, color, anchor, maxHeight, proc) {
+        makeFancyBubble(this, data, false, false, proc, size, maxWidth, color, anchor, maxHeight);
     }
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'think(data, size, maxWidth, color)',
     function (data, size, maxWidth, color, proc) {
         makeFancyBubble(this, data, true, false, proc, size, maxWidth, color);
     }
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'think(data, size, maxWidth, color, anchor)',
-    function (data, size, maxWidth, color, anchor, proc) {
-        makeFancyBubble(this, data, true, false, proc, size, maxWidth, color, anchor);
+    function (data, size, maxWidth, color, anchor, maxHeight, proc) {
+        makeFancyBubble(this, data, true, false, proc, size, maxWidth, color, anchor, maxHeight);
     }
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'costume(data, size, maxWidth, color, align, font)',
     function (data, size, maxWidth, color, align, font, proc) {
         validateColor(color);
-        return new FancyTextCostume(data, size, maxWidth, color, align, font)
+        return new FancyTextCostume(data, size, maxWidth, color, align, font);
     }
 
-)
+);
 
 SnapExtensions.primitives.set(
     prefix+'remove_formatting_characters(text)',
     function (text) {
 
         function remove(t) {
-            return t.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1, -1))
+            return t.replace(/(\*[^\*]*\*)|(\_[^\_]*\_)/g, match => match.slice(1, -1));
         }
 
         function removeCharacters(t) {
@@ -58,7 +64,7 @@ SnapExtensions.primitives.set(
         return removeCharacters(text);
 
     }
-)
+);
 
 function validateColor(color) {
     if(!/rgba?\(\d{1,3}\,\d{1,3},\d{1,3},?\d?\.?\d*\)/.test(color) && !!color){
@@ -66,7 +72,7 @@ function validateColor(color) {
     }
 }
 
-function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWidth, color, anchor) {
+function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWidth, color, anchor, maxHeight) {
     const stage = sprite.parentThatIsA(StageMorph);
 
     validateColor(color);
@@ -83,7 +89,8 @@ function makeFancyBubble (sprite, data, isThought, isQuestion, proc, size, maxWi
         size,
         maxWidth,
         color,
-        anchor
+        anchor,
+        maxHeight
     );
 
     sprite.add(bubble);
@@ -161,7 +168,7 @@ if(!SpriteMorph.prototype.oldPositionTalkBubble) {
             bubble.setLeft(this.center().x);
         }
         bubble.keepWithin(stage);
-    }
+    };
 
 }
 
@@ -218,7 +225,7 @@ FancyTextMorph.prototype.init = function (
         fontName,
         shadowOffset,
         shadowColor);
-}
+};
 
 FancyTextMorph.prototype.fixLayout = function () {
     // determine my extent depending on my current settings
@@ -254,11 +261,11 @@ FancyTextMorph.prototype.processLine = function(line, ctx, charCb = () => {}, fr
     const processChar = (char) => {
         ctx.font = this.font();
         charCb(char, ctx);
-    }
+    };
 
     const processFrac = (frac) => {
         fracCb(frac, ctx);
-    }
+    };
 
     let escape = false;
 
@@ -300,10 +307,10 @@ FancyTextMorph.prototype.processLine = function(line, ctx, charCb = () => {}, fr
                     processIfEscaped(char, ()=> escape = true);
                     break;
                 case '*':
-                    processIfEscaped(char, () => this.isBold = !this.isBold)
+                    processIfEscaped(char, () => this.isBold = !this.isBold);
                     break;
                 case '_':
-                    processIfEscaped(char, () => this.isItalic = !this.isItalic)
+                    processIfEscaped(char, () => this.isItalic = !this.isItalic);
                     break;
                 case '~':
                     processIfEscaped(char, () => {
@@ -318,7 +325,7 @@ FancyTextMorph.prototype.processLine = function(line, ctx, charCb = () => {}, fr
 
     this.isBold = originalBold;
     this.isItalic = originalItalic;
-}
+};
 
 FancyTextMorph.prototype.lineWidth = function(ctx, line) {
     let width = 0;
@@ -327,7 +334,7 @@ FancyTextMorph.prototype.lineWidth = function(ctx, line) {
         frac => width += this.measureFraction(frac).width
     );
     return width;
-}
+};
 
 FancyTextMorph.prototype.lineHeight = function(line) {
     const fractions = FancyFraction.extract(line);
@@ -336,16 +343,16 @@ FancyTextMorph.prototype.lineHeight = function(line) {
 
     fractions.forEach(fraction => {
         lineHeight = Math.max(lineHeight, this.measureFraction(fraction).height);
-    })
+    });
 
     return lineHeight;
-}
+};
 
 FancyTextMorph.prototype.totalTextHeight = function() {
     let height = 0;
     this.lines.forEach(line =>
         {
-            height += this.lineHeight(line)
+            height += this.lineHeight(line);
         }
 
     );
@@ -353,7 +360,7 @@ FancyTextMorph.prototype.totalTextHeight = function() {
     height += fontHeight(this.fontSize) * 0.2;
 
     return height;
-}
+};
 
 FancyTextMorph.prototype.fillLine = function(ctx, line, x, y) {
     const lineHeight = this.lineHeight(line);
@@ -365,8 +372,8 @@ FancyTextMorph.prototype.fillLine = function(ctx, line, x, y) {
         const {width: fWidth, height: fHeight} = this.measureFraction(frac);
         this.drawFraction(frac, ctx, x, y + ((lineHeight - fHeight) / 2));
         x += fWidth;
-    })
-}
+    });
+};
 
 FancyTextMorph.prototype.drawFraction = function(fraction, ctx, x, y, totalWidth) {
 
@@ -422,7 +429,7 @@ FancyTextMorph.prototype.drawFraction = function(fraction, ctx, x, y, totalWidth
         ),
         y,
         totalWidth
-    )
+    );
 
     const oldLineWidth = ctx.lineWidth;
     ctx.lineWidth = FancyFraction.lineWidth(this.fontSize);
@@ -450,11 +457,11 @@ FancyTextMorph.prototype.drawFraction = function(fraction, ctx, x, y, totalWidth
         ),
         y + ctx.lineWidth * 2,
         totalWidth
-    )
+    );
 
     ctx.font = oldFont;
 
-}
+};
 
 FancyTextMorph.prototype.fractionHeight = function(fraction) {
     const fontSize = this.fontSize,
@@ -470,7 +477,7 @@ FancyTextMorph.prototype.fractionHeight = function(fraction) {
 
     return this.fractionHeight(fraction.numerator) +
         this.fractionHeight(fraction.denominator) + lineWidth * 4;
-}
+};
 
 FancyTextMorph.prototype.fractionWidth = function(fraction) {
 
@@ -507,14 +514,14 @@ FancyTextMorph.prototype.fractionWidth = function(fraction) {
 
     return width;
 
-}
+};
 
 FancyTextMorph.prototype.measureFraction = function(fraction){
     return {
         width: this.fractionWidth(fraction),
         height: this.fractionHeight(fraction)
-    }
-}
+    };
+};
 
 FancyTextMorph.prototype.render = function (ctx) {
     var shadowWidth = Math.abs(this.shadowOffset.x),
@@ -592,14 +599,14 @@ FancyTextMorph.prototype.render = function (ctx) {
     }
 };
 
-function FancySpriteBubbleMorph(data, stage, isThought, isQuestion, size, maxWidth, color, anchor) {
-    this.init(data, stage, isThought, isQuestion, size, maxWidth, color, anchor);
+function FancySpriteBubbleMorph(data, stage, isThought, isQuestion, size, maxWidth, color, anchor, maxHeight) {
+    this.init(data, stage, isThought, isQuestion, size, maxWidth, color, anchor, maxHeight);
 }
 
 FancySpriteBubbleMorph.prototype = new SpriteBubbleMorph('');
 FancySpriteBubbleMorph.prototype.constructor = FancySpriteBubbleMorph;
 FancySpriteBubbleMorph.uber = SpriteBubbleMorph.prototype;
-FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuestion, size, maxWidth, color, anchor){
+FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuestion, size, maxWidth, color, anchor, maxHeight){
 
     maxWidth = parseInt(maxWidth);
 
@@ -607,20 +614,28 @@ FancySpriteBubbleMorph.prototype.init = function(data, stage, isThought, isQuest
         maxWidth = 0;
     }
     this.maxWidth = maxWidth;
+
+    maxHeight = parseInt(maxHeight);
+    if(!maxHeight){
+        maxHeight = 0;
+    }
+    this.maxHeight = maxHeight;
+
     this.size = size || SpriteMorph.prototype.bubbleFontSize;
     this.textColor = color || new Color();
     this.anchor = anchor || 'top right';
 
     FancySpriteBubbleMorph.uber.init.call(this, data, stage, isThought, isQuestion);
-}
+};
 
 FancySpriteBubbleMorph.prototype.dataAsMorph = function(data) {
     var contents,
         sprite = SpriteMorph.prototype,
+        maxHeight = (this.maxHeight || this.stage?.dimensions?.y || 360) *
+            this.scale - (this.border + this.padding + 1) * 2,
         isText,
-        img,
-        scaledImg,
-        width;
+        width,
+        scroller;
 
     // everything here comes directly from SpriteBubbleMorph.prototype.dataAsMorph,
     // EXCEPT that we're creating a FancyTextMorph
@@ -665,15 +680,33 @@ FancySpriteBubbleMorph.prototype.dataAsMorph = function(data) {
         }
         contents.setWidth(width);
 
+        if (contents.height() > maxHeight) { // scroll
+            scroller = new ScrollFrameMorph();
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.bounds.setWidth(contents.width());
+            scroller.bounds.setHeight(maxHeight);
+            scroller.addContents(contents);
+            scroller.color = new Color(0, 0, 0, 0);
+
+            // scroll to the bottom:
+            /* // commented out for this case for now
+            scroller.scrollY(scroller.bottom() - contents.bottom());
+            scroller.adjustScrollBars();
+            */
+
+            contents = scroller;
+        }
+
         return contents;
     }
 
     return FancySpriteBubbleMorph.uber.dataAsMorph.call(this, data);
-}
+};
 
 function FancyFraction (numerator, denominator) {
     this.init(numerator, denominator);
-};
+}
 
 FancyFraction.prototype.init = function (numerator, denominator) {
     this.numerator = numerator;
@@ -712,11 +745,11 @@ FancyFraction.extract = function (aString) {
     var fractions = [];
 
     fractionStrings.forEach(fractionString => {
-        fractions.push(FancyFraction.parse(fractionString))
-    })
+        fractions.push(FancyFraction.parse(fractionString));
+    });
 
     return fractions;
-}
+};
 
 FancyFraction.parse = function (aString) {
     // * All fractions need to be parenthesized
@@ -743,7 +776,7 @@ FancyFraction.parse = function (aString) {
 
 FancyFraction.lineWidth = function(fontSize) {
     return Math.max(fontSize / 12, 1);
-}
+};
 
 FancyFraction.fontName = 'Courier';
 FancyFraction.fontStyle = 'monospace';
@@ -754,11 +787,11 @@ FancyFraction.transformFont = function(fontString, originalFontName, originalFon
         font = font.replace(originalFontStyle, FancyFraction.fontStyle);
     }
     return font;
-}
+};
 
 FancyTextCostume.prototype = new Costume();
 FancyTextCostume.prototype.constructor = FancyTextCostume;
-FancyTextCostume.uber = Costume.prototype
+FancyTextCostume.uber = Costume.prototype;
 
 function FancyTextCostume(data, size, maxWidth, color, align, font) {
     align = ['left','right','center'].includes(align) ? align : 'left';
@@ -809,7 +842,7 @@ function FancyTextCostume(data, size, maxWidth, color, align, font) {
 
 FancyTextMorph.prototype.toString = function() {
     return 'a FancyTextCostume(' + this.name + ')';
-}
+};
 
 Object.defineProperty(FancyTextCostume.prototype, "contents", {
     get: function contents() {
@@ -819,7 +852,7 @@ Object.defineProperty(FancyTextCostume.prototype, "contents", {
         textMorph.render(ctx);
         return canvas;
     }
-})
+});
 
 if(!SpriteMorph.prototype.oldRender) {
     SpriteMorph.prototype.oldRender = SpriteMorph.prototype.render;
@@ -888,4 +921,4 @@ SpriteMorph.prototype.render = function(ctx) {
     this.version = Date.now();
 
 
-}
+};

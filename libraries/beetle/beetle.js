@@ -16,9 +16,7 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
     SpriteMorph.prototype.setColorDimension = function (idx, num) {
         var stage = this.parent;
         this.originalSetColorDimension(idx, num);
-        if (stage?.beetleController &&
-            this.parentThatIsA(IDE_Morph).currentSprite === this
-        ) {
+        if (stage?.beetleController?.currentSprite === this) {
             stage.beetleController.beetle.setColor(this.color);
         }
     };
@@ -26,9 +24,7 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
     SpriteMorph.prototype.setColor = function (aColor) {
         var stage = this.parent;
         this.originalSetColor(aColor);
-        if (stage?.beetleController &&
-            this.parentThatIsA(IDE_Morph).currentSprite === this
-        ) {
+        if (stage?.beetleController?.currentSprite === this) {
             stage.beetleController.beetle.setColor(this.color);
         }
     };
@@ -41,9 +37,7 @@ if (!SpriteMorph.prototype.originalSetColorDimension) {
             stage = this.parent;
         this.originalMoveBy(delta, justMe);
         newPos = this.rotationCenter();
-        if (stage?.beetleController &&
-            this.parentThatIsA(IDE_Morph).currentSprite === this
-        ) {
+        if (stage?.beetleController?.currentSprite === this) {
             if (stage.beetleController.beetle.loggingSpritePositions
                 && !newPos.eq(oldPos)
             ) {
@@ -63,6 +57,7 @@ function BeetleController (stage) {
 
 BeetleController.prototype.init = function (stage) {
     this.stage = stage;
+    this.currentSprite = null; // last sprite that used the Beetle
 
     this.firstTimeOpenCount = 0; // for stupid Chrome
 
@@ -991,6 +986,8 @@ Beetle.prototype.init = function (controller) {
 
     this.name = 'beetle';
 
+    this.ready = false; // will be true when all meshes have been loaded
+
     this.shapeScale = new BABYLON.Vector2(1,1);
     this.shapeOffset = new BABYLON.Vector2.Zero;
     this.movementScale = 1;
@@ -1020,7 +1017,7 @@ Beetle.prototype.init = function (controller) {
 
 Beetle.prototype.initColor = function () {
     // Find out if there's a current sprite, or any sprite at all
-    var sprite = this.controller.stage.parent.currentSprite,
+    var sprite = this.controller.currentSprite,
         color;
     if (sprite instanceof StageMorph) {
         if (sprite.children[0]) {
@@ -1029,7 +1026,11 @@ Beetle.prototype.initColor = function () {
             return;
         }
     }
-    this.setColor(sprite.color);
+    if (sprite instanceof SpriteMorph) {
+        this.setColor(sprite.color);
+    } else {
+        this.setColor(new Color(128,100,90));
+    }
     this.controller.changed();
 };
 
@@ -1047,6 +1048,7 @@ Beetle.prototype.setColor = function (color) {
 };
 
 Beetle.prototype.loadMeshes = function () {
+    var myself = this;
     ['gray', 'color', 'black'].forEach(
         (each) =>
             BABYLON.SceneLoader.ImportMesh(
@@ -1077,6 +1079,7 @@ Beetle.prototype.loadMeshes = function () {
                         this.wings = meshes[0];
                         this.initColor();
                     }
+                    myself.ready = true;
                 }
             )
     );
@@ -1533,11 +1536,13 @@ SnapExtensions.buttons.palette.push({
 
 (function() {
     var ide = world.children[0],
-        stage = ide.stage;
+        scene = world.children[0].scenes.asArray().find(
+            s => s.globalVariables.names(true).includes('__module__beetle__')),
+        stage = scene.stage;
 
     // Redo palette so the button actually shows up
-    world.children[0].flushBlocksCache();
-    world.children[0].refreshPalette();
+    ide.flushBlocksCache();
+    ide.refreshPalette();
 
     // Init controller
     if (!stage.beetleController) {
@@ -1547,57 +1552,73 @@ SnapExtensions.buttons.palette.push({
 
 // Primitives
 
-SnapExtensions.primitives.set('bb_clear()', function (steps) {
+SnapExtensions.primitives.set('bb_ready()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
+    return stage.beetleController.beetle.ready;
+});
+
+SnapExtensions.primitives.set('bb_clear()', function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.clear();
 });
 
 SnapExtensions.primitives.set('bb_move(axis, steps)', function (axis, steps) {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.move(axis, steps);
 });
 
 SnapExtensions.primitives.set('bb_goto(x, y, z)', function (x, y, z) {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.goto(x, y, z);
 });
 
 SnapExtensions.primitives.set('bb_position()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     return stage.beetleController.beetle.getPosition();
 });
 
 SnapExtensions.primitives.set('bb_setrot(x, y, z)', function (x, y, z) {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.setRotations(x, y, z);
 });
 
 SnapExtensions.primitives.set('bb_rotation()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     return stage.beetleController.beetle.getRotation();
 });
 
 SnapExtensions.primitives.set('bb_rotate(x, y, z)', function (x, y, z) {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.rotate(x, y, z);
 });
 
 SnapExtensions.primitives.set('bb_pointto(x, y, z)', function (x, y, z) {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.pointTo(x, y, z);
 });
 
 SnapExtensions.primitives.set('bb_setextrusionbase(base)', function (base) {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.extrusionShapeSelector = base;
     stage.beetleController.beetle.updateExtrusionShapeOutline();
 });
@@ -1605,6 +1626,7 @@ SnapExtensions.primitives.set('bb_setextrusionbase(base)', function (base) {
 SnapExtensions.primitives.set('bb_extrusionbasepoints()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     return new List(stage.beetleController.beetle.extrusionShape.map(
         point => new List([point.x * -1, point.z]))
     );
@@ -1616,18 +1638,21 @@ SnapExtensions.primitives.set(
 {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.setLoggingSpritePosition(doIt, currentPos);
 });
 
 SnapExtensions.primitives.set('bb_startextruding()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.extrudeToCurrentPoint();
 });
 
 SnapExtensions.primitives.set('bb_stopextruding()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.stopExtruding();
 });
 
@@ -1637,6 +1662,7 @@ SnapExtensions.primitives.set(
 {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.setScale(scale, which);
 });
 
@@ -1644,6 +1670,7 @@ SnapExtensions.primitives.set('bb_scale(which)', function (which) {
     var stage = this.parentThatIsA(StageMorph),
         scale;
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     scale = stage.beetleController.beetle[which + 'Scale'];
     if (which === 'shape') {
         if (scale.x === scale.y) {
@@ -1658,11 +1685,13 @@ SnapExtensions.primitives.set('bb_scale(which)', function (which) {
 SnapExtensions.primitives.set('bb_setoffset(offset)', function (offset) {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     stage.beetleController.beetle.setOffset(offset.itemsArray());
 });
 
 SnapExtensions.primitives.set('bb_beetleView()', function () {
     var stage = this.parentThatIsA(StageMorph);
     if (!stage.beetleController) { return; }
+    stage.beetleController.currentSprite = this;
     return stage.beetleController.beetleView();
 });

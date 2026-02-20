@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -53,7 +53,7 @@ normalizeCanvas, SnapSerializer, Costume, ThreadManager, IDE_Morph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2024-May-28';
+modules.scenes = '2026-February-18';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -120,7 +120,12 @@ function Scene(aStageMorph) {
     this.hasUnsavedEdits = false;
     this.unifiedPalette = false;
     this.showCategories = true;
+    this.hideEmptyCategories = false;
     this.showPaletteButtons = true;
+    this.role = null; // null (default), "template" or "tutorial"
+    this.createdFromTemplate = false;
+    this.template = null; // {name: str, version: str, hide: nested list}
+    this.hideSprites = false;
 
     // cached IDE state
     this.sprites = new List();
