@@ -87,20 +87,20 @@
       "de": {
         "name": "Ereignisse",
         "searchData": [
-          "Wenn Variable _ sich ändert",
-          "Wenn _ > _",
-          "Wenn Hintergrund zu _ wechselt",
-          "hat _ sich ereignet?",
-          "hat _ sich verändert?",
-          "Wenn _ sich ändert"
+          "Wenn Variable _ sich ändert\rpl",
+          "Wenn _ > _\rpl",
+          "Wenn Hintergrund zu _ wechselt\rpl",
+          "hat _ sich ereignet?\rpl",
+          "hat _ sich verändert?\rpl",
+          "Wenn _ sich ändert\rpl"
         ],
         "searchData": [
-          "Wenn Variable _ sich ändert",
-          "Wenn _ > _",
-          "Wenn Hintergrund zu _ wechselt",
-          "hat _ sich ereignet?",
-          "hat _ sich verändert?",
-          "Wenn _ sich ändert"
+          "Wenn Variable _ sich ändert\rpl",
+          "Wenn _ > _\rpl",
+          "Wenn Hintergrund zu _ wechselt\rpl",
+          "hat _ sich ereignet?\rpl",
+          "hat _ sich verändert?\rpl",
+          "Wenn _ sich ändert\rpl"
         ]
       },
       "ca": {
@@ -171,6 +171,7 @@
       "sieve _ using _ _",
       "order _ _",
       "transform _ using _ _",
+      "pipe _ to _",
       "extend _ using _ _",
       "running sum of _",
       "difference of _",
@@ -179,16 +180,24 @@
       "running min of _",
       "running max of _",
       "running reduce _",
-      "running fold _ _",
-      "pipe _",
-      "let _ then report _"
+      "running fold _ to _",
+      "let _  then report _"
     ],
     "categories": [
+      "Tables",
       "control",
-      "operators",
-      "other",
-      "Tables"
-    ]
+      "other"
+    ],
+    "translations": {
+      "de": {
+        "searchData": [
+          "deklariere _ _ dann berichte _"
+        ],
+        "searchData": [
+          "deklariere _ _ dann berichte _"
+        ]
+      }
+    }
   },
   {
     "fileName": "neural_networks_module.xml",
@@ -197,7 +206,6 @@
     "searchData": [
       "plot bars _ _",
       "render neural model _ _",
-      "_ times _",
       "normalize table _",
       "normalization for table _",
       "partition table _ by _",
@@ -210,13 +218,14 @@
       "_ of network _",
       "_ of network _ to _",
       "blockify _",
-      "new perceptron sprite"
+      "new perceptron sprite",
+      "_ times _"
     ],
     "categories": [
       "pen",
-      "control",
       "lists",
-      "Neural Networks"
+      "Neural Networks",
+      "control"
     ],
     "translations": {
       "de": {
@@ -239,6 +248,24 @@
           "_ von Netzwerk _ auf _",
           "blockifiziere _",
           "neues Perzeptron Objekt"
+        ],
+        "searchData": [
+          "male Balken _ _\rca",
+          "male neurales Modell _ _\rca",
+          "normalisiere Tabelle _\rca",
+          "Normalisierung für Tabelle _\rca",
+          "teile Tabelle _ im Verhältnis _\rca",
+          "generiere _ für _ in _ _",
+          "klone _ _\rca",
+          "Objekt _\rca",
+          "neues neuronales Netzwerk _\rca",
+          "_ Netzwerk _ mit _\rca",
+          "_ _ mit Netzwerk _\rca",
+          "_ von Netzwerk _\rca",
+          "_ von Netzwerk _ auf _\rca",
+          "blockifiziere _",
+          "neues Perzeptron Objekt",
+          "_ mal _"
         ]
       },
       "ca": {
@@ -246,6 +273,19 @@
         "description": "Classifica dades vectoritzades utilitzant xarxes neuronals. Entrena i valida els teus propis models interns."
       }
     }
+  },
+  {
+    "fileName": "teachable-machines.xml",
+    "name": "Teachable Machines",
+    "description": "Use Google's Teachable Machine to classify images in real-time using your webcam. Detect hand, face and body features or gestures by using Teachable Machine models running locally in the browser.",
+    "searchData": [
+      "Predict",
+      "Load Model _"
+    ],
+    "categories": [
+      "other"
+    ],
+    "translations": {}
   },
   {
     "fileName": "edge AI.xml",
@@ -266,8 +306,7 @@
     "categories": [
       "Edge Computer Vision"
     ],
-    "translations": {
-    }
+    "translations": {}
   },
   {
     "fileName": "~",
@@ -299,8 +338,8 @@
           "wirf _ _\rca",
           "falls _ dann _ und pause $-1-255-220-0\rca",
           "ignoriere _\rca",
-          "führe _ mit Continuation aus",
-          "rufe _ mit Continuation auf"
+          "führe _ mit Continuation aus\rpl",
+          "rufe _ mit Continuation auf\rpl"
         ],
         "searchData": [
           "fange _ _\rca",
@@ -309,8 +348,8 @@
           "wirf _ _\rca",
           "falls _ dann _ und pause $-1-255-220-0\rca",
           "ignoriere _\rca",
-          "führe _ mit Continuation aus",
-          "rufe _ mit Continuation auf"
+          "führe _ mit Continuation aus\rpl",
+          "rufe _ mit Continuation auf\rpl"
         ]
       },
       "es": {
@@ -999,6 +1038,14 @@
           "posa el servo _ a _\res",
           "lectura analògica _\res",
           "lectura digital _\res"
+        ],
+        "searchData": [
+          "placa connectada?\res",
+          "posa el pin digital _ a _\res",
+          "posa el pin _ al valor _\res",
+          "posa el servo _ a _\res",
+          "lectura analògica _\res",
+          "lectura digital _\res"
         ]
       }
     }
@@ -1009,26 +1056,26 @@
     "description": "Generate 3D geometry by extruding points, lines or polygons along a path in 3D space.",
     "searchData": [
       "reset",
-      "set _ scale to _",
-      "set shape offset to _",
       "go home",
-      "go to _",
-      "stop extruding",
       "move _ steps",
-      "change relative _ by _",
+      "go to _",
       "set _ position to _",
-      "_ position",
       "change absolute _ by _",
+      "change relative _ by _",
+      "_ position",
       "rotate _ by _",
       "set _ rotation to _",
-      "push position",
-      "_ rotation",
       "point to _",
+      "_ rotation",
       "start extruding _",
+      "stop extruding",
       "log sprite positions in _",
       "shape points",
+      "set shape offset to _",
+      "set _ scale to _",
       "change _ scale by _",
       "_ scale",
+      "push position",
       "pop position",
       "beetle view"
     ],
@@ -1066,26 +1113,26 @@
         ],
         "searchData": [
           "reinicia",
-          "fixa l'escala de _ a _",
-          "fixa el desplaçament de la base a _",
           "torna a casa",
-          "vés a _",
-          "deixa d'extrudir",
           "mou-te _ passos",
-          "mou-te en la _ pròpia _ passos",
+          "vés a _",
           "fixa la coordenada _ a _",
-          "posició _",
           "augmenta la coordenada _ en _",
+          "mou-te en la _ pròpia _ passos",
+          "posició _",
           "gira sobre _ propi en _ graus",
           "fixa l'angle _ propi a _",
-          "enregistra posició actual",
-          "angle _",
           "apunta cap a _",
+          "angle _",
           "comença a extrudir amb _ de base",
+          "deixa d'extrudir",
           "enregistra les posicions de la tortuga _",
           "punts de la base",
+          "fixa el desplaçament de la base a _",
+          "fixa l'escala de _ a _",
           "augmenta l'escala de _ en _",
           "escala de _",
+          "enregistra posició actual",
           "torna a la posició enregistrada",
           "vista de l'escarbat"
         ]
@@ -1266,15 +1313,17 @@
           "sprich _ mit _ Aussprache _ und Höhe _ Geschwindigkeit _\rpt",
           "sprich _ mit _ Aussprache _ und Höhe _ Geschwindigkeit _ und warte\rpt",
           "erkenne Gesprochenes\rar",
-          "stoppe Spracherkennung"
+          "Sprachantwort begonnen?",
+          "aktiviere Sprachausgabe _\r pl",
+          "stoppe Spracherkennung\rpl"
         ],
         "searchData": [
           "sprich _ mit _ Aussprache _ und Höhe _ Geschwindigkeit _\rpt",
           "sprich _ mit _ Aussprache _ und Höhe _ Geschwindigkeit _ und warte\rpt",
           "erkenne Gesprochenes\rar",
           "Sprachantwort begonnen?",
-          "aktiviere Sprachausgabe _",
-          "stoppe Spracherkennung"
+          "aktiviere Sprachausgabe _\r pl",
+          "stoppe Spracherkennung\rpl"
         ]
       },
       "ca": {
@@ -2168,13 +2217,13 @@
         "description": "Agafa una taula (normalment obtinguda des d'un fitxer CSV) com a entrada i obté un resum de la taula agrupant les dades pel camp especificat pel número de columna. Les altres tres entrades només s'utilitzen si els valors d'aquest camp són nombres, i llavors permet agrupar-los (per exemple en dècades, segles...). Aquestes tres entrades indiquen els valors més petits i més grans dels grups i, més important, la longitud de l'agrupació (10 per dècades, 100 per segles). Si el camp no és numèric, cal deixar aquests tres camps buits o a zero. En aquest darrer cas, cada valor de text farà una agrupació (una dada a representar) i apareixerà en ordre alfabètic. El bloc retorna una nova taula amb tres columnes. La primera té el nom del grup. La segona el número de registres que té cada grup. I la tercera té una altra taula amb els registres originals que s'han agrupat. Si les agrupacions no tenen una amplada constant o es vol agrupar per alguna funció o per més d'un camp, cal utilitzar la llibreria \"Anàlisi de la distribució de freqüències\".",
         "searchData": [
           "gràfica de la taula _ agrupada pel camp",
-          "ordena taula _ pel camp _ en ordre _",
-          "agrupa taula _ pel camp _ per intervals de _"
+          "ordena taula _ pel camp _ en ordre _\rpl",
+          "agrupa taula _ pel camp _ per intervals de _\rpl"
         ],
         "searchData": [
           "gràfica de la taula _ agrupada pel camp",
-          "ordena taula _ pel camp _ en ordre _",
-          "agrupa taula _ pel camp _ per intervals de _"
+          "ordena taula _ pel camp _ en ordre _\rpl",
+          "agrupa taula _ pel camp _ per intervals de _\rpl"
         ]
       },
       "it": {
@@ -2300,11 +2349,15 @@
       "_ url: _ send: _ headers: _",
       "key: _ value: _",
       "current location",
-      "binary data from _ type _"
+      "binary data from _ type _",
+      "load costume from url _",
+      "load sound from url _"
     ],
     "categories": [
       "operators",
-      "sensing"
+      "sensing",
+      "looks",
+      "sound"
     ]
   },
   {
@@ -2313,7 +2366,7 @@
     "description": "Declare and initialize multiple script variables",
     "searchData": [
       "let _",
-      "let _ then report _"
+      "let _  then report _"
     ],
     "categories": [
       "other"
@@ -2324,7 +2377,11 @@
         "description": "Mehrere Skriptvariablen auf einmal anlegen und mit Werten initialisieren",
         "searchData": [
           "deklariere _",
-          "deklariere _ dann berichte _"
+          "deklariere _ _ dann berichte _"
+        ],
+        "searchData": [
+          "deklariere _",
+          "deklariere _ _ dann berichte _"
         ]
       },
       "ca": {
@@ -3072,8 +3129,7 @@
     "categories": [
       "WebSockets"
     ],
-    "translations": {
-    }
+    "translations": {}
   },
   {
     "fileName": "signada.xml",
@@ -3202,7 +3258,7 @@
       "exit tutorial"
     ],
     "categories": [
-      "tutorials"
+      "Tutorials"
     ],
     "translations": {
       "ca": {
@@ -3269,7 +3325,13 @@
     "translations": {
       "de": {
         "name": "Male Pfade",
-        "description": "Male Vektorpfade und Polygone direkt, ohne den Stift zu bewegen, wahlweise ausgefüllt oder umrandet"
+        "description": "Male Vektorpfade und Polygone direkt, ohne den Stift zu bewegen, wahlweise ausgefüllt oder umrandet",
+        "searchData": [
+          "male Pfad _ _"
+        ],
+        "searchData": [
+          "male Pfad _ _"
+        ]
       }
     }
   },
@@ -3278,19 +3340,20 @@
     "name": "Shapes",
     "description": "Create, combine, transform and display geometric shapes for a functions-first approach to teaching programming. Inspired by Pyret's image library, see: https://pyret.org/docs/horizon/image.html - under development",
     "searchData": [
-      "draw  _",
+      "let _",
+      "draw _",
       "costume from _",
       "square _ _",
       "circle _ _",
       "rectangle w: _ h: _ _",
       "ellipse w: _ h: _ _",
-      "path _",
+      "path _ _",
       "rotate _ by _",
       "scale _ by _",
       "move _ by _",
-      "beside _ _ _ align y: _",
-      "above _ _ _ align x: _",
-      "overlay _ _ _ align x: _ y: _",
+      "beside _ _  align y: _",
+      "above _ _  align x: _",
+      "overlay _ _  align x: _ y: _",
       "layer _",
       "left of _",
       "right of _",
@@ -3301,11 +3364,25 @@
       "centroid x of _",
       "centroid y of _",
       "width of _",
-      "height of _"
+      "height of _",
+      "extent of _",
+      "bounding box of _",
+      "is _ a shape?"
     ],
     "categories": [
-      "tables"
-    ]
+      "other",
+      "Shapes"
+    ],
+    "translations": {
+      "de": {
+        "searchData": [
+          "deklariere _"
+        ],
+        "searchData": [
+          "deklariere _"
+        ]
+      }
+    }
   },
   {
     "fileName": "~",
@@ -3330,8 +3407,7 @@
     "categories": [
       "looks"
     ],
-    "translations": {
-    }
+    "translations": {}
   },
   {
     "fileName": "microworlds/fancy-text-morphs.xml",
@@ -3347,8 +3423,7 @@
     "categories": [
       "looks"
     ],
-    "translations": {
-    }
+    "translations": {}
   },
   {
     "fileName": "microworlds/fancy-text.xml",
@@ -3360,8 +3435,7 @@
     "categories": [
       "pen"
     ],
-    "translations": {
-    }
+    "translations": {}
   },
   {
     "fileName": "microworlds/microworld.xml",
@@ -3425,8 +3499,7 @@
     "categories": [
       "looks"
     ],
-    "translations": {
-    }
+    "translations": {}
   },
   {
     "fileName": "microworlds/translations.xml",
@@ -3453,7 +3526,6 @@
     "categories": [
       "Translations"
     ],
-    "translations": {
-    }
+    "translations": {}
   }
 ]
