@@ -1664,7 +1664,7 @@ DialogBoxMorph.prototype.inform = function (
     );
 
     if (!this.key) {
-        this.key = 'inform' + title + textString;
+        this.key = textString ? 'inform' + title + textString : null;
     }
 
     txt.enableLinks = true; // let the user click on URLs to open in new tab

@@ -107,6 +107,7 @@
 
 ### 2026-03-02
 * objects, blocks, widgets, gui: change name and color of custom categories
+* extensions, widgets: "open in dialog..." menu option for costume-morphs, double-click to pop up images in dialog
 
 ### 2026-02-28
 * added  (equilateral) triangles to the shapes library
