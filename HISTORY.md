@@ -45,6 +45,7 @@
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
     * ui
+        * change name and color of custom categories
         * new "blocks" and "speaker" symbols, icons for the sprite-editor tabs
         * new "hide empty categories" setting
         * added a black-gray-white palette to the bottom of the color picker for color input slots
@@ -103,6 +104,9 @@
     * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
     * German
+
+### 2026-03-02
+* objects, blocks, widgets, gui: change name and color of custom categories
 
 ### 2026-02-28
 * added  (equilateral) triangles to the shapes library

@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-February-27';
+modules.blocks = '2026-March-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1615,11 +1615,14 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
                 def = rcvr.getMethod(this.parent.blockSpec);
             }
         }
+        // if (def && deflt instanceof InputSlotMorph && !deflt.isUnevaluated) {
         if (def && deflt instanceof InputSlotMorph && !deflt.isUnevaluated) {
             deflt.setChoices.apply(
                 deflt,
                 def.inputOptionsOfIdx(this.parent.inputs().indexOf(this))
             );
+        } else if (deflt instanceof ADT_SlotMorph) {
+            deflt.setContents(this.defaultValue);
         }
     }
     if (deflt instanceof MultiArgMorph && !inp) {

@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-Februars-24';
+modules.gui = '2026-March-02';
 
 // Declarations
 
@@ -6158,6 +6158,85 @@ IDE_Morph.prototype.addPaletteCategory = function (name, color) {
     this.createPaletteHandle();
     this.categories.fixLayout();
     this.fixLayout();
+};
+
+IDE_Morph.prototype.changeUserCategory = function (pos) {
+    var menu = new MenuMorph(
+        this.changeCustomCategory,
+        null,
+        this
+    );
+
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
+        menu.addItem(
+            name,
+            name,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            true // verbatim - don't translate
+        )
+    );
+    if (pos) {
+        menu.popup(this.world(), pos);
+    } else {
+        menu.popUpAtHand(this.world());
+    }
+};
+
+IDE_Morph.prototype.changeCustomCategory = function (name) {
+    new DialogBoxMorph(
+        this,
+        cat => this.changePaletteCategory(cat.old, cat.name, cat.color),
+        this
+    ).promptCategory(
+        "Change Category",
+        name,
+        SpriteMorph.prototype.customCategories.get(name),
+        this.world(),
+        null, // pic
+        'Blocks category name:' // msg
+    );
+};
+
+IDE_Morph.prototype.changePaletteCategory = function (old, name, color) {
+    SpriteMorph.prototype.customCategories.set(name, color);
+    this.stage.globalBlocks.forEach(def =>{
+        if (def.category === old) {
+            def.category = name;
+            this.currentSprite.allBlockInstances(def).reverse().forEach(
+                block => block.refresh()
+            );
+        }
+    });
+    this.sprites.asArray().concat(this.stage).forEach(obj => {
+        obj.customBlocks.forEach(def => {
+            if (def.category === old) {
+                def.category = name;
+                obj.allDependentInvocationsOf(
+                    def.blockSpec()
+                ).reverse().forEach(
+                    block => block.refresh(def)
+                );
+            }
+        });
+    });
+    if (old === name) {
+        this.createCategories();
+        this.refreshEmptyCategories();
+        this.createPaletteHandle();
+        this.categories.fixLayout();
+        this.fixLayout();
+        this.recordUnsavedChanges();
+    } else {
+        this.deletePaletteCategory(old);
+    }
 };
 
 IDE_Morph.prototype.deleteUserCategory = function (pos) {

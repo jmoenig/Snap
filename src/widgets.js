@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2025 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -88,7 +88,7 @@ ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2025-December-19';
+modules.widgets = '2026-March-02';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2209,9 +2209,7 @@ DialogBoxMorph.prototype.promptCategory = function (
     if (pic) {this.setPicture(pic); }
 
     this.addBody(bdy);
-
     this.addButton('ok', 'OK');
-
     this.addButton('cancel', 'Cancel');
     this.fixLayout();
 
@@ -2221,6 +2219,7 @@ DialogBoxMorph.prototype.promptCategory = function (
 
     this.getInput = function () {
         return {
+            old: name, // +++
             name: field.getValue(),
             color: picker.color.copy()
         };
