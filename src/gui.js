@@ -6229,9 +6229,11 @@ IDE_Morph.prototype.changePaletteCategory = function (old, name, color) {
     });
     if (old === name) {
         this.createCategories();
-        this.refreshEmptyCategories();
         this.createPaletteHandle();
         this.categories.fixLayout();
+        this.flushPaletteCache();
+        this.refreshPalette(true);
+        this.refreshEmptyCategories();
         this.fixLayout();
         this.recordUnsavedChanges();
     } else {
