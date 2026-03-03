@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-March-02';
+modules.extensions = '2026-March-03';
 
 // Global stuff
 
@@ -1420,7 +1420,8 @@ SnapExtensions.primitives.set(
                 'Image view',
                 null,
                 this.world(),
-                costume.contents
+                costume.contents,
+                true // enable exporting
             ),
             img;
         proc.assertType(costume, 'costume');

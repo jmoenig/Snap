@@ -84,11 +84,12 @@
 StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph, ColorPaletteMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph, isNil,
 ArrowMorph, MenuMorph, isString, SliderMorph, MorphicPreferences, BLACK, WHITE,
-ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf*/
+ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf,
+IDE_Morph*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2026-March-02';
+modules.widgets = '2026-March-03';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -1648,7 +1649,8 @@ DialogBoxMorph.prototype.inform = function (
     title,
     textString,
     world,
-    pic
+    pic,
+    enablePicExport = false
 ) {
     var txt = new TextMorph(
         textString,
@@ -1670,7 +1672,7 @@ DialogBoxMorph.prototype.inform = function (
     txt.enableLinks = true; // let the user click on URLs to open in new tab
     this.labelString = title;
     this.createLabel();
-    if (pic) {this.setPicture(pic); }
+    if (pic) {this.setPicture(pic, enablePicExport); }
     if (textString) {
         this.addBody(txt);
     }
@@ -2762,7 +2764,7 @@ DialogBoxMorph.prototype.addButton = function (action, label) {
     return button;
 };
 
-DialogBoxMorph.prototype.setPicture = function (aMorphOrCanvas) {
+DialogBoxMorph.prototype.setPicture = function (aMorphOrCanvas, enableExport) {
     var morph;
     if (aMorphOrCanvas instanceof Morph) {
         morph = aMorphOrCanvas;
@@ -2772,6 +2774,19 @@ DialogBoxMorph.prototype.setPicture = function (aMorphOrCanvas) {
         morph.cachedImage = aMorphOrCanvas;
         morph.bounds.setWidth(aMorphOrCanvas.width);
         morph.bounds.setHeight(aMorphOrCanvas.height);
+        if (enableExport) {
+            morph.userMenu = function () {
+                var menu = new MenuMorph(this);
+                menu.addItem(
+                    'export',
+                    () => IDE_Morph.prototype.saveCanvasAs(
+                        aMorphOrCanvas,
+                        'image'
+                    )
+                );
+                return menu;
+            };
+        }
     }
     this.addHead(morph);
 };

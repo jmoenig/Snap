@@ -105,6 +105,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2026-03-03
+* extensions, widgets: enable exporting images from image-view dialogs
+
 ### 2026-03-02
 * objects, blocks, widgets, gui: change name and color of custom categories
 * extensions, widgets: "open in dialog..." menu option for costume-morphs, double-click to pop up images in dialog
