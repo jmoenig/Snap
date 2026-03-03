@@ -107,6 +107,7 @@
 
 ### 2026-03-03
 * extensions, widgets: enable exporting images from image-view dialogs
+* shapes module update
 
 ### 2026-03-02
 * objects, blocks, widgets, gui: change name and color of custom categories
