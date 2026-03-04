@@ -57,6 +57,7 @@
         * new "... times ..." reporter in the neural networks library for quantifying results
         * new blocks to load costumes and sounds from a url in the web-services library, thanks, @ego-lay-atman-bay!
         * new "cst_shrink-wrap(cst)" extension
+        * new "ide_switch_to_palette(category)" extension
     * new help screens
         * new help screens for "combinations" and
         * "pipe" reporters, thanks, Brian and gang!
@@ -104,6 +105,9 @@
     * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
     * German
+
+### 2026-03-04
+* extensions: new "ide_switch_to_palette(category)" extension
 
 ### 2026-03-03
 * extensions, widgets: enable exporting images from image-view dialogs

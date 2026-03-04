@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-March-03';
+modules.extensions = '2026-March-04';
 
 // Global stuff
 
@@ -1781,6 +1781,22 @@ SnapExtensions.primitives.set(
         data.map(eachRow => dict[eachRow.at(1)] = eachRow.at(2));
         SnapTranslator.dict[SnapTranslator.language] = dict;
         ide.reflectLanguage(SnapTranslator.language);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_switch_to_palette(category)',
+    function (category) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        if (ide.scene.unifiedPalette) {
+            ide.scrollPaletteToCategory(category);
+        } else {
+            ide.currentCategory = category;
+            ide.categories.buttons.forEach(each =>
+                each.refresh()
+            );
+            ide.refreshPalette(true);
+        }
     }
 );
 
