@@ -106,6 +106,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2026-03-05
+* updated the tutorial extension with a new "select editor category" command
+
 ### 2026-03-04
 * extensions: new "ide_switch_to_palette(category)" extension
 
