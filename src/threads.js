@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-February-27';
+modules.threads = '2026-March-02';
 
 var ThreadManager;
 var Process;
@@ -9093,7 +9093,7 @@ Process.prototype.slotSpec = function (num) {
     // answer a spec indicating the shape of a slot represented by a number
     // or by a textual mnemomic
     var prefix = '',
-        id = this.reportIsA(num, 'text') ? this.slotType(num) : +num,
+        id,
         spec;
 
     if (num instanceof List) { // input group
@@ -9102,6 +9102,7 @@ Process.prototype.slotSpec = function (num) {
         ).join('');
     }
 
+    id = this.reportIsA(num, 'text') ? this.slotType(num) : +num;
     if (id >= 100) {
         prefix = '%mult';
         id -= 100;

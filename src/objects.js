@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-February-24';
+modules.objects = '2026-March-02';
 
 var SpriteMorph;
 var StageMorph;
@@ -4496,6 +4496,10 @@ SpriteMorph.prototype.freshPalette = function (category) {
                 () => this.parentThatIsA(IDE_Morph).createNewCategory()
             );
             if (SpriteMorph.prototype.customCategories.size) {
+                menu.addItem(
+                    'change a category...',
+                    () => this.parentThatIsA(IDE_Morph).changeUserCategory()
+                );
                 menu.addItem(
                     'delete a category...',
                     () => this.parentThatIsA(IDE_Morph).deleteUserCategory()
