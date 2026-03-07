@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-February-27';
+modules.extensions = '2026-March-04';
 
 // Global stuff
 
@@ -1416,6 +1416,13 @@ SnapExtensions.primitives.set(
     'cst_morph(cst)',
     function (costume, proc) {
         var m = new Morph(),
+            imageView = () => new DialogBoxMorph().inform(
+                'Image view',
+                null,
+                this.world(),
+                costume.contents,
+                true // enable exporting
+            ),
             img;
         proc.assertType(costume, 'costume');
         img = costume.contents;
@@ -1425,6 +1432,8 @@ SnapExtensions.primitives.set(
         m.cachedImage = img;
         m.isCustomSwatch = true;
 
+        m.mouseDoubleClick = imageView;
+
         // support exporting costumes directly from speech balloons:
         m.userMenu = function () {
             var menu = new MenuMorph(this),
@@ -1432,6 +1441,7 @@ SnapExtensions.primitives.set(
                     this.world().childThatIsA(IDE_Morph);
 
             if (ide.isAppMode) {return; }
+            menu.addItem('open in dialog...', imageView);
             menu.addItem(
                 'export',
                 () => ide.saveCanvasAs(img, costume.name || 'image')
@@ -1771,6 +1781,22 @@ SnapExtensions.primitives.set(
         data.map(eachRow => dict[eachRow.at(1)] = eachRow.at(2));
         SnapTranslator.dict[SnapTranslator.language] = dict;
         ide.reflectLanguage(SnapTranslator.language);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_switch_to_palette(category)',
+    function (category) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        if (ide.scene.unifiedPalette) {
+            ide.scrollPaletteToCategory(category);
+        } else {
+            ide.currentCategory = category;
+            ide.categories.buttons.forEach(each =>
+                each.refresh()
+            );
+            ide.refreshPalette(true);
+        }
     }
 );
 

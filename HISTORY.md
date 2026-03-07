@@ -45,6 +45,7 @@
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
     * ui
+        * change name and color of custom categories
         * new "blocks" and "speaker" symbols, icons for the sprite-editor tabs
         * new "hide empty categories" setting
         * added a black-gray-white palette to the bottom of the color picker for color input slots
@@ -56,6 +57,7 @@
         * new "... times ..." reporter in the neural networks library for quantifying results
         * new blocks to load costumes and sounds from a url in the web-services library, thanks, @ego-lay-atman-bay!
         * new "cst_shrink-wrap(cst)" extension
+        * new "ide_switch_to_palette(category)" extension
     * new help screens
         * new help screens for "combinations" and
         * "pipe" reporters, thanks, Brian and gang!
@@ -103,6 +105,23 @@
     * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
     * German
+
+### 2026-03-05
+* updated the tutorial extension with a new "select editor category" command
+
+### 2026-03-04
+* extensions: new "ide_switch_to_palette(category)" extension
+
+### 2026-03-03
+* extensions, widgets: enable exporting images from image-view dialogs
+* shapes module update
+
+### 2026-03-02
+* objects, blocks, widgets, gui: change name and color of custom categories
+* extensions, widgets: "open in dialog..." menu option for costume-morphs, double-click to pop up images in dialog
+
+### 2026-02-28
+* added  (equilateral) triangles to the shapes library
 
 ### 2026-02-27
 * threads: metaprogramming support for the ADT slot
