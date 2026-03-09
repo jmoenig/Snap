@@ -12691,7 +12691,10 @@ InputSlotMorph.prototype.isEmptySlot = function () {
 };
 
 InputSlotMorph.prototype.matches = function (typestring) {
-    return [this.isNumeric ? 'number' : 'text', 'any'].includes(typestring);
+    if (this.isNumeric) {
+        return 'number';
+    }
+    return true;
 };
 
 // InputSlotMorph single-stepping:
@@ -14133,6 +14136,10 @@ TextSlotMorph.prototype.contents = function () {
         this.children,
         child => child instanceof TextMorph
     );
+};
+
+TextSlotMorph.prototype.matches = function (typestring) {
+    return ['text', 'number'].includes(typestring);
 };
 
 // TextSlotMorph events:
