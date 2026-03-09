@@ -12692,7 +12692,7 @@ InputSlotMorph.prototype.isEmptySlot = function () {
 
 InputSlotMorph.prototype.matches = function (typestring) {
     if (this.isNumeric) {
-        return 'number' === typestring;
+        return ['number', 'any'].includes(typestring);
     }
     return true;
 };
