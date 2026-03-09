@@ -112,6 +112,7 @@
 ### 2026-03-09
 * objects, blocks, byob: "enforce types" option for custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot
 * updated the neural networks extension with new data type enforcements
+* updated the plot bars extension with new data type enforcements
 
 ### 2026-03-05
 * updated the tutorial extension with a new "select editor category" command
