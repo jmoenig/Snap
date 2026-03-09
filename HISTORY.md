@@ -34,6 +34,9 @@
         * include an entry named underscore + field in the data to specify a custom data type
         * integrated type-inferral for user defined data types
         * new ADT input slot for blocks
+    * enforcing data types in input slots
+        * new optional "reports" type declaration entry for custom reporters
+        * new "enforce types" option for all custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot
     * domain-specific languages (DSL) support
         * support for dynamic dropdown menus and read-only settings in variadic input slots
         * support for variadic upvars in custom blocks
@@ -105,6 +108,9 @@
     * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
     * German
+
+### 2026-03-09
+* objects, blocks, byob: "enforce types" option for custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot
 
 ### 2026-03-05
 * updated the tutorial extension with a new "select editor category" command

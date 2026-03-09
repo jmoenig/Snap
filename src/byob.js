@@ -113,7 +113,7 @@ ADT_SlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-February-26';
+modules.byob = '2026-March-09';
 
 // Declarations
 
@@ -2420,6 +2420,7 @@ CustomReporterBlockMorph.prototype.reactToTemplateCopy =
 CustomReporterBlockMorph.prototype.refresh = function (aDefinition, offset) {
     var def = aDefinition || this.definition;
     CustomCommandBlockMorph.prototype.refresh.call(this, aDefinition, offset);
+    this.reports = def.reports;
     if (!this.isPrototype) {
         this.isPredicate = (def.type === 'predicate');
     }

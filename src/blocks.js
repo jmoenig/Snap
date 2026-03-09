@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-March-02';
+modules.blocks = '2026-March-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1471,6 +1471,26 @@ SyntaxElementMorph.prototype.debugCachedInputs = function () {
                 realInputs[i].constructor.name);
         }
     }
+};
+
+SyntaxElementMorph.prototype.allBlocks = function () {
+    // answer blocks of all children
+    return this.allChildren().slice(0).reverse().filter(child =>
+        child instanceof BlockMorph);
+};
+
+SyntaxElementMorph.prototype.freeInputSlots = function () { //
+    // answer the free input slots, including slots inside variadic ones
+    var slots = [];
+    this.inputs().forEach(m => {
+        if (m instanceof ArgMorph) {
+            slots.push(m);
+            if (m instanceof MultiArgMorph) {
+                slots = slots.concat(m.freeInputSlots());
+            }
+        }
+    });
+    return slots;
 };
 
 SyntaxElementMorph.prototype.allInputs = function () {
@@ -7652,7 +7672,7 @@ function ReporterBlockMorph(isPredicate) {
 ReporterBlockMorph.prototype.init = function (isPredicate) {
     ReporterBlockMorph.uber.init.call(this);
     this.isPredicate = isPredicate || false;
-    this.reports = null; // optional return type declaration, e.g. 'number'
+    this.reports = isPredicate ? 'Boolean' : 'any'; // optional return type
 
     this.bounds.setExtent(new Point(50, 22).multiplyBy(this.scale));
     this.fixLayout();
@@ -8860,14 +8880,22 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                 (child.fullBounds().intersects(fb))
         ),
         blackList = reporter.allInputs(),
+        all = [],
         handPos,
-        target,
-        all;
+        target;
 
-    all = [];
     stacks.forEach(stack =>
-        all = all.concat(stack.allInputs())
+        stack.allBlocks().forEach(block => {
+            if (block.enforceTypes) {
+                all = all.concat(block.freeInputSlots().filter(m =>
+                    m.matches(reporter.reports)
+                ));
+            } else {
+                all = all.concat(stack.allInputs());
+            }
+        })
     );
+
     if (all.length === 0) {return null; }
 
     function touchingVariadicArrowsIfAny(inp, point) {
@@ -10017,6 +10045,11 @@ ArgMorph.prototype.evaluate = function () {
 
 ArgMorph.prototype.isEmptySlot = function () {
     return this.type !== null;
+};
+
+ArgMorph.prototype.matches = function (typestring) {
+    var expected = [this.type === 'list' ? 'list' : 'actor', 'any'];
+    return expected.includes(typestring);
 };
 
 // ArgMorph op-sequence analysis
@@ -12657,6 +12690,10 @@ InputSlotMorph.prototype.isEmptySlot = function () {
     return this.contents().text === '' && !this.selectedBlock && !this.symbol;
 };
 
+InputSlotMorph.prototype.matches = function (typestring) {
+    return [this.isNumeric ? 'number' : 'text', 'any'].includes(typestring);
+};
+
 // InputSlotMorph single-stepping:
 
 InputSlotMorph.prototype.flash = function (aColor) {
@@ -13078,6 +13115,7 @@ TemplateSlotMorph.prototype.init = function (name) {
     }
     template.setSpec(this.labelString);
     template.selector = 'reportGetVar';
+    template.reports = 'any';
     TemplateSlotMorph.uber.init.call(this);
     this.add(template);
     this.fixLayout();
@@ -13367,6 +13405,10 @@ BooleanSlotMorph.prototype.evaluate = function () {
 
 BooleanSlotMorph.prototype.isEmptySlot = function () {
     return this.value === null;
+};
+
+BooleanSlotMorph.prototype.matches = function (typestring) {
+    return ['Boolean', 'any'].includes(typestring);
 };
 
 BooleanSlotMorph.prototype.isBinary = function () {
@@ -14213,6 +14255,10 @@ ColorSlotMorph.prototype.evaluate = function () {
     return this.color;
 };
 
+ColorSlotMorph.prototype.matches = function (typestring) {
+    return ['color', 'any'].includes(typestring);
+};
+
 // ColorSlotMorph drawing:
 
 ColorSlotMorph.prototype.fixLayout = function () {
@@ -14309,6 +14355,10 @@ ADT_SlotMorph.prototype.setContents = function (typeString = 'ADT') {
 
 ADT_SlotMorph.prototype.evaluate = function () {
     return this.contents().text;
+};
+
+ADT_SlotMorph.prototype.matches = function (typestring) {
+    return [this.contents().text, 'any'].includes(typestring);
 };
 
 ADT_SlotMorph.prototype.isEmptySlot = function () {
@@ -15497,6 +15547,10 @@ MultiArgMorph.prototype.evaluate = function () {
 
 MultiArgMorph.prototype.isEmptySlot = function () {
     return this.canBeEmpty ? this.inputs().length === 0 : false;
+};
+
+MultiArgMorph.prototype.matches = function (typestring) {
+    return ['list', 'any'].includes(typestring);
 };
 
 // MultiArgMorph op-sequence analysis
