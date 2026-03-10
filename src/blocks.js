@@ -8637,6 +8637,7 @@ ScriptsMorph.prototype.cleanUpSpacing = 15;
 ScriptsMorph.prototype.isPreferringEmptySlots = true;
 ScriptsMorph.prototype.enableKeyboard = true;
 ScriptsMorph.prototype.enableNestedAutoWrapping = true;
+ScriptsMorph.prototype.enforceTypes = false;
 ScriptsMorph.prototype.feedbackColor = WHITE;
 
 // ScriptsMorph instance creation:
@@ -8886,7 +8887,7 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
 
     stacks.forEach(stack =>
         stack.allBlocks().forEach(block => {
-            if (block.enforceTypes) {
+            if (ScriptsMorph.prototype.enforceTypes || block.enforceTypes) {
                 all = all.concat(block.freeInputSlots().filter(m =>
                     m.matches(reporter.reports)
                 ));
