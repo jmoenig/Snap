@@ -119,6 +119,7 @@
 * gui, scenes, store: new "enforce input types" setting for scenes and puzzles / microworlds
 * updated imbw blumen microworld with the new "enforce input types" option
 * blocks, byob: new "number unevaluated" special input slot for custom blocks
+* updated shapes extension with new "number unevaluated" special input slots
 
 ### 2026-03-09
 * objects, blocks, byob: "enforce types" option for custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot
