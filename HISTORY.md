@@ -116,6 +116,7 @@
 * updated the shapes extension with new data type enforcements
 * gui: experimental hidden "enforce input types" preference setting (per session)
 * gui, scenes, store: new "enforce input types" setting for scenes and puzzles / microworlds
+* updated imbw blumen microworld with the new "enforce input types" option
 
 ### 2026-03-09
 * objects, blocks, byob: "enforce types" option for custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot
