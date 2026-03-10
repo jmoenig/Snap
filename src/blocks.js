@@ -8883,7 +8883,8 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
         stack.allBlocks().forEach(block => {
             if (ScriptsMorph.prototype.enforceTypes || block.enforceTypes) {
                 all = all.concat(block.allBlockInputs().filter(m =>
-                    m.matches(reporter.reports)));
+                    m.matches && m.matches(reporter.reports)
+                ));
             } else {
                 all = all.concat(block.allBlockInputs());
             }
