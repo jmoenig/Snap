@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-March-09';
+modules.blocks = '2026-March-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -14361,7 +14361,7 @@ ADT_SlotMorph.prototype.setContents = function (typeString = 'ADT') {
 };
 
 ADT_SlotMorph.prototype.evaluate = function () {
-    return this.contents().text;
+    return new List();
 };
 
 ADT_SlotMorph.prototype.matches = function (typestring) {
