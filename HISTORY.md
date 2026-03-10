@@ -45,6 +45,7 @@
         * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
         * support for user-scriptable rename-menus in upvars, including variadic ones (a single menu is repeated in each non-unevaluated slot, a list of menu-lists whose first item is an empty list gets repeated across all subslots)
         * new "360° angles" dial widget for mathematical bearings (zero is East, counterclockwise) instead of compass bearings
+        * new "number unevaluated" special input slot for custom blocks
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
@@ -117,6 +118,7 @@
 * gui: experimental hidden "enforce input types" preference setting (per session)
 * gui, scenes, store: new "enforce input types" setting for scenes and puzzles / microworlds
 * updated imbw blumen microworld with the new "enforce input types" option
+* blocks, byob: new "number unevaluated" special input slot for custom blocks
 
 ### 2026-03-09
 * objects, blocks, byob: "enforce types" option for custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot

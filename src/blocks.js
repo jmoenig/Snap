@@ -326,6 +326,10 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'numeric'
     },
+    '%nUE': {
+        type: 'input',
+        tags: 'numeric unevaluated'
+    },
     '%ns': {
         type: 'input',
         tags: 'numstring'
@@ -3175,6 +3179,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor =
     %t      - inline variable reporter template
     %anyUE  - white rectangular type-in slot, unevaluated if replaced
     %boolUE - chameleon colored hexagonal slot, unevaluated if replaced
+    %nUE    - white oval numerical slot, unevaluated if replaced
     %f      - round function slot, unevaluated if replaced,
     %r      - round reporter slot
     %p      - hexagonal predicate slot
@@ -7776,6 +7781,7 @@ ReporterBlockMorph.prototype.isUnevaluated = function () {
     var spec = this.getSlotSpec();
     return spec === '%anyUE' ||
         spec === '%boolUE' ||
+        spec === '%nUE' ||
         spec === '%f';
 };
 
@@ -11213,7 +11219,7 @@ InputSlotMorph.prototype.init = function (
 
 InputSlotMorph.prototype.getSpec = function () {
     if (this.isUnevaluated) {
-        return '%anyUE';
+        return this.isNumeric ? '%nUE': '%anyUE';
     }
     if (this.isNumeric) {
         return '%n';
