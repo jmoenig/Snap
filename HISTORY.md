@@ -37,7 +37,7 @@
     * enforcing data types in input slots
         * new optional "reports" type declaration entry for custom reporters
         * new "enforce types" option for all custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot
-        * experimental hidden general "enforce input types" preference setting (per session)
+        * new general "enforce input types" preference setting for scenes / puzzles / microworlds
     * domain-specific languages (DSL) support
         * support for dynamic dropdown menus and read-only settings in variadic input slots
         * support for variadic upvars in custom blocks
@@ -115,6 +115,7 @@
 * updated the tables extension with new data type enforcements
 * updated the shapes extension with new data type enforcements
 * gui: experimental hidden "enforce input types" preference setting (per session)
+* gui, scenes, store: new "enforce input types" setting for scenes and puzzles / microworlds
 
 ### 2026-03-09
 * objects, blocks, byob: "enforce types" option for custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot

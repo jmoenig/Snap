@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion, ADT_SlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2026-February-26';
+modules.store = '2026-March-10';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -420,6 +420,7 @@ SnapSerializer.prototype.loadScene = function (
     scene.disableDraggingData = model.scene.attributes.dragdata === 'false';
     scene.hideEmptyCategories = model.scene.attributes.empty === 'false';
     scene.hideSprites = model.scene.attributes.blocksonly === 'true';
+    scene.enforceTypes = model.scene.attributes.strict === 'true';
     scene.penColorModel = model.scene.attributes.colormodel === 'hsl' ?
         'hsl' : 'hsv';
     model.notes = model.scene.childNamed('notes');
@@ -2148,7 +2149,7 @@ Scene.prototype.toXML = function (serializer) {
     SpriteMorph.prototype.blocks = this.blocks;
 
     xml = serializer.format(
-        '<scene name="@"%%%%%%%%%>' +
+        '<scene name="@"%%%%%%%%%%>' +
             '<notes>$</notes>' +
             '%' +
             '<hidden>$</hidden>' +
@@ -2172,6 +2173,7 @@ Scene.prototype.toXML = function (serializer) {
         this.penColorModel === 'hsl' ? ' colormodel="hsl"' : '',
         this.hideEmptyCategories ? ' empty="false"' : '',
         this.hideSprites ? ' blocksonly="true"' : '',
+        this.enforceTypes ? ' strict="true"' : '',
         this.notes || '',
         serializer.paletteToXML(this.customCategories),
         Object.keys(this.hiddenPrimitives).reduce(

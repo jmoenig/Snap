@@ -5176,7 +5176,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         ScriptsMorph.prototype.enforceTypes,
         'uncheck to allow\ndropping reporters\ninto unmatching slots',
         'disable dropping reporters\ninto unmatching slots',
-        true
+        false
     );
     addPreference(
         'Wrap list indices',
