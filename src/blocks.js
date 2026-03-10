@@ -8892,7 +8892,7 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                     m.matches(reporter.reports)
                 ));
             } else {
-                all = all.concat(block.freeInputSlots());
+                all = all.concat(block.allInputs());
             }
         })
     );
