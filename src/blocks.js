@@ -1479,20 +1479,6 @@ SyntaxElementMorph.prototype.allBlocks = function () {
         child instanceof BlockMorph);
 };
 
-SyntaxElementMorph.prototype.freeInputSlots = function () { //
-    // answer the free input slots, including slots inside variadic ones
-    var slots = [];
-    this.inputs().forEach(m => {
-        if (m instanceof ArgMorph) {
-            slots.push(m);
-            if (m instanceof MultiArgMorph) {
-                slots = slots.concat(m.freeInputSlots());
-            }
-        }
-    });
-    return slots;
-};
-
 SyntaxElementMorph.prototype.allInputs = function () {
     // answer arguments and nested reporters of all children
     return this.allChildren().slice(0).reverse().filter(child =>
@@ -1500,6 +1486,14 @@ SyntaxElementMorph.prototype.allInputs = function () {
             (child instanceof ReporterBlockMorph &&
                 child !== this)
     );
+};
+
+SyntaxElementMorph.prototype.allBlockInputs = function () {
+    var all = [];
+    this.inputs().forEach(m => {
+        all = all.concat(m.allInputs());
+    });
+    return all;
 };
 
 SyntaxElementMorph.prototype.allEmptySlots = function () {
@@ -8888,11 +8882,10 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
     stacks.forEach(stack =>
         stack.allBlocks().forEach(block => {
             if (ScriptsMorph.prototype.enforceTypes || block.enforceTypes) {
-                all = all.concat(block.freeInputSlots().filter(m =>
-                    m.matches(reporter.reports)
-                ));
+                all = all.concat(block.allBlockInputs().filter(m =>
+                    m.matches(reporter.reports)));
             } else {
-                all = all.concat(block.allInputs());
+                all = all.concat(block.allBlockInputs());
             }
         })
     );
@@ -16109,6 +16102,9 @@ ReporterSlotMorph.prototype.emptySlot = function () {
         (this.fontSize + this.edge * 2) * 2 - shrink,
         this.fontSize + this.edge * 2 - shrink
     ));
+    empty.matches = (typestring) =>
+        this.isPredicate ? ['Boolean', 'any'].includes(typestring)
+        : true;
     return empty;
 };
 
