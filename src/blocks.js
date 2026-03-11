@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-March-02';
+modules.blocks = '2026-March-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -325,6 +325,10 @@ SyntaxElementMorph.prototype.labelParts = {
     '%n': {
         type: 'input',
         tags: 'numeric'
+    },
+    '%nUE': {
+        type: 'input',
+        tags: 'numeric unevaluated'
     },
     '%ns': {
         type: 'input',
@@ -1473,6 +1477,12 @@ SyntaxElementMorph.prototype.debugCachedInputs = function () {
     }
 };
 
+SyntaxElementMorph.prototype.allBlocks = function () {
+    // answer blocks of all children
+    return this.allChildren().slice(0).reverse().filter(child =>
+        child instanceof BlockMorph);
+};
+
 SyntaxElementMorph.prototype.allInputs = function () {
     // answer arguments and nested reporters of all children
     return this.allChildren().slice(0).reverse().filter(child =>
@@ -1480,6 +1490,14 @@ SyntaxElementMorph.prototype.allInputs = function () {
             (child instanceof ReporterBlockMorph &&
                 child !== this)
     );
+};
+
+SyntaxElementMorph.prototype.allBlockInputs = function () {
+    var all = [];
+    this.inputs().forEach(m => {
+        all = all.concat(m.allInputs());
+    });
+    return all;
 };
 
 SyntaxElementMorph.prototype.allEmptySlots = function () {
@@ -3161,6 +3179,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor =
     %t      - inline variable reporter template
     %anyUE  - white rectangular type-in slot, unevaluated if replaced
     %boolUE - chameleon colored hexagonal slot, unevaluated if replaced
+    %nUE    - white oval numerical slot, unevaluated if replaced
     %f      - round function slot, unevaluated if replaced,
     %r      - round reporter slot
     %p      - hexagonal predicate slot
@@ -7652,7 +7671,7 @@ function ReporterBlockMorph(isPredicate) {
 ReporterBlockMorph.prototype.init = function (isPredicate) {
     ReporterBlockMorph.uber.init.call(this);
     this.isPredicate = isPredicate || false;
-    this.reports = null; // optional return type declaration, e.g. 'number'
+    this.reports = isPredicate ? 'Boolean' : 'any'; // optional return type
 
     this.bounds.setExtent(new Point(50, 22).multiplyBy(this.scale));
     this.fixLayout();
@@ -7762,6 +7781,7 @@ ReporterBlockMorph.prototype.isUnevaluated = function () {
     var spec = this.getSlotSpec();
     return spec === '%anyUE' ||
         spec === '%boolUE' ||
+        spec === '%nUE' ||
         spec === '%f';
 };
 
@@ -8617,6 +8637,7 @@ ScriptsMorph.prototype.cleanUpSpacing = 15;
 ScriptsMorph.prototype.isPreferringEmptySlots = true;
 ScriptsMorph.prototype.enableKeyboard = true;
 ScriptsMorph.prototype.enableNestedAutoWrapping = true;
+ScriptsMorph.prototype.enforceTypes = false;
 ScriptsMorph.prototype.feedbackColor = WHITE;
 
 // ScriptsMorph instance creation:
@@ -8860,14 +8881,22 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                 (child.fullBounds().intersects(fb))
         ),
         blackList = reporter.allInputs(),
+        all = [],
         handPos,
-        target,
-        all;
+        target;
 
-    all = [];
     stacks.forEach(stack =>
-        all = all.concat(stack.allInputs())
+        stack.allBlocks().forEach(block => {
+            if (ScriptsMorph.prototype.enforceTypes || block.enforceTypes) {
+                all = all.concat(block.allBlockInputs().filter(m =>
+                    m.matches && m.matches(reporter.reports)
+                ));
+            } else {
+                all = all.concat(block.allBlockInputs());
+            }
+        })
     );
+
     if (all.length === 0) {return null; }
 
     function touchingVariadicArrowsIfAny(inp, point) {
@@ -10017,6 +10046,11 @@ ArgMorph.prototype.evaluate = function () {
 
 ArgMorph.prototype.isEmptySlot = function () {
     return this.type !== null;
+};
+
+ArgMorph.prototype.matches = function (typestring) {
+    var expected = [this.type === 'list' ? 'list' : 'actor', 'any'];
+    return expected.includes(typestring);
 };
 
 // ArgMorph op-sequence analysis
@@ -11185,7 +11219,7 @@ InputSlotMorph.prototype.init = function (
 
 InputSlotMorph.prototype.getSpec = function () {
     if (this.isUnevaluated) {
-        return '%anyUE';
+        return this.isNumeric ? '%nUE': '%anyUE';
     }
     if (this.isNumeric) {
         return '%n';
@@ -12657,6 +12691,13 @@ InputSlotMorph.prototype.isEmptySlot = function () {
     return this.contents().text === '' && !this.selectedBlock && !this.symbol;
 };
 
+InputSlotMorph.prototype.matches = function (typestring) {
+    if (this.isNumeric) {
+        return ['number', 'any'].includes(typestring);
+    }
+    return true;
+};
+
 // InputSlotMorph single-stepping:
 
 InputSlotMorph.prototype.flash = function (aColor) {
@@ -13078,6 +13119,7 @@ TemplateSlotMorph.prototype.init = function (name) {
     }
     template.setSpec(this.labelString);
     template.selector = 'reportGetVar';
+    template.reports = 'any';
     TemplateSlotMorph.uber.init.call(this);
     this.add(template);
     this.fixLayout();
@@ -13367,6 +13409,10 @@ BooleanSlotMorph.prototype.evaluate = function () {
 
 BooleanSlotMorph.prototype.isEmptySlot = function () {
     return this.value === null;
+};
+
+BooleanSlotMorph.prototype.matches = function (typestring) {
+    return ['Boolean', 'any'].includes(typestring);
 };
 
 BooleanSlotMorph.prototype.isBinary = function () {
@@ -14093,6 +14139,10 @@ TextSlotMorph.prototype.contents = function () {
     );
 };
 
+TextSlotMorph.prototype.matches = function (typestring) {
+    return ['text', 'number'].includes(typestring);
+};
+
 // TextSlotMorph events:
 
 TextSlotMorph.prototype.layoutChanged = function () {
@@ -14213,6 +14263,10 @@ ColorSlotMorph.prototype.evaluate = function () {
     return this.color;
 };
 
+ColorSlotMorph.prototype.matches = function (typestring) {
+    return ['color', 'any'].includes(typestring);
+};
+
 // ColorSlotMorph drawing:
 
 ColorSlotMorph.prototype.fixLayout = function () {
@@ -14308,7 +14362,11 @@ ADT_SlotMorph.prototype.setContents = function (typeString = 'ADT') {
 };
 
 ADT_SlotMorph.prototype.evaluate = function () {
-    return this.contents().text;
+    return new List();
+};
+
+ADT_SlotMorph.prototype.matches = function (typestring) {
+    return [this.contents().text, 'any'].includes(typestring);
 };
 
 ADT_SlotMorph.prototype.isEmptySlot = function () {
@@ -15499,6 +15557,10 @@ MultiArgMorph.prototype.isEmptySlot = function () {
     return this.canBeEmpty ? this.inputs().length === 0 : false;
 };
 
+MultiArgMorph.prototype.matches = function (typestring) {
+    return ['list', 'any'].includes(typestring);
+};
+
 // MultiArgMorph op-sequence analysis
 
 MultiArgMorph.prototype.unwind = BlockMorph.prototype.unwind;
@@ -16047,6 +16109,9 @@ ReporterSlotMorph.prototype.emptySlot = function () {
         (this.fontSize + this.edge * 2) * 2 - shrink,
         this.fontSize + this.edge * 2 - shrink
     ));
+    empty.matches = (typestring) =>
+        this.isPredicate ? ['Boolean', 'any'].includes(typestring)
+        : true;
     return empty;
 };
 

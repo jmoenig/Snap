@@ -34,6 +34,10 @@
         * include an entry named underscore + field in the data to specify a custom data type
         * integrated type-inferral for user defined data types
         * new ADT input slot for blocks
+    * enforcing data types in input slots
+        * new optional "reports" type declaration entry for custom reporters
+        * new "enforce types" option for all custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot
+        * new general "enforce input types" preference setting for scenes / puzzles / microworlds
     * domain-specific languages (DSL) support
         * support for dynamic dropdown menus and read-only settings in variadic input slots
         * support for variadic upvars in custom blocks
@@ -41,6 +45,7 @@
         * support for dynamically setting the contents of expanded variadic upvars and input slots by a user script in the block definition
         * support for user-scriptable rename-menus in upvars, including variadic ones (a single menu is repeated in each non-unevaluated slot, a list of menu-lists whose first item is an empty list gets repeated across all subslots)
         * new "360° angles" dial widget for mathematical bearings (zero is East, counterclockwise) instead of compass bearings
+        * new "number unevaluated" special input slot for custom blocks
     * files
         * new general "dta_export(data, name, type)" extension (for csv, json, etc.)
         * new general "dta_import(raw?)" extension (for text files, csv, json etc.)
@@ -105,6 +110,21 @@
     * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
     * German
+
+### 2026-03-10
+* blocks: changed ADT input slots evaluation to return an empty list
+* updated the tables extension with new data type enforcements
+* updated the shapes extension with new data type enforcements
+* gui: experimental hidden "enforce input types" preference setting (per session)
+* gui, scenes, store: new "enforce input types" setting for scenes and puzzles / microworlds
+* updated imbw blumen microworld with the new "enforce input types" option
+* blocks, byob: new "number unevaluated" special input slot for custom blocks
+* updated shapes extension with new "number unevaluated" special input slots
+
+### 2026-03-09
+* objects, blocks, byob: "enforce types" option for custom blocks: only lets users drop reporters into input slots whose return type matches that of the slot
+* updated the neural networks extension with new data type enforcements
+* updated the plot bars extension with new data type enforcements
 
 ### 2026-03-05
 * updated the tutorial extension with a new "select editor category" command

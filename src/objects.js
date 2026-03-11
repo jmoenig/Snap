@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-March-02';
+modules.objects = '2026-March-09';
 
 var SpriteMorph;
 var StageMorph;
@@ -217,6 +217,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportHyperZip: {
             dev: true,
             type: 'reporter',
+            reports: 'list',
             category: 'control',
             spec:
                 'zip %repRing inputs: %br %s leaf-rank %n %br %s leaf-rank %n',
@@ -485,6 +486,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         getPosition: {
             only: SpriteMorph,
             type: 'reporter',
+            reports: 'list',
             category: 'motion',
             spec: 'position',
             code: 'pos',
@@ -495,6 +497,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         xPosition: {
             only: SpriteMorph,
             type: 'reporter',
+            reports: 'number',
             category: 'motion',
             spec: 'x position',
             code: 'x'
@@ -502,6 +505,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         yPosition: {
             only: SpriteMorph,
             type: 'reporter',
+            reports: 'number',
             category: 'motion',
             spec: 'y position',
             code: 'y'
@@ -509,6 +513,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         direction: {
             only: SpriteMorph,
             type: 'reporter',
+            reports: 'number',
             category: 'motion',
             spec: 'direction',
             code: 'dir'
@@ -537,6 +542,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         getCostumeIdx: {
             type: 'reporter',
+            reports: 'number',
             category: 'looks',
             spec: 'costume #',
             code: 'costume#',
@@ -546,6 +552,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportGetImageAttribute: {
             type: 'reporter',
+            reports: 'number',
             category: 'looks',
             spec: '%img of costume %cst',
             defaults: [['width'], ['current']],
@@ -553,12 +560,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportNewCostume: {
             type: 'reporter',
+            reports: 'costume',
             category: 'looks',
             spec: 'new costume %l width %dim height %dim',
             code: 'newCostume'
         },
         reportNewCostumeStretched: {
             type: 'reporter',
+            reports: 'costume',
             category: 'looks',
             spec: 'stretch %cst x: %n y: %n %',
             defaults: [['current'], 100, 50],
@@ -566,6 +575,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportNewCostumeSkewed: {
             type: 'reporter',
+            reports: 'costume',
             category: 'looks',
             spec: 'skew %cst to %dir degrees %n %',
             defaults: [['current'], 0, 50],
@@ -629,6 +639,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         getEffect: {
             type: 'reporter',
+            reports: 'number',
             category: 'looks',
             spec: '%eff effect',
             defaults: [['ghost']],
@@ -664,6 +675,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         getScale: {
             only: SpriteMorph,
             type: 'reporter',
+            reports: 'number',
             category: 'looks',
             spec: 'size',
             code: 'size'
@@ -724,6 +736,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportCostumes: {
             dev: true,
             type: 'reporter',
+            reports: 'list',
             category: 'looks',
             spec: 'wardrobe'
         },
@@ -784,6 +797,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportGetSoundAttribute: {
             type: 'reporter',
+            reports: 'number',
             category: 'sound',
             spec: '%aa of sound %snd',
             defaults: [['duration']],
@@ -791,6 +805,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportNewSoundFromSamples: {
             type: 'reporter',
+            reports: 'sound',
             category: 'sound',
             spec: 'new sound %l rate %rate Hz',
             defaults: [null, 44100],
@@ -846,6 +861,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         getTempo: {
             type: 'reporter',
+            reports: 'number',
             category: 'sound',
             spec: 'tempo',
             code: 'tempo'
@@ -869,6 +885,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         getVolume: {
             type: 'reporter',
+            reports: 'number',
             category: 'sound',
             spec: 'volume',
             code: 'vol'
@@ -892,6 +909,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         getPan: {
             type: 'reporter',
+            reports: 'number',
             category: 'sound',
             spec: 'balance',
             code: 'pan'
@@ -913,6 +931,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportSounds: {
             dev: true,
             type: 'reporter',
+            reports: 'list',
             category: 'sound',
             spec: 'jukebox'
         },
@@ -970,6 +989,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         getPenAttribute: {
             type: 'reporter',
+            reports: 'number',
             category: 'pen',
             spec: 'pen %pen',
             defaults: [['hue']],
@@ -1045,12 +1065,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportPenTrailsAsCostume: {
             type: 'reporter',
+            reports: 'costume',
             category: 'pen',
             spec: 'pen trails',
             code: 'trails'
         },
         reportPentrailsAsSVG: {
             type: 'reporter',
+            reports: 'costume',
             category: 'pen',
             spec: 'pen vectors',
             code: 'svgTrails'
@@ -1079,12 +1101,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportColor: {
             type: 'reporter',
+            reports: 'color',
             category: 'pen',
             spec: 'color %clr',
             code: 'colorFrom'
         },
         reportColorAttribute: {
             type: 'reporter',
+            reports: 'number',
             category: 'pen',
             spec: '%color of color %clr',
             defaults: [['hue']],
@@ -1092,6 +1116,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportNewColor: {
             type: 'reporter',
+            reports: 'color',
             category: 'pen',
             spec: 'new color %hsbt',
             code: 'newColor'
@@ -1134,6 +1159,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         getLastMessage: {  // retained for legacy compatibility
             dev: true,
             type: 'reporter',
+            reports: 'text',
             category: 'control',
             spec: 'message'
         },
@@ -1151,6 +1177,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportPoll: {
             type: 'reporter',
+            reports: 'any',
             category: 'control',
             spec: 'request %msg %survey',
             code: 'request'
@@ -1267,6 +1294,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportIfElse: {
             type: 'reporter',
+            reports: 'any',
             category: 'control',
             spec: 'if %b then %anyUE else %anyUE',
             code: 'ifThen',
@@ -1297,6 +1325,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         evaluate: {
             type: 'reporter',
+            reports: 'any',
             category: 'control',
             spec: 'call %repRing %inputs',
             code: 'call'
@@ -1341,6 +1370,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportAskFor: {
             type: 'reporter',
+            reports: 'any',
             category: 'control',
             spec: 'ask %spr for %repRing %inputs',
             code: 'ask',
@@ -1369,6 +1399,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         newClone: {
             type: 'reporter',
+            reports: 'sprite',
             category: 'control',
             spec: 'a new clone of %clntrtl',
             defaults: [['myself']],
@@ -1412,6 +1443,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportBlockAttribute: {
             type: 'reporter',
+            reports: 'any',
             category: 'control',
             spec: '%block of block %repRing',
             defaults: [['definition']],
@@ -1419,6 +1451,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportEnvironment: {
             type: 'reporter',
+            reports: 'any',
             category: 'control',
             spec: 'this %env',
             defaults: [['script']],
@@ -1458,6 +1491,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         // Pipe
         reportPipe: {
             type: 'reporter',
+            reports: 'any',
             category: 'control',
             spec: 'pipe %s $arrowRight %mult%repRing',
             code: 'pipe',
@@ -1495,6 +1529,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportAspect: {
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: '%asp at %loc',
             defaults: [['hue'], ['mouse-pointer']],
@@ -1503,29 +1538,34 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportStackSize: {
             dev: true,
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'stack size'
         },
         reportFrameCount: {
             dev: true,
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'frames'
         },
         reportYieldCount: {
             dev: true,
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'yields'
         },
         reportThreadCount: {
             dev: true,
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'processes'
         },
         doAsk: {
             type: 'command',
+            reports: 'any',
             category: 'sensing',
             spec: 'ask %s and wait',
             defaults: [localize('what\'s your name?')]
@@ -1533,17 +1573,20 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportLastAnswer: { // retained for legacy compatibility
             dev: true,
             type: 'reporter',
+            reports: 'any',
             category: 'sensing',
             spec: 'answer'
         },
         getLastAnswer: {
             type: 'reporter',
+            reports: 'any',
             category: 'sensing',
             spec: 'answer',
             code: 'answer'
         },
         reportMousePosition: {
             type: 'reporter',
+            reports: 'list',
             category: 'sensing',
             spec: 'mouse position',
             code: 'mouse',
@@ -1553,12 +1596,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportMouseX: {
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'mouse x',
             code: 'mouseX'
         },
         reportMouseY: {
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'mouse y',
             code: 'mouseY'
@@ -1579,6 +1624,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportRelationTo: {
             only: SpriteMorph,
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: '%rel to %dst',
             defaults: [['distance'], ['mouse-pointer']],
@@ -1598,12 +1644,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         getTimer: {
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'timer',
             code: 'timer'
         },
         reportAttributeOf: {
             type: 'reporter',
+            reports: 'any',
             category: 'sensing',
             spec: '%att of %spr',
             defaults: [['costume #']],
@@ -1611,6 +1659,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportObject: {
             type: 'reporter',
+            reports: 'agent',
             category: 'sensing',
             spec: 'object %self',
             defaults: [['myself']],
@@ -1625,6 +1674,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportURL: {
             type: 'reporter',
+            reports: 'text',
             category: 'sensing',
             spec: 'url %s',
             defaults: ['snap.berkeley.edu'],
@@ -1646,6 +1696,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportDate: {
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'current %dates',
             defaults: [['date']],
@@ -1653,6 +1704,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportGet: {
             type: 'reporter',
+            reports: 'any',
             category: 'sensing',
             spec: 'my %get',
             defaults: [['neighbors']],
@@ -1660,6 +1712,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportAudio: {
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'microphone %audio',
             defaults: [['volume']],
@@ -1690,6 +1743,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportVariadicSum: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: '%sum',
             alias: '+',
@@ -1697,6 +1751,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportDifference: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: '%n \u2212 %n',
             alias: '-',
@@ -1704,6 +1759,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportVariadicProduct: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: '%product',
             alias: '*',
@@ -1711,18 +1767,21 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportQuotient: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: '%n / %n', // '%n \u00F7 %n'
             code: '/'
         },
         reportRound: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: 'round %n',
             code: 'round'
         },
         reportMonadic: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: '%fun of %n',
             defaults: [['sqrt'], 10],
@@ -1730,24 +1789,28 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportPower: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: '%n ^ %n',
             code: '^'
         },
         reportModulus: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: '%n mod %n',
             code: 'mod'
         },
         reportAtan2: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: 'atan2 %n ÷ %n',
             code: 'atan2'
         },
         reportVariadicMin: {
             type: 'reporter',
+            reports: 'any',
             category: 'operators',
             spec: '%min',
             alias: 'min',
@@ -1755,6 +1818,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportVariadicMax: {
             type: 'reporter',
+            reports: 'any',
             category: 'operators',
             spec: '%max',
             alias: 'max',
@@ -1762,6 +1826,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportRandom: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: 'pick random %ns to %ns',
             defaults: [1, 10],
@@ -1846,6 +1911,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportJoinWords: {
             type: 'reporter',
+            reports: 'text',
             category: 'operators',
             spec: 'join %words',
             defaults: [localize('hello') + ' ', localize('world')],
@@ -1853,6 +1919,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportLetter: {
             type: 'reporter',
+            reports: 'text',
             category: 'operators',
             spec: 'letter %ix of %s',
             defaults: [1, localize('world')],
@@ -1866,12 +1933,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportStringSize: { // deprecated as of v9
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: 'length of %s',
             defaults: [localize('world')]
         },
         reportTextAttribute: {
             type: 'reporter',
+            reports: 'text',
             category: 'operators',
             spec: '%ta of text %s',
             defaults: [['length'], localize('world')],
@@ -1879,6 +1948,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportUnicode: {
             type: 'reporter',
+            reports: 'number',
             category: 'operators',
             spec: 'unicode of %s',
             defaults: ['a'],
@@ -1886,6 +1956,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportUnicodeAsLetter: {
             type: 'reporter',
+            reports: 'text',
             category: 'operators',
             spec: 'unicode %n as letter',
             defaults: [65],
@@ -1906,6 +1977,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportTextSplit: {
             type: 'reporter',
+            reports: 'list',
             category: 'operators',
             spec: 'split %s by %delim',
             defaults: [localize('hello') + ' ' + localize('world'), " "],
@@ -1920,6 +1992,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportTypeOf: { // only in dev mode for debugging
             dev: true,
             type: 'reporter',
+            reports: 'text',
             category: 'operators',
             spec: 'type of %s',
             defaults: [5]
@@ -1927,6 +2000,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportTextFunction: { // only in dev mode - experimental
             dev: true,
             type: 'reporter',
+            reports: 'text',
             category: 'operators',
             spec: '%txtfun of %s',
             defaults: [['encode URI'], "Abelson & Sussman"]
@@ -1984,6 +2058,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         // Lists
         reportNewList: {
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: 'list %exp',
             code: 'list',
@@ -1993,12 +2068,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportCONS: {
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: '%s in front of %l',
             code: 'cons'
         },
         reportListItem: {
             type: 'reporter',
+            reports: 'any',
             category: 'lists',
             spec: 'item %idx of %l',
             defaults: [1],
@@ -2006,6 +2083,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportCDR: {
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: 'all but first of %l',
             code: 'cdr'
@@ -2018,6 +2096,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportListAttribute: {
             type: 'reporter',
+            reports: 'any',
             category: 'lists',
             spec: '%la of %l',
             defaults: [['length']],
@@ -2047,6 +2126,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportListIndex: {
             type: 'reporter',
+            reports: 'number',
             category: 'lists',
             spec: 'index of %s in %l',
             defaults: [localize('thing')],
@@ -2090,6 +2170,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         // numbers - (arrayed when hyper-blocks is on, otherwise linked)
         reportNumbers: {
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: 'numbers from %n to %n',
             defaults: [1, 10],
@@ -2115,6 +2196,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
     */
         reportConcatenatedLists: {
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: 'append %lists',
             code: 'append',
@@ -2129,6 +2211,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportCrossproduct: {
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: 'combinations %lists',
             code: 'combinations',
@@ -2149,6 +2232,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportReshape: {
             type: 'reporter',
+            reports: 'any',
             category: 'lists',
             spec: 'reshape %s to %nums',
             defaults: [null, [4, 3]],
@@ -2166,6 +2250,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         // HOFs
         reportMap: {
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: 'map %repRing over %l',
             code: 'map',
@@ -2186,11 +2271,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportAtomicMap: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: '$blitz map %repRing over %l'
         },
         reportKeep: {
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: 'keep items %predRing from %l',
             code: 'keep',
@@ -2211,11 +2298,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportAtomicKeep: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
+            reports: 'list',
             category: 'lists',
             spec: '$blitz keep items %predRing from %l'
         },
         reportFindFirst: {
             type: 'reporter',
+            reports: 'any',
             category: 'lists',
             spec: 'find first item %predRing in %l',
             code: 'find',
@@ -2235,11 +2324,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportAtomicFindFirst: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
+            reports: 'any',
             category: 'lists',
             spec: '$blitz find first item %predRing in %l'
         },
         reportCombine: {
             type: 'reporter',
+            reports: 'any',
             category: 'lists',
             spec: 'combine %l using %repRing',
             code: 'combine',
@@ -2260,6 +2351,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportAtomicCombine: {
             dev: true, // not shown in palette, only accessible via relabelling
             type: 'reporter',
+            reports: 'any',
             category: 'lists',
             spec: '$blitz combine %l using %repRing'
         },
@@ -2310,6 +2402,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportMappedCode: {
             type: 'reporter',
+            reports: 'text',
             category: 'other',
             spec: 'code of %cmdRing',
             code: 'encode'
@@ -2331,6 +2424,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportApplyExtension: {
             type: 'reporter',
+            reports: 'any',
             category: 'other',
             spec: 'extension %ext %mult%s',
             code: 'ext'
@@ -2346,6 +2440,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportVideo: {
             type: 'reporter',
+            reports: 'number',
             category: 'sensing',
             spec: 'video %vid on %self',
             defaults: [['motion'], ['myself']],
@@ -2411,6 +2506,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             reportAnalogReading: {
             dev: true,
             type: 'reporter',
+            reports: 'number',
             category: 'other',
             spec: 'analog reading %n',
             src:`(
@@ -3609,6 +3705,9 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         if (contains(['reifyReporter', 'reifyPredicate'], block.selector)) {
             block.isStatic = true;
         }
+        if (info.type === 'reporter' && info.reports) {
+            block.reports = info.reports;
+        }
         block.setSpec(block.localizeBlockSpec(info.spec));
     }
     if (migration && migration.expand) {
@@ -3653,6 +3752,7 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
     block.isLocalVarTemplate = isLocalTemplate;
     block.setSpec(varName);
     block.isDraggable = true;
+    block.reports = 'any';
     return block;
 };
 

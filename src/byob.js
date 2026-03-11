@@ -113,7 +113,7 @@ ADT_SlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-February-26';
+modules.byob = '2026-March-10';
 
 // Declarations
 
@@ -2420,6 +2420,7 @@ CustomReporterBlockMorph.prototype.reactToTemplateCopy =
 CustomReporterBlockMorph.prototype.refresh = function (aDefinition, offset) {
     var def = aDefinition || this.definition;
     CustomCommandBlockMorph.prototype.refresh.call(this, aDefinition, offset);
+    this.reports = def.reports;
     if (!this.isPrototype) {
         this.isPredicate = (def.type === 'predicate');
     }
@@ -4168,7 +4169,7 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
             this.defaultValue ? ' = ' + this.defaultValue.toString() : ''
         );
     } else if (contains(
-            ['%cmdRing', '%repRing', '%predRing', '%anyUE', '%boolUE'],
+            ['%cmdRing', '%repRing', '%predRing', '%anyUE', '%boolUE', '%nUE'],
             this.type
         )) {
         suff = ' \u03BB';
@@ -4899,8 +4900,9 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defLabel.refresh = () => {
         if (this.isExpanded && contains(
                 [
-                    '%s', '%n', '%txt', '%anyUE', '%b', '%boolUE', '%adt',
-                    '%mlt', '%code', '%upvar', '%parameter', '%clr', '%mult%adt'
+                    '%s', '%n', '%nUE', '%txt', '%anyUE', '%b', '%boolUE',
+                    '%adt', '%mlt', '%code', '%upvar', '%parameter', '%clr',
+                    '%mult%adt'
                 ],
                 this.fragment.type
             )) {
@@ -4928,12 +4930,12 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput.setWidth(50);
     defInput.refresh = () => {
         if (this.isExpanded && contains(
-            ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code', '%upvar',
+            ['%s', '%n', '%nUE', '%txt', '%anyUE', '%mlt', '%code', '%upvar',
                 '%parameter', '%adt', '%mult%adt'],
             this.fragment.type
         )) {
             defInput.show();
-            if (this.fragment.type === '%n') {
+            if (['%n', '%nUE'].includes(this.fragment.type)) {
                 defInput.setIsNumeric(true);
             } else {
                 defInput.setIsNumeric(false);
@@ -5315,7 +5317,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
             (contains(
                 ['%mlt', '%code', '%obj', '%scriptVars', '%receive', '%send',
                     '%elseif', '%upvar', '%mult%upvar', '%parameter', '%adt',
-                    '%mult%parameter', '%mult%adt'],
+                    '%mult%parameter', '%mult%adt', '%nUE'],
                 this.fragment.type
             ) ? on : off) +
             localize('special'),
@@ -5366,6 +5368,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
+    addSpecialSlotType('number \u03BB', '%nUE');
     addSpecialSlotType('object', '%obj');
     addSpecialSlotType('parameter', '%parameter');
     addSpecialSlotType('ADT', '%adt');

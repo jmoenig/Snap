@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-March-02';
+modules.gui = '2026-March-10';
 
 // Declarations
 
@@ -5167,6 +5167,15 @@ IDE_Morph.prototype.settingsMenu = function () {
         this.scene.hideEmptyCategories,
         'uncheck to show all primitive block categories',
         'check to hide empty primitive block categories',
+        false
+    );
+    addPreference(
+        'Enforce input types',
+        () => ScriptsMorph.prototype.enforceTypes =
+            !ScriptsMorph.prototype.enforceTypes,
+        ScriptsMorph.prototype.enforceTypes,
+        'uncheck to allow\ndropping reporters\ninto unmatching slots',
+        'disable dropping reporters\ninto unmatching slots',
         false
     );
     addPreference(
