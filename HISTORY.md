@@ -111,6 +111,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2026-03-11
+* tweaked slot type matching
+
 ### 2026-03-10
 * blocks: changed ADT input slots evaluation to return an empty list
 * updated the tables extension with new data type enforcements
