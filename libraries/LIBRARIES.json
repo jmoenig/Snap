@@ -181,7 +181,7 @@
     "translations": {
       "zh_CN": {
         "name": "表格处理库",
-        "description": "使用强大、通用的函数创建、选择、筛选、排序、转换、扩展和分析表格数据集。其设计灵感源自 Pyret 的 Tables 数据，详情可参阅：https://pyret.org/docs/latest/tables.html。感谢 Shriram Krishnamurthi 的启发、反馈与建议。示例项目（仍在开发中）：https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode"
+        "description": "使用强大、通用的函数创建、选择、筛选、排序、转换、扩展和分析表格数据集。其设计灵感源自 Pyret 的 Tables 数据，详情可参阅：https://pyret.org/docs/latest/tables.html。感谢 Shriram Krishnamurthi 的启发、反馈与建议。示例项目(仍在开发中)：https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode"
       }
     }
   },
@@ -371,7 +371,7 @@
       },
       "zh_CN": {
         "name": "循环、函数迭代和组合库",
-        "description": "传统的循环结构（如while、until等），加上Lisp中的\"named let\"（FOR的一般化），再加上函数迭代（反复调用一个函数）和函数组合。"
+        "description": "传统的循环结构(如while、until等)，加上Lisp中的\"named let\"(FOR的一般化)，再加上函数迭代(反复调用一个函数)和函数组合。"
       }
     },
     "searchData": [
@@ -825,7 +825,7 @@
         "description": "Закон Айзенберга: усе, що можна зробити за допомогою графічного інтерфейсу користувача, має бути можливим за допомогою мови програмування, і навпаки."
       },
       "zh_CN": {
-        "name": "获取器和设置器",
+        "name": "获取器和设置器库",
         "description": "艾森伯格定律：任何可以通过图形用户界面完成的事情都应该能够通过编程语言完成，反之亦然。"
       }
     },
@@ -890,6 +890,10 @@
       "ca": {
         "name": "Sensors de dispositius mòbils",
         "description": "Lectures dels sensors de mòbils i tauletes."
+      },
+      "zh_CN": {
+        "name": "移动设备传感器库",
+        "description": "访问手机和平板上的传感器"
       }
     }
   },
@@ -900,6 +904,9 @@
     "translations": {
       "ca": {
         "description": "Interactua amb dispositius programats amb Microblocks conentant-los per USB o per BLE. Els missatges enviats per Microblocks es reben automàticament a Snap! després de la connexió"
+      },
+      "zh_CN": {
+        "description": "通过USB或BLE无线连接与MicroBlocks设备进行交互。连接后，MicroBlocks设备生成的广播将自动在Snap!端接收"
       }
     },
     "searchData": [
@@ -941,6 +948,10 @@
           "lectura analògica _\res",
           "lectura digital _\res"
         ]
+      },
+      "zh_CN": {
+        "name": "Snap!4Arduino硬件连接库",
+        "description": "增加Snap4Arduino(Snap!改版)的所有功能。将Snap!连接到任何兼容Firmata的板卡：UNO、Nano、Mega、Leonardo、Micro、Due、101、ESP8266、NodeMCU……以动态控制它们的功能。需要上传Firmata固件"
       }
     }
   },
@@ -1005,6 +1016,10 @@
           "torna a la posició enregistrada",
           "vista de l'escarbat"
         ]
+      },
+      "zh_CN": {
+        "name": "3D甲虫教学库",
+        "description": "在三维空间中沿路径绘制点、线或多边形，以生成3D几何图形。\n对于TurboWarp或Gandi IDE用户：本库并非Snap! 3D的实现，\n而是Snap!改版Beetle Blocks的Snap! DSL(领域特定语言)重写版本\n(由于此前Beetle Blocks的服务器数据丢失，因此，在Snap! 10版本，Beetle Blocks被重写为Snap!库。)\n详见\nhttps://snapwiki.miraheze.org/wiki/Beetle_Blocks"
       }
     }
   },
@@ -1036,6 +1051,10 @@
       "ca": {
         "name": "Brodats digitals",
         "description": "Generació d'arxius per les brodadores digitals afegint les funcionalitats de brodadora al dibuix de tortuga estàndard. Experimental"
+      },
+      "zh_CN": {
+        "name": "刺绣库",
+        "description": "生成刺绣文件，用于在缝纫机上缝制画笔轨迹(实验性功能，正在建设中)"
       }
     }
   },
@@ -1075,7 +1094,7 @@
         "description": "Додати інтерактивні карти до проектів"
       },
       "zh_CN": {
-        "name": "世界地图",
+        "name": "世界地图库",
         "description": "向项目中添加交互式地图"
       }
     },
@@ -1108,6 +1127,10 @@
     "translations": {
       "ca": {
         "description": "Demana a l'usuari que triï una opció."
+      },
+      "zh_CN": {
+        "name": "问答菜单库",
+        "description": "在询问框上提示用户选择一个选项"
       }
     },
     "searchData": [
@@ -1582,6 +1605,10 @@
     "translations": {
       "ca": {
         "description": "Creeu arcs tot girant els objectes un número de graus i movent-los en un radi determinat"
+      },
+      "zh_CN": {
+        "name": "圆周运动库",
+        "description": "通过给定半径及角度，使角色进行圆周运动"
       }
     },
     "searchData": [
@@ -2115,7 +2142,7 @@
         "name": "Доступ до веб-служб (https)"
       },
       "zh_CN": {
-        "name": "网络服务访问（https）"
+        "name": "网络服务访问(https)"
       }
     },
     "searchData": [
@@ -2917,7 +2944,7 @@
         "description": "Взаємодія з пристроями MicroBlocks через Wi-Fi. Потрібно, щоб пристрій мав TFT-дисплей, дві кнопки та можливість Wi-Fi, а також завантажений проект Signada MicroBlocks. Citilab ED1 і низка плат M5Stack є одними з пристроїв, які працюють з Signada"
       },
       "zh_CN": {
-        "name": "Signada（网络远程控制）",
+        "name": "Signada(网络远程控制)",
         "description": "通过WiFi与MicroBlocks设备进行交互。需要设备具备TFT显示屏、两个按钮和WiFi功能，以及加载了Signada MicroBlocks项目。Citilab ED1和一些M5Stack开发板是与Signada兼容的设备之一。"
       }
     },
