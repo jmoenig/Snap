@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-March-10';
+modules.blocks = '2026-March-11';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1495,6 +1495,7 @@ SyntaxElementMorph.prototype.allInputs = function () {
 SyntaxElementMorph.prototype.allBlockInputs = function () {
     var all = [];
     this.inputs().forEach(m => {
+        all.push(m);
         all = all.concat(m.allInputs());
     });
     return all;
@@ -8549,6 +8550,10 @@ RingMorph.prototype.dataType = function () {
 RingMorph.prototype.isEmptySlot = function () {
     return this.contents() === null &&
         (this.getSlotSpec().indexOf('Ring') > 0);
+};
+
+RingMorph.prototype.matches = function (typestring) {
+    return ['command', 'script', 'any'].includes(typestring);
 };
 
 // RingMorph zebra coloring
