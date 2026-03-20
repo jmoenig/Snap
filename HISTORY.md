@@ -68,7 +68,7 @@
         * "pipe" reporters, thanks, Brian and gang!
 * **Notable Changes:**
     * data types
-        * enhanced "is ... as ...?" predicate to support dependent data types and user defined structs (ADTs)
+        * enhanced "is ... a ...?" predicate to support dependent data types and user defined structs (ADTs)
     * ui
         * keep result balloons "attached" to their originating block / script when scrolling
         * added icons to the IDE tabs (scripts, costumes, sounds)
@@ -79,6 +79,8 @@
         * sprite icons no longer blur when the sprite size is reduced or the zoom level increases
         * resizing the browser / window in presentation ("app") mode scales the stage smoothly
         * removed "stage selected, no motion primitives" text from the palette to support sprite-less microworlds
+    * blocks
+        * removed landscape orientation of text-input slots
     * meta-programming
         * silently handle missing variable references in user-scripted dropdowns and expansion subslots by returning an empty list instead
         * removed "static" tag from the block-attribute getter
@@ -110,6 +112,9 @@
     * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
     * German
+
+### 2026-03-13
+* blocs, objects: made text-input slots type aware and removed landscape orientation
 
 ### 2026-03-11
 * tweaked slot type matching

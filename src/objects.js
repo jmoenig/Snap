@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-March-09';
+modules.objects = '2026-March-13';
 
 var SpriteMorph;
 var StageMorph;
@@ -1059,7 +1059,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
-            spec: 'write %s size %n',
+            spec: 'write %txt size %n',
             defaults: [localize('Hello!'), 12],
             animation: true
         },
@@ -1676,7 +1676,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'sensing',
-            spec: 'url %s',
+            spec: 'url %txt',
             defaults: ['snap.berkeley.edu'],
             code: 'url'
         },
@@ -1921,7 +1921,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
-            spec: 'letter %ix of %s',
+            spec: 'letter %ix of %txt',
             defaults: [1, localize('world')],
             code: 'letter',
             src: `(
@@ -1942,7 +1942,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
-            spec: '%ta of text %s',
+            spec: '%ta of text %txt',
             defaults: [['length'], localize('world')],
             code: 'text'
         },
@@ -1950,7 +1950,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
-            spec: 'unicode of %s',
+            spec: 'unicode of %txt',
             defaults: ['a'],
             code: 'unicode'
         },
