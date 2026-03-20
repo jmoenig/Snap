@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-March-11';
+modules.blocks = '2026-March-13';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -336,7 +336,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%txt': {
         type: 'input',
-        tags: 'landscape'
+        tags: 'textual' // 'landscape'
     },
     '%anyUE': {
         type: 'input',
@@ -849,6 +849,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%typ': {
         type: 'input',
+        tags: 'textual',
         // tags: 'read-only static',
         menu: 'typesMenu'
     },
@@ -1287,7 +1288,7 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%words': {
         type: 'multi',
-        slots: '%s',
+        slots: '%txt', // '%s'
         defaults: 2
     },
     '%lists': {
@@ -2115,7 +2116,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         // apply the tags
         // ---------------
-        // input: numeric, numstring, alphanum, read-only, unevaluated,
+        // input: numeric, textual, numstring, alphanum, read-only, unevaluated,
         //        landscape, static
         // text entry: monospace
         // boolean: unevaluated, static
@@ -2136,6 +2137,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                     switch (tag) {
                     case 'numeric':
                         part.isNumeric = true;
+                        break;
+                    case 'textual':
+                        part.isTextual = true;
                         break;
                     case 'alphanum':
                         part.isNumeric = true;
@@ -11203,6 +11207,7 @@ InputSlotMorph.prototype.init = function (
     this.choices = choiceDict || null; // object, function or selector
     this.oldContentsExtent = contents.extent();
     this.isNumeric = isNumeric || false;
+    this.isTextual = false;
     this.evaluateAsString = false; // special case for RANDOM NUMBER reporter
     this.isAlphanumeric = false; // temporary override for allowing text
     this.isReadOnly = isReadOnly || false;
@@ -11228,6 +11233,8 @@ InputSlotMorph.prototype.getSpec = function () {
     }
     if (this.isNumeric) {
         return '%n';
+    } else if (this.isTextual) {
+        return '%txt';
     }
     return '%s'; // default
 };
@@ -12699,6 +12706,8 @@ InputSlotMorph.prototype.isEmptySlot = function () {
 InputSlotMorph.prototype.matches = function (typestring) {
     if (this.isNumeric) {
         return ['number', 'any'].includes(typestring);
+    } else if (this.isTextual) {
+        return ['text', 'number', 'any'].includes(typestring);
     }
     return true;
 };
