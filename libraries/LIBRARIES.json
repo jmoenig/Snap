@@ -181,7 +181,7 @@
     "translations": {
       "zh_CN": {
         "name": "表格处理库",
-        "description": "使用强大、通用的函数创建、选择、筛选、排序、转换、扩展和分析表格数据集。其设计灵感源自 Pyret 的 Tables 数据，详情可参阅：https://pyret.org/docs/latest/tables.html。感谢 Shriram Krishnamurthi 的启发、反馈与建议。示例项目(仍在开发中)：https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode"
+        "description": "使用强大、通用的函数创建、选择、筛选、排序、转换、扩展和分析表格数据集。其设计灵感源自 Pyret 的 Tables 数据，详情可参阅：https://pyret.org/docs/latest/tables.html。感谢 Shriram Krishnamurthi 的启发、反馈与建议。示例作品(仍在开发中)：https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode"
       }
     }
   },
@@ -1095,7 +1095,7 @@
       },
       "zh_CN": {
         "name": "世界地图库",
-        "description": "向项目中添加交互式地图"
+        "description": "向作品中添加交互式地图"
       }
     },
     "searchData": [
@@ -1181,8 +1181,8 @@
         "description": "Генерування костюмів з букв та слів"
       },
       "zh_CN": {
-        "name": "文本样式",
-        "description": "从文本的字母或单词生成造型。"
+        "name": "文本转造型库",
+        "description": "将文本转化为造型。"
       }
     },
     "searchData": [
@@ -1229,8 +1229,8 @@
         "description": "Виведення тексту за допомогою синтезу мовлення."
       },
       "zh_CN": {
-        "name": "文本转语音",
-        "description": "使用语音合成输出文本。"
+        "name": "文本与语音互转库",
+        "description": "通过文本输出声音，或通过外部声音输出文本"
       }
     },
     "searchData": [
@@ -1280,8 +1280,8 @@
         "description": "Ковзайте, збільшуйте та обертайте за допомогою функцій полегшення."
       },
       "zh_CN": {
-        "name": "动画",
-        "description": "使用缓动函数进行滑动、放大和旋转。"
+        "name": "动画库",
+        "description": "通过变换函数进行滑动、放大和旋转(包括非线性动画实现)"
       }
     },
     "searchData": [
@@ -1564,8 +1564,8 @@
         "description": "Постійне зберігання ключ-значення в Snap! сесій в одному браузері"
       },
       "zh_CN": {
-        "name": "数据库",
-        "description": "在同一浏览器中跨Snap!会话保持持久化的键值存储,这是关于在Snap!编程环境中实现在不同会话之间保持数据持久性的描述。"
+        "name": "数据缓存库",
+        "description": "在同一浏览器中缓存基于键值对的数据，且可以跨Snap!编辑器访问。"
       }
     },
     "searchData": [
@@ -1587,6 +1587,10 @@
       "ca": {
         "name": "Rajoles d'escenari",
         "description": "Divideix l'escenari en diferents regions iguals per realitzar la mateixa acció repetitivament"
+      },
+      "zh_CN": {
+        "name": "子区域库",
+        "description": "将舞台分成若干大小相同的区域，并对每个区域执行相同的程序"
       }
     },
     "searchData": [
@@ -1715,7 +1719,8 @@
         "name": "Слова, речення"
       },
       "zh_CN": {
-        "name": "单词，句子"
+        "name": "单词、句子处理库",
+        "description": "Scratch 遗漏了 Logo 的一个重要思想：将字符串视为由单词和句子组成的结构，而不仅仅是有若干字符组合成的字符串。这个库重新引入了这一思想。\n对于国内的Scratcher/Snapper：由于中文不像英文一样，每个词之间都有一个空格。因此，本库一开始的设计就只适用于英文句子处理"
       }
     },
     "searchData": [
@@ -1752,6 +1757,10 @@
       "ca": {
         "name": "Només paraules",
         "description": "Utilitza els textos com si fossin llistes de paraules. Una variant mínima de la llibreria 'Paraules i Frases' per a projectes lingüístics com ara un xat amb un robot."
+      },
+      "zh_CN": {
+        "name": "纯单词处理库",
+        "description": "将文本视为单词列表来使用。这是单词、句子处理库的一个最小变体，适用于聊天机器人等语言项目。\n对于国内的Scratcher/Snapper：由于中文不像英文一样，每个词之间都有一个空格。因此，本库一开始的设计就只适用于英文句子处理"
       }
     },
     "searchData": [
@@ -1849,8 +1858,8 @@
         "description": "Додає функції з мови APL, що підтримують гіперблоки."
       },
       "zh_CN": {
-        "name": "APL原语",
-        "description": "添加支持超运算积木的APL语言功能."
+        "name": "APL(领域特定语言)库",
+        "description": "引入基于超运算积木构建的的APL语言实现."
       }
     },
     "searchData": [
@@ -1963,7 +1972,8 @@
         "name": "Потоки (ліниві списки)"
       },
       "zh_CN": {
-        "name": "流(惰性列表)"
+        "name": "流(按需求值的列表)",
+        "description": "这是列表数据类型的一种变体，其中每个列表项只有在需要时才会被计算，因此你可以构建包含百万项甚至无限大小的列表，而不会真正占用那么多时间或内存(其中包含一个用于报告所有质数的积木作为示例。)。相关教程详见《计算机程序的构造与解释》(SICP)第三章第五节"
       }
     },
     "searchData": [
@@ -2945,7 +2955,7 @@
       },
       "zh_CN": {
         "name": "Signada(网络远程控制)",
-        "description": "通过WiFi与MicroBlocks设备进行交互。需要设备具备TFT显示屏、两个按钮和WiFi功能，以及加载了Signada MicroBlocks项目。Citilab ED1和一些M5Stack开发板是与Signada兼容的设备之一。"
+        "description": "通过WiFi与MicroBlocks设备进行交互。需要设备具备TFT显示屏、两个按钮和WiFi功能，以及加载了Signada MicroBlocks作品。Citilab ED1和一些M5Stack开发板是与Signada兼容的设备之一。"
       }
     },
     "searchData": [
