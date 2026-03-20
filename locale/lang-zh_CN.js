@@ -89,6 +89,8 @@
         3. 右键点击自制积木，并点击菜单里的"编辑..."选项。此时会出现积木编辑器；
         4. 右键点击定义积木处，并点击菜单里的"翻译..."选项；
         5. 
+
+- Ayist14
 */
 
 SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
