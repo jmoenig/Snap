@@ -685,7 +685,8 @@
         "name": "Великі, раціональні, комплексні числа #s"
       },
       "zh_CN": {
-        "name": "Scheme数字类型库"
+        "name": "Scheme数字类型库",
+        "description": "集成了Scheme的完整数字类型，可通过\"使用Scheme的数字类型系统？ <True>\"导入这些数据类型"
       }
     },
     "searchData": [
