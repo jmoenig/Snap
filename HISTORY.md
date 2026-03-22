@@ -113,6 +113,10 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2026-03-22
+* updated shapes library
+* fixed an adt-type inferral bug
+
 ### 2026-03-13
 * blocs, objects: made text-input slots type aware and removed landscape orientation
 

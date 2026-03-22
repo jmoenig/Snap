@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-March-02';
+modules.threads = '2026-March-22';
 
 var ThreadManager;
 var Process;
@@ -4908,10 +4908,11 @@ Process.prototype.reportIsA = function (thing, typeString) {
         return primType === choice || // support ADTs (user defined structs)
             primType === 'list' &&
                 (this.reportListItem('_type', thing) === typeString ||
+                    ((this.reportListItem(['parent'], thing) === 'list') &&
                     this.reportIsA(
                         this.reportListItem(['parent'], thing),
                         typeString
-                    ));
+                    )));
     }
 };
 
