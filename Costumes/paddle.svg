@@ -1,11 +1,60 @@
-<svg version="1.1" width="85" height="13" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <defs>
-    <radialGradient id="grad_1" cx="0.5686" cy="0.409" r="0.7683">
-      <stop offset="0" stop-color="#009933" stop-opacity="1"/>
-      <stop offset="1" stop-color="#00CC44" stop-opacity="1"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="84.000008"
+   height="12.078432"
+   id="svg11"
+   sodipodi:docname="paddle.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview13"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <defs
+     id="defs7">
+    <radialGradient
+       id="grad_1"
+       cx="105.79455"
+       cy="437.76116"
+       r="44.574644"
+       gradientTransform="matrix(1.4478456,0,0,0.20818695,-105.41177,-86.196083)"
+       fx="105.79455"
+       fy="437.76116"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#009933"
+         stop-opacity="1"
+         id="stop2" />
+      <stop
+         offset="1"
+         stop-color="#00CC44"
+         stop-opacity="1"
+         id="stop4" />
     </radialGradient>
   </defs>
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <image id="ID0.3343799961730838" width="2" height="2" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAADklEQVR42mNhgAIWGAMAAH4ACYwGaSAAAAAtdEVYdFNvZnR3YXJlAGJ5LmJsb29kZHkuY3J5cHRvLmltYWdlLlBORzI0RW5jb2RlcqgGf+4AAAAASUVORK5CYII=" transform="matrix(0.5, 0, 0, 0.5, 39, 8)"/>
-  <path id="ID0.03990915324538946" fill="#009933" stroke="url(#grad_1)" stroke-width="10" d="M 197 162 L 340 162 L 340 174 L 197 174 L 197 162 Z " transform="matrix(0.5490196347236633, 0, 0, 0.5490196347236633, -104.45, -86.2)"/>
+  <image
+     id="ID0.3343799961730838"
+     width="1"
+     height="1"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAADklEQVR42mNhgAIWGAMAAH4ACYwGaSAAAAAtdEVYdFNvZnR3YXJlAGJ5LmJsb29kZHkuY3J5cHRvLmltYWdlLlBORzI0RW5jb2RlcqgGf+4AAAAASUVORK5CYII="
+     x="38.038231"
+     y="8.0039177" />
+  <path
+     id="ID0.03990915324538946"
+     fill="#009933"
+     stroke="url(#grad_1)"
+     stroke-width="5.4902"
+     d="M 2.7450972,2.7450974 H 81.254904 V 9.333333 H 2.7450972 Z"
+     style="stroke:url(#grad_1)" />
 </svg>

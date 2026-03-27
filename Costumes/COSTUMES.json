@@ -48,26 +48,8 @@
     }
   },
   {
-    "fileName": "Duck.svg",
-    "name": "Duck",
-    "translations": {
-    }
-  },
-  {
     "fileName": "Egg.svg",
     "name": "Egg",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Fox.svg",
-    "name": "Fox",
-    "translations": {
-    }
-  },
-  {
-    "fileName": "Frog.svg",
-    "name": "Frog",
     "translations": {
     }
   },
@@ -732,7 +714,7 @@
     }
   },
   {
-    "fileName": "Cowbell.svg",
+    "fileName": "Cowbell2.svg",
     "name": "Cowbell",
     "translations": {
     }

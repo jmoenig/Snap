@@ -1,7 +1,38 @@
-<svg version="1.1" width="27" height="37" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="26.000002"
+   height="36.400002"
+   id="svg5"
+   sodipodi:docname="4-pixel.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.06029181042686105">
-    <path id="ID0.1095679965801537" fill="#39B54A" d="M 21 42 L 42 42 L 42 63 L 21 63 L 21 42 Z " transform="matrix(0.24761906266212463, 0, 0, 0.24761906266212463, 0.4, 0.05)"/>
-    <path id="ID0.06722730584442616" fill="#39B54A" d="M 105 84 L 105 105 L 84 105 L 84 147 L 63 147 L 63 105 L 0 105 L 0 63 L 21 63 L 21 84 L 63 84 L 63 42 L 42 42 L 42 21 L 63 21 L 63 0 L 84 0 L 84 84 L 105 84 " transform="matrix(0.24761906266212463, 0, 0, 0.24761906266212463, 0.4, 0.05)"/>
+  <g
+     id="ID0.06029181042686105"
+     transform="translate(-0.4,-0.05)">
+    <path
+       id="ID0.1095679965801537"
+       fill="#39b54a"
+       d="M 21,42 H 42 V 63 H 21 Z"
+       transform="matrix(0.24761906,0,0,0.24761906,0.4,0.05)" />
+    <path
+       id="ID0.06722730584442616"
+       fill="#39b54a"
+       d="m 105,84 v 21 H 84 v 42 H 63 V 105 H 0 V 63 H 21 V 84 H 63 V 42 H 42 V 21 H 63 V 0 h 21 v 84 h 21"
+       transform="matrix(0.24761906,0,0,0.24761906,0.4,0.05)" />
   </g>
 </svg>

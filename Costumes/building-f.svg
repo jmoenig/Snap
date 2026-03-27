@@ -1,59 +1,175 @@
-<svg version="1.1" width="50" height="131" viewBox="-1 -1 50 131" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="79.327164"
+   height="211.0224"
+   viewBox="-1 -1 79.327164 211.0224"
+   id="svg39"
+   sodipodi:docname="building-f.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs43" />
+  <sodipodi:namedview
+     id="namedview41"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.7634579516015947" transform="matrix(1.628894567489624, 0, 0, 1.628894567489624, -0.65, 0.05)">
-    <g id="ID0.18224140675738454">
-      <g id="ID0.07530780974775553">
-        <path id="ID0.5715098325163126" fill="#FFFFFF" d="M 216 232.500 L 263.300 232.500 L 263.300 359.600 L 216 359.600 L 216 232.500 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+  <g
+     id="ID0.7634579516015947"
+     transform="matrix(1.6288946,0,0,1.6288946,-1.9773367,-1.7338984)">
+    <g
+       id="ID0.18224140675738454">
+      <g
+         id="ID0.07530780974775553">
+        <path
+           id="ID0.5715098325163126"
+           fill="#ffffff"
+           d="m 216,232.5 h 47.3 V 359.6 H 216 Z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.6419649901799858">
-        <path id="ID0.22598200850188732" fill="#C3E8F3" d="M 220.500 254.600 L 225.900 254.600 L 225.900 351.100 L 220.500 351.100 L 220.500 254.600 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.6419649901799858">
+        <path
+           id="ID0.22598200850188732"
+           fill="#c3e8f3"
+           d="m 220.5,254.6 h 5.4 v 96.5 h -5.4 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.444835988804698">
-        <path id="ID0.512604983523488" fill="#C3E8F3" d="M 231.500 254.600 L 236.900 254.600 L 236.900 351.100 L 231.500 351.100 L 231.500 254.600 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.444835988804698">
+        <path
+           id="ID0.512604983523488"
+           fill="#c3e8f3"
+           d="m 231.5,254.6 h 5.4 v 96.5 h -5.4 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.6040827860124409">
-        <path id="ID0.32492705062031746" fill="#C3E8F3" d="M 242.400 254.600 L 247.800 254.600 L 247.800 351.100 L 242.400 351.100 L 242.400 254.600 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.6040827860124409">
+        <path
+           id="ID0.32492705062031746"
+           fill="#c3e8f3"
+           d="m 242.4,254.6 h 5.4 v 96.5 h -5.4 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.8097445969469845">
-        <path id="ID0.7237178734503686" fill="#C3E8F3" d="M 253.300 254.600 L 258.700 254.600 L 258.700 351.100 L 253.300 351.100 L 253.300 254.600 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.8097445969469845">
+        <path
+           id="ID0.7237178734503686"
+           fill="#c3e8f3"
+           d="m 253.3,254.6 h 5.4 v 96.5 h -5.4 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.46690878132358193">
-        <path id="ID0.7223627232015133" fill="#D1E6BB" d="M 259.900 249.300 L 220 249.300 L 220 237.400 L 259.900 237.400 L 259.900 249.300 Z M 222.100 247.200 L 257.800 247.200 L 257.800 239.500 L 222.100 239.500 L 222.100 247.200 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.46690878132358193">
+        <path
+           id="ID0.7223627232015133"
+           fill="#d1e6bb"
+           d="M 259.9,249.3 H 220 v -11.9 h 39.9 z m -37.8,-2.1 h 35.7 v -7.7 h -35.7 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.5169353974051774">
-        <path id="ID0.8186326143331826" fill="#D1E6BB" d="M 217.200 253.100 L 264 253.100 L 264 255.200 L 217.200 255.200 L 217.200 253.100 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.5169353974051774">
+        <path
+           id="ID0.8186326143331826"
+           fill="#d1e6bb"
+           d="M 217.2,253.1 H 264 v 2.1 h -46.8 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.810804265551269">
-        <path id="ID0.5596781019121408" fill="#D1E6BB" d="M 219.600 253.900 L 221.700 253.900 L 221.700 359.600 L 219.600 359.600 L 219.600 253.900 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.810804265551269">
+        <path
+           id="ID0.5596781019121408"
+           fill="#d1e6bb"
+           d="m 219.6,253.9 h 2.1 v 105.7 h -2.1 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.9613605025224388">
-        <path id="ID0.7781043443828821" fill="#D1E6BB" d="M 225.100 253.900 L 227.200 253.900 L 227.200 359.600 L 225.100 359.600 L 225.100 253.900 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.9613605025224388">
+        <path
+           id="ID0.7781043443828821"
+           fill="#d1e6bb"
+           d="m 225.1,253.9 h 2.1 v 105.7 h -2.1 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.15633063623681664">
-        <path id="ID0.7627233378589153" fill="#D1E6BB" d="M 230.500 253.900 L 232.600 253.900 L 232.600 359.600 L 230.500 359.600 L 230.500 253.900 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.15633063623681664">
+        <path
+           id="ID0.7627233378589153"
+           fill="#d1e6bb"
+           d="m 230.5,253.9 h 2.1 v 105.7 h -2.1 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.49152950197458267">
-        <path id="ID0.38208107789978385" fill="#D1E6BB" d="M 236 253.900 L 238.100 253.900 L 238.100 359.600 L 236 359.600 L 236 253.900 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.49152950197458267">
+        <path
+           id="ID0.38208107789978385"
+           fill="#d1e6bb"
+           d="m 236,253.9 h 2.1 V 359.6 H 236 Z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.5892330384813249">
-        <path id="ID0.2751736999489367" fill="#D1E6BB" d="M 241.400 253.900 L 243.500 253.900 L 243.500 359.600 L 241.400 359.600 L 241.400 253.900 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.5892330384813249">
+        <path
+           id="ID0.2751736999489367"
+           fill="#d1e6bb"
+           d="m 241.4,253.9 h 2.1 v 105.7 h -2.1 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.8417911268770695">
-        <path id="ID0.924276034347713" fill="#D1E6BB" d="M 246.900 253.900 L 249 253.900 L 249 359.600 L 246.900 359.600 L 246.900 253.900 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.8417911268770695">
+        <path
+           id="ID0.924276034347713"
+           fill="#d1e6bb"
+           d="m 246.9,253.9 h 2.1 v 105.7 h -2.1 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.7201975523494184">
-        <path id="ID0.5528415888547897" fill="#D1E6BB" d="M 252.300 253.900 L 254.400 253.900 L 254.400 359.600 L 252.300 359.600 L 252.300 253.900 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.7201975523494184">
+        <path
+           id="ID0.5528415888547897"
+           fill="#d1e6bb"
+           d="m 252.3,253.9 h 2.1 v 105.7 h -2.1 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.7567268083803356">
-        <path id="ID0.515790902543813" fill="#D1E6BB" d="M 257.800 253.900 L 259.900 253.900 L 259.900 359.600 L 257.800 359.600 L 257.800 253.900 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.7567268083803356">
+        <path
+           id="ID0.515790902543813"
+           fill="#d1e6bb"
+           d="m 257.8,253.9 h 2.1 v 105.7 h -2.1 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.9168362296186388">
-        <path id="ID0.07600371493026614" fill="#D1E6BB" d="M 262.200 232.500 L 264.300 232.500 L 264.300 360 L 262.200 360 L 262.200 232.500 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.9168362296186388">
+        <path
+           id="ID0.07600371493026614"
+           fill="#d1e6bb"
+           d="m 262.2,232.5 h 2.1 V 360 h -2.1 z"
+           transform="translate(-215,-230)" />
       </g>
-      <g id="ID0.5485369618982077">
-        <path id="ID0.4239500411786139" fill="#D1E6BB" d="M 215.600 232.500 L 217.700 232.500 L 217.700 360 L 215.600 360 L 215.600 232.500 Z " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+      <g
+         id="ID0.5485369618982077">
+        <path
+           id="ID0.4239500411786139"
+           fill="#d1e6bb"
+           d="m 215.6,232.5 h 2.1 V 360 h -2.1 z"
+           transform="translate(-215,-230)" />
       </g>
     </g>
-    <path id="ID0.34229851560667157" fill="none" stroke="#D1E6BB" stroke-width="3.0989" d="M 215.900 232 L 264.300 232 " transform="matrix(1, 0, 0, 1, -215, -230)"/>
+    <path
+       id="ID0.34229851560667157"
+       fill="none"
+       stroke="#d1e6bb"
+       stroke-width="3.0989"
+       d="m 215.9,232 h 48.4"
+       transform="translate(-215,-230)" />
   </g>
 </svg>
