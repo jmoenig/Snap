@@ -2122,7 +2122,7 @@ CustomCommandBlockMorph.prototype.moveInPalette = function (dir = 'up') {
         ide.flushPaletteCache();
         ide.refreshEmptyCategories();
         ide.refreshPalette();
-    }    
+    }
 };
 
 CustomCommandBlockMorph.prototype.exportBlockDefinition = function () {
@@ -2177,7 +2177,7 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
     if (exp instanceof BlockMorph) {
         rebindRecursiveCalls(exp);
     }
- 
+
 
     ide.flushPaletteCache();
     ide.refreshPalette();
