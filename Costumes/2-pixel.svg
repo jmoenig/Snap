@@ -1,23 +1,104 @@
-<svg version="1.1" width="26" height="36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="25.214287"
+   height="35.299999"
+   id="svg19"
+   sodipodi:docname="2-pixel.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs23" />
+  <sodipodi:namedview
+     id="namedview21"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.053377158008515835">
-    <g id="ID0.3933425606228411">
-      <path id="ID0.8768781279213727" fill="#231F20" d="M 21 84 L 42 84 L 42 105 L 21 105 L 21 84 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.7938423897139728" fill="#231F20" d="M 42 63 L 63 63 L 63 84 L 42 84 L 42 63 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.8406719649210572" fill="#231F20" d="M 21 0 L 84 0 L 84 21 L 21 21 L 21 0 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.8507354613393545" fill="#231F20" d="M 63 42 L 84 42 L 84 63 L 63 63 L 63 42 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.5758201023563743" fill="#231F20" d="M 84 21 L 105 21 L 105 42 L 84 42 L 84 21 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.9977783733047545" fill="#231F20" d="M 21 105 L 21 126 L 105 126 L 105 147 L 0 147 L 0 105 L 21 105 " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.2934017018415034" fill="#231F20" d="M 0 21 L 21 21 L 21 42 L 0 42 L 0 21 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
+  <g
+     id="ID0.053377158008515835"
+     transform="translate(-0.8)">
+    <g
+       id="ID0.3933425606228411">
+      <path
+         id="ID0.8768781279213727"
+         fill="#231f20"
+         d="m 21,84 h 21 v 21 H 21 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.7938423897139728"
+         fill="#231f20"
+         d="M 42,63 H 63 V 84 H 42 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.8406719649210572"
+         fill="#231f20"
+         d="M 21,0 H 84 V 21 H 21 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.8507354613393545"
+         fill="#231f20"
+         d="M 63,42 H 84 V 63 H 63 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.5758201023563743"
+         fill="#231f20"
+         d="m 84,21 h 21 V 42 H 84 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.9977783733047545"
+         fill="#231f20"
+         d="m 21,105 v 21 h 84 v 21 H 0 v -42 h 21"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.2934017018415034"
+         fill="#231f20"
+         d="M 0,21 H 21 V 42 H 0 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
     </g>
-    <g id="ID0.8902965965680778">
-      <path id="ID0.8705049473792315" fill="#39B54A" d="M 21 84 L 42 84 L 42 105 L 21 105 L 21 84 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.3633783529512584" fill="#39B54A" d="M 42 63 L 63 63 L 63 84 L 42 84 L 42 63 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.8149931351654232" fill="#39B54A" d="M 21 0 L 84 0 L 84 21 L 21 21 L 21 0 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.5814503408037126" fill="#39B54A" d="M 63 42 L 84 42 L 84 63 L 63 63 L 63 42 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.6437820489518344" fill="#39B54A" d="M 84 21 L 105 21 L 105 42 L 84 42 L 84 21 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.25430502090603113" fill="#39B54A" d="M 21 105 L 21 126 L 105 126 L 105 147 L 0 147 L 0 105 L 21 105 " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
-      <path id="ID0.7498254734091461" fill="#39B54A" d="M 0 21 L 21 21 L 21 42 L 0 42 L 0 21 Z " transform="matrix(0.240136057138443, 0, 0, 0.240136057138443, 0.8, 0)"/>
+    <g
+       id="ID0.8902965965680778">
+      <path
+         id="ID0.8705049473792315"
+         fill="#39b54a"
+         d="m 21,84 h 21 v 21 H 21 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.3633783529512584"
+         fill="#39b54a"
+         d="M 42,63 H 63 V 84 H 42 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.8149931351654232"
+         fill="#39b54a"
+         d="M 21,0 H 84 V 21 H 21 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.5814503408037126"
+         fill="#39b54a"
+         d="M 63,42 H 84 V 63 H 63 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.6437820489518344"
+         fill="#39b54a"
+         d="m 84,21 h 21 V 42 H 84 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.25430502090603113"
+         fill="#39b54a"
+         d="m 21,105 v 21 h 84 v 21 H 0 v -42 h 21"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
+      <path
+         id="ID0.7498254734091461"
+         fill="#39b54a"
+         d="M 0,21 H 21 V 42 H 0 Z"
+         transform="matrix(0.24013606,0,0,0.24013606,0.8,0)" />
     </g>
   </g>
 </svg>

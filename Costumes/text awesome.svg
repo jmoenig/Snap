@@ -1,5 +1,42 @@
-<svg version="1.1" width="208" height="42" viewBox="6 9 208 42" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="636.56946"
+   height="401.49182"
+   viewBox="6 9 636.56946 401.49182"
+   id="svg4"
+   sodipodi:docname="text awesome.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <image id="ID0.20290409959852695" width="2" height="2" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAADklEQVR42mNhgAIWGAMAAH4ACYwGaSAAAAAtdEVYdFNvZnR3YXJlAGJ5LmJsb29kZHkuY3J5cHRvLmltYWdlLlBORzI0RW5jb2RlcqgGf+4AAAAASUVORK5CYII=" transform="matrix(0.5, 0, 0, 0.5, 109, 32)"/>
-  <text id="ID0.8806540477089584" fill="#6600CC" x="182" y="166.25" text-anchor="start" font-family="Scratch" font-size="22" transform="matrix(2.598745346069336, 0, 0, 2.598745346069336, 0, 0.65)">Awesome!</text>
+  <image
+     id="ID0.20290409959852695"
+     width="1"
+     height="1"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAADklEQVR42mNhgAIWGAMAAH4ACYwGaSAAAAAtdEVYdFNvZnR3YXJlAGJ5LmJsb29kZHkuY3J5cHRvLmltYWdlLlBORzI0RW5jb2RlcqgGf+4AAAAASUVORK5CYII="
+     x="6"
+     y="9" />
+  <text
+     id="ID0.8806540477089584"
+     fill="#6600cc"
+     x="369.97165"
+     y="409.69141"
+     text-anchor="start"
+     font-family="Scratch"
+     font-size="57.1724px"
+     style="stroke-width:2.59875">Awesome!</text>
 </svg>

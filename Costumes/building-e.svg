@@ -1,12 +1,64 @@
-<svg version="1.1" width="73" height="236" viewBox="-1 -1 73 236" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="71.599998"
+   height="234.5"
+   viewBox="-1 -1 71.599998 234.5"
+   id="svg10"
+   sodipodi:docname="building-e.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     id="namedview12"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.619334174785763" transform="matrix(1, 0, 0, 1, -44, -81)">
-    <path id="ID0.5743648270145059" fill="#5ACBF2" d="M 259.500 167.600 L 259.500 153.700 L 242.700 153.700 L 242.700 139.400 L 223.700 139.400 L 223.700 125.500 L 204.200 125.500 L 204.200 359.300 L 275.800 360 L 275.800 167.600 L 259.500 167.600 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.04677435057237744" fill="#D4EEF4" d="M 246 168.100 L 252.500 168.100 L 252.500 177.700 L 246 177.700 L 246 168.100 Z " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.3237219233997166" fill="#D4EEF4" d="M 246 188.100 L 252.500 188.100 L 252.500 197.700 L 246 197.700 L 246 188.100 Z " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.24152361694723368" fill="#D4EEF4" d="M 246 260.700 L 252.500 260.700 L 252.500 270.300 L 246 270.300 L 246 260.700 Z " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.6591854551807046" fill="#D4EEF4" d="M 230.200 219.200 L 236.700 219.200 L 236.700 228.800 L 230.200 228.800 L 230.200 219.200 Z " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.14373220410197973" fill="#D4EEF4" d="M 229.600 144.400 L 236.100 144.400 L 236.100 154 L 229.600 154 L 229.600 144.400 Z " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.35777322901412845" fill="#D4EEF4" d="M 230.800 191.100 L 237.300 191.100 L 237.300 200.700 L 230.800 200.700 L 230.800 191.100 Z " transform="matrix(1, 0, 0, 1, -160, -44)"/>
+  <g
+     id="ID0.619334174785763"
+     transform="translate(-45.2,-82.5)">
+    <path
+       id="ID0.5743648270145059"
+       fill="#5acbf2"
+       d="m 259.5,167.6 v -13.9 h -16.8 v -14.3 h -19 v -13.9 h -19.5 v 233.8 l 71.6,0.7 V 167.6 h -16.3"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.04677435057237744"
+       fill="#d4eef4"
+       d="m 246,168.1 h 6.5 v 9.6 H 246 Z"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.3237219233997166"
+       fill="#d4eef4"
+       d="m 246,188.1 h 6.5 v 9.6 H 246 Z"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.24152361694723368"
+       fill="#d4eef4"
+       d="m 246,260.7 h 6.5 v 9.6 H 246 Z"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.6591854551807046"
+       fill="#d4eef4"
+       d="m 230.2,219.2 h 6.5 v 9.6 h -6.5 z"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.14373220410197973"
+       fill="#d4eef4"
+       d="m 229.6,144.4 h 6.5 v 9.6 h -6.5 z"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.35777322901412845"
+       fill="#d4eef4"
+       d="m 230.8,191.1 h 6.5 v 9.6 h -6.5 z"
+       transform="translate(-160,-44)" />
   </g>
 </svg>

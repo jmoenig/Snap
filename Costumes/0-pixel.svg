@@ -1,8 +1,43 @@
-<svg version="1.1" width="26" height="37" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="25.444168"
+   height="35.621834"
+   id="svg6"
+   sodipodi:docname="0-pixel.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.038030187133699656">
-    <path id="ID0.6170409843325615" fill="#39B54A" d="M 105 21 L 105 126 L 84 126 L 84 42 L 63 42 L 63 21 L 21 21 L 21 0 L 84 0 L 84 21 L 105 21 " transform="matrix(0.24232541024684906, 0, 0, 0.24232541024684906, 0.3, 0.65)"/>
-    <path id="ID0.1062387116253376" fill="#39B54A" d="M 42 42 L 63 42 L 63 105 L 42 105 L 42 42 Z " transform="matrix(0.24232541024684906, 0, 0, 0.24232541024684906, 0.3, 0.65)"/>
-    <path id="ID0.4762702202424407" fill="#39B54A" d="M 84 126 L 84 147 L 21 147 L 21 126 L 0 126 L 0 21 L 21 21 L 21 105 L 42 105 L 42 126 L 84 126 " transform="matrix(0.24232541024684906, 0, 0, 0.24232541024684906, 0.3, 0.65)"/>
+  <g
+     id="ID0.038030187133699656"
+     transform="translate(-0.3,-0.65)">
+    <path
+       id="ID0.6170409843325615"
+       fill="#39b54a"
+       d="M 105,21 V 126 H 84 V 42 H 63 V 21 H 21 V 0 h 63 v 21 h 21"
+       transform="matrix(0.24232541,0,0,0.24232541,0.3,0.65)" />
+    <path
+       id="ID0.1062387116253376"
+       fill="#39b54a"
+       d="m 42,42 h 21 v 63 H 42 Z"
+       transform="matrix(0.24232541,0,0,0.24232541,0.3,0.65)" />
+    <path
+       id="ID0.4762702202424407"
+       fill="#39b54a"
+       d="m 84,126 v 21 H 21 V 126 H 0 V 21 h 21 v 84 h 21 v 21 h 42"
+       transform="matrix(0.24232541,0,0,0.24232541,0.3,0.65)" />
   </g>
 </svg>

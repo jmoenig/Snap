@@ -1,12 +1,63 @@
-<svg version="1.1" width="30" height="41" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="26.553967"
+   height="37.175552"
+   id="svg10"
+   sodipodi:docname="S-pixel.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     id="namedview12"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.381645867601037" transform="matrix(0.9298837780952454, 0, 0, 0.9298837780952454, 0, 0)">
-    <path id="ID0.2551600467413664" fill="#39B54A" d="M 21 0 L 84 0 L 84 21 L 21 21 L 21 0 Z " transform="matrix(0.27196401357650757, 0, 0, 0.27196401357650757, 0.7, 0.4)"/>
-    <path id="ID0.4091657451353967" fill="#39B54A" d="M 21 63 L 84 63 L 84 84 L 21 84 L 21 63 Z " transform="matrix(0.27196401357650757, 0, 0, 0.27196401357650757, 0.7, 0.4)"/>
-    <path id="ID0.7999427253380418" fill="#39B54A" d="M 0 21 L 21 21 L 21 63 L 0 63 L 0 21 Z " transform="matrix(0.27196401357650757, 0, 0, 0.27196401357650757, 0.7, 0.4)"/>
-    <path id="ID0.37215042766183615" fill="#39B54A" d="M 0 105 L 21 105 L 21 126 L 0 126 L 0 105 Z " transform="matrix(0.27196401357650757, 0, 0, 0.27196401357650757, 0.7, 0.4)"/>
-    <path id="ID0.9090825319290161" fill="#39B54A" d="M 84 21 L 105 21 L 105 42 L 84 42 L 84 21 Z " transform="matrix(0.27196401357650757, 0, 0, 0.27196401357650757, 0.7, 0.4)"/>
-    <path id="ID0.22709927475079894" fill="#39B54A" d="M 84 84 L 105 84 L 105 126 L 84 126 L 84 84 Z " transform="matrix(0.27196401357650757, 0, 0, 0.27196401357650757, 0.7, 0.4)"/>
-    <path id="ID0.1342734727077186" fill="#39B54A" d="M 21 126 L 84 126 L 84 147 L 21 147 L 21 126 Z " transform="matrix(0.27196401357650757, 0, 0, 0.27196401357650757, 0.7, 0.4)"/>
+  <g
+     id="ID0.381645867601037"
+     transform="matrix(0.92988378,0,0,0.92988378,-0.65091864,-0.37195351)">
+    <path
+       id="ID0.2551600467413664"
+       fill="#39b54a"
+       d="M 21,0 H 84 V 21 H 21 Z"
+       transform="matrix(0.27196401,0,0,0.27196401,0.7,0.4)" />
+    <path
+       id="ID0.4091657451353967"
+       fill="#39b54a"
+       d="M 21,63 H 84 V 84 H 21 Z"
+       transform="matrix(0.27196401,0,0,0.27196401,0.7,0.4)" />
+    <path
+       id="ID0.7999427253380418"
+       fill="#39b54a"
+       d="M 0,21 H 21 V 63 H 0 Z"
+       transform="matrix(0.27196401,0,0,0.27196401,0.7,0.4)" />
+    <path
+       id="ID0.37215042766183615"
+       fill="#39b54a"
+       d="m 0,105 h 21 v 21 H 0 Z"
+       transform="matrix(0.27196401,0,0,0.27196401,0.7,0.4)" />
+    <path
+       id="ID0.9090825319290161"
+       fill="#39b54a"
+       d="m 84,21 h 21 V 42 H 84 Z"
+       transform="matrix(0.27196401,0,0,0.27196401,0.7,0.4)" />
+    <path
+       id="ID0.22709927475079894"
+       fill="#39b54a"
+       d="m 84,84 h 21 v 42 H 84 Z"
+       transform="matrix(0.27196401,0,0,0.27196401,0.7,0.4)" />
+    <path
+       id="ID0.1342734727077186"
+       fill="#39b54a"
+       d="m 21,126 h 63 v 21 H 21 Z"
+       transform="matrix(0.27196401,0,0,0.27196401,0.7,0.4)" />
   </g>
 </svg>
