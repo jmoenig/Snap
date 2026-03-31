@@ -113,6 +113,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2026-03-31
+* updated shapes library with new "regular polygon" block 
+
 ### 2026-03-22
 * updated shapes library
 * fixed an adt-type inferral bug
