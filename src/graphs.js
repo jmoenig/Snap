@@ -16,16 +16,20 @@
 
 */
 
-function createFlowMatrix (size, directed = false) {
+function allocateMatrix (size) {
     var adjacencyMatrix;
-    
-    // allocate the array
     adjacencyMatrix = [];
     for (var i = 0; i < size; ++i) {
         adjacencyMatrix[i] = []
         for (var j = 0; j < size; ++j)
             adjacencyMatrix[i][j] = 0;
     }
+    return adjacencyMatrix;
+}
+
+function createFlowMatrix (size, directed = false) {
+    var adjacencyMatrix;
+    adjacencyMatrix = allocateMatrix(size);
 
     // populate the fields
     for (var i = 0; i < size; ++i) {
@@ -43,16 +47,7 @@ function createFlowMatrix (size, directed = false) {
 
 function createForkMatrix (size, directed = false) {
     var adjacencyMatrix;
-    
-    // allocate the array
-    adjacencyMatrix = [];
-    for (var i = 0; i < size; ++i) {
-        console.log(i)
-        adjacencyMatrix[i] = []
-        for (var j = 0; j < size; ++j)
-            adjacencyMatrix[i][j] = 0;
-    }
-    console.log(adjacencyMatrix)
+    adjacencyMatrix = allocateMatrix(size)
 
     // source node
     for (var i = 0; i < size - 1; ++i)
