@@ -117,6 +117,7 @@
 ### 2026-04-01
 * updated shapes library
 * new costumes by Ketrina, yay!!!
+* huge Chinese translation update for libraries, thank you, @Ayist14 !
 
 ### 2026-03-31
 * updated shapes library with new "regular polygon" block 
