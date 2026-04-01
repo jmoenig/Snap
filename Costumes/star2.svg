@@ -1,7 +1,42 @@
-<svg version="1.1" width="50" height="54" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="49.085289"
+   height="52.931286"
+   id="svg6"
+   sodipodi:docname="star2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.25651572179049253">
-    <path id="ID0.7438426534645259" fill="#FFFF00" stroke="#FFFF00" stroke-linecap="round" d="M 247.600 183.500 L 239.600 175.850 L 232 183.650 L 247.600 183.500 Z " transform="matrix(2.716806411743164, 0, 0, -4.613910675048828, -626.6, 861.4)"/>
-    <path id="ID0.7438426534645259" fill="#FFFF00" stroke="#FFFF00" stroke-linecap="round" d="M 247.600 183.500 L 239.600 175.850 L 232 183.650 L 247.600 183.500 Z " transform="matrix(2.716806411743164, 0, 0, 4.613910675048828, -626.7, -807.75)"/>
+  <g
+     id="ID0.25651572179049253"
+     transform="translate(-0.34839576,-0.35935672)">
+    <path
+       id="ID0.7438426534645259"
+       fill="#ffff00"
+       stroke="#ffff00"
+       stroke-linecap="round"
+       d="m 247.6,183.5 -8,-7.65 -7.6,7.8 z"
+       transform="matrix(2.7168064,0,0,-4.6139107,-626.6,861.4)" />
+    <path
+       id="path3"
+       fill="#ffff00"
+       stroke="#ffff00"
+       stroke-linecap="round"
+       d="m 247.6,183.5 -8,-7.65 -7.6,7.8 z"
+       transform="matrix(2.7168064,0,0,4.6139107,-626.7,-807.75)" />
   </g>
 </svg>
