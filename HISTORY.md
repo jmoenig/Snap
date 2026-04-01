@@ -113,6 +113,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2026-04-01
+* updated shapes library
+
 ### 2026-03-31
 * updated shapes library with new "regular polygon" block 
 * updated shapes library to also scale the line width
