@@ -66,6 +66,7 @@
     * new help screens
         * new help screens for "combinations" and
         * "pipe" reporters, thanks, Brian and gang!
+    * new set of costumes by Ketrina!
 * **Notable Changes:**
     * data types
         * enhanced "is ... a ...?" predicate to support dependent data types and user defined structs (ADTs)
@@ -115,6 +116,7 @@
 
 ### 2026-04-01
 * updated shapes library
+* new costumes by Ketrina, yay!!!
 
 ### 2026-03-31
 * updated shapes library with new "regular polygon" block 
