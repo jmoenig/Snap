@@ -12065,6 +12065,7 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.isDraggable = false;
     this.currentKey = null; // currently pressed key code
     this.worldCanvas = aCanvas;
+    this.hidePalette = null;
 
     // additional properties:
     this.stamp = Date.now(); // reference in multi-world setups
