@@ -5921,15 +5921,16 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging'
         + '\n\n'
-        + 'Ketrina Johnson created every Snap! costume and background'
+        + 'Ketrina Johnson - https://ketrinadrawsalot.com -'
+        + '\ncreated every Snap! costume and background'
         + '\nexcept the ones inherited from Scratch, Alonzo, and the following:'
         + '\n\n'
-        + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes'
-        + 'are watercolor paintings\nby Meghan Taylor and represent'
-        + 'characters from her webcomic\nProphecy of the Circle,'
+        + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes '
+        + 'are watercolor\n paintings by Meghan Taylor and represent '
+        + 'characters from her webcomic\nProphecy of the Circle, '
         + 'licensed to us only for use in Snap! projects. '
         + '\nMeghan also painted the Tad costumes, '
-        + 'but that character is in the public domain.';
+        + 'which are in the public domain.';
 
     for (module in modules) {
         if (Object.prototype.hasOwnProperty.call(modules, module)) {
