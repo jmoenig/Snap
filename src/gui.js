@@ -5921,7 +5921,7 @@ IDE_Morph.prototype.aboutSnap = function () {
         + '\nAchal Dave: Web Audio'
         + '\nJoe Otto: Morphic Testing and Debugging'
         + '\n\n'
-        + 'Ketrina Johnson - https://ketrinadrawsalot.com -'
+        + 'Ketrina Thompson - https://ketrinadrawsalot.com -'
         + '\ncreated every Snap! costume and background'
         + '\nexcept the ones inherited from Scratch, Alonzo, and the following:'
         + '\n\n'
