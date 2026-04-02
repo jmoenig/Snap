@@ -5962,6 +5962,7 @@ IDE_Morph.prototype.aboutSnap = function () {
             ),
             scroller,
             maxHeight = world.height() - dlg.titleFontSize * 10;
+        tm.enableLinks = true; // let the user click on URLs to open in new tab
         if (tm.height() > maxHeight) {
             scroller = new ScrollFrameMorph();
             scroller.acceptsDrops = false;
