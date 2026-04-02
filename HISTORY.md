@@ -28,6 +28,8 @@
         * new "pen_path(points, [fill, close]" extension for drawing precise, filled shapes
         * new "Draw Paths" library for directly drawing filled or stroked polylines and polygons without moving the pen sprite
         * new "Shapes" extension for working with geometrical figures, modeled after Pyret's images. Under construction
+    * OOP 2.0 (data objects)
+        * "super" calls: using a ring as index inside the "ITEM ... OF ..." reporter answers a copy of the function (ring) that is bound to the list object in the second slot, enabling polymorphic methods, i.e. message dispatches to a "super class"
     * custom data types (ADTs)
         * include a ring entry named underscore + morph in data to specify a dynamic view
         * new "cst_morph(cst)" extension for specifying custom ADT visualizations
@@ -113,6 +115,9 @@
     * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
     * German
+
+### 2026-04-02
+* threads: new feature: using a ring as index inside the "ITEM ... OF ..." reporter answers a copy of the function (ring) that is bound to the list object in the second slot, enabling polymorphic methods, i.e. message dispatches to a "super class"
 
 ### 2026-04-01
 * updated shapes library

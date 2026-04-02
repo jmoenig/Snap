@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-March-22';
+modules.threads = '2026-April-02';
 
 var ThreadManager;
 var Process;
@@ -2469,6 +2469,11 @@ Process.prototype.reportListItem = function (index, list) {
     }
     if (index instanceof List && this.enableHyperOps) {
         return list.query(index);
+    }
+    if (index instanceof Context) {
+        // allow binding a function to another object to enable
+        // polymorphic messages involving a "super class"
+        return this.reportContextFor(index, list);
     }
     value = list.lookup(index);
     if (value instanceof Context && (parseFloat(index) !== +index)) {
