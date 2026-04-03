@@ -116,6 +116,9 @@
     * Catalan, thanks, Joan!
     * German
 
+### 2026-04-03
+* objects: fixed restoring the hidden custom blocks in a palette of a template-based project
+
 ### 2026-04-02
 * threads: new feature: using a ring as index inside the "ITEM ... OF ..." reporter answers a copy of the function (ring) that is bound to the list object in the second slot, enabling polymorphic methods, i.e. message dispatches to a "super class"
 * updated shapes library with ability to rotate regular polygons

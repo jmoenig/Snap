@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-March-13';
+modules.objects = '2026-April-03';
 
 var SpriteMorph;
 var StageMorph;
@@ -12084,7 +12084,7 @@ StageMorph.prototype.restoreHiddenGlobalBlocks = function (
 
     // global custom blocks
     this.globalBlocks.forEach(def =>
-        def.isHelper = hiddenList.at(2).contains(def.abstractBlockSpec));
+        def.isHelper = hiddenList.at(2).contains(def.abstractBlockSpec()));
 
     // global variables
     variables.names(true).forEach(name =>
