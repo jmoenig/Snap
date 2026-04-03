@@ -10,6 +10,7 @@
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
         * projects based on a template let the user restore the visibility of global blocks in the template palette
         * template-projects store their magnification level if it's above 100%
+        * "generate puzzle" automatically turns the project into a template
     * tutorials
         * open and run a scene inside a separate modeless window
         * new "Tutorials" library for positioning and scaling the tutorial window and interacting with the editor
@@ -55,6 +56,7 @@
         * change name and color of custom categories
         * new "blocks" and "speaker" symbols, icons for the sprite-editor tabs
         * new "hide empty categories" setting
+        * "generate puzzle" automatically hides empty categories
         * added a black-gray-white palette to the bottom of the color picker for color input slots
         * new "blocks only" setting for costomized "functions-first" microworlds
     * more extensions
@@ -118,6 +120,7 @@
 
 ### 2026-04-03
 * objects: fixed restoring the hidden custom blocks in a palette of a template-based project
+* gui: automatically turn generated puzzles into templates and hide empty categories
 
 ### 2026-04-02
 * threads: new feature: using a ring as index inside the "ITEM ... OF ..." reporter answers a copy of the function (ring) that is bound to the list object in the second slot, enabling polymorphic methods, i.e. message dispatches to a "super class"

@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-April-02';
+modules.gui = '2026-April-03';
 
 // Declarations
 
@@ -6557,6 +6557,15 @@ IDE_Morph.prototype.generatePuzzle = function () {
 
     // refresh
     this.selectSprite(puzzle);
+
+    // turn the project into a template
+    this.scene.role = 'template';
+
+    // hide empty categories
+    this.scene.hideEmptyCategories = true;
+    this.createCategories();
+    this.createPaletteHandle();
+    this.fixLayout();
 };
 
 IDE_Morph.prototype.addToPuzzle = function () {
