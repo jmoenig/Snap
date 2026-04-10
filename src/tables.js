@@ -408,6 +408,10 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         ).getImage();
     } else if (dta instanceof List) {
         return this.listSymbol();
+    } else if (dta instanceof Graph) {
+        return new SymbolMorph(
+            'graph', SyntaxElementMorph.prototype.fontSize
+        ).getImage();
     } else {
         return dta ? dta.toString() : (dta === 0 ? '0' : null);
     }

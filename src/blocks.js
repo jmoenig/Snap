@@ -2372,6 +2372,8 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.cachedImage = img;
     } else if (value instanceof Sound) {
         morphToShow = new SymbolMorph('notes', 30);
+    } else if (value instanceof Graph) {
+        morphToShow = new SymbolMorph('graph', 30);
     } else if (value instanceof Context) {
         img = value.image();
         morphToShow = new Morph();
@@ -9680,6 +9682,7 @@ InputSlotMorph.prototype.typesMenu = function () {
     dict.command = ['command'];
     dict.reporter = ['reporter'];
     dict.predicate = ['predicate'];
+    // TODO - add graph slot
     return dict;
 };
 

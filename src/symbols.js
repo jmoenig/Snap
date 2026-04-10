@@ -153,6 +153,7 @@ SymbolMorph.prototype.names = [
     'jumpBackward',
     'stepBackward',
     'puzzlePiece',
+    'graph',
 ];
 
 // SymbolMorph instance creation:
@@ -504,6 +505,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'puzzlePiece':
         this.renderSymbolPuzzlePiece(ctx, aColor);
+        break;
+    case 'graph':
+        this.renderSymbolGraph(ctx, aColor);
         break;
 
     default:
@@ -2511,6 +2515,52 @@ SymbolMorph.prototype.renderSymbolPuzzlePiece = function (ctx, color) {
 
     ctx.closePath();
     ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolGraph = function (ctx, color) {
+    const width = this.symbolWidth();
+    const height = this.size;
+
+    const nodeRadius = Math.max(2, Math.min(width, height) / 10);
+    const leftX = width * 0.24;
+    const rightX = width * 0.76;
+    const topY = height * 0.28;
+    const bottomY = height * 0.72;
+    const midX = width * 0.50;
+    const midY = height * 0.50;
+
+    ctx.strokeStyle = color.toString();
+    ctx.fillStyle = color.toString();
+    ctx.lineWidth = Math.max(1, Math.min(width, height) / 14);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // edges
+    ctx.beginPath();
+    ctx.moveTo(leftX, topY);
+    ctx.lineTo(midX, midY);
+    ctx.lineTo(rightX, topY);
+    ctx.moveTo(leftX, topY);
+    ctx.lineTo(leftX, bottomY);
+    ctx.lineTo(rightX, bottomY);
+    ctx.moveTo(midX, midY);
+    ctx.lineTo(rightX, bottomY);
+    ctx.stroke();
+
+    // nodes
+    const nodes = [
+        [leftX, topY],
+        [midX, midY],
+        [rightX, topY],
+        [leftX, bottomY],
+        [rightX, bottomY]
+    ];
+
+    for (const [x, y] of nodes) {
+        ctx.beginPath();
+        ctx.arc(x, y, nodeRadius, 0, 2 * Math.PI);
+        ctx.fill();
+    }
 };
 
 /*
