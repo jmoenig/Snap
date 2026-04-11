@@ -42,12 +42,12 @@ function createFlowMatrix (size, directed = false) {
         }
     }
 
-    return adjacencyMatrix
+    return adjacencyMatrix;
 }
 
 function createForkMatrix (size, directed = false) {
     var adjacencyMatrix;
-    adjacencyMatrix = allocateMatrix(size)
+    adjacencyMatrix = allocateMatrix(size);
 
     // source node
     for (var i = 0; i < size - 1; ++i)
@@ -77,7 +77,7 @@ function Graph(list, type) {
 
     // create the adjacency matrix
     contents = list.contents;
-    size = contents.length + 2;
+    size = contents.length;
     if (type === 'directed flow') 
         adjacencyMatrix = createFlowMatrix(size, true);
     else if (type === 'directed fork')
@@ -96,20 +96,8 @@ Graph.prototype.toString = function () {
     for (var i = 0; i < this.size; ++i) {
         for (var j = 0; j < this.size; ++j) {
             if (i !== j && this.adjacencyMatrix[i][j] === 1) {
-                if (i === 0) 
-                    src = 'src';
-                else if (i === this.size - 1) 
-                    src = 'dst';
-                else src = 
-                    this.src[i-1].toString();
-
-                if (j === 0) 
-                    dst = 'src';
-                else if (j === this.size - 1) 
-                    dst = 'dst';
-                else 
-                    dst = this.src[j-1].toString();
-
+                src = this.src[i].toString();
+                dst = this.src[j].toString();
                 returnString += `${src} --> ${dst}\n`;
             }
         }
@@ -121,13 +109,24 @@ Graph.prototype.toString = function () {
 Graph.prototype.getEdges = function () {
     var edges;
 
-    // TODO figure out the recursive structure. 
-
-    edges = []
-    for (var i = 1; i < this.size - 1; ++i)
-        for (var j = 1; j < this.size - 1; ++j)
-            if (i !== j && this.adjacencyMatrix[i][j] === 1)
-                edges.push(new List([this.src[i-1], this.src[j-1]]))
+    edges = [];
+    for (var i = 0; i < this.size; ++i) {
+        for (var j = 0; j < this.size; ++j) {
+            if (i !== j && this.adjacencyMatrix[i][j] === 1) {
+                // check if the src or dst is a graph
+                if (this.src[i] instanceof Graph) {
+                    var lastElement = this.src[i].getLastElement();         
+                }
+                src = this.src[i].toString();
+                dst = this.src[j].toString();
+                edges.push(new List([src, dst]))
+            }
+        }
+    }           
 
     return new List(edges)
+}
+
+Graph.prototype.getLastElement = function () {
+    return 0;
 }
