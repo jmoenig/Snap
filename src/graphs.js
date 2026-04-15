@@ -15,118 +15,120 @@
         * graphic for graph data type
 
 */
+function __parseDirectedFlow (graphContents) {
+    var edges = new List(),
+        seenGraphs = new List(),
+        i, j, k,
+        src, dst,
+        srcGraphEdges, dstGraphEdges;
 
-function allocateMatrix (size) {
-    var adjacencyMatrix;
-    adjacencyMatrix = [];
-    for (var i = 0; i < size; ++i) {
-        adjacencyMatrix[i] = []
-        for (var j = 0; j < size; ++j)
-            adjacencyMatrix[i][j] = 0;
-    }
-    return adjacencyMatrix;
-}
+    for (i = 1; i < graphContents.length(); ++i) {
+        src = new List([graphContents.at(i)]) 
+        dst = new List([graphContents.at(i+1)]);
 
-function createFlowMatrix (size, directed = false) {
-    var adjacencyMatrix;
-    adjacencyMatrix = allocateMatrix(size);
-
-    // populate the fields
-    for (var i = 0; i < size; ++i) {
-        for (var j = 0; j < size; ++j) {
-            if (i === j || i+1 === j) {
-                adjacencyMatrix[i][j] = 1;
-                if (!directed) 
-                    adjacencyMatrix[j][i] = 1;
+        if (src.at(1) instanceof Graph) {
+            if (!seenGraphs.contains(src.at(1).id)) {
+                srcGraphEdges = src.at(1).getEdges();
+                for (j = 1; j <= srcGraphEdges.length(); ++j)
+                    edges.add(srcGraphEdges.at(j));
+                seenGraphs.add(src.at(1).id);
             }
+            src = src.at(1).getLeaves();
         }
+
+        if (dst.at(1) instanceof Graph) {
+            if (!seenGraphs.contains(dst.at(1).id)) {
+                dstGraphEdges = dst.at(1).getEdges();
+                for (j = 1; j <= dstGraphEdges.length(); ++j)
+                    edges.add(dstGraphEdges.at(j));
+                seenGraphs.add(dst.at(1).id);
+            }
+            dst = dst.at(1).getRoots();
+        }
+
+        for (j = 1; j <= src.length(); ++j)
+            for (k = 1; k <= dst.length(); ++k)
+                edges.add(new List([src.at(j), dst.at(k)]))
     }
 
-    return adjacencyMatrix;
+    return edges;
 }
 
-function createForkMatrix (size, directed = false) {
-    var adjacencyMatrix;
-    adjacencyMatrix = allocateMatrix(size);
-
-    // source node
-    for (var i = 0; i < size - 1; ++i)
-        adjacencyMatrix[0][i] = 1;
-
-    // other nodes
-    if (!directed)
-        for (var i = 1; i < size - 1; ++i)
-            adjacencyMatrix[i][0] = 1;
-    for (var i = 1; i < size - 1; ++i)
-        adjacencyMatrix[i][size - 1] = 1;
-
-    // destination node
-    for (var i = 1; i < size; ++i)
-        if (!directed || i === size - 1)
-            adjacencyMatrix[size - 1][i] = 1;
-
-    return adjacencyMatrix
+function __parseDirectedFork (graphContents) {
+    // TODO
+    return new List();
 }
 
 var Graph;
 
 function Graph(list, type) {
-    var contents;
-    var size;
-    var adjacencyMatrix;
-
-    // create the adjacency matrix
-    contents = list.contents;
-    size = contents.length;
-    if (type === 'directed flow') 
-        adjacencyMatrix = createFlowMatrix(size, true);
-    else if (type === 'directed fork')
-        adjacencyMatrix = createForkMatrix(size, true);
-
-    this.src = contents;
-    this.size = size;
-    this.adjacencyMatrix = adjacencyMatrix;
+    this.contents = list;
+    this.type = type;
+    this.id =  Math.floor(Math.random() * 1000000000);
 }
 
 Graph.prototype.toString = function () {
-    var returnString;
-    var src, dst;
-
-    returnString = '';
-    for (var i = 0; i < this.size; ++i) {
-        for (var j = 0; j < this.size; ++j) {
-            if (i !== j && this.adjacencyMatrix[i][j] === 1) {
-                src = this.src[i].toString();
-                dst = this.src[j].toString();
-                returnString += `${src} --> ${dst}\n`;
-            }
-        }
-    }
-
+    var returnString = '';    
+    // TODO
     return returnString;
 }
 
 Graph.prototype.getEdges = function () {
     var edges;
-
-    edges = [];
-    for (var i = 0; i < this.size; ++i) {
-        for (var j = 0; j < this.size; ++j) {
-            if (i !== j && this.adjacencyMatrix[i][j] === 1) {
-                // check if the src or dst is a graph
-                if (this.src[i] instanceof Graph) {
-                    var lastElement = this.src[i].getLastElement();         
-                }
-                src = this.src[i].toString();
-                dst = this.src[j].toString();
-                edges.push(new List([src, dst]))
-            }
-        }
-    }           
-
-    return new List(edges)
+    // TODO
+    switch (this.type) {
+        case 'directed flow':
+            edges = __parseDirectedFlow(this.contents);
+            break;
+        case 'directed fork':
+            edges = __parseDirectedFork(this.contents);
+            break;
+        case 'undirected flow':
+            // TODO
+        case 'undirected fork':
+            // TODO
+        default:
+            throw new Error('unsuported graph type');
+    }
+    return edges;
 }
 
-Graph.prototype.getLastElement = function () {
-    return 0;
+Graph.prototype.getRoots = function () {
+    var roots = new List(),
+        graphSize = this.contents.length(),
+        temp;
+
+    if (this.type === 'directed flow') {
+        temp = this.contents.at(1);
+        if (temp instanceof Graph)
+            return temp.getRoots();
+        roots.add(temp);
+        return roots;
+    }
+
+    if (this.type === 'directed fork') {
+        // TODO
+    }
+
+    throw new Error('unsupported graph type');
+}
+
+Graph.prototype.getLeaves = function () {
+    var leaves = new List(),
+        graphSize = this.contents.length(),
+        temp;
+
+    if (this.type === 'directed flow') {
+        temp = this.contents.at(graphSize);
+        if (temp instanceof Graph)
+            return temp.getLeaves();
+        leaves.add(temp);
+        return leaves; 
+    }
+  
+    if (this.type === 'directed fork') {
+        // TODO
+    }
+
+    throw new Error('unsupported graph type');
 }
