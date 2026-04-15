@@ -55,8 +55,17 @@ function __parseDirectedFlow (graphContents) {
 }
 
 function __parseDirectedFork (graphContents) {
-    // TODO
-    return new List();
+    var edges = new List(),
+        i, j,
+        temp;
+    for (i = 1; i <= graphContents.length(); ++i) {
+        if (graphContents.at(i) instanceof Graph) {
+            temp = graphContents.at(i).getEdges();
+            for (j = 1; j <= temp.length(); ++j)
+                edges.add(temp.at(j));
+        }
+    }
+    return edges;
 }
 
 var Graph;
@@ -96,7 +105,7 @@ Graph.prototype.getEdges = function () {
 Graph.prototype.getRoots = function () {
     var roots = new List(),
         graphSize = this.contents.length(),
-        temp;
+        temp, i, j;
 
     if (this.type === 'directed flow') {
         temp = this.contents.at(1);
@@ -107,7 +116,17 @@ Graph.prototype.getRoots = function () {
     }
 
     if (this.type === 'directed fork') {
-        // TODO
+        for (i = 1; i <= graphSize; ++i) {
+            temp = this.contents.at(i);
+            if (!(temp instanceof Graph))
+                roots.add(temp);
+            else {
+                temp = temp.getRoots();
+                for (j = 1; j <= temp.length(); ++j)
+                    roots.add(temp.at(j))
+            }
+        }
+        return roots;
     }
 
     throw new Error('unsupported graph type');
@@ -116,7 +135,7 @@ Graph.prototype.getRoots = function () {
 Graph.prototype.getLeaves = function () {
     var leaves = new List(),
         graphSize = this.contents.length(),
-        temp;
+        temp, i, j;
 
     if (this.type === 'directed flow') {
         temp = this.contents.at(graphSize);
@@ -127,7 +146,17 @@ Graph.prototype.getLeaves = function () {
     }
   
     if (this.type === 'directed fork') {
-        // TODO
+        for (i = 1; i <= graphSize; ++i) {
+            temp = this.contents.at(i);
+            if (!(temp instanceof Graph))
+                leaves.add(temp);
+            else {
+                temp = temp.getLeaves();
+                for (j = 1; j <= temp.length(); ++j)
+                    leaves.add(temp.at(j))
+            }
+        }
+        return leaves;
     }
 
     throw new Error('unsupported graph type');
