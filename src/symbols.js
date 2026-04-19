@@ -158,9 +158,10 @@ SymbolMorph.prototype.names = [
   "extension",
   "newSprite",
   "penIcon",
-  "penSeperator",
+  "blockSeperator",
   "commentClose",
-  "ttsIcon"
+  "ttsIcon",
+  "translateIcon",
 ];
 
 // SymbolMorph instance creation:
@@ -544,14 +545,17 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case "penIcon":
       this.renderSymbolPenIcon(ctx);
       break;
-    case "penSeperator":
-      this.renderSymbolPenSeperator(ctx);
+    case "blockSeperator":
+      this.renderSymbolBlockSeperator(ctx);
       break;
     case "commentClose":
       this.renderSymbolCommentClose(ctx);
       break;
     case "ttsIcon":
       this.renderSymbolTtsIcon(ctx);
+      break;
+    case "translateIcon":
+      this.renderSymbolTranslateIcon(ctx);
       break;
     default:
       throw new Error('unknown symbol name: "' + this.name + '"');
@@ -603,7 +607,7 @@ SymbolMorph.prototype.symbolWidth = function () {
       return size;
     case "loop":
       return size * 1.1;
-    case "penSeperator":
+    case "blockSeperator":
       return (size / 28.1) * 2;
     default:
       return size;
@@ -710,6 +714,8 @@ SymbolMorph.prototype.penIconSymbol = new Image();
 SymbolMorph.prototype.penIconSymbol.src = "src/pen-icon.svg";
 SymbolMorph.prototype.ttsIconSymbol = new Image();
 SymbolMorph.prototype.ttsIconSymbol.src = "src/tts-icon.svg";
+SymbolMorph.prototype.translateIconSymbol = new Image();
+SymbolMorph.prototype.translateIconSymbol.src = "src/translate-icon.png";
 SymbolMorph.prototype.paintBlack = new Image();
 SymbolMorph.prototype.paintBlack.src = "src/paintbucket-black.svg";
 SymbolMorph.prototype.pipette = new Image();
@@ -2775,7 +2781,11 @@ SymbolMorph.prototype.renderSymbolTtsIcon = function (ctx) {
   this.drawImage(ctx, this.ttsIconSymbol);
 };
 
-SymbolMorph.prototype.renderSymbolPenSeperator = function (ctx) {
+SymbolMorph.prototype.renderSymbolTranslateIcon = function (ctx) {
+  this.drawImage(ctx, this.translateIconSymbol);
+};
+
+SymbolMorph.prototype.renderSymbolBlockSeperator = function (ctx) {
   var shift = this.width() / 4;
   ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
   ctx.fillRect(shift, 0, this.width() - shift * 2, this.height());

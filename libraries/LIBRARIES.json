@@ -1188,6 +1188,19 @@
     ]
   },
   {
+    "fileName": "translate_module.xml",
+    "name": "Translate",
+    "description": "Translate text from one language to another.\n\nFrom scratch, created by codingisfun2831t",
+    "translations": {},
+    "searchData": [
+      "translate _ to _",
+      "language"
+    ],
+    "categories": [
+      "Translate"
+    ]
+  },
+  {
     "fileName": "animation_module.xml",
     "name": "Animation",
     "description": "Glide, grow and rotate using easing functions.",

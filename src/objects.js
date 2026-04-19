@@ -1000,33 +1000,33 @@ SpriteMorph.prototype.primitiveBlocks = function () {
     clear: {
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 erase all",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 erase all",
       animation: true,
     },
     down: {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 pen down",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 pen down",
     },
     up: {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 pen up",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 pen up",
     },
     getPenDown: {
       only: SpriteMorph,
       type: "predicate",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 pen down?",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 pen down?",
       code: "down?",
     },
     setColor: {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 set pen color to %clr",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 set pen color to %clr",
       src: `(
                 (prim t setColor color)
                 (extension "clr_setpen(clr)" (get color)))`,
@@ -1035,7 +1035,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 set pen %clrdim to %n",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 set pen %clrdim to %n",
       defaults: [["hue"], 50],
       code: "pen=",
     },
@@ -1043,14 +1043,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 change pen %clrdim by %n",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 change pen %clrdim by %n",
       defaults: [["hue"], 10],
       code: "+pen",
     },
     getPenAttribute: {
       type: "reporter",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 pen %pen",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 pen %pen",
       defaults: [["hue"]],
       code: "pen",
     },
@@ -1058,14 +1058,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: StageMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 set background color to %clr",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 set background color to %clr",
       animation: true,
     },
     setBackgroundColorDimension: {
       only: StageMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 set background %clrdim to %n",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 set background %clrdim to %n",
       defaults: [["hue"], 50],
       animation: true,
     },
@@ -1073,7 +1073,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: StageMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 change background %clrdim by %n",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 change background %clrdim by %n",
       defaults: [["hue"], 10],
       animation: true,
     },
@@ -1081,7 +1081,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 change pen size by %n",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 change pen size by %n",
       defaults: [1],
       animation: true,
       code: "+penSize",
@@ -1093,7 +1093,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 set pen size to %n",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 set pen size to %n",
       defaults: [1],
       animation: true,
       code: "penSize=",
@@ -1102,7 +1102,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 stamp",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 stamp",
       animation: true,
       code: "stamp",
     },
@@ -1110,7 +1110,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 fill",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 fill",
       animation: true,
       code: "fill",
     },
@@ -1118,33 +1118,33 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 write %s size %n",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 write %s size %n",
       defaults: [localize("Hello!"), 12],
       animation: true,
     },
     reportPenTrailsAsCostume: {
       type: "reporter",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 pen trails",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 pen trails",
       code: "trails",
     },
     reportPentrailsAsSVG: {
       type: "reporter",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 pen vectors",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 pen vectors",
       code: "svgTrails",
     },
     doPasteOn: {
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 paste on %spr",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 paste on %spr",
       code: "paste",
       animation: true,
     },
     doCutFrom: {
       type: "command",
       category: "pen",
-      spec: "$penIcon-2.3 $penSeperator-2.5 cut from %spr",
+      spec: "$penIcon-2.3 $blockSeperator-2.5 cut from %spr",
       code: "cut",
       animation: true,
     },
@@ -1548,7 +1548,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "predicate",
       category: "sensing",
-      spec: "touching %col ?",
+      spec: "touching color %col ?",
       defaults: [["mouse-pointer"]],
       code: "touch",
     },
@@ -4064,8 +4064,8 @@ SpriteMorph.prototype.blockTemplates = function (
       blocks.push(block("doScreenshot"));
     }
   } else if (category === "sound") {
-    blocks.push(block("playSound"));
     blocks.push(block("doPlaySoundUntilDone"));
+    blocks.push(block("playSound"));
     blocks.push(block("doStopAllSounds"));
     blocks.push("-");
     blocks.push(block("doPlaySoundAtRate"));
@@ -4227,7 +4227,6 @@ SpriteMorph.prototype.blockTemplates = function (
     blocks.push(watcherToggle("getTimer"));
     blocks.push(block("getTimer"));
     blocks.push(block("doResetTimer"));
-    blocks.push(block("reportDate"));
     blocks.push("-");
     blocks.push(block("reportAttributeOf"));
 
@@ -4236,6 +4235,9 @@ SpriteMorph.prototype.blockTemplates = function (
     }
 
     blocks.push(block("reportObject"));
+    blocks.push("-");
+    blocks.push(block("reportDate"));
+    scratchBlock("dayssince2000");
     blocks.push("-");
     blocks.push(block("reportURL"));
     blocks.push(block("reportAudio"));
@@ -4270,9 +4272,9 @@ SpriteMorph.prototype.blockTemplates = function (
     blocks.push("-");
     blocks.push(block("reportRandom"));
     blocks.push("-");
+    blocks.push(block("reportVariadicGreaterThan"));
     blocks.push(block("reportVariadicLessThan"));
     blocks.push(block("reportVariadicEquals"));
-    blocks.push(block("reportVariadicGreaterThan"));
     blocks.push("-");
     blocks.push(block("reportVariadicAnd"));
     blocks.push(block("reportVariadicOr"));
@@ -11682,8 +11684,8 @@ StageMorph.prototype.blockTemplates = function (
       blocks.push(block("doScreenshot"));
     }
   } else if (category === "sound") {
-    blocks.push(block("playSound"));
     blocks.push(block("doPlaySoundUntilDone"));
+    blocks.push(block("playSound"));
     blocks.push(block("doStopAllSounds"));
     blocks.push("-");
     blocks.push(block("doPlaySoundAtRate"));
@@ -11834,7 +11836,6 @@ StageMorph.prototype.blockTemplates = function (
     blocks.push(block("doResetTimer"));
     blocks.push(watcherToggle("getTimer"));
     blocks.push(block("getTimer"));
-    blocks.push(block("reportDate"));
     blocks.push("-");
     blocks.push(block("reportAttributeOf"));
 
@@ -11843,6 +11844,9 @@ StageMorph.prototype.blockTemplates = function (
     }
 
     blocks.push(block("reportObject"));
+    blocks.push("-");
+    blocks.push(block("reportDate"));
+    scratchBlock("dayssince2000");
     blocks.push("-");
     blocks.push(block("reportURL"));
     blocks.push(block("reportAudio"));
@@ -11885,9 +11889,9 @@ StageMorph.prototype.blockTemplates = function (
     blocks.push(block("reportAtan2"));
     blocks.push(block("reportRandom"));
     blocks.push("-");
+    blocks.push(block("reportVariadicGreaterThan"));
     blocks.push(block("reportVariadicLessThan"));
     blocks.push(block("reportVariadicEquals"));
-    blocks.push(block("reportVariadicGreaterThan"));
     blocks.push("-");
     blocks.push(block("reportVariadicAnd"));
     blocks.push(block("reportVariadicOr"));
@@ -15568,7 +15572,7 @@ WatcherMorph.prototype.updateLabel = function () {
     return;
   }
   if (obj.version !== this.version) {
-    this.objName = obj.name ? obj.name + " " : " ";
+    this.objName = obj.name ? obj.name + ": " : " ";
     if (this.labelMorph) {
       this.labelMorph.destroy();
       this.labelMorph = null;

@@ -3460,23 +3460,7 @@ IDE_Morph.prototype.applySavedSettings = function () {
     solidshadow = this.getSetting("solidshadow");
 
   this.accentColor =
-    accentColor == "red"
-      ? this.accentColors[0]
-      : accentColor == "purple"
-        ? this.accentColors[1]
-        : accentColor == "orange"
-          ? this.accentColors[3]
-          : accentColor == "green"
-            ? this.accentColors[4]
-            : accentColor == "yellow"
-              ? this.accentColors[5]
-              : accentColor == "indigo"
-                ? this.accentColors[6]
-                : accentColor == "cyan"
-                  ? this.accentColors[7]
-                  : accentColor == "lime"
-                    ? this.accentColors[8]
-                    : this.accentColors[2];
+    this.accentColors[accentColor] ?? this.accentColors.blue;
   DialogBoxMorph.prototype.titleBarColor = this.accentColor;
   PushButtonMorph.prototype.pressColor = this.accentColor;
   PushButtonMorph.prototype.highlightColor =
@@ -7937,160 +7921,56 @@ IDE_Morph.prototype.looksMenuData = function () {
   );
   return menu;
 };
-IDE_Morph.prototype.accentColors = [
-  new Color(255, 76, 76),
-  new Color(133, 92, 214),
-  new Color(76, 151, 255),
-  new Color(204, 85, 0),
-  new Color(15, 189, 140),
-  new Color(228, 171, 24),
-  new Color(71, 102, 204),
-  new Color(0, 195, 255),
-  new Color(140, 210, 30),
-];
+
+IDE_Morph.prototype.accentColors = {
+  "red": new Color(255, 76, 76),
+  "purple": new Color(133, 92, 214),
+  "blue": new Color(76, 151, 255),
+  "orange": new Color(204, 85, 0),
+  "green": new Color(15, 189, 140),
+  "yellow": new Color(228, 171, 24),
+  "indigo": new Color(71, 102, 204),
+  "cyan": new Color(0, 195, 255),
+  "lime": new Color(140, 210, 30),
+}
+
 IDE_Morph.prototype.accentColorMenu = function () {
   var menu = new MenuMorph(this),
-    colors = this.accentColors,
-    tick = new SymbolMorph(
-      "tick",
-      MorphicPreferences.menuFontSize * 0.75,
-      WHITE,
-    ),
-    empty = tick.fullCopy(),
-    on = new SymbolMorph(
+    myself = this,
+    hints = {
+      "red": "TurboWarp",
+      "blue": "old Scratch",
+      "purple": "new Scratch"
+    };
+  menu.bgColor = this.getControlBarColor();
+  const setAccent = (name, color) => {
+    myself.accentColor = color;
+    myself.saveSetting("accentColor", name);
+    
+    DialogBoxMorph.prototype.titleBarColor = myself.accentColor;
+    PushButtonMorph.prototype.pressColor = myself.accentColor;
+    PushButtonMorph.prototype.highlightColor =
+      PushButtonMorph.prototype.pressColor.lighter(50);
+
+    myself.refreshIDE();
+  };
+
+  for (const [name, color] of Object.entries(this.accentColors)) {
+    var on = new SymbolMorph(
       "circleSolid",
       MorphicPreferences.menuFontSize * 0.75,
-      WHITE,
+      color.darker(10),
     ),
     off = new SymbolMorph(
       "circle",
       MorphicPreferences.menuFontSize * 0.75,
-      WHITE,
+      color,
     );
-  menu.bgColor = this.getControlBarColor();
-  empty.render = nop;
-  const setAccent = () => {
-    DialogBoxMorph.prototype.titleBarColor = this.accentColor;
-    PushButtonMorph.prototype.pressColor = this.accentColor;
-    console.log(this.accentColor);
-    PushButtonMorph.prototype.highlightColor =
-      PushButtonMorph.prototype.pressColor.lighter(50);
-  };
-  function colorSwatch (color) {
-    var morph = new Morph();
-    morph.color = color;
-    morph.setExtent(new Point(30, 30));
-    return morph;
-  };
-  menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
-    if (!hide || shiftClicked) {
-      menu.addItem(
-        [test ? on : off, localize(label)],
-        toggle,
-        test ? onHint : (isNil(offHint) ? onHint : offHint),
-        hide ? new Color(255, 100, 100) : null,
-      );
-    }
-  };
-  menu.addPreference(
-    "Red",
-    () => (
-      (this.accentColor = colors[0]),
-      this.saveSetting("accentColor", "red"),
-      setAccent(),
-      this.refreshIDE()
-    ),
-    this.accentColor.eq(colors[0]),
-    colorSwatch(colors[0])
-  );
-  menu.addPreference(
-    "Orange",
-    () => (
-      (this.accentColor = colors[3]),
-      this.saveSetting("accentColor", "orange"),
-      setAccent(),
-      this.refreshIDE()
-    ),
-    this.accentColor.eq(colors[3]),
-    colorSwatch(colors[3])
-  );
-  menu.addPreference(
-    "Yellow",
-    () => (
-      (this.accentColor = colors[5]),
-      this.saveSetting("accentColor", "yellow"),
-      setAccent(),
-      this.refreshIDE()
-    ),
-    this.accentColor.eq(colors[5]),
-    colorSwatch(colors[5])
-  );
-  menu.addPreference(
-    "Lime",
-    () => (
-      (this.accentColor = colors[8]),
-      this.saveSetting("accentColor", "lime"),
-      setAccent(),
-      this.refreshIDE()
-    ),
-    this.accentColor.eq(colors[8]),
-    colorSwatch(colors[8])
-  );
-  menu.addPreference(
-    "Green",
-    () => (
-      (this.accentColor = colors[4]),
-      this.saveSetting("accentColor", "green"),
-      setAccent(),
-      this.refreshIDE()
-    ),
-    this.accentColor.eq(colors[4]),
-    colorSwatch(colors[4])
-  );
-  menu.addPreference(
-    "Cyan",
-    () => (
-      (this.accentColor = colors[7]),
-      this.saveSetting("accentColor", "cyan"),
-      setAccent(),
-      this.refreshIDE()
-    ),
-    this.accentColor.eq(colors[7]),
-    colorSwatch(colors[7])
-  );
-  menu.addPreference(
-    "Indigo",
-    () => (
-      (this.accentColor = colors[6]),
-      this.saveSetting("accentColor", "indigo"),
-      setAccent(),
-      this.refreshIDE()
-    ),
-    this.accentColor.eq(colors[6]),
-    colorSwatch(colors[6])
-  );
-  menu.addPreference(
-    "Purple",
-    () => (
-      (this.accentColor = colors[1]),
-      this.saveSetting("accentColor", "purple"),
-      setAccent(),
-      this.refreshIDE()
-    ),
-    this.accentColor.eq(colors[1]),
-    colorSwatch(colors[1])
-  );
-  menu.addPreference(
-    "Blue",
-    () => (
-      (this.accentColor = colors[2]),
-      this.saveSetting("accentColor", "blue"),
-      setAccent(),
-      this.refreshIDE()
-    ),
-    this.accentColor.eq(colors[2]),
-    colorSwatch(colors[2])
-  );
+    menu.addItem(
+      [this.accentColor == color ? on : off, localize(name[0].toUpperCase() + name.slice(1))],
+      () => setAccent(name, color),
+      hints[name]);
+  }
   return menu;
 };
 

@@ -14584,7 +14584,6 @@ ColorSlotMorph.prototype.getUserColor = function (model) {
   pickColorButton.setRight(buttonContainer.right());
   menu.addItem(buttonContainer, nop);
   menu.popup(this.world(), this.bottomCenter());
-  this.world().activeMenu = null;
 };
 
 // ColorSlotMorph events:
