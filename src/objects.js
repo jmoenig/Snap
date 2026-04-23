@@ -1548,7 +1548,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "predicate",
       category: "sensing",
-      spec: "touching color %col ?",
+      spec: "touching %col ?",
       defaults: [["mouse-pointer"]],
       code: "touch",
     },
@@ -1556,7 +1556,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
       only: SpriteMorph,
       type: "predicate",
       category: "sensing",
-      spec: "touching %clr ?",
+      spec: "touching color %clr ?",
       code: "touchColor",
     },
     reportColorIsTouchingColor: {
