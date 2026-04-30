@@ -10201,6 +10201,8 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             }
         }
         contents.isDraggable = false;
+    } else if (data instanceof Graph) {
+        contents = new SymbolMorph('graph', 30);
     } else if (data instanceof Context) {
         img = data.image();
         contents = new Morph();
@@ -11894,6 +11896,8 @@ CellMorph.prototype.createContents = function () {
                 }
             }
             this.contentsMorph.isDraggable = false;
+        } else if (this.contents instanceof Graph) {
+            this.contentsMorph = new SymbolMorph('graph', 30);
         } else {
             this.contentsMorph = new TextMorph(
                 !isNil(this.contents) ? this.contents.toString() : '',
