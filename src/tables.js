@@ -406,6 +406,22 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         return new SymbolMorph(
             'notes', SyntaxElementMorph.prototype.fontSize
         ).getImage();
+    } else if (dta instanceof Instrument) {
+        return new SymbolMorph(
+            'piano', SyntaxElementMorph.prototype.fontSize
+        ).getImage();
+    } else if (dta instanceof Oscillator) {
+        return new SymbolMorph(
+            'waveform', SyntaxElementMorph.prototype.fontSize
+        ).getImage();
+    } else if (dta instanceof Filter) {
+        return new SymbolMorph(
+            'filter', SyntaxElementMorph.prototype.fontSize
+        ).getImage();
+    } else if (dta instanceof Filter) {
+        return new SymbolMorph(
+            'effect', SyntaxElementMorph.prototype.fontSize
+        ).getImage();
     } else if (dta instanceof List) {
         return this.listSymbol();
     } else if (dta instanceof Graph) {

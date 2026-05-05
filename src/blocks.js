@@ -2374,6 +2374,14 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow = new SymbolMorph('notes', 30);
     } else if (value instanceof Graph) {
         morphToShow = new SymbolMorph('graph', 30);
+    } else if (value instanceof Instrument) {
+        morphToShow = new SymbolMorph('piano', 30);
+    } else if (value instanceof Oscillator) {
+        morphToShow = new SymbolMorph('waveform', 30);
+    } else if (value instanceof Filter) {
+        morphToShow = new SymbolMorph('filter', 30);
+    } else if (value instanceof AudioEffect) {
+        morphToShow = new SymbolMorph('effect', 30);
     } else if (value instanceof Context) {
         img = value.image();
         morphToShow = new Morph();

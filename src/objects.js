@@ -10175,6 +10175,12 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents.cachedImage = img;
     } else if (data instanceof Sound) {
         contents = new SymbolMorph('notes', 30);
+    } else if (data instanceof Instrument) {
+        contents = new SymbolMorph('piano', 30);
+    } else if (data instanceof Oscillator) {
+        contents = new SymbolMorph('waveform', 30);
+    } else if (data instanceof Filter) {
+        contents = new SymbolMorph('filter', 30);
     } else if (data instanceof HTMLCanvasElement) {
         img = data;
         contents = new Morph();
@@ -10906,6 +10912,64 @@ CostumeEditorMorph.prototype.mouseDownLeft = function (pos) {
 
 CostumeEditorMorph.prototype.mouseMove
     = CostumeEditorMorph.prototype.mouseDownLeft;
+
+// Instrument ////////////////////////////////////////////////////////
+
+// This is a BeatBlox instrument 
+
+function Instrument(id, src) {
+    this.id = id;
+    this.src = src;
+}
+
+// Oscillator ////////////////////////////////////////////////////////
+
+// This is a BeatBlox oscillator
+
+function Oscillator(type, parameters) {
+    this.type = type;
+    this.parameters = parameters;
+}
+
+Oscillator.prototype.getFrequency = function () {
+    if (!this.parameters.frequency) {
+        return 440;
+    }
+    return this.parameters.frequency;
+}
+
+Oscillator.prototype.getValue = function () {
+    if (!this.parameters.value) {
+        return 1;
+    }
+    return this.parameters.value;
+}
+
+// Gain //////////////////////////////////////////////////////////////
+
+function Gain(value) {
+    this.parameters = {
+        gain: value
+    };
+}
+
+// Filter ////////////////////////////////////////////////////////////
+
+// This is a BeatBlox filter
+
+function Filter(type, parameters) {
+    this.type = type;
+    this.parameters = parameters
+}
+
+// Effect ////////////////////////////////////////////////////////////
+
+// This is a BeatBlox effect
+
+function AudioEffect(type) {
+    // TODO update this
+    this.type = type;
+}
 
 // Sound /////////////////////////////////////////////////////////////
 
@@ -11870,6 +11934,12 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph.cachedImage = img;
         } else if (this.contents instanceof Sound) {
             this.contentsMorph = new SymbolMorph('notes', 30);
+        } else if (this.contents instanceof Instrument) {
+            this.contentsMorph = new SymbolMorph('piano', 30);
+        } else if (this.contents instanceof Oscillator) {
+            this.contentsMorph = new SymbolMorph('waveform', 30);
+         } else if (this.contents instanceof Filter) {
+            this.contentsMorph = new SymbolMorph('filter', 30);
         } else if (this.contents instanceof List) {
             if (this.contents.isTable()) {
                 this.contentsMorph = new TableFrameMorph(new TableMorph(
