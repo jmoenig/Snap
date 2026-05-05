@@ -1,17 +1,84 @@
-<svg version="1.1" width="50" height="199" viewBox="-1 -1 50 199" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="48.200001"
+   height="197"
+   viewBox="-1 -1 48.200001 197"
+   id="svg14"
+   sodipodi:docname="building-c.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs18" />
+  <sodipodi:namedview
+     id="namedview16"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.0740606258623302" transform="matrix(1, 0, 0, 1, -55, -119)">
-    <g id="ID0.7692540069110692">
-      <path id="ID0.27700962172821164" fill="#E7F5F5" d="M 264.100 163 L 264.100 360 L 215.900 360 L 215.900 206.100 L 264.100 163 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
+  <g
+     id="ID0.0740606258623302"
+     transform="translate(-56.9,-120)">
+    <g
+       id="ID0.7692540069110692">
+      <path
+         id="ID0.27700962172821164"
+         fill="#e7f5f5"
+         d="M 264.1,163 V 360 H 215.9 V 206.1 L 264.1,163"
+         transform="translate(-160,-44)" />
     </g>
-    <path id="ID0.9674194143153727" fill="none" stroke="#FFBCCB" stroke-width="3.9157" d="M 260.100 175.500 L 260.100 204.400 L 226 204.400 L 260.100 175.500 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.8109534960240126" fill="#7ADED4" d="M 264.100 220.700 L 264.100 228.200 L 228.600 223.400 L 230.100 216.100 L 264.100 220.700 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.3405959359370172" fill="#7ADED4" d="M 264.100 238.900 L 264.100 246.400 L 228.600 241.500 L 230.100 234.200 L 264.100 238.900 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.5695877196267247" fill="#7ADED4" d="M 264.100 257 L 264.100 264.500 L 228.600 259.700 L 230.100 252.400 L 264.100 257 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.7236357503570616" fill="#7ADED4" d="M 264.100 275.200 L 264.100 282.700 L 228.600 277.800 L 230.100 270.500 L 264.100 275.200 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.8468433166854084" fill="#7ADED4" d="M 264.100 300.800 L 228.600 296 L 230.100 288.700 L 264.100 293.300 L 264.100 300.800 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.7763515622355044" fill="#7ADED4" d="M 264.100 311.500 L 264.100 319 L 228.600 314.200 L 230.100 306.800 L 264.100 311.500 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.002734142355620861" fill="#7ADED4" d="M 264.100 329.600 L 264.100 337.100 L 228.600 332.300 L 230.100 325 L 264.100 329.600 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.6289974274113774" fill="#7ADED4" d="M 264.100 347.800 L 264.100 355.300 L 228.600 350.500 L 230.100 343.200 L 264.100 347.800 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
+    <path
+       id="ID0.9674194143153727"
+       fill="none"
+       stroke="#ffbccb"
+       stroke-width="3.9157"
+       d="m 260.1,175.5 v 28.9 H 226 l 34.1,-28.9"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.8109534960240126"
+       fill="#7aded4"
+       d="m 264.1,220.7 v 7.5 l -35.5,-4.8 1.5,-7.3 34,4.6"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.3405959359370172"
+       fill="#7aded4"
+       d="m 264.1,238.9 v 7.5 l -35.5,-4.9 1.5,-7.3 34,4.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.5695877196267247"
+       fill="#7aded4"
+       d="m 264.1,257 v 7.5 l -35.5,-4.8 1.5,-7.3 34,4.6"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.7236357503570616"
+       fill="#7aded4"
+       d="m 264.1,275.2 v 7.5 l -35.5,-4.9 1.5,-7.3 34,4.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.8468433166854084"
+       fill="#7aded4"
+       d="m 264.1,300.8 -35.5,-4.8 1.5,-7.3 34,4.6 v 7.5"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.7763515622355044"
+       fill="#7aded4"
+       d="m 264.1,311.5 v 7.5 l -35.5,-4.8 1.5,-7.4 34,4.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.002734142355620861"
+       fill="#7aded4"
+       d="m 264.1,329.6 v 7.5 l -35.5,-4.8 1.5,-7.3 34,4.6"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.6289974274113774"
+       fill="#7aded4"
+       d="m 264.1,347.8 v 7.5 l -35.5,-4.8 1.5,-7.3 34,4.6"
+       transform="translate(-160,-44)" />
   </g>
 </svg>

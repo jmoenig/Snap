@@ -1,5 +1,42 @@
-<svg version="1.1" width="324" height="32" viewBox="2 15 324 32" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="454.72836"
+   height="262.32709"
+   viewBox="2 15 454.72836 262.32709"
+   id="svg4"
+   sodipodi:docname="text_Halloween.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <image id="ID0.20290409959852695" width="2" height="2" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAADklEQVR42mNhgAIWGAMAAH4ACYwGaSAAAAAtdEVYdFNvZnR3YXJlAGJ5LmJsb29kZHkuY3J5cHRvLmltYWdlLlBORzI0RW5jb2RlcqgGf+4AAAAASUVORK5CYII=" transform="matrix(0.5, 0, 0, 0.5, 155, 23)"/>
-  <text id="ID0.8806540477089584" fill="#000000" x="182" y="166.25" text-anchor="start" font-family="Marker" font-size="22" transform="matrix(1.6596343517303467, 0, 0, 1.6596343517303467, 0.5, 0.65)">Happy Halloween!</text>
+  <image
+     id="ID0.20290409959852695"
+     width="1"
+     height="1"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAADklEQVR42mNhgAIWGAMAAH4ACYwGaSAAAAAtdEVYdFNvZnR3YXJlAGJ5LmJsb29kZHkuY3J5cHRvLmltYWdlLlBORzI0RW5jb2RlcqgGf+4AAAAASUVORK5CYII="
+     x="2"
+     y="15" />
+  <text
+     id="ID0.8806540477089584"
+     fill="#000000"
+     x="149.55347"
+     y="268.56421"
+     text-anchor="start"
+     font-family="Marker"
+     font-size="36.512px"
+     style="stroke-width:1.65963">Happy Halloween!</text>
 </svg>

@@ -1,28 +1,186 @@
-<svg version="1.1" width="81" height="211" viewBox="-1 -1 81 211" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="79.400002"
+   height="209.76112"
+   viewBox="-1 -1 79.400002 209.76112"
+   id="svg26"
+   sodipodi:docname="building-a.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs30" />
+  <sodipodi:namedview
+     id="namedview28"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.6381982862949371" transform="matrix(1, 0, 0, 1, -40, -106)">
-    <path id="ID0.6144169359467924" fill="#7ADED4" d="M 202.700 165.100 L 245.500 150.600 L 279.700 166.700 L 279.700 359.300 L 200.300 359.300 L 202.700 165.100 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.40658388938754797" fill="#E7F5F5" d="M 245 150.400 L 245.400 360 L 200.300 360 L 200.300 164.400 C 200.300 164.400 239.600 152.600 245 150.400 Z " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.7996598514728248" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 170.900 L 239.200 161.300 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.8729699272662401" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 180.300 L 239.200 170.600 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.49381784442812204" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 189.700 L 239.200 180 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.5796759389340878" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 199 L 239.200 189.300 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.34350841771811247" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 208.400 L 239.200 198.700 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.6725465091876686" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 217.700 L 239.200 208 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.28908489318564534" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 227.100 L 239.200 217.400 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.30443239491432905" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 236.400 L 239.200 226.700 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.7472218456678092" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 245.800 L 239.200 236.100 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.4849748779088259" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 255.100 L 239.200 245.500 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.021925758104771376" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 264.500 L 239.200 254.800 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.5576177532784641" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 273.800 L 239.200 264.200 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.9373113294132054" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 283.200 L 239.200 273.500 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.7946327091194689" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 292.600 L 239.200 282.900 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.7412395114079118" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 301.900 L 239.200 292.200 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.2939005591906607" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 311.300 L 239.200 301.600 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.8212720775045455" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 320.600 L 239.200 310.900 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.03039324516430497" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 330 L 239.200 320.300 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.06565768551081419" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 339.300 L 239.200 329.600 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.3000860661268234" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 348.700 L 239.200 339 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
-    <path id="ID0.4035794558003545" fill="none" stroke="#7ADED4" stroke-width="4.4846" d="M 204.500 358 L 239.200 348.400 " transform="matrix(1, 0, 0, 1, -160, -44)"/>
+  <g
+     id="ID0.6381982862949371"
+     transform="translate(-41.3,-107.4)">
+    <path
+       id="ID0.6144169359467924"
+       fill="#7aded4"
+       d="m 202.7,165.1 42.8,-14.5 34.2,16.1 v 192.6 h -79.4 l 2.4,-194.2"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.40658388938754797"
+       fill="#e7f5f5"
+       d="M 245,150.4 245.4,360 H 200.3 V 164.4 c 0,0 39.3,-11.8 44.7,-14 z"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.7996598514728248"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,170.9 34.7,-9.6"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.8729699272662401"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,180.3 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.49381784442812204"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="M 204.5,189.7 239.2,180"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.5796759389340878"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,199 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.34350841771811247"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,208.4 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.6725465091876686"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="M 204.5,217.7 239.2,208"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.28908489318564534"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,227.1 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.30443239491432905"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,236.4 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.7472218456678092"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,245.8 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.4849748779088259"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,255.1 34.7,-9.6"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.021925758104771376"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,264.5 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.5576177532784641"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,273.8 34.7,-9.6"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.9373113294132054"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,283.2 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.7946327091194689"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,292.6 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.7412395114079118"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,301.9 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.2939005591906607"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,311.3 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.8212720775045455"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,320.6 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.03039324516430497"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,330 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.06565768551081419"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,339.3 34.7,-9.7"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.3000860661268234"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="M 204.5,348.7 239.2,339"
+       transform="translate(-160,-44)" />
+    <path
+       id="ID0.4035794558003545"
+       fill="none"
+       stroke="#7aded4"
+       stroke-width="4.4846"
+       d="m 204.5,358 34.7,-9.6"
+       transform="translate(-160,-44)" />
   </g>
 </svg>

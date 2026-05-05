@@ -1,2108 +1,2140 @@
 /*
+你好，欢迎参与Snap!的简体中文汉化贡献！
 
-    lang-zh_CN.js
+由于Snap!完全独立于Scratch和Blockly(并且Snap!的祖先是Scratch 1.4，不是Blockly！)，
+因此，如果你是新来的Snap!官方编辑器的汉化贡献者，或者是第一次试图修改汉化版本的Scratcher/Snapper，
+请详细查看本注释提供的汉化教程
+(长期参与汉化贡献的资深用户可忽略这一教程)
 
-    Simplified Chinese translation for SNAP!
+一、如何翻译Snap!编辑器
 
-    written by 五百刀/邓江华
+  1. 翻译文本部分
+    若要翻译编辑器的一些文本(包括积木名称)，可通过"<英文原文>": "<译文>"来追加。例如：
+      ·"sprite": "角色";
+      ·"stage": "舞台";
+      ·......
 
-    Copyright (C) 2016 by Jens Mönig
+  2. 如何表示积木
+    一个积木的名字由特殊图标(用"$"标识)、文本和参数(用"_"表示)构成。例如：
+      ·"当 $greenflag 被点击"(当绿旗被点击)";
+      ·"移动 _ 步";
+      ·"碰到边缘就反弹";
+      ·"列表 _"(注：可变参数同样用"_"表示);
+      ·......
+    
+    特殊图标也可以用"_"表示。例如：
+      ·"当 _ 被点击"(当 $greenflag 被点击);
+      ·"pipe _ _"(pipe $arrowRight _);
+      ·......
+    
+    翻译格式同"翻译文本部分"。
+  
+二、如何翻译Snap!的内置库
 
-    This file is part of Snap!.
+  1. 翻译内置库的名字和描述
+    在Snap!源码里，所有内置库的名字、描述和语言翻译都会保存在library/LIBRARIES.json里。
+    一个库在LIBRARIES.json的表示详见该文件的一个例子：
+    (p.s.: 在Snap!源码里，简体中文用"zh_CN"表示，繁体中文用"zh_TW"表示)
 
-    Snap! is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of
-    the License, or (at your option) any later version.
+    {
+      //库的对应文件
+      "fileName": "code2blocks_module.xml",
+      //库的名字
+      "name": "Code to Blocks to Code",
+      //库的描述
+      "description": "Translate text code to blocks and vice-versa",
+      //所有显示在积木面板上的积木
+      "searchData": [
+        "parse code _ to blocks",
+        "encode blocks _ to text _ pretty"
+      ],
+      //积木所在的类别，其中原生积木类别用英文表示
+      "categories": [
+        "operators" //运算类别
+      ],
+      //库的对应翻译。翻译部分格式同上且可选。
+      "translations": {
+        //德语翻译
+        "de": {
+          "searchData": [
+            "verwandle Code _ in Blöcke\rca",
+            "verwandle Blöcke _ in Code _ formatiert\rca"
+          ]
+        },
+        //加泰罗尼亚语翻译
+        "ca": {
+          "name": "Codi textual dels blocs",
+          "description": "Obté el codi textual dels blocs i viceversa",
+          "searchData": [
+            "blocs del codi textual _",
+            "codi textual dels blocs _ formatats _"
+          ]
+        },
+        //简体中文翻译
+        "zh_CN": {
+          "name": "积木与代码互转库",
+          "description": "伪Lisp代码与积木双向转换"
+        }
+      }
+    },
+    
+    因此，若要翻译名字和描述，
+    请直接在library/LIBRARIES.json里找到对应名字(查看name部分)并翻译，
+    不要直接在本文件里加。
+  
+  2. 翻译内置库的积木
+    翻译内置库的积木的步骤如下：
+        1. 点击"文件"选项;
+        2. 在菜单中点击"自制积木库...";
+        3. 选择自制积木库并导入;
+        4. 右键点击自制积木，并点击菜单里的"编辑..."选项。此时会出现积木编辑器;
+        5. 右键点击定义积木处，并点击菜单里的"翻译..."选项;
+        6. 在弹出的窗口处追加"zh_CN:<积木名字>";
+        7. 重复第4-6步，直到这个库的所有积木(包括隐藏积木)均已翻译完;
+        8. 导出自制积木库，重命名为LIBRARIES里库的对应文件名;
+        9. 移动至libraries。
+      
+    (自制积木的翻译也不要动不动加到本文件里！)
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
-    Note to Translators:
-    --------------------
-    At this stage of development, Snap! can be translated to any LTR language
-    maintaining the current order of inputs (formal parameters in blocks).
-
-    Translating Snap! is easy:
-
-
-    1. Download
-
-    Download the sources and extract them into a local folder on your
-    computer:
-
-        <http://snap.berkeley.edu/snapsource/snap.zip>
-
-    Use the German translation file (named 'lang-de.js') as template for your
-    own translations. Start with editing the original file, because that way
-    you will be able to immediately check the results in your browsers while
-    you're working on your translation (keep the local copy of snap.html open
-    in your web browser, and refresh it as you progress with your
-    translation).
-
-
-    2. Edit
-
-    Edit the translation file with a regular text editor, or with your
-    favorite JavaScript editor.
-
-    In the first non-commented line (the one right below this
-    note) replace "de" with the two-letter ISO 639-1 code for your language,
-    e.g.
-
-        fr - French => SnapTranslator.dict.fr = {
-        it - Italian => SnapTranslator.dict.it = {
-        pl - Polish => SnapTranslator.dict.pl = {
-        pt - Portuguese => SnapTranslator.dict.pt = {
-        es - Spanish => SnapTranslator.dict.es = {
-        el - Greek => => SnapTranslator.dict.el = {
-
-    etc. (see <http://en.wikipedia.org/wiki/ISO_639-1>)
-
-
-    3. Translate
-
-    Then work through the dictionary, replacing the German strings against
-    your translations. The dictionary is a straight-forward JavaScript ad-hoc
-    object, for review purposes it should be formatted as follows:
-
-        {
-            'English string':
-                'Translation string',
-            'last key':
-        }       'last value'
-
-    and you only edit the indented value strings. Note that each key-value
-    pair needs to be delimited by a comma, but that there shouldn't be a comma
-    after the last pair (again, just overwrite the template file and you'll be
-    fine).
-
-    If something doesn't work, or if you're unsure about the formalities you
-    should check your file with
-
-        <http://JSLint.com>
-
-    This will inform you about any missed commas etc.
-
-
-    4. Accented characters
-
-    Depending on which text editor and which file encoding you use you can
-    directly enter special characters (e.g. Umlaut, accented characters) on
-    your keyboard. However, I've noticed that some browsers may not display
-    special characters correctly, even if other browsers do. So it's best to
-    check your results in several browsers. If you want to be on the safe
-    side, it's even better to escape these characters using Unicode.
-
-        see: <http://0xcc.net/jsescape/>
-
-
-    5. Block specs:
-
-    At this time your translation of block specs will only work
-    correctly, if the order of formal parameters and their types
-    are unchanged. Placeholders for inputs (formal parameters) are
-    indicated by a preceding % prefix and followed by a type
-    abbreviation.
-
-    For example:
-
-        'say %s for %n secs'
-
-    can currently not be changed into
-
-        'say %n secs long %s'
-
-    and still work as intended.
-
-    Similarly
-
-        'point towards %dst'
-
-    cannot be changed into
-
-        'point towards %cst'
-
-    without breaking its functionality.
-
-
-    6. Submit
-
-    When you're done, rename the edited file by replacing the "de" part of the
-    filename with the two-letter ISO 639-1 code for your language, e.g.
-
-        fr - French => lang-fr.js
-        it - Italian => lang-it.js
-        pl - Polish => lang-pl.js
-        pt - Portuguese => lang-pt.js
-        es - Spanish => lang-es.js
-        el - Greek => => lang-el.js
-
-    and send it to me for inclusion in the official Snap! distribution.
-    Once your translation has been included, Your name will the shown in the
-    "Translators" tab in the "About Snap!" dialog box, and you will be able to
-    directly launch a translated version of Snap! in your browser by appending
-
-        lang:xx
-
-    to the URL, xx representing your translations two-letter code.
-
-
-    7. Known issues
-
-    In some browsers accents or ornaments located in typographic ascenders
-    above the cap height are currently (partially) cut-off.
-
-    Enjoy!
-    -Jens
+- Ayist14
 */
 
-/*global SnapTranslator*/
-
-SnapTranslator.dict.zh_CN = {
-
-/*
-    Special characters: (see <http://0xcc.net/jsescape/>)
-
-    Ä, ä   \u00c4, \u00e4
-    Ö, ö   \u00d6, \u00f6
-    Ü, ü   \u00dc, \u00fc
-    ß      \u00df
-*/
-
-    // translations meta information
-    'language_name':
-        '简体中文',
-    'language_translator':
-        '五百刀/邓江华',
-    'translator_e-mail':
-        'ubertao@qq.com/djh@rhjxx.cn',
-    'last_changed':
-        '2018-01-22',
-
-    // GUI
-    // control bar:
-    'untitled':
-        '无名项目',
-    'development mode':
-        '开发模式',
-
-    // categories:
-    'Motion':
-        '运动',
-    'Looks':
-        '外观',
-    'Sound':
-        '声音',
-    'Pen':
-        '画笔',
-    'Control':
-        '控制',
-    'Sensing':
-        '探测',
-    'Operators':
-        '运算',
-    'Variables':
-        '变量',
-    'Lists':
-        '列表',
-    'Other':
-        '其他',
-
-    // editor:
-    'draggable':
-        '允许拖动',
-
-    // tabs:
-    'Scripts':
-        '脚本',
-    'Costumes':
-        '造型',
-    'Sounds':
-        '声音',
-
-    // names:
-    'Sprite':
-        '角色',
-    'Stage':
-        '舞台',
-
-    // rotation styles:
-    'don\'t rotate':
-        '不能旋转',
-    'can rotate':
-        '可以旋转',
-    'only face left/right':
-        '只能水平翻转',
-
-    // new sprite button:
-    'add a new sprite':
-        '添加角色',
-    'add a new Turtle sprite':
-        '添加一个海龟角色',
-
-    // tab help
-    'costumes tab help':
-        '把网页或电脑中的图片拖到这里，可以添加一个造型',
-
-    'import a sound from your computer\nby dragging it into here':
-        '把电脑中的声音文件拖到这里，可以添加一个声音',
-
-    // primitive blocks:
-
-    /*
-        Attention Translators:
-        ----------------------
-        At this time your translation of block specs will only work
-        correctly, if the order of formal parameters and their types
-        are unchanged. Placeholders for inputs (formal parameters) are
-        indicated by a preceding % prefix and followed by a type
-        abbreviation.
-
-        For example:
-
-            'say %s for %n secs'
-
-        can currently not be changed into
-
-            'say %n secs long %s'
-
-        and still work as intended.
-
-        Similarly
-
-            'point towards %dst'
-
-        cannot be changed into
-
-            'point towards %cst'
-
-        without breaking its functionality.
-    */
-
-    // motion:
-    'Stage selected:\nno motion primitives':
-        '选中了舞台:\n舞台不能使用运动积木',
-
-
-    'move %n steps':
-        '移动 %n 歩',
-    'turn %clockwise %n degrees':
-        '旋转 %clockwise %n 度',
-    'turn %counterclockwise %n degrees':
-        '旋转 %counterclockwise %n 度',
-    'point in direction %dir':
-        '面向 %dir 度',
-    'point towards %dst':
-        '面向 %dst',
-    'go to x: %n y: %n':
-        '移到 x: %n y: %n',
-    'go to %dst':
-        '移到 %dst',
-    'glide %n secs to x: %n y: %n':
-        '在 %n 秒钟内滑到 x: %n y: %n',
-    'change x by %n':
-        '把x坐标增加 %n',
-    'set x to %n':
-        '把x坐标设定为 %n',
-    'change y by %n':
-        '把y坐标增加 %n',
-    'set y to %n':
-        '把y坐标设定为 %n',
-    'if on edge, bounce':
-        '碰到边缘就反弹',
-    'x position':
-        'x坐标',
-    'y position':
-        'y坐标',
-    'direction':
-        '方向',
-
-    // looks:
-    'switch to costume %cst':
-        '换成 %cst 造型',
-    'next costume':
-        '下一个造型',
-    'costume #':
-        '造型编号',
-    'costume name':
-        '造型名称',
-    'say %s for %n secs':
-        '说 %s %n 秒',
-    'say %s':
-        '说 %s',
-    'think %s for %n secs':
-        '思考 %s %n 秒',
-    'think %s':
-        '思考 %s',
-    'Hello!':
-        '你好！',
-    'Hmm...':
-        '嗯……',
-    'change %eff effect by %n':
-        '把 %eff 效果增加 %n',
-    'set %eff effect to %n':
-        '把 %eff 效果设定为 %n',
-    'clear graphic effects':
-        '清除所有图形效果',
-    'change size by %n':
-        '把角色的大小增加 %n',
-    'set size to %n %':
-        '把角色的大小设定为 %n %',
-    'size':
-        '大小',
-    'show':
-        '显示',
-    'hide':
-        '隐藏',
-    'go to front':
-        '移至最上层',
-    'go back %n layers':
-        '下移 %n 层',
-
-    // development mode
-    'development mode \ndebugging primitives:':
-        '开发模式\n调试积木：',
-    'wardrobe':
-        '全部造型',
-    'console log %mult%s':
-        '控制台日志 %mult%s',
-    'alert %mult%s':
-        '警告: %mult%s',
-    'save %imgsource as costume named %s':
-        '把 %imgsource 保存为造型，命名为 %s',
-    'stage image':
-        '舞台图片',
-    'jukebox':
-        '全部声音',
-    'processes':
-        '进程数量',
-    '%txtfun of %s':
-        '%txtfun %s',
-    'map %repRing over %l':
-        'map %repRing over %l',
-    'for %upvar in %l %cl':
-        'for %upvar in %l %cl',
-    'each item':
-        '每一项',
-    'show table %l':
-        '显示表格 %l',
-    'entering development mode.\n\nerror catching is turned off,\nuse the browser\'s web console\nto see error messages.':
-        '进入开发模式。\n\n错误捕捉已关闭，请使用\n浏览器控制台查看错误消息。',
-    'entering user mode':
-        '进入用户模式',
-
-    // development mode: morph context menu
-    'user features...':
-        '用户菜单…',
-    'color...':
-        '颜色…',
-    'choose another color \nfor this morph':
-        '指定morph的颜色',
-    'transparency...':
-        '透明度…',
-    'set this morph\'s\nalpha value':
-        '设置morph的alpha通道值',
-    'resize...':
-        '改变大小…',
-    'show a handle\nwhich can be dragged\nto change this morph\'s extent':
-        '显示一个把手，\n拖动可改变morph大小',
-    'pick up':
-        '抓起',
-    'disattach and put \ninto the hand':
-        '断开连接拿起morph',
-    'attach...':
-        '连接到…',
-    'stick this morph\nto another one':
-        '连接到另外一个morph',
-    'move...':
-        '移动…',
-    'show a handle\nwhich can be dragged\nto move this morph':
-        '显示一个把手，\n拖动可移动这个morph',
-    'inspect...':
-        '查看…',
-    'open a window\non all properties':
-        '打开查看器窗口\n显示所有属性',
-    'open a new window\nwith a picture of this morph': // pick up
-        '打开新窗口\n展示这个morph的图片',
-    'lock':
-        '锁定',
-    'make this morph\nunmovable':
-        '固定morph不可移动',
-    'unlock':
-        '解锁',
-    'make this morph\nmovable':
-        '可以移动morph',
-    'World...':
-        'World…', // don't translate "World"
-    'show the\nWorld\'s menu':
-        '显示World菜单',
-    'font size...':
-        '字体大小…',
-    'set this String\'s\nfont point size':
-        '设置字符串的字体点数',
-    'align left':
-        '靠左',
-    'align right':
-        '靠右',
-    'align center':
-        '居中',
-    'serif':
-        '衬线字体',
-    'sans-serif':
-        '无衬线字体',
-    'italic':
-        '斜体',
-    'normal style':
-        '直体',
-    'bold':
-        '粗体',
-    'normal weight':
-        '正常粗细',
-    'show blanks':
-        '显示空格',
-    'hide blanks':
-        '隐藏空格',
-    'hide characters':
-        '隐藏字符',
-    'show characters':
-        '显示字符',
-    'delete block':
-        '删除积木',
-    'spec...':
-        '描述…',
-    'spec':
-        '描述',
-    'border width...':
-        '边框粗细…',
-    'set the border\'s\nline size':
-        '设置边框线条尺寸',
-    'border color...':
-        '边框颜色…',
-    'set the border\'s\nline color':
-        '设置边框线条颜色',
-    'corner size...':
-        '圆角大小…',
-    'set the corner\'s\nradius':
-        '设置圆角半径',
-    'alpha\nvalue:':
-        'alpha通道值：',
-    'color:':
-        '颜色：',
-
-    // development mode: morph inspector
-    'show...':
-        '显示…',
-    'close':
-        '关闭',
-    'attributes':
-        '属性',
-    'methods':
-        '方法',
-    'mark own':
-        '标记自有属性',
-    'un-mark own':
-        '取消自有属性标记',
-    'save':
-        '保存',
-    'add property...':
-        '增加属性…',
-    'remove...':
-        '删除…',
-    'new property name:':
-        '新属性名：',
-    'property name:':
-        '属性名：',
-    'in new inspector...':
-        '新窗口…',
-    'here...':
-        '此窗口…',
-
-    // development mode: WorldMorph context menu
-    'demo...':
-        '演示…',
-    'sample morphs':
-        '各种morph示例',
-    'hide all...':
-        '全部隐藏…',
-    'show all...':
-        '全部显示…',
-    'move all inside...':
-        '全部围住…',
-    'keep all submorphs\nwithin and visible':
-        '围入所有子morph\n全部可见',
-    'auto line wrap on...':
-        '自动折行',
-    'enable automatic\nline wrapping':
-        '打开自动折行功能',
-    'auto line wrap off...':
-        '不自动折行',
-    'turn automatic\nline wrapping\noff':
-        '关闭自动折行功能',
-    'screenshot...':
-        '屏幕截图…',
-    'restore display':
-        '恢复显示',
-    'redraw the\nscreen once':
-        '重画屏幕',
-    'fill page...':
-        '填满页面…',
-    'let the World automatically\nadjust to browser resizings':
-        '让Wolrd随浏览器改变大小',
-    'sharp shadows...':
-        '锐利的阴影…',
-    'sharp drop shadows\nuse for old browsers':
-        '对老旧浏览器\n使用锐利的阴影',
-    'blurred shadows...':
-        '模糊的阴影…',
-    'blurry shades,\n use for new browsers':
-        '对新浏览器\n使用模糊的阴影',
-    'choose the World\'s\nbackground color':
-        '选择World的背景颜色',
-    'touch screen settings':
-        '适合触摸屏',
-    'bigger menu fonts\nand sliders':
-        '使用大号菜单字体和游标',
-    'standard settings':
-        '适合普通屏幕',
-    'smaller menu fonts\nand sliders':
-        '使用小号菜单字体和游标',
-    'user mode...':
-        '用户模式…',
-    'disable developers\'\ncontext menus':
-        '禁用开发者快捷菜单',
-    'about morphic.js...':
-        '关于morphic.js…',
-    'development mode...':
-        '开发者模式…',
-
-    // development mode: World's demo context menu
-    'make a morph':
-        '创建morph',
-    'rectangle':
-        '矩形',
-    'box':
-        '圆角框',
-    'circle box':
-        '圆头框',
-    'frame':
-        '框架',
-    'scroll frame':
-        '可滚动框架',
-    'handle':
-        '把手',
-    'string':
-        '字符串',
-    'speech bubble':
-        '对话气泡',
-    'gray scale palette':
-        '灰度调色板',
-    'color palette':
-        '彩色调色板',
-    'color picker':
-        '颜色选择器',
-    'sensor demo':
-        '探测器演示',
-    'animation demo':
-        '动画演示',
-    'pen':
-        '画笔',
-
-    // sound:
-    'play sound %snd':
-        '播放声音 %snd',
-    'play sound %snd until done':
-        '播放声音 %snd 直到播放完毕',
-    'stop all sounds':
-        '停止所有声音',
-    'rest for %n beats':
-        '停止 %n 拍',
-    'play note %note for %n beats':
-        '弹奏音符 %note 拍长 %n',
-    'set instrument to %inst':
-        '将乐器设定为 %inst',
-    'change tempo by %n':
-        '把节奏加快 %n',
-    'set tempo to %n bpm':
-        '把节奏设定为 %n',
-    'tempo':
-        '节奏',
-
-    // pen:
-    'clear':
-        '清空',
-    'pen down':
-        '落笔',
-    'pen up':
-        '抬笔',
-    'set pen color to %clr':
-        '把画笔的颜色设定为 %clr',
-    'change pen color by %n':
-        '把画笔的颜色值增加 %n',
-    'set pen color to %n':
-        '把画笔的颜色值设定为 %n',
-    'change pen shade by %n':
-        '把画笔的色度增加 %n',
-    'set pen shade to %n':
-        '把画笔的色度设定为 %n',
-    'change pen size by %n':
-        '把画笔的大小增加 %n',
-    'set pen size to %n':
-        '把画笔的大小设定为 %n',
-    'stamp':
-        '图章',
-    'fill':
-        '填充',
-    'tip':
-        '尖端',
-    'middle':
-        '中间',
-
-    // control:
-    'when %greenflag clicked':
-        '当 %greenflag 被点击',
-    'when %keyHat key pressed':
-        '当按下 %keyHat 键',
-    'when I am %interaction':
-        '当 %interaction 我',
-    'clicked':
-        '点击',
-    'pressed':
-        '按下',
-    'dropped':
-        '放下',
-    'mouse-entered':
-        '鼠标碰到',
-    'mouse-departed':
-        '鼠标离开',
-    'when %b':
-        '当 %b',
-    'when I receive %msgHat':
-        '当接收到 %msgHat',
-    'broadcast %msg':
-        '广播 %msg',
-    'broadcast %msg and wait':
-        '广播 %msg 并等待',
-    'Message name':
-        '消息名称',
-    'message':
-        '消息',
-    'any message':
-        '任何消息',
-    'wait %n secs':
-        '等待 %n 秒',
-    'wait until %b':
-        '直到 %b 前都等待',
-    'forever %loop':
-        '重复执行 %lop',
-    'repeat %n %loop':
-        '重复执行 %n %loop',
-    'repeat until %b %loop':
-        '重复执行直到 %b %loop',
-    'if %b %c':
-        '如果 %b %c',
-    'if %b %c else %c':
-        '如果 %b %c 否则 %c',
-    'report %s':
-        '报告 %s',
-    'stop %stopChoices':
-        '停止 %stopChoices',
-    'all':
-        '全部',
-    'this script':
-        '这个脚本',
-    'this block':
-        '这块积木',
-    'stop %stopOthersChoices':
-        '停止 %stopOthersChoices',
-    'all but this script':
-        '所有其他脚本',
-    'other scripts in sprite':
-        '这个角色的其他脚本',
-    'pause all %pause':
-        '暂停所有的 %pause',
-    'run %cmdRing %inputs':
-        '运行 %cmdRing %inputs',
-    'launch %cmdRing %inputs':
-        '启动 %cmdRing %inputs',
-    'call %repRing %inputs':
-        '调用 %repRing %inputs',
-    'tell %spr to %cmdRing %inputs':
-        '命令 %spr 运行 %cmdRing %inputs',
-    'ask %spr for %repRing %inputs':
-        '请求 %spr 返回 %repRing %inputs',
-    'run %cmdRing w/continuation':
-        '带延续运行 %cmdRing',
-    'call %cmdRing w/continuation':
-        '带延续调用 %cmdRing',
-    'warp %c':
-        '一步完成 %c',
-    'when I start as a clone':
-        '当我被克隆',
-    'create a clone of %cln':
-        '克隆一个 %cln',
-    'a new clone of %cln':
-        '%cln 的一个新克隆',
-    'myself':
-        '自己',
-    'delete this clone':
-        '删除这个克隆',
-
-    // sensing:
-    'touching %col ?':
-        '碰到 %col ？',
-    'touching %clr ?':
-        '碰到颜色 %clr ？',
-    'color %clr is touching %clr ?':
-        '颜色 %clr 碰到颜色 %clr ？',
-    'ask %s and wait':
-        '询问 %s 并等待',
-    'what\'s your name?':
-        '你的名字？',
-    'answer':
-        '回答',
-    'mouse x':
-        '鼠标的x坐标',
-    'mouse y':
-        '鼠标的y坐标',
-    'mouse down?':
-        '按下了鼠标？',
-    'key %key pressed?':
-        '按下了 %key 键？',
-    'distance to %dst':
-        '到 %dst 的距离',
-    'reset timer':
-        '计时器归零',
-    'timer':
-        '计时器',
-    '%att of %spr':
-        '取 %att 于 %spr',
-    'my %get':
-        '我的 %get',
-    'http:// %s':
-        'http:// %s',
-    'turbo mode?':
-        '启动了加速？',
-    'set turbo mode to %b':
-        '设置加速开关为 %b',
-
-    'filtered for %clr':
-        '用 %clr 过滤造型',
-    'stack size':
-        '堆栈大小',
-    'frames':
-        '栈帧层数',
-
-    'current %dates':
-        '当前的 %dates',
-    'year':
-        '年份',
-    'month':
-        '月份',
-    'date':
-        '日期',
-    'hour':
-        '钟点',
-    'minute':
-        '分钟',
-    'second':
-        '秒钟',
-    'time in milliseconds':
-        '时间戳',
-    'day of week':
-        '星期几',
-
-    // operators:
-    '%n mod %n':
-        '%n 除以 %n 的余数',
-    'round %n':
-        '把 %n 四舍五入',
-    '%fun of %n':
-        '%fun %n',
-    'pick random %n to %n':
-        '在 %n 到 %n 间随机选一个数',
-    '%b and %b':
-        '%b 且 %b',
-    '%b or %b':
-        '%b 或 %b',
-    'not %b':
-        '%b 不成立',
-    'true':
-        '真',
-    'false':
-        '假',
-    'join %words':
-        '把 %words 连起来',
-    'split %s by %delim':
-        '把 %s 按 %delim 分开',
-    'hello':
-        '你好',
-    'world':
-        '世界',
-    'letter %idx of %s':
-        '第 %idx 个字符在文字 %s 中',
-    'length of %s':
-        '%s 的长度',
-    'unicode of %s':
-        '字符 %s 的Unicode码',
-    'unicode %n as letter':
-        'Unicode码为 %n 的字符',
-    'is %s a %typ ?':
-        '%s 的类型是 %typ ？',
-    'is %s identical to %s ?':
-        '%s 与 %s 相同？',
-
-    'type of %s':
-        '%s 的类型',
-
-    // variables:
-    'Make a variable':
-        '新建一个变量',
-    'Variable name':
-        '变量名',
-    'Script variable name':
-        '脚本变量名',
-    'inherit %shd':
-        '继承 %shd',
-    'Delete a variable':
-        '删除变量',
-
-    'set %var to %s':
-        '把 %var 设定为 %s',
-    'change %var by %n':
-        '把 %var 增加 %n',
-    'show variable %var':
-        '显示变量 %var',
-    'hide variable %var':
-        '隐藏变量 %var',
-    'script variables %scriptVars':
-        '脚本变量 %scriptVars',
-
-    // lists:
-    'list %exp':
-        '列表 %exp',
-    '%s in front of %l':
-        '%s 放在 %l 前面',
-    'item %idx of %l':
-        '第 %idx 项 %l',
-    'all but first of %l':
-        '%l 第一项以外',
-    'length of %l':
-        '%l 的长度',
-    '%l contains %s':
-        '%l 含有 %s',
-    'thing':
-        '东西',
-    'add %s to %l':
-        '把 %s 放到 %l 后面',
-    'delete %ida of %l':
-        '删除第 %ida 项 %l',
-    'insert %s at %idx of %l':
-        '把 %s 插入到第 %idx 项 %l',
-    'replace item %idx of %l with %s':
-        '把第 %idx 项 %l 替换为 %s',
-
-    // other
-    'Make a block':
-        '制作积木',
-
-    // menus
-    // snap menu
-    'About...':
-        '关于Snap!…',
-    'Reference manual':
-        '参考手册',
-    'Snap! website':
-        '官方网站',
-    'Download source':
-        '下载源代码',
-    'Switch back to user mode':
-        '回到用户模式',
-    'disable deep-Morphic\ncontext menus\nand show user-friendly ones':
-        '禁用Morphic快捷菜单\n显示正常的用户界面',
-    'Switch to dev mode':
-        '切换到开发者模式',
-    'enable Morphic\ncontext menus\nand inspectors,\nnot user-friendly!':
-        '启用Morphic快捷菜单和查看器\n用户界面不友好',
-
-    // project menu
-    'Project notes...':
-        '项目备注…',
-    'New':
-        '新建',
-    'Open...':
-        '打开…',
-    'Save':
-        '保存',
-    'Save to disk':
-        '存盘',
-    'store this project\nin the downloads folder\n(in supporting browsers)':
-        '保存到下载文件夹\n（部分浏览器支持）',
-
-    'Save As...':
-        '另存为…',
-    'Import...':
-        '导入…',
-    'file menu import hint':
-        '加载导出的项目、积木库、造型或声音',
-
-
-    'Export project as plain text...':
-        '用文字格式导出项目…',
-    'Export project...':
-        '导出项目…',
-    '(in a new window)':
-        '（打开新窗口）',
-    'save project data as XML\nto your downloads folder':
-        '把项目数据以XML格式\n保存到下载文件夹',
-    'show project data as XML\nin a new browser window':
-        '打开新窗口，展示项目的XML数据',
-    'Export Project As...':
-        '把项目导出到…',
-    'Exported!':
-        '导出好了！',
-    'Export blocks...':
-        '导出积木…',
-    'show global custom block definitions as XML\nin a new browser window':
-        '打开新窗口，以XML格式展示全局自制积木',
-    'Unused blocks...':
-        '没用到的积木…',
-    'find unused global custom blocks\nand remove their definitions':
-        '查找没用到的全局自制积木，\n删除它们的定义',
-    'Remove unused blocks':
-        '删除没用到的积木',
-    'there are currently no unused\nglobal custom blocks in this project':
-        '这个项目里目前没有\n没用到的全局自制积木',
-    'unused block(s) removed':
-        '删掉了没用到的积木',
-    'Export summary...':
-        '导出项目总结…',
-    'open a new browser browser window\n with a summary of this project':
-        '打开新窗口，展示这个项目的总结',
-    'Export summary with drop-shadows...':
-        '导出项目总结（带阴影）…',
-    'open a new browser browser window\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers':
-        '打开新窗口，使用带有阴影的图形\n展示这个项目的总结\n（只有部分浏览器可以）',
-
-    'Contents':
-        '内容',
-    'Kind of':
-        '类型：',
-    'Part of':
-        '属于：',
-    'Parts':
-        '组件',
-    'Blocks':
-        '积木',
-    'For all Sprites':
-        '对所有角色',
-    'Import tools':
-        '导入工具包',
-    'load the official library of\npowerful blocks':
-        '载入强大的官方积木库',
-    'Libraries...':
-        '积木库…',
-    'Select categories of additional blocks to add to this project.':
-        '挑选更多积木，添加到项目中。',
-    'Select a costume from the media library':
-        '从媒体库中挑选一个造型',
-    'Select a sound from the media library':
-        '从媒体库中挑选一个声音',
-    'Import':
-        '导入',
-    'Import library':
-        '导入积木库',
-    'Backgrounds':
-        '背景',
-
-    // cloud menu
-    'Login...':
-        '登录…',
-    'Signup...':
-        '注册…',
-    'Reset Password...':
-        '重设密码…',
-    'Logout':
-        '登出',
-    'Change Password...':
-        '修改密码…',
-    'Change Password':
-        '修改密码',
-    'password has been changed.':
-        '密码改好了。',
-    'Export all scripts as pic...':
-        '把所有脚本导出为图片…',
-    'show a picture of all scripts\nand block definitions':
-        '把所有脚本和积木设计图展示成一张图片',
-    'url...':
-        'URL…',
-    'Service:':
-        '服务：',
-    'Reset Password':
-        '重设密码',
-    'An e-mail with a link to\nreset your password\nhas been sent to the address provided':
-        '重设密码的网址已发往你的电子邮件地址',
-    'Signup':
-        '注册',
-    'export project media only...':
-        '仅导出项目中的媒体文件…',
-    'export project without media...':
-        '导出项目，不含媒体…',
-    'export project as cloud data...':
-        '把项目以云端数据格式导出…',
-    'open shared project from cloud...':
-        '打开共享在云端的项目…',
-
-    // Sign up dialog
-    'Sign up':
-        '注册',
-    'User name:':
-        '用户名：',
-    'Birth date:':
-        '出生日期：',
-    'year:':
-        '年：',
-    'E-mail address:':
-        '电子邮件：',
-    'E-mail address of parent or guardian:':
-        '家长电子邮件：',
-    'Terms of Service...':
-        '服务条款…',
-    'Privacy...':
-        '隐私政策…',
-    'I have read and agree\nto the Terms of Service':
-        '我已阅读并同意《服务条款》',
-    'January':
-        '一月',
-    'February':
-        '二月',
-    'March':
-        '三月',
-    'April':
-        '四月',
-    'May':
-        '五月',
-    'June':
-        '六月',
-    'July':
-        '七月',
-    'August':
-        '八月',
-    'September':
-        '九月',
-    'October':
-        '十月',
-    'November':
-        '十一月',
-    'December':
-        '十二月',
-    'or before':
-        '或更早',
-    'please fill out\nthis field':
-        '请填写这里',
-    'User name must be four\ncharacters or longer':
-        '用户名不能少于4个字符',
-    'please provide a valid\nemail address':
-        '请填写有效的电子邮件地址',
-    'password must be six\ncharacters or longer':
-        '密码不能少于6个字符',
-    'passwords do\nnot match':
-        '两次填写的密码不一致',
-    'please agree to\nthe TOS':
-        '请同意《服务条款》',
-    'Sign in':
-        '登录',
-    'Password:':
-        '密码：',
-    'stay signed in on this computer\nuntil logging out':
-        '保持登录，直到登出',
-    'Reset password':
-        '重设密码',
-    'could not connect to:':
-        '连不上这个网站：',
-    'now connected.':
-        '已经登录到云端。',
-    'disconnected.':
-        '已经从云端登出。',
-    'Old password:':
-        '老密码：',
-    'New password:':
-        '新密码：',
-    'Repeat new password:':
-        '重复一遍新密码：',
-
-    // settings menu
-    'Language...':
-        '语言…',
-    'Zoom blocks...':
-        '放大积木…',
-    'Stage size...':
-        '舞台大小…',
-    'Stage size':
-        '舞台大小',
-    'Stage width':
-        '舞台宽度',
-    'Stage height':
-        '舞台高度',
-    'Default':
-        '默认',
-    'Blurred shadows':
-        '半透明阴影',
-    'uncheck to use solid drop\nshadows and highlights':
-        '关：使用不透明的阴影和加亮',
-    'check to use blurred drop\nshadows and highlights':
-        '关：使用透明的阴影和加亮',
-    'Zebra coloring':
-        '积木颜色相间',
-    'check to enable alternating\ncolors for nested blocks':
-        '开：使用深浅相间的颜色\n显示嵌套的同类积木',
-    'uncheck to disable alternating\ncolors for nested block':
-        '关：使用同样的颜色\n显示嵌套的同类积木',
-    'Dynamic input labels':
-        '动态输入标记',
-    'uncheck to disable dynamic\nlabels for variadic inputs':
-        '关：可变输入项不使用动态标记',
-    'check to enable dynamic\nlabels for variadic inputs':
-        '开：可变输入项使用动态标记',
-    'Prefer empty slot drops':
-        '只放空白项',
-    'settings menu prefer empty slots hint':
-        '开：“报告积木”优先\n放在没有积木的输入项上',
-    'uncheck to allow dropped\nreporters to kick out others':
-        '关：“报告积木”可以\n踢走输入项上已有的积木',
-    'Long form input dialog':
-        '输入类型说明',
-    'check to always show slot\ntypes in the input dialog':
-        '开：在输入项对话框里显示类型说明',
-    'uncheck to use the input\ndialog in short form':
-        '关：显示简洁的输入项对话框',
-    'Plain prototype labels':
-        '简洁的设计图',
-    'uncheck to always show (+) symbols\nin block prototype labels':
-        '关：在积木设计图上显示(+)号',
-    'check to hide (+) symbols\nin block prototype labels':
-        '开：不在积木设计图上显示(+)号',
-    'Virtual keyboard':
-        '虚拟键盘',
-    'uncheck to disable\nvirtual keyboard support\nfor mobile devices':
-        '关：不使用移动设备的虚拟键盘',
-    'check to enable\nvirtual keyboard support\nfor mobile devices':
-        '开：使用移动设备的虚拟键盘',
-    'Input sliders':
-        '使用游标',
-    'uncheck to disable\ninput sliders for\nentry fields':
-        '关：不使用游标修改输入字段',
-    'check to enable\ninput sliders for\nentry fields':
-        '开：使用游标修改输入字段',
-    'Execute on slider change':
-        '游标改变时运行脚本',
-    'uncheck to supress\nrunning scripts\nwhen moving the slider':
-        '关：滑动游标时暂停运行脚本',
-    'check to run\nthe edited script\nwhen moving the slider':
-        '开：滑动游标时运行改变的脚本',
-    'Clicking sound':
-        '点击音效',
-    'uncheck to turn\nblock clicking\nsound off':
-        '关：点击积木时不发出声音',
-    'check to turn\nblock clicking\nsound on':
-        '开：点击积木发出声音',
-    'Animations':
-        '动画',
-    'uncheck to disable\nIDE animations':
-        '关：不显示编辑器动画效果',
-    'Turbo mode':
-        '加速模式',
-    'check to prioritize\nscript execution':
-        '开：加速脚本运行',
-    'uncheck to run scripts\nat normal speed':
-        '关：正常速度运行脚本',
-    'check to enable\nIDE animations':
-        '开：显示编辑器动画效果',
-    'Flat design':
-        '扁平外观',
-    'check for alternative\nGUI design':
-        '开：使用扁平风格的用户界面',
-    'uncheck for default\nGUI design':
-        '关：使用默认的用户界面',
-    'Keyboard Editing':
-        '键盘编辑',
-    'uncheck to disable\nkeyboard editing support':
-        '关：不使用键盘编辑',
-    'check to enable\nkeyboard editing support':
-        '开：使用键盘编辑',
-    'Table support':
-        '使用表格功能',
-    'uncheck to disable\nmulti-column list views':
-        '关：不使用多栏(如2维)列表',
-    'check for multi-column\nlist view support':
-        '开：使用多栏(如2维)列表',
-    'Table lines':
-        '表格线',
-    'uncheck for less contrast\nmulti-column list views':
-        '关：浅色表格线',
-    'check for higher contrast\ntable views':
-        '开：深色表格线',
-    'Thread safe scripts':
-        '线程安全的脚本',
-    'uncheck to allow\nscript reentrance':
-        '关：允许脚本重入',
-    'check to disallow\nscript reentrance':
-        '开：不允许脚本重入',
-    'Prefer smooth animations':
-        '动画尽可能平滑',
-    'uncheck for greater speed\nat variable frame rates':
-        '关：改变帧率保证播放速度\n(牺牲平滑程度)',
-    'check for smooth, predictable\nanimations across computers':
-        '开：平滑地显示动画\n(牺牲播放速度)',
-    'Flat line ends':
-        '平头线条',
-    'check for flat ends of lines':
-        '开：线条的端点是平的',
-    'uncheck for round ends of lines':
-        '关：线条的端点是圆的',
-    'Codification support':
-        '可转换成代码',
-    'uncheck to disable\nblock to text mapping features':
-        '不选：关闭积木转文字的功能',
-    'check for block\nto text mapping features':
-        '开：打开积木转文字的功能',
-    'Inheritance support':
-        '母子角色(继承)',
-    'uncheck to disable\nsprite inheritance features':
-        '关：角色不可以继承',
-    'check for sprite\ninheritance features':
-        '开：角色可以继承',
-    'Sprite Nesting':
-        '角色组合',
-    'check to enable\nsprite composition':
-        '开：允许角色组合',
-    'uncheck to disable\nsprite composition':
-        '关：不允许角色组合',
-    'First-Class Sprites':
-        '高等角色',
-    'uncheck to disable support\nfor first-class sprites':
-        '关：不使用高等角色',
-    'check to enable support\n for first-class sprite':
-        '开：使用高等角色',
-    'Dragging threshold...':
-        '拖放最小距离…',
-    'specify the distance the hand has to move\nbefore it picks up an object':
-        '要抓起东西\n鼠标需要移动的最小距离',
-    'Cache Inputs':
-        '缓存输入数据',
-    'uncheck to stop caching\ninputs (for debugging the evaluator)':
-        '关：不缓存输入数据\n（以便调试求值过程）',
-    'check to cache inputs\nboosts recursion':
-        '开：缓存输入数据\n递归速度更快',
-    'Project URLs':
-        '项目网址',
-    'check to enable\nproject data in URLs':
-        '开：网址携带项目数据',
-    'uncheck to disable\nproject data in URLs':
-        '关：网址不携带项目数据',
-    'Rasterize SVGs':
-        'SVG点阵化',
-    'uncheck for smooth\nscaling of vector costumes':
-        '关：矢量造型平滑缩放',
-    'check to rasterize\nSVGs on import':
-        '开：导入SVG时把它点阵化',
-    'Persist linked sublist IDs':
-        '保存子列表ID',
-    'uncheck to disable\nsaving linked sublist identities':
-        '关：不保存子列表的ID',
-    'check to enable\nsaving linked sublist identities':
-        '开：保存子列表的ID',
-    // inputs
-    'with inputs':
-        '输入项',
-    'input names:':
-        '输入项：',
-    'Input Names:':
-        '输入项：',
-    'input list:':
-        '输入列表：',
-    'options...':
-        '选项…',
-    'read-only':
-        '只读',
-    'Input Slot Options':
-        '输入项选项',
-    'Enter one option per line.Optionally use "=" as key/value delimiter\ne.g.\n   the answer=42':
-        '每行一个选项。可使用“=”作为键和值的分隔符。例如：\n　　　　答案=42',
-    // context menus:
-    'help':
-        '帮助',
-
-    // palette:
-    'hide primitives':
-        '隐藏原始积木',
-    'show primitives':
-        '显示原始积木',
-    'header mapping...':
-        '对应的定义代码…',
-    'code mapping...':
-        '对应的调用代码…',
-    'code list mapping...':
-        '列表对应的代码…',
-    'code item mapping...':
-        '列表项对应的代码…',
-    'code delimiter mapping...':
-        '列表项分隔符对应的代码…',
-
-    // codification dialog:
-    'Header mapping':
-        '对应的定义代码',
-    'Code mapping':
-        '对应的调用代码',
-    'Code mapping - ':
-        '对应的代码 -',
-    'Code mapping - String <#1>':
-        '对应的代码 - 字符串 <#1>',
-    'Code mapping - list contents <#1>':
-        '对应的代码 - 列表内容 <#1>',
-    'Code mapping - list item <#1>':
-        '对应的代码 - 列表项',
-    'Code mapping - list item delimiter':
-        '对应的代码 - 列表项分隔符',
-    'Enter code that corresponds to the block\'s definition. Use the formal parameter\nnames as shown and <body> to reference the definition body\'s generated text code.':
-        '输入积木对应的定义/实现部分代码。\n使用上图所示的形参名，使用<body>来引用积木的定义。',
-    'Enter code that corresponds to the block\'s definition. Choose your own\nformal parameter names (ignoring the ones shown).':
-        '输入积木对应的定义/实现部分代码。\n使用自己选择的形参名字（忽略上图所示的形参名）。',
-    'Enter code that corresponds to the block\'s operation (usually a single\nfunction invocation). Use <#n> to reference actual arguments as shown.':
-        '输入积木对应的调用代码。\n用<#n>来引用上图所示的实参。',
-
-    // codification blocks
-    'map %cmdRing to %codeKind %code':
-        '把 %cmdRing 转换成 %codeKind %code',
-    'map String to code %code':
-        '把字符串转成代码 %code',
-    'map %codeListPart of %codeListKind to code %code':
-        '把 %codeListKind 的 %codeListPart 转成代码 %code',
-    'code of %cmdRing':
-        '%cmdRing 的代码',
-    'item':
-        '项',
-    'delimiter':
-        '分隔符',
-    'collection':
-        '集合',
-    'variables':
-        '变量',
-    'parameters':
-        '参数',
-    'code':
-        '调用代码',
-    'header':
-        '定义代码',
-    'code string mapping...':
-        '字符串对应的代码…',
-    // sprites:
-    'parent:':
-        '母角色：',
-    'parent...':
-        '母角色…',
-    'current parent':
-        '母角色',
-
-    // blocks:
-    'help...':
-        '帮助…',
-    'relabel...':
-        '更换…',
-    'duplicate':
-        '复制',
-    'make a copy\nand pick it up':
-        '复制并抓起这个积木',
-    'only duplicate this block':
-        '复制单个积木',
-    'delete':
-        '删除',
-    'script pic...':
-        '显示脚本图片…',
-    'open a new window\nwith a picture of this script':
-        '打开一个新窗口，\n显示这个脚本的图片',
-    'script pic with result...':
-        '带结果的脚本图片…',
-    'open a new window\nwith a picture of both\nthis script and its result':
-        '打开一个新窗口，\n显示这个脚本和运行结果的图片',
-    'ringify':
-        '加上环',
-    'unringify':
-        '去掉环',
-    'transient':
-        '不记录',
-    'uncheck to save contents\nin the project':
-        '关：把变量内容保存在项目里',
-    'check to prevent contents\nfrom being saved':
-        '开：不保存变量内容',
-    'find blocks...':
-        '找积木…',
-
-    // custom blocks:
-    'delete block definition...':
-        '删除积木定义…',
-    'edit...':
-        '编辑…',
-
-    // sprites:
-    'edit':
-        '编辑',
-    'move':
-        '移动',
-    'detach from':
-        '脱离',
-    'detach all parts':
-        '拆除所有组件',
-    'export...':
-        '导出…',
-    'paint a new sprite':
-        '画一个新角色',
-
-    // stage:
-    'show all':
-        '显示所有',
-    'pic...':
-        '展示图片…',
-    'open a new window\nwith a picture of the stage':
-        '打开一个新窗口，显示舞台的图片',
-    'turn pen trails into new costume...':
-        '把笔迹变成新造型…',
-    'turn all pen trails and stamps\ninto a new costume for the\ncurrently selected sprite':
-        '把所有笔迹和图章变成当前选中角色的一个新造型',
-
-    // scripting area
-    'clean up':
-        '整理',
-    'arrange scripts\nvertically':
-        '垂直排列脚本',
-    'add comment':
-        '添加说明',
-    'undrop':
-        '收回积木',
-    'undo the last\nblock drop\nin this pane':
-        '收回刚刚放下的积木',
-    'scripts pic...':
-        '脚本图片…',
-    'open a new window\nwith a picture of all scripts':
-        '打开一个新窗口，展示所有脚本的图片',
-    'make a block...':
-        '制作新积木…',
-
-    // costumes
-    'rename':
-        '改名',
-    'export':
-        '导出',
-    'rename costume':
-        '给造型改名',
-    'Paint a new costume':
-        '画一个新造型',
-    'edit rotation point only...':
-        '修改旋转中心点…',
-
-    // sounds
-    'Play sound':
-        '播放声音',
-    'Stop sound':
-        '停止声音',
-    'Stop':
-        '停止',
-    'Play':
-        '播放',
-    'rename sound':
-        '给声音改名',
-
-    // lists and tables
-    'list view...':
-        '展示为列表…',
-    'table view...':
-        '展示为表格…',
-    'open in dialog...':
-        '在对话框中查看…',
-    'open in another dialog...':
-        '在另一个对话框中查看…',
-    'reset columns':
-        '重置列',
-    'items':
-        '项',
-    'Table view':
-        '查看表格',
-
-    // dialogs
-    // buttons
-    'OK':
-        '确定',
-    'Ok':
-        '确定',
-    'Cancel':
-        '取消',
-    'Yes':
-        '是',
-    'No':
-        '否',
-
-    // help
-    'Help':
-        '帮助',
-
-    // zoom blocks
-    'Zoom blocks':
-        '放大积木',
-    'build':
-        '建立',
-    'your own':
-        '你自己',
-    'blocks':
-        '积木',
-    'normal (1x)':
-        '标准 (1x)',
-    'demo (1.2x)':
-        '演示 (1.2倍)',
-    'presentation (1.4x)':
-        '幻灯片 (1.4x)',
-    'big (2x)':
-        '大(2x)',
-    'huge (4x)':
-        '超大 (4x)',
-    'giant (8x)':
-        '巨大 (8x)',
-    'monstrous (10x)':
-        '无敌 (10x)',
-
-    // Project Manager
-    'Untitled':
-        '无名项目',
-    'Open Project':
-        '打开项目',
-    '(empty)':
-        '(空的)',
-    'Saved!':
-        '已保存！',
-    'Delete Project':
-        '删除项目',
-    'Are you sure you want to delete':
-        '你确定要删除',
-    'rename...':
-        '改名为…',
-    'Open':
-        '打开',
-    'Cloud':
-        '云端',
-    'Snap!Cloud':
-        'Snap！云端',
-    'Browser':
-        '浏览器',
-    'Examples':
-        '例子',
-    'You are not logged in':
-        '你还没有登录',
-    'Updating\nproject list...':
-        '正在更新项目列表…',
-    'last changed':
-        '最后修改',
-    'Share':
-        '分享',
-    'Unshare':
-        '不分享',
-    'Share Project':
-        '分享项目',
-    'Unshare Project':
-        '不分享项目',
-    'Are you sure you want to publish':
-        '确定让其他人看到项目',
-    'Are you sure you want to unpublish':
-        '确定不让其他人看到项目',
-    'sharing\nproject...':
-        '正在分享项目…',
-    'shared.':
-        '项目已分享给其他人。',
-    'unsharing\nproject...':
-        '正在取消项目分享…',
-    'unshared.':
-        '其他人已看不到项目。',
-    'Fetching project\nfrom the cloud...':
-        '从云端下载下项目…',
-    'Opening project...':
-        '正在打开项目…',
-    'Save Project':
-        '保存项目…',
-    'Saving project\nto the cloud...':
-        '把项目保存到云端…',
-    'saved.':
-        '项目已保存。',
-
-    // costume editor
-    'Costume Editor':
-        '造型编辑器',
-    'click or drag crosshairs to move the rotation center':
-        '点击或拖动准星，设置旋转中心点',
-
-    // project notes
-    'Project Notes':
-        '项目备注',
-
-    // new project
-    'New Project':
-        '新建项目',
-    'Replace the current project with a new one?':
-        '你要放弃正在编辑的项目，重新开始吗？',
-
-    // save project
-    'Save Project As...':
-        '项目另存为…',
-
-    // export blocks
-    'Export blocks':
-        '导出积木',
-    'Import blocks':
-        '导入积木',
-    'this project doesn\'t have any\ncustom global blocks yet':
-        '这个项目没有包含全局性的自制',
-    'select':
-        '选择',
-    'none':
-        '无',
-
-    // variable dialog
-    'for all sprites':
-        '给所有角色用',
-    'for this sprite only':
-        '给这个角色用',
-
-    // block dialog
-    'Change block':
-        '修改积木',
-    'Command':
-        '命令',
-    'Reporter':
-        '报告',
-    'Predicate':
-        '判断',
-
-    // block editor
-    'Block Editor':
-        '积木编辑器',
-    'Apply':
-        '应用',
-
-    // block deletion dialog
-    'Delete Custom Block':
-        '删除自制积木',
-    'block deletion dialog text':
-        '你确实要删除所有这种自制积木和它的定义吗？',
-    'block variables...':
-        '积木变量…',
-    'block variables':
-        '积木变量',
-    'Block variable name':
-        '积木变量名字',
-    'remove block variables...':
-        '删除积木变量…',
-    '(temporary)':
-        '(临时)',
-
-    // input dialog
-    'Create input name':
-        '创建输入项',
-    'Edit input name':
-        '编辑输入项',
-    'Edit label fragment':
-        '编辑标签片段',
-    'Title text':
-        '标题文本',
-    'Input name':
-        '输入项',
-    'Delete':
-        '删除',
-    'Object':
-        '对象',
-    'Number':
-        '数字',
-    'Text':
-        '文本',
-    'List':
-        '列表',
-    'Any type':
-        '任一类型',
-    'Boolean (T/F)':
-        '布尔（真/假）',
-    'Command\n(inline)':
-        '命令（嵌入）',
-    'Command\n(C-shape)':
-        '命令（C型）',
-    'Any\n(unevaluated)':
-        '任意（不计算）',
-    'Boolean\n(unevaluated)':
-        '布尔（不计算）',
-    'Single input.':
-        '输入单个值。',
-    'Default Value:':
-        '默认值：',
-    'Multiple inputs (value is list of inputs)':
-        '输入多个值（列表）',
-    'Upvar - make internal variable visible to caller':
-        '回传变量 - 让调用者可以使用这个变量',
-
-    // About Snap
-    'About Snap':
-        '关于 Snap',
-    'Back...':
-        '返回…',
-    'License...':
-        '许可…',
-    'Modules...':
-        '模块…',
-    'Credits...':
-        '光荣榜…',
-    'Translators...':
-        '翻译者…',
-    'License':
-        '许可协议',
-    'current module versions:':
-        '目前模块的版本：',
-    'Contributors':
-        '贡献者：',
-    'Translations':
-        '翻译者',
-
-    // variable watchers
-    'normal':
-        '标准',
-    'large':
-        '大型',
-    'slider':
-        '游标',
-    'slider min...':
-        '游标最小值…',
-    'slider max...':
-        '游标最大值…',
-    'import...':
-        '导入…',
-    'Slider minimum value':
-        '游标的最小值',
-    'Slider maximum value':
-        '游标的最大值',
-
-    // list watchers
-    'length: ':
-        '长度：',
-
-    // coments
-    'add comment here...':
-        '在这里添加说明…',
-    'comment pic...':
-        '展示图片…',
-    'open a new window\nwith a picture of this comment':
-        '打开新窗口，展示这条说明的图片',
-
-    // drow downs
-    // directions
-    '(90) right':
-        '右(90)',
-    '(-90) left':
-        '左(-90)',
-    '(0) up':
-        '上(0)',
-    '(180) down':
-        '下(180)',
-    'random':
-        '任意',
-    'random position':
-        '任意位置',
-
-    // collision detection
-    'mouse-pointer':
-        '鼠标指针',
-    'edge':
-        '边缘',
-    'pen trails':
-        '画笔轨迹',
-    'center':
-        '舞台中心',
-
-    // costumes
-    'Turtle':
-        '海龟',
-    'Empty':
-        '空白',
-
-    // graphical effects
-    'color':
-        '色彩',
-    'fisheye':
-        '鱼眼',
-    'whirl':
-        '旋转',
-    'pixelate':
-        '像素化',
-    'mosaic':
-        '马赛克',
-    'saturation':
-        '饱和度',
-    'brightness':
-        '亮度',
-    'ghost':
-        '透明',
-    'negative':
-        '底片',
-    'comic':
-        '漫画',
-    'confetti':
-        '彩纸',
-
-    // keys
-    'space':
-        '空格',
-    'up arrow':
-        '↑',
-    'down arrow':
-        '↓',
-    'right arrow':
-        '→',
-    'left arrow':
-        '←',
-    'any key':
-        '任意',
-    'a':
-        'a',
-    'b':
-        'b',
-    'c':
-        'c',
-    'd':
-        'd',
-    'e':
-        'e',
-    'f':
-        'f',
-    'g':
-        'g',
-    'h':
-        'h',
-    'i':
-        'i',
-    'j':
-        'j',
-    'k':
-        'k',
-    'l':
-        'l',
-    'm':
-        'm',
-    'n':
-        'n',
-    'o':
-        'o',
-    'p':
-        'p',
-    'q':
-        'q',
-    'r':
-        'r',
-    's':
-        's',
-    't':
-        't',
-    'u':
-        'u',
-    'v':
-        'v',
-    'w':
-        'w',
-    'x':
-        'x',
-    'y':
-        'y',
-    'z':
-        'z',
-    '0':
-        '0',
-    '1':
-        '1',
-    '2':
-        '2',
-    '3':
-        '3',
-    '4':
-        '4',
-    '5':
-        '5',
-    '6':
-        '6',
-    '7':
-        '7',
-    '8':
-        '8',
-    '9':
-        '9',
-
-    // messages
-    'new...':
-        '新建…',
-
-    // math functions
-    'abs':
-        '绝对值',
-    'ceiling':
-        '向上取整',
-    'floor':
-        '向下取整',
-    'sqrt':
-        '平方根',
-    'sin':
-        'sin',
-    'cos':
-        'cos',
-    'tan':
-        'tan',
-    'asin':
-        'asin',
-    'acos':
-        'acos',
-    'atan':
-        'atan',
-    'ln':
-        'ln',
-    'e^':
-        'e^',
-
-    // delimiters
-    'character':
-        '字符',
-    'letter':
-        '字母',
-    'whitespace':
-        '空白',
-    'line':
-        '行',
-    'tab':
-        '制表符',
-    'cr':
-        '回车',
-
-    // data types
-    'number':
-        '数字',
-    'text':
-        '文字',
-    'Boolean':
-        '布尔',
-    'list':
-        '列表',
-    'command':
-        '命令',
-    'reporter':
-        '记录',
-    'predicate':
-        '判断',
-    'sprite':
-        '角色',
-    'costume':
-        '造型',
-    'sound':
-        '声音',     
-
-    // list indices
-    'last':
-        '最后',
-    'any':
-        '任意',
-
-    // attributes
-    'my':
-        '属性',
-    'neighbors':
-        '邻居',
-    'self':
-        '本身',
-    'other sprites':
-        '其他角色',
-    'parts':
-        '组件',
-    'anchor':
-        '组合后角色',
-    'parent':
-        '母角色',
-    'children':
-        '子角色',
-    'clones':
-        '克隆',
-    'other clones':
-        '其他克隆',
-    'dangling?':
-        '是否悬垂？',
-    'rotation x':
-        '旋转点x坐标',
-    'rotation y':
-        '旋转点y坐标',
-    'center x':
-        '中心点x坐标',
-    'center y':
-        '中心店y坐标',
-    'name':
-        '名字',
-    'stage':
-        '舞台',
-    'distance':
-        '距离',
-    'costumes':
-        '造型',
-    'sounds':
-        '声音',   
-
-    // Paint.js
-    'Paint Editor':
-        '画板',
-    'undo':
-        '撤销',
-    'Paintbrush tool\n(free draw)':
-        '画笔(鼠标作画)',
-    'Stroked Rectangle\n(shift: square)':
-        '矩形框\n(shift: 正方形)',
-    'Stroked Ellipse\n(shift: circle)':
-        '椭圆圈\n(shift: 圆圈)',
-    'Eraser tool':
-        '橡皮',
-    'Set the rotation center':
-        '设定旋转中心点',
-    'Line tool\n(shift: vertical/horizontal)':
-        '直线\n(shift: 垂直或水平)',
-    'Filled Rectangle\n(shift: square)':
-        '实心矩形\n(shift: 正方形)',
-    'Filled Ellipse\n(shift: circle)':
-        '实心椭圆形\n(shift: 圆形)',
-    'Fill a region':
-        '涂满一个区域',
-    'Pipette tool\n(pick a color anywhere)':
-        '滴管\n(从屏幕上选一个颜色)',
-    'grow':
-        '增大',
-    'shrink':
-        '减小',
-    'flip \u2194':
-        '↔ 翻',
-    'flip \u2195':
-        '↕ 翻',
-    'Brush size':
-        '画笔粗细',
-    'Constrain proportions of shapes?\n(you can also hold shift)':
-        '只画正方形/圆形/垂直或水平线\n(相当于按住shift键)',
-
-    // thread.js
-    'a variable of name \'':
-        '这个上下文中不存在“',
-    '\'\ndoes not exist in this context':
-        '”这个变量',
-    'expecting':
-        '此处要求填写',
-    'input(s), but getting':
-        '个输入项，但实际得到输入项个数是'
-
+SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
+    "0": "0",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
+    "7": "7",
+    "8": "8",
+    "9": "9",
+    "' does not exist in this context": "”这个变量",
+    "(-90) left": "左(-90)",
+    "(0) up": "上(0)",
+    "(1) sine": "(1)sin",
+    "(180) down": "下(180)",
+    "(2) square": "(2)square",
+    "(3) sawtooth": "(3)sawtooth",
+    "(4) triangle": "(4)triangle",
+    "(90) right": "右(90)",
+    "(EDC)Translations": "(EDC)翻译",
+    "(empty)": "(空)",
+    "(in a new window)": "(打开新窗口)",
+    "(no matches)": "(无匹配项)",
+    "(none)": "(无)",
+    "(temporary)": "(临时)",
+    "360° dial": "360° 刻度盘",
+    "3D Beetle Geometry": "",
+    "_ at _": "_ 于 _",
+    "_ combine _ using _": "_ 结合 _ 方法为 _",
+    "_ contains _": "_ 含有 _",
+    "_ effect": "_ 效果",
+    "_ find first item _ in _": "_ 保留满足 _ 且来自 _ 的第一个数据",
+    "_ in front of _": "_ 放在 _ 前面",
+    "_ keep items _ from _": "_ 保留满足 _ 且来自 _ 的所有数据",
+    "_ map _ over _": "_ 映射 _ 在 _",
+    "_ mod _": "_ mod _",
+    "_ of _": "取 _ 于 _",
+    "_ of block _": "_ 自积木 _",
+    "_ of color _": "_ 自颜色 _",
+    "_ of costume _": "取 _ 于 _",
+    "_ of sound _": "取 _ 于声音 _",
+    "_ of text _": "_ 的 文本 _",
+    "_ on _": "_ 在 _ 上",
+    "_ to _": "_ 到 _",
+    "__shout__go__": "",
+    "a": "a",
+    "a custom block definition is missing": "自制积木定义丢失",
+    "a new clone of _": "_ 的一个新克隆",
+    "a variable of name '": "这个程序不存在变量“",
+    "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists. (A block that reports all the prime numbers is included as an example.) See SICP 3.5 for a tutorial.": "这是一种列表数据类型的变体,在这种类型中,每个列表项只有在需要时才会被计算,因此您可以构建百万项列表而不会真正占用那么多时间或内存,甚至可以构建无限大小的列表. (一个报告所有质数的积木被包含为一个示例.) 请参阅SICP 3.5进行教程.",
+    "about morphic.js...": "关于morphic.js...",
+    "About Snap": "关于 Snap",
+    "About...": "关于Snap!...",
+    "abs": "abs(绝对值)",
+    "Account created.": "账号已创建.",
+    "acos": "acos(反余弦)",
+    "add _ to _": "把 _ 放到 _ 后面",
+    "add a new sprite": "添加角色",
+    "add a new Turtle sprite": "添加一个海龟角色",
+    "add comment": "添加说明",
+    "add comment here...": "在这里添加说明...",
+    "Add interactive maps to projects": "向作品中添加交互式地图",
+    "add property...": "增加属性...",
+    "Add scene...": "添加场景...",
+    "Adds features from the APL language supporting hyperblocks.": "添加基于Hyperblock构建的APL语言.",
+    "ADT": "自定义数据类型/结构体",
+    "ADT Type": "可传入类型(类型注解)",
+    "Afterglow blocks": "积木光环持续时间(秒)",
+    "Afterglow blocks...": "积木光环持续时间...",
+    "agent": "交互对象(角色&舞台)",
+    "alert _": "警告: _",
+    "align center": "居中",
+    "align left": "靠左",
+    "align right": "靠右",
+    "all": "全部",
+    "all <": "",
+    "all =": "是否全部相等",
+    "all >": "",
+    "all but first of _": "_ 第一项以外",
+    "all but this script": "这个脚本外的其它脚本",
+    "all identical": "全部相同",
+    "all scenes": "所有场景",
+    "all ≤": "是否按升序排列",
+    "all ≥": "是否按降序排列",
+    "Allow multi-line text input to a block": "允许在积木中输入多行文本",
+    "alpha value:": "透明度:",
+    "An e-mail with a link to reset your password has been sent to the address provided": "重设密码的网址已发往你的电子邮件地址",
+    "An e-mail with your password has been sent to the address provided": "您的密码已发送到所提供的电子邮件地址",
+    "An extended version of the URL block that allows POST, PUT, and DELETE as well as GET requests, allows using the secure HTTPS protocol, and gives control over headers, etc. Also parses JSON data.": "URL积木的扩展版本,允许POST、PUT和DELETE以及GET请求,允许使用安全的HTTPS协议,并允许控制头部等.还可以解析JSON数据.",
+    "Analyze data for frequency distribution": "分析频率分布数据",
+    "Analyze, manipulate and generate sound samples.": "分析、操纵和生成声音样本.",
+    "Analyze, transform and generate blocks and scripts": "分析、转换和生成积木和程序",
+    "anchor": "组合体",
+    "and": "与",
+    "and send": "并发送",
+    "and you will not be able to convert them back into vector drawings.": "并且你不能把它们转换回矢量图形。",
+    "angle (0-180)": "角度 (0-180)",
+    "Animation": "动画",
+    "animation demo": "动画演示",
+    "Animations": "所有动画",
+    "Another custom block with this name exists.": "存在另一个具有此名称的自制积木.",
+    "answer": "回答",
+    "any": "",
+    "Any\n(unevaluated)": "任一类型\n(封装成环)",
+    "any key": "任意按键",
+    "any message": "任何消息",
+    "Any type": "任一类型",
+    "anything": "任意部分",
+    "APL primitives": "APL原语",
+    "append _": "追加合并 _",
+    "Apply": "应用",
+    "April": "四月",
+    "Arcs": "弧形",
+    "Are you sure you want to continue?": "您确定要继续吗？",
+    "Are you sure you want to delete": "你确定要删除",
+    "Are you sure you want to publish": "确定让其他人看到作品",
+    "Are you sure you want to replace": "您确定要替换吗",
+    "Are you sure you want to share": "您确定要共享吗",
+    "Are you sure you want to unpublish": "确定不让其他人看到作品",
+    "Are you sure you want to unshare": "您确定要取消共享吗",
+    "arrange scripts vertically": "垂直排列脚本",
+    "arrowDown": "向下箭头",
+    "arrowDownOutline": "向下箭头轮廓",
+    "arrowLeft": "向左箭头",
+    "arrowLeftOutline": "向左箭头轮廓",
+    "arrowRight": "向右箭头",
+    "arrowRightOutline": "向右箭头轮廓",
+    "arrowUp": "向上箭头",
+    "arrowUpOutline": "向上箭头轮廓",
+    "ascending": "升序",
+    "descending": "降序",
+    "asin": "asin(反正弦)",
+    "ask _ and wait": "询问 _ 并等待",
+    "ask _ for _ _": "请求 _ 返回 _ _",
+    "at": "于",
+    "atan": "atan(反正切)",
+    "attach...": "连接到...",
+    "attributes": "属性",
+    "Audio Comp": "音频组件",
+    "August": "八月",
+    "auto": "自动",
+    "auto line wrap off...": "不自动折行",
+    "auto line wrap on...": "自动折行",
+    "b": "b",
+    "back": "底",
+    "Back...": "返回...",
+    "Backgrounds": "背景",
+    "Backup failed. This cannot be undone, proceed anyway?": "备份失败.这不能撤销,还要继续吗？",
+    "balance": "声音平衡",
+    "Bar charts": "条形图",
+    "big (2x)": "大(2倍)",
+    "bigger menu fonts and sliders": "使用大号菜单字体和游标",
+    "Bignums, rationals, complex #s": "大数、有理数、复数 #s",
+    "bins": "容器",
+    "Birth date": "出生日期",
+    "Bitmap": "位图",
+    "Bitwise arithmetic operators for low-level bit manipulation.": "用于底层位操作的位算术运算符。",
+    "Bitwise operators": "位运算符",
+    "block": "积木",
+    "block deletion dialog text": "你确实要删除所有这种自制积木和它的定义吗？",
+    "Block Editor": "积木编辑器",
+    "Block variable name": "积木变量名字",
+    "block variables": "积木变量",
+    "block variables...": "积木变量...",
+    "block-solid (0)": "积木-实心(0)",
+    "blockify": "转化为积木",
+    "blocks": "积木",
+    "Blocks all the way": "积木到底(Blocks all the way)",
+    "Blocks category name": "积木类别名",
+    "Blocks category name:": "积木类别名：",
+    "blue": "蓝色",
+    "Blurred shadows": "半透明阴影",
+    "blurred shadows...": "模糊的阴影...",
+    "blurry shades, use for new browsers": "对新浏览器 使用模糊的阴影",
+    "Board was disconnected": "控制板已中断连接，端口：",
+    "bold": "粗体",
+    "Boolean": "布尔值",
+    "Boolean\n(unevaluated)": "布尔值\n(封装成环)",
+    "Boolean (T/F)": "布尔值 (True/False)",
+    "border color...": "边框颜色...",
+    "border width...": "边框粗细...",
+    "Bottom": "底部",
+    "bottom": "底部坐标",
+    "box": "圆角框",
+    "Bright theme": "明亮主题",
+    "brightness": "亮度",
+    "Bring back deleted sprites": "恢复已删除的角色",
+    "broadcast _ _": "广播 _ _",
+    "broadcast _ _ and wait": "广播 _ _ 并等待",
+    "Browser": "浏览器",
+    "brush": "笔刷",
+    "Brush size": "画笔粗细",
+    "build": "构建",
+    "but getting a": "但获得一个",
+    "c": "c",
+    "Cache Inputs": "缓存输入数据",
+    "call _ _": "调用 _ _",
+    "call _ w/continuation": "带延续调用(call/cc) _",
+    "caller": "调用者",
+    "camera": "相机",
+    "Camera": "相机",
+    "Camera not supported": "不支持相机",
+    "Camera support": "支持相机",
+    "can only write text or numbers, not a": "只能写文本或数字，不是",
+    "can rotate": "可以旋转",
+    "Cancel": "取消",
+    "cannot handle zero width or height": "无法处理零宽或高",
+    "cannot operate on a deleted sprite": "无法对已删除的精灵进行操作",
+    "cannot send media, sprites or procedures to another scene": "无法将媒体、精灵或过程发送到另一个场景",
+    "Capture runtime continuations to build fancy control structures": "捕获运行时继续构建花哨的控制结构",
+    "Case sensitivity": "区分大小写",
+    "case sensitivity": "大小写敏感",
+    "Catch errors": "捕获错误",
+    "Catch errors in a script": "在脚本中捕获错误",
+    "categories": "类别",
+    "category": "所在积木类别",
+    "Category color": "类别颜色",
+    "CAUTION! Development Version": "警告！这是开发版本",
+    "ceiling": "ceiling(上取整)",
+    "center": "舞台中心",
+    "center x": "角色几何中心的x坐标",
+    "center y": "角色几何中心的y坐标",
+    "change _ by _": "把 _ 增加 _",
+    "change _ effect by _": "把 _ 效果增加 _",
+    "change background _ by _": "把背景的 _ 增加 _",
+    "change balance by _": "把声音平衡增加 _",
+    "Change block": "修改积木",
+    "Change Password": "修改密码",
+    "Change Password...": "修改密码...",
+    "change pen _ by _": "把画笔的 _ 增加 _",
+    "change pen color by _": "把画笔的颜色值增加 _",
+    "change pen shade by _": "把画笔的色度增加 _",
+    "change pen size by _": "把画笔的大小增加 _",
+    "change size by _": "把角色的大小增加 _",
+    "change tempo by _": "把节奏加快 _",
+    "change volume by _": "把音量增加 _",
+    "change x by _": "把x坐标增加 _",
+    "change y by _": "把y坐标增加 _",
+    "character": "字符",
+    "check for alternative\nGUI design": "使用扁平风格的用户界面",
+    "check for alternative\nGUI theme": "选中以使用浅色主题",
+    "check for block\nto text mapping features": "打开积木转代码的功能",
+    "check for flat ends of lines": "用画笔画出的线条端点是平的",
+    "check for higher contrast\ntable views": "深色表格线",
+    "check for higher resolution, uses more computing resources": "使用更多计算资源",
+    "check for multi-column\nlist view support": "使用可视化的多栏(如2维)列表",
+    "check for smooth, predictable animations across computers": "平滑地显示动画 (牺牲播放速度)",
+    "check for sprite\ninheritance features": "角色可以继承",
+    "check for wrapping\nlist indices": "启用列表索引循环",
+    "check to\nshow in palette": "勾选以显示在积木面板里",
+    "check to allow\nempty Boolean slots": "允许布尔值参数为空",
+    "check to always show slot\ntypes in the input dialog": "在输入项对话框里显示类型说明",
+    "check to cache\nsprite renderings": "选中以缓存角色渲染",
+    "check to cache inputs boosts recursion": "缓存输入数据 递归速度更快",
+    "check to disable\ndirectly running blocks\nby clicking on them": "勾选以禁止点击积木直接运行",
+    "check to disallow\nscript reentrance": "不允许脚本重入",
+    "check to distinguish upper- and\n lowercase when comparing texts": "大小写敏感",
+    "check to edit primitives\nin the palette as custom blocks": "选中以将原生积木作为自制积木编辑",
+    "check to enable\nauto-wrapping inside nested block stacks": "嵌套的积木可以自动换行",
+    "check to enable\ncamera support": "使用摄像机",
+    "check to enable\ndropping commands in all rings": "允许将命令类积木嵌入所有类型的环里",
+    "check to enable\nIDE animations": "显示编辑器动画效果",
+    "check to enable\ninput sliders for\nentry fields": "使用游标修改输入字段",
+    "check to enable\nkeyboard editing support": "使用键盘编辑",
+    "check to enable\nproject data in URLs": "网址携带作品数据",
+    "check to enable\nsaving linked sublist identities": "保存子列表的ID",
+    "check to enable\nsprite composition": "允许角色组合",
+    "check to enable alternating\ncolors for nested blocks": "使用深浅相间的颜色 显示嵌套的同类积木",
+    "check to enable auto-wrapping\ninside nested block stacks": "选中以启用嵌套积木堆栈内的自动换行",
+    "check to enable dynamic\nlabels for variadic inputs": "可变输入项使用动态标记",
+    "check to enable support\n for first-class sprite": "将角色作为一等公民",
+    "check to enable using operators on lists and tables": "勾选以启用作用于列表和表格的超级运算符",
+    "check to enable virtual keyboard support for mobile devices": "使用移动设备的虚拟键盘",
+    "check to enforce\nstatically typed inputs": "勾选以允许积木参数进行静态类型检查",
+    "check to have the stage use up\nall space and go behind the\nscripting area": "勾选启用演示模式",
+    "check to hide (+) symbols\nin block prototype labels": "不在积木编辑器的积木部分上显示(+)号",
+    "check to hide empty primitive block categories": "勾选以隐藏所有无积木的积木类别",
+    "check to inherit from": "继承于",
+    "check to prevent contents from being saved": "不保存变量的值",
+    "check to prioritize\nscript execution": "勾选加速脚本运行",
+    "check to quickstep\nthreads atomically": "勾选以原子方式快速步进线程",
+    "check to rasterize\nSVGs on import": "导入SVG时把它点阵化",
+    "check to run\nthe edited script\nwhen moving the slider": "滑动游标时运行改变的脚本",
+    "check to show\ncategory names\nin the palette": "显示面板上的类别名称",
+    "check to show all blocks in a single palette": "勾选之后所有的积木会在同一个积木面板里显示",
+    "check to show buttons\nin the palette": "显示面板上的按钮",
+    "check to show extension\nprimitives in the palette": "显示“extension”及“primitive”积木，以使用已导入的扩展函数\n对于TurboWarp/Gandi IDE用户：由于Snap!的自定义扩展只是\"JavaScript Function\"积木的替代方案，\n因此Snap!扩展完全不兼容TurboWarp或Gandi IDE\n(更何况是国人新发布的02Engine、AutraEditor和Bilup这三个TurboWarp改版)\nSnapper编辑的Snap!扩展可通过内置扩展函数“src_load(url)”导入\nSnap!扩展开发教程(官方版本)详见https://github.com/jmoenig/Snap/blob/master/docs/Extensions.md",
+    "check to support\nnative JavaScript functions": "取消勾选以解除JavaScript Function积木的使用限制\n对于02Engine用户：Snap!比02Engine早十年实现JS + 积木混合编程，其原理是JavaScript的函数是一等公民\n由于Snap!的列表、函数(Snap! Lambda，即环)、角色/舞台、造型、声音及延续(continuation)均为一等公民，\n故在混合编程的灵活性上比02Engine强得多\n用JavaScript Function积木动态创建的JavaScript Lambda可通过\"运行\"或\"调用\"积木直接运行",
+    "check to switch pen colors\nand graphic effects to HSL": "勾选后更改画笔颜色为HSL模式",
+    "check to turn\nblock clicking\nsound on": "点击积木发出声音",
+    "check to turn on\n visible stepping (slow)": "勾选以开始显示每一步的执行",
+    "check to turn on\nlogging pen vectors": "勾选以开始记录画笔矢量",
+    "check to turn this scene\ninto a tutorial": "勾选以在保存作品时\n将此场景变为教程",
+    "check to turn this scene into an uneditable\ntemplate when saving it": "勾选以在保存作品时\n将此场景变为不可编辑的模板",
+    "check to use blurred drop\nshadows and highlights": "使用透明的阴影和加亮",
+    "children": "子角色",
+    "choose another color for this morph": "指定morph的颜色",
+    "choose the World's background color": "选择World的背景颜色",
+    "circle": "圆形",
+    "circle box": "圆头框",
+    "circleSolid": "实心圆形",
+    "classify": "分类",
+    "classifier": "分类器",
+    "clean up": "整理",
+    "clear": "清空",
+    "Clear backup": "清除备份",
+    "clear graphic effects": "清除图形效果",
+    "clear undrop queue": "清除未删除队列",
+    "click or drag crosshairs to move the rotation center": "点击或拖动十字准线来移动旋转中心",
+    "clicked": "点击",
+    "Clicking sound": "点击音效",
+    "clockwise": "顺时针",
+    "clockwise (1500-1000)": "顺时针 (1500-1000)",
+    "clone": "克隆",
+    "clones": "克隆",
+    "close": "关闭",
+    "Closed brush (free draw)": "闭合画笔(自由绘画)",
+    "closedBrush": "关闭画笔",
+    "cloud": "云",
+    "Cloud": "云端",
+    "cloud unavailable without a web server.": "云服务需要一个web服务器",
+    "cloudGradient": "云渐变",
+    "cloudOutline": "云轮廓",
+    "code": "调用代码",
+    "code delimiter mapping...": "列表项分隔符对应的代码...",
+    "code item mapping...": "列表项对应的代码...",
+    "code list mapping...": "列表对应的代码...",
+    "Code mapping": "对应的调用代码",
+    "Code mapping -": "对应的代码 -",
+    "Code mapping - list contents <#1>": "对应的代码 - 列表内容 <#1>",
+    "Code mapping - list item <#1>": "对应的代码 - 列表项 <#1>",
+    "Code mapping - list item delimiter": "对应的代码 - 列表项分隔符",
+    "Code mapping - String <#1>": "对应的代码 - 字符串 <#1>",
+    "code mapping...": "对应的调用代码...",
+    "code of _": "_ 的代码",
+    "code string mapping...": "字符串对应的代码...",
+    "Code to Blocks to Code": "代码与积木互转",
+    "Codification support": "转换成代码",
+    "Collapse": "解包传参标签",
+    "collapse": "collapse(解包传参标签)",
+    "collapses": "(各可变参数的)解包传参标签",
+    "collection": "集合",
+    "collidables": "碰撞(对象)",
+    "color": "颜色",
+    "color _": "颜色 _ 本身",
+    "color _ is touching _ ?": "颜色 _ 碰到颜色 _ ？",
+    "color palette": "彩色调色板",
+    "color picker": "颜色选择器",
+    "color...": "颜色...",
+    "Color": "颜色",
+    "color:": "颜色:",
+    "Colors and Crayons": "颜色和画笔",
+    "columns": "行列转置",
+    "combinations _": "组合 _",
+    "combine _ using _": "合并 _ 方法为 _",
+    "comic": "漫画",
+    "Command": "命令类",
+    "Command\n(C-shape)": "C型参数\n(封装成环)",
+    "Command\n(inline)": "命令类函数\n(环形命令式)",
+    "command": "命令类函数",
+    "comment": "comment(函数文档)",
+    "comment pic...": "展示图片...",
+    "compile": "编译",
+    "compile _": "编译 _",
+    "compile _ for _ args": "编译脚本 _ 参数： _",
+    "Compute and display outlines of costumes and halos around sprites": "计算并显示角色周围的服装和光环的轮廓",
+    "Computer": "计算机",
+    "conditionals": "分支判断",
+    "confetti": "彩纸",
+    "confusion matrix": "混淆矩阵",
+    "Connect": "连接到Arduino板",
+    "Connect to hardware extensions through the Web Serial API (Chromium, Chrome or Edge required)": "通过Web Serial API连接到硬件扩展(需要Chromium、Chrome或Edge)",
+    "Connecting board...": "正在连接控制板，端口：...",
+    "console log _": "控制台日志 _",
+    "Constrain proportions of shapes? \n(you can also hold shift)": "只画正方形/圆形/垂直或水平线 \n(相当于按住shift键)",
+    "Contents": "内容",
+    "continuation": "延续",
+    "Continuations": "第一类延续数据 + call/cc",
+    "continuations cannot be forked": "延续不能被分叉",
+    "Contributors": "贡献者:",
+    "Control": "控制",
+    "Control the Hummingbird robotics kit processor": "控制Hummingbird机器人套件处理器",
+    "Convert to bitmap?": "转换为位图？",
+    "corner size...": "圆角大小...",
+    "cos": "cos(余弦)",
+    "costume": "造型",
+    "costume #": "造型编号",
+    "Costume Editor": "造型编辑器",
+    "costume name": "造型名称",
+    "costumes": "所有造型",
+    "Costumes": "造型",
+    "costumes tab help": "把网页或电脑中的图片拖到这里,可以添加一个造型",
+    "could not connect to:": "无法连接到:",
+    "counter-clockwise": "逆时针",
+    "counter-clockwise (1500-2000)": "逆时针 (1500-2000)",
+    "cr": "回车",
+    "Crayons": "画笔",
+    "create a clone of _": "克隆一个 _",
+    "Create and manage global/sprite/script variables in a script": "在脚本中创建和管理全局/角色/脚本变量",
+    "Create input name": "添加参数",
+    "Create variables": "创建变量",
+    "Create variables in program": "在程序中创建变量",
+    "Credits...": "光荣榜...",
+    "cross": "十字",
+    "crosshairs": "十字准星",
+    "current": "当前造型",
+    "current _": "当前的 _",
+    "current module versions:": "目前模块的版本:",
+    "current parent": "目前的母角色",
+    "Custom Block Translations": "自制积木的翻译",
+    "custom?": "是自制积木?",
+    "Customize primitives": "自定义原生积木",
+    "Customize the display of the Snap!Ul to create a microworld programming environment.": "自定义 Snap!Ul 的显示，以创建一个微观世界编程环境。",
+    "cut from _": "从 _ 剪切",
+    "d": "d",
+    "dangling?": "是否为组合面的组合面？",
+    "darker": "调黑",
+    "data": "数据",
+    "Data Objects with prototypical inheritance": "具有原型继承的数据对象",
+    "data types": "所有数据类型",
+    "Database": "数据库",
+    "date": "日期",
+    "day of week": "星期几",
+    "days left": "剩余天数",
+    "days left.": "剩余天数。",
+    "December": "十二月",
+    "Declare & Initialize Script Variables": "声明和初始化脚本变量",
+    "Declare and initialize multiple script variables": "声明和初始化多个脚本变量",
+    "Default": "默认值",
+    "Default Value:": "默认值",
+    "Defaults": "默认值",
+    "defaults": "(各参数的)默认值",
+    "define _ _ _": "定义 _ _ _",
+    "definition": "积木定义",
+    "Delete": "删除",
+    "delete": "删除",
+    "delete _": "删除 _",
+    "delete _ of _": "删除第 _ 项 _",
+    "delete a category...": "删除一个类别...",
+    "Delete a variable": "删除变量",
+    "delete block": "删除积木",
+    "delete block _": "删除积木 _",
+    "delete block definition...": "删除积木定义...",
+    "Delete Custom Block": "删除自制积木",
+    "Delete Project": "删除作品",
+    "delete slot": "删除槽",
+    "delete this clone": "删除此克隆",
+    "delete variable": "删除变量",
+    "delimiter": "分隔符",
+    "demo (1.2x)": "演示 (1.2倍)",
+    "demo...": "演示...",
+    "destinations": "目的坐标",
+    "detach all parts": "所有组件脱离",
+    "detach and put into the hand": "脱离并放入手部",
+    "detach from": "脱离",
+    "development mode": "开发模式",
+    "development mode debugging primitives:": "开发模式 调试积木:",
+    "development mode...": "开发者模式...",
+    "dimensions": "维度",
+    "direction": "方向",
+    "Disable click-to-run": "点击积木时禁止直接运行",
+    "disable deep-Morphic context menus and show user-friendly ones": "禁用Morphic快捷菜单 显示正常的用户界面",
+    "disable developers' context menus": "禁用开发者快捷菜单",
+    "Disable dragging data": "禁止拖拽数据",
+    "disable dragging media\nand blocks out of\nwatchers and balloons": "禁用拖动媒体和积木从监视器和气球",
+    "disattach and put into the hand": "断开连接拿起morph",
+    "Disconnect": "断开与Arduino的连接",
+    "disconnected": "断开连接",
+    "disconnected.": "已经从云端登出.",
+    "Display dialogs and messages to the user.": "向用户显示对话框和消息。",
+    "distance": "距离",
+    "distance to _": "到 _ 的距离",
+    "distribution": "分布",
+    "Divide the stage into sub-regions in each of which to perform an action": "将舞台划分为子区域，每个子区域执行一个动作",
+    "don't rotate": "不能旋转",
+    "Down": "下",
+    "down arrow": "↓",
+    "download and save\nwith a summary of this project\nwith drop-shadows on all pictures.\nnot supported by all browsers": "下载并保存此作品，带有所有图片的阴影。 不是所有浏览器都支持",
+    "download script": "下载脚本",
+    "Download source": "下载源代码",
+    "download this script as an XML file": "下载此脚本作为XML文件",
+    "draggable": "允许拖动",
+    "draggable?": "是否可拖动?",
+    "dragging threshold": "拖动阈值",
+    "Dragging threshold...": "拖放最小距离...",
+    "Draw a list of numbers as vertical lines distributed evenly across the stage.": "将数字列表绘制为垂直线条，均匀分布在舞台上。",
+    "dropped": "放下",
+    "duplicate": "复制",
+    "duplicate block definition...": "复制积木定义...",
+    "duration": "持续时间",
+    "Dynamic input labels": "动态输入标记",
+    "Dynamic scheduling": "动态调度",
+    "Dynamic sprite rendering": "动态角色渲染",
+    "e": "e",
+    "E-mail address": "电子邮件地址",
+    "E-mail address of parent or guardian": "家长或监护人的电子邮件地址",
+    "e^": "e^",
+    "each item": "每一项",
+    "edge": "边缘",
+    "Edge color (left click)": "边缘颜色(左键点击)",
+    "edit": "编辑",
+    "edited": "编辑实参",
+    "Edit input name": "编辑输入项",
+    "Edit label fragment": "编辑标签片段",
+    "edit rotation point only...": "修改旋转中心点...",
+    "edit the costume's rotation center": "编辑角色的旋转中心",
+    "edit...": "编辑...",
+    "editables": "可编辑输入项？",
+    "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.": "艾森伯格定律：任何可以通过图形用户界面完成的事情都应该能够通过编程语言完成，反之亦然。",
+    "elegant (90)": "优雅的(90)",
+    "Ellipse (shift: circle)": "椭圆(shift: 正圆)",
+    "else if _ _": "否则 如果 _ _",
+    "Embroidery": "刺绣",
+    "Empty": "空白",
+    "enable automatic line wrapping": "打开自动折行功能",
+    "Enable command drops in all rings": "在所有环中启用命令下拉菜单",
+    "enable Morphic context menus and inspectors, not user-friendly!": "启用Morphic快捷菜单和查看器 对用户不友好",
+    "encode blocks _ to text _ pretty": "编码积木 _ 为文本 _",
+    "enforce types": "静态类型支持",
+    "Enter code that corresponds to the block's definition. Choose your own formal parameter names (ignoring the ones shown).": "输入积木对应的定义/实现部分代码. 使用自己选择的形参名字(忽略上图所示的形参名).",
+    "Enter code that corresponds to the block's definition. Use the formal parameter names as shown and <body> to reference the definition body's generated text code.": "输入积木对应的定义/实现部分代码. 使用上图所示的形参名,使用<body>来引用积木的定义.",
+    "Enter code that corresponds to the block's operation (usually a single function invocation). Use <#n> to reference actual arguments as shown.": "输入积木对应的调用代码. 用<#n>来引用上图所示的实参.",
+    "Enter one item per line.": "每行循环对应一个子参数",
+    "Enter one option per line.": "每行一个选项.",
+    "Enter one option per line.\nOptionally use \"=\" as key/value delimiter and {} for submenus. e.g.\n   the answer=42": "每行一个选项.可使用\"=\"作为键和值的分隔符.例如: answer=42",
+    "Enter one translation per line. use colon (\":\") as lang/spec delimiter\nand underscore (\"_\") as placeholder for an input, e.g.:\n\nen:say _ for _ secs": "每行输入一个翻译。\n使用冒号(\":\")作为语言/规范分隔符，下划线 (\"_\") 作为占位符代替输入。\n例如：\n\nen:say _ for _ secs",
+    "entering development mode.\n\nerror catching is turned off,\nuse the browser's web console\nto see error messages.": "进入开发模式. 错误捕捉已关闭,请使用 浏览器控制台查看错误消息.",
+    "entering user mode": "进入用户模式",
+    "epochs": "迭代次数",
+    "erase": "擦除",
+    "eraser": "橡皮擦",
+    "Eraser tool": "橡皮",
+    "Error": "错误",
+    "ERROR: INVALID PASSWORD": "错误: 无效的密码",
+    "Event Hat": "事件类",
+    "Events": "事件",
+    "Examples": "例子",
+    "exceeding maximum number of clones": "超过克隆体的最大数量",
+    "Execute on slider change": "游标改变时运行脚本",
+    "Expand": "子参数标签",
+    "expands": "(各可变参数的)参数标签",
+    "expecting": "此处要求填写",
+    "expecting a": "期望一个",
+    "expecting a finite number but getting Infinity or NaN": "期望获得有限数值，但获得了无穷大或NaN",
+    "EXPERIMENTAL - overload primitives\nwith custom block definitions": "实验性-使用自制积木定义重载原语",
+    "EXPERIMENTAL - switch (back) to\nprimitive blocks in the palette": "实验性功能 - 切换 (回) 到\n调色板中的基元积木",
+    "experimental - under construction": "实验性 - 尚未完成",
+    "EXPERIMENTAL - use custom blocks\nin all palette blocks": "实验性功能 - 在所有积木面板中使用自定义积木",
+    "EXPERIMENTAL - use primitives\nin all palette blocks": "实验性功能 - 在所有积木面板中使用基本积木",
+    "experimental!\nmake this reporter fast and uninterruptable\nCAUTION: Errors in the ring\ncan break your Snap! session!": "实验性功能！\n这一功能可以使该返回类积木运行得更快且不可中断。\n当心：任何在环里出现的报错\n都可能会令当前Snap!编辑器崩溃！",
+    "EXPERIMENTAL! check to enable\n live custom control structures": "实验性功能！勾选以启用实时自定义控制结构",
+    "EXPERIMENTAL! check to enable\nsupport for compiling": "实验性功能！勾选以启用编译支持",
+    "experimental! make this reporter fast and uninterruptable CAUTION: Errors in the ring can break your Snap! session!": "实验性！使这个报告器快速和不可中断。注意：环中的错误可能会破坏您的Snap！会话！",
+    "EXPERIMENTAL! optimize Canvas2D readback operations using the \"willReadFrequently\" attribute at the expense of slowing down rendering in some web browsers": "实验性！使用 'willReadFrequently' 属性来优化 Canvas2D 读取操作，但可能会降低某些网页浏览器的渲染速度",
+    "EXPERIMENTAL! uncheck to disable live\ncustom control structures": "实验性功能！取消勾选以禁用实时自定义控制结构",
+    "EXPERIMENTAL! uncheck to disable live\nsupport for compiling": "实验性功能！取消勾选以禁用实时编译支持",
+    "export": "导出",
+    "Export all scripts as pic...": "把所有脚本导出为图片...",
+    "export block definition...": "导出自制积木",
+    "Export blocks": "导出积木",
+    "Export blocks...": "导出积木...",
+    "export pen trails\nas PNG image": "导出画笔轨迹为PNG图片",
+    "export pen trails line segments as SVG": "导出画笔轨迹线段为SVG",
+    "Export pen trails...": "导出画笔轨迹...",
+    "export project as cloud data...": "把作品以云端数据格式导出...",
+    "Export project as plain text...": "用文字格式导出作品...",
+    "Export Project As...": "把作品导出到...",
+    "export project media only...": "仅导出作品中的媒体文件...",
+    "export project without media...": "导出作品,不含媒体...",
+    "Export project...": "导出作品...",
+    "export script": "导出脚本",
+    "Export summary with drop-shadows...": "导出作品预览的HTML文件(带阴影)...",
+    "Export summary...": "导出作品预览的HTML文件",
+    "export...": "导出...",
+    "Exported!": "导出好了！",
+    "Extension blocks": "使用扩展(扩展函数(组))？",
+    "extensions": "扩展(函数)",
+    "extent": "范围",
+    "extract": "提取",
+    "Extract substrings of a string in various ways. In general, text inputs allow only a single line. The MULTILINE block accepts multi-line text input and can be used in text input slots of other blocks.": "通过多种方式提取字符串的子字符串.通常情况下,文本输入只允许一行.MULTILINE积木接受多行文本输入,并可以用于其他积木的文本输入插槽.",
+    "f": "f",
+    "Fade blocks": "积木形状隐藏度",
+    "Fade blocks...": "积木形状隐藏度...",
+    "false": "假",
+    "February": "二月",
+    "Fetching project from the cloud...": "从云端下载下作品...",
+    "file": "文件",
+    "file menu import hint": "从本地导入",
+    "fill": "填充",
+    "Fill a region": "涂满一个区域",
+    "Fill color (right click)": "填充颜色(右键点击)",
+    "fill page...": "填满页面...",
+    "Filled Ellipse (shift: circle)": "实心椭圆 (shift: 圆)",
+    "Filled Rectangle (shift: square)": "实心矩形 (shift: 正方形)",
+    "filtered for _": "用 _ 过滤造型",
+    "find blocks": "查找积木",
+    "find blocks...": "查找积木...",
+    "find first item _ in _": "满足 _ 且来自 _ 的第一个数据",
+    "find unused global custom blocks\nand remove their definitions": "查找没用到的全局自制积木并删除它们",
+    "First-Class Sprites": "第一类角色数据支持",
+    "fisheye": "鱼眼",
+    "flag": "旗帜",
+    "flash": "闪现",
+    "Flat Bright": "扁平明亮",
+    "Flat design": "扁平外观",
+    "Flat line ends": "平头线条",
+    "flat line ends": "平头线条",
+    "flatten": "一维化",
+    "flip ↔": "↔ 翻",
+    "flip ↕": "↕ 翻",
+    "floor": "floor(下取整)",
+    "font size...": "字体大小...",
+    "footprints": "足迹",
+    "for _ = _ to _ _": "遍历每个 _ 从 _ 到 _ _",
+    "For all Sprites": "对所有角色",
+    "for all sprites": "给所有角色用",
+    "for each _ in _ _": "遍历每个 _ 来自 _ _",
+    "for this sprite only": "仅对此角色",
+    "forever _": "重复执行 _",
+    "frame": "框架",
+    "frames": "帧",
+    "frequencies": "频率",
+    "frequency": "频率",
+    "Frequency Distribution Analysis": "频率分布分析",
+    "front": "顶",
+    "fullScreen": "全屏",
+    "g": "g",
+    "gears": "齿轮",
+    "Generate 3D geometry by extruding points,lines or polygons along a path in 3D space.": "在 3D 空间中，沿着路径挤出点、线或多边形以生成 3D 几何图形。",
+    "generate a Parson's Puzzle \nfrom the current sprite": "从当前角色生成谜题",
+    "Generate costumes from letters or words of text.": "从文本的字母或单词生成造型。",
+    "Generate embroidery files for stitching pen trails on a sewing machine,experimental and under construction.": "为缝纫机上的刺绣笔迹生成刺绣文件，实验性功能，正在建设中。",
+    "Generate puzzle": "生成拼图",
+    "get blocks": "获取积木",
+    "get data": "获取数据",
+    "get learning rate": "获取学习率",
+    "get model": "获取模型",
+    "get topology": "获取拓扑结构",
+    "Getters and setters": "获取器和设置器",
+    "ghost": "透明",
+    "giant (8x)": "巨大 (8x)",
+    "glide _ secs to x: _ y: _": "在 _ 秒钟内滑到 x: _ y: _",
+    "Glide, grow and rotate using easing functions.": "使用缓动函数进行滑动、放大和旋转。",
+    "global": "全局积木",
+    "global?": "是全局积木?",
+    "go back _ layers": "下移 _ 层",
+    "go to _": "移到 _",
+    "go to _ layer": "移至 _ 层",
+    "go to x: _ y: _": "移到 x: _ y: _",
+    "gray scale palette": "灰度调色板",
+    "green": "绿色",
+    "Input group": "(可变参数的)参数类型组",
+    "group": "(可变参数的)参数类型组",
+    "grow": "增大",
+    "h": "h",
+    "handle": "把手",
+    "hat": "事件类积木",
+    "header": "定义代码",
+    "Header mapping": "对应的定义代码",
+    "header mapping...": "头部映射...",
+    "height": "高度",
+    "hello": "你好",
+    "Hello!": "你好！",
+    "Hello, World!": "你好，世界！",
+    "Help": "帮助",
+    "help": "帮助",
+    "help...": "帮助...",
+    "here...": "此窗口...",
+    "hidden layers": "隐藏层",
+    "hide": "隐藏",
+    "hide all...": "全部隐藏...",
+    "hide blanks": "隐藏空格",
+    "hide blocks": "在积木区隐藏积木",
+    "Hide blocks in palette": "在积木面板中隐藏积木",
+    "Hide blocks in the palette": "隐藏积木面板上的积木",
+    "hide blocks...": "隐藏积木",
+    "Hide blocks...": "隐藏积木...",
+    "hide characters": "隐藏字符",
+    "Hide empty categories": "隐藏无积木的积木类别",
+    "hide primitives": "隐藏原生积木",
+    "hide variable _": "隐藏变量 _",
+    "high": "高",
+    "Hmm...": "嗯......",
+    "HOF version of ZIP,letting you \"hyperize\" any dyadic function": "HOF 版本的 ZIP，让你“超级化”任何二元函数",
+    "HOF version of ZIP,letting you \"hyperize\"any dyadic function": "ZIP的高阶函数版本，使你可以“超载”任何二元函数",
+    "hour": "小时",
+    "HSL pen color model": "画笔HSL颜色模式",
+    "http:// _": "",
+    "hue": "色调",
+    "huge (4x)": "超大 (4x)",
+    "Hummingbird robotics": "蜂鸟机器人技术",
+    "Hyper blocks support": "引入超运算积木(Hyperblock)？",
+    "i": "i",
+    "I have read and agree\nto the Terms of Service": "我已阅读并同意《服务条款》",
+    "identical to": "与",
+    "if _ _": "如果 _ _",
+    "if _ _ _": "如果 _ _ _",
+    "if _ _ else _": "如果 _ _ 否则 _",
+    "if _ then _ else _": "如果 _ 返回 _ 否则 _",
+    "if on edge, bounce": "碰到边缘就反弹",
+    "If you cannot find that email, please check your spam folder.": "如果您找不到那封电子邮件，请检查您的垃圾邮件文件夹。",
+    "If you still cannot find it, please use the \"Resend Verification Email...\" option in the cloud menu.": "如果您仍然找不到，请使用云菜单中的“重新发送验证电子邮件...”选项。",
+    "Import": "导入",
+    "Import a new costume from your webcam": "从网络摄像头导入新造型",
+    "import a sound from your computer\nby dragging it into here": "把电脑中的声音文件拖到这里,\n可以添加一个声音",
+    "Import blocks": "导入积木",
+    "Import library": "导入积木库",
+    "Import sound": "导入音频",
+    "Import tools": "导入工具",
+    "import without attempting to parse or format data": "导入数据而不尝试解析或格式化数据",
+    "Import...": "导入...",
+    "import...": "导入...",
+    "Imported": "已导入",
+    "in new inspector...": "新窗口...",
+    "in palette": "在积木面板里",
+    "including dependencies": "包括依赖项",
+    "Incorporates the former crayon and set RGB libraries. Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.": "整合了以前的画笔和RGB库。实现了公平的色调(更多的橙色，更少的绿色，添加了棕色)，以及包括灰度和基于公平色调的阴影在内的线性颜色刻度。",
+    "index": "索引",
+    "index of _ in _": "_ 在 _ 中的索引",
+    "Infinite precision integers, exact rationals, complex": "无限精度整数，精确有理数，复数",
+    "inherit _": "继承 _",
+    "Inheritance support": "支持继承",
+    "inherited": "继承的",
+    "Initial slots": "默认参数数量",
+    "initial slots": "initial slots(默认参数数量)",
+    "input list:": "输入列表:",
+    "Input name": "输入项",
+    "Input Names": "输入多个项",
+    "input names:": "输入项:",
+    "Input sliders": "使用游标",
+    "Input Slot Options": "输入项选项",
+    "input slots": "所有(输入槽/实参)",
+    "input(s), but getting": "个输入项,但实际的输入项个数是",
+    "inputs": "实参",
+    "insert _ at _ of _": "把 _ 插入到第 _ 项 _",
+    "insert a slot": "插入一个槽",
+    "insert a variable": "插入一个变量",
+    "Inside a custom block": "在自制积木中",
+    "inspect...": "查看...",
+    "Interact with MicroBlocks devices over a USB cable or wirelessly through BLE.Broadcasts generated by the MicroBlocks device will automatically be received on the Snap!side after connecting.": "通过 USB 线缆或通过 BLE 无线连接与 MicroBlocks 设备进行交互。在连接后，MicroBlocks 设备生成的广播将自动在 Snap! 端接收。",
+    "Interact with MicroBlocks devices via WiFi. Requires the device to have a TFT display, two buttons and WiFi capability, as well as the Signada MicroBlocks project loaded. The Citilab ED1 and a bunch of the M5Stack boards are some of the devices that work with Signada.": "通过WiFi与MicroBlocks设备进行交互。需要设备具备TFT显示屏、两个按钮和WiFi功能，以及加载了Signada MicroBlocks作品。Citilab ED1和一些M5Stack开发板是与Signada兼容的设备之一。",
+    "is _ ?": "_ 是相同的?",
+    "is _ a _ ?": "_ 的类型是 _ 吗？",
+    "is _ empty?": "_ 为空?",
+    "is _ identical to _ ?": "_ 与 _ 是相同的？",
+    "is _ on?": "_ 已启用?",
+    "is not a valid option": "不是合法选项",
+    "is read-only": "是只读的",
+    "italic": "斜体",
+    "item": "项",
+    "item _ of _": "第 _ 项 _",
+    "items": "项",
+    "Iteration, composition": "迭代,组合",
+    "j": "j",
+    "January": "一月",
+    "JavaScript extensions": "使用JavaScript Function积木？",
+    "JavaScript extensions for Snap! are turned off": "未解除JavaScript Function积木的使用限制",
+    "JavaScript function ( _ ) { _ }": "",
+    "JIT compiler support": "支持JIT编译器？",
+    "join _": "把 _ 连起来",
+    "jukebox": "全部声音",
+    "July": "七月",
+    "June": "六月",
+    "Just Bars": "条形",
+    "Just the crayons, without the rest of the colors library. Fast and simple.": "只有画笔，没有其余的颜色库。快速而简单。",
+    "Just Words": "只有单词",
+    "k": "k",
+    "keep all submorphs within and visible": "围入所有子morph 全部可见",
+    "keep items _ from _": "满足 _ 且来自 _ 的所有数据",
+    "key": "键",
+    "key _ pressed?": "按下了 _ 键？",
+    "keyboard": "键盘",
+    "Keyboard Editing": "键盘编辑",
+    "keyboardFilled": "键盘填充",
+    "keys": "所有按键",
+    "Kind of": "类型:",
+    "l": "l",
+    "label": "积木标签",
+    "Language...": "语言...",
+    "language_name": "简体中文",
+    "language_translator": "五百刀/邓江华/孟锡峰/曹儒林/moodykeke/Ayist14",
+    "large": "大型",
+    "last": "最后一",
+    "last changed": "最后修改",
+    "last_changed": "2024-12-09",
+    "launch _ _": "启动 _ _",
+    "LEAP Motion controller": "飞行运动控制器",
+    "left": "左端坐标",
+    "left arrow": "←",
+    "length": "长度",
+    "length of _": "_ 的长度",
+    "length:": "长度:",
+    "let the World automatically adjust to browser resizing": "让Wolrd随浏览器改变大小",
+    "let the World automatically adjust to browser resizings": "让Wolrd随浏览器改变大小",
+    "letter": "字母",
+    "letter _ of _": "第 _ 个字符在文字 _ 中",
+    "Libraries...": "自制积木库...",
+    "License": "许可协议",
+    "License...": "许可...",
+    "light (70)": "浅色 (70)",
+    "lighter": "调亮",
+    "lightness": "亮度",
+    "Like \"switch\" in C-like languages or \"cond\" in Lisp. Thanks to Nathan Dinsmore for inventing the idea of a separate block for each branch!": "类似于C语言中的\"switch\"或Lisp中的\"cond\"。感谢Nathan Dinsmore发明了为每个分支创建单独块的想法!",
+    "line": "行",
+    "Line tool (shift: constrain to 45º)": "线条工具(按住Shift键: 限制到45度角)",
+    "Line tool (shift: vertical/horizontal)": "直线 (shift: 垂直或水平)",
+    "lines": "所有行",
+    "List": "列表",
+    "list": "列表",
+    "list _": "列表 _",
+    "List comprehension": "列表处理(最基本的Hyperblock实现)",
+    "List utilities": "列表工具",
+    "list view...": "列表视图...",
+    "Lists": "列表",
+    "Live coding support": "动态编程支持",
+    "ln": "ln",
+    "load the official library of powerful blocks": "载入强大的官方自制积木库",
+    "Loading": "正在加载",
+    "Local Block(s) in Global Definition": "全局定义中的本地积木",
+    "location": "位置",
+    "locations": "位置",
+    "lock": "锁定",
+    "log pen vectors": "记录画笔矢量",
+    "Log pen vectors": "记录笔矢量",
+    "login": "登录",
+    "Login...": "登录...",
+    "Logout": "登出",
+    "long (10x)": "较长(10秒)",
+    "Long form input dialog": "长格式输入对话框",
+    "Looks": "外观",
+    "loop": "循环",
+    "low": "低",
+    "lower case": "lower case(全部字母小写)",
+    "m": "m",
+    "Magnification": "UI缩放率",
+    "magnifierOutline": "放大镜轮廓",
+    "magnifyingGlass": "放大镜",
+    "Make a block": "创建自制积木",
+    "make a block...": "制作新积木...",
+    "make a category...": "在积木区创建积木类别...",
+    "make a copy and pick it up": "复制并抓起这个积木",
+    "make a morph": "创建morph",
+    "Make a variable": "创建一个变量",
+    "make temporary and\nhide in the sprite corral": "转化为临时克隆\n并隐藏在角色栏里",
+    "make this morph movable": "可以移动morph",
+    "make this morph unmovable": "固定morph不可移动",
+    "Manipulate costumes pixel-wise.": "逐像素操作造型",
+    "map _ of _ to code _": "把 _ 的 _ 转成代码 _",
+    "map _ over _": "映射 _ 在 _",
+    "map _ to _ _": "把 _ 转换成 _ _",
+    "map String to code _": "把字符串转成代码 _",
+    "March": "三月",
+    "mark own": "标记自有属性",
+    "max": "max",
+    "Max slots": "最大参数数量",
+    "max slots": "max slots(最大参数数量)",
+    "maximum": "最大值",
+    "maximum (20x)": "最长(20秒)",
+    "May": "五月",
+    "medium (50)": "中等 (50)",
+    "menu": "菜单",
+    "menus": "各参数菜单",
+    "message": "消息",
+    "Message name": "消息名称",
+    "Messages": "消息",
+    "messages": "消息",
+    "Metaprogramming": "元编程",
+    "Method Editor": "方法编辑器",
+    "methods": "方法",
+    "MicroBlocks": "",
+    "microphone": "声音属性",
+    "microphone _": "麦克风 _",
+    "Microphone resolution...": "麦克风分辨率...",
+    "middle": "中间",
+    "min slots": "min slots(最小参数数量)",
+    "minimum": "最小值",
+    "minute": "分钟",
+    "mirror video": "视频镜像",
+    "missing / unspecified extension": "缺少/未指定扩展函数名",
+    "Modules...": "模块...",
+    "monstrous (10x)": "最大 (10x)",
+    "month": "月份",
+    "mosaic": "马赛克",
+    "motion": "动作",
+    "Motion": "运动",
+    "mouse down?": "按下了鼠标？",
+    "mouse position": "鼠标坐标",
+    "mouse x": "鼠标的x坐标",
+    "mouse y": "鼠标的y坐标",
+    "mouse-departed": "鼠标离开",
+    "mouse-entered": "鼠标碰到",
+    "mouse-pointer": "鼠标指针",
+    "move": "移动",
+    "move _ steps": "移动 _ 步",
+    "move all inside...": "全部围住...",
+    "move...": "移动...",
+    "move up": "向上移动积木",
+    "move down": "向下移动积木",
+    "Multi-branched conditional": "多分支条件",
+    "Multi-branched conditional (switch)": "多分支条件(切换)",
+    "multi-line": "多行",
+    "Multiple inputs (value is list of inputs)": "输入多个值(可变参数，将形参的多个输入项视为一个列表)",
+    "Music Notation,Instruments,Drums,Tones,Chords,Tracks,from the University of Virginia(Glen Bull)": "音乐记谱、乐器、鼓、音调、和弦、轨道，来自弗吉尼亚大学 (Glen Bull)",
+    "muti-line": "多行文本",
+    "my": "我的",
+    "my _": "我的 _",
+    "my anchor": "我的组合体",
+    "my parts": "我的组合面",
+    "my dangling?": "是否为组合面的组合面？",
+    "my draggable?": "是否可拖动？",
+    "my name": "我的名字",
+    "my parent": "我的父角色",
+    "my rotation style": "我的旋转方式",
+    "my rotation x": "旋转中心的x坐标",
+    "my rotation y": "旋转中心的y坐标",
+    "my temporary?": "是否临时存在？",
+    "myself": "自己",
+    "n": "n",
+    "name": "名字",
+    "neg": "neg(取反)",
+    "negative": "底片",
+    "neighbors": "相邻角色",
+    "neighbors ≠": "相邻角色 ≠",
+    "Nested auto-wrapping": "嵌套自动换行",
+    "New": "新建",
+    "New category": "新建积木类别",
+    "New category...": "新建积木类别...",
+    "new color _": "以 _ 返回新颜色",
+    "new costume _ width _ height _": "创建造型 _ 宽度 _ 高度 _",
+    "new line": "换行",
+    "New password": "新密码",
+    "New Project": "新建作品",
+    "new property name:": "新属性名:",
+    "New scene": "新建场景",
+    "new sound _ rate _ Hz": "创建声音 _ 频率 _ Hz",
+    "new...": "新建...",
+    "next": "下一个",
+    "next costume": "下一个造型",
+    "No": "否",
+    "No board connected.": "没有连接控制板.",
+    "none": "无",
+    "normal": "正常",
+    "normal (1x)": "正常(1秒)",
+    "normal (5x)": "正常(5秒)",
+    "normal style": "直体",
+    "normal weight": "正常粗细",
+    "normalScreen": "普通屏幕",
+    "normalStage": "标准舞台",
+    "not": "not",
+    "not _": "_ 不成立",
+    "note": "音符",
+    "Notes": "作品说明...",
+    "Notes...": "作品说明...",
+    "nothing": "nothing",
+    "November": "十一月",
+    "now connected.": "已登录到云端.",
+    "Number": "数字",
+    "number": "数字",
+    "number of channels": "通道数",
+    "numbers from _ to _": "从 _ 到 _ 的数字",
+    "o": "o",
+    "Object": "交互对象(角色&舞台)",
+    "object": "交互对象(角色&舞台)",
+    "object _": "对象 _",
+    "object attributes": "对象属性",
+    "objects": "对象",
+    "objects + self": "所有对象 + 当前角色",
+    "octagon": "八边形",
+    "October": "十月",
+    "off (0x)": "不持续(0秒)",
+    "OK": "确定",
+    "Ok": "确定",
+    "Old password": "旧密码",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences, rather than just a string of characters. This library brings back that idea.": "在Logo中的一个重要概念，而在Scratch中没有包括的是将文本视为由单词和句子结构组成，而不仅仅是字符的字符串。这个库重新引入了这个概念。",
+    "One of the big ideas in Logo that they left out of Scratch is thinking of text as structured into words and sentences,rather than just a string of characters.This library brings back that idea.": "Scratch 最大的想法之一是，他们没有考虑到文本是结构化为单词和句子的，而不仅仅是一串字符。这个库带来了这个想法。",
+    "only duplicate this block": "复制单个积木",
+    "only face left/right": "只能水平翻转",
+    "only grab this block": "仅抓取此积木",
+    "OOP": "面向对象",
+    "Open": "打开",
+    "open a new browser browser window with a summary of this project": "打开新窗口,展示这个作品",
+    "open a new browser browser window with a summary of this project with drop-shadows on all pictures. not supported by all browsers": "打开新窗口,使用带有阴影的图形 展示这个作品 (只有部分浏览器可以)",
+    "open a new window with a picture of all scripts": "打开一个新窗口,展示所有脚本的图片",
+    "open a new window with a picture of both this script and its result": "打开一个新窗口, 显示这个脚本和运行结果的图片",
+    "open a new window with a picture of the stage": "打开一个新窗口,显示舞台的图片",
+    "open a new window with a picture of this comment": "打开新窗口,展示这条说明的图片",
+    "open a new window with a picture of this morph": "打开新窗口 展示这个morph的图片",
+    "open a new window with a picture of this script": "打开一个新窗口, 显示这个脚本的图片",
+    "Open a Scratch project from your computer": "从你的电脑中打开一个Scratch作品",
+    "open a window on all properties": "打开新的窗口 显示所有属性",
+    "open in another dialog...": "在另一个对话框中查看...",
+    "Open in Community Site": "在社区网站中打开",
+    "open in dialog...": "在对话框中查看...",
+    "Open Project": "打开作品",
+    "open shared project from cloud...": "打开共享在云端的作品...",
+    "Open...": "打开...",
+    "Opening Costumes... ": "打开造型中...",
+    "Opening project...": "正在打开作品...",
+    "Operators": "运算",
+    "options": "options(选项)",
+    "options...": "选项...",
+    "or": "或",
+    "or before": "或更早",
+    "Other": "其他",
+    "other clones": "其他克隆体",
+    "other scripts in sprite": "该角色的其它脚本",
+    "other sprites": "其他角色",
+    "Outlines and Halos": "轮廓和光环",
+    "Output text using speech synthesis.": "使用语音合成输出文本。",
+    "overdraw": "叠绘",
+    "overload a primitive": "重载一个原生积木",
+    "p": "p",
+    "paint": "绘制",
+    "Paint a new costume": "画一个新造型",
+    "paint a new sprite": "画一个新角色",
+    "Paint a shape (shift: edge color)": "绘制一个形状(按住Shift键: 设置边缘颜色)",
+    "Paint a shape (shift: secondary color)": "绘制一个形状(按住Shift键: 使用辅助颜色)",
+    "Paint Editor": "画板",
+    "Paintbrush tool (free draw)": "画笔(鼠标作画)",
+    "paintbucket": "填充工具",
+    "Parallelization": "并行化",
+    "parameters": "参数",
+    "parameter": "形式变量",
+    "parent": "父角色",
+    "parent...": "父角色...",
+    "parent:": "父角色:",
+    "parse code _ to blocks": "解析代码 _ 为积木",
+    "Part of": "属于:",
+    "partition": "划分比例",
+    "parts": "组合面",
+    "password has been changed.": "密码改好了.",
+    "password must be six characters or longer": "密码不能少于6个字符",
+    "Password:": "密码:",
+    "passwords do not match": "两次填写的密码不一致",
+    "paste on _": "拼贴在 _ 上",
+    "pause": "暂停",
+    "pause all _": "暂停所有的 _",
+    "Pen": "画笔",
+    "pen": "画笔",
+    "pen _": "画笔的 _",
+    "pen down": "落笔",
+    "pen down?": "画笔已落下?",
+    "pen is down?": "画笔已落下？",
+    "pen trails": "画笔轨迹",
+    "pen up": "抬笔",
+    "pen vectors": "画笔矢量",
+    "Performer mode": "演示模式",
+    "Persist linked sublist IDs": "保存子列表ID",
+    "Persistent key-value storage across Snap! sessions in the same browser": "在同一浏览器中跨Snap!会话保持持久化的键值存储,这是关于在Snap!编程环境中实现在不同会话之间保持数据持久性的描述。",
+    "piano keyboard": "钢琴键盘",
+    "pic...": "展示图片...",
+    "pick random _ to _": "在 _ 到 _ 间随机选一个数",
+    "pick up": "抓起",
+    "pipe _ $arrowRight _": "管道 _ $arrowRight _",
+    "pipette": "吸管",
+    "Pipette tool (pick a color anywhere)": "滴管 (从屏幕上选一个颜色)",
+    "Pipette tool (pick a color from anywhere shift: fill color)": "滴管工具(从任何地方取色, 按Shift键: 填充颜色)",
+    "Pipette tool (pick a color from anywhere shift: secondary color)": "选色器工具(shift: 从任何地方选择颜色)",
+    "pitch": "音调",
+    "pivot": "支点",
+    "pixel": "像素",
+    "pixelate": "像素化",
+    "pixels": "每个像素",
+    "Plain prototype labels": "普通原型标签",
+    "Play": "播放",
+    "play _ Hz for _ secs": "演奏频率 _ 赫兹 _ 秒",
+    "play frequency _ Hz": "演奏频率 _ 赫兹",
+    "play note _ for _ beats": "弹奏音符 _ 持续 _ 拍",
+    "Play sound": "播放声音",
+    "play sound _": "播放声音 _",
+    "play sound _ at _ Hz": "播放声音 _ 于频率 _ 赫兹",
+    "play sound _ until done": "播放声音 _ 直到播放完毕",
+    "please agree to the TOS": "请同意《服务条款》",
+    "please fill out this field": "请填写这里",
+    "Please make sure your web browser is up to date and your camera is properly configured. Some browsers also require you to access Snap! through HTTPS to use the camera. Please replace the \"http://\" part of the address in your browser by \"https://\" and try again.": "请确保您的网页浏览器是最新的，并且您的摄像头已正确配置。一些浏览器还要求您通过HTTPS访问Snap!以使用摄像头。请将浏览器地址栏中的“http://”部分替换为“https://”，然后再试一次。",
+    "please provide a valid email address": "请填写有效的电子邮件地址",
+    "Please use the verification link that was sent to your email address when you signed up.": "请使用您在注册时发送到您电子邮件地址的验证链接。",
+    "point in direction _": "面向 _ 度",
+    "point towards _": "面向 _",
+    "pointRight": "向右",
+    "Polygon": "多边形",
+    "polygon": "多边形",
+    "position": "坐标",
+    "poster": "海报",
+    "predict": "预测",
+    "Predicate": "判断类",
+    "predicate": "判断类函数",
+    "Prefer empty slot drops": "只放空白项",
+    "Prefer smooth animations": "动画尽可能平滑",
+    "presentation (1.4x)": "幻灯片 (1.4x)",
+    "pressed": "按下",
+    "previous": "上一个",
+    "primitive": "primitive(是否为原生积木？)",
+    "primitives": "所有原生积木",
+    "Primitives palette": "原生积木面板",
+    "Privacy...": "隐私政策...",
+    "processes": "进程数量",
+    "product": "乘积",
+    "Project Notes": "作品备注",
+    "Project notes...": "作品注释...",
+    "Project URLs": "作品网址",
+    "Prompt the user to pick an option.": "提示用户选择一个选项。",
+    "properties": "性能；道具；内容",
+    "property name:": "属性名:",
+    "Provide 100 selected colors": "提供100种可选颜色",
+    "Provide getters and setters for all GUI-controlled global settings": "为所有 GUI 控制的全局设置提供 getter 和 setter",
+    "Publish": "发布",
+    "Publish Project": "发布作品",
+    "published.": "已发布。",
+    "publishing project...": "正在发布作品...",
+    "q": "q",
+    "r": "r",
+    "r-g-b-a": "r-g-b-a",
+    "random": "任意",
+    "random position": "任意位置",
+    "rank": "维数",
+    "Rasterize SVGs": "SVG点阵化",
+    "raw data...": "原始数据...",
+    "ray length": "射线长度",
+    "read-only": "不可编辑实参？",
+    "receivers": "接收者(广播)",
+    "receivers...": "接收器...",
+    "Record a new sound": "录制新声音",
+    "recording": "录音...",
+    "Recover": "恢复",
+    "rectangle": "矩形",
+    "Rectangle (shift: square)": "长方形(shift: 正方形)",
+    "rectangleSolid": "实心矩形",
+    "red": "红色",
+    "redo the last undone block drop in this pane": "在此面板中重做最后一次撤销的积木放置",
+    "redraw the screen once": "重画屏幕",
+    "redrop": "重新放置",
+    "Reference manual": "参考手册",
+    "relabel...": "更换...",
+    "release": "发布(转化)",
+    "Remove a category...": "删除积木类别...",
+    "remove block variables...": "删除积木变量...",
+    "Remove unused blocks": "删除没用到的积木",
+    "remove...": "删除...",
+    "rename": "重命名",
+    "rename all blocks that access this variable": "重命名所有访问此变量的积木",
+    "rename all...": "重命名所有...",
+    "rename background": "重命名背景",
+    "rename costume": "重命名造型",
+    "rename only this reporter": "仅重命名此报告器",
+    "rename sound": "重命名声音",
+    "rename...": "改名为...",
+    "repeat _ _": "重复执行 _ 次 _",
+    "Repeat new password:": "重复一遍新密码:",
+    "Repeat Password:": "重复密码:",
+    "repeat until _ _": "重复执行直到 _ _",
+    "Replace all occurrences of a letter or a sequence of letters with another in a text.": "在文本中将所有出现的字母或字母序列替换为另一个字母。",
+    "replace item _ of _ with _": "把第 _ 项 _ 替换为 _",
+    "Replace Letters": "替换字母",
+    "Replace Project": "替换作品",
+    "Replace the current project with a new one?": "你要放弃正在编辑的作品,重新开始吗？",
+    "replaceables": "可嵌入表达式？",
+    "report _": "返回 _",
+    "Report hand positions from LEAP Motion controller (leapmotion.com).": "从 LEAP Motion 控制器 (leapmotion.com) 报告手部位置.",
+    "Reporter": "返回类",
+    "reporter": "返回类函数",
+    "reporter didn't report": "返回类积木未返回",
+    "request _ _": "广播 _ _ 并返回访问结果",
+    "Request blocked": "请求被阻止",
+    "Resend verification email": "重新发送验证邮件...",
+    "Resend Verification Email...": "重新发送验证邮件...",
+    "reset columns": "重置列",
+    "Reset Password": "重设密码",
+    "Reset password": "重设密码",
+    "Reset Password...": "重设密码...",
+    "reset timer": "计时器归零",
+    "reshape _ to _": "重构列表 _ 为 _",
+    "resize...": "改变大小...",
+    "resolution": "分辨率",
+    "rest for _ beats": "停止 _ 拍",
+    "restore display": "恢复显示",
+    "Restore primitives": "恢复原状",
+    "Restore unsaved project": "恢复未保存的作品",
+    "result pic...": "结果图片...",
+    "Retina display support": "视网膜显示支持",
+    "reverse": "倒序",
+    "right": "右端坐标",
+    "right arrow": "→",
+    "ring": "环",
+    "ringify": "环形化",
+    "robot": "机器人",
+    "rotate": "旋转",
+    "rotation style": "旋转样式",
+    "rotation x": "角色旋转中心的x坐标",
+    "rotation y": "角色旋转中心的y坐标",
+    "round _": "round _ (四舍五入)",
+    "run _ _": "运行 _ _",
+    "run _ w/continuation": "带延续运行(call/cc) _",
+    "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.": "运行脚本；如果发生错误,不要用红色光环停止脚本,而是运行另一个脚本来处理错误.还包括一个积木,用于通过作为输入给出的消息来导致错误.还包括一个用于创建脚本变量并为其赋值的积木.",
+    "Run and call a sprite's local custom blocks from another sprite": "从另一个角色运行和调用角色的本地自制积木",
+    "Run several scripts in parallel and wait until all are done.": "并行运行多个脚本并等待所有脚本完成.",
+    "s": "s",
+    "Same Named Blocks": "同名积木",
+    "sample morphs": "各种morph示例",
+    "sample rate": "样本频率",
+    "samples": "样本数据",
+    "sans-serif": "无衬线字体",
+    "saturation": "饱和",
+    "Save": "保存",
+    "save": "保存",
+    "save _ as costume named _": "把 _ 保存为造型,命名为 _",
+    "save a picture\nof all scripts": "保存所有脚本的图片",
+    "save a picture\nof both this script and its result": "保存这个脚本及其结果的图片",
+    "save a picture\nof the stage": "保存舞台的图片",
+    "save a picture\nof this comment": "保存这条评论的图片",
+    "save a picture\nof this script": "保存这个脚本的图片",
+    "save a summary\nof this project": "保存这个作品的摘要",
+    "Save As...": "另存为...",
+    "save global custom block\ndefinitions as XML": "将全局自制积木定义保存为XML格式",
+    "Save Project": "保存作品",
+    "Save Project As...": "作品另存为...",
+    "save project data as XML\nto your downloads folder": "把作品数据以XML格式 保存到下载文件夹",
+    "Save to disk": "保存到磁盘",
+    "Saved!": "已保存！",
+    "saved.": "作品已保存.",
+    "Saving project to the cloud...": "把作品保存到云端...",
+    "say _": "说 _",
+    "say _ for _ secs": "说 _ _ 秒",
+    "scenes": "所有场景",
+    "Scenes...": "场景...",
+    "Scientific Functions,Graphing,SQL interface,Machine Learning,from Uni Gottingen(Eckart Modrow)": "科学函数、绘图、SQL 接口、机器学习，来自哥廷根大学 (Eckart Modrow)",
+    "SciSnap! v3": "",
+    "scope": "scope(作用域)",
+    "screenshot": "屏幕截图",
+    "screenshot...": "屏幕截图...",
+    "script": "脚本",
+    "script pic with result...": "带结果的脚本图片...",
+    "script pic...": "脚本图片...",
+    "Script variable name": "脚本变量名",
+    "script variables _": "脚本变量 _",
+    "scripted": "动态菜单(通过程序设计)",
+    "Scripts": "脚本",
+    "scripts": "脚本区",
+    "scripts pic...": "脚本图片...",
+    "scroll frame": "可滚动框架",
+    "scrolled-down": "滚轮向下滚动",
+    "scrolled-up": "滚轮向上滚动",
+    "second": "秒钟",
+    "select": "选择",
+    "Select a costume from the media library": "从媒体库中挑选一个造型",
+    "Select a sound from the media library": "从媒体库中挑选一个声音",
+    "Select categories of additional blocks to add to this project.": "挑选更多积木,添加到作品中.",
+    "selection": "选择",
+    "Selection tool": "选择工具",
+    "selector...": "选择器...",
+    "self": "本身",
+    "send _ to _": "发送消息 _ 给 _",
+    "send data": "广播并发送数据",
+    "senders...": "发送者...",
+    "Sensing": "探测",
+    "sensor demo": "传感器演示",
+    "Separator": "子参数分隔符",
+    "separator": "separator(子参数分隔符)",
+    "separators": "(各可变参数的)子参数分隔符",
+    "September": "九月",
+    "Serial Ports": "",
+    "serif": "衬线字体",
+    "Service": "服务",
+    "set learning rate": "设置学习率",
+    "set model": "设置模型",
+    "set topology": "设置拓扑结构",
+    "set _ effect to _": "把 _ 效果设定为 _",
+    "set _ of block _ to _": "把 _ 自 _ 设为 _",
+    "set _ to _": "设置 _ 为 _",
+    "set background _ to _": "把背景的 _ 设定为 _",
+    "set background color to _": "把背景色设置为 _",
+    "set balance to _": "设置声音平衡为 _",
+    "set instrument to _": "将乐器设定为 _",
+    "set pen _ to _": "把画笔的 _ 设定为 _",
+    "set pen color to _": "把画笔的颜色值设定为 _",
+    "set pen shade to _": "把画笔的色度设定为 _",
+    "set pen size to _": "把画笔的大小设定为 _",
+    "Set RGB or HSV pen color": "设置RGB或HSV画笔颜色",
+    "set size to _ %": "把角色的大小设定为 _ %",
+    "set slot _ to _": "将 _ 的实参设为 _",
+    "set tempo to _ bpm": "把节奏设定为 _",
+    "set the border's line color": "设置边框线条颜色",
+    "set the border's line size": "设置边框线条尺寸",
+    "set the corner's radius": "设置圆角半径",
+    "Set the rotation center": "设置旋转中心",
+    "set this morph's alpha value": "设置morph的alpha通道值",
+    "set this String's font point size": "设置字符串的字体点数",
+    "set turbo mode to _": "设置加速模式为 _",
+    "set video transparency to _": "把视频透明度设置为 _",
+    "set volume to _ %": "把音量设定为 _ %",
+    "set x to _": "把x坐标设定为 _",
+    "set y to _": "把y坐标设定为 _",
+    "setting the rotation center requires a costume": "设定旋转中心需要一个角色",
+    "settings menu prefer empty slots hint": "“报告积木”优先 放在没有积木的输入项上",
+    "several block definitions already match this label": "多个积木定义已经匹配到这个标签",
+    "Share": "分享",
+    "Share Project": "分享作品",
+    "shared.": "作品已分享给其他人.",
+    "sharing project...": "正在分享作品...",
+    "sharp drop shadows use for old browsers": "对老旧浏览器 使用锐利的阴影",
+    "sharp shadows...": "锐利的阴影...",
+    "shimmering (80)": "闪烁(80)",
+    "short (1x)": "较短(1秒)",
+    "show": "显示",
+    "show a handle which can be dragged to change this morph's extent": "显示一个把手, 拖动可改变morph大小",
+    "show a handle which can be dragged to move this morph": "显示一个把手, 拖动可移动这个morph",
+    "show a picture of all scripts\nand block definitions": "把所有脚本展示成一张图片",
+    "show all": "显示全部",
+    "show all...": "显示全部...",
+    "show blanks": "显示空格",
+    "Show buttons": "显示按钮",
+    "Show categories": "显示分类",
+    "show characters": "显示字符",
+    "show global custom block definitions as XML in a new browser window": "打开新窗口,以XML格式展示全局自制积木",
+    "show primitives": "显示基本积木",
+    "show project data as XML in a new browser window": "打开新窗口,展示作品的XML数据",
+    "show table _": "显示表格 _",
+    "show the World's menu": "显示World菜单",
+    "show variable _": "显示变量 _",
+    "show...": "显示...",
+    "shown?": "已显示?",
+    "shrink": "减小",
+    "shuffled": "已洗牌",
+    "sign": "sign(符号)",
+    "Sign in": "登录",
+    "Sign up": "注册",
+    "Signada (Network remote control)": "Signada(网络远程控制)",
+    "signals": "信号",
+    "Signup": "注册",
+    "Signup...": "注册...",
+    "sin": "sin(正弦)",
+    "Single input.": "输入单个值.",
+    "Single palette": "单一积木面板",
+    "size": "大小",
+    "skew _ to _ degrees _ %": "倾斜 _ _ 度 大小: _ %",
+    "slider": "游标",
+    "slider max...": "滑块最大值...",
+    "Slider maximum value": "游标的最大值",
+    "slider min...": "滑块最小值...",
+    "Slider minimum value": "游标的最小值",
+    "slots": "slots(各参数类别)",
+    "smaller menu fonts and sliders": "使用小号菜单字体和游标",
+    "smallStage": "小舞台",
+    "snap": "快照",
+    "Snap! website": "官方网站",
+    "Snap!Cloud": "Snap！云端",
+    "solutions": "(Parson问题的)解法",
+    "Some standard functions on lists (reverse, sort, etc.)": "一些列表上的标准函数(反转、排序等)",
+    "sorted": "已排序",
+    "Sound": "声音",
+    "sound": "声音",
+    "Sound Recorder": "录音机",
+    "Sounds": "声音",
+    "sounds": "声音",
+    "space": "空格",
+    "space above": "分隔积木",
+    "spec": "描述",
+    "spec...": "描述...",
+    "special": "特殊的",
+    "specify the distance the hand has to move\nbefore it picks up an object": "要抓起东西 鼠标需要移动的最小距离",
+    "spectrum": "声谱",
+    "speech bubble": "对话气泡",
+    "speechBubble": "对话框",
+    "speechBubbleOutline": "对话框轮廓",
+    "split _ by _": "把 _ 按 _ 分开",
+    "Sprite": "角色",
+    "sprite": "角色",
+    "Sprite Method API": "角色方法 API",
+    "Sprite Nesting": "角色组合",
+    "sprites": "角色",
+    "sprites + self": "所有角色 + 当前角色",
+    "sprites + turtle": "所有角色 + turtle(海龟)",
+    "sqrt": "sqrt(平方根)",
+    "square": "正方形",
+    "stack size": "堆栈大小",
+    "Stage": "舞台",
+    "stage": "舞台",
+    "Stage height": "舞台高度",
+    "stage image": "舞台图片",
+    "Stage selected: no motion primitives": "选中了舞台: 舞台不能使用运动积木",
+    "Stage size": "舞台大小",
+    "Stage size...": "舞台大小...",
+    "Stage width": "舞台宽度",
+    "stamp": "图章",
+    "standard settings": "适合普通屏幕",
+    "static": "不可嵌入表达式？",
+    "stay signed in on this computer until logging out": "保持登录,直到登出",
+    "stepForward": "向前一步",
+    "stick this morph to another one": "连接到另外一个morph",
+    "stick to": "粘附到",
+    "Stop": "停止",
+    "stop _": "停止 _",
+    "stop all sounds": "停止所有声音",
+    "stop frequency": "停止演奏频率",
+    "Stop sound": "停止声音",
+    "stopped": "停止",
+    "stopped (1500)": "停止 (1500)",
+    "storage": "存储",
+    "store this project in the downloads folder (in supporting browsers)": "保存到下载文件夹 (部分浏览器支持)",
+    "Streams (lazy lists)": "流(惰性列表)",
+    "stretch _ x: _ y: _ %": "拉伸 _ 比例 x: _ y: _ %",
+    "string": "字符串",
+    "Strings, Multi-line input": "字符串，多行输入",
+    "Stroked Ellipse (shift: circle)": "椭圆 (shift: 圆)",
+    "Stroked Rectangle (shift: square)": "矩形框 (shift: 正方形)",
+    "subtle (95)": "微妙(95)",
+    "sum": "求和",
+    "Support for translating text, blocks, and dropdown/placeholder values": "支持翻译文本、积木和下拉/占位符值",
+    "SVG costumes are not yet fully supported in every browser": "SVG 格式尚未在所有浏览器中得到完全支持",
+    "svg...": "svg...",
+    "Switch back to user mode": "回到用户模式",
+    "switch to costume _": "换成 _ 造型",
+    "Switch to dev mode": "切换到开发者模式",
+    "switch to scene _ _": "切换至场景 _ _",
+    "Switch to vector editor?": "切换到矢量编辑器?",
+    "switch(back)to primitive blocks in the palette,\nCAUTION - can break extensions.": "重置为原生积木，\n注意 - 可能会破坏对原生积木的扩展。",
+    "t": "t",
+    "tab": "制表符",
+    "Table lines": "表格线",
+    "Table support": "使用表格功能",
+    "Table view": "查看表格",
+    "table view...": "展示为表格...",
+    "take a camera snapshot and import it as a new sprite": "用摄像头拍摄一个新角色",
+    "Takes a table (typically from a CSV data set) as input and reports a summary of the table grouped by the field in the specified column number. The remaining three inputs are used only if the field values are numbers, in which case they can be grouped into buckets (e.g., decades, centuries, etc.). Those three inputs specify the smallest and largest values of interest and, most importantly, the width of a bucket (10 for decades, 100 for centuries). If the field isn't numeric, leave these three inputs empty or set them to zero. In that case, each string value of the field is its own bucket, and they appear sorted alphabetically. The block reports a new table with three columns. The first column contains the bucket name or smallest number. The second column contains a nonnegative integer that says how many records in the input table fall into this bucket. The third column is a subtable containing the actual records from the original table that fall into the bucket. If your buckets aren't of constant width, or you want to group by some function of more than one field, load the \"Frequency Distribution Analysis\" library instead.": "接受一个表格(通常来自CSV数据集)作为输入，并报告按指定列号中的字段分组的表格摘要。剩下的三个输入仅在字段值为数字时才会被使用，此时可以将它们分成不同的区间(例如，十年、百年等)。这三个输入用于指定感兴趣的最小值和最大值，最重要的是区间的宽度(例如，十年的宽度为10，百年的宽度为100)。如果字段不是数字类型，请将这三个输入留空或设置为零。在这种情况下，字段的每个字符串值都将被视为单独的区间，并按字母顺序排序。该积木会报告一个包含三列的新表格。第一列包含区间名称或最小数字。第二列包含一个非负整数，表示输入表格中有多少记录属于这个区间。第三列是一个子表格，包含原始表格中属于该区间的实际记录。如果您的区间不是固定宽度的，或者您想要根据多个字段的某种函数进行分组，请加载\"Frequency Distribution Analysis\"库。",
+    "tan": "tan(正切)",
+    "tell _ to _ _": "告诉 _ 运行 _ _",
+    "Template": "变为模板",
+    "tempo": "节奏",
+    "temporary?": "是否临时存在?",
+    "Terms of Service...": "服务条款...",
+    "Ternary Boolean slots": "三元布尔值",
+    "text": "文字",
+    "Text": "文本",
+    "Text Costumes": "文本样式",
+    "Text formatting and basic fraction support for SAY and THINK blocks.": "SAY 和 THINK 积木的文本格式化和基本函数支持。",
+    "Text formatting and basic fraction support for writing on stage.": "在舞台上写作的文本格式化和基本函数支持。",
+    "Text to Speech": "文本转语音",
+    "Text to speech": "文本转语音",
+    "text-only (100)": "仅文本(100)",
+    "The full Scheme numeric tower. \"USE BIGNUMS <True>\" to enable.": "完整的Scheme数值塔。使用 \"USE BIGNUMS <True>\" 来启用。",
+    "the predicate takes too long for a custom hat block": "谓词对于自定义事件类积木来说需要太长时间",
+    "The question came up at": "问题出现在以下地方：",
+    "there are currently no unused global custom blocks in this project": "这个作品里目前没有 没用到的全局自制积木",
+    "there are currently no vectorizable pen trail segments": "目前没有可以矢量化的笔迹段",
+    "thing": "东西",
+    "think _": "思考 _",
+    "think _ for _ secs": "思考 _ _ 秒",
+    "this _": "这个 _",
+    "this block": "这个积木",
+    "This global block definition contains one or more local custom blocks which must be removed first.": "这个全局积木定义包含一个或多个私有自制积木，必须首先删除这些私有自制积木。",
+    "this project doesn't have any custom global blocks yet": "这个作品未包含全局自制积木",
+    "this script": "这个脚本",
+    "This version of Snap! is being developed.\n*** It is NOT supported for end users. ***\nSaving a project in THIS version is likely to\nmake it UNUSABLE or DEFECTIVE for current and\neven future official versions!\n\nvisit https://snap.berkeley.edu/run\nfor the official Snap! installation.": "当前版本的 Snap! 正在开发，\n*** 且不面向最终用户 ***\n在当前版本保存作品可能导致其\n在当前版本，甚至在未来的正式版本中\n无法使用或出现bug！\n\n请访问https://snap.berkeley.edu/run\n以使用Snap!的最新官方版本",
+    "This will convert your vector objects into bitmaps,": "这将把您的矢量图转换为位图。",
+    "This will erase your current drawing.": "这将擦除您当前的绘图。",
+    "Thread safe scripts": "线程安全的脚本",
+    "Tiles": "图块",
+    "time in milliseconds": "毫秒",
+    "timer": "计时器",
+    "tip": "尖端",
+    "Title text": "标题文本",
+    "to": "到",
+    "Today": "今天",
+    "Today,": "今天,",
+    "Top": "顶部",
+    "top": "顶部坐标",
+    "touch screen settings": "适合触摸屏",
+    "touching _ ?": "碰到 _ ？",
+    "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.": "传统的循环结构(如while、until等)，加上Lisp中的\"named let\"(FOR的一般化)，再加上函数迭代(反复调用一个函数)和函数组合。",
+    "train": "训练",
+    "transient": "不记录",
+    "Translate text code to blocks and\nvice-versa": "文本代码与积木互相转换",
+    "translations": "translations(翻译)",
+    "translations...": "翻译...",
+    "Translators...": "翻译者...",
+    "transparency": "透明度",
+    "transparency...": "透明度...",
+    "trash is empty": "垃圾箱为空",
+    "true": "真",
+    "TuneScope": "TuneScope",
+    "Turbo mode": "加速模式",
+    "turbo mode": "加速模式",
+    "turbo mode?": "启动了加速模式？",
+    "turn _ _ degrees": "旋转 _ _ 度",
+    "Turn a ringified block/script into a costume": "将环形积木/脚本转换为造型",
+    "turn all pen trails and stamps into a new background for the stage": "将所有笔迹和印章转换为舞台的新背景",
+    "turn all pen trails and stamps into a new costume for the currently selected sprite": "把所有笔迹和图章变成当前选中角色的一个新造型",
+    "turn automatic line wrapping off": "关闭自动换行功能",
+    "turn pen trails into new background...": "将笔迹转换为新背景...",
+    "turn pen trails into new costume...": "把笔迹变成新造型...",
+    "Turn sprites by a delta of degrees moving them at a given radius": "通过给定半径移动角色以旋转它们的角度增量",
+    "turnBack": "向后转",
+    "turnForward": "向前转",
+    "turnLeft": "向左转",
+    "turnRight": "向右转",
+    "Turtle": "海龟",
+    "turtle": "海龟",
+    "turtleOutline": "海龟轮廓",
+    "Tutorial": "变为教程",
+    "type": "积木形状类别",
+    "type of _": "_ 的类型",
+    "u": "u",
+    "un-mark own": "取消自有属性标记",
+    "unable to convert to": "无法转换为",
+    "unable to inherit (disabled or circular?)": "无法继承(禁用还是循环？)",
+    "unable to nest (disabled or circular?)": "无法嵌套(禁用还是循环？)",
+    "uncheck for default\nGUI design": "使用默认的用户界面",
+    "uncheck for default\nGUI theme": "取消选中默认 \nGUI 主题",
+    "uncheck for dynamically\ntyped inputs": "取消勾选以使积木参数允许任意类型传入",
+    "uncheck for greater speed at variable frame rates": "改变帧率保证播放速度 (牺牲平滑程度)",
+    "uncheck for less contrast\nmulti-column list views": "浅色表格线",
+    "uncheck for lower resolution, saves computing resources": "取消选中较低的分辨率,节省计算资源",
+    "uncheck for round ends of lines": "用画笔画出的线条端点是圆的",
+    "uncheck for smooth\nscaling of vector costumes": "矢量造型平滑缩放",
+    "uncheck to\nhide in palette": "取消勾选以隐藏在积木面板里",
+    "uncheck to allow\nscript reentrance": "允许脚本重入",
+    "uncheck to allow dropped\nreporters to kick out others": "“返回类积木”可以 替换输入项上已有的积木",
+    "uncheck to always show (+) symbols\nin block prototype labels": "在积木编辑器的积木部分上显示(+)号",
+    "uncheck to confine auto-wrapping\nto top-level block stacks": "取消选中以限制自动换行到顶层积木堆栈",
+    "uncheck to disable\nblock to text mapping features": "关闭积木转文字的功能",
+    "uncheck to disable\ncamera support": "取消选中以禁用相机支持",
+    "uncheck to disable\ndropping commands in reporter rings": "取消选中以禁用报告器环中的删除命令",
+    "uncheck to disable\nIDE animations": "不显示编辑器动画效果",
+    "uncheck to disable\ninput sliders for\nentry fields": "不使用游标修改输入字段",
+    "uncheck to disable\nkeyboard editing support": "不使用键盘编辑",
+    "uncheck to disable\nmulti-column list views": "不使用可视化形式的多栏(如2维)列表",
+    "uncheck to disable\nproject data in URLs": "网址不携带作品数据",
+    "uncheck to disable\nsaving linked sublist identities": "不保存子列表的ID",
+    "uncheck to disable\nsprite composition": "不允许角色组合",
+    "uncheck to disable\nsprite inheritance features": "角色不可以继承",
+    "uncheck to disable\nusing operators on lists and tables": "取消勾选以禁用作用于列表和表格的超级运算符",
+    "uncheck to disable\nvirtual keyboard support for mobile devices": "不使用移动设备的虚拟键盘",
+    "uncheck to disable\nwrapping list indices": "取消勾选以禁用列表索引循环",
+    "uncheck to disable alternating\ncolors for nested block": "使用同样的颜色 显示嵌套的同类积木",
+    "uncheck to disable dynamic\nlabels for variadic inputs": "可变输入项不使用动态标记",
+    "uncheck to disable editing primitives\nin the palette as custom blocks": "取消勾选以禁用调色板中的\n作为",
+    "uncheck to disable support\nfor first-class sprites": "不将角色作为一等公民",
+    "uncheck to disable support for\nnative JavaScript functions": "取消勾选以禁用JavaScript Function积木",
+    "uncheck to disinherit": "取消勾选以继承",
+    "uncheck to drag media\nand blocks out of\nwatchers and balloons": "取消勾选以拖动媒体和积木从监视器和气球",
+    "uncheck to enable\ndirectly running blocks\nby clicking on them": "取消勾选后可以点击积木直接运行",
+    "uncheck to go back to regular\nlayout": "取消选中以返回常规 \n 布局",
+    "uncheck to hide\ncategory names\nin the palette": "取消勾选后隐藏积木面板上的分类名称",
+    "uncheck to hide buttons\nin the palette": "取消勾选后隐藏积木面板上的按钮",
+    "uncheck to hide extension\nprimitives in the palette": "隐藏“extension”积木和“primitive”积木",
+    "uncheck to ignore upper- and\n lowercase when comparing texts": "取消勾选后忽略大小写",
+    "uncheck to limit\nBoolean slots to true / false": "取消勾选后布尔参数只能是True或False",
+    "uncheck to render\nsprites dynamically": "取消选中以动态渲染角色",
+    "uncheck to run scripts\nat normal speed": "取消勾选以正常速度运行脚本",
+    "uncheck to save contents in the project": "取消勾选把变量内容保存在作品里",
+    "uncheck to save this \nscene regularly": "取消勾选，以常规方式保存此场景",
+    "uncheck to schedule\nthreads framewise": "取消勾选以逐帧调度线程",
+    "uncheck to show all primitive block categories": "取消勾选以显示所有积木类别",
+    "uncheck to show only the selected category's blocks": "取消勾选后积木会分别显示在其归属的积木面板(类别)中",
+    "uncheck to stop caching inputs (for debugging the evaluator)": "不缓存输入数据 (以便调试求值过程)",
+    "uncheck to suppress\nrunning scripts\nwhen moving the slider": "取消勾选后滑动游标时运行脚本",
+    "uncheck to switch pen colors\nand graphic effects to HSV": "取消勾选后更改画笔颜色为HSV模式",
+    "uncheck to treat this\nscene regularly": "取消勾选，以常规方式保存此场景",
+    "uncheck to turn\nblock clicking\nsound off": "点击积木时不发出声音",
+    "uncheck to turn off\nlogging pen vectors": "取消勾选以停止记录画笔矢量",
+    "uncheck to turn off\nvisible stepping": "取消勾选以停止显示步进",
+    "uncheck to use solid drop\nshadows and highlights": "使用不透明的阴影和加亮",
+    "uncheck to use the input\ndialog in short form": "显示简洁的输入项对话框",
+    "uncompile": "取消编译",
+    "Undelete sprites...": "恢复已删除的角色",
+    "undo": "撤销",
+    "undo the last block drop in this pane": "收回刚刚放下的积木",
+    "undrop": "收回积木",
+    "unicode _ as letter": "Unicode码为 _ 的字符",
+    "unicode of _": "字符 _ 的Unicode码",
+    "uniques": "集合化",
+    "unlock": "解锁",
+    "Unpublish": "取消发布",
+    "Unpublish Project": "取消发布作品",
+    "unpublished.": "未发布的作品.",
+    "unpublishing project...": "正在取消作品发布...",
+    "unringify": "取消环形化",
+    "Unsaved Changes!": "未保存的更改！",
+    "Unshare": "不分享",
+    "Unshare Project": "不分享作品",
+    "unshared.": "其他人已看不到作品.",
+    "unsharing project...": "正在取消作品分享...",
+    "unsupported attribute": "不支持的属性",
+    "unsupported data type": "不支持的类型",
+    "unsupported graphic effect": "不支持的图形效果",
+    "Untitled": "无标题",
+    "untitled": "无标题",
+    "unused": "未使用",
+    "unused block(s) removed": "删掉了没用到的积木",
+    "Unused blocks...": "没用到的积木...",
+    "Unverified account:": "未验证的账户:",
+    "Up": "上",
+    "up arrow": "↑",
+    "Updating project list...": "正在更新作品列表...",
+    "Uploading": "上传中",
+    "upper case": "upper case(全部字母大写)",
+    "Upvar - make internal variable visible to caller": "回传变量 - 让调用者可以使用这个变量",
+    "url...": "网址...",
+    "Use CPU for graphics": "使用CPU绘制图形",
+    "Use custom blocks": "使用自制积木",
+    "Use primitives": "使用原生积木",
+    "Use texts as if they were lists of words.A minimal variant of the Words/Sentences library for language projects like chat bots.": "将文本视为单词列表。Words/Sentences 库的一个最小变体，用于聊天机器人等语言作品。",
+    "use the keyboard\nto enter blocks": "使用键盘编辑可视化程序.",
+    "user features...": "用户菜单...",
+    "user mode...": "用户模式...",
+    "User name must be four characters or longer": "用户名不能少于4个字符",
+    "User name:": "用户名:",
+    "v": "v",
+    "value": "值",
+    "variable": "变量",
+    "Variable name": "变量名",
+    "Variables": "变量",
+    "variables": "变量",
+    "Variadic reporters": "可变参数的报表",
+    "Vector": "矢量",
+    "Vector Paint Editor": "矢量绘图编辑器",
+    "Versions of +, x, AND, and OR that take more than two inputs.": "+, x, AND, 和 OR 运算符可以接受超过两个的输入。",
+    "video _ on _": "视频 _ 对 _",
+    "video capture": "视频捕捉",
+    "Virtual keyboard": "虚拟键盘",
+    "Visible stepping": "可视化单步运行",
+    "validate": "验证",
+    "volume": "音量",
+    "w": "w",
+    "wait _ secs": "等待 _ 秒",
+    "wait until _": "直到 _ 前都等待",
+    "wardrobe": "全部造型",
+    "warp _": "一步完成 _",
+    "Web Audio API is not supported in this browser": "Web Audio API 目前不支持这个浏览器",
+    "Web services access (https)": "网络服务访问(https)",
+    "what's your name?": "你的名字？",
+    "when _": "当 _",
+    "when _ clicked": "当 _ 被点击",
+    "when _ is edited _": "当 _ 被编辑时 _",
+    "when _ key pressed _": "当按下 _ 键 _",
+    "when I am _": "当 _ 我",
+    "when I receive _ _": "当接收到 _ _",
+    "when I start as a clone": "当我作为克隆体启动时",
+    "when slot _ signals _": "当实参 _ 接收到操作 _",
+    "whirl": "旋转",
+    "whitespace": "空符",
+    "width": "宽度",
+    "with data": "带数据",
+    "with inputs": "带有输入",
+    "word": "单词",
+    "Words, sentences": "单词，句子",
+    "world": "世界",
+    "World Map": "世界地图",
+    "World...": "世界...",
+    "Would you like to replace it?": "您是否要替换它？",
+    "Wrap list indices": "列表索引循环",
+    "write _ size _": "写字 _ 字号 _",
+    "Write scripts that react to data transitions,state changes and sensor threshold passings": "编写响应数据转换、状态变化和传感器阈值通过的脚本",
+    "Write text using fancy fonts,contributed by Tethrarxitet": "使用多样的字体编写文本，由 Tethrarxitet 提供",
+    "Writing and formatting": "字体格式",
+    "x": "x",
+    "x position": "x坐标",
+    "y": "y",
+    "y position": "y坐标",
+    "year": "年份",
+    "year:": "年:",
+    "Yes": "是",
+    "Yesterday": "昨天",
+    "Yesterday,": "昨天,",
+    "You are not logged in": "你还没有登录",
+    "You are now logged in, and your account is enabled for three days.": "您已经登录，并且您的账户将在三天后退出登录。",
+    "You have": "您有",
+    "Your account is still unverified.\nPlease use the verification link that\nwas sent to your email address when you\nsigned up.\n\nIf you cannot find that email, please\ncheck your spam folder. If you still\ncannot find it, please use the \"Resend\nVerification Email...\" option in the cloud\nmenu.": "您的账户仍未验证。\n请使用您注册时发送到您的电子邮件地址的验证链接。\n\n如果您找不到该电子邮件，请检查您的垃圾邮件文件夹。如果仍然找不到，请在云菜单中使用“重新发送验证电子邮件...”选项。",
+    "Your board has been connected. Happy prototyping!": "接上Arduino板了，祝你玩得愉快！",
+    "your own": "你自己",
+    "z": "z",
+    "Zebra coloring": "斑马着色",
+    "Zoom blocks": "调整积木大小",
+    "Zoom blocks...": "调整积木大小...",
+    //积木库菜单、部分文本/Snap! 11及以上功能的汉化
+    "number?": "是否为数字？",
+    "complex?": "是否为复数？",
+    "real?": "是否为实数？",
+    "rational?": "是否为有理数？",
+    "integer?": "是否为整数？",
+    "exact?": "是否为精确值？",
+    "inexact?": "是否为不精确值？",
+    "exact": "精确值",
+    "inexact": "不精确值",
+    "finite?": "是否为有限数？",
+    "infinite?": "是否为无穷大？",
+    "nan?": "是否不是数字？",
+    "numerator": "分子",
+    "denominator": "分母",
+    "real-part": "实部",
+    "imag-part": "虚部",
+    "magnitude": "模",
+    "angle": "辐角",
+    "0 black #000000": "0 黑色 #000000",
+    "1 gray7 #121212": "1 灰度7 #121212",
+    "2 gray14 #242424": "2 灰度14 #242424",
+    "3 gray21 #363636": "3 灰度21 #363636",
+    "4 gray28 #484848": "4 灰度28 #484848",
+    "5 gray36 #5c5c5c": "5 灰度36 #5c5c5c",
+    "6 gray43 #6d6d6d": "6 灰度43 #6d6d6d",
+    "7 gray50 #7f7f7f": "7 灰度50 #7f7f7f",
+    "8 gray57 #919191": "8 灰度57 #919191",
+    "9 gray64 #a3a3a3": "9 灰度64 #a3a3a3",
+    "10 gray71 #b5b5b5": "10 灰度71 #b5b5b5",
+    "11 gray78 #c8c8c8": "11 灰度78 #c8c8c8",
+    "12 gray85 #dadada": "12 灰度85 #dadada",
+    "13 gray92 #ececec": "13 灰度92 #ececec",
+    "14 white #ffffff": "14 白色 #ffffff",
+    "15 deep pink #ff1493": "15 深粉红 #ff1493",
+    "16 hot pink #ff69b4": "16 亮粉红 #ff69b4",
+    "17 bright pink #ff007f": "17 亮粉红 #ff007f",
+    "18 raspberry #e30b5d": "18 覆盆子红 #e30b5d",
+    "19 amaranth #e52b50": "19 苋菜红 #e52b50",
+    "20 red #ff0000": "20 红色 #ff0000",
+    "21 burgundy #900020": "21 勃艮第红 #900020",
+    "22 cherry #990000": "22 樱桃红 #990000",
+    "23 dark candy apple red #a40000": "23 深糖果苹果红 #a40000",
+    "24 sanguine #c00000": "24 血红 #c00000",
+    "25 maroon #800000": "25 栗色 #800000",
+    "26 crimson #c90016": "26 绯红 #c90016",
+    "27 Lists #d94d11": "27 列表 #d94d11",
+    "28 candy apple red #ff0800": "28 糖果苹果红 #ff0800",
+    "29 coquelicot #ff3800": "29 虞美人红 #ff3800",
+    "30 saddle brown #8b4513": "30 马鞍棕 #8b4513",
+    "31 chocolate #7b3f00": "31 巧克力色 #7b3f00",
+    "32 kobicha #6b4423": "32 深褐色 #6b4423",
+    "33 sepia #704214": "33 乌贼墨色 #704214",
+    "34 chestnut #954535": "34 栗色 #954535",
+    "35 dark brown #654321": "35 深棕色 #654321",
+    "36 brown #964b00": "36 棕色 #964b00",
+    "37 golden brown #996515": "37 金棕色 #996515",
+    "38 cinnamon #b87333": "38 肉桂色 #b87333",
+    "39 copper #d2691e": "39 铜色 #d2691e",
+    "40 orange #ff7f00": "40 橙色 #ff7f00",
+    "41 Pantone orange #ff5800": "41 潘通橙 #ff5800",
+    "42 pumpkin #ff7518": "42 南瓜色 #ff7518",
+    "43 Variables #f3761d": "43 变量 #f3761d",
+    "44 Spanish orange #e86100": "44 西班牙橙 #e86100",
+    "45 burnt orange #cc5500": "45 焦橙色 #cc5500",
+    "46 sinopia #cb410b": "46 赭色 #cb410b",
+    "47 ochre #cc7722": "47 赭石色 #cc7722",
+    "48 carrot #ed9121": "48 胡萝卜色 #ed9121",
+    "49 tangerine #f28500": "49 橘红色 #f28500",
+    "50 yellow #ffff00": "50 黄色 #ffff00",
+    "51 Control #e6a822": "51 控制 #e6a822",
+    "52 dark goldenrod #b8860b": "52 深秋麒麟色 #b8860b",
+    "53 goldenrod #daa520": "53 秋麒麟色 #daa520",
+    "54 saffron #f4c430": "54 藏红花色 #f4c430",
+    "55 sandstorm #ecd540": "55 沙暴色 #ecd540",
+    "56 mustard #ffdb58": "56 芥末黄 #ffdb58",
+    "57 gold #ffd700": "57 金色 #ffd700",
+    "58 egg yolk #fee33e": "58 蛋黄 #fee33e",
+    "59 rubber duck #fbe108": "59 橡皮鸭黄 #fbe108",
+    "60 lime #00ff00": "60 酸橙色 #00ff00",
+    "61 apple green #8db600": "61 苹果绿 #8db600",
+    "62 Operators #62c213": "62 运算 #62c213",
+    "63 forest green #228b22": "63 森林绿 #228b22",
+    "64 green #008000": "64 绿色 #008000",
+    "65 dark green #006400": "65 深绿 #006400",
+    "66 dark pastel green #03c03c": "66 深粉绿 #03c03c",
+    "67 emerald #50c878": "67 祖母绿 #50c878",
+    "68 mint #3eb489": "68 薄荷色 #3eb489",
+    "69 Pen #00a178": "69 画笔 #00a178",
+    "70 aqua (cyan) #00ffff": "70 水色 (青色) #00ffff",
+    "71 dark cyan #008b8b": "71 深青色 #008b8b",
+    "72 cerulean #007ba7": "72 天蓝 #007ba7",
+    "73 iceberg #71a6d2": "73 冰山色 #71a6d2",
+    "74 Sensing #0494dc": "74 探测 #0494dc",
+    "75 teal #008080": "75 鸭绿色 #008080",
+    "76 light sky blue #87cefa": "76 亮天蓝 #87cefa",
+    "77 deep sky blue #00bfff": "77 深天蓝 #00bfff",
+    "78 dodger blue #1e90ff": "78 道奇蓝 #1e90ff",
+    "79 azure #007fff": "79 蔚蓝 #007fff",
+    "80 blue #0000ff": "80 蓝色 #0000ff",
+    "81 midnight blue #191970": "81 午夜蓝 #191970",
+    "82 dark powder blue #003399": "82 深粉蓝 #003399",
+    "83 cobalt #0047ab": "83 钴蓝 #0047ab",
+    "84 denim #1560bd": "84 牛仔蓝 #1560bd",
+    "85 navy blue #000080": "85 海军蓝 #000080",
+    "86 steel blue #4682b4": "86 钢蓝 #4682b4",
+    "87 Motion #4a6cd4": "87 运动 #4a6cd4",
+    "88 cornflower #6495ed": "88 矢车菊蓝 #6495ed",
+    "89 slate blue #6a5acd": "89 板岩蓝 #6a5acd",
+    "90 violet #8000ff": "90 紫罗兰 #8000ff",
+    "91 Looks #8f56e3": "91 外观 #8f56e3",
+    "92 grape #6f2da8": "92 葡萄紫 #6f2da8",
+    "93 indigo #4b0082": "93 靛蓝 #4b0082",
+    "94 x11 purple #a020f0": "94 X11紫色 #a020f0",
+    "95 magenta (fuchia) #ff00ff": "95 洋红 (倒挂金钟色) #ff00ff",
+    "96 dark orchid #9932cc": "96 深兰花紫 #9932cc",
+    "97 Sound #cf4ad9": "97 声音 #cf4ad9",
+    "98 purple #7f007f": "98 紫色 #7f007f",
+    "99 dark magenta #8b008b": "99 深洋红 #8b008b",
+    "return data type ...": "声明返回类型...",
+    "specify what kind of data this block reports": "声明这个积木所返回的数据类型",
+    "Return Data Type": "返回类型",
+    "Enforce input types": "静态类型支持(可选，仅限于当前更改)",
+    "disable dropping reporters\ninto unmatching slots": "勾选以禁止部分表达式\n嵌入类型不匹配的积木参数里",
+    "uncheck to allow\ndropping reporters\ninto unmatching slots": "取消勾选以允许任意表达式嵌入积木参数里",
+    "number λ": "数字(封装成环)",
+    "Project notes": "作品说明",
+    "Project name": "作品名称",
+    "User": "用户",
+    "Presentation mode": "演示模式",
+    "Language": "语言",
+    "Stage scale": "舞台大小",
+    "Keyboard editing": "键盘编辑",
+    "Visible palette": "显示积木面板",
+    "shape": "图形",
+    "movement": "移动",
+    "Open 3D Window": "打开3D世界窗口",
+    "3D Beetle": "3D甲虫",
+    "Beetle": "甲虫",
+    "Gird": "方格",
+    "Axes": "坐标系",
+    "Extrusion base": "拉伸图形",
+    "Wireframe": "线段",
+    "Ghost mode": "透明模式",
+    "First person view": "第一人称视角",
+    "Orthographic mode": "正交投影模式",
+    "Zoom to fit": "缩放至合适大小",
+    "Reset camera": "重置摄像头",
+    "Export": "导出",
+    "Close": "关闭",
+    "triangle": "三角形",
+    "semicircle": "半圆形",
+    "point": "点",
+    "sprite positions": "角色位置",
+    "zigzag": "锯齿形",
+    "z": "Z形",
+    "cross": "十字形",
+    "step": "步长",
+    "width": "宽度",
+    "centered": "居中",
+    "running": "平针",
+    "triple run": "三重平针",
+    "Blocks only": "隐藏舞台区",
+    "check to hide\nthe stage and \nsprite editor panes": "勾选以隐藏舞台区和角色区。效果类似于02Engine的舞台、角色窗口",
+    "uncheck to show\nthe stage and\nsprite editor panes": "取消勾选以显示舞台区和角色区。效果类似于02Engine的舞台、角色窗口",
+    "change a category...": "修改积木类别...",
+    "Constrain proportions of shapes?\n(you can also hold shift)": "规范所绘制的形状\n(包括矩形、圆形和直线，相当于按住Shift键)",
+    "Paintbrush tool\n(free draw)": "切换成画笔\n(自由绘制)",
+    "Stroked Rectangle\n(shift: square)": "绘制矩形\n(Shift: 正方形)",
+    "Stroked Ellipse\n(shift: circle)": "绘制圆形\n(Shift: 正圆)",
+    "Line tool\n(shift: vertical/horizontal)": "绘制直线\n(Shift: 垂直/水平)",
+    "Filled Rectangle\n(shift: square)": "填充矩形\n(Shift: 正方形)",
+    "Filled Ellipse\n(shift: circle)": "填充圆形\n(Shift: 正圆)",
+    "Pipette tool\n(pick a color anywhere)": "取色器\n(获取任意位置颜色)",
+    "flip horizontal": "水平翻转",
+    "Closed brush\n(free draw)": "切换成画笔\n(自由绘制)",
+    "Paint a shape\n(shift: edge color)": "调整形状颜色\n(Shift: 调整边缘颜色)",
+    "Pipette tool\n(pick a color from anywhere shift: fill color)": "取色器\n(获取任意位置颜色, Shift: 填充颜色)",
+    "Edge color\n(left click)": "边缘颜色\n(左键点击)",
+    "Fill color\n(right click)": "形状颜色\n(右键点击)",
+    "Line tool\n(shift: constrain to 45°)": "绘制直线\n(Shift: 45度)",
+    "flip vertical": "垂直翻转",
+    "linear": "线性变换",
+    "quadratic": "非线性变换(取平方)",
+    "quadratic-in": "非线性收缩(取平方)",
+    "quadratic-out": "非线性发散(取平方)",
+    "quadratic-in-out": "非线性放缩(取平方)",
+    "cubic": "非线性变换(取立方)",
+    "cubic-in": "非线性收缩(取立方)",
+    "cubic-out": "非线性发散(取立方)",
+    "cubic-in-out": "非线性放缩(取立方)",
+    "quart": "非线性变换(取四次方)",
+    "quart-in": "非线性收缩(取四次方)",
+    "quart-out": "非线性发散(取四次方)",
+    "quart-in-out": "非线性放缩(取四次方)",
+    "sinusoidal": "非线性变换(正弦)",
+    "sine-in": "非线性收缩(正弦)",
+    "sine-out": "非线性发散(正弦)",
+    "sine-in-out": "非线性放缩(正弦)",
+    "elastic": "弹性变换",
+    "steps": "步进",
+    "ghost effect": "透明效果",
+    "color effect": "颜色效果",
+    "saturation effect": "饱和效果",
+    "brightness effect": "亮度效果",
+    "fisheye effect": "鱼眼效果",
+    "whirl effect": "旋转效果",
+    "pixelate effect": "像素化效果",
+    "mosaic effect": "马赛克效果",
+    "negative effect": "底片效果",
+    "color": "颜色",
+    "color number": "颜色编号",
+    "crayon": "蜡笔",
+    "fair hue": "公平色调",
+    "~": "波浪号",
+    "size": "大小",
+    "transparency": "透明度",
+    "X11/W3C name": "X11/W3C名称",
+    "(3D color spaces)": "(3D色彩空间)",
+    "fair HSL": "公平HSL",
+    "fair HSV": "公平HSV",
+    "HSL": "HSL",
+    "HSV": "HSV",
+    "RGB (0-255)": "RGB (0-255)",
+    "fair saturation (HSL)": "公平饱和度 (HSL)",
+    "fair lightness": "公平亮度",
+    "fair HSL vector": "公平HSL向量",
+    "fair saturation (HSV)": "公平饱和度 (HSV)",
+    "fair value (brightness)": "公平明度 (亮度)",
+    "fair HSV vector": "公平HSV向量",
+    "hue": "色调",
+    "saturation (HSL)": "饱和度 (HSL)",
+    "lightness": "亮度",
+    "HSL vector": "HSL向量",
+    "saturation (HSV)": "饱和度 (HSV)",
+    "value (brightness)": "明度 (亮度)",
+    "HSV vector": "HSV向量",
+    "red": "红色",
+    "green": "绿色",
+    "blue": "蓝色",
+    "RGB(A) vector": "RGB(A)向量",
+    "RGB(A) hex": "RGB(A)十六进制",
+    "RGB vector": "RGB向量",
+    "RGBA vector": "RGBA向量",
+    "RGB hex": "RGB十六进制",
+    "additive (light)": "加色法 (光)",
+    "additive (averaged)": "加色法 (平均)",
+    "subtractive (ideal)": "减色法 (理想)",
+    "subtractive (averaged)": "减色法 (平均)",
+    "simulated paint": "模拟颜料",
+    "paint (sRGB corrected)": "颜料 (sRGB校正)",
+    "nearest color number": "最近颜色编号",
+    "crayon number": "蜡笔编号",
+    "grays": "灰色",
+    "pinks": "粉色",
+    "reds": "红色",
+    "browns": "棕色",
+    "oranges": "橙色",
+    "yellows": "黄色",
+    "greens": "绿色",
+    "cyans": "青色",
+    "blues": "蓝色",
+    "purples": "紫色",
+    "0 black #000000": "0 黑色 #000000",
+    "1 gray7 #121212": "1 灰色7 #121212",
+    "2 gray14 #242424": "2 灰色14 #242424",
+    "3 gray21 #363636": "3 灰色21 #363636",
+    "4 gray28 #484848": "4 灰色28 #484848",
+    "5 gray36 #5c5c5c": "5 灰色36 #5c5c5c",
+    "6 gray43 #6d6d6d": "6 灰色43 #6d6d6d",
+    "7 gray50 #7f7f7f": "7 灰色50 #7f7f7f",
+    "8 gray57 #919191": "8 灰色57 #919191",
+    "9 gray64 #a3a3a3": "9 灰色64 #a3a3a3",
+    "10 gray71 #b5b5b5": "10 灰色71 #b5b5b5",
+    "11 gray78 #c8c8c8": "11 灰色78 #c8c8c8",
+    "12 gray85 #dadada": "12 灰色85 #dadada",
+    "13 gray92 #ececec": "13 灰色92 #ececec",
+    "14 white #ffffff": "14 白色 #ffffff",
+    "15 deep pink #ff1493": "15 深粉色 #ff1493",
+    "16 hot pink #ff69b4": "16 热粉色 #ff69b4",
+    "17 bright pink #ff007f": "17 亮粉色 #ff007f",
+    "18 raspberry #e30b5d": "18 树莓色 #e30b5d",
+    "19 amaranth #e52b50": "19 苋菜红 #e52b50",
+    "20 red #ff0000": "20 红色 #ff0000",
+    "21 burgundy #900020": "21 勃艮第红 #900020",
+    "22 cherry #990000": "22 樱桃红 #990000",
+    "23 dark candy apple red #a40000": "23 深糖果苹果红 #a40000",
+    "24 sanguine #c00000": "24 血红色 #c00000",
+    "25 maroon #800000": "25 栗色 #800000",
+    "26 crimson #c90016": "26 深红色 #c90016",
+    "27 Lists #d94d11": "27 列表色 #d94d11",
+    "28 candy apple red #ff0800": "28 糖果苹果红 #ff0800",
+    "29 coquelicot #ff3800": "29 虞美人红 #ff3800",
+    "30 saddle brown #8b4513": "30 鞍褐色 #8b4513",
+    "31 chocolate #7b3f00": "31 巧克力色 #7b3f00",
+    "32 kobicha #6b4423": "32 昆布茶色 #6b4423",
+    "33 sepia #704214": "33 乌贼墨色 #704214",
+    "34 chestnut #954535": "34 栗色 #954535",
+    "35 dark brown #654321": "35 深棕色 #654321",
+    "36 brown #964b00": "36 棕色 #964b00",
+    "37 golden brown #996515": "37 金棕色 #996515",
+    "38 cinnamon #b87333": "38 肉桂色 #b87333",
+    "39 copper #d2691e": "39 铜色 #d2691e",
+    "40 orange #ff7f00": "40 橙色 #ff7f00",
+    "41 Pantone orange #ff5800": "41 潘通橙 #ff5800",
+    "42 pumpkin #ff7518": "42 南瓜色 #ff7518",
+    "43 Variables #f3761d": "43 变量色 #f3761d",
+    "44 Spanish orange #e86100": "44 西班牙橙 #e86100",
+    "45 burnt orange #cc5500": "45 焦橙色 #cc5500",
+    "46 sinopia #cb410b": "46 锡诺普红 #cb410b",
+    "47 ochre #cc7722": "47 赭石色 #cc7722",
+    "48 carrot #ed9121": "48 胡萝卜色 #ed9121",
+    "49 tangerine #f28500": "49 橘子色 #f28500",
+    "50 yellow #ffff00": "50 黄色 #ffff00",
+    "51 Control #e6a822": "51 控制色 #e6a822",
+    "52 dark goldenrod #b8860b": "52 深麒麟草色 #b8860b",
+    "53 goldenrod #daa520": "53 麒麟草色 #daa520",
+    "54 saffron #f4c430": "54 藏红花色 #f4c430",
+    "55 sandstorm #ecd540": "55 沙暴色 #ecd540",
+    "56 mustard #ffdb58": "56 芥末色 #ffdb58",
+    "57 gold #ffd700": "57 金色 #ffd700",
+    "58 egg yolk #fee33e": "58 蛋黄色 #fee33e",
+    "59 rubber duck #fbe108": "59 橡皮鸭黄 #fbe108",
+    "60 lime #00ff00": "60 青柠色 #00ff00",
+    "61 apple green #8db600": "61 苹果绿 #8db600",
+    "62 Operators #62c213": "62 运算符色 #62c213",
+    "63 forest green #228b22": "63 森林绿 #228b22",
+    "64 green #008000": "64 绿色 #008000",
+    "65 dark green #006400": "65 深绿色 #006400",
+    "66 dark pastel green #03c03c": "66 深粉彩绿 #03c03c",
+    "67 emerald #50c878": "67 祖母绿 #50c878",
+    "68 mint #3eb489": "68 薄荷色 #3eb489",
+    "69 Pen #00a178": "69 笔色 #00a178",
+    "70 aqua (cyan) #00ffff": "70 水色 (青色) #00ffff",
+    "71 dark cyan #008b8b": "71 深青色 #008b8b",
+    "72 cerulean #007ba7": "72 天蓝色 #007ba7",
+    "73 iceberg #71a6d2": "73 冰山色 #71a6d2",
+    "74 Sensing #0494dc": "74 感应色 #0494dc",
+    "75 teal #008080": "75 蓝绿色 #008080",
+    "76 light sky blue #87cefa": "76 淡天蓝 #87cefa",
+    "77 deep sky blue #00bfff": "77 深天蓝 #00bfff",
+    "78 dodger blue #1e90ff": "78 道奇蓝 #1e90ff",
+    "79 azure #007fff": "79 蔚蓝色 #007fff",
+    "80 blue #0000ff": "80 蓝色 #0000ff",
+    "81 midnight blue #191970": "81 午夜蓝 #191970",
+    "82 dark powder blue #003399": "82 深粉蓝 #003399",
+    "83 cobalt #0047ab": "83 钴蓝色 #0047ab",
+    "84 denim #1560bd": "84 牛仔蓝 #1560bd",
+    "85 navy blue #000080": "85 海军蓝 #000080",
+    "86 steel blue #4682b4": "86 钢蓝色 #4682b4",
+    "87 Motion #4a6cd4": "87 运动色 #4a6cd4",
+    "88 cornflower #6495ed": "88 矢车菊蓝 #6495ed",
+    "89 slate blue #6a5acd": "89 石板蓝 #6a5acd",
+    "90 violet #8000ff": "90 紫罗兰色 #8000ff",
+    "91 Looks #8f56e3": "91 外观色 #8f56e3",
+    "92 grape #6f2da8": "92 葡萄紫 #6f2da8",
+    "93 indigo #4b0082": "93 靛蓝色 #4b0082",
+    "94 x11 purple #a020f0": "94 X11紫色 #a020f0",
+    "95 magenta (fuchia) #ff00ff": "95 品红 (紫红色) #ff00ff",
+    "96 dark orchid #9932cc": "96 深兰花紫 #9932cc",
+    "97 Sound #cf4ad9": "97 声音色 #cf4ad9",
+    "98 purple #7f007f": "98 紫色 #7f007f",
+    "99 dark magenta #8b008b": "99 深品红 #8b008b",
 };

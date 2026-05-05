@@ -1,9 +1,48 @@
-<svg version="1.1" width="26" height="36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="25.073498"
+   height="35.102898"
+   id="svg7"
+   sodipodi:docname="5-pixel.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs11" />
+  <sodipodi:namedview
+     id="namedview9"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.9087742972187698">
-    <path id="ID0.6687679593451321" fill="#39B54A" d="M 84 84 L 105 84 L 105 126 L 84 126 L 84 84 Z " transform="matrix(0.2387952208518982, 0, 0, 0.2387952208518982, 0, 0.25)"/>
-    <path id="ID0.41478168312460184" fill="#39B54A" d="M 21 63 L 84 63 L 84 84 L 21 84 L 21 63 Z " transform="matrix(0.2387952208518982, 0, 0, 0.2387952208518982, 0, 0.25)"/>
-    <path id="ID0.1601519174873829" fill="#39B54A" d="M 0 126 L 84 126 L 84 147 L 0 147 L 0 126 Z " transform="matrix(0.2387952208518982, 0, 0, 0.2387952208518982, 0, 0.25)"/>
-    <path id="ID0.0315268742851913" fill="#39B54A" d="M 21 63 L 0 63 L 0 0 L 105 0 L 105 21 L 21 21 L 21 63 " transform="matrix(0.2387952208518982, 0, 0, 0.2387952208518982, 0, 0.25)"/>
+  <g
+     id="ID0.9087742972187698"
+     transform="translate(0,-0.25)">
+    <path
+       id="ID0.6687679593451321"
+       fill="#39b54a"
+       d="m 84,84 h 21 v 42 H 84 Z"
+       transform="matrix(0.23879522,0,0,0.23879522,0,0.25)" />
+    <path
+       id="ID0.41478168312460184"
+       fill="#39b54a"
+       d="M 21,63 H 84 V 84 H 21 Z"
+       transform="matrix(0.23879522,0,0,0.23879522,0,0.25)" />
+    <path
+       id="ID0.1601519174873829"
+       fill="#39b54a"
+       d="m 0,126 h 84 v 21 H 0 Z"
+       transform="matrix(0.23879522,0,0,0.23879522,0,0.25)" />
+    <path
+       id="ID0.0315268742851913"
+       fill="#39b54a"
+       d="M 21,63 H 0 V 0 H 105 V 21 H 21 v 42"
+       transform="matrix(0.23879522,0,0,0.23879522,0,0.25)" />
   </g>
 </svg>

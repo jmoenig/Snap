@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Programmieren Kl. 6 BaWü Informatik & Medienbildung</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="../src/morphic.js"></script>
+        <script src="../src/symbols.js"></script>
+        <script src="../src/widgets.js"></script>
+        <script src="../src/blocks.js"></script>
+        <script src="../src/threads.js"></script>
+        <script src="../src/objects.js"></script>
+        <script src="../src/scenes.js"></script>
+        <script src="../src/gui.js"></script>
+        <script src="../src/paint.js"></script>
+        <script src="../src/lists.js"></script>
+        <script src="../src/byob.js"></script>
+        <script src="../src/tables.js"></script>
+        <script src="../src/sketch.js"></script>
+        <script src="../src/video.js"></script>
+        <script src="../src/maps.js"></script>
+        <script src="../src/extensions.js?"></script>
+        <script src="../src/xml.js"></script>
+        <script src="../src/store.js"></script>
+        <script src="../src/locale.js"></script>
+        <script src="../src/cloud.js"></script>
+        <script src="../src/api.js"></script>
+        <script src="../src/embroider.js"></script>
+        <script src="../src/sha512.js"></script>
+        <script src="../src/FileSaver.min.js"></script>
+        <script>
+            var world;
+            window.onload = function () {
+                var FPS = 60,
+                    lastTime = 0,
+
+                    loop = (timestamp) => {
+                        requestAnimationFrame(loop);
+                        if (timestamp - lastTime < 1000 / FPS) {
+                            return;
+                        }
+                        world.doOneCycle();
+                        lastTime = Math.max(
+                            lastTime + 1000 / FPS,
+                            timestamp - 1000 / FPS
+                        );
+                    };
+                /*
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('sw.js');
+                }
+                */
+                world = new WorldMorph(document.getElementById('world'));
+                new IDE_Morph({
+                    path: '../',
+                    load: 'blumen.xml',
+                    // onload: () => /* runs when project is loaded */,
+                    design: "flat",
+                    theme: "bright",
+                    lang: "de",
+                    // border: 1,
+                    // hideControls: true,
+                    hideProjectName: true,
+                    // hideCategories: true,
+                    // hideProjects: true,
+                    hideSettings: true,
+                    noProjectItems: true,
+                    // noDefaultCat: false,
+                    // noSprites: true,
+                    // noSpriteEdits: true,
+                    // noPalette: true,
+                    // zoom: 1.25,
+                    // blocksZoom: 1.2,
+                    // blocksFade: 30,
+                    noCloud: true,
+                    // noImports: true,
+                    noOwnBlocks: true,
+                    noRingify: true,
+                    noUserSettings: true,
+                    noDevWarning: true,
+                    preserveTitle: true
+                }).openIn(world);
+                requestAnimationFrame(loop);
+            };
+        </script>
+    </head>
+    <body style="margin: 0;">
+        <canvas id="world" tabindex="1" style="position: absolute;"></canvas>
+    </body>
+</html>

@@ -1,6 +1,33 @@
-<svg version="1.1" width="16" height="36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="15.000741"
+   height="35.001728"
+   id="svg4"
+   sodipodi:docname="1-pixel.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.48640277422964573">
-    <path id="ID0.9058243939653039" fill="#39B54A" d="M 63 126 L 63 147 L 0 147 L 0 126 L 21 126 L 21 42 L 0 42 L 0 21 L 21 21 L 21 0 L 42 0 L 42 126 L 63 126 " transform="matrix(0.23810699582099915, 0, 0, 0.23810699582099915, 0.75, 0.25)"/>
+  <g
+     id="ID0.48640277422964573"
+     transform="translate(-0.75,-0.25)">
+    <path
+       id="ID0.9058243939653039"
+       fill="#39b54a"
+       d="m 63,126 v 21 H 0 V 126 H 21 V 42 H 0 V 21 H 21 V 0 h 21 v 126 h 21"
+       transform="matrix(0.238107,0,0,0.238107,0.75,0.25)" />
   </g>
 </svg>

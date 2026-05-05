@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -30,36 +30,20 @@
     needs morphic.js
 
 
-    prerequisites:
-    --------------
+    credits:
+    --------
     additional symbols have been contributed by members of the Snap!
     open-source community, especially by Bernat Romagosa
 
 */
 
-/*global modules, Morph, Point, newCanvas, Costume, radians, Color*/
+/*global modules, Morph, Point, radians, ZERO, BLACK*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2019-February-07';
+modules.symbols = '2026-February-13';
 
 var SymbolMorph;
-
-/*
-WorldMorph.prototype.customMorphs = function () {
-    // add examples to the world's demo menu
-
-    return [
-        new SymbolMorph(
-            'globe',
-            50,
-            new Color(250, 250, 250),
-            new Point(-1, -1),
-            new Color(20, 20, 20)
-        )
-    ];
-};
-*/
 
 // SymbolMorph //////////////////////////////////////////////////////////
 
@@ -86,30 +70,39 @@ SymbolMorph.prototype.names = [
     'pointRight',
     'stepForward',
     'gears',
+    'gearPartial',
+    'gearBig',
     'file',
     'fullScreen',
+    'grow',
     'normalScreen',
+    'shrink',
     'smallStage',
     'normalStage',
     'turtle',
-    'stage',
+    'turtlePlus',
     'turtleOutline',
+    'stage',
     'pause',
     'flag',
     'octagon',
     'cloud',
-    'cloudOutline',
     'cloudGradient',
+    'cloudOutline',
     'turnRight',
     'turnLeft',
+    'turnAround',
     'storage',
     'poster',
     'flash',
     'brush',
+    'tick',
+    'checkedBox',
     'rectangle',
     'rectangleSolid',
     'circle',
     'circleSolid',
+    'dot',
     'ellipse',
     'line',
     'cross',
@@ -124,12 +117,18 @@ SymbolMorph.prototype.names = [
     'turnForward',
     'arrowUp',
     'arrowUpOutline',
+    'arrowUpThin',
+    'arrowUpDownThin',
     'arrowLeft',
     'arrowLeftOutline',
+    'arrowLeftThin',
+    'arrowLeftRightThin',
     'arrowDown',
     'arrowDownOutline',
+    'arrowDownThin',
     'arrowRight',
     'arrowRightOutline',
+    'arrowRightThin',
     'robot',
     'magnifyingGlass',
     'magnifierOutline',
@@ -142,32 +141,59 @@ SymbolMorph.prototype.names = [
     'footprints',
     'keyboard',
     'keyboardFilled',
-    'globe'
+    'globe',
+    'globeBig',
+    'list',
+    'listNarrow',
+    'verticalEllipsis',
+    'flipVertical',
+    'flipHorizontal',
+    'trash',
+    'trashFull',
+    'cube',
+    'cubeSolid',
+    'blocks',
+    'speaker',
+    'infinity'
 ];
 
 // SymbolMorph instance creation:
 
-function SymbolMorph(name, size, color, shadowOffset, shadowColor) {
-    this.init(name, size, color, shadowOffset, shadowColor);
+function SymbolMorph(name, size, color, shadowOffset, shadowColor, bg) {
+    this.init(name, size, color, shadowOffset, shadowColor, bg);
 }
 
 SymbolMorph.prototype.init = function (
-    name, // or costume
+    name,
     size,
     color,
     shadowOffset,
-    shadowColor
+    shadowColor,
+    bg
 ) {
     this.isProtectedLabel = false; // participate in zebraing
     this.isReadOnly = true;
-    this.name = name || 'square'; // can also be a costume
-    this.size = size || ((size === 0) ? 0 : 50);
-    this.shadowOffset = shadowOffset || new Point(0, 0);
+    this.name = name || 'square';
+    this.size = size || 50;
+    this.shadowOffset = shadowOffset || ZERO;
     this.shadowColor = shadowColor || null;
+    SymbolMorph.uber.init.call(this);
+    this.color = color || BLACK;
+    this.backgroundColor = bg || null;
+    this.fixLayout();
+    this.rerender();
+};
 
-    SymbolMorph.uber.init.call(this, true); // silently
-    this.color = color || new Color(0, 0, 0);
-    this.drawNew();
+// SymbolMorph string representation: 'a SymbolMorph: "square"'
+
+SymbolMorph.prototype.toString = function () {
+    return 'a ' +
+        (this.constructor.name ||
+            this.constructor.toString().split(' ')[1].split('(')[0]) +
+        ': "' +
+        this.name +
+        '" ' +
+        this.bounds;
 };
 
 // SymbolMorph zebra coloring:
@@ -182,168 +208,331 @@ SymbolMorph.prototype.setLabelColor = function (
     this.setColor(textColor);
 };
 
-// SymbolMorph displaying:
+// SymbolMorph dynamic coloring:
 
-SymbolMorph.prototype.drawNew = function () {
-    var ctx, x, y, sx, sy;
-    this.image = newCanvas(new Point(
-        this.symbolWidth() + Math.abs(this.shadowOffset.x),
-        this.size + Math.abs(this.shadowOffset.y)
-    ));
-    this.silentSetWidth(this.image.width);
-    this.silentSetHeight(this.image.height);
-    ctx = this.image.getContext('2d');
-    sx = this.shadowOffset.x < 0 ? 0 : this.shadowOffset.x;
-    sy = this.shadowOffset.y < 0 ? 0 : this.shadowOffset.y;
-    x = this.shadowOffset.x < 0 ? Math.abs(this.shadowOffset.x) : 0;
-    y = this.shadowOffset.y < 0 ? Math.abs(this.shadowOffset.y) : 0;
-    if (this.shadowColor) {
-        ctx.drawImage(
-            this.symbolCanvasColored(this.shadowColor),
-            sx,
-            sy
-        );
-    }
-    ctx.drawImage(
-        this.symbolCanvasColored(this.color),
-        x,
-        y
-    );
+SymbolMorph.prototype.getShadowRenderColor = function () {
+    // answer the shadow rendering color, can be overridden for my children
+    return this.shadowColor;
 };
 
-SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
-    // private
-    if (this.name instanceof Costume) {
-        return this.name.thumbnail(new Point(this.symbolWidth(), this.size));
+// SymbolMorph layout:
+
+SymbolMorph.prototype.setExtent = function (aPoint) {
+    if (this.size === aPoint.y) {return; }
+    this.changed();
+    this.size = aPoint.y;
+    this.fixLayout();
+    this.rerender();
+};
+
+SymbolMorph.prototype.fixLayout = function () {
+    // determine my extent
+    this.bounds.setWidth(this.symbolWidth() + Math.abs(this.shadowOffset.x));
+    this.bounds.setHeight(this.size + Math.abs(this.shadowOffset.y));
+};
+
+// SymbolMorph displaying:
+
+SymbolMorph.prototype.render = function (ctx) {
+    var sx = this.shadowOffset.x < 0 ? 0 : this.shadowOffset.x,
+        sy = this.shadowOffset.y < 0 ? 0 : this.shadowOffset.y,
+        x = this.shadowOffset.x < 0 ? Math.abs(this.shadowOffset.x) : 0,
+        y = this.shadowOffset.y < 0 ? Math.abs(this.shadowOffset.y) : 0;
+
+    if (this.backgroundColor) {
+        ctx.save();
+        ctx.fillStyle = this.backgroundColor.toString();
+        ctx.fillRect(0, 0, this.symbolWidth(), this.size);
+        ctx.restore();
     }
+    if (this.shadowColor) {
+        ctx.save();
+        ctx.translate(sx, sy);
+        this.renderShape(ctx, this.getShadowRenderColor());
+        ctx.restore();
+    }
+    ctx.save();
+    ctx.translate(x, y);
+    this.renderShape(ctx, this.getRenderColor());
+    ctx.restore();
+};
 
-    var canvas = newCanvas(new Point(this.symbolWidth(), this.size));
-
+SymbolMorph.prototype.renderShape = function (ctx, aColor) {
+    // private
     switch (this.name) {
     case 'square':
-        return this.drawSymbolStop(canvas, aColor);
+        this.renderSymbolStop(ctx, aColor);
+        break;
     case 'pointRight':
-        return this.drawSymbolPointRight(canvas, aColor);
+        this.renderSymbolPointRight(ctx, aColor);
+        break;
     case 'stepForward':
-        return this.drawSymbolStepForward(canvas, aColor);
+        this.renderSymbolStepForward(ctx, aColor);
+        break;
     case 'gears':
-        return this.drawSymbolGears(canvas, aColor);
+        this.renderSymbolGears(ctx, aColor);
+        break;
+    case 'gearBig':
+        this.renderSymbolGearBig(ctx, aColor);
+        break;
+    case 'gearPartial':
+        this.renderSymbolGearPartial(ctx, aColor);
+        break;
     case 'file':
-        return this.drawSymbolFile(canvas, aColor);
+        this.renderSymbolFile(ctx, aColor);
+        break;
     case 'fullScreen':
-        return this.drawSymbolFullScreen(canvas, aColor);
+        this.renderSymbolFullScreen(ctx, aColor);
+        break;
+    case 'grow':
+        this.renderSymbolGrow(ctx, aColor);
+        break;
     case 'normalScreen':
-        return this.drawSymbolNormalScreen(canvas, aColor);
+        this.renderSymbolNormalScreen(ctx, aColor);
+        break;
     case 'smallStage':
-        return this.drawSymbolSmallStage(canvas, aColor);
+        this.renderSymbolSmallStage(ctx, aColor);
+        break;
     case 'normalStage':
-        return this.drawSymbolNormalStage(canvas, aColor);
+        this.renderSymbolNormalStage(ctx, aColor);
+        break;
+    case 'shrink':
+        this.renderSymbolShrink(ctx, aColor);
+        break;
     case 'turtle':
-        return this.drawSymbolTurtle(canvas, aColor);
-    case 'stage':
-        return this.drawSymbolStop(canvas, aColor);
+        this.renderSymbolTurtle(ctx, aColor);
+        break;
+    case 'turtlePlus':
+        this.renderPlus(this.renderSymbolTurtle, 0.8, 'right', ctx, aColor);
+        break;
     case 'turtleOutline':
-        return this.drawSymbolTurtleOutline(canvas, aColor);
+        this.renderSymbolTurtleOutline(ctx, aColor);
+        break;
+    case 'stage':
+        this.renderSymbolStop(ctx, aColor);
+        break;
     case 'pause':
-        return this.drawSymbolPause(canvas, aColor);
+        this.renderSymbolPause(ctx, aColor);
+        break;
     case 'flag':
-        return this.drawSymbolFlag(canvas, aColor);
+        this.renderSymbolFlag(ctx, aColor);
+        break;
     case 'octagon':
-        return this.drawSymbolOctagon(canvas, aColor);
+        this.renderSymbolOctagon(ctx, aColor);
+        break;
     case 'cloud':
-        return this.drawSymbolCloud(canvas, aColor);
-    case 'cloudOutline':
-        return this.drawSymbolCloudOutline(canvas, aColor);
+        this.renderSymbolCloud(ctx, aColor);
+        break;
     case 'cloudGradient':
-        return this.drawSymbolCloudGradient(canvas, aColor);
+        this.renderSymbolCloudGradient(ctx, aColor);
+        break;
+    case 'cloudOutline':
+        this.renderSymbolCloudOutline(ctx, aColor);
+        break;
     case 'turnRight':
-        return this.drawSymbolTurnRight(canvas, aColor);
+        this.renderSymbolTurnRight(ctx, aColor);
+        break;
     case 'turnLeft':
-        return this.drawSymbolTurnLeft(canvas, aColor);
+        this.renderSymbolTurnLeft(ctx, aColor);
+        break;
+    case 'turnAround':
+        this.renderSymbolTurnAround(ctx, aColor);
+        break;
     case 'storage':
-        return this.drawSymbolStorage(canvas, aColor);
+        this.renderSymbolStorage(ctx, aColor);
+        break;
     case 'poster':
-        return this.drawSymbolPoster(canvas, aColor);
+        this.renderSymbolPoster(ctx, aColor);
+        break;
     case 'flash':
-        return this.drawSymbolFlash(canvas, aColor);
+        this.renderSymbolFlash(ctx, aColor);
+        break;
     case 'brush':
-        return this.drawSymbolBrush(canvas, aColor);
+        this.renderSymbolBrush(ctx, aColor);
+        break;
+    case 'brushPlus':
+        this.renderPlus(this.renderSymbolBrush, 0.8, 'left', ctx, aColor);
+        break;
+    case 'tick':
+        this.renderSymbolTick(ctx, aColor);
+        break;
+    case 'checkedBox':
+        this.renderSymbolCheckedBox(ctx, aColor);
+        break;
     case 'rectangle':
-        return this.drawSymbolRectangle(canvas, aColor);
+        this.renderSymbolRectangle(ctx, aColor);
+        break;
     case 'rectangleSolid':
-        return this.drawSymbolRectangleSolid(canvas, aColor);
+        this.renderSymbolRectangleSolid(ctx, aColor);
+        break;
     case 'circle':
-        return this.drawSymbolCircle(canvas, aColor);
+        this.renderSymbolCircle(ctx, aColor);
+        break;
     case 'circleSolid':
-        return this.drawSymbolCircleSolid(canvas, aColor);
+        this.renderSymbolCircleSolid(ctx, aColor);
+        break;
+    case 'dot':
+        this.renderSymbolCircleSolid(ctx, aColor);
+        break;
     case 'ellipse':
-        return this.drawSymbolCircle(canvas, aColor);
+        this.renderSymbolCircle(ctx, aColor);
+        break;
     case 'line':
-        return this.drawSymbolLine(canvas, aColor);
+        this.renderSymbolLine(ctx, aColor);
+        break;
     case 'cross':
-        return this.drawSymbolCross(canvas, aColor);
+        this.renderSymbolCross(ctx, aColor);
+        break;
     case 'crosshairs':
-        return this.drawSymbolCrosshairs(canvas, aColor);
+        this.renderSymbolCrosshairs(ctx, aColor);
+        break;
     case 'paintbucket':
-        return this.drawSymbolPaintbucket(canvas, aColor);
+        this.renderSymbolPaintbucket(ctx, aColor);
+        break;
     case 'eraser':
-        return this.drawSymbolEraser(canvas, aColor);
+        this.renderSymbolEraser(ctx, aColor);
+        break;
     case 'pipette':
-        return this.drawSymbolPipette(canvas, aColor);
+        this.renderSymbolPipette(ctx, aColor);
+        break;
     case 'speechBubble':
-        return this.drawSymbolSpeechBubble(canvas, aColor);
+        this.renderSymbolSpeechBubble(ctx, aColor);
+        break;
     case 'speechBubbleOutline':
-        return this.drawSymbolSpeechBubbleOutline(canvas, aColor);
+        this.renderSymbolSpeechBubbleOutline(ctx, aColor);
+        break;
     case 'loop':
-        return this.drawSymbolLoop(canvas, aColor);
+        this.renderSymbolLoop(ctx, aColor);
+        break;
     case 'turnBack':
-        return this.drawSymbolTurnBack(canvas, aColor);
+        this.renderSymbolTurnBack(ctx, aColor);
+        break;
     case 'turnForward':
-        return this.drawSymbolTurnForward(canvas, aColor);
+        this.renderSymbolTurnForward(ctx, aColor);
+        break;
     case 'arrowUp':
-        return this.drawSymbolArrowUp(canvas, aColor);
+        this.renderSymbolArrowUp(ctx, aColor);
+        break;
     case 'arrowUpOutline':
-        return this.drawSymbolArrowUpOutline(canvas, aColor);
+        this.renderSymbolArrowUpOutline(ctx, aColor);
+        break;
+    case 'arrowUpThin':
+        this.renderSymbolArrowUpThin(ctx, aColor);
+        break;
+    case 'arrowUpDownThin':
+        this.renderSymbolArrowUpDownThin(ctx, aColor);
+        break;
     case 'arrowLeft':
-        return this.drawSymbolArrowLeft(canvas, aColor);
+        this.renderSymbolArrowLeft(ctx, aColor);
+        break;
     case 'arrowLeftOutline':
-        return this.drawSymbolArrowLeftOutline(canvas, aColor);
+        this.renderSymbolArrowLeftOutline(ctx, aColor);
+        break;
+    case 'arrowLeftThin':
+        this.renderSymbolArrowLeftThin(ctx, aColor);
+        break;
+    case 'arrowLeftRightThin':
+        this.renderSymbolArrowLeftRightThin(ctx, aColor);
+        break;
     case 'arrowDown':
-        return this.drawSymbolArrowDown(canvas, aColor);
+        this.renderSymbolArrowDown(ctx, aColor);
+        break;
     case 'arrowDownOutline':
-        return this.drawSymbolArrowDownOutline(canvas, aColor);
+        this.renderSymbolArrowDownOutline(ctx, aColor);
+        break;
+    case 'arrowDownThin':
+        this.renderSymbolArrowDownThin(ctx, aColor);
+        break;
     case 'arrowRight':
-        return this.drawSymbolArrowRight(canvas, aColor);
+        this.renderSymbolArrowRight(ctx, aColor);
+        break;
     case 'arrowRightOutline':
-        return this.drawSymbolArrowRightOutline(canvas, aColor);
+        this.renderSymbolArrowRightOutline(ctx, aColor);
+        break;
+    case 'arrowRightThin':
+        this.renderSymbolArrowRightThin(ctx, aColor);
+        break;
     case 'robot':
-        return this.drawSymbolRobot(canvas, aColor);
+        this.renderSymbolRobot(ctx, aColor);
+        break;
     case 'magnifyingGlass':
-        return this.drawSymbolMagnifyingGlass(canvas, aColor);
+        this.renderSymbolMagnifyingGlass(ctx, aColor);
+        break;
     case 'magnifierOutline':
-        return this.drawSymbolMagnifierOutline(canvas, aColor);
+        this.renderSymbolMagnifierOutline(ctx, aColor);
+        break;
     case 'selection':
-        return this.drawSymbolSelection(canvas, aColor);
+        this.renderSymbolSelection(ctx, aColor);
+        break;
     case 'polygon':
-        return this.drawSymbolOctagonOutline(canvas, aColor);
+        this.renderSymbolOctagonOutline(ctx, aColor);
+        break;
     case 'closedBrush':
-        return this.drawSymbolClosedBrushPath(canvas, aColor);
+        this.renderSymbolClosedBrushPath(ctx, aColor);
+        break;
     case 'notes':
-        return this.drawSymbolNotes(canvas, aColor);
+        this.renderSymbolNotes(ctx, aColor);
+        break;
     case 'camera':
-        return this.drawSymbolCamera(canvas, aColor);
+        this.renderSymbolCamera(ctx, aColor);
+        break;
+    case 'cameraPlus':
+        this.renderPlus(this.renderSymbolCamera, 0.7, 'right', ctx, aColor);
+        break;
     case 'location':
-        return this.drawSymbolLocation(canvas, aColor);
+        this.renderSymbolLocation(ctx, aColor);
+        break;
     case 'footprints':
-        return this.drawSymbolFootprints(canvas, aColor);
+        this.renderSymbolFootprints(ctx, aColor);
+        break;
     case 'keyboard':
-        return this.drawSymbolKeyboard(canvas, aColor);
+        this.renderSymbolKeyboard(ctx, aColor);
+        break;
     case 'keyboardFilled':
-        return this.drawSymbolKeyboardFilled(canvas, aColor);
+        this.renderSymbolKeyboardFilled(ctx, aColor);
+        break;
     case 'globe':
-        return this.drawSymbolGlobe(canvas, aColor);
+        this.renderSymbolGlobe(ctx, aColor);
+        break;
+    case 'globeBig':
+        this.renderSymbolGlobeBig(ctx, aColor);
+        break;
+    case 'list':
+    case 'listNarrow':
+        this.renderSymbolList(ctx, aColor);
+        break;
+    case 'verticalEllipsis':
+        this.renderSymbolVerticalEllipsis(ctx, aColor);
+        break;
+    case 'flipVertical':
+        this.renderSymbolFlipVertical(ctx, aColor);
+        break;
+    case 'flipHorizontal':
+        this.renderSymbolFlipHorizontal(ctx, aColor);
+        break;
+    case 'trash':
+        this.renderSymbolTrash(ctx, aColor);
+        break;
+    case 'trashFull':
+        this.renderSymbolTrashFull(ctx, aColor);
+        break;
+    case 'cube':
+        this.renderSymbolCube(ctx, aColor);
+        break;
+    case 'cubeSolid':
+        this.renderSymbolCubeSolid(ctx, aColor);
+        break;
+    case 'blocks':
+        this.renderSymbolBlocks(ctx, aColor);
+        break;
+    case 'speaker':
+        this.renderSymbolSpeaker(ctx, aColor);
+        break;
+    case 'infinity':
+        this.renderSymbolInfinity(ctx, aColor);
+        break;
     default:
-        return canvas;
+        throw new Error('unknown symbol name: "' + this.name + '"');
     }
 };
 
@@ -351,21 +540,26 @@ SymbolMorph.prototype.symbolWidth = function () {
     // private
     var size = this.size;
 
-    if (this.name instanceof Costume) {
-        return (size / this.name.height()) * this.name.width();
-    }
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
+    case 'verticalEllipsis':
+        return size * 0.2;
+    case 'dot':
+        return size * 0.4;
+    case 'listNarrow':
+        return size * 0.5;
     case 'location':
         return size * 0.6;
     case 'flash':
     case 'file':
+    case 'list':
         return size * 0.8;
     case 'smallStage':
     case 'normalStage':
         return size * 1.2;
     case 'turtle':
+    case 'turtlePlus':
     case 'turtleOutline':
     case 'stage':
         return size * 1.3;
@@ -377,6 +571,8 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'keyboard':
     case 'keyboardFilled':
         return size * 1.6;
+    case 'infinity':
+        return size * 1.75;
     case 'turnRight':
     case 'turnLeft':
         return size / 3 * 2;
@@ -387,133 +583,241 @@ SymbolMorph.prototype.symbolWidth = function () {
     }
 };
 
-SymbolMorph.prototype.drawSymbolStop = function (canvas, color) {
-    // answer a canvas showing a vertically centered square
-    var ctx = canvas.getContext('2d');
-
+SymbolMorph.prototype.renderSymbolStop = function (ctx, color) {
+    // draw a vertically centered square
     ctx.fillStyle = color.toString();
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    return canvas;
+    ctx.fillRect(0, 0, this.symbolWidth(), this.size);
 };
 
-SymbolMorph.prototype.drawSymbolPointRight = function (canvas, color) {
-    // answer a canvas showing a right-pointing, equilateral triangle
-    var ctx = canvas.getContext('2d');
-
+SymbolMorph.prototype.renderSymbolPointRight = function (ctx, color) {
+    // draw a right-pointing, equilateral triangle
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, Math.round(canvas.height / 2));
-    ctx.lineTo(0, canvas.height);
+    ctx.lineTo(this.symbolWidth(), Math.round(this.size / 2));
+    ctx.lineTo(0, this.size);
     ctx.lineTo(0, 0);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolStepForward = function (canvas, color) {
-    // answer a canvas showing a right-pointing triangle
+SymbolMorph.prototype.renderSymbolStepForward = function (ctx, color) {
+    // draw a right-pointing triangle
     // followed by a vertical bar
-    var ctx = canvas.getContext('2d');
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width * 0.75, Math.round(canvas.height / 2));
-    ctx.lineTo(0, canvas.height);
+    ctx.lineTo(w * 0.75, Math.round(h / 2));
+    ctx.lineTo(0, h);
     ctx.lineTo(0, 0);
     ctx.closePath();
     ctx.fill();
     ctx.fillRect(
-        canvas.width * 0.75,
+        w * 0.75,
         0,
-        canvas.width * 0.25,
-        canvas.height
+        w * 0.25,
+        h
     );
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolGears = function (canvas, color) {
-    // answer a canvas showing gears
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
+    // draw gears
+    var w = this.symbolWidth(),
         r = w / 2,
-        e = w / 6;
+        spikes = 8,
+        off = 8,
+        shift = 10,
+        angle, turn, i;
 
-    ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 7;
-
+    ctx.fillStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(r, r, w, radians(0), radians(360), true);
-    ctx.arc(r, r, e * 1.5, radians(0), radians(360), false);
-    ctx.closePath();
-    ctx.clip();
 
-    ctx.moveTo(0, r);
+    // draw the spiked outline
+    ctx.moveTo(w, r);
+    angle = 360 / spikes;
+    turn = angle * 0.5;
+    for (i = 0; i < spikes; i += 1) {
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians(i * angle + turn),
+            radians(i * angle + off + turn)
+        );
+        ctx.arc(
+            r,
+            r,
+            r * 0.7,
+            radians(i * angle - shift + angle * 0.5 + turn),
+            radians(i * angle + shift + angle * 0.5 + turn)
+        );
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians((i + 1) * angle - off + turn),
+            radians((i + 1) * angle + turn)
+        );
+    }
     ctx.lineTo(w, r);
-    ctx.stroke();
 
-    ctx.moveTo(r, 0);
-    ctx.lineTo(r, w);
-    ctx.stroke();
+    // draw the hole in the middle
+    ctx.arc(r, r, r * 0.3, radians(0), radians(360));
 
-    ctx.moveTo(e, e);
-    ctx.lineTo(w - e, w - e);
-    ctx.stroke();
-
-    ctx.moveTo(w - e, e);
-    ctx.lineTo(e, w - e);
-    ctx.stroke();
-
-    return canvas;
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
 };
 
-SymbolMorph.prototype.drawSymbolFile = function (canvas, color) {
-    // answer a canvas showing a page symbol
-    var ctx = canvas.getContext('2d'),
-        w = Math.min(canvas.width, canvas.height) / 2;
+SymbolMorph.prototype.renderSymbolGearBig = function (ctx, color) {
+    // draw a large gear
+    var w = this.symbolWidth(),
+        r = w / 2,
+        spikes = 10,
+        off = 7,
+        shift = 8,
+        angle, i;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+
+    // draw the spiked outline
+    ctx.moveTo(w, r);
+    angle = 360 / spikes;
+    for (i = 0; i < spikes; i += 1) {
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians(i * angle),
+            radians(i * angle + off)
+        );
+        ctx.arc(
+            r,
+            r,
+            r * 0.8,
+            radians(i * angle - shift + angle * 0.5),
+            radians(i * angle + shift + angle * 0.5)
+        );
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians((i + 1) * angle - off),
+            radians((i + 1) * angle)
+        );
+    }
+    ctx.lineTo(w, r);
+
+    // draw the holes in the middle
+    ctx.arc(r, r, r * 0.6, radians(0), radians(360));
+    ctx.arc(r, r, r * 0.2, radians(0), radians(360));
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGearPartial = function (ctx, color) {
+    // draw gears
+    var w = this.symbolWidth(),
+        r = w * 0.75,
+        spikes = 8,
+        off = 8,
+        shift = 10,
+        angle, turn, i;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+
+    // draw the spiked outline
+    ctx.moveTo(w, r);
+    angle = 360 / spikes;
+    turn = angle * 0.5;
+    for (i = 0; i < spikes; i += 1) {
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians(i * angle + turn),
+            radians(i * angle + off + turn)
+        );
+        ctx.arc(
+            r,
+            r,
+            r * 0.7,
+            radians(i * angle - shift + angle * 0.5 + turn),
+            radians(i * angle + shift + angle * 0.5 + turn)
+        );
+        ctx.arc(
+            r,
+            r,
+            r,
+            radians((i + 1) * angle - off + turn),
+            radians((i + 1) * angle + turn)
+        );
+    }
+    ctx.lineTo(w, r);
+
+    // draw the hole in the middle
+    ctx.arc(r, r, r * 0.3, radians(0), radians(360));
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolFile = function (ctx, color) {
+    // draw a page symbol
+    var height = this.size,
+        width = this.symbolWidth(),
+        w = Math.min(width, height) / 2;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
     ctx.lineTo(w, 0);
     ctx.lineTo(w, w);
-    ctx.lineTo(canvas.width, w);
-    ctx.lineTo(canvas.width, canvas.height);
-    ctx.lineTo(0, canvas.height);
+    ctx.lineTo(width, w);
+    ctx.lineTo(width, height);
+    ctx.lineTo(0, height);
     ctx.closePath();
     ctx.fill();
 
     ctx.fillStyle = color.darker(25).toString();
     ctx.beginPath();
     ctx.moveTo(w, 0);
-    ctx.lineTo(canvas.width, w);
+    ctx.lineTo(width, w);
     ctx.lineTo(w, w);
     ctx.lineTo(w, 0);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolFullScreen = function (canvas, color) {
-    // answer a canvas showing two arrows pointing diagonally outwards
-    var ctx = canvas.getContext('2d'),
-        h = canvas.height,
-        c = canvas.width / 2,
-        off = canvas.width / 20,
-        w = canvas.width / 2;
+SymbolMorph.prototype.renderSymbolFullScreen = function (ctx, color) {
+    // draw two arrows pointing diagonally outwards
+    var h = this.size,
+        width = this.symbolWidth(),
+        c = width / 2,
+        off = width / 20,
+        w = width / 2;
 
     ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 5;
+    ctx.lineWidth = width / 5;
+    ctx.beginPath();
     ctx.moveTo(c - off, c + off);
-    ctx.lineTo(0, h);
+//    ctx.lineTo(0, h);
+    ctx.lineTo(off * 2, h - off * 2);
     ctx.stroke();
 
     ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 5;
+    ctx.lineWidth = width / 5;
+    ctx.beginPath();
     ctx.moveTo(c + off, c - off);
-    ctx.lineTo(h, 0);
+    ctx.lineTo(h - off * 2, off * 2);
     ctx.stroke();
 
     ctx.fillStyle = color.toString();
@@ -531,28 +835,74 @@ SymbolMorph.prototype.drawSymbolFullScreen = function (canvas, color) {
     ctx.lineTo(h, w);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolNormalScreen = function (canvas, color) {
-    // answer a canvas showing two arrows pointing diagonally inwards
-    var ctx = canvas.getContext('2d'),
-        h = canvas.height,
-        c = canvas.width / 2,
-        off = canvas.width / 20,
-        w = canvas.width;
+SymbolMorph.prototype.renderSymbolGrow = function (ctx, color) {
+
+    var h = this.size,
+        width = this.symbolWidth(),
+        c = width / 2,
+        off = width / 20,
+        w = width / 3;
+        
+    function arrows() {
+        ctx.strokeStyle = color.toString();
+        ctx.lineWidth = width / 7;
+        ctx.beginPath();
+        ctx.moveTo(c - off * 3, c + off * 3);
+        ctx.lineTo(off * 2, h - off * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = color.toString();
+        ctx.lineWidth = width / 7;
+        ctx.beginPath();
+        ctx.moveTo(c + off * 3 , c - off * 3);
+        ctx.lineTo(h - off * 2, off * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = color.toString();
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+        ctx.lineTo(0, h - w);
+        ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = color.toString();
+        ctx.beginPath();
+        ctx.moveTo(h, 0);
+        ctx.lineTo(h - w, 0);
+        ctx.lineTo(h, w);
+        ctx.closePath();
+        ctx.fill();
+    }
+    
+    // draw four arrows pointing diagonally outwards
+    arrows();
+    ctx.translate(this.size, 0);
+    ctx.rotate(radians(90));
+    arrows();
+};
+
+
+SymbolMorph.prototype.renderSymbolNormalScreen = function (ctx, color) {
+ var h = this.size,
+        w = this.symbolWidth(),
+        c = w / 2,
+        off = w / 20;
 
     ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 5;
+    ctx.lineWidth = w / 5;
+    ctx.beginPath();
     ctx.moveTo(c - off * 3, c + off * 3);
-    ctx.lineTo(0, h);
+    ctx.lineTo(off, h - off);
     ctx.stroke();
 
     ctx.strokeStyle = color.toString();
-    ctx.lineWidth = canvas.width / 5;
+    ctx.lineWidth = w / 5;
+    ctx.beginPath();
     ctx.moveTo(c + off * 3, c - off * 3);
-    ctx.lineTo(h, 0);
+    ctx.lineTo(h - off, off);
     ctx.stroke();
 
     ctx.fillStyle = color.toString();
@@ -570,98 +920,133 @@ SymbolMorph.prototype.drawSymbolNormalScreen = function (canvas, color) {
     ctx.lineTo(c - off, w);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolSmallStage = function (canvas, color) {
-    // answer a canvas showing a stage toggling symbol
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolShrink = function (ctx, color) {
+    // draw 4 arrows pointing diagonally inwards
+    var h = this.size,
+        w = this.symbolWidth(),
+        c = w / 2,
+        off = w / 20;
+        
+    function arrows() {
+        ctx.strokeStyle = color.toString();
+        ctx.lineWidth = w / 8;
+        ctx.beginPath();
+        ctx.moveTo(c - off * 3, c + off * 3);
+        ctx.lineTo(off, h - off);
+        ctx.stroke();
+
+        ctx.strokeStyle = color.toString();
+        ctx.lineWidth = w / 8;
+        ctx.beginPath();
+        ctx.moveTo(c + off * 3, c - off * 3);
+        ctx.lineTo(h - off, off);
+        ctx.stroke();
+
+        ctx.fillStyle = color.toString();
+        ctx.beginPath();
+        ctx.moveTo(c + off * 2, c - off * 2);
+        ctx.lineTo(w - off, c - off * 2);
+        ctx.lineTo(c + off * 2, 0 + off);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = color.toString();
+        ctx.beginPath();
+        ctx.moveTo(c - off * 2, c + off * 2);
+        ctx.lineTo(0 + off, c + off * 2);
+        ctx.lineTo(c - off * 2, w - off);
+        ctx.closePath();
+        ctx.fill();
+    }
+    
+    arrows();
+    ctx.translate(this.size, 0);
+    ctx.rotate(radians(90));
+    arrows();
+};
+
+SymbolMorph.prototype.renderSymbolSmallStage = function (ctx, color) {
+    // draw a stage toggling symbol
+    var w = this.symbolWidth(),
+        h = this.size,
         w2 = w / 2,
         h2 = h / 2;
 
-    ctx.fillStyle = color.darker(40).toString();
+    ctx.fillStyle = color.darker(50).toString();
     ctx.fillRect(0, 0, w, h);
 
     ctx.fillStyle = color.toString();
     ctx.fillRect(w2, 0, w2, h2);
 
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolNormalStage = function (canvas, color) {
-    // answer a canvas showing a stage toggling symbol
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolNormalStage = function (ctx, color) {
+    // draw a stage toggling symbol
+    var w = this.symbolWidth(),
+        h = this.size,
         w2 = w / 2,
         h2 = h / 2;
 
     ctx.fillStyle = color.toString();
     ctx.fillRect(0, 0, w, h);
 
-    ctx.fillStyle = color.darker(25).toString();
+    ctx.fillStyle = color.darker(50).toString();
     ctx.fillRect(w2, 0, w2, h2);
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolTurtle = function (canvas, color) {
-    // answer a canvas showing a turtle
-    var ctx = canvas.getContext('2d');
+SymbolMorph.prototype.renderSymbolTurtle = function (ctx, color) {
+    // draw a LOGO turtle
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, canvas.height / 2);
-    ctx.lineTo(0, canvas.height);
-    ctx.lineTo(canvas.height / 2, canvas.height / 2);
+    ctx.lineTo(w, h / 2);
+    ctx.lineTo(0, h);
+    ctx.lineTo(h / 2, h / 2);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolTurtleOutline = function (canvas, color) {
-    // answer a canvas showing a turtle
-    var ctx = canvas.getContext('2d');
+SymbolMorph.prototype.renderSymbolTurtleOutline = function (ctx, color) {
+    // draw a LOGO turtle
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(canvas.width, canvas.height / 2);
-    ctx.lineTo(0, canvas.height);
-    ctx.lineTo(canvas.height / 2, canvas.height / 2);
+    ctx.lineTo(w, h / 2);
+    ctx.lineTo(0, h);
+    ctx.lineTo(h / 2, h / 2);
     ctx.closePath();
     ctx.stroke();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolPause = function (canvas, color) {
-    // answer a canvas showing two parallel rectangles
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width / 5;
+SymbolMorph.prototype.renderSymbolPause = function (ctx, color) {
+    // draw two parallel rectangles
+    var w = this.symbolWidth() / 5,
+        h = this.size;
 
     ctx.fillStyle = color.toString();
-    ctx.fillRect(0, 0, w * 2, canvas.height);
-    ctx.fillRect(w * 3, 0, w * 2, canvas.height);
-    return canvas;
+    ctx.fillRect(0, 0, w * 2, h);
+    ctx.fillRect(w * 3, 0, w * 2, h);
 };
 
-SymbolMorph.prototype.drawSymbolFlag = function (canvas, color) {
-    // answer a canvas showing a flag
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        l = Math.max(w / 12, 1),
-        h = canvas.height;
+SymbolMorph.prototype.renderSymbolFlag = function (ctx, color) {
+    // draw a flag
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 12, 1);
 
     ctx.lineWidth = l;
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
     ctx.moveTo(l / 2, 0);
-    ctx.lineTo(l / 2, canvas.height);
+    ctx.lineTo(l / 2, h);
     ctx.stroke();
 
     ctx.lineWidth = h / 2;
@@ -676,14 +1061,11 @@ SymbolMorph.prototype.drawSymbolFlag = function (canvas, color) {
         h * 0.5
     );
     ctx.stroke();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolOctagon = function (canvas, color) {
-    // answer a canvas showing an octagon
-    var ctx = canvas.getContext('2d'),
-        side = canvas.width,
+SymbolMorph.prototype.renderSymbolOctagon = function (ctx, color) {
+    // draw an octagon
+    var side = this.symbolWidth(),
         vert = (side - (side * 0.383)) / 2;
 
     ctx.fillStyle = color.toString();
@@ -698,15 +1080,12 @@ SymbolMorph.prototype.drawSymbolOctagon = function (canvas, color) {
     ctx.lineTo(0, vert);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolCloud = function (canvas, color) {
-    // answer a canvas showing an cloud
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolCloud = function (ctx, color) {
+    // draw a cloud
+    var w = this.symbolWidth(),
+        h = this.size,
         r1 = h * 2 / 5,
         r2 = h / 4,
         r3 = h * 3 / 10,
@@ -720,16 +1099,13 @@ SymbolMorph.prototype.drawSymbolCloud = function (canvas, color) {
     ctx.arc(w - r3, h - r3, r3, radians(269), radians(90), false);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolCloudGradient = function (canvas, color) {
-    // answer a canvas showing an cloud
-    var ctx = canvas.getContext('2d'),
+SymbolMorph.prototype.renderSymbolCloudGradient = function (ctx, color) {
+    // draw a cloud
+    var w = this.symbolWidth(),
+        h = this.size,
         gradient,
-        w = canvas.width,
-        h = canvas.height,
         r1 = h * 2 / 5,
         r2 = h / 4,
         r3 = h * 3 / 10,
@@ -753,15 +1129,12 @@ SymbolMorph.prototype.drawSymbolCloudGradient = function (canvas, color) {
     ctx.arc(w - r3, h - r3, r3, radians(269), radians(90), false);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolCloudOutline = function (canvas, color) {
-    // answer a canvas showing an cloud
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolCloudOutline = function (ctx, color) {
+    // draw cloud
+    var w = this.symbolWidth(),
+        h = this.size,
         r1 = h * 2 / 5,
         r2 = h / 4,
         r3 = h * 3 / 10,
@@ -769,20 +1142,17 @@ SymbolMorph.prototype.drawSymbolCloudOutline = function (canvas, color) {
 
     ctx.strokeStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(r2 + 1, h - r2 - 1, r2, radians(90), radians(259), false);
-    ctx.arc(w / 20 * 5, h / 9 * 4, r4, radians(165), radians(300), false);
-    ctx.arc(w / 20 * 11, r1 + 1, r1, radians(200), radians(357), false);
-    ctx.arc(w - r3 - 1, h - r3 - 1, r3, radians(269), radians(90), false);
+    ctx.arc(r2 + 1, h - r2 - 1, r2, radians(90), radians(180), false);
+    ctx.arc(w / 20 * 5, h / 9 * 4, r4, radians(150), radians(300), false);
+    ctx.arc(w / 20 * 11, r1 + 1, r1, radians(210), radians(335), false);
+    ctx.arc(w - r3 - 1, h - r3 - 1, r3, radians(280), radians(90), false);
     ctx.closePath();
     ctx.stroke();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolTurnRight = function (canvas, color) {
-    // answer a canvas showing a right-turning arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolTurnRight = function (ctx, color) {
+    // draw a right-turning arrow
+    var w = this.symbolWidth(),
         l = Math.max(w / 10, 1),
         r = w / 2;
 
@@ -799,14 +1169,11 @@ SymbolMorph.prototype.drawSymbolTurnRight = function (canvas, color) {
     ctx.lineTo(r, r * 2);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolTurnLeft = function (canvas, color) {
-    // answer a canvas showing a left-turning arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolTurnLeft = function (ctx, color) {
+    // draw a left-turning arrow
+    var w = this.symbolWidth(),
         l = Math.max(w / 10, 1),
         r = w / 2;
 
@@ -823,19 +1190,36 @@ SymbolMorph.prototype.drawSymbolTurnLeft = function (canvas, color) {
     ctx.lineTo(r, r * 2);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolStorage = function (canvas, color) {
-    // answer a canvas showing a stack of three disks
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        r = canvas.height,
-        unit = canvas.height / 11;
+SymbolMorph.prototype.renderSymbolTurnAround = function (ctx, color) {
+    // draw a right-around-turning arrow
+    var w = this.symbolWidth(),
+        l = Math.max(w / 10, 1),
+        r = w / 2;
 
-    function drawDisk(bottom, fillTop) {
+    ctx.lineWidth = l;
+    ctx.strokeStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r - l / 2, radians(-45), radians(225), false);
+    ctx.stroke();
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(0, r * 0.1);
+    ctx.lineTo(r * 0.8, 0);
+    ctx.lineTo(r * 0.7, r * 0.7);
+    ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolStorage = function (ctx, color) {
+    // draw a stack of three disks
+    var w = this.symbolWidth(),
+        h = this.size,
+        r = h,
+        unit = h / 11;
+
+    function drawDisk(bottom) {
         ctx.fillStyle = color.toString();
         ctx.beginPath();
         ctx.arc(w / 2, bottom - h, r, radians(60), radians(120), false);
@@ -853,70 +1237,59 @@ SymbolMorph.prototype.drawSymbolStorage = function (canvas, color) {
 
         ctx.fillStyle = color.darker(25).toString();
         ctx.beginPath();
-
-        if (fillTop) {
-            ctx.arc(
-                w / 2,
-                bottom - h - unit * 2,
-                r,
-                radians(120),
-                radians(60),
-                true
-            );
-        }
-
         ctx.arc(
             w / 2,
             bottom + unit * 6 + 1,
             r,
-            radians(60),
-            radians(120),
-            true
+            radians(-120), // 60
+            radians(-60), // 120
+            false // true
         );
-        ctx.closePath();
-
-        if (fillTop) {
-            ctx.fill();
-        } else {
-            ctx.stroke();
-        }
+        ctx.stroke();
     }
 
     ctx.strokeStyle = color.toString();
     drawDisk(h);
     drawDisk(h - unit * 3);
-    drawDisk(h - unit * 6, false);
-    return canvas;
+    drawDisk(h - unit * 6);
 };
 
-SymbolMorph.prototype.drawSymbolPoster = function (canvas, color) {
-    // answer a canvas showing a poster stand
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolPoster = function (ctx, color) {
+    // draw a poster stand
+    var w = this.symbolWidth(),
+        h = this.size,
         bottom = h * 0.75,
-        edge = canvas.height / 5;
+        edge = h / 5;
 
     ctx.fillStyle = color.toString();
     ctx.strokeStyle = color.toString();
 
     ctx.lineWidth = w / 15;
+
+    ctx.beginPath();
     ctx.moveTo(w / 2, h / 3);
     ctx.lineTo(w / 6, h);
     ctx.stroke();
 
+    ctx.beginPath();
     ctx.moveTo(w / 2, h / 3);
     ctx.lineTo(w / 2, h);
     ctx.stroke();
 
+    ctx.beginPath();
     ctx.moveTo(w / 2, h / 3);
     ctx.lineTo(w * 5 / 6, h);
     ctx.stroke();
 
-    ctx.fillRect(0, 0, w, bottom);
-    ctx.clearRect(0, bottom, w, w / 20);
-
-    ctx.clearRect(w - edge, bottom - edge, edge + 1, edge + 1);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(w, 0);
+    ctx.lineTo(w, bottom - edge);
+    ctx.lineTo(w - edge, bottom - edge);
+    ctx.lineTo(w - edge, bottom);
+    ctx.lineTo(0, bottom);
+    ctx.closePath();
+    ctx.fill();
 
     ctx.fillStyle = color.darker(25).toString();
     ctx.beginPath();
@@ -925,16 +1298,13 @@ SymbolMorph.prototype.drawSymbolPoster = function (canvas, color) {
     ctx.lineTo(w - edge, bottom);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolFlash = function (canvas, color) {
-    // answer a canvas showing a flash
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolFlash = function (ctx, color) {
+    // draw a lightning bolt
+    var w = this.symbolWidth(),
+        h = this.size,
         w3 = w / 3,
-        h = canvas.height,
         h3 = h / 3,
         off = h3 / 3;
 
@@ -953,14 +1323,12 @@ SymbolMorph.prototype.drawSymbolFlash = function (canvas, color) {
     ctx.lineTo(w, 0);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolBrush = function (canvas, color) {
-    // answer a canvas showing a paintbrush
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolBrush = function (ctx, color) {
+    // draw a paintbrush
+    var w = this.symbolWidth(),
+        h = this.size,
         l = Math.max(w / 30, 0.5);
 
     ctx.fillStyle = color.toString();
@@ -984,15 +1352,35 @@ SymbolMorph.prototype.drawSymbolBrush = function (canvas, color) {
     ctx.moveTo(w / 2, h / 8 * 5);
     ctx.lineTo(w - l, h * 0.25);
     ctx.stroke();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolRectangle = function (canvas, color) {
-    // answer a canvas showing a rectangle
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.width,
+SymbolMorph.prototype.renderSymbolTick = function (ctx, color) {
+    // draw a check mark
+    var w = this.symbolWidth(),
+        h = this.size;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(w * 0.2, h * 0.5);
+    ctx.lineTo(w * 0.5, h);
+    ctx.lineTo(w * 0.8, h * 0.3);
+    ctx.lineTo(w, 0);
+    ctx.lineTo(w * 0.65, h * 0.2);
+    ctx.lineTo(w * 0.5, h * 0.65);
+    ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolCheckedBox = function (ctx, color) {
+    // draw a rectangle with a check mark
+    this.renderSymbolRectangle(ctx, color);
+    this.renderSymbolTick(ctx, color);
+};
+
+SymbolMorph.prototype.renderSymbolRectangle = function (ctx, color) {
+    // draw a rectangle
+    var w = this.symbolWidth(),
+        h = this.size,
         l = Math.max(w / 20, 0.5);
 
     ctx.strokeStyle = color.toString();
@@ -1004,14 +1392,12 @@ SymbolMorph.prototype.drawSymbolRectangle = function (canvas, color) {
     ctx.lineTo(l, h - l);
     ctx.closePath();
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolRectangleSolid = function (canvas, color) {
-    // answer a canvas showing a solid rectangle
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.width;
+SymbolMorph.prototype.renderSymbolRectangleSolid = function (ctx, color) {
+    // draw a solid rectangle
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
@@ -1021,94 +1407,91 @@ SymbolMorph.prototype.drawSymbolRectangleSolid = function (canvas, color) {
     ctx.lineTo(0, h);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolCircle = function (canvas, color) {
-    // answer a canvas showing a circle
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolCircle = function (ctx, color) {
+    // draw a circle
+    var w = this.symbolWidth(),
         l = Math.max(w / 20, 0.5);
 
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
+    ctx.beginPath();
     ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolCircleSolid = function (canvas, color) {
-    // answer a canvas showing a solid circle
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width;
+SymbolMorph.prototype.renderSymbolCircleSolid = function (ctx, color) {
+    // draw a solid circle
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.fillStyle = color.toString();
-    ctx.arc(w / 2, w / 2, w / 2, radians(0), radians(360), false);
+    ctx.beginPath();
+    ctx.arc(w / 2, h / 2, w / 2, radians(0), radians(360), false);
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolLine = function (canvas, color) {
-    // answer a canvas showing a plus sign cross
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolLine = function (ctx, color) {
+    // draw a plus sign cross
+    var w = this.symbolWidth(),
+        h = this.size,
         l = Math.max(w / 20, 0.5);
 
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
     ctx.lineCap = 'round';
+    ctx.beginPath();
     ctx.moveTo(l, l);
     ctx.lineTo(w - l, h - l);
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolCross = function (canvas, color) {
-    // answer a canvas showing a diagonal line
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolCross = function (ctx, color) {
+    // draw a diagonal line
+    var w = this.symbolWidth(),
         l = Math.max(w / 20, 0.5);
 
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
     ctx.lineCap = 'round';
+    ctx.beginPath();
     ctx.moveTo(l, w / 2);
     ctx.lineTo(w - l, w / 2);
     ctx.stroke();
+    ctx.beginPath();
     ctx.moveTo(w / 2, l);
     ctx.lineTo(w / 2, w - l);
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolCrosshairs = function (canvas, color) {
-    // answer a canvas showing a crosshairs
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolCrosshairs = function (ctx, color) {
+    // draw a crosshairs
+    var w = this.symbolWidth(),
+        h = this.size,
         l = 0.5;
 
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
+    ctx.beginPath();
     ctx.moveTo(l, h / 2);
     ctx.lineTo(w - l, h / 2);
     ctx.stroke();
+    ctx.beginPath();
     ctx.moveTo(w / 2, l);
     ctx.lineTo(w / 2, h - l);
     ctx.stroke();
+    ctx.beginPath();
     ctx.moveTo(w / 2, h / 2);
     ctx.arc(w / 2, w / 2, w / 3 - l, radians(0), radians(360), false);
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolPaintbucket = function (canvas, color) {
-    // answer a canvas showing a paint bucket
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        n = canvas.width / 5,
+SymbolMorph.prototype.renderSymbolPaintbucket = function (ctx, color) {
+    // draw a paint bucket
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 5,
         l = Math.max(w / 30, 0.5);
 
     ctx.strokeStyle = color.toString();
@@ -1147,16 +1530,13 @@ SymbolMorph.prototype.drawSymbolPaintbucket = function (canvas, color) {
     ctx.lineTo(n * 4, n * 3);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolEraser = function (canvas, color) {
-    // answer a canvas showing an eraser
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        n = canvas.width / 4,
+SymbolMorph.prototype.renderSymbolEraser = function (ctx, color) {
+    // draw an eraser
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 4,
         l = Math.max(w / 20, 0.5);
 
     ctx.strokeStyle = color.toString();
@@ -1177,16 +1557,13 @@ SymbolMorph.prototype.drawSymbolEraser = function (canvas, color) {
     ctx.lineTo(w, n);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolPipette = function (canvas, color) {
-    // answer a canvas showing an eyedropper
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        n = canvas.width / 4,
+SymbolMorph.prototype.renderSymbolPipette = function (ctx, color) {
+    // draw an eyedropper
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 4,
         n2 = n / 2,
         l = Math.max(w / 20, 0.5);
 
@@ -1212,16 +1589,13 @@ SymbolMorph.prototype.drawSymbolPipette = function (canvas, color) {
     ctx.moveTo(n * 2, n);
     ctx.lineTo(n * 3, n * 2);
     ctx.stroke();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolSpeechBubble = function (canvas, color) {
-    // answer a canvas showing a speech bubble
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        n = canvas.width / 3,
+SymbolMorph.prototype.renderSymbolSpeechBubble = function (ctx, color) {
+    // draw a speech bubble
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 3,
         l = Math.max(w / 20, 0.5);
 
     ctx.fillStyle = color.toString();
@@ -1236,18 +1610,16 @@ SymbolMorph.prototype.drawSymbolSpeechBubble = function (canvas, color) {
     ctx.lineTo(n / 2, h - l);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolSpeechBubbleOutline = function (
-    canvas,
+SymbolMorph.prototype.renderSymbolSpeechBubbleOutline = function (
+    ctx,
     color
 ) {
-    // answer a canvas showing a speech bubble
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        n = canvas.width / 3,
+    // draw a speech bubble
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 3,
         l = Math.max(w / 20, 0.5);
 
     ctx.strokeStyle = color.toString();
@@ -1262,16 +1634,14 @@ SymbolMorph.prototype.drawSymbolSpeechBubbleOutline = function (
     ctx.lineTo(n / 2, h - l);
     ctx.closePath();
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolLoop = function (canvas, aColor) {
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        w2 = canvas.width / 2,
+SymbolMorph.prototype.renderSymbolLoop = function (ctx, aColor) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        w2 = w / 2,
         w4 = w2 / 2,
-        h2 = canvas.height / 2,
+        h2 = h / 2,
         l = Math.max(h / 10, 0.5);
 
     ctx.lineWidth = l * 2;
@@ -1288,15 +1658,13 @@ SymbolMorph.prototype.drawSymbolLoop = function (canvas, aColor) {
     ctx.lineTo(w, h2);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolTurnBack = function (canvas, aColor) {
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        w2 = canvas.width / 2,
-        h2 = canvas.height / 2,
+SymbolMorph.prototype.renderSymbolTurnBack = function (ctx, aColor) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        w2 = w / 2,
+        h2 = h / 2,
         l = Math.max(w / 20, 0.5);
 
     ctx.fillStyle = aColor.toString();
@@ -1312,15 +1680,13 @@ SymbolMorph.prototype.drawSymbolTurnBack = function (canvas, aColor) {
     ctx.beginPath();
     ctx.arc(w2, h, h2, radians(0), radians(-90), true);
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolTurnForward = function (canvas, aColor) {
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        w2 = canvas.width / 2,
-        h2 = canvas.height / 2,
+SymbolMorph.prototype.renderSymbolTurnForward = function (ctx, aColor) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        w2 = w / 2,
+        h2 = h / 2,
         l = Math.max(w / 20, 0.5);
 
     ctx.fillStyle = aColor.toString();
@@ -1336,15 +1702,13 @@ SymbolMorph.prototype.drawSymbolTurnForward = function (canvas, aColor) {
     ctx.beginPath();
     ctx.arc(w2, h, h2, radians(-180), radians(-90), false);
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolArrowUp = function (canvas, color) {
-    // answer a canvas showing an up arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        n = canvas.width / 2,
+SymbolMorph.prototype.renderSymbolArrowUp = function (ctx, color) {
+    // draw an up arrow
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 2,
         l = Math.max(w / 20, 0.5);
 
     ctx.fillStyle = color.toString();
@@ -1359,15 +1723,13 @@ SymbolMorph.prototype.drawSymbolArrowUp = function (canvas, color) {
     ctx.lineTo(w * 0.35, n);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolArrowUpOutline = function (canvas, color) {
-    // answer a canvas showing an up arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        n = canvas.width / 2,
+SymbolMorph.prototype.renderSymbolArrowUpOutline = function (ctx, color) {
+    // draw an up arrow
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 2,
         l = Math.max(w / 20, 0.5);
 
     ctx.strokeStyle = color.toString();
@@ -1382,87 +1744,152 @@ SymbolMorph.prototype.drawSymbolArrowUpOutline = function (canvas, color) {
     ctx.lineTo(w * 0.35, n);
     ctx.closePath();
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolArrowDown = function (canvas, color) {
-    // answer a canvas showing a down arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width;
+SymbolMorph.prototype.renderSymbolArrowUpThin = function (ctx, color) {
+    // draw a thin up arrow
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 3,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(w - n, n);
+    ctx.lineTo(w / 2, l * 2);
+    ctx.lineTo(n, n);
+    ctx.moveTo(w / 2, l * 2);
+    ctx.lineTo(w / 2, h - l);
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolArrowUpDownThin = function (ctx, color) {
+    // draw a thin up-down arrow
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 3,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(w - n, n);
+    ctx.lineTo(w / 2, l * 2);
+    ctx.lineTo(n, n);
+    ctx.moveTo(w - n, h - n);
+    ctx.lineTo(w / 2, h - l * 2);
+    ctx.lineTo(n, h - n);
+    ctx.moveTo(w / 2, l * 2);
+    ctx.lineTo(w / 2, h - l * 2);
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolArrowDown = function (ctx, color) {
+    // draw a down arrow
+    var w = this.symbolWidth();
     ctx.save();
     ctx.translate(w, w);
     ctx.rotate(radians(180));
-    this.drawSymbolArrowUp(canvas, color);
+    this.renderSymbolArrowUp(ctx, color);
     ctx.restore();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolArrowDownOutline = function (canvas, color) {
-    // answer a canvas showing a down arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width;
+SymbolMorph.prototype.renderSymbolArrowDownOutline = function (ctx, color) {
+    // draw a down arrow
+    var w = this.symbolWidth();
     ctx.save();
     ctx.translate(w, w);
     ctx.rotate(radians(180));
-    this.drawSymbolArrowUpOutline(canvas, color);
+    this.renderSymbolArrowUpOutline(ctx, color);
     ctx.restore();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolArrowLeft = function (canvas, color) {
-    // answer a canvas showing a left arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width;
+SymbolMorph.prototype.renderSymbolArrowDownThin = function (ctx, color) {
+    // draw a thin down arrow
+    var w = this.symbolWidth();
+    ctx.save();
+    ctx.translate(w, w);
+    ctx.rotate(radians(180));
+    this.renderSymbolArrowUpThin(ctx, color);
+    ctx.restore();
+};
+
+SymbolMorph.prototype.renderSymbolArrowLeft = function (ctx, color) {
+    // draw a left arrow
+    var w = this.symbolWidth();
     ctx.save();
     ctx.translate(0, w);
     ctx.rotate(radians(-90));
-    this.drawSymbolArrowUp(canvas, color);
+    this.renderSymbolArrowUp(ctx, color);
     ctx.restore();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolArrowLeftOutline = function (canvas, color) {
-    // answer a canvas showing a left arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width;
+SymbolMorph.prototype.renderSymbolArrowLeftOutline = function (ctx, color) {
+    // draw a left arrow
+    var w = this.symbolWidth();
     ctx.save();
     ctx.translate(0, w);
     ctx.rotate(radians(-90));
-    this.drawSymbolArrowUpOutline(canvas, color);
+    this.renderSymbolArrowUpOutline(ctx, color);
     ctx.restore();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolArrowRight = function (canvas, color) {
-    // answer a canvas showing a right arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width;
+SymbolMorph.prototype.renderSymbolArrowLeftThin = function (ctx, color) {
+    // draw a thin left arrow
+    var w = this.symbolWidth();
+    ctx.save();
+    ctx.translate(0, w);
+    ctx.rotate(radians(-90));
+    this.renderSymbolArrowUpThin(ctx, color);
+    ctx.restore();
+};
+
+SymbolMorph.prototype.renderSymbolArrowLeftRightThin = function (ctx, color) {
+    // draw a thin left-right arrow
+    var w = this.symbolWidth();
+    ctx.save();
+    ctx.translate(0, w);
+    ctx.rotate(radians(-90));
+    this.renderSymbolArrowUpDownThin(ctx, color);
+    ctx.restore();
+};
+
+SymbolMorph.prototype.renderSymbolArrowRight = function (ctx, color) {
+    // draw a right arrow
+    var w = this.symbolWidth();
     ctx.save();
     ctx.translate(w, 0);
     ctx.rotate(radians(90));
-    this.drawSymbolArrowUp(canvas, color);
+    this.renderSymbolArrowUp(ctx, color);
     ctx.restore();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolArrowRightOutline = function (canvas, color) {
-    // answer a canvas showing a right arrow
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width;
+SymbolMorph.prototype.renderSymbolArrowRightOutline = function (ctx, color) {
+    // draw a right arrow
+    var w = this.symbolWidth();
     ctx.save();
     ctx.translate(w, 0);
     ctx.rotate(radians(90));
-    this.drawSymbolArrowUpOutline(canvas, color);
+    this.renderSymbolArrowUpOutline(ctx, color);
     ctx.restore();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolRobot = function (canvas, color) {
-    // answer a canvas showing a humanoid robot
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
-        n = canvas.width / 6,
+SymbolMorph.prototype.renderSymbolArrowRightThin = function (ctx, color) {
+    // draw a thin right arrow
+    var w = this.symbolWidth();
+    ctx.save();
+    ctx.translate(w, 0);
+    ctx.rotate(radians(90));
+    this.renderSymbolArrowUpThin(ctx, color);
+    ctx.restore();
+};
+
+SymbolMorph.prototype.renderSymbolRobot = function (ctx, color) {
+    // draw a humanoid robot
+    var w = this.symbolWidth(),
+        h = this.size,
+        n = w / 6,
         n2 = n / 2,
         l = Math.max(w / 20, 0.5);
 
@@ -1524,16 +1951,13 @@ SymbolMorph.prototype.drawSymbolRobot = function (canvas, color) {
     ctx.lineTo(n * 4.5, n * 3.5);
     ctx.closePath();
     ctx.fill();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolMagnifyingGlass = function (canvas, color) {
-    // answer a canvas showing a magnifying glass
-    var ctx = canvas.getContext('2d'),
+SymbolMorph.prototype.renderSymbolMagnifyingGlass = function (ctx, color) {
+    // draw a magnifying glass
+    var w = this.symbolWidth(),
+        h = this.size,
         gradient,
-        w = canvas.width,
-        h = canvas.height,
         r = w * 0.3,
         x = w * 2 / 3 - Math.sqrt(r),
         y = h / 3 + Math.sqrt(r),
@@ -1553,10 +1977,12 @@ SymbolMorph.prototype.drawSymbolMagnifyingGlass = function (canvas, color) {
     gradient.addColorStop(0, color.inverted().lighter(50).toString());
     gradient.addColorStop(1, color.inverted().darker(25).toString());
     ctx.fillStyle = gradient;
+    ctx.beginPath();
     ctx.arc(x, y, r, radians(0), radians(360), false);
     ctx.fill();
 
     ctx.lineWidth = l / 2;
+    ctx.beginPath();
     ctx.arc(x, y, r, radians(0), radians(360), false);
     ctx.stroke();
 
@@ -1566,15 +1992,12 @@ SymbolMorph.prototype.drawSymbolMagnifyingGlass = function (canvas, color) {
     ctx.lineTo(x - Math.sqrt(r + l), y + Math.sqrt(r + l));
     ctx.closePath();
     ctx.stroke();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolMagnifierOutline = function (canvas, color) {
-    // answer a canvas showing a magnifying glass
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolMagnifierOutline = function (ctx, color) {
+    // draw a magnifying glass
+    var w = this.symbolWidth(),
+        h = this.size,
         r = w * 0.3,
         x = w * 2 / 3 - Math.sqrt(r),
         y = h / 3 + Math.sqrt(r),
@@ -1583,6 +2006,7 @@ SymbolMorph.prototype.drawSymbolMagnifierOutline = function (canvas, color) {
     ctx.strokeStyle = color.toString();
 
     ctx.lineWidth = l * 0.5;
+    ctx.beginPath();
     ctx.arc(x, y, r, radians(0), radians(360), false);
     ctx.stroke();
 
@@ -1592,20 +2016,17 @@ SymbolMorph.prototype.drawSymbolMagnifierOutline = function (canvas, color) {
     ctx.lineTo(x - Math.sqrt(r + l), y + Math.sqrt(r + l));
     ctx.closePath();
     ctx.stroke();
-
-    return canvas;
 };
 
 
-SymbolMorph.prototype.drawSymbolSelection = function (canvas, color) {
-    // answer a canvas showing a filled arrow and a dashed rectangle
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height;
+SymbolMorph.prototype.renderSymbolSelection = function (ctx, color) {
+    // draw a filled arrow and a dashed rectangle
+    var w = this.symbolWidth(),
+        h = this.size;
 
     ctx.save();
     ctx.setLineDash([3]);
-    this.drawSymbolRectangle(canvas, color);
+    this.renderSymbolRectangle(ctx, color);
     ctx.restore();
 
     ctx.save();
@@ -1613,17 +2034,14 @@ SymbolMorph.prototype.drawSymbolSelection = function (canvas, color) {
     ctx.translate(0.7 * w, 0.4 * h);
     ctx.scale(0.5, 0.5);
     ctx.rotate(radians(135));
-    this.drawSymbolArrowDownOutline(canvas, color);
+    this.renderSymbolArrowDownOutline(ctx, color);
     ctx.fill();
     ctx.restore();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolOctagonOutline = function (canvas, color) {
-    // answer a canvas showing an octagon
-    var ctx = canvas.getContext('2d'),
-        side = canvas.width,
+SymbolMorph.prototype.renderSymbolOctagonOutline = function (ctx, color) {
+    // draw an octagon
+    var side = this.symbolWidth(),
         vert = (side - (side * 0.383)) / 2,
         l = Math.max(side / 20, 0.5);
 
@@ -1640,25 +2058,24 @@ SymbolMorph.prototype.drawSymbolOctagonOutline = function (canvas, color) {
     ctx.lineTo(l, vert);
     ctx.closePath();
     ctx.stroke();
-
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolClosedBrushPath =
-	SymbolMorph.prototype.drawSymbolCloudOutline;
+SymbolMorph.prototype.renderSymbolClosedBrushPath =
+	SymbolMorph.prototype.renderSymbolCloudOutline;
 
-SymbolMorph.prototype.drawSymbolNotes = function (canvas, color) {
-    // answer a canvas showing two musical notes
-    var ctx = canvas.getContext('2d'),
-        size = canvas.width,
+SymbolMorph.prototype.renderSymbolNotes = function (ctx, color) {
+    // draw two musical notes
+    var size = this.symbolWidth(),
         r = size / 6,
         l = Math.max(r / 3, 1);
 
     ctx.strokeStyle = color.toString();
     ctx.fillStyle = color.toString();
 
+    ctx.beginPath();
     ctx.arc(r, size - r, r, radians(0), radians(360), false);
     ctx.fill();
+    ctx.beginPath();
     ctx.arc(size - r, size - (r * 2), r, radians(0), radians(360), false);
     ctx.fill();
 
@@ -1680,14 +2097,12 @@ SymbolMorph.prototype.drawSymbolNotes = function (canvas, color) {
     ctx.moveTo(size - (l / 2), size - (r * 2));
     ctx.lineTo(size - (l / 2), l);
     ctx.stroke();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolCamera = function (canvas, color) {
-    // answer a canvas showing a camera
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.width,
+SymbolMorph.prototype.renderSymbolCamera = function (ctx, color) {
+    // draw a camera
+    var w = this.symbolWidth(),
+        h = this.size,
         r = w * 0.16,
         l = Math.max(w / 20, 0.5);
 
@@ -1704,49 +2119,40 @@ SymbolMorph.prototype.drawSymbolCamera = function (canvas, color) {
     ctx.lineTo(w * 3 / 8 , l);
     ctx.lineTo(w / 4 , h / 4);
     ctx.lineTo(l , h / 4);
-    ctx.closePath();
-    ctx.fill();
+    ctx.lineTo(l, h * 5 / 6);
 
     // camera lens
-    ctx.save();
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
     ctx.arc(w / 2, h / 2, r, radians(0), radians(360), false);
-    ctx.fill();
-    ctx.restore();
 
-    return canvas;
+    ctx.clip();
+    ctx.fillRect(0, 0, w, h);
 };
 
-SymbolMorph.prototype.drawSymbolLocation = function (canvas, color) {
-    // answer a canvas showing a map pin
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolLocation = function (ctx, color) {
+    // draw a map pin
+    var w = this.symbolWidth(),
+        h = this.size,
         r = w / 2;
 
     // pin
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    ctx.arc(r, r, r, radians(-210), radians(30), false);
+
+    ctx.moveTo(0, r);
+    ctx.arc(r, r, r, radians(-180), radians(0), false);
     ctx.lineTo(r, h);
-    ctx.closePath();
-    ctx.fill();
+    ctx.lineTo(0, r);
 
     // hole
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
     ctx.arc(r, r, r * 0.5, radians(0), radians(360), false);
-    ctx.closePath();
-    ctx.fill();
 
-    return canvas;
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, h);
 };
 
-SymbolMorph.prototype.drawSymbolFootprints = function (canvas, color) {
-    // answer a canvas showing a pair of (shoe) footprints
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolFootprints = function (ctx, color) {
+    // draw a pair of (shoe) footprints
+    var w = this.symbolWidth(),
         u = w / 10,
         r = u * 1.5;
 
@@ -1779,13 +2185,11 @@ SymbolMorph.prototype.drawSymbolFootprints = function (canvas, color) {
     ctx.arc(w - (u * 2.25), u * 9, u, radians(0), radians(-150), false);
     ctx.closePath();
     ctx.fill();
-    return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolKeyboard = function (canvas, color) {
-    // answer a canvas showing a typing keyboard
-    var ctx = canvas.getContext('2d'),
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolKeyboard = function (ctx, color) {
+    // draw a typing keyboard
+    var h = this.size,
         u = h / 10,
         k = h / 5,
         row, col;
@@ -1802,24 +2206,22 @@ SymbolMorph.prototype.drawSymbolKeyboard = function (canvas, color) {
    		}
   	}
 	ctx.fillRect(u * 4, u * 7, k * 4, k);
-	return canvas;
 };
 
-SymbolMorph.prototype.drawSymbolKeyboardFilled = function (canvas, color) {
-    // answer a canvas showing a typing keyboard
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
-        h = canvas.height,
+SymbolMorph.prototype.renderSymbolKeyboardFilled = function (ctx, color) {
+    // draw a typing keyboard
+    var w = this.symbolWidth(),
+        h = this.size,
         u = h / 10,
         k = h / 5,
         row, col;
 
     ctx.fillStyle = color.toString();
-    ctx.fillRect(0, 0, w, h);
-    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.rect(0, 0, w, h);
     for (row = 0; row < 2; row += 1) {
         for (col = 0; col < 5; col += 1) {
-            ctx.fillRect(
+            ctx.rect(
                   ((u + k) * col) + u,
                   ((u + k) * row) + u,
                    k,
@@ -1827,40 +2229,438 @@ SymbolMorph.prototype.drawSymbolKeyboardFilled = function (canvas, color) {
             );
            }
       }
-    ctx.fillRect(u * 4, u * 7, k * 4, k);
-    return canvas;
+    ctx.rect(u * 4, u * 7, k * 4, k);
+
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, h);
 };
 
-SymbolMorph.prototype.drawSymbolGlobe = function (canvas, color) {
-    // answer a canvas showing a circle
-    var ctx = canvas.getContext('2d'),
-        w = canvas.width,
+SymbolMorph.prototype.renderSymbolGlobeBig = function (ctx, color) {
+    this.renderSymbolGlobe(ctx, color, true);
+};
+
+SymbolMorph.prototype.renderSymbolGlobe = function (ctx, color, detailed) {
+    // draw a stylized globe
+    var w = this.symbolWidth(),
         l = Math.max(w / 30, 0.5);
 
     ctx.strokeStyle = color.toString();
     ctx.lineWidth = l * 2;
+
+    ctx.beginPath();
     ctx.arc(w / 2, w / 2, w / 2 - l, radians(0), radians(360), false);
     ctx.stroke();
 
-/* // more detailed version, commmented out
-    ctx.moveTo(l, w / 3);
-    ctx.lineTo(w - l, w / 3);
-    ctx.stroke();
-    ctx.moveTo(l, 2 * w / 3);
-    ctx.lineTo(w - l, 2 * w / 3);
-    ctx.stroke();
-*/
-
+    if (detailed) {
+        ctx.moveTo(l * 3, w * 0.3);
+        ctx.lineTo(w - l * 3, w * 0.3);
+        ctx.stroke();
+        ctx.moveTo(l * 3, w * 0.7);
+        ctx.lineTo(w - l * 3, w * 0.7);
+        ctx.stroke();
+    }
+    
     // single line version, looks better when small:
+    ctx.beginPath();
     ctx.moveTo(l, w / 2);
     ctx.lineTo(w - l, w / 2);
     ctx.stroke();
 
-    ctx.moveTo(w / 2, 0);
+    ctx.beginPath();
+    ctx.moveTo(w / 2, l / 2);
     ctx.arcTo(0, w / 2, w / 2, w, w * 0.75);
     ctx.stroke();
-    ctx.moveTo(w / 2, 0);
+
+    ctx.beginPath();
+    ctx.moveTo(w / 2, l / 2);
     ctx.arcTo(w, w / 2, w / 2, w, w * 0.75);
     ctx.stroke();
-    return canvas;
 };
+
+SymbolMorph.prototype.renderSymbolList = function (ctx, color) {
+    // draw a stylized list
+    var w = this.symbolWidth(),
+        h = this.size,
+        padding = h / 10,
+        item = h / 5,
+        row;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.rect(0, 0, w, h);
+    for (row = 0; row < 4; row += 1) {
+        ctx.rect(
+            padding,
+            ((padding + item) * row) + padding,
+            w - item,
+            item
+        );
+    }
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, h);
+};
+
+SymbolMorph.prototype.renderSymbolVerticalEllipsis = function (ctx, color) {
+    // draw 3 solid circles
+    var r = this.symbolWidth() / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 5, r, radians(0), radians(360), false);
+    ctx.arc(r, r * 9, r, radians(0), radians(360), false);
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolFlipHorizontal = function (ctx, color) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        c = w / 2,
+        off = w / 15;
+    
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = w / 15;
+    ctx.beginPath();
+    ctx.moveTo(0 + off, h - off / 2);
+    ctx.lineTo(c - off * 1.2, h - off / 2);
+    ctx.lineTo(c - off * 1.2, off * 2);
+    ctx.closePath();
+    ctx.stroke();
+    
+    ctx.fillStyle = color.toString();
+    ctx.lineWidth = w / 15;
+    ctx.beginPath();
+    ctx.moveTo(w - off, h - off / 2);
+    ctx.lineTo(c + off * 1.2, h - off / 2);
+    ctx.lineTo(c + off * 1.2, off * 2);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.fill();
+};
+    
+SymbolMorph.prototype.renderSymbolFlipVertical = function (ctx, color) {
+    ctx.translate(0, this.size);
+    ctx.rotate(radians(-90));
+    this.renderSymbolFlipHorizontal(ctx, color);
+};
+
+SymbolMorph.prototype.renderSymbolTrash = function (ctx, color) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        step = w / 10;
+
+    function stripe(x) {
+        var half = step / 2;
+        ctx.moveTo(x - half, step * 4);
+        ctx.arc(x, step * 4, half, radians(180), radians(0));
+        ctx.lineTo(x + half, step * 8.5);
+        ctx.arc(x, step * 8.5, half, radians(0), radians(180));
+        ctx.lineTo(x - half, step * 4);
+    }
+
+    // body of the can
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(step, step * 2.5);
+    ctx.lineTo(step * 1.5, step * 9.5);
+    ctx.lineTo(step * 2.5, h);
+    ctx.lineTo(step * 7.5, h);
+    ctx.lineTo(step * 8.5, step * 9.5);
+    ctx.lineTo(step * 9, step * 2.5);
+    ctx.lineTo(step, step * 2.5);
+
+    // vertical stripes
+    stripe(w * 0.3);
+    stripe(w * 0.5);
+    stripe(w * 0.7);
+
+    ctx.save();
+    ctx.clip();
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+
+    // the lid
+    ctx.lineWidth = step;
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = step;
+    ctx.beginPath();
+    ctx.moveTo(step / 2, step * 1.5);
+    ctx.lineTo(step * 9.5, step * 1.5);
+    ctx.stroke();
+
+    // the handle on the lid
+    ctx.lineWidth = step / 2;
+    ctx.beginPath();
+    ctx.moveTo(step * 3, step * 1.5);
+    ctx.lineTo(step * 4, step * 0.25);
+    ctx.lineTo(step * 6, step * 0.25);
+    ctx.lineTo(step * 7, step * 1.5);
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolTrashFull = function (ctx, color) {
+    var w = this.symbolWidth(),
+        h = this.size,
+        step = w / 10;
+
+    function stripe(x) {
+        var half = step / 2;
+        ctx.moveTo(x - half, step * 5.5);
+        ctx.arc(x, step * 5.5, half, radians(180), radians(0));
+        ctx.lineTo(x + half, step * 8.5);
+        ctx.arc(x, step * 8.5, half, radians(0), radians(180));
+        ctx.lineTo(x - half, step * 5.5);
+    }
+
+    // body of the can
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(step, step * 4);
+    ctx.lineTo(step * 1.5, step * 9.5);
+    ctx.lineTo(step * 2.5, h);
+    ctx.lineTo(step * 7.5, h);
+    ctx.lineTo(step * 8.5, step * 9.5);
+    ctx.lineTo(step * 9, step * 4);
+    ctx.lineTo(step, step * 4);
+
+    // vertical stripes
+    stripe(w * 0.3);
+    stripe(w * 0.5);
+    stripe(w * 0.7);
+
+    ctx.save();
+    ctx.clip();
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+
+    // document
+    ctx.beginPath();
+    ctx.moveTo(step * 2, 0);
+    ctx.lineTo(step * 6, 0);
+    ctx.lineTo(step * 8, step * 2);
+    ctx.lineTo(step * 8, step * 3.5);
+    ctx.lineTo(step * 2, step * 3.5);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = color.darker(25).toString();
+    ctx.beginPath();
+    ctx.moveTo(step * 6, 0);
+    ctx.lineTo(step * 8, step * 2);
+    ctx.lineTo(step * 6, step * 2);
+    ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolCube = function (ctx, color) {
+    // draw a hexagon
+    var side = this.symbolWidth(),
+        half = side / 2,
+        quarter = side / 4,
+        l = Math.max(side / 20, 0.5);
+
+    // draw the outer hexagon
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(l, quarter);
+    ctx.lineTo(half, l);
+    ctx.lineTo(side - l, quarter);
+    ctx.lineTo(side - l, side - quarter);
+    ctx.lineTo(half, side - l);
+    ctx.lineTo(l, side-quarter);
+    ctx.closePath();
+    ctx.stroke();
+
+    // draw the inner edges
+    ctx.beginPath();
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(l, quarter);
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(side - l, quarter);
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(half, side - l);
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolCubeSolid = function (ctx, color) {
+    // draw a hexagon
+    var side = this.symbolWidth(),
+        half = side / 2,
+        quarter = side / 4,
+        l = Math.max(side / 20, 0.5);
+
+    // draw the outline
+    this.renderSymbolCube(ctx, color);
+
+    // fill the bottom right square
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(half, half - l);
+    ctx.lineTo(side - l, quarter);
+    ctx.lineTo(side - l, side - quarter);
+    ctx.lineTo(half, side - l);
+    ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolBlocks = function (ctx, color) {
+    // draw a stack of 2 command blocks
+    var step = this.size * 0.1,
+        side = this.size * 0.4;
+
+    function blockPath(top, right) {
+        ctx.beginPath();
+
+        // top
+        ctx.moveTo(0, top);
+        ctx.lineTo(step * 2, top);
+        ctx.lineTo(step * 3, top + step);
+        ctx.lineTo(step * 5, top + step);
+        ctx.lineTo(step * 6, top);
+        ctx.lineTo(right, top);
+
+        // right
+        ctx.lineTo(right, top + side);
+    
+        // bottom
+        ctx.lineTo(step * 6, top + side);
+        ctx.lineTo(step * 5, top + step + side);
+        ctx.lineTo(step * 3, top + step + side);
+        ctx.lineTo(step * 2, top + side);
+        ctx.lineTo(0, top + side);
+
+        // left
+        ctx.closePath();
+    }
+
+    ctx.fillStyle = color.toString();
+    blockPath(0, this.symbolWidth() - step);
+    ctx.fill();
+    blockPath(side + step, this.symbolWidth());
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolSpeaker = function (ctx, color) {
+    // draw a loudspeaker with two emerging sound waves
+    var step = this.size / 3,
+        r = this.size / 2,
+        l = this.size / 15;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    ctx.moveTo(0, step);
+    ctx.lineTo(step, step);
+    ctx.lineTo(step * 2, 0);
+    ctx.lineTo(step * 2, step * 3);
+    ctx.lineTo(step, step * 2);
+    ctx.lineTo(0, step * 2);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.lineWidth = l;
+    ctx.strokeStyle = color.toString();
+    ctx.beginPath();
+    ctx.arc(r, r, r - l / 2, radians(45), radians(-45), true);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(r, r, r * 0.65, radians(45), radians(-45), true);
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolInfinity = function (ctx, color) {
+    var h = this.size,
+        l = Math.max(h / 4, 1),
+        r = h / 2;
+
+    ctx.lineWidth = l;
+    ctx.strokeStyle = color.toString();
+
+    // left arc
+    ctx.beginPath();
+    ctx.arc(r, r, r - l / 2, radians(60), radians(360), false);
+    ctx.stroke();
+
+    // right arc
+    ctx.beginPath();
+    ctx.arc(r * 3 - l, r, r - l / 2, radians(-120), radians(180), false);
+    ctx.stroke();
+};
+
+// Decorations
+
+SymbolMorph.prototype.renderPlus = function (
+        renderer, scale, orientation, ctx, color) {
+    // draw a smaller version of another symbol with a little plus sign
+    // at the top right corner
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 12, 0.5),
+        l2 = l / 2,
+        side = h / 3,
+
+        tp = l2,
+        bt = l2 + side,
+        y_middle = l2 + side / 2,
+
+        lt = w - side - l2,
+        x_middle = w - (side / 2) - l2,
+        rt = w - l2;
+
+    if (orientation === 'left') {
+        lt = l2;
+        x_middle = side / 2 + l2;
+        rt = side + l2;
+    }
+
+    ctx.save();
+    ctx.translate(orientation === 'left' ?
+        w * (1 - scale)
+        : 0, h * (1 - scale));
+    ctx.scale(scale, scale);
+    renderer.call(this, ctx, color);
+    ctx.restore();
+
+    // draw a little "plus" sign in the upper right corner
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l;
+    ctx.lineCap = 'square';
+   
+    // vertical line
+    ctx.beginPath();
+    ctx.moveTo(x_middle, tp);
+    ctx.lineTo(x_middle, bt);
+    ctx.stroke();
+ 
+     // horizontal line
+    ctx.beginPath();
+    ctx.moveTo(lt, y_middle);
+    ctx.lineTo(rt, y_middle);
+    ctx.stroke();
+};
+
+/*
+// register examples with the World demo menu
+// comment out to shave off a millisecond loading speed ;-)
+
+(function () {
+    var bright = new Color(240, 240, 240),
+        dark = new Color(20, 20, 20),
+        offset = new Point(-1, -1);
+       
+    SymbolMorph.prototype.addToDemoMenu([
+        'Symbols',
+        SymbolMorph.prototype.names.map(sym => [
+            new SymbolMorph(
+                sym,
+                30,
+                bright,
+                offset,
+                dark
+            ),
+            sym
+        ])
+    ]);
+})();
+*/

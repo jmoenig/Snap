@@ -1,0 +1,91 @@
+{
+  "name": "@tonejs/midi",
+  "version": "2.0.28",
+  "description": "Convert binary midi into JSON",
+  "main": "build/Midi.js",
+  "module": "dist/Midi.js",
+  "jsnext:main": "dist/Midi.js",
+  "types": "dist/Midi.d.ts",
+  "scripts": {
+    "build": "tsc && webpack --mode=production",
+    "codecov": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "docs": "typedoc",
+    "increment": "node scripts/increment_version.js",
+    "lint": "eslint --ext ts ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "watch": "webpack -w --mode=development",
+    "test": "nyc mocha --timeout=10000 --require ts-node/register ./test/*.ts"
+  },
+  "files": [
+    "build",
+    "dist",
+    "src",
+    "LICENSE.md",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tonejs/Midi.git"
+  },
+  "author": "Yotam Mann",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Tonejs/Midi/issues"
+  },
+  "homepage": "https://tonejs.github.com/Midi/",
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.9.0",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^8.0.1",
+    "@types/node": "^14.18.9",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "chai": "^4.2.0",
+    "codecov": "^3.2.0",
+    "eslint": "^8.7.0",
+    "glob": "^7.2.0",
+    "http-server": "^14.1.0",
+    "mocha": "^8.1.0",
+    "node-fetch": "^2.6.7",
+    "nyc": "^15.1.0",
+    "semver": "^5.6.0",
+    "source-map-support": "^0.5.12",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.4.0",
+    "typedoc": "^0.22.11",
+    "typescript": "^4.5.4",
+    "webpack": "^5.66.0",
+    "webpack-cli": "^4.9.1"
+  },
+  "dependencies": {
+    "array-flatten": "^3.0.0",
+    "midi-file": "^1.2.2"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "lcov",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": true,
+    "useTabs": true,
+    "singleQuote": false
+  }
+}

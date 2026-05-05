@@ -1,16 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 16.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="145.561px" height="143.07px" viewBox="-4.708 -4.5 145.561 143.07" enable-background="new -4.708 -4.5 145.561 143.07"
-	 xml:space="preserve">
-<g id="ID0.2657389142550528">
-	<path id="ID0.2874125149101019" fill="#C4F3EF" stroke="#C4F3EF" stroke-width="15" stroke-linejoin="round" d="M37.8,3
-		C19.025,3,3.788,19.265,3.788,39.305c0,40.77,38.528,51.458,64.783,91.765c24.822-40.059,64.783-52.297,64.783-91.765
-		C133.354,19.265,118.115,3,99.342,3c-13.619,0-25.34,8.583-30.771,20.933C63.14,11.583,51.418,3,37.8,3z"/>
-	<path id="ID0.2874125149101019_1_" fill="#CCFFFF" stroke="#CCFFFF" stroke-width="15" stroke-linejoin="round" d="M34.8,4
-		C17.132,4,2.792,19.306,2.792,38.165c0,38.366,36.257,48.426,60.964,86.355c23.358-37.696,60.964-49.214,60.964-86.355
-		C124.721,19.306,110.381,4,92.713,4c-12.815,0-23.846,8.077-28.956,19.699C58.646,12.077,47.616,4,34.8,4z"/>
+
+<svg
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="145.562"
+   height="143.06935"
+   viewBox="-4.708 -4.5 145.56199 143.06934"
+   enable-background="new -4.708 -4.5 145.561 143.07"
+   xml:space="preserve"
+   sodipodi:docname="heart_love_it.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs9" /><sodipodi:namedview
+   id="namedview7"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1" />
+<g
+   id="ID0.2657389142550528">
+	<path
+   id="ID0.2874125149101019"
+   fill="#c4f3ef"
+   stroke="#c4f3ef"
+   stroke-width="15"
+   stroke-linejoin="round"
+   d="M 37.8,3 C 19.025,3 3.788,19.265 3.788,39.305 c 0,40.77 38.528,51.458 64.783,91.765 C 93.393,91.011 133.354,78.773 133.354,39.305 133.354,19.265 118.115,3 99.342,3 85.723,3 74.002,11.583 68.571,23.933 63.14,11.583 51.418,3 37.8,3 Z" />
+	<path
+   id="ID0.2874125149101019_1_"
+   fill="#ccffff"
+   stroke="#ccffff"
+   stroke-width="15"
+   stroke-linejoin="round"
+   d="M 34.8,4 C 17.132,4 2.792,19.306 2.792,38.165 2.792,76.531 39.049,86.591 63.756,124.52 87.114,86.824 124.72,75.306 124.72,38.165 124.721,19.306 110.381,4 92.713,4 79.898,4 68.867,12.077 63.757,23.699 58.646,12.077 47.616,4 34.8,4 Z" />
 </g>
-<text id="ID0.7224274449981749" transform="matrix(1 0 0 1 19.708 55.4043)" fill="#FF9999" font-family="'Helvetica'" font-size="25.0793">LOVE IT</text>
+<text
+   id="ID0.7224274449981749"
+   fill="#ff9999"
+   font-family="Helvetica"
+   font-size="25.0793px"
+   x="19.708"
+   y="55.404301">LOVE IT</text>
 </svg>

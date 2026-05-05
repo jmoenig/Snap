@@ -52,14 +52,20 @@
         - fixed initial rendering, so costumes can be re-opened after saving
     2018, June 20 (Jens):
         - select primary color with right-click (in addition to shift-click)
+    2020, April 15 (Jens):
+        - migrated to new Morphic2 architecture
+    2021, March 17 (Jens):
+        - moved stage dimension handling to scenes
 */
 
-/*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, nop,
-PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph,
-TextMorph, Image, newCanvas, PaintEditorMorph, StageMorph, Costume, isNil,
-localize, PaintCanvasMorph, detect, modules*/
+/*global Point, Object, Rectangle, AlignmentMorph, Morph, XML_Element, localize,
+PaintColorPickerMorph, Color, SliderMorph, InputFieldMorph, ToggleMorph, isNil,
+TextMorph, Image, newCanvas, PaintEditorMorph, Costume, nop, PaintCanvasMorph,
+StringMorph, detect, modules*/
 
-modules.sketch = '2019-February-22';
+/*jshint esversion: 6*/
+
+modules.sketch = '2023-May-24';
 
 // Declarations
 
@@ -977,15 +983,14 @@ VectorPaintEditorMorph.prototype.buildEdits = function () {
             function () {
                 if (myself.shapes.length > 0) {
                     myself.ide.confirm(
-                        'This will convert your vector objects into\n' +
-                        'bitmaps, and you will not be able to convert\n' +
-                        'them back into vector drawings.\n' +
+                        'This will convert your vector objects into ' +
+                        'bitmaps, and you will not be able to convert ' +
+                        'them back into vector drawings. ' +
                         'Are you sure you want to continue?',
                         'Convert to bitmap?',
-                        function () {
-                            myself.convertToBitmap();
-                        },
-                        nop
+                        () => {
+                            setTimeout(() => {myself.convertToBitmap(); });
+                        }
                     );
                 } else {
                     myself.convertToBitmap();
@@ -998,7 +1003,8 @@ VectorPaintEditorMorph.prototype.buildEdits = function () {
 };
 
 VectorPaintEditorMorph.prototype.convertToBitmap = function () {
-    var canvas = newCanvas(StageMorph.prototype.dimensions);
+    var canvas = newCanvas(this.ide.stage.dimensions),
+        myself = this;
 
     this.object = new Costume();
 
@@ -1012,10 +1018,16 @@ VectorPaintEditorMorph.prototype.convertToBitmap = function () {
         this.world(),
         this.ide,
         false,
-        this.oncancel
+        null,
+        () => {
+            myself.ide.currentSprite.shadowAttribute('costumes');
+            myself.ide.currentSprite.addCostume(myself.object);
+            myself.ide.spriteEditor.updateList();
+            if (myself.ide) {
+                myself.ide.currentSprite.wearCostume(myself.object);
+            }
+        }
     );
-
-    this.destroy();
 };
 
 VectorPaintEditorMorph.prototype.buildScaleBox = function () {
@@ -1045,7 +1057,14 @@ VectorPaintEditorMorph.prototype.openIn = function (
     var myself = this,
         isEmpty = isNil(shapes) || shapes.length === 0;
 
-    VectorPaintEditorMorph.uber.openIn.call(this, world, null, oldrc, callback);
+    VectorPaintEditorMorph.uber.openIn.call(
+        this,
+        world,
+        null,
+        oldrc,
+        callback,
+        anIDE
+    );
     this.ide = anIDE;
     this.paper.drawNew();
     this.paper.changed();
@@ -1074,67 +1093,67 @@ VectorPaintEditorMorph.prototype.openIn = function (
     this.updateHistory();
 
     this.processKeyUp = function () {
-        this.shift = false;
-        this.ctrl = false;
-        this.propertiesControls.constrain.refresh();
+        myself.shift = false;
+        myself.ctrl = false;
+        myself.propertiesControls.constrain.refresh();
     };
 
     this.processKeyDown = function (event) {
-        var myself = this,
-            pos;
 
-        this.shift = event.shiftKey;
-        this.ctrl = event.ctrlKey;
+        var pos;
 
-        switch (this.world().currentKey) {
+        myself.shift = myself.world().currentKey === 16;
+        myself.ctrl = event.ctrlKey;
+
+        switch (myself.world().currentKey) {
             /* Del and backspace keys */
             case 46:
             case 8:
-                this.sortSelection();
-                this.selection.slice().reverse().forEach(function (shape) {
+                myself.sortSelection();
+                myself.selection.slice().reverse().forEach(function (shape) {
                     myself.shapes.splice(myself.shapes.indexOf(shape), 1);
                 });
-                this.clearSelection();
-                this.updateHistory();
+                myself.clearSelection();
+                myself.updateHistory();
             break;
             /* Enter key */
             case 13:
-                if (this.currentShape && this.currentShape.isPolygon) {
-                    this.currentShape.close();
-                    this.currentShape.drawOn(this.paper);
-                    this.shapes.push(this.currentShape);
-                    this.currentShape = null;
-                    this.updateHistory();
+                if (myself.currentShape && myself.currentShape.isPolygon) {
+                    myself.currentShape.close();
+                    myself.currentShape.drawOn(myself.paper);
+                    myself.shapes.push(myself.currentShape);
+                    myself.currentShape = null;
+                    myself.updateHistory();
                 }
             break;
             /* Page Up key */
             case 33:
-                this.changeSelectionLayer('up');
+                myself.changeSelectionLayer('up');
             break;
             /* Page Down key */
             case 34:
-                this.changeSelectionLayer('down');
+                myself.changeSelectionLayer('down');
             break;
             /* End key */
             case 35:
-                this.changeSelectionLayer('bottom');
+                myself.changeSelectionLayer('bottom');
             break;
 
             /* Home key */
             case 36:
-                this.changeSelectionLayer('top');
+                myself.changeSelectionLayer('top');
             break;
             case 90:
             /* Ctrl + Z */
-                if (this.ctrl) {
-                    this.undo();
+                if (myself.ctrl) {
+                    myself.undo();
                 }
             break;
             case 67:
             /* Ctrl + C */
-                if (this.ctrl && this.selection.length) {
-                    this.clipboard =
-                        this.selection.map(function (each) {
+                if (myself.ctrl && myself.selection.length) {
+                    myself.clipboard =
+                        myself.selection.map(function (each) {
                             return each.copy();
                         }
                     );
@@ -1142,50 +1161,49 @@ VectorPaintEditorMorph.prototype.openIn = function (
             break;
             case 86:
             /* Ctrl + V */
-                pos = this.world().hand.position();
-                if (this.ctrl && this.paper.bounds.containsPoint(pos)) {
-                    this.paper.pasteAt(pos);
-                    this.updateHistory();
+                pos = myself.world().hand.position();
+                if (myself.ctrl && myself.paper.bounds.containsPoint(pos)) {
+                    myself.paper.pasteAt(pos);
+                    myself.updateHistory();
                 }
             break;
             case 65:
             /* Ctrl + A */
-                if (this.ctrl) {
-                    this.paper.currentTool = 'selection';
-                    this.paper.toolChanged('selection');
-                    this.refreshToolButtons();
-                    this.paper.selectShapes(this.shapes);
+                if (myself.ctrl) {
+                    myself.paper.currentTool = 'selection';
+                    myself.paper.toolChanged('selection');
+                    myself.refreshToolButtons();
+                    myself.paper.selectShapes(myself.shapes);
                 }
             break;
             case 27:
             /* Escape key */
-                this.clearSelection();
+                myself.clearSelection();
             break;
             case 37:
             /* Left arrow */
-                this.moveSelectionBy(new Point(-1, 0));
-                this.updateHistory();
+                myself.moveSelectionBy(new Point(-1, 0));
+                myself.updateHistory();
             break;
             case 38:
             /* Up arrow	*/
-                this.moveSelectionBy(new Point(0, -1));
-                this.updateHistory();
+                myself.moveSelectionBy(new Point(0, -1));
+                myself.updateHistory();
             break;
             case 39:
             /* Right arrow */
-                this.moveSelectionBy(new Point(1, 0));
-                this.updateHistory();
+                myself.moveSelectionBy(new Point(1, 0));
+                myself.updateHistory();
             break;
             case 40:
             /* Down arrow */
-                this.moveSelectionBy(new Point(0, 1));
-                this.updateHistory();
+                myself.moveSelectionBy(new Point(0, 1));
+                myself.updateHistory();
             break;
             default:
                 nop();
         }
-        this.propertiesControls.constrain.refresh();
-        this.drawNew();
+        myself.propertiesControls.constrain.refresh();
     };
 };
 
@@ -1196,12 +1214,11 @@ VectorPaintEditorMorph.prototype.buildContents = function() {
 
     this.paper.destroy();
     this.paper = new VectorPaintCanvasMorph(myself.shift);
-    this.paper.setExtent(StageMorph.prototype.dimensions);
+    this.paper.setExtent(this.ide.stage.dimensions);
     this.body.add(this.paper);
 
     this.refreshToolButtons();
     this.fixLayout();
-    this.drawNew();
 };
 
 VectorPaintEditorMorph.prototype.buildToolbox = function () {
@@ -1252,7 +1269,6 @@ VectorPaintEditorMorph.prototype.buildToolbox = function () {
     });
 
     this.toolbox.bounds = this.toolbox.fullBounds().expandBy(inset * 2);
-    this.toolbox.drawNew();
 };
 
 // TODO :'(
@@ -1262,14 +1278,26 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
         pc = this.propertiesControls,
         alpen = new AlignmentMorph("row", this.padding),
         alignColor = new AlignmentMorph("row", this.padding),
-        alignNames = new AlignmentMorph("row", this.padding);
+        alignNames = new AlignmentMorph("row", this.padding),
+        brushControl = new AlignmentMorph("column", 3);
+        
+    brushControl.alignment = "left";
 
     pc.primaryColorViewer = new Morph();
-    pc.primaryColorViewer.setExtent(new Point(85, 15)); // 40 = height primary & brush size
     pc.primaryColorViewer.color = new Color(0, 0, 0);
+    pc.primaryColorViewer.setExtent(new Point(85, 15)); // 40 = height primary & brush size
+
+    pc.primaryColorViewer.render = function (ctx) {
+        myself.renderColorSelection(ctx, myself.paper.settings.primaryColor);
+    };
+
     pc.secondaryColorViewer = new Morph();
-    pc.secondaryColorViewer.setExtent(new Point(85, 15)); // 20 = height secondaryColor box
     pc.secondaryColorViewer.color = new Color(0, 0, 0);
+    pc.secondaryColorViewer.setExtent(new Point(85, 15)); // 20 = height secondaryColor box
+
+    pc.secondaryColorViewer.render = function (ctx) {
+        myself.renderColorSelection(ctx, myself.paper.settings.secondaryColor);
+    };
 
     pc.colorpicker = new PaintColorPickerMorph(
         new Point(180, 100),
@@ -1287,6 +1315,9 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
             this.action(this.getPixelColor(pos), true);
         }
     };
+
+    // also allow selecting the fill color via touch-hold
+    pc.colorpicker.mouseClickRight = pc.colorpicker.mouseDownRight;
 
     pc.colorpicker.action(new Color(0, 0, 0)); // secondary color
     pc.colorpicker.action('transparent', true);
@@ -1313,12 +1344,10 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     pc.penSizeField.accept = function (num) {
         var val = parseFloat(pc.penSizeField.getValue());
         pc.penSizeSlider.value = val;
-        pc.penSizeSlider.drawNew();
         pc.penSizeSlider.updateValue();
         this.setContents(val);
         myself.paper.settings.lineWidth = val;
-        this.world().keyboardReceiver = myself;
-        //pc.colorpicker.action(myself.paper.settings.primaryColor);
+        this.world().keyboardFocus = myself;
         myself.selection.forEach(function (shape) {
             shape.setBorderWidth(num);
             shape.drawOn(myself.paper);
@@ -1330,7 +1359,6 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
     alpen.add(pc.penSizeField);
     alpen.color = myself.color;
     alpen.fixLayout();
-    pc.penSizeField.drawNew();
 
     pc.constrain = new ToggleMorph(
             "checkbox",
@@ -1340,34 +1368,34 @@ VectorPaintEditorMorph.prototype.populatePropertiesMenu = function () {
             function () { return myself.shift; }
             );
 
+    pc.constrain.label.isBold = false;
     alignColor.add(pc.secondaryColorViewer);
     alignColor.add(pc.primaryColorViewer);
     alignColor.fixLayout();
 
     alignNames.add(new TextMorph(localize('Edge color\n(left click)'),
-				 null, null, null, null,
+				 10, null, null, null,
 				 'center', 85));
     alignNames.add(new TextMorph(localize('Fill color\n(right click)'),
-				 null, null, null, null,
+				 10, null, null, null,
 				 'center', 85));
     alignNames.fixLayout();
     c.add(pc.colorpicker);
 	c.add(alignNames);
     c.add(alignColor);
-    c.add(new TextMorph(localize('Brush size')));
-    c.add(alpen);
-    c.add(pc.constrain);
+    brushControl.add(
+        new StringMorph(localize("Brush size") + ":", 10, null, true)
+    );
+    brushControl.add(alpen);
+    brushControl.add(pc.constrain);
+    brushControl.fixLayout();
+    c.add(brushControl);
 };
 
 VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
     var myself = this,
         isSecondary = this.paper.isShiftPressed() ? false : secondary,
-        propertyName = (isSecondary ? 'secondary' : 'primary') + 'Color',
-        ni = newCanvas(
-            this.propertiesControls[propertyName + 'Viewer'].extent()
-        ),
-        ctx = ni.getContext('2d'),
-        i, j;
+        propertyName = (isSecondary ? 'secondary' : 'primary') + 'Color';
 
     this.paper.settings[(propertyName)] = color;
 
@@ -1379,7 +1407,16 @@ VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
         this.updateHistory();
     }
 
-    if (color === 'transparent') {
+    this.propertiesControls[propertyName + 'Viewer'].rerender();
+};
+
+VectorPaintEditorMorph.prototype.renderColorSelection = function (
+    ctx,
+    color = 'transparent'
+) {
+    var i, j;
+
+    if (color === 'transparent' || color.a === 0) {
         for (i = 0; i < 180; i += 5) {
             for (j = 0; j < 15; j += 5) {
                 ctx.fillStyle =
@@ -1393,17 +1430,6 @@ VectorPaintEditorMorph.prototype.selectColor = function (color, secondary) {
         ctx.fillStyle = color.toString();
         ctx.fillRect(0, 0, 180, 15);
     }
-
-    //Brush size
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = Math.min(this.paper.settings.lineWidth, 20);
-    ctx.beginPath();
-    ctx.lineCap = 'round';
-    ctx.moveTo(20, 30);
-    ctx.lineTo(160, 30);
-    ctx.stroke();
-    this.propertiesControls[propertyName + 'Viewer'].image = ni;
-    this.propertiesControls[propertyName + 'Viewer'].changed();
 };
 
 VectorPaintEditorMorph.prototype.changeSelectionLayer = function (destination) {
@@ -1535,7 +1561,7 @@ VectorPaintEditorMorph.prototype.getSVG = function () {
     svg.attributes.xmlns = 'http://www.w3.org/2000/svg';
     svg.attributes.snap = 'http://snap.berkeley.edu/run';
     svg.attributes.version = '1.1';
-    svg.attributes.preserveAspectRatio = 'xMinYMin meet';
+    svg.attributes.preserveAspectRatio = 'none meet';
     svg.attributes.viewBox =
         bounds.left() + ' ' + bounds.top() + ' ' +
         (bounds.right() - bounds.left()) + ' ' +
@@ -1652,6 +1678,7 @@ function VectorPaintCanvasMorph (shift) {
 
 VectorPaintCanvasMorph.prototype.init = function (shift) {
     VectorPaintCanvasMorph.uber.init.call(this, shift);
+    this.isCachingImage = true;
     this.pointBuffer = [];
     this.currentTool = 'brush';
     this.settings = {
@@ -1726,22 +1753,27 @@ VectorPaintCanvasMorph.prototype.toolChanged = function (tool) {
 VectorPaintCanvasMorph.prototype.drawNew = function () {
     var myself = this,
         editor = this.parentThatIsA(VectorPaintEditorMorph),
-        canvas = newCanvas(this.extent());
+        canvas = newCanvas(this.extent(), false, this.cachedImage);
 
     this.merge(this.background, canvas);
     this.merge(this.paper, canvas);
 
-    editor.shapes.forEach(function(each) {
-        myself.merge(each.image, canvas);
-    });
+    if (editor) {
+        editor.shapes.forEach(function(each) {
+            myself.merge(each.image, canvas);
+        });
 
-    if (editor.currentShape) {
-        this.merge(editor.currentShape.image, canvas);
+        if (editor.currentShape) {
+            this.merge(editor.currentShape.image, canvas);
+        }
     }
 
-    this.image = canvas;
+    this.cachedImage = canvas;
     this.drawFrame();
 };
+
+VectorPaintCanvasMorph.prototype.render =
+    VectorPaintCanvasMorph.prototype.drawNew;
 
 VectorPaintCanvasMorph.prototype.step = function () {
     if (this.redraw) {

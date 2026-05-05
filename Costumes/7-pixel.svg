@@ -1,10 +1,53 @@
-<svg version="1.1" width="26" height="36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="25.285713"
+   height="35.400002"
+   id="svg8"
+   sodipodi:docname="7-pixel.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs12" />
+  <sodipodi:namedview
+     id="namedview10"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.313814845867455">
-    <path id="ID0.6111538698896766" fill="#39B54A" d="M 105 0 L 105 42 L 84 42 L 84 21 L 0 21 L 0 0 L 105 0 " transform="matrix(0.24081632494926453, 0, 0, 0.24081632494926453, 0.55, 0.55)"/>
-    <path id="ID0.26674040500074625" fill="#39B54A" d="M 21 84 L 42 84 L 42 105 L 21 105 L 21 84 Z " transform="matrix(0.24081632494926453, 0, 0, 0.24081632494926453, 0.55, 0.55)"/>
-    <path id="ID0.712471314240247" fill="#39B54A" d="M 63 42 L 84 42 L 84 63 L 63 63 L 63 42 Z " transform="matrix(0.24081632494926453, 0, 0, 0.24081632494926453, 0.55, 0.55)"/>
-    <path id="ID0.9837261787615716" fill="#39B54A" d="M 42 63 L 63 63 L 63 84 L 42 84 L 42 63 Z " transform="matrix(0.24081632494926453, 0, 0, 0.24081632494926453, 0.55, 0.55)"/>
-    <path id="ID0.2812008634209633" fill="#39B54A" d="M 0 105 L 21 105 L 21 147 L 0 147 L 0 105 Z " transform="matrix(0.24081632494926453, 0, 0, 0.24081632494926453, 0.55, 0.55)"/>
+  <g
+     id="ID0.313814845867455"
+     transform="translate(-0.55,-0.55)">
+    <path
+       id="ID0.6111538698896766"
+       fill="#39b54a"
+       d="M 105,0 V 42 H 84 V 21 H 0 V 0 h 105"
+       transform="matrix(0.24081632,0,0,0.24081632,0.55,0.55)" />
+    <path
+       id="ID0.26674040500074625"
+       fill="#39b54a"
+       d="m 21,84 h 21 v 21 H 21 Z"
+       transform="matrix(0.24081632,0,0,0.24081632,0.55,0.55)" />
+    <path
+       id="ID0.712471314240247"
+       fill="#39b54a"
+       d="M 63,42 H 84 V 63 H 63 Z"
+       transform="matrix(0.24081632,0,0,0.24081632,0.55,0.55)" />
+    <path
+       id="ID0.9837261787615716"
+       fill="#39b54a"
+       d="M 42,63 H 63 V 84 H 42 Z"
+       transform="matrix(0.24081632,0,0,0.24081632,0.55,0.55)" />
+    <path
+       id="ID0.2812008634209633"
+       fill="#39b54a"
+       d="m 0,105 h 21 v 42 H 0 Z"
+       transform="matrix(0.24081632,0,0,0.24081632,0.55,0.55)" />
   </g>
 </svg>

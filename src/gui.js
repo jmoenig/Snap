@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -39,13 +39,19 @@
 
         IDE_Morph
         ProjectDialogMorph
+        LibraryImportDialogMorph
         SpriteIconMorph
         TurtleIconMorph
         CostumeIconMorph
         WardrobeMorph
+        SoundIconMorph
+        JukeboxMorph
+        SceneIconMorph
+        SceneAlbumMorph
         StageHandleMorph
         PaletteHandleMorph
         CamSnapshotDialogMorph
+        SoundRecorderDialogMorph
 
 
     credits
@@ -55,29 +61,37 @@
     Ian Reynolds contributed handling and visualization of sounds
     Michael Ball contributed the LibraryImportDialogMorph and countless
     utilities to load libraries from relative urls
+    Bernat Romagosa contributed more things than I can mention,
+    including interfacing to the camera and microphone
 
 */
 
-/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud,
-ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, VariableFrame,
-StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph,normalizeCanvas,
+/*global modules, Morph, SpriteMorph, SyntaxElementMorph, Color, Cloud, Audio,
+ListWatcherMorph, TextMorph, newCanvas, useBlurredShadows, Sound, Scene, Note,
+StringMorph, Point, MenuMorph, morphicVersion, DialogBoxMorph, BlockEditorMorph,
 ToggleButtonMorph, contains, ScrollFrameMorph, StageMorph, PushButtonMorph, sb,
 InputFieldMorph, FrameMorph, Process, nop, SnapSerializer, ListMorph, detect,
-AlignmentMorph, TabMorph, Costume, MorphicPreferences, Sound, BlockMorph,
-ToggleMorph, InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight,
-BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, localize,
-List, ArgMorph, Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph,
-CommentMorph, CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph,
-BlockLabelPlaceHolderMorph, Audio, SpeechBubbleMorph, ScriptFocusMorph,
-XML_Element, WatcherMorph, BlockRemovalDialogMorph, saveAs, TableMorph,
-isSnapObject, isRetinaEnabled, disableRetinaSupport, enableRetinaSupport,
-isRetinaSupported, SliderMorph, Animation, BoxMorph, MediaRecorder*/
+AlignmentMorph, TabMorph, Costume, MorphicPreferences,BlockMorph, ToggleMorph,
+InputSlotDialogMorph, ScriptsMorph, isNil, SymbolMorph, fontHeight, localize,
+BlockExportDialogMorph, BlockImportDialogMorph, SnapTranslator, List, ArgMorph,
+Uint8Array, HandleMorph, SVG_Costume, TableDialogMorph, CommentMorph, saveAs,
+CommandBlockMorph, BooleanSlotMorph, RingReporterSlotMorph, ScriptFocusMorph,
+BlockLabelPlaceHolderMorph, SpeechBubbleMorph, XML_Element, WatcherMorph, WHITE,
+BlockRemovalDialogMorph,TableMorph, isSnapObject, isRetinaEnabled, SliderMorph,
+disableRetinaSupport, enableRetinaSupport, isRetinaSupported, MediaRecorder,
+Animation, BoxMorph, BlockDialogMorph, RingMorph, Project, ZERO, BLACK, CLEAR,
+BlockVisibilityDialogMorph, ThreadManager, isString, SnapExtensions, snapEquals,
+HatBlockMorph, ZOOM*/
+
+/*jshint esversion: 11*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2019-July-10';
+modules.gui = '2026-April-30';
 
 // Declarations
+
+var SnapVersion = '12-beta-260430';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -88,9 +102,12 @@ var TurtleIconMorph;
 var WardrobeMorph;
 var SoundIconMorph;
 var JukeboxMorph;
+var SceneIconMorph;
+var SceneAlbumMorph;
 var StageHandleMorph;
 var PaletteHandleMorph;
 var CamSnapshotDialogMorph;
+var SoundRecorderDialogMorph;
 
 // IDE_Morph ///////////////////////////////////////////////////////////
 
@@ -104,9 +121,31 @@ IDE_Morph.uber = Morph.prototype;
 
 // IDE_Morph preferences settings and skins
 
-IDE_Morph.prototype.setDefaultDesign = function () {
+IDE_Morph.prototype.isBright = false;
+
+IDE_Morph.prototype.setDefaultDesign = function () { // skeuomorphic
     MorphicPreferences.isFlat = false;
-    SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
+    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    SyntaxElementMorph.prototype.contrast = 65;
+    DialogBoxMorph.prototype.corner = 12;
+    DialogBoxMorph.prototype.padding = 14;
+};
+
+IDE_Morph.prototype.setFlatDesign = function () {
+    MorphicPreferences.isFlat = true;
+    IDE_Morph.prototype.scriptsPaneTexture = null;
+    SyntaxElementMorph.prototype.contrast = 20;
+    DialogBoxMorph.prototype.corner = 8;
+    DialogBoxMorph.prototype.padding = 10;
+};
+
+IDE_Morph.prototype.setDefaultTheme = function () { // dark
+    IDE_Morph.prototype.isBright = false;
+
+    PushButtonMorph.prototype.outlineColor = new Color(30, 30, 30);
+    PushButtonMorph.prototype.outlineGradient = false;
+
+    SpriteMorph.prototype.paletteColor = new Color(30, 30, 30);
     SpriteMorph.prototype.paletteTextColor = new Color(230, 230, 230);
     StageMorph.prototype.paletteTextColor
         = SpriteMorph.prototype.paletteTextColor;
@@ -115,61 +154,20 @@ IDE_Morph.prototype.setDefaultDesign = function () {
         = SpriteMorph.prototype.paletteColor.lighter(30);
 
     IDE_Morph.prototype.buttonContrast = 30;
-    IDE_Morph.prototype.backgroundColor = new Color(40, 40, 40);
+    IDE_Morph.prototype.backgroundColor = new Color(10, 10, 10);
     IDE_Morph.prototype.frameColor = SpriteMorph.prototype.paletteColor;
 
     IDE_Morph.prototype.groupColor
-        = SpriteMorph.prototype.paletteColor.lighter(8);
+        = SpriteMorph.prototype.paletteColor.lighter(5);
     IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
-    IDE_Morph.prototype.buttonLabelColor = new Color(255, 255, 255);
+    IDE_Morph.prototype.buttonLabelColor = WHITE;
     IDE_Morph.prototype.tabColors = [
-        IDE_Morph.prototype.groupColor.darker(40),
-        IDE_Morph.prototype.groupColor.darker(60),
+        IDE_Morph.prototype.groupColor.darker(50),
+        IDE_Morph.prototype.groupColor.darker(25),
         IDE_Morph.prototype.groupColor
     ];
     IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
-    IDE_Morph.prototype.appModeColor = new Color();
-    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
-    IDE_Morph.prototype.padding = 5;
-
-    SpriteIconMorph.prototype.labelColor
-        = IDE_Morph.prototype.buttonLabelColor;
-    CostumeIconMorph.prototype.labelColor
-        = IDE_Morph.prototype.buttonLabelColor;
-    SoundIconMorph.prototype.labelColor
-        = IDE_Morph.prototype.buttonLabelColor;
-    TurtleIconMorph.prototype.labelColor
-        = IDE_Morph.prototype.buttonLabelColor;
-};
-
-IDE_Morph.prototype.setFlatDesign = function () {
-    MorphicPreferences.isFlat = true;
-    SpriteMorph.prototype.paletteColor = new Color(255, 255, 255);
-    SpriteMorph.prototype.paletteTextColor = new Color(70, 70, 70);
-    StageMorph.prototype.paletteTextColor
-        = SpriteMorph.prototype.paletteTextColor;
-    StageMorph.prototype.paletteColor = SpriteMorph.prototype.paletteColor;
-    SpriteMorph.prototype.sliderColor = SpriteMorph.prototype.paletteColor;
-
-    IDE_Morph.prototype.buttonContrast = 30;
-    IDE_Morph.prototype.backgroundColor = new Color(200, 200, 200);
-    IDE_Morph.prototype.frameColor = new Color(255, 255, 255);
-
-    IDE_Morph.prototype.groupColor = new Color(230, 230, 230);
-    IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
-    IDE_Morph.prototype.buttonLabelColor = new Color(70, 70, 70);
-    IDE_Morph.prototype.tabColors = [
-        IDE_Morph.prototype.groupColor.lighter(60),
-        IDE_Morph.prototype.groupColor.darker(10),
-        IDE_Morph.prototype.groupColor
-    ];
-    IDE_Morph.prototype.rotationStyleColors = [
-        IDE_Morph.prototype.groupColor,
-        IDE_Morph.prototype.groupColor.darker(10),
-        IDE_Morph.prototype.groupColor.darker(30)
-    ];
-    IDE_Morph.prototype.appModeColor = IDE_Morph.prototype.frameColor;
-    IDE_Morph.prototype.scriptsPaneTexture = null;
+    IDE_Morph.prototype.appModeColor = BLACK;
     IDE_Morph.prototype.padding = 1;
 
     SpriteIconMorph.prototype.labelColor
@@ -180,6 +178,57 @@ IDE_Morph.prototype.setFlatDesign = function () {
         = IDE_Morph.prototype.buttonLabelColor;
     TurtleIconMorph.prototype.labelColor
         = IDE_Morph.prototype.buttonLabelColor;
+    SceneIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+
+    DialogBoxMorph.prototype.color = PushButtonMorph.prototype.color;
+
+    ScriptsMorph.prototype.feedbackColor = WHITE;
+};
+
+IDE_Morph.prototype.setBrightTheme = function () {
+    IDE_Morph.prototype.isBright = true;
+
+    PushButtonMorph.prototype.outlineColor = new Color(255, 255, 255);
+    PushButtonMorph.prototype.outlineGradient = true;
+
+    SpriteMorph.prototype.paletteColor = WHITE;
+    SpriteMorph.prototype.paletteTextColor = new Color(70, 70, 70);
+    StageMorph.prototype.paletteTextColor
+        = SpriteMorph.prototype.paletteTextColor;
+    StageMorph.prototype.paletteColor = SpriteMorph.prototype.paletteColor;
+    SpriteMorph.prototype.sliderColor = SpriteMorph.prototype.paletteColor;
+
+    IDE_Morph.prototype.buttonContrast = 30;
+    IDE_Morph.prototype.backgroundColor = new Color(220, 220, 230);
+    IDE_Morph.prototype.frameColor = new Color(240, 240, 245);
+
+    IDE_Morph.prototype.groupColor = WHITE;
+    IDE_Morph.prototype.sliderColor = SpriteMorph.prototype.sliderColor;
+    IDE_Morph.prototype.buttonLabelColor = new Color(70, 70, 70);
+    IDE_Morph.prototype.tabColors = [
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor.lighter(50),
+        IDE_Morph.prototype.groupColor
+    ];
+    IDE_Morph.prototype.rotationStyleColors = IDE_Morph.prototype.tabColors;
+    IDE_Morph.prototype.appModeColor = IDE_Morph.prototype.frameColor;
+    IDE_Morph.prototype.padding = 1;
+
+    SpriteIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    CostumeIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    SoundIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    TurtleIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+    SceneIconMorph.prototype.labelColor
+        = IDE_Morph.prototype.buttonLabelColor;
+
+    DialogBoxMorph.prototype.color = IDE_Morph.prototype.frameColor;
+
+    ScriptsMorph.prototype.feedbackColor = new Color(153, 255, 213);
 };
 
 IDE_Morph.prototype.scriptsTexture = function () {
@@ -189,47 +238,101 @@ IDE_Morph.prototype.scriptsTexture = function () {
     for (i = 0; i < 100; i += 4) {
         ctx.fillStyle = this.frameColor.toString();
         ctx.fillRect(i, 0, 1, 100);
-        ctx.fillStyle = this.groupColor.lighter(6).toString();
+        ctx.fillStyle = this.groupColor.lighter(2).toString();
         ctx.fillRect(i + 1, 0, 1, 100);
         ctx.fillRect(i + 3, 0, 1, 100);
-        ctx.fillStyle = this.groupColor.toString();
+        ctx.fillStyle = this.groupColor.darker(2).toString();
         ctx.fillRect(i + 2, 0, 1, 100);
     }
     return pic;
 };
 
+IDE_Morph.prototype.setDefaultTheme();
 IDE_Morph.prototype.setDefaultDesign();
 
 // IDE_Morph instance creation:
 
-function IDE_Morph(isAutoFill) {
-    this.init(isAutoFill);
+function IDE_Morph(config = {}) {
+    this.init(config);
 }
 
-IDE_Morph.prototype.init = function (isAutoFill) {
+/*
+    Configuring the IDE for specialized uses, e.g. as DSL inside another IDE
+    can be achieved by passing in an optional configuration dictionary when
+    creating an instance. This is still very much under construction. Currently
+    the following options are available:
+
+        noAutoFill      bool, do not let the IDE fill the whole World canvas
+        path            str, path to additional resources (translations)
+        load:           str, microworld file name (xml)
+        onload:         callback, called when the microworld is loaded
+        design:         str, currently "flat" (bright) or "classic" (dark)
+        border:         num, pixels surrounding the IDE, default is none (zero)
+        lang:           str, translation to be used, e.g. "de" for German
+        mode:           str, currently "presentation" or "edit"
+        hideControls:   bool, hide/show the tool bar
+        hideCategories: bool, hide/show the palette block category buttons
+        hideProjectName:bool, hide/show the project title in the tool bar
+        noProjectItems: bood, hide/show project specific menu items
+        noDefaultCat:   bool, hide/show the buit-in bloc category buttons
+        noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
+        noSprites:      bool, hide/show the stage, corral, sprite editor
+        noPalette:      bool, hide/show the palette including the categories
+        noImports:      bool, disable/allow importing files via drag&drop
+        noOwnBlocks:    bool, hider/show "make a block" and "make a category"
+        noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
+        noUserSettings: bool, disable/enable persistent user preferences
+        noDevWarning:   bool, ignore development version incompatibility warning
+        noExitWarning:  bool, do not show a browser warning when closing the IDE
+                                with unsaved changes
+        preserveTitle:  bool, do not set the tab title dynamically to reflect
+                                the current Snap! version
+        zoom:           num, global zoom factor, e.g. 1.25
+        blocksZoom:     num, zoom factor for blocks, e.g. 1.5
+        blocksFade:     num, fading percentage for blocks, e.g. 85
+        zebra:          num, contrast percentage for nesting same-color blocks
+
+    Note that such configurations will not affect the user's own preference
+    settings, e.g. configuring the blocks zoom or language will not overwrite
+    the user's own settings which are kept in localstorage.
+*/
+
+IDE_Morph.prototype.init = function (config) {
     // global font setting
     MorphicPreferences.globalFontFamily = 'Helvetica, Arial';
-
-    // restore saved user preferences
-    this.userLanguage = null; // user language preference for startup
-    this.projectsInURLs = false;
-    this.applySavedSettings();
 
     // additional properties:
     this.cloud = new Cloud();
     this.cloudMsg = null;
     this.source = null;
     this.serializer = new SnapSerializer();
+    this.config = config;
+    this.version = Date.now(); // for outside observers
 
-    this.globalVariables = new VariableFrame();
-    this.currentSprite = new SpriteMorph(this.globalVariables);
-    this.sprites = new List([this.currentSprite]);
-    this.currentCategory = 'motion';
+    // restore saved user preferences
+    this.userLanguage = null; // user language preference for startup
+    this.applySavedSettings();
+
+    // scenes
+    this.scenes = new List([new Scene()]);
+    this.scene = this.scenes.at(1);
+    this.isAddingScenes = false;
+    this.isAddingNextScene = false;
+
+    // tutorial scene(s)
+    this.tutorial = null; // active dialog box or tutorial pane, if any
+
+    // editor
+    this.globalVariables = this.scene.globalVariables;
+    this.currentSprite = this.scene.addDefaultSprite();
+    this.sprites = this.scene.sprites;
+    this.currentCategory = this.scene.unifiedPalette ? 'unified' : 'motion';
     this.currentTab = 'scripts';
-    this.projectName = '';
-    this.projectNotes = '';
 
-    this.logoURL = this.resourceURL('src', 'snap_logo_sm.png');
+    // logoURL is disabled because the image data is hard-copied
+    // to avoid tainting the world canvas
+    // this.logoURL = this.resourceURL('src', 'snap_logo_sm.png');
+
     this.logo = null;
     this.controlBar = null;
     this.categories = null;
@@ -246,35 +349,70 @@ IDE_Morph.prototype.init = function (isAutoFill) {
     this.embedOverlay = null;
     this.isEmbedMode = false;
 
-    this.isAutoFill = isAutoFill === undefined ? true : isAutoFill;
+    this.isAutoFill = !config.noAutoFill;
     this.isAppMode = false;
     this.isSmallStage = false;
     this.filePicker = null;
+
+    // incrementally saving projects to the cloud is currently unused
+    // and needs to be extended to work with scenes before reactivation
     this.hasChangedMedia = false;
 
     this.isAnimating = true;
     this.paletteWidth = 200; // initially same as logo width
     this.stageRatio = 1; // for IDE animations, e.g. when zooming
+    this.performerMode = false;
+    this.performerScale = 1;
 
-	this.wasSingleStepping = false; // for toggling to and from app mode
+    this.wasSingleStepping = false; // for toggling to and from app mode
 
     this.loadNewProject = false; // flag when starting up translated
     this.shield = null;
 
     this.savingPreferences = true; // for bh's infamous "Eisenbergification"
 
+    this.bulkDropInProgress = false; // for handling multiple file-drops
+    this.cachedSceneFlag = null; // for importing multiple scenes at once
+    this.isImportingLocalFile = false; // for handling imports of smart pics
+
     // initialize inherited properties:
     IDE_Morph.uber.init.call(this);
 
     // override inherited properites:
     this.color = this.backgroundColor;
+
+    // initialize the primitive blocks dictionary
+    SpriteMorph.prototype.initBlocks();
+
+    // turn all primitives into custom blocks
+    // under construction, commented out for now
+    // SpriteMorph.prototype.customizeBlocks();
+    // this.bootstrapCustomizedPrimitives();
 };
 
 IDE_Morph.prototype.openIn = function (world) {
-    var hash, myself = this, urlLanguage = null;
+    var hash, myself = this;
+
+    window.onmessage = function (event) {
+        // make the API accessible from outside an iframe
+        var ide = myself;
+        if (!isNil(event.data.selector)) {
+            window.top.postMessage(
+                {
+                    selector: event.data.selector,
+                    response: ide[event.data.selector].apply(
+                        ide,
+                        event.data.params
+                    )
+                },
+                '*'
+            );
+        }
+    };
 
     function initUser(username) {
         sessionStorage.username = username;
+        myself.controlBar.cloudButton.refresh();
         if (username) {
             myself.source = 'cloud';
             if (!myself.cloud.verified) {
@@ -296,26 +434,18 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
-    if (location.protocol !== 'file:') {
-        if (!sessionStorage.username) {
-            // check whether login should persist across browser sessions
-            this.cloud.initSession(initUser);
-        } else {
-            // login only persistent during a single browser session
-            this.cloud.checkCredentials(initUser);
-        }
-    }
-
     this.buildPanes();
     world.add(this);
+    this.applySavedMagnification();
+    // this.applySavedStageScale(); // commented out for now
     world.userMenu = this.userMenu;
 
     // override SnapCloud's user message with Morphic
-    this.cloud.message = function (string) {
+    this.cloud.message = (string) => {
         var m = new MenuMorph(null, string),
             intervalHandle;
         m.popUpCenteredInWorld(world);
-        intervalHandle = setInterval(function () {
+        intervalHandle = setInterval(() => {
             m.destroy();
             clearInterval(intervalHandle);
         }, 2000);
@@ -323,7 +453,7 @@ IDE_Morph.prototype.openIn = function (world) {
 
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
-    world.reactToDropOf = function (morph) {
+    world.reactToDropOf = (morph) => {
         if (!(morph instanceof DialogBoxMorph ||
         		(morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
@@ -336,42 +466,32 @@ IDE_Morph.prototype.openIn = function (world) {
 
     this.reactToWorldResize(world.bounds);
 
-    function getURL(url) {
-        try {
-            var request = new XMLHttpRequest();
-            request.open('GET', url, false);
-            request.send();
-            if (request.status === 200) {
-                return request.responseText;
-            }
-            throw new Error('unable to retrieve ' + url);
-        } catch (err) {
-            myself.showMessage('unable to retrieve project');
-            return '';
-        }
-    }
-
     function applyFlags(dict) {
+        if (dict.noCloud) {
+            myself.cloud.disable();
+        }
         if (dict.embedMode) {
             myself.setEmbedMode();
         }
-        if (dict.editMode) {
+        if (dict.editMode || myself.config.noSprites) {
             myself.toggleAppMode(false);
         } else {
             myself.toggleAppMode(true);
         }
         if (!dict.noRun) {
-            myself.runScripts();
+            autoRun();
         }
         if (dict.hideControls) {
             myself.controlBar.hide();
-            window.onbeforeunload = nop;
+            window.noExitWarning = true;
         }
         if (dict.noExitWarning) {
-            window.onbeforeunload = nop;
+            window.noExitWarning = true;
         }
-        if (dict.lang) {
-            myself.setLanguage(dict.lang, null, true); // don't persist
+        if (dict.blocksZoom) {
+            myself.savingPreferences = false;
+            myself.setBlocksScale(Math.max(1,Math.min(dict.blocksZoom, 12)));
+            myself.savingPreferences = true;
         }
 
         // only force my world to get focus if I'm not in embed mode
@@ -381,11 +501,36 @@ IDE_Morph.prototype.openIn = function (world) {
         }
     }
 
+    function autoRun () {
+        // if we're going to run the project anyway, remove the embed
+        // overlay in case we're in embedMode
+        if (myself.embedOverlay) {
+            myself.embedPlayButton.destroy();
+            myself.embedOverlay.destroy();
+        }
+        // wait until all costumes and sounds are loaded
+        if (isLoadingAssets()) {
+            myself.world().animations.push(
+                new Animation(nop, nop, 0, 200, nop, autoRun)
+            );
+        } else {
+            myself.runScripts();
+        }
+    }
+
+    function isLoadingAssets() {
+        return myself.sprites.asArray().concat([myself.stage]).some(any =>
+            (any.costume ? any.costume.loaded !== true : false) ||
+            any.costumes.asArray().some(each => each.loaded !== true) ||
+            any.sounds.asArray().some(each => each.loaded !== true)
+        );
+    }
+
     // dynamic notifications from non-source text files
     // has some issues, commented out for now
     /*
-    this.cloudMsg = getURL('http://snap.berkeley.edu/cloudmsg.txt');
-    motd = getURL('http://snap.berkeley.edu/motd.txt');
+    this.cloudMsg = getURL('https://snap.berkeley.edu/cloudmsg.txt');
+    motd = getURL('https://snap.berkeley.edu/motd.txt');
     if (motd) {
         this.inform('Snap!', motd);
     }
@@ -401,14 +546,50 @@ IDE_Morph.prototype.openIn = function (world) {
                 hash = decodeURIComponent(hash);
             }
             if (contains(
-                    ['project', 'blocks', 'sprites', 'snapdata'].map(
-                        function (each) {
-                            return hash.substr(0, 8).indexOf(each);
-                        }
+                    ['project', 'blocks', 'sprites', 'snapdata'].map(each =>
+                        hash.substr(0, 8).indexOf(each)
                     ),
                     1
                 )) {
                 this.droppedText(hash);
+            } else if (hash.match(/\.(png|gif|svg|jpe?g|tiff)$/i)) {
+                // Import an image, which could contain embedded scripts
+                fetch(hash).then(res => res.blob()).then(blob => {
+                    let pic = new Image(),
+                        imgURL = URL.createObjectURL(blob),
+                        dataMarker = MorphicPreferences.pngPayloadMarker;
+
+                    pic.src = imgURL;
+                    pic.onload = (async () => {
+                        let buff = new Uint8Array(await blob.arrayBuffer()),
+                            strBuff = buff.reduce((acc, b) =>
+                                acc + String.fromCharCode(b), ""),
+                            hasImportanbleCode = (txt) =>
+                                txt.match(
+                                    /^<(blocks|block|script|sprite)/i
+                                ),
+                            embeddedData, canvas;
+
+                            if (strBuff.includes(dataMarker)) {
+                            embeddedData = decodeURIComponent(
+                                strBuff.split(dataMarker)[1]
+                            );
+                            if (hasImportanbleCode(embeddedData)) {
+                                return this.rawOpenScriptString(
+                                    embeddedData,
+                                    true
+                                );
+                            }
+                        } else {
+                            canvas = newCanvas(
+                                new Point(pic.width, pic.height),
+                                true
+                            );
+                            canvas.getContext('2d').drawImage(pic, 0, 0);
+                            this.droppedImage(canvas, decodeURIComponent(hash));
+                        }
+                    })();
+                });
             } else {
                 idx = hash.indexOf("&");
                 if (idx > 0) {
@@ -417,24 +598,114 @@ IDE_Morph.prototype.openIn = function (world) {
                     hash = hash.slice(0, idx);
                     applyFlags(dict);
                 }
-                this.droppedText(getURL(hash));
+                this.shield = new Morph();
+                this.shield.alpha = 0;
+                this.shield.setExtent(this.parent.extent());
+                this.parent.add(this.shield);
+                this.showMessage('Fetching project...');
+
+                this.getURL(
+                    hash,
+                    projectData => {
+                        var msg;
+                        this.nextSteps([
+                            () => msg = this.showMessage('Opening project...'),
+                            () => {
+                                if (projectData.indexOf('<snapdata') === 0) {
+                                    this.rawOpenCloudDataString(projectData);
+                                } else if (
+                                    projectData.indexOf('<project') === 0
+                                ) {
+                                    this.rawOpenProjectString(projectData);
+                                } else if (
+                                    projectData.indexOf('<blocks') === 0
+                                ) {
+                                    this.rawOpenBlocksString(
+                                        projectData,
+                                        null, // name, optional
+                                        true  // silently
+                                    );
+                                }
+                                this.hasChangedMedia = true;
+                            },
+                            () => {
+                                this.shield.destroy();
+                                this.shield = null;
+                                msg.destroy();
+                                this.toggleAppMode(false);
+                            }
+                        ]);
+                    }
+                );
             }
-        } else if (location.hash.substr(0, 5) === '#run:') {
+       } else if (location.hash.substr(0, 5) === '#run:') {
+            dict = '';
             hash = location.hash.substr(5);
-            idx = hash.indexOf("&");
-            if (idx > 0) {
-                hash = hash.slice(0, idx);
-            }
+
+            //decoding if hash is an encoded URI
             if (hash.charAt(0) === '%'
                     || hash.search(/\%(?:[0-9a-f]{2})/i) > -1) {
                 hash = decodeURIComponent(hash);
             }
-            if (hash.substr(0, 8) === '<project>') {
-                this.rawOpenProjectString(hash);
+            idx = hash.indexOf("&");
+
+            // supporting three URL cases
+
+            // xml project
+            if (hash.substr(0, 8) === '<project') {
+                this.rawOpenProjectString(
+                    hash.slice(0,hash.indexOf('</project>') + 10)
+                );
+                applyFlags(
+                    myself.cloud.parseDict(
+                        hash.substr(hash.indexOf('</project>') + 10)
+                    )
+                );
+            // no project, only flags
+            } else if (idx == 0){
+                applyFlags(myself.cloud.parseDict(hash));
+            // xml file path
+            // three path types allowed:
+            //  (1) absolute (http...),
+            //  (2) relative to site ("/path") or
+            //  (3) relative to folder ("path")
             } else {
-                this.rawOpenProjectString(getURL(hash));
+                this.shield = new Morph();
+                this.shield.alpha = 0;
+                this.shield.setExtent(this.parent.extent());
+                this.parent.add(this.shield);
+                this.showMessage('Fetching project...');
+                if (idx > 0) {
+                    dict = myself.cloud.parseDict(hash.substr(idx));
+                    hash = hash.slice(0,idx);
+                }
+                this.getURL(
+                    hash,
+                    projectData => {
+                        var msg;
+                        this.nextSteps([
+                            () => msg = this.showMessage('Opening project...'),
+                            () => {
+                                if (projectData.indexOf('<snapdata') === 0) {
+                                    this.rawOpenCloudDataString(projectData);
+                                } else if (
+                                    projectData.indexOf('<project') === 0
+                                ) {
+                                    this.rawOpenProjectString(projectData);
+                                }
+                                this.hasChangedMedia = true;
+                            },
+                            () => {
+                                this.shield.destroy();
+                                this.shield = null;
+                                msg.destroy();
+                                // this.toggleAppMode(true);
+                                applyFlags(dict);
+                            }
+                        ]);
+                    }
+                );
             }
-            applyFlags(myself.cloud.parseDict(location.hash.substr(5)));
         } else if (location.hash.substr(0, 9) === '#present:') {
             this.shield = new Morph();
             this.shield.color = this.color;
@@ -449,14 +720,11 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
-                function (projectData) {
+                projectData => {
                     var msg;
                     myself.nextSteps([
-                        function () {
-                            msg = myself.showMessage('Opening project...');
-                        },
-                        function () {nop(); }, // yield (bug in Chrome)
-                        function () {
+                        () => msg = myself.showMessage('Opening project...'),
+                        () => {
                             if (projectData.indexOf('<snapdata') === 0) {
                                 myself.rawOpenCloudDataString(projectData);
                             } else if (
@@ -466,7 +734,7 @@ IDE_Morph.prototype.openIn = function (world) {
                             }
                             myself.hasChangedMedia = true;
                         },
-                        function () {
+                        () => {
                             myself.shield.destroy();
                             myself.shield = null;
                             msg.destroy();
@@ -489,14 +757,11 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
-                function (projectData) {
+                projectData => {
                     var msg;
                     myself.nextSteps([
-                        function () {
-                            msg = myself.showMessage('Opening project...');
-                        },
-                        function () {nop(); }, // yield (bug in Chrome)
-                        function () {
+                        () => msg = myself.showMessage('Opening project...'),
+                        () => {
                             if (projectData.indexOf('<snapdata') === 0) {
                                 myself.rawOpenCloudDataString(projectData);
                             } else if (
@@ -506,7 +771,7 @@ IDE_Morph.prototype.openIn = function (world) {
                             }
                             myself.hasChangedMedia = true;
                         },
-                        function () {
+                        () => {
                             myself.shield.destroy();
                             myself.shield = null;
                             msg.destroy();
@@ -526,7 +791,7 @@ IDE_Morph.prototype.openIn = function (world) {
             myself.cloud.getPublicProject(
                 dict.ProjectName,
                 dict.Username,
-                function (projectData) {
+                projectData => {
                 	myself.saveXMLAs(projectData, dict.ProjectName);
                  	myself.showMessage(
                   	   'Saved project\n' + dict.ProjectName,
@@ -536,20 +801,228 @@ IDE_Morph.prototype.openIn = function (world) {
                 this.cloudError()
             );
         } else if (location.hash.substr(0, 6) === '#lang:') {
-            urlLanguage = location.hash.substr(6);
-            this.setLanguage(urlLanguage, null, true); // don't persist
-            this.loadNewProject = true;
+            dict = myself.cloud.parseDict(location.hash.substr(6));
+            applyFlags(dict);
         } else if (location.hash.substr(0, 7) === '#signup') {
             this.createCloudAccount();
         }
-    this.loadNewProject = false;
+        this.loadNewProject = false;
     }
 
-    if (this.userLanguage) {
+    function launcherLangSetting() {
+        var langSetting = null;
+        if (location.hash.substr(0, 6) === '#lang:') {
+            if (location.hash.charAt(8) === '_') {
+                langSetting = location.hash.slice(6,11);
+            } else {
+                langSetting = location.hash.slice(6,8);
+            }
+        }
+        // lang-flag wins lang-anchor setting
+        langSetting = myself.cloud.parseDict(location.hash).lang || langSetting;
+        return langSetting;
+    }
+
+    if (launcherLangSetting()) {
+        // launch with this non-persisten lang setting
+        this.loadNewProject = true;
+        this.setLanguage(launcherLangSetting(), interpretUrlAnchors, true);
+    } else if (this.userLanguage) {
         this.loadNewProject = true;
         this.setLanguage(this.userLanguage, interpretUrlAnchors);
     } else {
         interpretUrlAnchors.call(this);
+    }
+
+    if (location.protocol === 'file:') {
+        Process.prototype.enableJS = true;
+    } else {
+        if (!sessionStorage.username) {
+            // check whether login should persist across browser sessions
+            this.cloud.initSession(initUser);
+        } else {
+            // login only persistent during a single browser session
+            this.cloud.checkCredentials(initUser);
+        }
+    }
+
+    world.keyboardFocus = this.stage;
+    this.warnAboutIE();
+
+    // configure optional settings
+    this.applyConfigurations();
+
+    this.warnAboutDev();
+    return this;
+};
+
+// IDE_Morph configuration
+
+IDE_Morph.prototype.applyConfigurations = function () {
+    var cnf = this.config,
+        refreshLater = false,
+        lang, translation, src,
+
+        refresh = () => {
+            // load project
+            if (cnf.load) {
+                this.getURL(
+                    cnf.load,
+                    projectData => {
+                        this.buildPanes();
+                        this.fixLayout();
+                        if (projectData.indexOf('<snapdata') === 0) {
+                            this.rawOpenCloudDataString(projectData);
+                        } else if (
+                            projectData.indexOf('<project') === 0
+                        ) {
+                            this.rawOpenProjectString(projectData);
+                        }
+                        this.hasChangedMedia = true;
+                        this.applyPaneHidingConfigurations();
+                        if (cnf.onload) {
+                            cnf.onload();
+                        }
+                    }
+                );
+            } else {
+                this.buildPanes();
+                this.fixLayout();
+                this.newProject();
+                this.applyPaneHidingConfigurations();
+            }
+        };
+
+    if (!Object.keys(cnf).length) {
+        return;
+    }
+
+    // design
+    if (cnf.design) {
+        if (cnf.design === 'flat') {
+            this.setFlatDesign();
+        } else if (cnf.design === 'classic') {
+            this.setDefaultDesign();
+        }
+    }
+
+    // theme
+    if (cnf.theme) {
+        if (cnf.theme === 'bright') {
+            this.setBrightTheme();
+        } else if (cnf.theme === 'dark') {
+            this.setDefaultTheme();
+        }
+    }
+
+    // interaction mode
+    if (cnf.mode === "presentation") {
+        this.toggleAppMode(true);
+    } else {
+        this.toggleAppMode(false);
+    }
+
+    // blocks size
+    if (cnf.blocksZoom) {
+        SyntaxElementMorph.prototype.setScale(
+            Math.max(1, Math.min(cnf.blocksZoom, 12))
+        );
+        CommentMorph.prototype.refreshScale();
+    }
+
+    // blocks fade
+    if (cnf.blocksFade) {
+        SyntaxElementMorph.prototype.setAlphaScaled(100 - cnf.blocksFade);
+    }
+
+    // zebra coloring //
+    if (isNil(cnf.zebra)) {
+        BlockMorph.prototype.zebraContrast = 40;
+    } else {
+        BlockMorph.prototype.zebraContrast = cnf.zebra;
+    }
+
+    // language
+    if (cnf.lang) {
+        lang = cnf.lang;
+        translation = document.getElementById('language');
+
+        // this needs to be directed to something more generic:
+        src = this.resourceURL('locale', 'lang-' + lang + '.js');
+
+        SnapTranslator.unload();
+        if (translation) {
+            document.head.removeChild(translation);
+        }
+        SnapTranslator.language = lang;
+        if (lang !== 'en') {
+            refreshLater = true;
+            translation = document.createElement('script');
+            translation.id = 'language';
+            translation.onload = () => refresh();
+            document.head.appendChild(translation);
+            translation.src = src;
+        }
+    }
+
+    // no palette
+    if (cnf.noPalette) {
+        ScriptsMorph.prototype.enableKeyboard = false;
+    }
+
+    if (!refreshLater) {
+        refresh();
+    }
+
+    // disable cloud access
+    if (cnf.noCloud) {
+        this.cloud.disable();
+        this.fixLayout();
+    }
+
+    // disable onbeforeunload close warning
+    if (cnf.noExitWarning) {
+        window.noExitWarning = true;
+    }
+};
+
+IDE_Morph.prototype.applyPaneHidingConfigurations = function () {
+    var cnf = this.config;
+
+    // hide controls
+    if (cnf.hideControls) {
+        this.logo.hide();
+        this.controlBar.hide();
+        window.noExitWarning = true;
+    }
+
+    // hide categories
+    if (cnf.hideCategories) {
+        this.categories.hide();
+    }
+
+    // no sprites
+    if (cnf.noSprites) {
+        this.controlBar.stageSizeButton.hide();
+        this.controlBar.appModeButton.hide();
+        this.controlBar.startButton.hide();
+        this.stage.hide();
+        cnf.noSpriteEdits = true;
+    }
+
+    // hide sprite editing widgets
+    if (cnf.noSpriteEdits) {
+        this.spriteBar.hide();
+        this.stageHandle.hide();
+        this.corralBar.hide();
+        this.corral.hide();
+    }
+
+    // no palette
+    if (cnf.noPalette) {
+        this.categories.hide();
+        this.palette.hide();
+        this.paletteHandle.hide();
     }
 };
 
@@ -575,11 +1048,72 @@ IDE_Morph.prototype.createLogo = function () {
     }
 
     this.logo = new Morph();
-    this.logo.texture = this.logoURL;
-    this.logo.drawNew = function () {
-        this.image = newCanvas(this.extent());
-        var context = this.image.getContext('2d'),
-            gradient = context.createLinearGradient(
+
+    // the logo texture is not loaded dynamically as an image, but instead
+    // hard-copied here to avoid tainting the world canvas. This lets us
+    // use Snap's (and Morphic's) color pickers to sense any pixel which
+    // otherwise would be compromised by annoying browser security.
+
+    // this.logo.texture = this.logoURL; // original code, commented out
+    this.logo.texture = "data:image/png;base64," +
+        "iVBORw0KGgoAAAANSUhEUgAAACwAAAAYCAYAAACBbx+6AAAKiklEQVRYR5VXe3BU5RX/" +
+        "ne+7924SwiOEJJvwUCAgCZFBEtRatIlVlATLIwlFsCgdeYWICu1MfbKUabVVtBoDQlUc" +
+        "FCubEIpAAEUTrGhFGIXAAjZCFdhNQiTkQbK7997vdO7SREAo9P5zZ77HOb9zzu87D8JV" +
+        "fOyBwGIwEdg5XrcmKRExcoSCNQKgWwXRTYKQDAKUQi1DbASrjzgsdqdM8zc6d6o80LIB" +
+        "RR6oq1B52SN0pcteL+SUKbCdcw3lCUMsof2amAs0iVRNEoIhZYKoCcTtYBARxUUZ1IMZ" +
+        "CIZxWDG9oVSv1/tP8Z12ZHAVNMqBdSW9l9uPAGYGoQwicqjQUQsmZ9kLSf8FGyhzzyCB" +
+        "P8X1kO7TLaoREJuIxCeSzKNhWzRbKhgyRCwJZfcA2UOY+E4QTewZK2Ob2tQhIl6cPLmu" +
+        "LKLPC+n8O2X/P+CJAXLAXXzpfLD+sqRHesaKF5vbHZtil4bCA98YeO+2f19J0Yl3+wzV" +
+        "DH0GMz8cE0WxHSH8DZrxhPsX3x7rBO5YUFgI1Um3y8r0sCg8WOZgBQ54YPTJGNCPgehw" +
+        "qNl/zfTmJoe3Dt9OeN15LgObTUs/JNB9prvA9/mljNvblCkyh+7l6p3AxVxt2JiQalty" +
+        "IYB5AL5n5qWh1vqVA2cieCWjz+07AXd8C+eZAP71SY8Q6JlzfuajDPFMSkHg7brtSd1w" +
+        "Vr2hVIymxX97f2IO2nCPP2be0EDaWZuMVttoP2tGBd5/dfCpToHnKMZUvWSJzP5ZNSin" +
+        "uouv9RXX/MRW9lMgHkekaqCsVZDmZnfD4JMI7LXPPUgHXATaBVEvLDrg7tBgRDbrK9wz" +
+        "GHwnM0Xrmsg3bT4eC5XV2FzfYnS/fkzK9zU7aQ7MXxbvnxkk8UhYUTcGTGJyMsM/Okw5" +
+        "s3rVdY2Zs/foe1MyIw8UHjA8oCosEUA1cjw/AA94M/KUMOcQBW8gsptYuXYpa8Cr/aZW" +
+        "7Sss9Mrhw33swWJkV1eL6uoc6wFPVVRDo3stmDN/xOFAed95EHYps7o/Jb/hrc6QTXt0" +
+        "/4QzYa1Egd7TyCq3WEgBGkggMyGhbt2bnpyrDO8PJDizAYPbbS21Tw+rXk+BjzIQvhRF" +
+        "8ub6MlhiF4h6dKU1J1M4xD+xvnc/CaMKpN5LntywqHM9d77vrwCNrCxNG32x0Oxs1lzp" +
+        "vmtdQVnfe0DArGvsczNskUAaareWDP/SOT+2qKa/DkrtLu14k8HrW+JrsKbf1xFZN3ES" +
+        "khrbJ7tPxYYMMRpsxQi4ajaVDjnobI8vrslWLLc6186lNYBqX041hiyoDR339ovWNGs7" +
+        "GA3J+XUFneDGFft+T4zfCsYDm5enrzsfdF7R12lM1jsAfcPgNmJkMqE3AfEMWqYTlVpK" +
+        "vcDAbSCcEUCcIO6jSyzWSW04a8rXmGAw4yQYg5nQkxi9GHhu6/L0pbnzfbcxoZIUFXd5" +
+        "2KlEOR5Yfm/cACFduxnCl5zvv70TWN68/YNYauVSi77BNjs2CmDVQKF/WFIyJPTzh48m" +
+        "GVbwCwK6E+MJJtpBLKUi+1kC3wNShbaF40KDrkM7FrQ0S5PmsyCMd5xAzHMVYRgzzbCV" +
+        "/jkb4Z66En/WpGuisjryFIkGsFqrWN0XAXx+NQuUpyyJ70VPnz5jfapc7RNS7mltXLly" +
+        "tj5nzipzbPG+gTrrTzIwQ2guTZmhHUoXxdteGnYkd/6hfUR8cMsr6dM6jcwt+nokkbkL" +
+        "JBdseWXY6+dH5a6iw3dLUiuYsQJEPwXQurU07b7OM3c9ery3DLceAdHHgvl1xVQYIvzG" +
+        "AUzshXCqTsP65NtsxioQWgAVw2w/kFLQuGfPykw9a84eqzPV3D2vZgQJ7UEp9YfYDtXa" +
+        "mhwvLHs5QTRvKU2b3AW4+ND1YOwQQi3cXDJ8be78QwsZGCXAUgFDCdRPET8uGGMBiqlM" +
+        "WDcBHo9yMkVZ2RQ7d75vEzMGMMmFUqqO0b2H/dMBGym/zBB1Fe6PwBAgvAxgBYMWpuQH" +
+        "3nLq/5KdrA42f+Y69WXIdFKNA2pcsW+iYLzDjBIQZwHUWlmaNqnTsNzimiywtoFhL2PI" +
+        "YQTOZfDbAH1B4CwCTSfiJxXTHQTun5gQk/emZ2Aw3XPA8HkywuOKfZXElFJZmjYykik9" +
+        "LLrSWl1F0iyXIVaFgmqa5rI+NsO680LXJufXzedIo3ZhIv/Bi75qAvwMpEChrnJ52r1d" +
+        "kSg6MlqStYZBxwFKZ4XpW1ek7XTuTiiq6W+SfA/Ez4FxB0EkbylNG3fem4ljoR1hoFLY" +
+        "eJ50Kdtq/AcjHG7cFN/XDOu7AWpOzg+kH/DCiJdJXzFLocX7s5wK9+CivZnfne3WM0rD" +
+        "4ZYwhWO7dbjskD6VSPwOij1MmE2E+srS9LFdmWXu4dtJU2VgOgxgqFDqKc0V827YDCaC" +
+        "uIgYs1hxMQTdAubbFctJ21YM2z95ti85aGA5gFGsuISIHgNwshurWyKAAxXJy7q5sLA1" +
+        "qGb1za9/zVnzlyeu6h7TbdbZjmNT3flYN3XBvj+22noRA8cY6CBCFJgSFdQaM6ReMlyi" +
+        "nEDHKkvTZ3R5f77vTmIuZYlXSNEoEPKZcRiMehAsJ4URsEIJSiPmOQT+EKAWJhoEcIKm" +
+        "xFxbKottVICwrrI0fTY5Pa5N8iunh2i3w2MGT2lqdhTWlSWNj4kxNp0Nth8Qoe/vSCph" +
+        "c2rWgYk2EE8gYZNqs1l88feSjN0RPj908AZlo3X78uG1nYBnPHYoHh0dQweh+ZCzdgjx" +
+        "eU5B0Q0+2MduOtAsY+Paw3qo1daeAXFSFJnLJIm+LIi6a+Hq1ctG+bwvfBq97pueg4TR" +
+        "42jZi/07KFDh9ib20gpPnbH/4J4ceHLPSuhZc2AeW31tVFT34Fp3ojE50Gi9n5zqn0oj" +
+        "0HSp0nmpNY/HIzwez1VNF+OLD35gM4W3lqbn/W/5TBRYn7iISPaxFXn7Fvi/9Hgg0tNB" +
+        "zpRR571mIMtgSbcokXe2PcavKLaCYR4DFBT1qvWfnFZ984IFLU4rugRVoroaqKrKsZ0e" +
+        "0OmxT3qzrlOC7pZojmbWmcggWylACNh2nBYb9VG4LTy9ZuqOJY/31my9dMziF3vGvDug" +
+        "pSPb0GWzBdkEwWSdbs/aOPxXZZHIXTAidTbzzj9Srwns35QSgzDfJdjKBon+DM1m5gwi" +
+        "dAjhL0yahG/+VZnqSt1dazoC9yZDZs6G5dwNbEhcBIXHAdpFZCu2NQ0kmahdWZyoubQj" +
+        "aLMmbc/Z9pdR6a4Qv5bzYK2ufTwmZGUoTXxnsooxGByWetPTSRPC+yN9zeVC4OBd4gF5" +
+        "zhsanUY/w4PwiQ19R0plvQWmpckFdd7Lyagrd29i4Nvkgrpix/DTHaboHa1HaCKMDFLh" +
+        "9/lIo0c9/dmUOKkpXj36+TOuPm+KU8ZYSggfYGHYpMKSP+nwhzrnSnLCWZYOutyYEpm/" +
+        "fOCLp9268uQXQOpGZnKKTBtLinaYAgJJojZWfCsDBSTlFPfEEzVXy/3/5UCHZlecmh0B" +
+        "jrfLvBAJPlC/G1PlkNza0OkP4noGW4zVhkaTTAsWsTNnkDP02XSu82oTTPOSCgJvOw85" +
+        "0xE09MezY9mpQp7i87IHwOJ0IiRcSNOIAdkRmZEJ5D9/VBCtnsd7nAAAAABJRU5ErkJg" +
+        "gg==";
+
+    this.logo.render = function (ctx) {
+        var gradient = ctx.createLinearGradient(
                 0,
                 0,
                 this.width(),
@@ -587,17 +1121,19 @@ IDE_Morph.prototype.createLogo = function () {
             );
         gradient.addColorStop(0, 'black');
         gradient.addColorStop(0.5, myself.frameColor.toString());
-        context.fillStyle = MorphicPreferences.isFlat ?
-                myself.frameColor.toString() : gradient;
-        context.fillRect(0, 0, this.width(), this.height());
-        if (this.texture) {
-            this.drawTexture(this.texture);
+        ctx.fillStyle = MorphicPreferences.isFlat ||
+                IDE_Morph.prototype.isBright ?
+            myself.frameColor.toString() : gradient;
+        ctx.fillRect(0, 0, this.width(), this.height());
+        if (this.cachedTexture) {
+            this.renderCachedTexture(ctx);
+        } else if (this.texture) {
+            this.renderTexture(this.texture, ctx);
         }
     };
 
-    this.logo.drawCachedTexture = function () {
-        var context = this.image.getContext('2d');
-        context.drawImage(
+    this.logo.renderCachedTexture = function (ctx) {
+        ctx.drawImage(
             this.cachedTexture,
             5,
             Math.round((this.height() - this.cachedTexture.height) / 2)
@@ -609,7 +1145,7 @@ IDE_Morph.prototype.createLogo = function () {
         myself.snapMenu();
     };
 
-    this.logo.color = new Color();
+    this.logo.color = BLACK;
     this.logo.setExtent(new Point(200, 28)); // dimensions are fixed
     this.add(this.logo);
 };
@@ -629,10 +1165,23 @@ IDE_Morph.prototype.createControlBar = function () {
         steppingButton,
         cloudButton,
         x,
-        colors = [
+        colors = this.isBright ? this.tabColors
+        : [
             this.groupColor,
             this.frameColor.darker(50),
             this.frameColor.darker(50)
+        ],
+        activeColor = new Color(153, 255, 213),
+        activeColors = [
+            activeColor,
+            activeColor.lighter(40),
+            activeColor.lighter(40)
+        ],
+        errorColor = new Color(173, 15, 0),
+        errorColors = [
+            errorColor,
+            errorColor.lighter(40),
+            errorColor.lighter(40)
         ],
         myself = this;
 
@@ -643,36 +1192,43 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar = new Morph();
     this.controlBar.color = this.frameColor;
     this.controlBar.setHeight(this.logo.height()); // height is fixed
+
+    // let users manually enforce re-layout when changing orientation
+    // on mobile devices
+    // Leaving it out, because it's most probably unneeded
+    /*
     this.controlBar.mouseClickLeft = function () {
         this.world().fillPage();
     };
+    */
+
     this.add(this.controlBar);
 
     //smallStageButton
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the IDE is the target
+        this, // the IDE is the target
         'toggleStageSize',
         [
             new SymbolMorph('smallStage', 14),
             new SymbolMorph('normalStage', 14)
         ],
-        function () {  // query
-            return myself.isSmallStage;
-        }
+        () => this.isSmallStage // query
     );
 
+    button.hasNeutralBackground = true;
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
-    button.pressColor = colors[2];
+    button.pressColor = colors[0];
     button.labelMinExtent = new Point(36, 18);
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = this.buttonLabelColor;
+    button.labelColor = this.isBright ?
+        WHITE
+        : this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'stage size\nsmall & normal';
     button.fixLayout();
     button.refresh();
@@ -683,28 +1239,26 @@ IDE_Morph.prototype.createControlBar = function () {
     //appModeButton
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the IDE is the target
+        this, // the IDE is the target
         'toggleAppMode',
         [
             new SymbolMorph('fullScreen', 14),
             new SymbolMorph('normalScreen', 14)
         ],
-        function () {  // query
-            return myself.isAppMode;
-        }
+        () => this.isAppMode // query
     );
 
+    button.hasNeutralBackground = true;
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
-    button.pressColor = colors[2];
+    button.pressColor = colors[0];
     button.labelMinExtent = new Point(36, 18);
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'app & edit\nmodes';
     button.fixLayout();
     button.refresh();
@@ -715,35 +1269,36 @@ IDE_Morph.prototype.createControlBar = function () {
     //steppingButton
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the IDE is the target
+        this, // the IDE is the target
         'toggleSingleStepping',
         [
             new SymbolMorph('footprints', 16),
             new SymbolMorph('footprints', 16)
         ],
-        function () {  // query
-            return Process.prototype.enableSingleStepping;
-        }
+        () => Process.prototype.enableSingleStepping // query
     );
 
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
-    button.pressColor = new Color(153, 255, 213);
-//    button.pressColor = colors[2];
+    button.pressColor = activeColor;
     button.labelMinExtent = new Point(36, 18);
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     button.hint = 'Visible stepping';
     button.fixLayout();
     button.refresh();
     steppingButton = button;
     this.controlBar.add(steppingButton);
     this.controlBar.steppingButton = steppingButton; // for refreshing
+
+    if (this.performerMode) {
+        appModeButton.hide();
+        stageSizeButton.hide();
+    }
 
     // stopButton
     button = new ToggleButtonMorph(
@@ -754,12 +1309,10 @@ IDE_Morph.prototype.createControlBar = function () {
             new SymbolMorph('octagon', 14),
             new SymbolMorph('square', 14)
         ],
-        function () {  // query
-            return myself.stage ?
-                    myself.stage.enableCustomHatBlocks &&
-                        myself.stage.threads.pauseCustomHatBlocks
-                        : true;
-        }
+        () => this.stage ? // query
+                myself.stage.enableCustomHatBlocks &&
+                    myself.stage.threads.pauseCustomHatBlocks
+            : true
     );
 
     button.corner = 12;
@@ -770,9 +1323,12 @@ IDE_Morph.prototype.createControlBar = function () {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = new Color(200, 0, 0);
+    button.labelColor = new Color(
+        this.isBright ? 128 : 200,
+        0,
+        0
+    );
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'stop\nevery-\nthing';
     button.fixLayout();
     button.refresh();
@@ -789,22 +1345,22 @@ IDE_Morph.prototype.createControlBar = function () {
             new SymbolMorph('pause', 12),
             new SymbolMorph('pointRight', 14)
         ],
-        function () {  // query
-            return myself.isPaused();
-        }
+        () => this.isPaused() // query
     );
 
+    button.hasNeutralBackground = true;
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
-    button.pressColor = colors[2];
+    button.pressColor = colors[0];
     button.labelMinExtent = new Point(36, 18);
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = new Color(255, 220, 0);
+    button.labelColor = this.isBright ?
+        new Color(220, 185, 0)
+            : new Color(255, 220, 0);
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'pause/resume\nall scripts';
     button.fixLayout();
     button.refresh();
@@ -826,9 +1382,49 @@ IDE_Morph.prototype.createControlBar = function () {
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
-    button.labelColor = new Color(0, 200, 0);
+    button.fps = 4;
+    button.shownState = 'idle'; // 'active', 'error'
+
+    button.step = function () {
+        var state;
+        if (!myself.stage) {
+            return;
+        }
+        if (myself.stage.threads.processes.length) {
+            state = myself.stage.threads.processes.some(any => any.errorFlag) ?
+                'error' : 'active';
+        } else {
+            state = 'idle';
+        }
+        if (state === this.shownState) {
+            return;
+        }
+        this.shownState = state;
+        switch (state) {
+        case 'active':
+            this.color = activeColors[0];
+            this.highlightColor = activeColors[1];
+            this.pressColor = activeColors[2];
+            break;
+        case 'error':
+            this.color = errorColors[0];
+            this.highlightColor = errorColors[1];
+            this.pressColor = errorColors[2];
+            break;
+        default: // 'idle'
+            this.color = colors[0];
+            this.highlightColor = colors[1];
+            this.pressColor = colors[2];
+        }
+        this.rerender();
+    };
+
+    button.labelColor = new Color(
+        0,
+        this.isBright ? 100 : 200,
+        0
+    );
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'start green\nflag scripts';
     button.fixLayout();
     startButton = button;
@@ -843,12 +1439,12 @@ IDE_Morph.prototype.createControlBar = function () {
         6,
         'horizontal'
     );
-    slider.action = function (num) {
+    slider.action = (num) => {
         Process.prototype.flashTime = (num - 1) / 100;
-        myself.controlBar.refreshResumeSymbol();
+        this.controlBar.refreshResumeSymbol();
     };
     // slider.alpha = MorphicPreferences.isFlat ? 0.1 : 0.3;
-    slider.color = new Color(153, 255, 213);
+    slider.color = activeColor;
     slider.alpha = 0.3;
     slider.setExtent(new Point(50, 14));
     this.controlBar.add(slider);
@@ -871,7 +1467,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'open, save, & annotate project';
     button.fixLayout();
     projectButton = button;
@@ -895,7 +1490,6 @@ IDE_Morph.prototype.createControlBar = function () {
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'edit settings';
     button.fixLayout();
     settingsButton = button;
@@ -903,32 +1497,38 @@ IDE_Morph.prototype.createControlBar = function () {
     this.controlBar.settingsButton = settingsButton; // for menu positioning
 
     // cloudButton
-    button = new PushButtonMorph(
-        this,
+    button = new ToggleButtonMorph(
+        null, //colors,
+        this, // the IDE is the target
         'cloudMenu',
-        new SymbolMorph('cloud', 11)
+        [
+            new SymbolMorph('cloudOutline', 11),
+            new SymbolMorph('cloud', 11)
+        ],
+        () => !isNil(this.cloud.username) // query
     );
+
+    button.hasNeutralBackground = true;
     button.corner = 12;
     button.color = colors[0];
     button.highlightColor = colors[1];
-    button.pressColor = colors[2];
+    button.pressColor = colors[0];
     button.labelMinExtent = new Point(36, 18);
     button.padding = 0;
     button.labelShadowOffset = new Point(-1, -1);
     button.labelShadowColor = colors[1];
     button.labelColor = this.buttonLabelColor;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     // button.hint = 'cloud operations';
     button.fixLayout();
+    button.refresh();
     cloudButton = button;
     this.controlBar.add(cloudButton);
-    this.controlBar.cloudButton = cloudButton; // for menu positioning
+    this.controlBar.cloudButton = cloudButton; // for menu positioning & refresh
 
     this.controlBar.fixLayout = function () {
         x = this.right() - padding;
-        [stopButton, pauseButton, startButton].forEach(
-            function (button) {
+        [stopButton, pauseButton, startButton].forEach(button => {
                 button.setCenter(myself.controlBar.center());
                 button.setRight(x);
                 x -= button.width();
@@ -936,13 +1536,17 @@ IDE_Morph.prototype.createControlBar = function () {
             }
         );
 
-        x = Math.min(
-            startButton.left() - (3 * padding + 2 * stageSizeButton.width()),
-            myself.right() - StageMorph.prototype.dimensions.x *
-                (myself.isSmallStage ? myself.stageRatio : 1)
-        );
-        [stageSizeButton, appModeButton].forEach(
-            function (button) {
+        x = startButton.left() - (3 * padding + 2 * stageSizeButton.width());
+        if (!myself.config.noSprites) {
+            x = Math.min(
+                x,
+                myself.right() - myself.stage.dimensions.x *
+                    (myself.isSmallStage ? myself.stageRatio : 1) -
+                    (myself.config.border || 0)
+            );
+            x = Math.max(x, this.left());
+        }
+        [stageSizeButton, appModeButton].forEach(button => {
                 x += padding;
                 button.setCenter(myself.controlBar.center());
                 button.setLeft(x);
@@ -951,19 +1555,47 @@ IDE_Morph.prototype.createControlBar = function () {
         );
 
         slider.setCenter(myself.controlBar.center());
-        slider.setRight(stageSizeButton.left() - padding);
+        if (myself.performerMode) {
+            slider.setRight(startButton.left() - padding);
+        } else {
+            slider.setRight(stageSizeButton.left() - padding);
+        }
 
         steppingButton.setCenter(myself.controlBar.center());
         steppingButton.setRight(slider.left() - padding);
 
         settingsButton.setCenter(myself.controlBar.center());
-        settingsButton.setLeft(this.left());
+        settingsButton.setLeft(
+            Math.max(
+                this.left() - 55,
+                Math.min(
+                    this.left(),
+                    steppingButton.left() -
+                        settingsButton.width() -
+                        padding -
+                        35
+                )
+            )
+        );
 
-        cloudButton.setCenter(myself.controlBar.center());
-        cloudButton.setRight(settingsButton.left() - padding);
+        if (myself.config.hideSettings) {
+            settingsButton.hide();
+        }
 
         projectButton.setCenter(myself.controlBar.center());
-        projectButton.setRight(cloudButton.left() - padding);
+
+        if (myself.config.noImports || myself.config.hideProjects) {
+            projectButton.hide();
+        }
+
+        if (myself.cloud.disabled) {
+            cloudButton.hide();
+            projectButton.setRight(settingsButton.left() - padding);
+        } else {
+            cloudButton.setCenter(myself.controlBar.center());
+            cloudButton.setRight(settingsButton.left() - padding);
+            projectButton.setRight(cloudButton.left() - padding);
+        }
 
         this.refreshSlider();
         this.updateLabel();
@@ -971,7 +1603,8 @@ IDE_Morph.prototype.createControlBar = function () {
 
     this.controlBar.refreshSlider = function () {
         if (Process.prototype.enableSingleStepping && !myself.isAppMode) {
-            slider.drawNew();
+            slider.fixLayout();
+            slider.rerender();
             slider.show();
         } else {
             slider.hide();
@@ -1001,49 +1634,125 @@ IDE_Morph.prototype.createControlBar = function () {
     };
 
     this.controlBar.updateLabel = function () {
-        var suffix = myself.world().isDevMode ?
-                ' - ' + localize('development mode') : '';
+        var prefix = myself.hasUnsavedEdits() ? '\u270E ' : '',
+            suffix = myself.world().isDevMode ?
+                ' - ' + localize('development mode') : '',
+            name, scene, txt;
 
         if (this.label) {
             this.label.destroy();
         }
-        if (myself.isAppMode) {
+        if (myself.isAppMode || myself.config.hideProjectName) {
             return;
         }
-
-        this.label = new StringMorph(
-            (myself.projectName || localize('untitled')) + suffix,
+        scene = myself.scenes.at(1) !== myself.scene ?
+                ' (' + myself.scene.name + ')' : '';
+        name = (myself.getProjectName() || localize('untitled'));
+        if (!myself.config.preserveTitle) {
+            document.title = "Snap! " +
+                (myself.getProjectName() ? name : SnapVersion);
+        }
+        txt = new StringMorph(
+            prefix + name +  scene + suffix,
             14,
             'sans-serif',
             true,
             false,
             false,
-            MorphicPreferences.isFlat ? null : new Point(2, 1),
+            IDE_Morph.prototype.isBright ? null : new Point(2, 1),
             myself.frameColor.darker(myself.buttonContrast)
         );
-        this.label.color = myself.buttonLabelColor;
-        this.label.drawNew();
-        this.add(this.label);
+        txt.color = myself.buttonLabelColor;
+
+        this.label = new FrameMorph();
+        this.label.acceptsDrops = false;
+        this.label.alpha = 0;
+        txt.setPosition(this.label.position());
+        this.label.add(txt);
+        this.label.setExtent(
+            new Point(
+                steppingButton.left() - settingsButton.right() - padding * 2,
+                txt.height()
+            )
+        );
         this.label.setCenter(this.center());
         this.label.setLeft(this.settingsButton.right() + padding);
+        this.add(this.label);
     };
 };
 
 IDE_Morph.prototype.createCategories = function () {
-    var myself = this;
+    var myself = this,
+        primCats = this.primitiveCategories(),
+        categorySelectionAction = this.scene.unifiedPalette ? scrollToCategory
+            : changePalette,
+        categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
+            : queryCurrentCategory,
+        shift = this.config.noDefaultCat ? 4 : 0,
+        flag = true;
 
     if (this.categories) {
+        flag = this.categories.isVisible;
         this.categories.destroy();
     }
     this.categories = new Morph();
     this.categories.color = this.groupColor;
-    this.categories.silentSetWidth(this.paletteWidth);
+    this.categories.bounds.setWidth(this.paletteWidth);
+    this.categories.buttons = [];
+    this.categories.isVisible = flag;
+
+    this.categories.droppedImage = (aCanvas, name, embeddedData) => {
+        this.droppedImage(aCanvas, name, embeddedData, 'categories');
+    };
+
+    this.categories.refresh = function () {
+        this.buttons.forEach(cat => {
+            cat.refresh();
+            if (cat.state) {
+                cat.scrollIntoView();
+            }
+        });
+    };
+
+    this.categories.refreshEmpty = function () {
+        // retained for backwards compatibility in 3rd party extensions
+        myself.refreshEmptyCategories();
+    };
+
+    function changePalette(category) {
+        return () => {
+            myself.currentCategory = category;
+            myself.categories.buttons.forEach(each =>
+                each.refresh()
+            );
+            myself.refreshPalette(true);
+        };
+    }
+
+    function scrollToCategory(category) {
+        return () => myself.scrollPaletteToCategory(category);
+    }
+
+    function queryCurrentCategory(category) {
+        return () => myself.currentCategory === category;
+    }
+
+    function queryTopCategory(category) {
+        return () => myself.topVisibleCategoryInPalette() === category;
+    }
 
     function addCategoryButton(category) {
+        var button = categoryButton(category);
+        myself.categories.add(button);
+        myself.categories.buttons.push(button);
+        return button;
+    }
+
+    function categoryButton(category) {
         var labelWidth = 75,
             colors = [
                 myself.frameColor,
-                myself.frameColor.darker(50),
+                myself.frameColor.darker(IDE_Morph.prototype.isBright ? 5 : 50),
                 SpriteMorph.prototype.blockColor[category]
             ],
             button;
@@ -1051,80 +1760,197 @@ IDE_Morph.prototype.createCategories = function () {
         button = new ToggleButtonMorph(
             colors,
             myself, // the IDE is the target
-            function () {
-                myself.currentCategory = category;
-                myself.categories.children.forEach(function (each) {
-                    each.refresh();
-                });
-                myself.refreshPalette(true);
-            },
+            categorySelectionAction(category),
             category[0].toUpperCase().concat(category.slice(1)), // label
-            function () {  // query
-                return myself.currentCategory === category;
-            },
+            categoryQueryAction(category), // query
             null, // env
             null, // hint
-            null, // template cache
             labelWidth, // minWidth
             true // has preview
         );
 
+        button.category = category;
         button.corner = 8;
         button.padding = 0;
         button.labelShadowOffset = new Point(-1, -1);
-        button.labelShadowColor = colors[1];
+        button.labelShadowColor = IDE_Morph.prototype.isBright ?
+            CLEAR : colors[1];
         button.labelColor = myself.buttonLabelColor;
+        if (IDE_Morph.prototype.isBright) {
+            button.labelPressColor = WHITE;
+        }
+        button.fixLayout();
+        button.refresh();
+        return button;
+    }
+
+    function addCustomCategoryButton(category, color) {
+        var labelWidth = 168,
+            colors = [
+                myself.frameColor,
+                myself.frameColor.darker(IDE_Morph.prototype.isBright ? 5 : 50),
+                color
+            ],
+            button;
+
+        button = new ToggleButtonMorph(
+            colors,
+            myself, // the IDE is the target
+            categorySelectionAction(category),
+            category, // label
+            categoryQueryAction(category), // query
+            null, // env
+            null, // hint
+            labelWidth, // minWidth
+            true // has preview
+        );
+
+        button.category = category;
+        button.corner = 8;
+        button.padding = 0;
+        button.labelShadowOffset = new Point(-1, -1);
+        button.labelShadowColor = IDE_Morph.prototype.isBright ?
+            CLEAR : colors[1];
+        button.labelColor = myself.buttonLabelColor;
+        if (IDE_Morph.prototype.isBright) {
+            button.labelPressColor = WHITE;
+        }
         button.fixLayout();
         button.refresh();
         myself.categories.add(button);
+        myself.categories.buttons.push(button);
         return button;
     }
 
     function fixCategoriesLayout() {
-        var buttonWidth = myself.categories.children[0].width(),
-            buttonHeight = myself.categories.children[0].height(),
+        var button = categoryButton('motion'),
+            buttonWidth = button.width(),
+            buttonHeight = button.height(),
+            more = SpriteMorph.prototype.customCategories.size,
+            len = primCats.length,
+            halve = Math.ceil(len / 2),
             border = 3,
-            rows =  Math.ceil((myself.categories.children.length) / 2),
             xPadding = (200 // myself.logo.width()
                 - border
                 - buttonWidth * 2) / 3,
             yPadding = 2,
             l = myself.categories.left(),
             t = myself.categories.top(),
-            i = 0,
+            scroller,
             row,
-            col;
+            col,
+            i;
 
-        myself.categories.children.forEach(function (button) {
-            i += 1;
-            row = Math.ceil(i / 2);
-            col = 2 - (i % 2);
+        myself.categories.children.forEach((button, i) => {
+            row = i < len ? i % halve : i - Math.floor(len / 2);
+            col = (i < halve || i > (len - 1)) ? 1 : 2;
             button.setPosition(new Point(
                 l + (col * xPadding + ((col - 1) * buttonWidth)),
-                t + (row * yPadding + ((row - 1) * buttonHeight) + border)
+                t + (((row - shift) + 1) * yPadding + ((row - shift) *
+                        buttonHeight) + border) +
+                    (i > (len - 1) ? border + 2 : 0)
             ));
         });
 
-        myself.categories.setHeight(
-            (rows + 1) * yPadding
-                + rows * buttonHeight
-                + 2 * border
-        );
+        if (shift) { // hide the built-in category buttons
+            for (i = 0; i < len; i += 1) {
+                myself.categories.children[i].hide();
+            }
+        }
+
+        if (more > 6) {
+            scroller = new ScrollFrameMorph(null, null, myself.sliderColor);
+            scroller.setColor(myself.groupColor);
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.setPosition(
+                new Point(0, myself.categories.children[len].top())
+            );
+            scroller.setWidth(myself.paletteWidth);
+            scroller.setHeight(buttonHeight * 6 + yPadding * 5);
+
+            for (i = 0; i < more; i += 1) {
+                scroller.addContents(myself.categories.children[len]);
+            }
+            myself.categories.add(scroller);
+            myself.categories.scroller = scroller;
+            myself.categories.setHeight(
+                (halve + 1 - shift) * yPadding
+                    + (halve - shift) * buttonHeight
+                    + 6 * (yPadding + buttonHeight) + border + 2
+                    + 2 * border
+            );
+        } else {
+            myself.categories.setHeight(
+                (halve + 1 - shift) * yPadding
+                    + (halve - shift) * buttonHeight
+                    + (more ?
+                        (more * (yPadding + buttonHeight) + border + 2)
+                            : 0)
+                    + 2 * border
+            );
+        }
     }
 
-    SpriteMorph.prototype.categories.forEach(function (cat) {
-        if (!contains(['lists', 'other'], cat)) {
-            addCategoryButton(cat);
-        }
-    });
+    primCats.forEach(cat => addCategoryButton(cat));
+
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
+        addCustomCategoryButton(
+            name,
+            SpriteMorph.prototype.customCategories.get(name)
+        )
+    );
+
     fixCategoriesLayout();
     this.add(this.categories);
+};
+
+IDE_Morph.prototype.primitiveCategories = function () {
+    // answer an array of categories for primitive blocks to be displayed
+    // as buttons. By default these are all the usual ones, e.g. motion, looks
+    // etc. but if the "hideEmptyCategories" setting is active only categories
+    // that are populated with at least one block in at least one agent (sprite
+    // or stage) in the current scene are answered
+    var categories = SpriteMorph.prototype.categories.filter(cat =>
+        !contains(['lists', 'other'], cat)),
+        all;
+    if (!this.scene.hideEmptyCategories) {
+        return categories;
+    }
+    all = this.sprites.asArray();
+    if (this.stage) {
+        all = all.concat(this.stage);
+    }
+    return categories.filter(prim =>
+        all.some(agent =>
+            agent.populatedCategories()[prim]));
+};
+
+IDE_Morph.prototype.refreshEmptyCategories = function () {
+    var dict = this.currentSprite.populatedCategories();
+    dict.variables = dict.variables || dict.lists || dict.other;
+    if (this.scene.hideEmptyCategories) {
+        this.createCategories();
+        this.createPaletteHandle();
+        this.fixLayout();
+    }
+    this.categories.buttons.forEach(cat => {
+        if (Object.hasOwn(dict, cat.category) && (dict[cat.category])) {
+            cat.enable();
+        } else {
+            cat.disable();
+        }
+    });
 };
 
 IDE_Morph.prototype.createPalette = function (forSearching) {
     // assumes that the logo pane has already been created
     // needs the categories pane for layout
-    var myself = this;
+    var myself = this,
+        vScrollAction;
 
     if (this.palette) {
         this.palette.destroy();
@@ -1136,14 +1962,15 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             null,
             this.currentSprite.sliderColor
         );
+        this.palette.isForSearching = true;
 
         // search toolbar (floating cancel button):
         /* commented out for now
         this.palette.toolBar = new PushButtonMorph(
             this,
-            function () {
-                myself.refreshPalette();
-                myself.palette.adjustScrollBars();
+            () => {
+                this.refreshPalette();
+                this.palette.adjustScrollBars();
             },
             new SymbolMorph("magnifierOutline", 16)
         );
@@ -1151,10 +1978,10 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
         this.palette.toolBar.padding = 1;
         // this.palette.toolBar.hint = 'Cancel';
         this.palette.toolBar.labelShadowColor = new Color(140, 140, 140);
-        this.palette.toolBar.drawNew();
         this.palette.toolBar.fixLayout();
         this.palette.add(this.palette.toolBar);
 	    */
+
     } else {
         this.palette = this.currentSprite.palette(this.currentCategory);
     }
@@ -1163,35 +1990,65 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
     this.palette.enableAutoScrolling = false;
     this.palette.contents.acceptsDrops = false;
 
-    this.palette.reactToDropOf = function (droppedMorph, hand) {
-        if (droppedMorph instanceof DialogBoxMorph) {
-            myself.world().add(droppedMorph);
-        } else if (droppedMorph instanceof SpriteMorph) {
-            myself.removeSprite(droppedMorph);
+    if (this.scene.unifiedPalette) {
+        this.palette.adjustScrollBars = function () {
+            ScrollFrameMorph.prototype.adjustScrollBars.call(this);
+            myself.categories.refresh();
+        };
+
+        vScrollAction = this.palette.vBar.action;
+        this.palette.vBar.action = function (num) {
+            vScrollAction(num);
+            myself.categories.buttons.forEach(each => each.refresh());
+        };
+    }
+
+    this.palette.wantsDropOf = (morph) => !(morph instanceof DialogBoxMorph);
+
+    this.palette.reactToDropOf = (droppedMorph, hand) => {
+        if (droppedMorph instanceof SpriteMorph) {
+            this.removeSprite(droppedMorph);
         } else if (droppedMorph instanceof SpriteIconMorph) {
             droppedMorph.destroy();
-            myself.removeSprite(droppedMorph.object);
+            this.removeSprite(droppedMorph.object);
         } else if (droppedMorph instanceof CostumeIconMorph) {
-            myself.currentSprite.wearCostume(null);
-            droppedMorph.perish();
+            // this.currentSprite.wearCostume(null); // do we need this?
+            droppedMorph.perish(myself.isAnimating ? 200 : 0);
         } else if (droppedMorph instanceof BlockMorph) {
-            myself.stage.threads.stopAllForBlock(droppedMorph);
+            this.stage.threads.stopAllForBlock(droppedMorph);
             if (hand && hand.grabOrigin.origin instanceof ScriptsMorph) {
                 hand.grabOrigin.origin.clearDropInfo();
                 hand.grabOrigin.origin.lastDroppedBlock = droppedMorph;
                 hand.grabOrigin.origin.recordDrop(hand.grabOrigin);
             }
-            droppedMorph.perish();
+            droppedMorph.perish(myself.isAnimating ? 200 : 0);
+            this.currentSprite.recordUserEdit(
+                'scripts',
+                'block',
+                'delete',
+                droppedMorph.abstractBlockSpec()
+            );
         } else {
-            droppedMorph.perish();
+            droppedMorph.perish(myself.isAnimating ? 200 : 0);
+            if (droppedMorph instanceof CommentMorph) {
+                this.currentSprite.recordUserEdit(
+                    'scripts',
+                    'comment',
+                    'delete'
+                );
+            }
         }
     };
 
-    this.palette.contents.reactToDropOf = function (droppedMorph) {
+    this.palette.contents.reactToDropOf = (droppedMorph) => {
         // for "undrop" operation
         if (droppedMorph instanceof BlockMorph) {
             droppedMorph.destroy();
         }
+    };
+
+    this.palette.droppedImage = (aCanvas, name, embeddedData) => {
+        this.droppedImage(aCanvas, name, embeddedData, 'palette');
     };
 
     this.palette.setWidth(this.logo.width());
@@ -1207,27 +2064,20 @@ IDE_Morph.prototype.createPaletteHandle = function () {
 };
 
 IDE_Morph.prototype.createStage = function () {
-    // assumes that the logo pane has already been created
-    if (this.stage) {this.stage.destroy(); }
-    StageMorph.prototype.frameRate = 0;
-    this.stage = new StageMorph(this.globalVariables);
-    this.stage.setExtent(this.stage.dimensions); // dimensions are fixed
-    if (this.currentSprite instanceof SpriteMorph) {
-        this.currentSprite.setPosition(
-            this.stage.center().subtract(
-                this.currentSprite.extent().divideBy(2)
-            )
-        );
-        this.stage.add(this.currentSprite);
+    if (this.stage) {
+        this.stage.destroy();
     }
-    this.add(this.stage);
+    this.add(this.scene.stage);
+    this.stage = this.scene.stage;
 };
 
 IDE_Morph.prototype.createStageHandle = function () {
     // assumes that the stage has already been created
     if (this.stageHandle) {this.stageHandle.destroy(); }
-    this.stageHandle = new StageHandleMorph(this.stage);
-    this.add(this.stageHandle);
+    if (!this.performerMode) {
+        this.stageHandle = new StageHandleMorph(this.stage);
+        this.add(this.stageHandle);
+    }
 };
 
 IDE_Morph.prototype.createSpriteBar = function () {
@@ -1241,7 +2091,11 @@ IDE_Morph.prototype.createSpriteBar = function () {
         tabColors = this.tabColors,
         tabBar = new AlignmentMorph('row', -tabCorner * 2),
         tab,
-        symbols = ['\u2192', '\u21BB', '\u2194'],
+        symbols = [
+            new SymbolMorph('arrowRightThin', 10),
+            new SymbolMorph('turnAround', 10),
+            new SymbolMorph('arrowLeftRightThin', 10),
+        ],
         labels = ['don\'t rotate', 'can rotate', 'only face left/right'],
         myself = this;
 
@@ -1260,22 +2114,25 @@ IDE_Morph.prototype.createSpriteBar = function () {
         button = new ToggleButtonMorph(
             colors,
             myself, // the IDE is the target
-            function () {
+            () => {
                 if (myself.currentSprite instanceof SpriteMorph) {
                     myself.currentSprite.rotationStyle = rotationStyle;
                     myself.currentSprite.changed();
-                    myself.currentSprite.drawNew();
-                    myself.currentSprite.changed();
+                    myself.currentSprite.fixLayout();
+                    myself.currentSprite.rerender();
+                    myself.currentSprite.recordUserEdit(
+                        'sprite',
+                        'rotation',
+                        rotationStyle
+                    );
                 }
-                rotationStyleButtons.forEach(function (each) {
-                    each.refresh();
-                });
+                rotationStyleButtons.forEach(each =>
+                    each.refresh()
+                );
             },
             symbols[rotationStyle], // label
-            function () {  // query
-                return myself.currentSprite instanceof SpriteMorph
-                    && myself.currentSprite.rotationStyle === rotationStyle;
-            },
+            () => myself.currentSprite instanceof SpriteMorph // query
+                && myself.currentSprite.rotationStyle === rotationStyle,
             null, // environment
             localize(labels[rotationStyle])
         );
@@ -1289,7 +2146,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
         button.fixLayout();
         button.refresh();
         rotationStyleButtons.push(button);
-        button.setPosition(myself.spriteBar.position().add(2));
+        button.setPosition(myself.spriteBar.position().add(new Point(2, 4)));
         button.setTop(button.top()
             + ((rotationStyleButtons.length - 1) * (button.height() + 2))
             );
@@ -1305,23 +2162,35 @@ IDE_Morph.prototype.createSpriteBar = function () {
     addRotationStyleButton(0);
     this.rotationStyleButtons = rotationStyleButtons;
 
-    thumbnail = new Morph();
-    thumbnail.setExtent(thumbSize);
-    thumbnail.image = this.currentSprite.thumbnail(thumbSize);
+    if (this.currentSprite instanceof SpriteMorph) {
+        thumbnail = this.currentSprite.thumb(thumbSize);
+        thumbnail.step = function () {
+            if (thumbnail.version !== myself.currentSprite.version) {
+                thumbnail.changed();
+                thumbnail.version = myself.currentSprite.version;
+            }
+        };
+    } else {
+        thumbnail = new Morph();
+        thumbnail.isCachingImage = true;
+        thumbnail.bounds.setExtent(thumbSize);
+        thumbnail.cachedImage = this.currentSprite.thumbnail(thumbSize);
+        thumbnail.step = function () {
+            if (thumbnail.version !== myself.currentSprite.version) {
+                thumbnail.cachedImage = myself.currentSprite.thumbnail(
+                    thumbSize,
+                    thumbnail.cachedImage
+                );
+                thumbnail.changed();
+                thumbnail.version = myself.currentSprite.version;
+            }
+        };
+    }
     thumbnail.setPosition(
         rotationStyleButtons[0].topRight().add(new Point(5, 3))
     );
     this.spriteBar.add(thumbnail);
-
     thumbnail.fps = 3;
-
-    thumbnail.step = function () {
-        if (thumbnail.version !== myself.currentSprite.version) {
-            thumbnail.image = myself.currentSprite.thumbnail(thumbSize);
-            thumbnail.changed();
-            thumbnail.version = myself.currentSprite.version;
-        }
-    };
 
     nameField = new InputFieldMorph(this.currentSprite.name);
     nameField.setWidth(100); // fixed dimensions
@@ -1329,7 +2198,7 @@ IDE_Morph.prototype.createSpriteBar = function () {
     nameField.setPosition(thumbnail.topRight().add(new Point(10, 3)));
     this.spriteBar.add(nameField);
     this.spriteBar.nameField = nameField;
-    nameField.drawNew();
+    nameField.fixLayout();
     nameField.accept = function () {
         var newName = nameField.getValue();
         myself.currentSprite.setName(
@@ -1343,14 +2212,16 @@ IDE_Morph.prototype.createSpriteBar = function () {
     padlock = new ToggleMorph(
         'checkbox',
         null,
-        function () {
-            myself.currentSprite.isDraggable =
-                !myself.currentSprite.isDraggable;
+        () => {
+            this.currentSprite.isDraggable = !this.currentSprite.isDraggable;
+            this.currentSprite.recordUserEdit(
+                'sprite',
+                'draggable',
+                this.currentSprite.isDraggable
+            );
         },
         localize('draggable'),
-        function () {
-            return myself.currentSprite.isDraggable;
-        }
+        () => this.currentSprite.isDraggable
     );
     padlock.label.isBold = false;
     padlock.label.setColor(this.buttonLabelColor);
@@ -1359,14 +2230,14 @@ IDE_Morph.prototype.createSpriteBar = function () {
     padlock.pressColor = tabColors[1];
 
     padlock.tick.shadowOffset = MorphicPreferences.isFlat ?
-            new Point() : new Point(-1, -1);
-    padlock.tick.shadowColor = new Color(); // black
+            ZERO : new Point(-1, -1);
+    padlock.tick.shadowColor = BLACK;
     padlock.tick.color = this.buttonLabelColor;
     padlock.tick.isBold = false;
-    padlock.tick.drawNew();
+    padlock.tick.fixLayout();
 
     padlock.setPosition(nameField.bottomLeft().add(2));
-    padlock.drawNew();
+    padlock.fixLayout();
     this.spriteBar.add(padlock);
     if (this.currentSprite instanceof StageMorph) {
         padlock.hide();
@@ -1375,8 +2246,10 @@ IDE_Morph.prototype.createSpriteBar = function () {
     // tab bar
     tabBar.tabTo = function (tabString) {
         var active;
+        if (myself.currentTab === tabString) {return; }
+        myself.world().hand.destroyTemporaries();
         myself.currentTab = tabString;
-        this.children.forEach(function (each) {
+        this.children.forEach(each => {
             each.refresh();
             if (each.state) {active = each; }
         });
@@ -1388,11 +2261,12 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('scripts'); },
-        localize('Scripts'), // label
-        function () {  // query
-            return myself.currentTab === 'scripts';
-        }
+        () => tabBar.tabTo('scripts'),
+        [ // label
+            new SymbolMorph('blocks', 10),
+            localize('Scripts')
+        ],
+        () => this.currentTab === 'scripts' // query
     );
     tab.padding = 3;
     tab.corner = tabCorner;
@@ -1400,20 +2274,31 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowOffset = new Point(-1, -1);
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
-    tab.drawNew();
+
+    tab.getPressRenderColor = function () {
+        if (MorphicPreferences.isFlat ||
+                SyntaxElementMorph.prototype.alpha > 0.85) {
+            return this.pressColor;
+        }
+        return this.pressColor.mixed(
+            Math.max(SyntaxElementMorph.prototype.alpha - 0.15, 0),
+            SpriteMorph.prototype.paletteColor
+        );
+    };
+
     tab.fixLayout();
     tabBar.add(tab);
 
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('costumes'); },
-        localize(this.currentSprite instanceof SpriteMorph ?
-            'Costumes' : 'Backgrounds'
-        ),
-        function () {  // query
-            return myself.currentTab === 'costumes';
-        }
+        () => tabBar.tabTo('costumes'),
+        [ // label
+            new SymbolMorph('brush', 10),
+            localize(this.currentSprite instanceof SpriteMorph ? 'Costumes'
+                : 'Backgrounds')
+        ],
+        () => this.currentTab === 'costumes' // query
     );
     tab.padding = 3;
     tab.corner = tabCorner;
@@ -1421,18 +2306,18 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowOffset = new Point(-1, -1);
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
-    tab.drawNew();
     tab.fixLayout();
     tabBar.add(tab);
 
     tab = new TabMorph(
         tabColors,
         null, // target
-        function () {tabBar.tabTo('sounds'); },
-        localize('Sounds'), // label
-        function () {  // query
-            return myself.currentTab === 'sounds';
-        }
+        () => tabBar.tabTo('sounds'),
+        [ // label
+            new SymbolMorph('speaker', 10),
+            localize('Sounds')
+        ],
+        () => this.currentTab === 'sounds' // query
     );
     tab.padding = 3;
     tab.corner = tabCorner;
@@ -1440,27 +2325,25 @@ IDE_Morph.prototype.createSpriteBar = function () {
     tab.labelShadowOffset = new Point(-1, -1);
     tab.labelShadowColor = tabColors[1];
     tab.labelColor = this.buttonLabelColor;
-    tab.drawNew();
     tab.fixLayout();
     tabBar.add(tab);
 
     tabBar.fixLayout();
-    tabBar.children.forEach(function (each) {
-        each.refresh();
-    });
+    tabBar.children.forEach(each =>
+        each.refresh()
+    );
     this.spriteBar.tabBar = tabBar;
     this.spriteBar.add(this.spriteBar.tabBar);
 
     this.spriteBar.fixLayout = function () {
         this.tabBar.setLeft(this.left());
-        this.tabBar.setBottom(this.bottom());
+        this.tabBar.setBottom(this.bottom() + myself.padding);
     };
 };
 
 IDE_Morph.prototype.createSpriteEditor = function () {
     // assumes that the logo pane and the stage have already been created
-    var scripts = this.currentSprite.scripts,
-        myself = this;
+    var scripts = this.currentSprite.scripts;
 
     if (this.spriteEditor) {
         this.spriteEditor.destroy();
@@ -1468,14 +2351,25 @@ IDE_Morph.prototype.createSpriteEditor = function () {
 
     if (this.currentTab === 'scripts') {
         scripts.isDraggable = false;
-        scripts.color = this.groupColor;
-        scripts.cachedTexture = this.scriptsPaneTexture;
+        if (this.performerMode) {
+            scripts.alpha = 0;
+        } else {
+            scripts.alpha = 1;
+            scripts.color = this.groupColor;
+            scripts.cachedTexture = MorphicPreferences.isFlat ? null
+                : this.scriptsTexture();
+        }
 
         this.spriteEditor = new ScrollFrameMorph(
             scripts,
             null,
             this.sliderColor
         );
+        if (this.performerMode) {
+            this.spriteEditor.alpha = 0;
+        } else {
+            this.spriteEditor.color = this.groupColor;
+        }
         this.spriteEditor.padding = 10;
         this.spriteEditor.growth = 50;
         this.spriteEditor.isDraggable = false;
@@ -1512,17 +2406,30 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor = new Morph();
         this.spriteEditor.color = this.groupColor;
         this.spriteEditor.acceptsDrops = true;
-        this.spriteEditor.reactToDropOf = function (droppedMorph) {
+        this.spriteEditor.reactToDropOf = (droppedMorph) => {
             if (droppedMorph instanceof DialogBoxMorph) {
-                myself.world().add(droppedMorph);
+                this.world().add(droppedMorph);
             } else if (droppedMorph instanceof SpriteMorph) {
-                myself.removeSprite(droppedMorph);
+                this.removeSprite(droppedMorph);
             } else {
                 droppedMorph.destroy();
             }
         };
         this.add(this.spriteEditor);
     }
+
+    this.spriteEditor.mouseEnterDragging = (morph) => {
+        if (morph instanceof BlockMorph) {
+            this.spriteBar.tabBar.tabTo('scripts');
+        } else if (morph instanceof CostumeIconMorph) {
+            this.spriteBar.tabBar.tabTo('costumes');
+        } else if (morph instanceof SoundIconMorph) {
+            this.spriteBar.tabBar.tabTo('sounds');
+        }
+    };
+
+    this.spriteEditor.contents.mouseEnterDragging =
+        this.spriteEditor.mouseEnterDragging;
 };
 
 IDE_Morph.prototype.createCorralBar = function () {
@@ -1531,26 +2438,33 @@ IDE_Morph.prototype.createCorralBar = function () {
         newbutton,
         paintbutton,
         cambutton,
-        colors = [
+        trashbutton,
+        flag = true,
+        myself = this,
+        colors = IDE_Morph.prototype.isBright ? this.tabColors
+        : [
             this.groupColor,
             this.frameColor.darker(50),
             this.frameColor.darker(50)
         ];
 
     if (this.corralBar) {
+        flag = this.corralBar.isVisible;
         this.corralBar.destroy();
     }
 
     this.corralBar = new Morph();
     this.corralBar.color = this.frameColor;
+    this.corralBar.isVisible = flag;
     this.corralBar.setHeight(this.logo.height()); // height is fixed
+    this.corralBar.setWidth(this.stage.width());
     this.add(this.corralBar);
 
     // new sprite button
     newbutton = new PushButtonMorph(
         this,
         "addNewSprite",
-        new SymbolMorph("turtle", 14)
+        new SymbolMorph("turtlePlus", 14)
     );
     newbutton.corner = 12;
     newbutton.color = colors[0];
@@ -1562,7 +2476,6 @@ IDE_Morph.prototype.createCorralBar = function () {
     newbutton.labelShadowColor = colors[1];
     newbutton.labelColor = this.buttonLabelColor;
     newbutton.contrast = this.buttonContrast;
-    newbutton.drawNew();
     newbutton.hint = "add a new Turtle sprite";
     newbutton.fixLayout();
     newbutton.setCenter(this.corralBar.center());
@@ -1572,7 +2485,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     paintbutton = new PushButtonMorph(
         this,
         "paintNewSprite",
-        new SymbolMorph("brush", 15)
+        new SymbolMorph("brushPlus", 15)
     );
     paintbutton.corner = 12;
     paintbutton.color = colors[0];
@@ -1584,7 +2497,6 @@ IDE_Morph.prototype.createCorralBar = function () {
     paintbutton.labelShadowColor = colors[1];
     paintbutton.labelColor = this.buttonLabelColor;
     paintbutton.contrast = this.buttonContrast;
-    paintbutton.drawNew();
     paintbutton.hint = "paint a new sprite";
     paintbutton.fixLayout();
     paintbutton.setCenter(this.corralBar.center());
@@ -1597,7 +2509,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         cambutton = new PushButtonMorph(
                 this,
                 "newCamSprite",
-                new SymbolMorph("camera", 15)
+                new SymbolMorph("cameraPlus", 15)
                 );
         cambutton.corner = 12;
         cambutton.color = colors[0];
@@ -1609,7 +2521,6 @@ IDE_Morph.prototype.createCorralBar = function () {
         cambutton.labelShadowColor = colors[1];
         cambutton.labelColor = this.buttonLabelColor;
         cambutton.contrast = this.buttonContrast;
-        cambutton.drawNew();
         cambutton.hint = "take a camera snapshot and\n" +
         	"import it as a new sprite";
         cambutton.fixLayout();
@@ -1625,18 +2536,67 @@ IDE_Morph.prototype.createCorralBar = function () {
         this.corralBar.add(cambutton);
         document.addEventListener(
             'cameraDisabled',
-            function (event) {
+            event => {
                 cambutton.disable();
                 cambutton.hint =
                     CamSnapshotDialogMorph.prototype.notSupportedMessage;
             }
         );
     }
+
+    // trash button
+    trashbutton = new PushButtonMorph(
+        this,
+        "undeleteSprites",
+        new SymbolMorph("trash", 18)
+    );
+    trashbutton.corner = 12;
+    trashbutton.color = colors[0];
+    trashbutton.highlightColor = colors[1];
+    trashbutton.pressColor = colors[2];
+    trashbutton.labelMinExtent = new Point(36, 18);
+    trashbutton.padding = 0;
+    trashbutton.labelShadowOffset = new Point(-1, -1);
+    trashbutton.labelShadowColor = colors[1];
+    trashbutton.labelColor = this.buttonLabelColor;
+    trashbutton.contrast = this.buttonContrast;
+    // trashbutton.hint = "bring back deleted sprites";
+    trashbutton.fixLayout();
+    trashbutton.setCenter(this.corralBar.center());
+    trashbutton.setRight(this.corralBar.right() - padding);
+    this.corralBar.add(trashbutton);
+
+    trashbutton.wantsDropOf = (morph) =>
+        morph instanceof SpriteMorph || morph instanceof SpriteIconMorph;
+
+    trashbutton.reactToDropOf = (droppedMorph) => {
+        if (droppedMorph instanceof SpriteMorph) {
+            this.removeSprite(droppedMorph);
+        } else if (droppedMorph instanceof SpriteIconMorph) {
+            droppedMorph.destroy();
+            this.removeSprite(droppedMorph.object);
+        }
+    };
+
+    this.corralBar.fixLayout = function () {
+        function updateDisplayOf(button) {
+            if (button && button.right() > trashbutton.left() - padding) {
+                button.hide();
+            } else {
+                button.show();
+            }
+        }
+        this.setWidth(myself.stage.width());
+        trashbutton.setRight(this.right() - padding);
+        updateDisplayOf(cambutton);
+        updateDisplayOf(paintbutton);
+    };
 };
 
-IDE_Morph.prototype.createCorral = function () {
+IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     // assumes the corral bar has already been created
-    var frame, template, padding = 5, myself = this;
+    var frame, padding = 5, myself = this,
+        album = this.corral? this.corral.album : null;
 
     this.createStageHandle();
     this.createPaletteHandle();
@@ -1647,6 +2607,8 @@ IDE_Morph.prototype.createCorral = function () {
 
     this.corral = new Morph();
     this.corral.color = this.groupColor;
+    this.corral.getRenderColor = ScriptsMorph.prototype.getRenderColor;
+
     this.add(this.corral);
 
     this.corral.stageIcon = new SpriteIconMorph(this.stage);
@@ -1657,29 +2619,46 @@ IDE_Morph.prototype.createCorral = function () {
     frame.acceptsDrops = false;
     frame.contents.acceptsDrops = false;
 
-    frame.contents.wantsDropOf = function (morph) {
-        return morph instanceof SpriteIconMorph;
-    };
+    frame.contents.wantsDropOf = (morph) => morph instanceof SpriteIconMorph;
 
-    frame.contents.reactToDropOf = function (spriteIcon) {
-        myself.corral.reactToDropOf(spriteIcon);
-    };
+    frame.contents.reactToDropOf = (spriteIcon) =>
+        this.corral.reactToDropOf(spriteIcon);
 
     frame.alpha = 0;
 
-    this.sprites.asArray().forEach(function (morph) {
+    this.sprites.asArray().forEach(morph => {
         if (!morph.isTemporary) {
-            template = new SpriteIconMorph(morph, template);
-            frame.contents.add(template);
+            frame.contents.add(new SpriteIconMorph(morph));
         }
     });
 
     this.corral.frame = frame;
     this.corral.add(frame);
 
+    // scenes corral
+    this.corral.album = keepSceneAlbum ? album
+            : new SceneAlbumMorph(this, this.sliderColor);
+    this.corral.album.color = this.frameColor;
+    this.corral.add(this.corral.album);
+
     this.corral.fixLayout = function () {
         this.stageIcon.setCenter(this.center());
         this.stageIcon.setLeft(this.left() + padding);
+
+        // scenes
+        if (myself.tutorial || myself.scenes.length() < 2) {
+            this.album.hide();
+        } else {
+            this.stageIcon.setTop(this.top());
+            this.album.show();
+            this.album.setLeft(this.left());
+            this.album.setTop(this.stageIcon.bottom() + padding);
+            this.album.setWidth(this.stageIcon.width() + padding * 2);
+            this.album.setHeight(
+                this.height() - this.stageIcon.height() - padding
+            );
+        }
+
         this.frame.setLeft(this.stageIcon.right() + padding);
         this.frame.setExtent(new Point(
             this.right() - this.frame.left(),
@@ -1695,7 +2674,7 @@ IDE_Morph.prototype.createCorral = function () {
             max = this.frame.right(),
             start = this.frame.left();
 
-        this.frame.contents.children.forEach(function (icon) {
+        this.frame.contents.children.forEach(icon => {
             var w = icon.width();
 
             if (x + w > max) {
@@ -1711,30 +2690,33 @@ IDE_Morph.prototype.createCorral = function () {
     this.corral.addSprite = function (sprite) {
         this.frame.contents.add(new SpriteIconMorph(sprite));
         this.fixLayout();
+        sprite.recordUserEdit(
+            'corral',
+            'add',
+            sprite.name
+        );
     };
 
     this.corral.refresh = function () {
         this.stageIcon.refresh();
-        this.frame.contents.children.forEach(function (icon) {
-            icon.refresh();
-        });
+        this.frame.contents.children.forEach(icon =>
+            icon.refresh()
+        );
     };
 
-    this.corral.wantsDropOf = function (morph) {
-        return morph instanceof SpriteIconMorph;
-    };
+    this.corral.wantsDropOf = (morph) => morph instanceof SpriteIconMorph;
 
     this.corral.reactToDropOf = function (spriteIcon) {
         var idx = 1,
             pos = spriteIcon.position();
         spriteIcon.destroy();
-        this.frame.contents.children.forEach(function (icon) {
+        this.frame.contents.children.forEach(icon => {
             if (pos.gt(icon.position()) || pos.y > icon.bottom()) {
                 idx += 1;
             }
         });
         myself.sprites.add(spriteIcon.object, idx);
-        myself.createCorral();
+        myself.createCorral(true); // keep scenes
         myself.fixLayout();
     };
 };
@@ -1745,32 +2727,72 @@ IDE_Morph.prototype.fixLayout = function (situation) {
     // situation is a string, i.e.
     // 'selectSprite' or 'refreshPalette' or 'tabEditor'
     var padding = this.padding,
+        cnf = this.config,
+        border = cnf.border || 0,
         flag,
+        mz,
         maxPaletteWidth;
 
-    Morph.prototype.trackChanges = false;
+    // logo
+    this.logo.setLeft(this.left() + border);
+    this.logo.setTop(this.top() + border);
 
     if (situation !== 'refreshPalette') {
         // controlBar
         this.controlBar.setPosition(this.logo.topRight());
-        this.controlBar.setWidth(this.right() - this.controlBar.left());
+        this.controlBar.setWidth(
+            this.right() - this.controlBar.left() - border
+        );
         this.controlBar.fixLayout();
 
         // categories
         this.categories.setLeft(this.logo.left());
-        this.categories.setTop(this.logo.bottom());
+        this.categories.setTop(
+            cnf.hideControls ? this.top() + border : this.logo.bottom()
+        );
         this.categories.setWidth(this.paletteWidth);
+        if (this.categories.scroller) {
+            this.categories.scroller.setWidth(this.paletteWidth);
+        }
     }
 
     // palette
     this.palette.setLeft(this.logo.left());
-    this.palette.setTop(this.categories.bottom());
-    this.palette.setHeight(this.bottom() - this.palette.top());
+    this.palette.setTop(
+        cnf.hideCategories ?
+            (cnf.hideControls ?
+                this.top() + border
+                : this.controlBar.bottom() + padding)
+            : this.categories.bottom()
+    );
+    this.palette.setHeight(this.bottom() - this.palette.top() - border);
     this.palette.setWidth(this.paletteWidth);
 
     if (situation !== 'refreshPalette') {
         // stage
-        if (this.isEmbedMode) {
+        if (this.performerMode) {
+            this.stage.setLeft(this.palette.right() + padding);
+            this.stage.setTop(this.spriteBar.bottom() + padding);
+            this.stage.setScale(1);
+            this.stageRatio = 1;
+            this.isSmallStage = false;
+            this.stage.dimensions = new Point(
+                    (this.width() - this.palette.width()) / this.performerScale,
+                    (this.palette.height() -
+                        this.corralBar.height() -
+                        this.corral.childThatIsA(SpriteIconMorph).height()
+                    ) / this.performerScale
+            );
+            this.stage.stopVideo();
+            this.stage.setExtent(new Point(
+                this.stage.dimensions.x * this.performerScale,
+                this.stage.dimensions.y * this.performerScale
+            ));
+            this.stage.resizePenTrails();
+            Costume.prototype.maxDimensions = this.stage.dimensions;
+            this.paletteHandle.fixLayout();
+            this.controlBar.stageSizeButton.hide();
+        } else if (this.isEmbedMode) {
             this.stage.setScale(Math.floor(Math.min(
                 this.width() / this.stage.dimensions.x,
                 this.height() / this.stage.dimensions.y
@@ -1778,11 +2800,9 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             flag = this.embedPlayButton.flag;
             flag.size = Math.floor(Math.min(
                         this.width(), this.height())) / 5;
-            flag.setWidth(flag.size);
-            flag.setHeight(flag.size);
+            flag.fixLayout();
             this.embedPlayButton.size = flag.size * 1.6;
-            this.embedPlayButton.setWidth(this.embedPlayButton.size);
-            this.embedPlayButton.setHeight(this.embedPlayButton.size);
+            this.embedPlayButton.fixLayout();
             if (this.embedOverlay) {
                 this.embedOverlay.setExtent(this.extent());
             }
@@ -1791,23 +2811,36 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             flag.setCenter(this.embedPlayButton.center());
             flag.setLeft(flag.left() + flag.size * 0.1); // account for slight asymmetry
         } else if (this.isAppMode) {
-            this.stage.setScale(Math.floor(Math.min(
+            this.stage.setScale(Math.min(
                 (this.width() - padding * 2) / this.stage.dimensions.x,
                 (this.height() - this.controlBar.height() * 2 - padding * 2)
                     / this.stage.dimensions.y
-            ) * 10) / 10);
+            ));
             this.stage.setCenter(this.center());
         } else {
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
-            this.stage.setTop(this.logo.bottom() + padding);
-            this.stage.setRight(this.right());
-            maxPaletteWidth = Math.max(
-                200,
-                this.width() -
-                    this.stage.width() -
-                    this.spriteBar.tabBar.width() -
-                    (this.padding * 2)
+            this.stage.setTop(
+                cnf.hideControls ?
+                    this.top() + border
+                        : this.logo.bottom() + padding
             );
+            this.stage.setRight(this.right() - border);
+            if (cnf.noSprites) {
+                maxPaletteWidth = Math.max(
+                    200,
+                    this.width() -
+                    border * 2
+                );
+            } else {
+                maxPaletteWidth = Math.max(
+                    200,
+                    this.width() -
+                        this.stage.width() -
+                        this.spriteBar.tabBar.width() -
+                        padding * 2 -
+                        border * 2
+                );
+            }
             if (this.paletteWidth > maxPaletteWidth) {
                 this.paletteWidth = maxPaletteWidth;
                 this.fixLayout();
@@ -1817,21 +2850,47 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         }
 
         // spriteBar
-        this.spriteBar.setLeft(this.paletteWidth + padding);
-        this.spriteBar.setTop(this.logo.bottom() + padding);
-        this.spriteBar.setExtent(new Point(
-            Math.max(0, this.stage.left() - padding - this.spriteBar.left()),
-            this.categories.bottom() - this.spriteBar.top() - padding
-        ));
+        this.spriteBar.setLeft(cnf.noPalette ?
+            this.left() + border
+            : this.paletteWidth + padding + border
+        );
+        this.spriteBar.setTop(
+            cnf.hideControls ?
+                this.top() + border
+                    : this.logo.bottom() + padding
+        );
+        this.spriteBar.setWidth(
+            Math.max(0, this.stage.left() - padding - this.spriteBar.left())
+        );
+        this.spriteBar.setHeight(
+            Math.round(this.logo.height() * 2.6)
+        );
         this.spriteBar.fixLayout();
 
         // spriteEditor
         if (this.spriteEditor.isVisible) {
-            this.spriteEditor.setPosition(this.spriteBar.bottomLeft());
-            this.spriteEditor.setExtent(new Point(
-                this.spriteBar.width(),
-                this.bottom() - this.spriteEditor.top()
-            ));
+            if (this.performerMode) {
+                this.spriteEditor.setTop(this.stage.top());
+                this.spriteEditor.setLeft(this.stage.left());
+                this.spriteEditor.setWidth(this.stage.width());
+                this.spriteEditor.setHeight(this.stage.height());
+            } else {
+                this.spriteEditor.setLeft(this.spriteBar.left());
+                this.spriteEditor.setTop(
+                    cnf.noSprites || cnf.noSpriteEdits ?
+                    (cnf.hideControls ? this.top() + border
+                        : this.controlBar.bottom() + padding)
+                    : this.spriteBar.bottom() + padding
+                );
+                this.spriteEditor.setWidth(
+                    cnf.noSprites ?
+                        this.right() - this.spriteEditor.left() - border
+                        : this.spriteBar.width()
+                );
+                this.spriteEditor.setHeight(
+                    this.bottom() - this.spriteEditor.top() - border
+                );
+            }
         }
 
         // corralBar
@@ -1843,68 +2902,192 @@ IDE_Morph.prototype.fixLayout = function (situation) {
         if (!contains(['selectSprite', 'tabEditor'], situation)) {
             this.corral.setPosition(this.corralBar.bottomLeft());
             this.corral.setWidth(this.stage.width());
-            this.corral.setHeight(this.bottom() - this.corral.top());
+            this.corral.setHeight(this.bottom() - this.corral.top() - border);
             this.corral.fixLayout();
         }
     }
 
-    Morph.prototype.trackChanges = true;
-    this.changed();
+    // adjust the global zoom if necessary
+    mz = this.maxZoom();
+    if (mz < (ZOOM * 100) && mz >= 100) {
+        this.setZoom(mz);
+    }
 };
 
-IDE_Morph.prototype.setProjectName = function (string) {
-    this.projectName = string.replace(/['"]/g, ''); // filter quotation marks
-    this.hasChangedMedia = true;
-    this.controlBar.updateLabel();
+// IDE_Morph project properties
+
+IDE_Morph.prototype.getProjectName = function () {
+    return this.scenes.at(1).name;
+};
+
+IDE_Morph.prototype.setProjectName = function (string, noChange) {
+    var projectScene = this.scenes.at(1),
+        name = this.newSceneName(string, projectScene);
+    if (name !== projectScene.name && !noChange) {
+        projectScene.name = name;
+        projectScene.stage.version = Date.now();
+        this.recordUnsavedChanges();
+        if (projectScene === this.scene) {
+            this.controlBar.updateLabel();
+        }
+    }
+    return name;
+};
+
+IDE_Morph.prototype.getProjectNotes = function () {
+    return this.scenes.at(1).notes;
+};
+
+IDE_Morph.prototype.setProjectNotes = function (string) {
+    var projectScene = this.scenes.at(1);
+    if (string !== projectScene.notes) {
+        projectScene.notes = string;
+        projectScene.stage.version = Date.now();
+        this.recordUnsavedChanges();
+        if (projectScene === this.scene) {
+            this.controlBar.updateLabel();
+        }
+    }
 };
 
 // IDE_Morph resizing
 
 IDE_Morph.prototype.setExtent = function (point) {
-    var padding = new Point(430, 110),
+    var cnf = this.config,
         minExt,
         ext,
         maxWidth,
-        minWidth,
         maxHeight,
         minRatio,
-        maxRatio;
+        maxRatio,
+        newRatio,
+        delta;
 
     // determine the minimum dimensions making sense for the current mode
     if (this.isAppMode) {
-        if (this.isEmbedMode) {
-            minExt = new Point(100, 100);
-        } else {
-            minExt = StageMorph.prototype.dimensions.add(
-                this.controlBar.height() + 10
-            );
+        minExt = new Point(100, 100);
+        if (!this.isEmbedMode) {
+            minExt = minExt.add(this.controlBar.height() + 10);
         }
+    } else if (cnf.noSprites) {
+        minExt = new Point(100, 100);
     } else {
-        if (this.stageRatio > 1) {
-            minExt = padding.add(StageMorph.prototype.dimensions);
-        } else {
-            minExt = padding.add(
-                StageMorph.prototype.dimensions.multiplyBy(this.stageRatio)
+        minExt = new Point(this.minWidth(), this.minHeight());
+    }
+    if (this.performerMode) {
+        ext = point;
+    } else {
+        ext = point.max(minExt);
+    }
+    if (!this.isAppMode) {
+        // in edit mode adjust stage ratio if necessary
+        // (in presentation mode this is already handled separately)
+        if (!cnf.noSprites) {
+            maxWidth = ext.x -
+                (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
+            maxHeight = ext.y -
+                SpriteIconMorph.prototype.thumbSize.y * 3;
+            minRatio = Math.max(
+                this.minStageWidth() / this.stage.dimensions.x,
+                this.minStageHeight() / this.stage.dimensions.y
             );
+            maxRatio = Math.min(
+                maxWidth / this.stage.dimensions.x,
+                maxHeight / this.stage.dimensions.y
+            );
+            newRatio = Math.min(
+                maxRatio,
+                Math.max(minRatio, this.stageRatio)
+            );
+            if (
+                ext.gt(this.extent()) &&
+                newRatio < 1 &&
+                this.stage.extent().lt(new Point(maxWidth, maxHeight))
+            ) {
+                delta = ext.divideBy(this.extent());
+                delta = Math.min(delta.x, delta.y);
+                newRatio = Math.min(newRatio * delta, 1);
+            }
+            this.stageRatio = newRatio;
+            this.isSmallStage = (this.stageRatio !== 1);
+            this.controlBar.stageSizeButton.refresh();
         }
     }
-    ext = point.max(minExt);
-
-    // adjust stage ratio if necessary
-    maxWidth = ext.x -
-        (200 + this.spriteBar.tabBar.width() + (this.padding * 2));
-    minWidth = SpriteIconMorph.prototype.thumbSize.x * 3;
-    maxHeight = (ext.y - SpriteIconMorph.prototype.thumbSize.y * 3.5);
-    minRatio = minWidth / this.stage.dimensions.x;
-    maxRatio = Math.min(
-        (maxWidth / this.stage.dimensions.x),
-        (maxHeight / this.stage.dimensions.y)
-    );
-    this.stageRatio = Math.min(maxRatio, Math.max(minRatio, this.stageRatio));
 
     // apply
     IDE_Morph.uber.setExtent.call(this, ext);
     this.fixLayout();
+};
+
+IDE_Morph.prototype.minWidth = function () {
+    // answer the minimum horizontal space required to render the full IDE
+    // in edit mode with all panes and UI elements,
+    // constrained by displaying all elements in the control bar
+    var buttons = this.controlBar.children.filter(morph =>
+            morph instanceof PushButtonMorph),
+        minControlBarWidth = this.logo.width() - 60 +
+            buttons.map(each => each.width()).reduce((a, b) => a + b) +
+                this.controlBar.steppingSlider.width(),
+        minTabBarWidth = this.minStageWidth() +
+            this.spriteBar.tabBar.width() +
+            this.logo.width();
+    return Math.max(minControlBarWidth, minTabBarWidth);
+};
+
+IDE_Morph.prototype.minHeight = function () {
+    // answer the minimum vertical space required to render the full IDE
+    // in edit mode with all panes and UI elements,
+    // constrained by displaying the control bar, and whichever requires more
+    // space:
+    // - a minimal stage and the corral with a single row of icons
+    //      - the stage height is constrained by the minimum stage width
+    // - the category buttons including user defined ones, a minimal palette
+    // - the sprite bar (name field and tabs) and a minimal scripts pane
+    var left = this.categories.height() + 100,
+        middle = this.spriteBar.height() + 100,
+        right = this.minStageHeight() +
+            SpriteIconMorph.prototype.thumbSize.y * 3;
+    return this.controlBar.height() + Math.max(left, middle, right);
+};
+
+IDE_Morph.prototype.minStageWidth = function () {
+    // answer the minimum horizontal space to which the stage with its current
+    // dimensions can be reduced without distorting the layout of the IDE in
+    // edit mode, constrained by being able to display a minimal corral with
+    // 2 icons and scroll bars
+    return SpriteIconMorph.prototype.thumbSize.x * 3;
+};
+
+IDE_Morph.prototype.minStageHeight = function () {
+    // answer the minimum vertical space required to display a minimal
+    // renditions of the stage in its current dimensions,
+    // constrained by the stage's dimensions and its minimum width
+    var ratio = this.minStageWidth() / this.stage.dimensions.x;
+    return this.stage.dimensions.y * ratio;
+};
+
+// IDE_Morph rendering
+
+IDE_Morph.prototype.render = function (ctx) {
+    var frame;
+    IDE_Morph.uber.render.call(this, ctx);
+    if (this.isAppMode && this.stage) {
+        // draw a subtle outline rectangle around the stage
+        // in presentation mode
+        frame = this.stage.bounds.translateBy(
+            this.position().neg()
+        ).expandBy(2);
+        ctx.strokeStyle = (this.isBright ? this.backgroundColor
+            : this.groupColor).toString();
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(frame.origin.x, frame.origin.y);
+        ctx.lineTo(frame.corner.x, frame.origin.y);
+        ctx.lineTo(frame.corner.x, frame.corner.y);
+        ctx.lineTo(frame.origin.x, frame.corner.y);
+        ctx.closePath();
+        ctx.stroke();
+    }
 };
 
 // IDE_Morph events
@@ -1917,10 +3100,24 @@ IDE_Morph.prototype.reactToWorldResize = function (rect) {
     if (this.filePicker) {
         document.body.removeChild(this.filePicker);
         this.filePicker = null;
+        this.isImportingLocalFile = false;
     }
 };
 
-IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
+IDE_Morph.prototype.beginBulkDrop = function () {
+    this.bulkDropInProgress = true;
+    this.cachedSceneFlag = this.isAddingScenes;
+    this.isAddingScenes = true;
+};
+
+IDE_Morph.prototype.endBulkDrop = function () {
+    this.isAddingScenes = this.cachedSceneFlag;
+    this.bulkDropInProgress = false;
+};
+
+IDE_Morph.prototype.droppedImage = function (aCanvas, name, embeddedData, src) {
+    if (this.config.noImports) {return; }
+
     var costume = new Costume(
         aCanvas,
         this.currentSprite.newCostumeName(
@@ -1940,35 +3137,131 @@ IDE_Morph.prototype.droppedImage = function (aCanvas, name) {
         return;
     }
 
+    // directly import embedded blocks if the image was dropped on
+    // a scripting area or the palette, otherwise import as costume
+    // (with embedded data)
+    if (!this.isImportingLocalFile &&
+        isString(embeddedData) &&
+        ['scripts', 'palette', 'categories'].includes(src) &&
+        embeddedData[0] === '<' &&
+        ['blocks', 'block', 'script', 'sprite'].some(tag =>
+            embeddedData.slice(1).startsWith(tag))
+    ) {
+        this.isImportingLocalFile = false;
+        return this.droppedText(embeddedData, name, '');
+    }
+
+    this.isImportingLocalFile = false;
+    costume.embeddedData = embeddedData || null;
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
+    this.spriteEditor.updateList();
     this.hasChangedMedia = true;
+    this.currentSprite.recordUserEdit(
+        'costume',
+        'imported',
+        costume.name
+    );
 };
 
 IDE_Morph.prototype.droppedSVG = function (anImage, name) {
-    var costume = new SVG_Costume(anImage, name.split('.')[0]);
+    if (this.config.noImports) {return; }
+
+    var myself,
+        viewBox,
+        w = 300, h = 150, // setting HTMLImageElement default values
+        scale = 1,
+        svgNormalized,
+        headerLenght = anImage.src.search('base64') + 7,
+            // usually 26 from "data:image/svg+xml;base64,"
+        svgStrEncoded = anImage.src.substring(headerLenght),
+        svgObj = new DOMParser().parseFromString(
+            atob(svgStrEncoded), "image/svg+xml"
+        ).firstElementChild,
+        normalizing = true; // false; // v11.1: always reconfigure SVGs
+
+    name = name.split('.')[0];
+
+    // checking for svg 'width' and 'height' attributes
+    if (svgObj.attributes.getNamedItem("width") &&
+            svgObj.attributes.getNamedItem("height")) {
+        w = parseFloat(svgObj.attributes.getNamedItem("width").value);
+        h = parseFloat(svgObj.attributes.getNamedItem("height").value);
+    } else {
+        normalizing = true;
+    }
+
+    // checking for svg 'viewBox' attribute
+    if (svgObj.attributes.getNamedItem("viewBox")) {
+        viewBox = svgObj.attributes.getNamedItem('viewBox').value;
+        viewBox = viewBox.split(/[ ,]/).filter(item => item);
+        if (viewBox.length == 4) {
+            if (normalizing) {
+                w = parseFloat(viewBox[2]);
+                h = parseFloat(viewBox[3]);
+            }
+        }
+    } else {
+        svgObj.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+        normalizing = true;
+    }
+
+    // checking if the costume is bigger than the stage and, if so, fit it
+    if (this.stage.dimensions.x < w || this.stage.dimensions.y < h) {
+        scale = Math.min(
+            (this.stage.dimensions.x / w),
+            (this.stage.dimensions.y / h)
+        );
+        normalizing = true;
+        w = w * scale;
+        h = h * scale;
+    }
+
+    // loading image, normalized if it needed
+    // all the images are:
+        // sized, with 'width' and 'height' attributes
+        // fitted to stage dimensions
+        // and with their 'viewBox' attribute
+    if (normalizing) {
+        svgNormalized = new Image(w, h);
+        svgObj.setAttribute('width', w);
+        svgObj.setAttribute('height', h);
+        svgNormalized.src = 'data:image/svg+xml;base64,' +
+            btoa(new XMLSerializer().serializeToString(svgObj));
+        myself = this;
+        svgNormalized.onload = () => myself.loadSVG(svgNormalized, name);
+    } else {
+        this.loadSVG(anImage, name);
+    }
+};
+
+IDE_Morph.prototype.loadSVG = function (anImage, name) {
+    var costume = new SVG_Costume(anImage, name);
+
     this.currentSprite.addCostume(costume);
     this.currentSprite.wearCostume(costume);
     this.spriteBar.tabBar.tabTo('costumes');
+    this.spriteEditor.updateList();
     this.hasChangedMedia = true;
 };
 
 IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
-	var myself = this;
+    if (this.config.noImports) {return; }
+
     if (anAudio.src.indexOf('data:audio') !== 0) {
-    	// fetch and base 64 encode samples using FileReader
-    	this.getURL(
-        	anAudio.src,
-        	function (blob) {
+        // fetch and base 64 encode samples using FileReader
+        this.getURL(
+            anAudio.src,
+            blob => {
                 var reader = new window.FileReader();
                 reader.readAsDataURL(blob);
-                reader.onloadend = function() {
+                reader.onloadend = () => {
                 	var base64 = reader.result;
-                    base64 = 'data:audio/ogg;base64,' +
+                    base64 = 'data:audio/mpeg;base64,' +
                         base64.split(',')[1];
                     anAudio.src = base64;
-                    myself.droppedAudio(anAudio, name);
+                    this.droppedAudio(anAudio, name);
                 };
             },
             'blob'
@@ -1977,22 +3270,53 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
     	this.currentSprite.addSound(anAudio, name.split('.')[0]); // up to '.'
     	this.spriteBar.tabBar.tabTo('sounds');
     	this.hasChangedMedia = true;
+        this.currentSprite.recordUserEdit(
+            'sound',
+            'imported',
+            name
+        );
     }
 };
 
 IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
+    if (this.config.noImports) {return; }
+
     var lbl = name ? name.split('.')[0] : '',
-        ext = name ? name.slice(name.lastIndexOf('.') + 1).toLowerCase() : '';
+        ext = name ? name.slice(name.lastIndexOf('.') + 1).toLowerCase() : '',
+        setting = this.isAddingScenes;
+
+    // handle the special situation of adding a scene to the current project
+    if (this.isAddingNextScene) {
+        this.isAddingScenes = true;
+        if (aString.indexOf('<project') === 0) {
+            location.hash = '';
+            this.openProjectString(aString);
+        } else if (aString.indexOf('<snapdata') === 0) {
+            location.hash = '';
+            this.openCloudDataString(aString);
+        }
+        this.isAddingScenes = setting;
+        this.isAddingNextScene = false;
+        return;
+    }
 
     // check for Snap specific files, projects, libraries, sprites, scripts
     if (aString.indexOf('<project') === 0) {
-        location.hash = '';
-        return this.openProjectString(aString);
+        this.backup(
+            () => {
+                location.hash = '';
+                this.openProjectString(aString);
+            }
+        );
+        return;
     }
     if (aString.indexOf('<snapdata') === 0) {
         location.hash = '';
         return this.openCloudDataString(aString);
     }
+
+    this.recordUnsavedChanges();
+
     if (aString.indexOf('<blocks') === 0) {
         return this.openBlocksString(aString, lbl, true);
     }
@@ -2001,6 +3325,12 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     }
     if (aString.indexOf('<media') === 0) {
         return this.openMediaString(aString);
+    }
+    if (aString.indexOf('<block') === 0) {
+        aString = '<script>' + aString + '</script>';
+    }
+    if (aString.indexOf('<scriptsonly') === 0) {
+        return this.openScriptsOnlyString(aString);
     }
     if (aString.indexOf('<script') === 0) {
         return this.openScriptString(aString);
@@ -2019,6 +3349,8 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
 };
 
 IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
+    if (this.config.noImports) {return; }
+
     // dynamically load ypr->Snap!
     var ypr = document.getElementById('ypr'),
         myself = this,
@@ -2046,6 +3378,20 @@ IDE_Morph.prototype.droppedBinary = function (anArrayBuffer, name) {
     }
 };
 
+// IDE_Morph global zoom gesture events
+
+IDE_Morph.prototype.mouseScroll = function (y) {
+    if (this.world().currentKey === 16 && !this.config.hideSettings) {
+        this.setZoom(ZOOM * 100 - y * 5);
+    }
+};
+
+IDE_Morph.prototype.mouseDoubleClick = function () {
+    if (this.world().currentKey === 16 && !this.config.hideSettings) {
+        this.setZoom(100);
+    }
+};
+
 // IDE_Morph button actions
 
 IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
@@ -2060,6 +3406,64 @@ IDE_Morph.prototype.refreshPalette = function (shouldIgnorePosition) {
     if (!shouldIgnorePosition) {
         this.palette.contents.setTop(oldTop);
     }
+    this.palette.adjustScrollBars();
+};
+
+IDE_Morph.prototype.scrollPaletteToCategory = function (category) {
+    var palette = this.palette,
+        msecs = this.isAnimating ? 200 : 0,
+        firstInCategory,
+        delta;
+
+    if (palette.isForSearching) {
+        this.refreshPalette();
+        palette = this.palette;
+    }
+    firstInCategory = palette.contents.children.find(
+        block => block.category === category
+    );
+    if (firstInCategory === undefined) {return; }
+    delta = palette.top() - firstInCategory.top() + palette.padding;
+    if (delta === 0) {return; }
+    this.world().animations.push(new Animation(
+        y => { // setter
+            palette.contents.setTop(y);
+            palette.contents.keepInScrollFrame();
+            palette.adjustScrollBars();
+        },
+        () => palette.contents.top(), // getter
+        delta, // delta
+        msecs, // duration in ms
+        t => Math.pow(t, 6), // easing
+        null // onComplete
+    ));
+};
+
+IDE_Morph.prototype.topVisibleCategoryInPalette = function () {
+    // private - answer the topmost (partially) visible
+    // block category in the palette, so it can be indicated
+    // as "current category" in the category selection buttons
+    var top;
+    if (!this.palette) {return; }
+    top = this.palette.contents.children.find(morph =>
+        morph.category && morph.bounds.intersects(this.palette.bounds)
+    );
+    if (top) {
+        if (top.category === 'other') {
+            if (top.selector === 'doWarp') {
+                return 'control';
+            }
+            if (top instanceof RingMorph) {
+                return 'operators';
+            }
+            return 'variables';
+        }
+        if (top.category === 'lists') {
+            return 'variables';
+        }
+        return top.category;
+    }
+    return null;
 };
 
 IDE_Morph.prototype.pressStart = function () {
@@ -2080,16 +3484,6 @@ IDE_Morph.prototype.toggleFastTracking = function () {
     }
 };
 
-IDE_Morph.prototype.toggleVariableFrameRate = function () {
-    if (StageMorph.prototype.frameRate) {
-        StageMorph.prototype.frameRate = 0;
-        this.stage.fps = 0;
-    } else {
-        StageMorph.prototype.frameRate = 30;
-        this.stage.fps = 30;
-    }
-};
-
 IDE_Morph.prototype.toggleSingleStepping = function () {
     this.stage.threads.toggleSingleStepping();
     this.controlBar.steppingButton.refresh();
@@ -2106,21 +3500,25 @@ IDE_Morph.prototype.toggleCameraSupport = function () {
 
 IDE_Morph.prototype.startFastTracking = function () {
     this.stage.isFastTracked = true;
-    this.stage.fps = 0;
     this.controlBar.startButton.labelString = new SymbolMorph('flash', 14);
-    this.controlBar.startButton.drawNew();
+    this.controlBar.startButton.createLabel();
     this.controlBar.startButton.fixLayout();
+    this.controlBar.startButton.rerender();
 };
 
 IDE_Morph.prototype.stopFastTracking = function () {
     this.stage.isFastTracked = false;
-    this.stage.fps = this.stage.frameRate;
     this.controlBar.startButton.labelString = new SymbolMorph('flag', 14);
-    this.controlBar.startButton.drawNew();
+    this.controlBar.startButton.createLabel();
     this.controlBar.startButton.fixLayout();
+    this.controlBar.startButton.rerender();
 };
 
 IDE_Morph.prototype.runScripts = function () {
+    if (this.stage.threads.pauseCustomHatBlocks) {
+        this.stage.threads.pauseCustomHatBlocks = false;
+        this.controlBar.stopButton.refresh();
+    }
     this.stage.fireGreenFlagEvent();
 };
 
@@ -2139,26 +3537,49 @@ IDE_Morph.prototype.isPaused = function () {
 };
 
 IDE_Morph.prototype.stopAllScripts = function () {
-    if (this.stage.enableCustomHatBlocks) {
-        this.stage.threads.pauseCustomHatBlocks =
-            !this.stage.threads.pauseCustomHatBlocks;
+    if (this.world().currentKey === 16) { // shiftClicked
+        this.scenes.map(scn => {
+            if (scn !== this.tutorial?.scene) {
+                scn.stop(true);
+            }
+        });
     } else {
-        this.stage.threads.pauseCustomHatBlocks = false;
+        this.scene.stop();
     }
     this.controlBar.stopButton.refresh();
-    this.stage.fireStopAllEvent();
 };
 
-IDE_Morph.prototype.selectSprite = function (sprite) {
+IDE_Morph.prototype.selectSprite = function (sprite, noEmptyRefresh) {
+    // prevent switching to another sprite if a block editor or a block
+    // visibility dialog box is open
+    // so local blocks of different sprites don't mix
+    if (
+        detect(
+            this.world().children,
+            morph => morph instanceof BlockEditorMorph ||
+                morph instanceof BlockDialogMorph ||
+                morph instanceof BlockVisibilityDialogMorph
+        )
+    ) {
+        return;
+    }
     if (this.currentSprite && this.currentSprite.scripts.focus) {
         this.currentSprite.scripts.focus.stopEditing();
     }
     this.currentSprite = sprite;
+    this.scene.currentSprite = sprite;
+    if (!noEmptyRefresh) {
+        this.refreshEmptyCategories();
+    }
     this.createPalette();
     this.createSpriteBar();
     this.createSpriteEditor();
     this.corral.refresh();
     this.fixLayout('selectSprite');
+    if (this.performerMode) {
+        this.fixLayout();
+        this.currentSprite.scripts.updateToolbar();
+    }
     this.currentSprite.scripts.fixMultiArgs();
 };
 
@@ -2171,13 +3592,30 @@ IDE_Morph.prototype.toggleRetina = function () {
         enableRetinaSupport();
     }
     this.world().fillPage();
-    IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    if (!MorphicPreferences.isFlat) {
+        IDE_Morph.prototype.scriptsPaneTexture = this.scriptsTexture();
+    }
     this.stage.clearPenTrails();
-    this.drawNew();
     this.refreshIDE();
 };
 
 // IDE_Morph skins
+
+IDE_Morph.prototype.defaultLooks = function () {
+    this.setDefaultDesign();
+    this.setDefaultTheme();
+    this.refreshIDE();
+    this.removeSetting('design');
+    this.removeSetting('theme');
+};
+
+IDE_Morph.prototype.flatBrightLooks = function () {
+    this.setFlatDesign();
+    this.setBrightTheme();
+    this.refreshIDE();
+    this.saveSetting('design', 'flat');
+    this.saveSetting('theme', 'bright');
+};
 
 IDE_Morph.prototype.defaultDesign = function () {
     this.setDefaultDesign();
@@ -2191,17 +3629,47 @@ IDE_Morph.prototype.flatDesign = function () {
     this.saveSetting('design', 'flat');
 };
 
-IDE_Morph.prototype.refreshIDE = function () {
-    var projectData;
+IDE_Morph.prototype.defaultTheme = function () {
+    this.setDefaultTheme();
+    this.refreshIDE();
+    this.removeSetting('theme');
+};
 
+IDE_Morph.prototype.brightTheme = function () {
+    this.setBrightTheme();
+    this.refreshIDE();
+    this.saveSetting('theme', 'bright');
+};
+
+IDE_Morph.prototype.refreshIDE = function () {
+    var projectData, onComplete, name, tutorial;
+
+    if (this.scene.createdFromTemplate) {
+        name = this.scene.name;
+        tutorial = !isNil(this.tutorial);
+        this.scene.createdFromTemplate = false;
+        onComplete = () => {
+            this.scene.createdFromTemplate = true;
+            this.setProjectName(name);
+            if (tutorial) {
+                this.launchProjectTutorial();
+            }
+        };
+    }
+
+    this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
-            projectData = this.serializer.serialize(this.stage);
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene, true)
+            );
         } catch (err) {
             this.showMessage('Serialization failed: ' + err);
         }
     } else {
-        projectData = this.serializer.serialize(this.stage);
+        projectData = this.serializer.serialize(
+            new Project(this.scenes, this.scene, true)
+        );
     }
     SpriteMorph.prototype.initBlocks();
     this.buildPanes();
@@ -2209,24 +3677,35 @@ IDE_Morph.prototype.refreshIDE = function () {
     if (this.loadNewProject) {
         this.newProject();
     } else {
-        this.openProjectString(projectData);
+        this.openProjectString(
+            projectData,
+            null,
+            null,
+            true,  // keepRoles
+            onComplete // restore name and template origin
+        );
     }
 };
 
 // IDE_Morph settings persistance
 
 IDE_Morph.prototype.applySavedSettings = function () {
+    if (this.config.noUserSettings) {return; }
+
     var design = this.getSetting('design'),
+        theme = this.getSetting('theme'),
         zoom = this.getSetting('zoom'),
+        fade = this.getSetting('fade'),
+        glow = this.getSetting('glow'),
         language = this.getSetting('language'),
         click = this.getSetting('click'),
         longform = this.getSetting('longform'),
-        longurls = this.getSetting('longurls'),
         plainprototype = this.getSetting('plainprototype'),
         keyboard = this.getSetting('keyboard'),
         tables = this.getSetting('tables'),
         tableLines = this.getSetting('tableLines'),
-        autoWrapping = this.getSetting('autowrapping');
+        autoWrapping = this.getSetting('autowrapping'),
+        solidshadow = this.getSetting('solidshadow');
 
     // design
     if (design === 'flat') {
@@ -2235,11 +3714,29 @@ IDE_Morph.prototype.applySavedSettings = function () {
         this.setDefaultDesign();
     }
 
+    // theme
+    if (theme === 'bright') {
+        this.setBrightTheme();
+    } else {
+        this.setDefaultTheme();
+    }
+
     // blocks zoom
     if (zoom) {
         SyntaxElementMorph.prototype.setScale(Math.min(zoom, 12));
         CommentMorph.prototype.refreshScale();
-        SpriteMorph.prototype.initBlocks();
+    }
+
+    // blocks fade
+    if (!isNil(fade)) {
+        this.setBlockTransparency(+fade);
+    }
+
+    // blocks afterglow //
+    if (isNil(glow)) {
+        this.setBlocksAfterglow(5);
+    } else {
+        this.setBlocksAfterglow(Math.max(0, Math.min(glow, 20)));
     }
 
     // language
@@ -2257,13 +3754,6 @@ IDE_Morph.prototype.applySavedSettings = function () {
     // long form
     if (longform) {
         InputSlotDialogMorph.prototype.isLaunchingExpanded = true;
-    }
-
-    // project data in URLs
-    if (longurls) {
-        this.projectsInURLs = true;
-    } else {
-        this.projectsInURLs = false;
     }
 
     // keyboard editing
@@ -2298,10 +3788,38 @@ IDE_Morph.prototype.applySavedSettings = function () {
     if (plainprototype) {
         BlockLabelPlaceHolderMorph.prototype.plainLabel = true;
     }
+
+    // solid shadow
+    if (solidshadow) {
+        window.useBlurredShadows = false;
+        this.rerender();
+    }
+};
+
+IDE_Morph.prototype.applySavedMagnification = function () {
+    var magnification = this.getSetting('magnification');
+    if (magnification && magnification !== 1) {
+        this.setZoom(magnification * 100);
+    } else if (this.config.zoom) {
+        this.setZoom(this.config.zoom * 100, true); // noSave
+    }
+};
+
+IDE_Morph.prototype.applySavedStageScale = function () {
+    // experimental, currently unused / commented out
+    var stagescale = this.getSetting('stagescale');
+    if (stagescale && stagescale !== 1) {
+        this.stageRatio = stagescale;
+        if (this.isSmallStage !== (this.stageRatio !== 1)) {
+            this.isSmallStage = (this.stageRatio !== 1);
+            this.controlBar.stageSizeButton.refresh();
+        }
+        this.setExtent(this.world().extent());
+    }
 };
 
 IDE_Morph.prototype.saveSetting = function (key, value) {
-    if (!this.savingPreferences) {
+    if (!this.savingPreferences || this.config.noUserSettings) {
         return;
     }
     if (this.hasLocalStorage()) {
@@ -2334,20 +3852,153 @@ IDE_Morph.prototype.hasLocalStorage = function () {
 	}
 };
 
+// IDE_Morph recording unsaved changes
+
+IDE_Morph.prototype.hasUnsavedEdits = function () {
+    return this.scenes.itemsArray().some(any => any.hasUnsavedEdits);
+};
+
+IDE_Morph.prototype.recordUnsavedChanges = function (spriteName, details) {
+    this.scene.hasUnsavedEdits = true;
+    this.updateChanges(spriteName, details);
+};
+
+IDE_Morph.prototype.recordSavedChanges = function () {
+    this.scenes.itemsArray().forEach(scene => scene.hasUnsavedEdits = false);
+    this.updateChanges(this.currentSprite.name, ['project', 'save']);
+};
+
+IDE_Morph.prototype.updateChanges = function (spriteName, details) {
+    // private
+    // invalidate saved backup, if any - but don't actually delete it yet
+    if (this.hasLocalStorage() &&
+        (localStorage['-snap-bakuser-'] == this.cloud.username)) {
+            localStorage['-snap-bakflag-'] = 'expired';
+    }
+
+    // update the version timestamp so my observer can react
+    this.version = Date.now();
+
+    // indicate unsaved changes in the project title display
+    this.controlBar.updateLabel();
+
+    // trigger an event
+    this.stage.fireUserEditEvent(
+        spriteName || this.currentSprite.name,
+        details || [],
+        this.version
+    );
+};
+
+// IDE_Morph project backup
+
+IDE_Morph.prototype.backup = function (callback) {
+    // in case of unsaved changes let the user confirm whether to
+    // abort the operation or go ahead with it.
+    // Save the current project for the currently logged in user
+    // to localstorage, then perform the given callback, e.g.
+    // load a new project.
+    if (this.hasUnsavedEdits()) {
+        this.confirm(
+            'Replace the current project with a new one?',
+            'Unsaved Changes!',
+            () => this.backupAndDo(callback)
+        );
+    } else {
+        callback();
+    }
+};
+
+IDE_Morph.prototype.backupAndDo = function (callback) {
+    // private
+    var username = this.cloud.username;
+    this.scene.captureGlobalSettings();
+    try {
+        localStorage['-snap-backup-'] = this.serializer.serialize(
+            new Project(this.scenes, this.scene)
+        );
+        delete localStorage['-snap-bakflag-'];
+        if (username) {
+            localStorage['-snap-bakuser-'] = username;
+        } else {
+            delete localStorage['-snap-bakuser-'];
+        }
+        callback();
+    } catch (err) {
+        nop(err);
+        this.confirm(
+            'Backup failed. This cannot be undone, proceed anyway?',
+            'Unsaved Changes!',
+            callback
+        );
+    }
+};
+
+IDE_Morph.prototype.clearBackup = function () {
+    delete localStorage['-snap-bakflag-'];
+    delete localStorage['-snap-bakuser-'];
+    delete localStorage['-snap-backup-'];
+};
+
+IDE_Morph.prototype.availableBackup = function (anyway) {
+    // return the name of the project that can be restored in double
+    // quotes for the currently logged in user.
+    // Otherwise return null
+    var username = this.cloud.username,
+        bak, ix;
+    if (this.hasLocalStorage()) {
+        if (
+            localStorage['-snap-bakuser-'] == username &&  // null == undefined
+            (!localStorage['-snap-bakflag-'] || anyway)
+        ) {
+            bak = localStorage['-snap-backup-'];
+            if (bak) {
+                ix = bak.indexOf('"', 15);
+                if (ix > 15) {
+                    return bak.slice(15, ix);
+                }
+            }
+        }
+    }
+    return null;
+};
+
+IDE_Morph.prototype.restore = function () {
+    // load the backed up project for the currently logged in user
+    // and backup the current one, in case they want to switch back to it
+    var username = this.cloud.username,
+        bak;
+    if (this.hasLocalStorage()) {
+        if (localStorage['-snap-bakuser-'] == username) { // null == undefined
+            bak = localStorage['-snap-backup-'];
+            if (bak) {
+                this.backup(() => {
+                    this.openProjectString(
+                        bak,
+                        () => this.recordUnsavedChanges()
+                    );
+                });
+            }
+        }
+    }
+};
+
 // IDE_Morph sprite list access
 
 IDE_Morph.prototype.addNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
-        rnd = Process.prototype.reportRandom;
+        rnd = Process.prototype.reportBasicRandom;
 
     sprite.name = this.newSpriteName(sprite.name);
     sprite.setCenter(this.stage.center());
     this.stage.add(sprite);
+    sprite.fixLayout();
+    sprite.rerender();
 
     // randomize sprite properties
-    sprite.setColorComponentHSVA(0, rnd.call(this, 0, 100));
-    sprite.setColorComponentHSVA(1, 100);
-    sprite.setColorComponentHSVA(2, rnd.call(this, 50, 100));
+    sprite.setColorDimension(0, rnd.call(this, 0, 100));
+    sprite.setColorDimension(1, 100);
+    sprite.setColorDimension(2, rnd.call(this, 25, 75));
 
     sprite.setXPosition(rnd.call(this, -220, 220));
     sprite.setYPosition(rnd.call(this, -160, 160));
@@ -2363,8 +4014,7 @@ IDE_Morph.prototype.addNewSprite = function () {
 
 IDE_Morph.prototype.paintNewSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
-        cos = new Costume(),
-        myself = this;
+        cos = new Costume();
 
     sprite.name = this.newSpriteName(sprite.name);
     sprite.setCenter(this.stage.center());
@@ -2376,8 +4026,8 @@ IDE_Morph.prototype.paintNewSprite = function () {
         this.world(),
         this,
         true,
-        function () {myself.removeSprite(sprite); },
-        function () {
+        () => this.removeSprite(sprite),
+        () => {
             sprite.addCostume(cos);
             sprite.wearCostume(cos);
         }
@@ -2386,8 +4036,7 @@ IDE_Morph.prototype.paintNewSprite = function () {
 
 IDE_Morph.prototype.newCamSprite = function () {
     var sprite = new SpriteMorph(this.globalVariables),
-        camDialog,
-        myself = this;
+        camDialog;
 
     sprite.name = this.newSpriteName(sprite.name);
     sprite.setCenter(this.stage.center());
@@ -2399,8 +4048,8 @@ IDE_Morph.prototype.newCamSprite = function () {
     camDialog = new CamSnapshotDialogMorph(
         this,
         sprite,
-        function () { myself.removeSprite(sprite); },
-        function (costume) {
+        () => this.removeSprite(sprite),
+        function (costume) { // needs to be "function" so it can access "this"
             sprite.addCostume(costume);
             sprite.wearCostume(costume);
             this.close();
@@ -2410,23 +4059,180 @@ IDE_Morph.prototype.newCamSprite = function () {
 };
 
 IDE_Morph.prototype.recordNewSound = function () {
-    var soundRecorder,
-        myself = this;
+    var soundRecorder;
 
     soundRecorder = new SoundRecorderDialogMorph(
-        function (sound) {
-            if (sound) {
-                myself.currentSprite.addSound(
-                	sound,
-                    myself.newSoundName('recording')
+        audio => {
+            var sound;
+            if (audio) {
+                sound = this.currentSprite.addSound(
+                	audio,
+                    this.newSoundName('recording')
                 );
-                myself.spriteBar.tabBar.tabTo('sounds');
-                myself.hasChangedMedia = true;
+                this.makeSureRecordingIsMono(sound);
+                this.spriteBar.tabBar.tabTo('sounds');
+                this.hasChangedMedia = true;
             }
         });
 
     soundRecorder.key = 'microphone';
     soundRecorder.popUp(this.world());
+};
+
+IDE_Morph.prototype.makeSureRecordingIsMono = function (sound) {
+    // private and temporary, a horrible kludge to work around browsers'
+    // reluctance to implement audio recording constraints that let us
+    // record sound in mono only. As of January 2020 the audio channelCount
+    // constraint only works in Firefox, hence this terrible function to
+    // force convert a stereo sound to mono for Chrome.
+    // If this code is still here next year, something is very wrong.
+    // -Jens
+
+    decodeSound(sound, makeMono);
+
+    function decodeSound(sound, callback) {
+        var base64, binaryString, len, bytes, i, arrayBuffer, audioCtx;
+        if (sound.audioBuffer) {
+            return callback (sound);
+        }
+        base64 = sound.audio.src.split(',')[1];
+        binaryString = window.atob(base64);
+        len = binaryString.length;
+        bytes = new Uint8Array(len);
+        for (i = 0; i < len; i += 1)        {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        arrayBuffer = bytes.buffer;
+        audioCtx = Note.prototype.getAudioContext();
+        sound.isDecoding = true;
+        audioCtx.decodeAudioData(
+            arrayBuffer,
+            buffer => {
+                sound.audioBuffer = buffer;
+                return callback (sound);
+            },
+            err => {throw err; }
+        );
+    }
+
+    function makeMono(sound) {
+        var samples, audio, blob, reader;
+        if (sound.audioBuffer.numberOfChannels === 1) {return; }
+        samples = sound.audioBuffer.getChannelData(0);
+
+        audio = new Audio();
+        blob = new Blob(
+            [
+                audioBufferToWav(
+                    encodeSound(samples, 44100).audioBuffer
+                )
+            ],
+            {type: "audio/wav"}
+        );
+        reader = new FileReader();
+        reader.onload = () => {
+            audio.src = reader.result;
+            sound.audio = audio; // .... aaaand we're done!
+            sound.audioBuffer = null;
+            sound.cachedSamples = null;
+            sound.isDecoding = false;
+            // console.log('made mono', sound);
+        };
+        reader.readAsDataURL(blob);
+    }
+
+    function encodeSound(samples, rate) {
+        var ctx = Note.prototype.getAudioContext(),
+            frameCount = samples.length,
+            arrayBuffer = ctx.createBuffer(1, frameCount, +rate || 44100),
+            i,
+            source;
+
+        if (!arrayBuffer.copyToChannel) {
+            arrayBuffer.copyToChannel = function (src, channel) {
+                var buffer = this.getChannelData(channel);
+                for (i = 0; i < src.length; i += 1) {
+                    buffer[i] = src[i];
+                }
+            };
+        }
+        arrayBuffer.copyToChannel(
+            Float32Array.from(samples),
+            0,
+            0
+        );
+        source = ctx.createBufferSource();
+        source.buffer = arrayBuffer;
+        source.audioBuffer = source.buffer;
+        return source;
+    }
+
+    function audioBufferToWav(buffer, opt) {
+        var sampleRate = buffer.sampleRate,
+            format = (opt || {}).float32 ? 3 : 1,
+            bitDepth = format === 3 ? 32 : 16,
+            result;
+
+        result = buffer.getChannelData(0);
+        return encodeWAV(result, format, sampleRate, 1, bitDepth);
+    }
+
+    function encodeWAV(
+        samples,
+        format,
+        sampleRate,
+        numChannels,
+        bitDepth
+    ) {
+        var bytesPerSample = bitDepth / 8,
+            blockAlign = numChannels * bytesPerSample,
+            buffer = new ArrayBuffer(44 + samples.length * bytesPerSample),
+            view = new DataView(buffer);
+
+        function writeFloat32(output, offset, input) {
+            for (var i = 0; i < input.length; i += 1, offset += 4) {
+                output.setFloat32(offset, input[i], true);
+            }
+        }
+
+        function floatTo16BitPCM(output, offset, input) {
+            var i, s;
+            for (i = 0; i < input.length; i += 1, offset += 2) {
+                s = Math.max(-1, Math.min(1, input[i]));
+                output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+            }
+        }
+
+        function writeString(view, offset, string) {
+            for (var i = 0; i < string.length; i += 1) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        writeString(view, 0, 'RIFF'); // RIFF identifier
+        // RIFF chunk length:
+        view.setUint32(4, 36 + samples.length * bytesPerSample, true);
+        writeString(view, 8, 'WAVE'); // RIFF type
+        writeString(view, 12, 'fmt '); // format chunk identifier
+        view.setUint32(16, 16, true); // format chunk length
+        view.setUint16(20, format, true); // sample format (raw)
+        view.setUint16(22, numChannels, true); // channel count
+        view.setUint32(24, sampleRate, true); // sample rate
+        // byte rate (sample rate * block align):
+        view.setUint32(28, sampleRate * blockAlign, true);
+        // block align (channel count * bytes per sample):
+        view.setUint16(32, blockAlign, true);
+        view.setUint16(34, bitDepth, true); // bits per sample
+        writeString(view, 36, 'data'); // data chunk identifier
+        // data chunk length:
+        view.setUint32(40, samples.length * bytesPerSample, true);
+        if (format === 1) { // Raw PCM
+            floatTo16BitPCM(view, 44, samples);
+        } else {
+            writeFloat32(view, 44, samples);
+        }
+        return buffer;
+    }
 };
 
 IDE_Morph.prototype.duplicateSprite = function (sprite) {
@@ -2437,6 +4243,11 @@ IDE_Morph.prototype.duplicateSprite = function (sprite) {
     duplicate.keepWithin(this.stage);
     duplicate.isDown = sprite.isDown;
     this.selectSprite(duplicate);
+    duplicate.recordUserEdit(
+        'corral',
+        'duplicate',
+        sprite.name
+    );
 };
 
 IDE_Morph.prototype.instantiateSprite = function (sprite) {
@@ -2452,18 +4263,28 @@ IDE_Morph.prototype.instantiateSprite = function (sprite) {
     }
     instance.isDown = sprite.isDown;
     this.selectSprite(instance);
+    instance.recordUserEdit(
+        'corral',
+        'clone',
+        sprite.name
+    );
 };
 
-IDE_Morph.prototype.removeSprite = function (sprite) {
-    var idx, myself = this;
-    sprite.parts.slice().forEach(function (part) {
-    	myself.removeSprite(part);
-    });
+IDE_Morph.prototype.removeSprite = function (sprite, enableUndelete = true) {
+    var idx;
+    sprite.parts.slice().forEach(part =>
+    	this.removeSprite(part)
+    );
     idx = this.sprites.asArray().indexOf(sprite) + 1;
     this.stage.threads.stopAllForReceiver(sprite);
+    sprite.recordUserEdit(
+        'corral',
+        'delete',
+        sprite.name
+    );
     sprite.corpsify();
     sprite.destroy();
-    this.stage.watchers().forEach(function (watcher) {
+    this.stage.watchers().forEach(watcher => {
         if (watcher.object() === sprite) {
             watcher.destroy();
         }
@@ -2471,53 +4292,83 @@ IDE_Morph.prototype.removeSprite = function (sprite) {
     if (idx > 0) {
         this.sprites.remove(idx);
     }
-    this.createCorral();
+    this.createCorral(true); // keep scenes
     this.fixLayout();
     this.currentSprite = detect(
         this.stage.children,
-        function (morph) {
-            return morph instanceof SpriteMorph && !morph.isTemporary;
-        }
+        morph => morph instanceof SpriteMorph && !morph.isTemporary
     ) || this.stage;
 
     this.selectSprite(this.currentSprite);
+
+    // remember the deleted sprite so it can be recovered again later
+    if (enableUndelete) {
+        this.scene.trash.push(sprite);
+    }
 };
 
 IDE_Morph.prototype.newSoundName = function (name) {
-    var lastSound =
-            this.currentSprite.sounds.at(
-                this.currentSprite.sounds.length());
+    var lastSound = this.currentSprite.sounds.at(
+            this.currentSprite.sounds.length()
+        );
 
     return this.newName(
         name || lastSound.name,
-        this.currentSprite.sounds.asArray().map(
-            function (eachSound) {
-                return eachSound.name;
-            }
+        this.currentSprite.sounds.asArray().map(eachSound =>
+            eachSound.name
         )
     );
 };
 
 IDE_Morph.prototype.newSpriteName = function (name, ignoredSprite) {
-    var all = this.sprites.asArray().concat(this.stage).filter(
-            function (each) {return each !== ignoredSprite; }
-        ).map(
-            function (each) {return each.name; }
-        );
+    var all = this.sprites.asArray().concat(this.stage).filter(each =>
+            each !== ignoredSprite
+        ).map(each => each.name);
     return this.newName(name, all);
 };
 
-IDE_Morph.prototype.newName = function (name, elements) {
-    var ix = name.indexOf('('),
-        stem = (ix < 0) ? name : name.substring(0, ix),
-        count = 1,
-        newName = stem;
+IDE_Morph.prototype.newSceneName = function (name, ignoredScene) {
+    var sName = name.replace(/['"]/g, ''), // filter out quotation marks
+        all = this.scenes.asArray().filter(each =>
+            each !== ignoredScene
+        ).map(each => each.name);
+    return this.newName(sName, all);
+};
 
-    while (contains(elements, newName)) {
+IDE_Morph.prototype.newName = function (name, elements) {
+    var count = 1,
+        newName = name,
+        exist = e => snapEquals(e, newName);
+
+    while (elements.some(exist)) {
         count += 1;
-        newName = stem + '(' + count + ')';
+        newName = name + '(' + count + ')';
     }
     return newName;
+};
+
+// IDE_Morph identifying sprites by name
+
+IDE_Morph.prototype.spriteNamed = function (name) {
+    // answer the SnapObject (sprite or stage) indicated by its name
+    // or the currently edited object if no name is given or none is found
+    var match;
+    if (name === this.stage.name) {
+        return this.stage;
+    }
+    match = detect(
+        this.sprites,
+        sprite => sprite.name === name
+    );
+    if (!match) {
+        // check if the sprite in question is currently being
+        // dragged around
+        match = detect(
+            this.world().hand.children,
+            morph => morph instanceof SpriteMorph && morph.name === name
+        );
+    }
+    return match || this.currentSprite;
 };
 
 // IDE_Morph deleting scripts
@@ -2537,7 +4388,6 @@ IDE_Morph.prototype.userMenu = function () {
 
 IDE_Morph.prototype.snapMenu = function () {
     var menu,
-        myself = this,
         world = this.world();
 
     menu = new MenuMorph(this);
@@ -2545,25 +4395,21 @@ IDE_Morph.prototype.snapMenu = function () {
     menu.addLine();
     menu.addItem(
         'Reference manual',
-        function () {
-            var url = myself.resourceURL('help', 'SnapManual.pdf');
+        () => {
+            var url = this.resourceURL('help', 'SnapManual.pdf');
             window.open(url, 'SnapReferenceManual');
         }
     );
     menu.addItem(
         'Snap! website',
-        function () {
-            window.open('http://snap.berkeley.edu/', 'SnapWebsite');
-        }
+        () => window.open('https://snap.berkeley.edu/', 'SnapWebsite')
     );
     menu.addItem(
         'Download source',
-        function () {
-            window.open(
+        () => window.open(
                 'https://github.com/jmoenig/Snap/releases/latest',
                 'SnapSource'
-            );
-        }
+            )
     );
     if (world.isDevMode) {
         menu.addLine();
@@ -2589,7 +4435,6 @@ IDE_Morph.prototype.snapMenu = function () {
 
 IDE_Morph.prototype.cloudMenu = function () {
     var menu,
-        myself = this,
         world = this.world(),
         pos = this.controlBar.cloudButton.bottomLeft(),
         shiftClicked = (world.currentKey === 16);
@@ -2636,17 +4481,36 @@ IDE_Morph.prototype.cloudMenu = function () {
             'changeCloudPassword'
         );
     }
+    if (this.hasCloudProject()) {
+        menu.addLine();
+        menu.addItem(
+            'Open in Community Site',
+            () => {
+                var dict = this.urlParameters();
+                window.open(
+                    this.cloud.showProjectPath(
+                        dict.Username, dict.ProjectName
+                    ),
+                    '_blank'
+                );
+            }
+        );
+    }
     if (shiftClicked) {
         menu.addLine();
         menu.addItem(
             'export project media only...',
-            function () {
-                if (myself.projectName) {
-                    myself.exportProjectMedia(myself.projectName);
+            () => {
+                var pn = this.getProjectName();
+                if (pn) {
+                    this.exportProjectMedia(pn);
                 } else {
-                    myself.prompt('Export Project As...', function (name) {
-                        myself.exportProjectMedia(name);
-                    }, null, 'exportProject');
+                    this.prompt(
+                        'Export Project As...',
+                        name => this.exportProjectMedia(name),
+                        null,
+                        'exportProject'
+                    );
                 }
             },
             null,
@@ -2654,13 +4518,17 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
         menu.addItem(
             'export project without media...',
-            function () {
-                if (myself.projectName) {
-                    myself.exportProjectNoMedia(myself.projectName);
+            () => {
+                var pn = this.getProjectName();
+                if (pn) {
+                    this.exportProjectNoMedia(pn);
                 } else {
-                    myself.prompt('Export Project As...', function (name) {
-                        myself.exportProjectNoMedia(name);
-                    }, null, 'exportProject');
+                    this.prompt(
+                        'Export Project As...',
+                        name => this.exportProjectNoMedia(name),
+                        null,
+                        'exportProject'
+                    );
                 }
             },
             null,
@@ -2668,13 +4536,17 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
         menu.addItem(
             'export project as cloud data...',
-            function () {
-                if (myself.projectName) {
-                    myself.exportProjectAsCloudData(myself.projectName);
+            () => {
+                var pn = this.getProjectName();
+                if (pn) {
+                    this.exportProjectAsCloudData(pn);
                 } else {
-                    myself.prompt('Export Project As...', function (name) {
-                        myself.exportProjectAsCloudData(name);
-                    }, null, 'exportProject');
+                    this.prompt(
+                        'Export Project As...',
+                        name => this.exportProjectAsCloudData(name),
+                        null,
+                        'exportProject'
+                    );
                 }
             },
             null,
@@ -2683,44 +4555,52 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addLine();
         menu.addItem(
             'open shared project from cloud...',
-            function () {
-                myself.prompt('Author name…', function (usr) {
-                    myself.prompt('Project name...', function (prj) {
-                        myself.showMessage(
-                            'Fetching project\nfrom the cloud...'
-                        );
-                        myself.cloud.getPublicProject(
-                            prj,
-                            usr.toLowerCase(),
-                            function (projectData) {
-                                var msg;
-                                if (!Process.prototype.isCatchingErrors) {
-                                    window.open(
-                                        'data:text/xml,' + projectData
-                                    );
-                                }
-                                myself.nextSteps([
-                                    function () {
-                                        msg = myself.showMessage(
-                                            'Opening project...'
-                                        );
-                                    },
-                                    function () {nop(); }, // yield (Chrome)
-                                    function () {
-                                        myself.rawOpenCloudDataString(
-                                            projectData
-                                        );
-                                    },
-                                    function () {
-                                        msg.destroy();
-                                    }
-                                ]);
-                            },
-                            myself.cloudError()
-                        );
-
-                    }, null, 'project');
-                }, null, 'project');
+            () => {
+                this.prompt(
+                    'Author name…',
+                    usr => {
+                        this.prompt(
+                            'Project name...',
+                            prj => {
+                                this.showMessage(
+                                    'Fetching project\nfrom the cloud...'
+                                );
+                                this.cloud.getPublicProject(
+                                    prj,
+                                    usr.toLowerCase(),
+                                    projectData => {
+                                        var msg;
+                                        if (
+                                            !Process.prototype.isCatchingErrors
+                                        ) {
+                                            window.open(
+                                                'data:text/xml,' + projectData
+                                            );
+                                        }
+                                    this.nextSteps([
+                                        () => {
+                                            msg = this.showMessage(
+                                                'Opening project...'
+                                            );
+                                        },
+                                        () => {
+                                            this.rawOpenCloudDataString(
+                                                projectData
+                                            );
+                                            msg.destroy();
+                                        },
+                                    ]);
+                                },
+                                this.cloudError()
+                            );
+                        },
+                        null,
+                        'project'
+                    );
+                },
+                null,
+                'project'
+                );
             },
             null,
             new Color(100, 0, 0)
@@ -2733,16 +4613,48 @@ IDE_Morph.prototype.settingsMenu = function () {
     var menu,
         stage = this.stage,
         world = this.world(),
-        myself = this,
         pos = this.controlBar.settingsButton.bottomLeft(),
-        shiftClicked = (world.currentKey === 16);
+        shiftClicked = (world.currentKey === 16),
+        on = new SymbolMorph(
+            'checkedBox',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        off = new SymbolMorph(
+            'rectangle',
+            MorphicPreferences.menuFontSize * 0.75
+        );
 
     function addPreference(label, toggle, test, onHint, offHint, hide) {
-        var on = '\u2611 ',
-            off = '\u2610 ';
         if (!hide || shiftClicked) {
             menu.addItem(
-                (test ? on : off) + localize(label),
+                [
+                    (test? on : off),
+                    localize(label)
+                ],
+                toggle,
+                test ? onHint : offHint,
+                hide ? new Color(100, 0, 0) : null
+            );
+        }
+    }
+
+    function addPreferenceMenu(label, test, submenu) {
+        menu.addMenu(
+            [
+                (test? on : off),
+                localize(label)
+            ],
+            submenu
+        );
+    }
+
+    function addSubPreference(label, toggle, test, onHint, offHint, hide) {
+        if (!hide || shiftClicked) {
+            menu.addItem(
+                [
+                    (test? on : off),
+                    '  ' + localize(label)
+                ],
                 toggle,
                 test ? onHint : offHint,
                 hide ? new Color(100, 0, 0) : null
@@ -2751,7 +4663,7 @@ IDE_Morph.prototype.settingsMenu = function () {
     }
 
     menu = new MenuMorph(this);
-    menu.addPair(
+    menu.addMenu(
         [
             new SymbolMorph(
                 'globe',
@@ -2759,11 +4671,15 @@ IDE_Morph.prototype.settingsMenu = function () {
             ),
             localize('Language...')
         ],
-        'languageMenu'
+        this.languageMenu()
     );
-    menu.addItem(
-        'Zoom blocks...',
-        'userSetBlocksScale'
+    menu.addItem(localize(
+        'Magnification') + '...',
+        'userZoom'
+    );
+    menu.addMenu(
+        localize('Looks') + '...',
+        this.looksMenu()
     );
     menu.addItem(
         'Stage size...',
@@ -2778,23 +4694,114 @@ IDE_Morph.prototype.settingsMenu = function () {
             new Color(100, 0, 0)
         );
     }
-    menu.addItem(
+    menu.addMenu(
         'Microphone resolution...',
-        'microphoneMenu'
+        this.microphoneMenu()
     );
     menu.addLine();
-    /*
+    if (shiftClicked) {
+        menu.addItem(
+            'Primitives palette',
+            () => this.stage.restorePrimitives(),
+            'EXPERIMENTAL - switch (back) to\n' +
+                'primitive blocks in the palette',
+            new Color(100, 0, 0)
+        );
+        menu.addItem(
+            'Customize primitives',
+            () => this.stage.customizeBlocks(),
+            'EXPERIMENTAL - overload primitives\n' +
+                'with custom block definitions',
+            new Color(100, 0, 0)
+        );
+        menu.addLine();
+        addPreference(
+            'Blocks all the way',
+            () => {
+                if (SpriteMorph.prototype.isBlocksAllTheWay()) {
+                    this.stage.restorePrimitives();
+                } else {
+                    this.bootstrapCustomizedPrimitives(
+                        this.stage.customizeBlocks()
+                    );
+                }
+            },
+            SpriteMorph.prototype.isBlocksAllTheWay(),
+            'uncheck to disable editing primitives\n' +
+                'in the palette as custom blocks',
+            'check to edit primitives\nin the palette as custom blocks',
+            new Color(100, 0, 0)
+
+        );
+        if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
+            menu.addItem(
+                'Use custom blocks',
+                () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
+                    this.stage,
+                    false
+                ),
+                'EXPERIMENTAL - use custom blocks\n' +
+                    'in all palette blocks',
+                new Color(100, 0, 0)
+            );
+            menu.addItem(
+                'Use primitives',
+                () => SpriteMorph.prototype.toggleAllCustomizedPrimitives(
+                    this.stage,
+                    true
+                ),
+                'EXPERIMENTAL - use primitives\n' +
+                    'in all palette blocks',
+                new Color(100, 0, 0)
+            );
+            menu.addLine();
+        }
+    }
     addPreference(
-        'JavaScript',
-        function () {
+        'JavaScript extensions',
+        () => {
+            /*
+            if (!Process.prototype.enableJS) {
+                this.logout();
+            }
+            */
             Process.prototype.enableJS = !Process.prototype.enableJS;
-            myself.currentSprite.blocksCache.operators = null;
-            myself.currentSprite.paletteCache.operators = null;
-            myself.refreshPalette();
+            if (Process.prototype.enableJS) {
+                // show JS-func primitive in case a microworld hides it
+                delete StageMorph.prototype.hiddenPrimitives.reportJSFunction;
+            }
+            this.flushBlocksCache('operators');
+            this.refreshPalette();
+            this.refreshEmptyCategories();
         },
         Process.prototype.enableJS,
         'uncheck to disable support for\nnative JavaScript functions',
-        'check to support\nnative JavaScript functions'
+        'check to support\nnative JavaScript functions' /* +
+            '.\n' +
+            'NOTE: You will have to manually\n' +
+            'sign in again to access your account.' */
+    );
+    addPreference(
+        'Extension blocks',
+        () => {
+            SpriteMorph.prototype.showingExtensions =
+                !SpriteMorph.prototype.showingExtensions;
+            this.flushBlocksCache('variables');
+            this.refreshPalette();
+            this.refreshEmptyCategories();
+        },
+        SpriteMorph.prototype.showingExtensions,
+        'uncheck to hide extension\nprimitives in the palette',
+        'check to show extension\nprimitives in the palette'
+    );
+    /*
+    addPreference(
+        'Add scenes',
+        () => this.isAddingScenes = !this.isAddingScenes,
+        this.isAddingScenes,
+        'uncheck to replace the current project,\nwith a new one',
+        'check to add other projects,\nto this one',
+        true
     );
     */
     if (isRetinaSupported()) {
@@ -2803,7 +4810,8 @@ IDE_Morph.prototype.settingsMenu = function () {
             'toggleRetina',
             isRetinaEnabled(),
             'uncheck for lower resolution,\nsaves computing resources',
-            'check for higher resolution,\nuses more computing resources'
+            'check for higher resolution,\nuses more computing resources',
+            true
         );
     }
     addPreference(
@@ -2814,7 +4822,7 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\ninput sliders for\nentry fields'
     );
     if (MorphicPreferences.useSliderForInput) {
-        addPreference(
+        addSubPreference(
             'Execute on slider change',
             'toggleSliderExecute',
             ArgMorph.prototype.executeOnSliderEdit,
@@ -2838,11 +4846,27 @@ IDE_Morph.prototype.settingsMenu = function () {
         false
     );
     addPreference(
+        'Log pen vectors',
+        () => StageMorph.prototype.enablePenLogging =
+            !StageMorph.prototype.enablePenLogging,
+        StageMorph.prototype.enablePenLogging,
+        'uncheck to turn off\nlogging pen vectors',
+        'check to turn on\nlogging pen vectors',
+        false
+    );
+    addPreference(
+        'Case sensitivity',
+        () => Process.prototype.isCaseInsensitive =
+            !Process.prototype.isCaseInsensitive,
+        !Process.prototype.isCaseInsensitive,
+        'uncheck to ignore upper- and\n lowercase when comparing texts',
+        'check to distinguish upper- and\n lowercase when comparing texts',
+        false
+    );
+    addPreference(
         'Ternary Boolean slots',
-        function () {
-        	BooleanSlotMorph.prototype.isTernary =
-        		!BooleanSlotMorph.prototype.isTernary;
-      	},
+        () => BooleanSlotMorph.prototype.isTernary =
+            !BooleanSlotMorph.prototype.isTernary,
         BooleanSlotMorph.prototype.isTernary,
         'uncheck to limit\nBoolean slots to true / false',
         'check to allow\nempty Boolean slots',
@@ -2856,7 +4880,42 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to enable\ncamera support',
         true
     );
-    menu.addLine(); // everything visible below is persistent
+    addPreference(
+        'Dynamic sprite rendering',
+        () => SpriteMorph.prototype.isCachingImage =
+            !SpriteMorph.prototype.isCachingImage,
+        !SpriteMorph.prototype.isCachingImage,
+        'uncheck to render\nsprites dynamically',
+        'check to cache\nsprite renderings',
+        true
+    );
+    addPreference(
+        'Dynamic scheduling',
+        () => StageMorph.prototype.enableQuicksteps =
+            !StageMorph.prototype.enableQuicksteps,
+        StageMorph.prototype.enableQuicksteps,
+        'uncheck to schedule\nthreads framewise',
+        'check to quickstep\nthreads atomically',
+        true
+    );
+    addPreference(
+        'Performer mode',
+        () => this.togglePerformerMode(),
+        this.performerMode,
+        'uncheck to go back to regular\nlayout',
+        'check to have the stage use up\nall space and go behind the\n' +
+        'scripting area'
+    );
+    if (this.performerMode) {
+        menu.addItem(
+            'Performer mode scale...',
+            'userSetPerformerModeScale',
+            'specify the scale of the stage\npixels in performer mode'
+        );
+    }
+    if (shiftClicked) {
+        menu.addLine(); // everything visible below is currently hidden
+    }
     addPreference(
         'Blurred shadows',
         'toggleBlurredShadows',
@@ -2890,52 +4949,17 @@ IDE_Morph.prototype.settingsMenu = function () {
         true
     );
     addPreference(
-        'Long form input dialog',
-        'toggleLongFormInputDialog',
-        InputSlotDialogMorph.prototype.isLaunchingExpanded,
-        'uncheck to use the input\ndialog in short form',
-        'check to always show slot\ntypes in the input dialog'
-    );
-    addPreference(
-        'Plain prototype labels',
-        'togglePlainPrototypeLabels',
-        BlockLabelPlaceHolderMorph.prototype.plainLabel,
-        'uncheck to always show (+) symbols\nin block prototype labels',
-        'check to hide (+) symbols\nin block prototype labels'
-    );
-    addPreference(
-        'Virtual keyboard',
-        'toggleVirtualKeyboard',
-        MorphicPreferences.useVirtualKeyboard,
-        'uncheck to disable\nvirtual keyboard support\nfor mobile devices',
-        'check to enable\nvirtual keyboard support\nfor mobile devices',
-        true
-    );
-    addPreference(
-        'Clicking sound',
-        function () {
-            BlockMorph.prototype.toggleSnapSound();
-            if (BlockMorph.prototype.snapSound) {
-                myself.saveSetting('click', true);
-            } else {
-                myself.removeSetting('click');
-            }
-        },
-        BlockMorph.prototype.snapSound,
-        'uncheck to turn\nblock clicking\nsound off',
-        'check to turn\nblock clicking\nsound on'
-    );
-    addPreference(
         'Animations',
-        function () {myself.isAnimating = !myself.isAnimating; },
-        myself.isAnimating,
+        () => this.isAnimating = !this.isAnimating,
+        this.isAnimating,
         'uncheck to disable\nIDE animations',
         'check to enable\nIDE animations',
         true
     );
+    /*
     addPreference(
         'Cache Inputs',
-        function () {
+        () => {
             BlockMorph.prototype.isCachingInputs =
                 !BlockMorph.prototype.isCachingInputs;
         },
@@ -2944,39 +4968,25 @@ IDE_Morph.prototype.settingsMenu = function () {
         'check to cache inputs\nboosts recursion',
         true
     );
+    */
     addPreference(
         'Rasterize SVGs',
-        function () {
-            MorphicPreferences.rasterizeSVGs =
-                !MorphicPreferences.rasterizeSVGs;
-        },
+        () => MorphicPreferences.rasterizeSVGs =
+            !MorphicPreferences.rasterizeSVGs,
         MorphicPreferences.rasterizeSVGs,
         'uncheck for smooth\nscaling of vector costumes',
         'check to rasterize\nSVGs on import',
         true
     );
     addPreference(
-        'Flat design',
-        function () {
-            if (MorphicPreferences.isFlat) {
-                return myself.defaultDesign();
-            }
-            myself.flatDesign();
-        },
-        MorphicPreferences.isFlat,
-        'uncheck for default\nGUI design',
-        'check for alternative\nGUI design',
-        false
-    );
-    addPreference(
         'Nested auto-wrapping',
-        function () {
+        () => {
             ScriptsMorph.prototype.enableNestedAutoWrapping =
                 !ScriptsMorph.prototype.enableNestedAutoWrapping;
             if (ScriptsMorph.prototype.enableNestedAutoWrapping) {
-                myself.removeSetting('autowrapping');
+                this.removeSetting('autowrapping');
             } else {
-                myself.saveSetting('autowrapping', false);
+                this.saveSetting('autowrapping', false);
             }
         },
         ScriptsMorph.prototype.enableNestedAutoWrapping,
@@ -2985,26 +4995,9 @@ IDE_Morph.prototype.settingsMenu = function () {
         true
     );
     addPreference(
-        'Project URLs',
-        function () {
-            myself.projectsInURLs = !myself.projectsInURLs;
-            if (myself.projectsInURLs) {
-                myself.saveSetting('longurls', true);
-            } else {
-                myself.removeSetting('longurls');
-            }
-        },
-        myself.projectsInURLs,
-        'uncheck to disable\nproject data in URLs',
-        'check to enable\nproject data in URLs',
-        true
-    );
-    addPreference(
         'Sprite Nesting',
-        function () {
-            SpriteMorph.prototype.enableNesting =
-                !SpriteMorph.prototype.enableNesting;
-        },
+        () => SpriteMorph.prototype.enableNesting =
+            !SpriteMorph.prototype.enableNesting,
         SpriteMorph.prototype.enableNesting,
         'uncheck to disable\nsprite composition',
         'check to enable\nsprite composition',
@@ -3012,12 +5005,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'First-Class Sprites',
-        function () {
+        () => {
             SpriteMorph.prototype.enableFirstClass =
                 !SpriteMorph.prototype.enableFirstClass;
-            myself.currentSprite.blocksCache.sensing = null;
-            myself.currentSprite.paletteCache.sensing = null;
-            myself.refreshPalette();
+            this.flushBlocksCache('sensing');
+            this.refreshPalette();
+            this.refreshEmptyCategories();
         },
         SpriteMorph.prototype.enableFirstClass,
         'uncheck to disable support\nfor first-class sprites',
@@ -3026,14 +5019,14 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Keyboard Editing',
-        function () {
+        () => {
             ScriptsMorph.prototype.enableKeyboard =
                 !ScriptsMorph.prototype.enableKeyboard;
-            myself.currentSprite.scripts.updateToolbar();
+            this.currentSprite.scripts.updateToolbar();
             if (ScriptsMorph.prototype.enableKeyboard) {
-                myself.removeSetting('keyboard');
+                this.removeSetting('keyboard');
             } else {
-                myself.saveSetting('keyboard', false);
+                this.saveSetting('keyboard', false);
             }
         },
         ScriptsMorph.prototype.enableKeyboard,
@@ -3043,13 +5036,13 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Table support',
-        function () {
+        () => {
             List.prototype.enableTables =
                 !List.prototype.enableTables;
             if (List.prototype.enableTables) {
-                myself.removeSetting('tables');
+                this.removeSetting('tables');
             } else {
-                myself.saveSetting('tables', false);
+                this.saveSetting('tables', false);
             }
         },
         List.prototype.enableTables,
@@ -3060,13 +5053,13 @@ IDE_Morph.prototype.settingsMenu = function () {
     if (List.prototype.enableTables) {
         addPreference(
             'Table lines',
-            function () {
+            () => {
                 TableMorph.prototype.highContrast =
                     !TableMorph.prototype.highContrast;
                 if (TableMorph.prototype.highContrast) {
-                    myself.saveSetting('tableLines', true);
+                    this.saveSetting('tableLines', true);
                 } else {
-                    myself.removeSetting('tableLines');
+                    this.removeSetting('tableLines');
                 }
             },
             TableMorph.prototype.highContrast,
@@ -3077,10 +5070,8 @@ IDE_Morph.prototype.settingsMenu = function () {
     }
     addPreference(
         'Live coding support',
-        function () {
-            Process.prototype.enableLiveCoding =
-                !Process.prototype.enableLiveCoding;
-        },
+        () => Process.prototype.enableLiveCoding =
+            !Process.prototype.enableLiveCoding,
         Process.prototype.enableLiveCoding,
         'EXPERIMENTAL! uncheck to disable live\ncustom control structures',
         'EXPERIMENTAL! check to enable\n live custom control structures',
@@ -3088,12 +5079,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'JIT compiler support',
-        function () {
+        () => {
             Process.prototype.enableCompiling =
                 !Process.prototype.enableCompiling;
-            myself.currentSprite.blocksCache.operators = null;
-            myself.currentSprite.paletteCache.operators = null;
-            myself.refreshPalette();
+            this.flushBlocksCache('operators');
+            this.refreshPalette();
+            this.refreshEmptyCategories();
         },
         Process.prototype.enableCompiling,
         'EXPERIMENTAL! uncheck to disable live\nsupport for compiling',
@@ -3103,37 +5094,27 @@ IDE_Morph.prototype.settingsMenu = function () {
     menu.addLine(); // everything below this line is stored in the project
     addPreference(
         'Thread safe scripts',
-        function () {stage.isThreadSafe = !stage.isThreadSafe; },
+        () => stage.isThreadSafe = !stage.isThreadSafe,
         this.stage.isThreadSafe,
         'uncheck to allow\nscript reentrance',
         'check to disallow\nscript reentrance'
     );
     addPreference(
-        'Prefer smooth animations',
-        'toggleVariableFrameRate',
-        StageMorph.prototype.frameRate,
-        'uncheck for greater speed\nat variable frame rates',
-        'check for smooth, predictable\nanimations across computers',
-        true
-    );
-    addPreference(
         'Flat line ends',
-        function () {
-            SpriteMorph.prototype.useFlatLineEnds =
-                !SpriteMorph.prototype.useFlatLineEnds;
-        },
+        () => SpriteMorph.prototype.useFlatLineEnds =
+            !SpriteMorph.prototype.useFlatLineEnds,
         SpriteMorph.prototype.useFlatLineEnds,
         'uncheck for round ends of lines',
         'check for flat ends of lines'
     );
     addPreference(
         'Codification support',
-        function () {
+        () => {
             StageMorph.prototype.enableCodeMapping =
                 !StageMorph.prototype.enableCodeMapping;
-            myself.currentSprite.blocksCache.variables = null;
-            myself.currentSprite.paletteCache.variables = null;
-            myself.refreshPalette();
+            this.flushBlocksCache('variables');
+            this.refreshPalette();
+            this.refreshEmptyCategories();
         },
         StageMorph.prototype.enableCodeMapping,
         'uncheck to disable\nblock to text mapping features',
@@ -3142,12 +5123,12 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Inheritance support',
-        function () {
+        () => {
             StageMorph.prototype.enableInheritance =
                 !StageMorph.prototype.enableInheritance;
-            myself.currentSprite.blocksCache.variables = null;
-            myself.currentSprite.paletteCache.variables = null;
-            myself.refreshPalette();
+            this.flushBlocksCache('variables');
+            this.refreshPalette();
+            this.refreshEmptyCategories();
         },
         StageMorph.prototype.enableInheritance,
         'uncheck to disable\nsprite inheritance features',
@@ -3155,11 +5136,75 @@ IDE_Morph.prototype.settingsMenu = function () {
         true
     );
     addPreference(
-        'Persist linked sublist IDs',
-        function () {
-            StageMorph.prototype.enableSublistIDs =
-                !StageMorph.prototype.enableSublistIDs;
+        'Hyper blocks support',
+        () => Process.prototype.enableHyperOps =
+            !Process.prototype.enableHyperOps,
+        Process.prototype.enableHyperOps,
+        'uncheck to disable\nusing operators on lists and tables',
+        'check to enable\nusing operators on lists and tables',
+        true
+    );
+    addPreference(
+        'Single palette',
+        () => this.toggleUnifiedPalette(),
+        this.scene.unifiedPalette,
+        'uncheck to show only the selected category\'s blocks',
+        'check to show all blocks in a single palette',
+        false
+    );
+    if (this.scene.unifiedPalette) {
+        addSubPreference(
+            'Show categories',
+            () => this.toggleCategoryNames(),
+            this.scene.showCategories,
+            'uncheck to hide\ncategory names\nin the palette',
+            'check to show\ncategory names\nin the palette'
+        );
+        addSubPreference(
+            'Show buttons',
+            () => this.togglePaletteButtons(),
+            this.scene.showPaletteButtons,
+            'uncheck to hide buttons\nin the palette',
+            'check to show buttons\nin the palette'
+        );
+    }
+    addPreference(
+        'Hide empty categories',
+        () => {
+            this.scene.hideEmptyCategories = !this.scene.hideEmptyCategories;
+            this.createCategories();
+            this.createPaletteHandle();
+            this.fixLayout();
         },
+        this.scene.hideEmptyCategories,
+        'uncheck to show all primitive block categories',
+        'check to hide empty primitive block categories',
+        false
+    );
+    addPreference(
+        'Enforce input types',
+        () => ScriptsMorph.prototype.enforceTypes =
+            !ScriptsMorph.prototype.enforceTypes,
+        ScriptsMorph.prototype.enforceTypes,
+        'uncheck to allow\ndropping reporters\ninto unmatching slots',
+        'disable dropping reporters\ninto unmatching slots',
+        false
+    );
+    addPreference(
+        'Wrap list indices',
+        () => {
+            List.prototype.enableWrapping =
+                !List.prototype.enableWrapping;
+        },
+        List.prototype.enableWrapping,
+        'uncheck to disable\nwrapping list indices',
+        'check for wrapping\nlist indices',
+        true
+    );
+    addPreference(
+        'Persist linked sublist IDs',
+        () => StageMorph.prototype.enableSublistIDs =
+            !StageMorph.prototype.enableSublistIDs,
         StageMorph.prototype.enableSublistIDs,
         'uncheck to disable\nsaving linked sublist identities',
         'check to enable\nsaving linked sublist identities',
@@ -3167,157 +5212,349 @@ IDE_Morph.prototype.settingsMenu = function () {
     );
     addPreference(
         'Enable command drops in all rings',
-        function () {
-            RingReporterSlotMorph.prototype.enableCommandDrops =
-                !RingReporterSlotMorph.prototype.enableCommandDrops;
-        },
+        () => RingReporterSlotMorph.prototype.enableCommandDrops =
+            !RingReporterSlotMorph.prototype.enableCommandDrops,
         RingReporterSlotMorph.prototype.enableCommandDrops,
         'uncheck to disable\ndropping commands in reporter rings',
         'check to enable\ndropping commands in all rings',
         true
     );
+
+    addPreference(
+        'HSL pen color model',
+        () => {
+            SpriteMorph.prototype.penColorModel =
+                SpriteMorph.prototype.penColorModel === 'hsl' ? 'hsv' : 'hsl';
+            this.refreshIDE();
+        },
+        SpriteMorph.prototype.penColorModel === 'hsl',
+        'uncheck to switch pen colors\nand graphic effects to HSV',
+        'check to switch pen colors\nand graphic effects to HSL',
+        false
+    );
+
+    addPreference(
+        'Disable click-to-run',
+        () => ThreadManager.prototype.disableClickToRun =
+            !ThreadManager.prototype.disableClickToRun,
+        ThreadManager.prototype.disableClickToRun,
+        'uncheck to enable\ndirectly running blocks\nby clicking on them',
+        'check to disable\ndirectly running blocks\nby clicking on them',
+        false
+    );
+    addPreference(
+        'Disable dragging data',
+        () => SpriteMorph.prototype.disableDraggingData =
+            !SpriteMorph.prototype.disableDraggingData,
+        SpriteMorph.prototype.disableDraggingData,
+        'uncheck to drag media\nand blocks out of\nwatchers and balloons',
+        'disable dragging media\nand blocks out of\nwatchers and balloons',
+        false
+    );
+    menu.addLine(); // templates and tutorial settings stored in the project
+    if (this.scene.role !== 'tutorial') {
+        addPreference(
+            'Template',
+            () => this.scene.role = this.scene.role === 'template' ?
+                null : 'template',
+            this.scene.role === 'template',
+            'uncheck to save this\nscene regularly',
+            'check to turn this scene into an uneditable\ntemplate when saving it'
+        );
+    }
+    if (this.scene.role !== 'template') {
+        addPreference(
+            'Tutorial',
+            () => this.scene.role = this.scene.role === 'tutorial' ?
+                null : 'tutorial',
+            this.scene.role === 'tutorial',
+            'uncheck to treat this\nscene regularly',
+            'check to turn this scene\ninto a tutorial'
+        );
+    }
+    if ((this.scene.role === 'template' || this.scene.template.hide) &&
+        this.scene.role !== 'tutorial'
+    ) {
+        addPreferenceMenu(
+            'Include settings',
+            this.scene.hasEmbeddedTemplateSettings(),
+            this.templateSettingsMenu()
+        );
+    }
     menu.popup(world, pos);
 };
 
+IDE_Morph.prototype.bootstrapCustomizedPrimitives = function (skipped) {
+    SpriteMorph.prototype.bootstrapCustomizedPrimitives(this.stage, skipped);
+};
+
 IDE_Morph.prototype.projectMenu = function () {
-    var menu,
-        myself = this,
+    var menu, tm,
         world = this.world(),
         pos = this.controlBar.projectButton.bottomLeft(),
         graphicsName = this.currentSprite instanceof SpriteMorph ?
                 'Costumes' : 'Backgrounds',
-        shiftClicked = (world.currentKey === 16);
+        shiftClicked = (world.currentKey === 16),
+        backup = this.availableBackup(shiftClicked),
+        scns, help, work;
 
     menu = new MenuMorph(this);
-    menu.addItem('Project notes...', 'editProjectNotes');
+    menu.addItem('Notes...', 'editNotes');
     menu.addLine();
-    menu.addPair('New', 'createNewProject', '^N');
-    menu.addPair('Open...', 'openProjectsBrowser', '^O');
-    menu.addPair('Save', "save", '^S');
-    menu.addItem('Save As...', 'saveProjectsBrowser');
-    menu.addLine();
-    menu.addItem(
-        'Import...',
-        'importLocalFile',
-        'file menu import hint' // looks up the actual text in the translator
-    );
-
-    if (shiftClicked) {
+    if (!this.config.noProjectItems) {
+        menu.addPair('New', 'createNewProject', '^N');
+        menu.addPair('Open...', 'openProjectsBrowser', '^O');
+        menu.addPair('Save', "save", '^S');
+        menu.addItem('Save As...', 'saveProjectsBrowser');
+        if (backup) {
+            menu.addItem(
+                'Restore unsaved project',
+                'restore',
+                backup,
+                shiftClicked ? new Color(100, 0, 0) : null
+            );
+            if (shiftClicked) {
+                menu.addItem(
+                    'Clear backup',
+                    'clearBackup',
+                    backup,
+                    new Color(100, 0, 0)
+                );
+            }
+        }
+        menu.addLine();
         menu.addItem(
-            localize(
-                'Export project...') + ' ' + localize('(in a new window)'
-            ),
-            function () {
-                if (myself.projectName) {
-                    myself.exportProject(myself.projectName, shiftClicked);
+            'Import...',
+            'importLocalFile',
+            'file menu import hint'
+                // looks up the actual text in the translator
+        );
+        menu.addItem(
+            'Export project...',
+            () => {
+                var pn = this.getProjectName();
+                if (pn) {
+                    this.exportProject(pn);
                 } else {
-                    myself.prompt('Export Project As...', function (name) {
-                        // false - override the shiftClick setting to use XML
-                        myself.exportProject(name, false);
-                    }, null, 'exportProject');
+                    this.prompt(
+                        'Export Project As...',
+                        name => this.exportProject(name),
+                        null,
+                        'exportProject'
+                    );
                 }
             },
-            'show project data as XML\nin a new browser window',
-            new Color(100, 0, 0)
+            'save project data as XML\nto your downloads folder'
         );
-    }
-    menu.addItem(
-        shiftClicked ?
-                'Export project as plain text...' : 'Export project...',
-        function () {
-            if (myself.projectName) {
-                myself.exportProject(myself.projectName, shiftClicked);
-            } else {
-                myself.prompt('Export Project As...', function (name) {
-                    myself.exportProject(name, shiftClicked);
-                }, null, 'exportProject');
+        menu.addItem(
+            'Export summary...',
+            () => this.exportProjectSummary(),
+            'save a summary\nof this project'
+        );
+        if (shiftClicked) {
+            menu.addItem(
+                'Export summary with drop-shadows...',
+                () => this.exportProjectSummary(true),
+                'download and save' +
+                    '\nwith a summary of this project' +
+                    '\nwith drop-shadows on all pictures.' +
+                    '\nnot supported by all browsers',
+                new Color(100, 0, 0)
+            );
+            menu.addItem(
+                'Export all scripts as pic...',
+                () => this.exportScriptsPicture(),
+                'show a picture of all scripts\nand block definitions',
+                new Color(100, 0, 0)
+            );
+        }
+        if (this.stage.trailsLog.length) {
+            tm = new MenuMorph(this);
+            tm.addItem(
+                'png...',
+                () => this.saveCanvasAs(
+                    this.currentSprite.reportPenTrailsAsCostume().contents,
+                    this.getProjectName() || this.stage.name
+                ),
+                'export pen trails\nas PNG image'
+            );
+            tm.addItem(
+                'svg...',
+                () => this.stage.exportTrailsLogAsSVG(),
+                'export pen trails\nline segments as SVG'
+            );
+            tm.addItem(
+                'poly svg...',
+                () => this.stage.exportTrailsLogAsPolySVG(),
+                'export pen trails\nline segments as polyline SVG'
+            );
+            tm.addItem(
+                'dst...',
+                () => this.stage.exportTrailsLogAsDST(),
+                'export pen trails\nas DST embroidery file'
+            );
+            tm.addItem(
+                'exp...',
+                () => this.stage.exportTrailsLogAsEXP(),
+                'export pen trails\nas EXP embroidery file'
+            );
+            menu.addMenu('Export pen trails', tm);
+        } else {
+            menu.addItem(
+                'Export pen trails...',
+                () => this.saveCanvasAs(
+                    this.currentSprite.reportPenTrailsAsCostume().contents,
+                    this.getProjectName() || this.stage.name
+                ),
+                'export pen trails\nas PNG image'
+            );
+        }
+        menu.addLine();
+        if (this.stage.globalBlocks.length ||
+            SpriteMorph.prototype.hasCustomizedPrimitives()
+        ) {
+            menu.addItem(
+                'Export blocks...',
+                () => this.exportGlobalBlocks(),
+                'save global custom block\ndefinitions as XML'
+            );
+        }
+        if (this.stage.globalBlocks.length) {
+            menu.addItem(
+                'Unused blocks...',
+                () => this.removeUnusedBlocks(),
+                'find unused global custom blocks' +
+                    '\nand remove their definitions'
+            );
+        }
+        if (SpriteMorph.prototype.hasCustomizedPrimitives()) {
+            if (shiftClicked) {
+                menu.addItem(
+                    'Export customized primitives...',
+                    () => this.exportCustomizedPrimitives(),
+                    'EXPERIMENTAL!',
+                    new Color(100, 0, 0)
+                );
             }
-        },
-        'save project data as XML\nto your downloads folder',
-        shiftClicked ? new Color(100, 0, 0) : null
-    );
-
-    if (this.stage.globalBlocks.length) {
+            menu.addItem(
+                'Restore primitives',
+                () => this.stage.restorePrimitives(),
+                'switch (back) to primitive blocks in the palette,\n' +
+                    'CAUTION - can break extensions.'
+            );
+        }
         menu.addItem(
-            'Export blocks...',
-            function () {myself.exportGlobalBlocks(); },
-            'show global custom block definitions as XML' +
-                '\nin a new browser window'
+            'Hide blocks...',
+            () => new BlockVisibilityDialogMorph(
+                    this.currentSprite
+                ).popUp(world)
         );
+        if (this.scene.template) {
+            menu.addItem(
+                'Restore palette',
+                () => this.stage.restoreHiddenGlobalBlocks(
+                    this.scene.template.hide,
+                    this.scene.template.version
+                ),
+                '"' + this.scene.template.name + '"'
+            );
+            if (shiftClicked) {
+                menu.addItem(
+                    'Remove template',
+                    () => this.scene.template = null,
+                    '"' + this.scene.template.name + '"',
+                    new Color(100, 0, 0)
+                );
+            }
+        }
         menu.addItem(
-            'Unused blocks...',
-            function () {myself.removeUnusedBlocks(); },
-            'find unused global custom blocks' +
-                '\nand remove their definitions'
+            'New category...',
+            () => this.createNewCategory()
         );
+        if (SpriteMorph.prototype.customCategories.size) {
+            menu.addItem(
+                'Remove a category...',
+                () => this.deleteUserCategory(pos)
+            );
+        }
+        if (this.currentSprite instanceof SpriteMorph &&
+            !this.currentSprite.solution) {
+            menu.addItem(
+                'Generate puzzle',
+                'generatePuzzle',
+                'generate a Parson\'s Puzzle\n' +
+                    'from the current sprite'
+            );
+        }
+        menu.addLine();
+        if (this.scenes.length() > 1) {
+            if (!this.tutorial) {
+                scns = this.scenes.itemsArray();
+                help = scns.find(any => any.role === 'tutorial');
+                work = scns.find(any => any.role !== 'tutorial');
+                if (help && work) {
+                    menu.addItem('Launch tutorial...', 'launchProjectTutorial');
+                }
+            }
+            menu.addItem('Scenes...', 'scenesMenu');
+        }
+        menu.addPair('New scene', 'createNewScene');
+        menu.addPair('Add scene...', 'addScene');
+        if (this.tutorial) {
+            menu.addPair('Exit tutorial', 'escapeTutorial');
+        }
+        menu.addLine();
     }
-
-    menu.addItem(
-        'Export summary...',
-        function () {myself.exportProjectSummary(); },
-        'open a new browser browser window\n with a summary of this project'
-    );
-
-    if (shiftClicked) {
-        menu.addItem(
-            'Export summary with drop-shadows...',
-            function () {myself.exportProjectSummary(true); },
-            'open a new browser browser window' +
-                '\nwith a summary of this project' +
-                '\nwith drop-shadows on all pictures.' +
-                '\nnot supported by all browsers',
-            new Color(100, 0, 0)
-        );
-        menu.addItem(
-            'Export all scripts as pic...',
-            function () {myself.exportScriptsPicture(); },
-            'show a picture of all scripts\nand block definitions',
-            new Color(100, 0, 0)
-        );
-    }
-
-    menu.addLine();
     menu.addItem(
         'Libraries...',
-        function() {
+        () => {
             if (location.protocol === 'file:') {
-                myself.importLocalFile();
+                this.importLocalFile();
                 return;
             }
-            myself.getURL(
-                myself.resourceURL('libraries', 'LIBRARIES'),
-                function (txt) {
-                    var libraries = myself.parseResourceFile(txt);
-                    new LibraryImportDialogMorph(myself, libraries).popUp();
+            this.getURL(
+                this.resourceURL('libraries', 'LIBRARIES.json'),
+                txt => {
+                    var libraries = this.parseResourceFile(txt);
+                    new LibraryImportDialogMorph(this, libraries).popUp();
                 }
             );
         },
         'Select categories of additional blocks to add to this project.'
     );
-
     menu.addItem(
         localize(graphicsName) + '...',
-        function () {
+        () => {
             if (location.protocol === 'file:') {
-                myself.importLocalFile();
+                this.importLocalFile();
                 return;
             }
-            myself.importMedia(graphicsName);
+            this.importMedia(graphicsName);
         },
         'Select a costume from the media library'
     );
     menu.addItem(
         localize('Sounds') + '...',
-        function () {
+        () => {
             if (location.protocol === 'file:') {
-                myself.importLocalFile();
+                this.importLocalFile();
                 return;
             }
-            myself.importMedia('Sounds');
+            this.importMedia('Sounds');
         },
         'Select a sound from the media library'
     );
 
+    if (this.scene.trash.length) {
+        menu.addLine();
+        menu.addItem(
+            'Undelete sprites...',
+            () => this.undeleteSprites(
+                this.controlBar.projectButton.bottomLeft()
+            ),
+            'Bring back deleted sprites'
+        );
+    }
     menu.popup(world, pos);
 };
 
@@ -3325,8 +5562,13 @@ IDE_Morph.prototype.resourceURL = function () {
     // Take in variadic inputs that represent an a nested folder structure.
     // Method can be easily overridden if running in a custom location.
     // Default Snap! simply returns a path (relative to snap.html)
-    var args = Array.prototype.slice.call(arguments, 0);
-    return args.join('/');
+    // Note: You can specify a base path to the root directory in the
+    // configuration object's "path" property that's passed when creating
+    // an IDE instance, e.g. either a relative one: {path: '../' }
+    // or a full url, depending on where (your) Snap! distro ist hosted
+    var args = Array.prototype.slice.call(arguments, 0),
+        path = this.config.path ? [this.config.path] : [];
+    return path.concat(args).join('/');
 };
 
 IDE_Morph.prototype.getMediaList = function (dirname, callback) {
@@ -3334,9 +5576,8 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
     // based on the contents file.
     // If no callback is specified, synchronously return the list of files
     // Note: Synchronous fetching has been deprecated and should be switched
-    var url = this.resourceURL(dirname, dirname.toUpperCase()),
+    var url = this.resourceURL(dirname, `${dirname.toUpperCase()}.json`),
         async = callback instanceof Function,
-        myself = this,
         data;
 
     function alphabetically(x, y) {
@@ -3346,8 +5587,8 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
     if (async) {
         this.getURL(
             url,
-            function (txt) {
-                var data = myself.parseResourceFile(txt);
+            txt => {
+                var data = this.parseResourceFile(txt);
                 data.sort(alphabetically);
                 callback.call(this, data);
             }
@@ -3360,34 +5601,45 @@ IDE_Morph.prototype.getMediaList = function (dirname, callback) {
 };
 
 IDE_Morph.prototype.parseResourceFile = function (text) {
-    // A Resource File lists all the files that could be loaded in a submenu
-    // Examples are libraries/LIBRARIES, Costumes/COSTUMES, etc
-    // The file format is tab-delimited, with unix newlines:
-    // file-name, Display Name, Help Text (optional)
-    var parts,
-        items = [];
+   /* A resource file is a JSON file with a list of objects:
+    1. fileName
+    2. name
+    3. description
+    4. categoires (optional, list)
+    5. searchData (optional, list of keywords)
+    6. translations (optional, map of language to name/description/searchData)
 
-    text.split('\n').map(function (line) {
-        return line.trim();
-    }).filter(function (line) {
-        return line.length > 0;
-    }).forEach(function (line) {
-        parts = line.split('\t').map(function (str) { return str.trim(); });
+    These files are used for loading costumes, backgrounds, and sounds, and libraries.
+    Translations are merged into the dictionary before rendering resourcres.
+    Categories are not expected to be translated with each individual resource, instead
+    translations are expected to be provided in each langauge's translation file.
 
-        if (parts.length < 2) {return; }
+    -- May 2024: categories, and searchData are not used in Snap! yet
+    Categories: Used to group resources in the media/libraries viewers
+    SearchData: Used to augment search results in the viewer, but not be displayed
+   */
+    let items = JSON.parse(text),
+        language = SnapTranslator.language || 'en';
 
-        items.push({
-            fileName: parts[0],
-            name: parts[1],
-            description: parts.length > 2 ? parts[2] : ''
-        });
-    });
+    // Update name, description, and searchData from translations
+    for (let item of items) {
+        if (item.translations && item.translations[language]) {
+            let translation = item.translations[language];
+            // ensure we never concatenate undefined arrays
+            let searchData = translation.searchData || [];
+            item.name = translation.name || item.name;
+            item.description = translation.description || item.description;
+            item.searchData = searchData + (item.searchData || []);
+        }
+        delete item.translations;
+    }
 
     return items;
 };
 
 IDE_Morph.prototype.importLocalFile = function () {
     var inp = document.createElement('input'),
+        addingScenes = this.isAddingScenes,
         myself = this,
         world = this.world();
 
@@ -3408,9 +5660,13 @@ IDE_Morph.prototype.importLocalFile = function () {
     inp.style.display = "none";
     inp.addEventListener(
         "change",
-        function () {
+        () => {
             document.body.removeChild(inp);
-            myself.filePicker = null;
+            this.filePicker = null;
+            if (addingScenes) {
+                myself.isAddingNextScene = true;
+            }
+            myself.isImportingLocalFile = true;
             world.hand.processDrop(inp.files);
         },
         false
@@ -3423,13 +5679,12 @@ IDE_Morph.prototype.importLocalFile = function () {
 IDE_Morph.prototype.importMedia = function (folderName) {
     // open a dialog box letting the user browse available "built-in"
     // costumes, backgrounds or sounds
-    var myself = this,
-        msg = this.showMessage('Opening ' + folderName + '...');
+    var msg = this.showMessage('Opening ' + folderName + '...');
     this.getMediaList(
         folderName,
-        function (items) {
+        items => {
             msg.destroy();
-            myself.popupMediaImportDialog(folderName, items);
+            this.popupMediaImportDialog(folderName, items);
         }
     );
 
@@ -3506,28 +5761,26 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.label.setTop(this.top() + (th - this.label.height()) / 2);
         this.buttons.setCenter(this.center());
         this.buttons.setBottom(this.bottom() - this.padding);
+
+        // refresh shadow
+        this.removeShadow();
+        this.addShadow();
     };
 
-    items.forEach(function (item) {
+    items.forEach(item => {
         // Caution: creating very many thumbnails can take a long time!
-        var url = myself.resourceURL(folderName, item.fileName),
+        var url = this.resourceURL(folderName, item.fileName),
             img = new Image(),
             suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
             isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
             isSound = contains(['wav', 'mp3'], suffix),
-            cstTemplate,
-            sndTemplate,
             icon;
 
         if (isSound) {
-            sndTemplate = icon = new SoundIconMorph(
-                new Sound(new Audio(), item.name),
-                sndTemplate
-            );
+            icon = new SoundIconMorph(new Sound(new Audio(), item.name));
         } else {
-            cstTemplate = icon = new CostumeIconMorph(
-                new Costume(turtle.image, item.name),
-                cstTemplate
+            icon = new CostumeIconMorph(
+                new Costume(turtle.getImage(), item.name)
             );
         }
         icon.isDraggable = false;
@@ -3555,20 +5808,20 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         } else if (isSVG) {
             img.onload = function () {
                 icon.object = new SVG_Costume(img, item.name);
+                icon.createThumbnail();
                 icon.refresh();
             };
-            myself.getURL(
+            this.getURL(
                 url,
-                function (txt) {
-                    img.src = 'data:image/svg+xml;base64,' +
-                         window.btoa(txt);
-                }
+                txt => img.src = 'data:image/svg+xml;base64,' +
+                    window.btoa(txt)
             );
         } else {
             img.onload = function () {
                 var canvas = newCanvas(new Point(img.width, img.height), true);
                 canvas.getContext('2d').drawImage(img, 0, 0);
                 icon.object = new Costume(canvas, item.name);
+                icon.createThumbnail();
                 icon.refresh();
             };
             img.src = url;
@@ -3577,7 +5830,6 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     dialog.popUp(world);
     dialog.setExtent(new Point(400, 300));
     dialog.setCenter(world.center());
-    dialog.drawNew();
 
     handle = new HandleMorph(
         dialog,
@@ -3588,6 +5840,55 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     );
 };
 
+IDE_Morph.prototype.undeleteSprites = function (pos) {
+    // pop up a menu showing deleted sprites that can be recovered
+    // by clicking on them
+
+    var menu = new MenuMorph(sprite => this.undelete(sprite, pos), null, this);
+        pos = pos || this.corralBar.bottomRight();
+
+    if (!this.scene.trash.length) {
+        this.showMessage('trash is empty');
+        return;
+    }
+    this.scene.trash.forEach(sprite =>
+        menu.addItem(
+            [
+                sprite.thumbnail(new Point(24, 24), null, true), // no corpse
+                sprite.name,
+            ],
+            sprite
+        )
+    );
+    menu.popup(this.world(), pos);
+};
+
+IDE_Morph.prototype.undelete = function (aSprite, pos) {
+    var rnd = Process.prototype.reportBasicRandom;
+
+    aSprite.setCenter(pos);
+    this.world().add(aSprite);
+    aSprite.glideTo(
+        this.stage.center().subtract(aSprite.extent().divideBy(2)),
+        this.isAnimating ? 100 : 0,
+        null, // easing
+        () => {
+            aSprite.isCorpse = false;
+            aSprite.version = Date.now();
+            aSprite.name = this.newSpriteName(aSprite.name);
+            this.stage.add(aSprite);
+            aSprite.setXPosition(rnd.call(this, -50, 50));
+            aSprite.setYPosition(rnd.call(this, -50, 59));
+            aSprite.fixLayout();
+            aSprite.rerender();
+            this.sprites.add(aSprite);
+            this.corral.addSprite(aSprite);
+            this.selectSprite(aSprite);
+            this.scene.updateTrash();
+        }
+    );
+};
+
 // IDE_Morph menu actions
 
 IDE_Morph.prototype.aboutSnap = function () {
@@ -3595,22 +5896,18 @@ IDE_Morph.prototype.aboutSnap = function () {
         module, btn1, btn2, btn3, btn4, licenseBtn, translatorsBtn,
         world = this.world();
 
-    aboutTxt = 'Snap! 5.0.3\nBuild Your Own Blocks\n\n'
-        + 'Copyright \u24B8 2019 Jens M\u00F6nig and '
+    aboutTxt = 'Snap! ' + SnapVersion + '\nBuild Your Own Blocks\n\n'
+        + 'Copyright \u24B8 2008-2026 Jens M\u00F6nig and '
         + 'Brian Harvey\n'
         + 'jens@moenig.org, bh@cs.berkeley.edu\n\n'
-
-        + 'Snap! is developed by the University of California, Berkeley\n'
-        + '          with support from the National Science Foundation (NSF), '
-        + 'MioSoft,          \n'
-        + 'the Communications Design Group (CDG) at SAP Labs, and the\n'
-        + 'Human Advancement Research Community (HARC) at YC Research.\n'
-
+        + '        Snap! is developed by the University of California, '
+        + 'Berkeley and SAP        \n'
+        + 'with support from the National Science Foundation (NSF),\n'
+        + 'MIOsoft and YC Research.\n'
         + 'The design of Snap! is influenced and inspired by Scratch,\n'
         + 'from the Lifelong Kindergarten group at the MIT Media Lab\n\n'
 
-        + 'for more information see http://snap.berkeley.edu\n'
-        + 'and http://scratch.mit.edu';
+        + 'for more information see https://snap.berkeley.edu';
 
     noticeTxt = localize('License')
         + '\n\n'
@@ -3634,24 +5931,48 @@ IDE_Morph.prototype.aboutSnap = function () {
     creditsTxt = localize('Contributors')
         + '\n\nNathan Dinsmore: Saving/Loading, Snap-Logo Design, '
         + '\ncountless bugfixes and optimizations'
-        + '\nKartik Chandra: Paint Editor'
         + '\nMichael Ball: Time/Date UI, Library Import Dialog,'
         + '\ncountless bugfixes and optimizations'
-        + '\nBartosz Leper: Retina Display Support'
         + '\nBernat Romagosa: Countless contributions'
+        + '\nBartosz Leper: Retina Display Support'
+        + '\nDariusz Dorożalski: Web Serial Support,'
+        + '\ncountless bugfixes and optimizations'
+        + '\nZhenlei Jia and Dariusz Dorożalski: IME text editing'
+        + '\nKen Kahn: IME support and countless other contributions'
         + '\nJosep Ferràndiz: Video Motion Detection'
         + '\nJoan Guillén: Countless contributions'
+        + '\nKartik Chandra: Paint Editor'
+        + '\nMichael Aschauer: Embroidery machine support'
         + '\nCarles Paredes: Initial Vector Paint Editor'
-        + '\n"Ava" Yuan Yuan, Dylan Servilla: Graphic Effects'
+        + '\n"Ava" Yuan Yuan, Deborah Servilla: Graphic Effects'
         + '\nKyle Hotchkiss: Block search design'
         + '\nBrian Broll: Many bugfixes and optimizations'
+        + '\nEckart Modrow: SciSnap! Extension'
+        + '\nBambi Brewer: Birdbrain Robotics Extension Support'
+        + '\nGlen Bull & team: TuneScope Music Extension'
         + '\nIan Reynolds: UI Design, Event Bindings, '
         + 'Sound primitives'
+        + '\nJadga Hügle: Icons and countless other contributions'
+        + '\nSimon Walters & Xavier Pi: MQTT extension'
+        + '\nVictoria Phelps: Reporter results tracing'
+        + '\nSimon Mong: Custom blocks palette arrangement'
         + '\nIvan Motyashov: Initial Squeak Porting'
         + '\nLucas Karahadian: Piano Keyboard Design'
+        + '\nego-lay-atman-bay: Piano Keyboard Octave Switching'
         + '\nDavide Della Casa: Morphic Optimizations'
         + '\nAchal Dave: Web Audio'
-        + '\nJoe Otto: Morphic Testing and Debugging';
+        + '\nJoe Otto: Morphic Testing and Debugging'
+        + '\n\n'
+        + 'Ketrina Thompson https://ketrinadrawsalot.com '
+        + 'created every costume'
+        + '\nexcept the ones inherited from Scratch, Alonzo, and the following:'
+        + '\n\n'
+        + 'Jahrd, Derec, Jamet, Sarron, Aleassa, and Lirin costumes '
+        + 'are watercolor\n paintings by Meghan Taylor and represent '
+        + 'characters from her webcomic\nProphecy of the Circle, '
+        + 'licensed to us only for use in Snap! projects. '
+        + '\nMeghan also painted the Tad costumes, '
+        + 'which are in the public domain.';
 
     for (module in modules) {
         if (Object.prototype.hasOwnProperty.call(modules, module)) {
@@ -3667,12 +5988,42 @@ IDE_Morph.prototype.aboutSnap = function () {
     translations = localize('Translations') + '\n' + SnapTranslator.credits();
 
     dlg = new DialogBoxMorph();
-    dlg.inform('About Snap', aboutTxt, world);
+
+    function txt(textString) {
+        var tm = new TextMorph(
+                textString,
+                dlg.fontSize,
+                dlg.fontStyle,
+                true,
+                false,
+                'center',
+                null,
+                null,
+                MorphicPreferences.isFlat ? null : new Point(1, 1),
+                WHITE
+            ),
+            scroller,
+            maxHeight = world.height() - dlg.titleFontSize * 10;
+        tm.enableLinks = true; // let the user click on URLs to open in new tab
+        if (tm.height() > maxHeight) {
+            scroller = new ScrollFrameMorph();
+            scroller.acceptsDrops = false;
+            scroller.contents.acceptsDrops = false;
+            scroller.bounds.setWidth(tm.width());
+            scroller.bounds.setHeight(maxHeight);
+            scroller.addContents(tm);
+            scroller.color = new Color(0, 0, 0, 0);
+            return scroller;
+        }
+        return tm;
+    }
+
+    dlg.inform('About Snap', aboutTxt, world, this.logo.cachedTexture);
     btn1 = dlg.buttons.children[0];
     translatorsBtn = dlg.addButton(
-        function () {
-            dlg.body.text = translations;
-            dlg.body.drawNew();
+        () => {
+            dlg.addBody(txt(translations));
+            dlg.body.fixLayout();
             btn1.show();
             btn2.show();
             btn3.hide();
@@ -3680,15 +6031,14 @@ IDE_Morph.prototype.aboutSnap = function () {
             licenseBtn.hide();
             translatorsBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'Translators...'
     );
     btn2 = dlg.addButton(
-        function () {
-            dlg.body.text = aboutTxt;
-            dlg.body.drawNew();
+        () => {
+            dlg.addBody(txt(aboutTxt));
+            dlg.body.fixLayout();
             btn1.show();
             btn2.hide();
             btn3.show();
@@ -3696,16 +6046,15 @@ IDE_Morph.prototype.aboutSnap = function () {
             licenseBtn.show();
             translatorsBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'Back...'
     );
     btn2.hide();
     licenseBtn = dlg.addButton(
-        function () {
-            dlg.body.text = noticeTxt;
-            dlg.body.drawNew();
+        () => {
+            dlg.addBody(txt(noticeTxt));
+            dlg.body.fixLayout();
             btn1.show();
             btn2.show();
             btn3.hide();
@@ -3713,15 +6062,14 @@ IDE_Morph.prototype.aboutSnap = function () {
             licenseBtn.hide();
             translatorsBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'License...'
     );
     btn3 = dlg.addButton(
-        function () {
-            dlg.body.text = versions;
-            dlg.body.drawNew();
+        () => {
+            dlg.addBody(txt(versions));
+            dlg.body.fixLayout();
             btn1.show();
             btn2.show();
             btn3.hide();
@@ -3729,15 +6077,14 @@ IDE_Morph.prototype.aboutSnap = function () {
             licenseBtn.hide();
             translatorsBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'Modules...'
     );
     btn4 = dlg.addButton(
-        function () {
-            dlg.body.text = creditsTxt;
-            dlg.body.drawNew();
+        () => {
+            dlg.addBody(txt(creditsTxt));
+            dlg.body.fixLayout();
             btn1.show();
             btn2.show();
             translatorsBtn.show();
@@ -3745,21 +6092,41 @@ IDE_Morph.prototype.aboutSnap = function () {
             btn4.hide();
             licenseBtn.hide();
             dlg.fixLayout();
-            dlg.drawNew();
             dlg.setCenter(world.center());
         },
         'Credits...'
     );
     translatorsBtn.hide();
     dlg.fixLayout();
-    dlg.drawNew();
 };
 
-IDE_Morph.prototype.editProjectNotes = function () {
-    var dialog = new DialogBoxMorph().withKey('projectNotes'),
+IDE_Morph.prototype.scenesMenu = function () {
+    var menu = new MenuMorph(scn => this.switchToScene(scn), null, this),
+        world = this.world(),
+        pos = this.controlBar.projectButton.bottomLeft(),
+        tick = new SymbolMorph(
+            'tick',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        empty = tick.fullCopy();
+
+    empty.render = nop;
+    this.scenes.asArray().forEach(scn =>
+        menu.addItem(
+            [
+                this.scene === scn ? tick : empty,
+                scn.name
+            ],
+            scn
+        )
+    );
+    menu.popup(world, pos);
+};
+
+IDE_Morph.prototype.editNotes = function () {
+    var dialog = new DialogBoxMorph().withKey('notes'),
         frame = new ScrollFrameMorph(),
-        text = new TextMorph(this.projectNotes || ''),
-        myself = this,
+        text = new TextMorph(this.scenes.at(1).notes || ''),
         size = 250,
         world = this.world();
 
@@ -3779,80 +6146,233 @@ IDE_Morph.prototype.editProjectNotes = function () {
     frame.fontSize = InputFieldMorph.prototype.fontSize;
     frame.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     frame.contrast = InputFieldMorph.prototype.contrast;
-    frame.drawNew = InputFieldMorph.prototype.drawNew;
+    frame.render = InputFieldMorph.prototype.render;
     frame.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     frame.addContents(text);
-    text.drawNew();
 
-    dialog.getInput = function () {
-        return text.text;
+    dialog.getInput = () => text.text;
+
+    dialog.target = this;
+
+    dialog.action = (note) => {
+        this.scene.notes = note;
+        this.recordUnsavedChanges();
     };
 
-    dialog.target = myself;
+    dialog.justDropped = () => text.edit();
 
-    dialog.action = function (note) {
-        myself.projectNotes = note;
-    };
-
-    dialog.justDropped = function () {
-        text.edit();
-    };
-
-    dialog.labelString = 'Project Notes';
+    dialog.labelString = 'Notes';
     dialog.createLabel();
     dialog.addBody(frame);
-    frame.drawNew();
     dialog.addButton('ok', 'OK');
     dialog.addButton('cancel', 'Cancel');
     dialog.fixLayout();
-    dialog.drawNew();
     dialog.popUp(world);
     dialog.setCenter(world.center());
     text.edit();
 };
 
 IDE_Morph.prototype.newProject = function () {
+    var project = new Project();
+
+    project.addDefaultScene();
     this.source = this.cloud.username ? 'cloud' : null;
-    if (this.stage) {
-        this.stage.destroy();
-    }
     if (location.hash.substr(0, 6) !== '#lang:') {
         location.hash = '';
     }
-    this.globalVariables = new VariableFrame();
-    this.currentSprite = new SpriteMorph(this.globalVariables);
-    this.sprites = new List([this.currentSprite]);
-    StageMorph.prototype.dimensions = new Point(480, 360);
-    StageMorph.prototype.hiddenPrimitives = {};
-    StageMorph.prototype.codeMappings = {};
-    StageMorph.prototype.codeHeaders = {};
-    StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = true;
-    StageMorph.prototype.enableSublistIDs = false;
-    SpriteMorph.prototype.useFlatLineEnds = false;
-    Process.prototype.enableLiveCoding = false;
-    this.setProjectName('');
-    this.projectNotes = '';
-    this.createStage();
-    this.add(this.stage);
-    this.createCorral();
-    this.selectSprite(this.stage.children[0]);
+    this.openProject(project);
+};
+
+IDE_Morph.prototype.createNewScene = function () {
+    var setting = this.isAddingScenes;
+    this.isAddingScenes = true;
+    this.newProject();
+    this.isAddingScenes = setting;
+};
+
+IDE_Morph.prototype.createNewCategory = function () {
+    new DialogBoxMorph(
+        this,
+        cat => this.addPaletteCategory(cat.name, cat.color),
+        this
+    ).promptCategory(
+        "New Category",
+        null,
+        new Color(0,116,143),
+        this.world(),
+        null, // pic
+        'Blocks category name:' // msg
+    );
+};
+
+IDE_Morph.prototype.addPaletteCategory = function (name, color) {
+    if (name === '') {return; }
+    SpriteMorph.prototype.customCategories.set(name, color);
+    this.createCategories();
+    this.refreshEmptyCategories();
+    this.createPaletteHandle();
+    this.categories.fixLayout();
     this.fixLayout();
 };
 
-IDE_Morph.prototype.save = function () {
-    var myself = this;
+IDE_Morph.prototype.changeUserCategory = function (pos) {
+    var menu = new MenuMorph(
+        this.changeCustomCategory,
+        null,
+        this
+    );
 
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
+        menu.addItem(
+            name,
+            name,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            true // verbatim - don't translate
+        )
+    );
+    if (pos) {
+        menu.popup(this.world(), pos);
+    } else {
+        menu.popUpAtHand(this.world());
+    }
+};
+
+IDE_Morph.prototype.changeCustomCategory = function (name) {
+    new DialogBoxMorph(
+        this,
+        cat => this.changePaletteCategory(cat.old, cat.name, cat.color),
+        this
+    ).promptCategory(
+        "Change Category",
+        name,
+        SpriteMorph.prototype.customCategories.get(name),
+        this.world(),
+        null, // pic
+        'Blocks category name:' // msg
+    );
+};
+
+IDE_Morph.prototype.changePaletteCategory = function (old, name, color) {
+    SpriteMorph.prototype.customCategories.set(name, color);
+    this.stage.globalBlocks.forEach(def =>{
+        if (def.category === old) {
+            def.category = name;
+            this.currentSprite.allBlockInstances(def).reverse().forEach(
+                block => block.refresh()
+            );
+        }
+    });
+    this.sprites.asArray().concat(this.stage).forEach(obj => {
+        obj.customBlocks.forEach(def => {
+            if (def.category === old) {
+                def.category = name;
+                obj.allDependentInvocationsOf(
+                    def.blockSpec()
+                ).reverse().forEach(
+                    block => block.refresh(def)
+                );
+            }
+        });
+    });
+    if (old === name) {
+        this.createCategories();
+        this.createPaletteHandle();
+        this.categories.fixLayout();
+        this.flushPaletteCache();
+        this.refreshPalette(true);
+        this.refreshEmptyCategories();
+        this.fixLayout();
+        this.recordUnsavedChanges();
+    } else {
+        this.deletePaletteCategory(old);
+    }
+};
+
+IDE_Morph.prototype.deleteUserCategory = function (pos) {
+    var menu = new MenuMorph(
+        this.deletePaletteCategory,
+        null,
+        this
+    );
+
+    // sort alphabetically
+    Array.from(
+        SpriteMorph.prototype.customCategories.keys()
+    ).sort().forEach(name =>
+        menu.addItem(
+            name,
+            name,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            true // verbatim - don't translate
+        )
+    );
+    if (pos) {
+        menu.popup(this.world(), pos);
+    } else {
+        menu.popUpAtHand(this.world());
+    }
+};
+
+IDE_Morph.prototype.deletePaletteCategory = function (name) {
+    this.stage.globalBlocks.forEach(def =>{
+        if (def.category === name) {
+            def.category = 'other';
+            this.currentSprite.allBlockInstances(def).reverse().forEach(
+                block => block.refresh()
+            );
+        }
+    });
+    this.sprites.asArray().concat(this.stage).forEach(obj => {
+        obj.customBlocks.forEach(def => {
+            if (def.category === name) {
+                def.category = 'other';
+                obj.allDependentInvocationsOf(
+                    def.blockSpec()
+                ).reverse().forEach(
+                    block => block.refresh(def)
+                );
+            }
+        });
+    });
+    SpriteMorph.prototype.customCategories.delete(name);
+    this.createCategories();
+    this.createPaletteHandle();
+    this.categories.fixLayout();
+    this.flushPaletteCache();
+    this.refreshPalette(true);
+    this.refreshEmptyCategories();
+    this.fixLayout();
+    this.recordUnsavedChanges();
+};
+
+IDE_Morph.prototype.save = function () {
     // temporary hack - only allow exporting projects to disk
     // when running Snap! locally without a web server
+    var pn = this.getProjectName();
     if (location.protocol === 'file:') {
-        if (this.projectName) {
-            this.exportProject(myself.projectName, false);
+        if (pn) {
+            this.exportProject(pn);
         } else {
-            this.prompt('Export Project As...', function (name) {
-                myself.exportProject(name, false);
-            }, null, 'exportProject');
+            this.prompt(
+                'Export Project As...',
+                name => this.exportProject(name),
+                null,
+                'exportProject'
+            );
         }
         return;
     }
@@ -3861,11 +6381,14 @@ IDE_Morph.prototype.save = function () {
         // cannot save to examples, deprecated localStorage
         this.source = null;
     }
-    if (this.projectName) {
+
+    if (this.cloud.disabled) {this.source = 'disk'; }
+
+    if (pn) {
         if (this.source === 'disk') {
-            this.exportProject(this.projectName);
+            this.exportProject(pn);
         } else if (this.source === 'cloud') {
-            this.saveProjectToCloud(this.projectName);
+            this.saveProjectToCloud(pn);
         } else {
             this.saveProjectsBrowser();
         }
@@ -3874,20 +6397,20 @@ IDE_Morph.prototype.save = function () {
     }
 };
 
-IDE_Morph.prototype.exportProject = function (name, plain) {
+IDE_Morph.prototype.exportProject = function (name) {
     // Export project XML, saving a file to disk
-    // newWindow requests displaying the project in a new tab.
-    var menu, str, dataPrefix;
-
+    var menu, str;
     if (name) {
-        this.setProjectName(name);
-        dataPrefix = 'data:text/' + plain ? 'plain,' : 'xml,';
+        name = this.setProjectName(name);
+        this.scene.captureGlobalSettings();
         try {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.stage);
-            this.setURL('#open:' + dataPrefix + encodeURIComponent(str));
+            str = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
             this.saveXMLAs(str, name);
             menu.destroy();
+            this.recordSavedChanges();
             this.showMessage('Exported!', 1);
         } catch (err) {
             if (Process.prototype.isCatchingErrors) {
@@ -3896,14 +6419,18 @@ IDE_Morph.prototype.exportProject = function (name, plain) {
                 throw err;
             }
         }
+        this.scene.applyGlobalSettings();
     }
 };
 
 IDE_Morph.prototype.exportGlobalBlocks = function () {
-    if (this.stage.globalBlocks.length > 0) {
+    var blocks = SpriteMorph.prototype.bootstrappedBlocks().concat(
+        this.stage.globalBlocks);
+    if (blocks.length > 0) {
         new BlockExportDialogMorph(
             this.serializer,
-            this.stage.globalBlocks
+            blocks,
+            this
         ).popUp(this.world());
     } else {
         this.inform(
@@ -3911,6 +6438,30 @@ IDE_Morph.prototype.exportGlobalBlocks = function () {
             'this project doesn\'t have any\n'
                 + 'custom global blocks yet'
         );
+    }
+};
+
+IDE_Morph.prototype.exportCustomizedPrimitives = function () {
+    var blocks = SpriteMorph.prototype.bootstrappedBlocks();
+    if (blocks.length > 0) {
+        new BlockExportDialogMorph(
+            this.serializer,
+            blocks,
+            this
+        ).popUp(this.world());
+    } else {
+        this.inform(
+            'Export customized primitives',
+            'this session doesn\'t have any\n'
+                + 'customized primitives yet'
+        );
+    }
+};
+
+IDE_Morph.prototype.refreshCustomizedPalette = function () {
+    var blocks = SpriteMorph.prototype.bootstrappedBlocks();
+    if (blocks.length > 0) {
+        this.serializer.loadBlocks(this.blocksLibraryXML(blocks));
     }
 };
 
@@ -3922,11 +6473,11 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
         found;
 
     function scan() {
-        return globalBlocks.filter(function (def) {
+        return globalBlocks.filter(def => {
             if (contains(unused, def)) {return false; }
-            return targets.every(function (each, trgIdx) {
-                return !(each.usesBlockInstance(def, true, trgIdx, unused));
-            });
+            return targets.every((each, trgIdx) =>
+                !each.usesBlockInstance(def, true, trgIdx, unused)
+            );
         });
     }
 
@@ -3941,7 +6492,7 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
     if (unused.length > 0) {
         new BlockRemovalDialogMorph(
             unused,
-            this.stage
+            this
         ).popUp(this.world());
     } else {
         this.inform(
@@ -3952,16 +6503,183 @@ IDE_Morph.prototype.removeUnusedBlocks = function () {
     }
 };
 
+IDE_Morph.prototype.generatePuzzle = function () {
+    if (this.sprites.asArray().some(any => any.solution)) {
+        return this.addToPuzzle();
+    }
+
+    var current = this.currentSprite,
+        allBlocks = current.allPaletteBlocks(),
+        used = current.scripts.allChildren().filter(
+            m => m instanceof BlockMorph),
+        uPrim = [],
+        uCust = [],
+        uVars = [],
+        unused,
+        puzzle;
+
+    // add stage-only blocks
+    this.stage.allPaletteBlocks().forEach(b => {
+        if (!allBlocks.includes(b)) {
+            allBlocks.push(b);
+        }
+    });
+
+    // determine unused blocks
+    used.forEach(b => {
+        if (b.isCustomBlock) {
+            uCust.push(b.isGlobal ? b.definition
+                : current.getMethod(b.semanticSpec));
+        } else if (b.selector === 'reportGetVar') {
+            uVars.push(b.blockSpec);
+        } else {
+            uPrim.push(b.selector);
+        }
+    });
+    unused = allBlocks.filter(b => {
+        if (b.isCustomBlock) {
+            return !contains(
+                uCust,
+                b.isGlobal ? b.definition
+                    : current.getMethod(b.semanticSpec)
+                );
+        } else if (b.selector === 'reportGetVar') {
+            return !contains(uVars, b.blockSpec);
+        } else {
+            return !contains(uPrim, b.selector);
+        }
+    });
+
+    // hide all unused blocks and show all used ones in the palette
+    allBlocks.forEach(block => current.changeBlockVisibility(
+        block,
+        contains(unused, block),
+        true // quick - without palette update
+    ));
+    if (unused.length === 0) {
+        StageMorph.prototype.hiddenPrimitives = [];
+    }
+
+    // fire user edit event
+    current.recordUserEdit(
+        'palette',
+        'hide block'
+    );
+
+    // turn on single palette and hide buttons
+    this.setUnifiedPalette(true);
+    this.scene.showPaletteButtons = false;
+
+    // refresh
+    this.flushBlocksCache();
+    this.refreshPalette();
+    this.refreshEmptyCategories();
+
+    // generate a new puzzle sprite by duplicating the current one
+    this.duplicateSprite(current);
+    puzzle = this.currentSprite; // this is now the duplicate
+    puzzle.setPosition(current.position());
+    puzzle.setName(this.newSpriteName(current.name + ' ' + localize('Puzzle')));
+
+    // remove all scripts but keep the comments that are either unattached
+    // or attached to the top block of a script
+    puzzle.scripts.children.forEach(m => {
+        if (m instanceof CommentMorph) {
+            m.prepareToBeGrabbed();
+        }
+    });
+    puzzle.scripts.children.filter(m =>
+        m instanceof BlockMorph
+    ).forEach(b => b.destroy());
+
+    // store the solution inside the puzzlem
+    // and remove the solution from the stage
+    puzzle.solution = current;
+    this.removeSprite(current, false); // disable undelete
+
+    // refresh
+    this.selectSprite(puzzle);
+
+    // turn the project into a template
+    this.scene.role = 'template';
+
+    // hide empty categories
+    this.scene.hideEmptyCategories = true;
+    this.createCategories();
+    this.createPaletteHandle();
+    this.fixLayout();
+};
+
+IDE_Morph.prototype.addToPuzzle = function () {
+    var current = this.currentSprite,
+        allBlocks = current.allPaletteBlocks(),
+        used = current.scripts.allChildren().filter(
+            m => m instanceof BlockMorph),
+        uCust = [],
+        unused,
+        puzzle;
+
+    // add stage-only blocks
+    this.stage.allPaletteBlocks().forEach(b => {
+        if (!allBlocks.includes(b)) {
+            allBlocks.push(b);
+        }
+    });
+
+    // determine unused local blocks only
+    used.forEach(b => {
+        if (b.isCustomBlock && !b.isGlobal) {
+            uCust.push(current.getMethod(b.semanticSpec));
+        }
+    });
+    unused = allBlocks.filter(b => b.isCustomBlock && !b.isGlobal &&
+        !contains(uCust, current.getMethod(b.semanticSpec))
+    );
+
+    // hide unused local custom bocks
+    unused.forEach(block => current.changeBlockVisibility(block, true, true));
+
+    // show used blocks
+    used.forEach(block => current.changeBlockVisibility(block, false, true));
+
+    // fire user edit event
+    current.recordUserEdit(
+        'palette',
+        'hide block'
+    );
+
+    // refresh
+    this.flushBlocksCache();
+    this.refreshPalette();
+    this.refreshEmptyCategories();
+
+    // generate a new puzzle sprite by duplicating the current one
+    this.duplicateSprite(current);
+    puzzle = this.currentSprite; // this is now the duplicate
+    puzzle.setPosition(current.position());
+    puzzle.setName(this.newSpriteName(current.name + ' ' + localize('Puzzle')));
+
+    // remove all scripts but keep the comments that are either unattached
+    // or attached to the top block of a script
+    puzzle.scripts.children.forEach(m => {
+        if (m instanceof CommentMorph) {
+            m.prepareToBeGrabbed();
+        }
+    });
+    puzzle.scripts.children.filter(m =>
+        m instanceof BlockMorph
+    ).forEach(b => b.destroy());
+
+    // store the solution inside the puzzlem
+    // and remove the solution from the stage
+    puzzle.solution = current;
+    this.removeSprite(current, false); // disable undelete
+
+    // refresh
+    this.selectSprite(puzzle);
+};
 IDE_Morph.prototype.exportSprite = function (sprite) {
-    var str = this.serializer.serialize(sprite.allParts());
-    str = '<sprites app="'
-        + this.serializer.app
-        + '" version="'
-        + this.serializer.version
-        + '">'
-        + str
-        + '</sprites>';
-    this.saveXMLAs(str, sprite.name);
+    this.saveXMLAs(sprite.toXMLString(), sprite.name);
 };
 
 IDE_Morph.prototype.exportScriptsPicture = function () {
@@ -3974,28 +6692,28 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
         ctx;
 
     // collect all script pics
-    this.sprites.asArray().forEach(function (sprite) {
-        pics.push(sprite.image);
+    this.sprites.asArray().forEach(sprite => {
+        pics.push(sprite.getImage());
         pics.push(sprite.scripts.scriptsPicture());
-        sprite.customBlocks.forEach(function (def) {
-            pics.push(def.scriptsPicture());
-        });
+        sprite.customBlocks.forEach(def =>
+            pics.push(def.scriptsPicture())
+        );
     });
-    pics.push(this.stage.image);
+    pics.push(this.stage.getImage());
     pics.push(this.stage.scripts.scriptsPicture());
-    this.stage.customBlocks.forEach(function (def) {
-        pics.push(def.scriptsPicture());
-    });
+    this.stage.customBlocks.forEach(def =>
+        pics.push(def.scriptsPicture())
+    );
 
     // collect global block pics
-    this.stage.globalBlocks.forEach(function (def) {
-        pics.push(def.scriptsPicture());
-    });
+    this.stage.globalBlocks.forEach(def =>
+        pics.push(def.scriptsPicture())
+    );
 
-    pics = pics.filter(function (each) {return !isNil(each); });
+    pics = pics.filter(each => !isNil(each));
 
     // determine dimensions of composite
-    pics.forEach(function (each) {
+    pics.forEach(each => {
         w = Math.max(w, each.width);
         h += (each.height);
         h += padding;
@@ -4005,12 +6723,12 @@ IDE_Morph.prototype.exportScriptsPicture = function () {
     ctx = pic.getContext('2d');
 
     // draw all parts
-    pics.forEach(function (each) {
+    pics.forEach(each => {
         ctx.drawImage(each, 0, y);
         y += padding;
         y += each.height;
     });
-    this.saveCanvasAs(pic, this.projectName || localize('Untitled'));
+    this.saveCanvasAs(pic, this.scene.name || localize('Untitled'));
 };
 
 IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
@@ -4042,7 +6760,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
             ul;
         if (names.length) {
             add(localize('Variables'), 'h3');
-            names.forEach(function (name) {
+            names.forEach(name => {
                 /*
                 addImage(
                     SpriteMorph.prototype.variableBlock(name).scriptPic()
@@ -4065,7 +6783,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
                 if (listMorph instanceof ListWatcherMorph) {
                     listMorph.expand();
                 }
-                img = addImage(watcher.fullImageClassic(), li);
+                img = addImage(watcher.fullImage(), li);
                 img.attributes.class = 'script';
             });
         }
@@ -4074,10 +6792,10 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     function addBlocks(definitions) {
         if (definitions.length) {
             add(localize('Blocks'), 'h3');
-            SpriteMorph.prototype.categories.forEach(function (category) {
+            SpriteMorph.prototype.allCategories().forEach(category => {
                 var isFirst = true,
                     ul;
-                definitions.forEach(function (def) {
+                definitions.forEach(def => {
                     var li, blockImg;
                     if (def.category === category) {
                         if (isFirst) {
@@ -4098,11 +6816,11 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
                             li
                         );
                         blockImg.attributes.class = 'script';
-                        def.sortedElements().forEach(function (script) {
+                        def.sortedElements().forEach(script => {
                             var defImg = addImage(
                                 script instanceof BlockMorph ?
                                         script.scriptPic()
-                                                : script.fullImageClassic(),
+                                                : script.fullImage(),
                                 li
                             );
                             defImg.attributes.class = 'script';
@@ -4113,7 +6831,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         }
     }
 
-    pname = this.projectName || localize('untitled');
+    pname = this.scene.name || localize('untitled');
 
     html = new XML_Element('html');
     html.attributes.lang = SnapTranslator.language;
@@ -4174,17 +6892,15 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     }
 
     // project notes
-    notes = Process.prototype.reportTextSplit(this.projectNotes, 'line');
-    notes.asArray().forEach(
-        function (paragraph) {add(paragraph); }
-    );
+    notes = Process.prototype.reportTextSplit(this.scene.notes, 'line');
+    notes.asArray().forEach(paragraph => add(paragraph));
 
     // table of contents
     add(localize('Contents'), 'h4');
     toc = addNode('ul');
 
     // sprites & stage
-    this.sprites.asArray().concat([stage]).forEach(function (sprite) {
+    this.sprites.asArray().concat([stage]).forEach(sprite => {
         var tocEntry = addNode('li', toc),
             scripts = sprite.scripts.sortedElements(),
             cl = sprite.costumes.length(),
@@ -4223,7 +6939,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
             if (sprite.parts.length) {
                 add(localize('Parts'), 'h3');
                 ol = addNode('ul');
-                sprite.parts.forEach(function (part) {
+                sprite.parts.forEach(part => {
                     var li = addNode('li', ol, part.name);
                     addImage(part.thumbnail(new Point(40, 40)), li, true)
                         .attributes.class = 'toc';
@@ -4235,7 +6951,7 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         if (cl > 1 || (sprite.getCostumeIdx() !== cl)) {
             add(localize('Costumes'), 'h3');
             ol = addNode('ol');
-            sprite.costumes.asArray().forEach(function (costume) {
+            sprite.costumes.asArray().forEach(costume => {
                 var li = addNode('li', ol, costume.name);
                 addImage(costume.thumbnail(new Point(40, 40)), li, true)
                     .attributes.class = 'toc';
@@ -4246,9 +6962,9 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         if (sprite.sounds.length()) {
             add(localize('Sounds'), 'h3');
             ol = addNode('ol');
-            sprite.sounds.asArray().forEach(function (sound) {
-                add(sound.name, 'li', ol);
-            });
+            sprite.sounds.asArray().forEach(sound =>
+                add(sound.name, 'li', ol)
+            );
         }
 
         // variables
@@ -4257,10 +6973,10 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
         // scripts
         if (scripts.length) {
             add(localize('Scripts'), 'h3');
-            scripts.forEach(function (script) {
+            scripts.forEach(script => {
                 var img = addImage(script instanceof BlockMorph ?
                         script.scriptPic()
-                                : script.fullImageClassic());
+                                : script.fullImage());
                 img.attributes.class = 'script';
             });
         }
@@ -4294,89 +7010,82 @@ IDE_Morph.prototype.exportProjectSummary = function (useDropShadows) {
     );
 };
 
-IDE_Morph.prototype.openProjectString = function (str) {
-    var msg,
-        myself = this;
+IDE_Morph.prototype.openProjectString = function (
+    str,
+    callback,
+    noPrims,
+    keepRoles,
+    onDone = nop
+) {
+    var msg;
+    if (this.bulkDropInProgress || this.isAddingScenes) {
+        this.rawOpenProjectString(str, noPrims, keepRoles);
+        if (callback) {callback(); }
+        return;
+    }
+    // reset prims
+    SpriteMorph.prototype.initBlocks();
+
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening project...');
-        },
-        function () {nop(); }, // yield (bug in Chrome)
-        function () {
-            myself.rawOpenProjectString(str);
-        },
-        function () {
+        () => msg = this.showMessage('Opening project...'),
+        () => {
+            this.rawOpenProjectString(str, noPrims, keepRoles);
             msg.destroy();
-        }
+            if (callback) {callback(); }
+        },
+        onDone
     ]);
 };
 
-IDE_Morph.prototype.rawOpenProjectString = function (str) {
+IDE_Morph.prototype.rawOpenProjectString = function (str, noPrims, keepRoles) {
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
-    StageMorph.prototype.hiddenPrimitives = {};
-    StageMorph.prototype.codeMappings = {};
-    StageMorph.prototype.codeHeaders = {};
-    StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = true;
-    StageMorph.prototype.enableSublistIDs = false;
-    Process.prototype.enableLiveCoding = false;
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.serializer.openProject(
-                this.serializer.load(str, this),
-                this
+            this.openProject(
+                this.serializer.load(str, this, noPrims, keepRoles)
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.serializer.openProject(
-            this.serializer.load(str, this),
-            this
+        this.openProject(
+            this.serializer.load(str, this, noPrims, keepRoles)
         );
     }
+    this.autoLoadExtensions();
     this.stopFastTracking();
 };
 
 IDE_Morph.prototype.openCloudDataString = function (str) {
     var msg,
-        myself = this,
         size = Math.round(str.length / 1024);
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening project\n' + size + ' KB...');
-        },
-        function () {nop(); }, // yield (bug in Chrome)
-        function () {
-            myself.rawOpenCloudDataString(str);
-        },
-        function () {
+        () => msg = this.showMessage('Opening project\n' + size + ' KB...'),
+        () => {
+            this.rawOpenCloudDataString(str);
             msg.destroy();
         }
     ]);
 };
 
 IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
-    var model;
-    StageMorph.prototype.hiddenPrimitives = {};
-    StageMorph.prototype.codeMappings = {};
-    StageMorph.prototype.codeHeaders = {};
-    StageMorph.prototype.enableCodeMapping = false;
-    StageMorph.prototype.enableInheritance = true;
-    StageMorph.prototype.enableSublistIDs = false;
-    Process.prototype.enableLiveCoding = false;
+    var model,
+        setting = this.isAddingScenes;
+
+    if (this.isAddingNextScene) {
+        this.isAddingScenes = true;
+    }
     if (Process.prototype.isCatchingErrors) {
         try {
             model = this.serializer.parse(str);
             this.serializer.loadMediaModel(model.childNamed('media'));
-            this.serializer.openProject(
+            this.openProject(
                 this.serializer.loadProjectModel(
                     model.childNamed('project'),
                     this,
                     model.attributes.remixID
-                ),
-                this
+                )
             );
         } catch (err) {
             this.showMessage('Load failed: ' + err);
@@ -4384,30 +7093,26 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     } else {
         model = this.serializer.parse(str);
         this.serializer.loadMediaModel(model.childNamed('media'));
-        this.serializer.openProject(
+        this.openProject(
             this.serializer.loadProjectModel(
                 model.childNamed('project'),
                 this,
                 model.attributes.remixID
-            ),
-            this
+            )
         );
     }
+    this.autoLoadExtensions();
     this.stopFastTracking();
+    this.isAddingScenes = setting;
+    this.isAddingNextScene = false;
 };
 
 IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
-    var msg,
-        myself = this;
+    var msg;
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening blocks...');
-        },
-        function () {nop(); }, // yield (bug in Chrome)
-        function () {
-            myself.rawOpenBlocksString(str, name, silently);
-        },
-        function () {
+        () => msg = this.showMessage('Opening blocks...'),
+        () => {
+            this.rawOpenBlocksString(str, name, silently);
             msg.destroy();
         }
     ]);
@@ -4415,23 +7120,37 @@ IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
 
 IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     // name is optional (string), so is silently (bool)
-    var blocks,
-        myself = this;
+    var blocks;
+    this.toggleAppMode(false);
+    this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
-            blocks = this.serializer.loadBlocks(str, myself.stage);
+            blocks = this.serializer.loadBlocks(str, this.stage);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        blocks = this.serializer.loadBlocks(str, myself.stage);
+        blocks = this.serializer.loadBlocks(str, this.stage);
     }
     if (silently) {
-        blocks.forEach(function (def) {
-            def.receiver = myself.stage;
-            myself.stage.globalBlocks.push(def);
-            myself.stage.replaceDoubleDefinitionsFor(def);
+        blocks.global.forEach(def => {
+            def.receiver = this.stage;
+            this.stage.globalBlocks.push(def);
+            this.stage.replaceDoubleDefinitionsFor(def);
         });
+        blocks.local.forEach(def => {
+            def.receiver = this.currentSprite;
+            this.currentSprite.customBlocks.push(def);
+            this.currentSprite.replaceDoubleDefinitionsFor(def);
+        });
+        if (blocks.data) {
+            this.globalVariables.merge(blocks.data);
+            this.flushBlocksCache('variables');
+        }
+        if (blocks.localData) {
+            this.currentSprite.variables.merge(blocks.localData);
+            this.flushBlocksCache('variables');
+        }
         this.flushPaletteCache();
         this.refreshPalette();
         this.showMessage(
@@ -4439,37 +7158,75 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
             2
         );
     } else {
-        new BlockImportDialogMorph(blocks, this.stage, name).popUp();
+        new BlockImportDialogMorph(
+            blocks.global.concat(blocks.local),
+            this.stage,
+            name
+        ).popUp();
     }
+    this.createCategories();
+    this.refreshEmptyCategories();
+    this.createPaletteHandle();
+    this.categories.fixLayout();
+    this.fixLayout();
+    this.autoLoadExtensions();
 };
 
 IDE_Morph.prototype.openSpritesString = function (str) {
-    var msg,
-        myself = this;
+    var msg;
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening sprite...');
-        },
-        function () {nop(); }, // yield (bug in Chrome)
-        function () {
-            myself.rawOpenSpritesString(str);
-        },
-        function () {
+        () => msg = this.showMessage('Opening sprite...'),
+        () => {
+            this.rawOpenSpritesString(str);
             msg.destroy();
-        }
+        },
     ]);
 };
 
 IDE_Morph.prototype.rawOpenSpritesString = function (str) {
+    this.toggleAppMode(false);
+    this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.serializer.loadSprites(str, this);
+            this.deserializeSpritesString(str);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.serializer.loadSprites(str, this);
+        this.deserializeSpritesString(str);
     }
+    this.autoLoadExtensions();
+};
+
+IDE_Morph.prototype.deserializeSpritesString = function (str) {
+    var xml = this.serializer.parse(str, true), // assert version
+        blocksModel = xml.childNamed('blocks'),
+        blocks;
+
+    if (blocksModel) {
+        // load the custom block definitions the sprites depend on
+        blocks = this.serializer.loadBlocksModel(blocksModel, this.stage);
+        blocks.global.forEach(def => {
+            def.receiver = this.stage;
+            this.stage.globalBlocks.push(def);
+            this.stage.replaceDoubleDefinitionsFor(def);
+        });
+        // load global variables which the custom blocks rely on
+        if (blocks.data) {
+            this.globalVariables.merge(blocks.data);
+            this.flushBlocksCache('variables');
+        }
+        // notice, there should not be any local blocks or datain this part of
+        // the model instead we're expecting them inside each sprite
+        this.flushPaletteCache();
+        this.refreshPalette();
+        this.createCategories();
+        this.refreshEmptyCategories();
+        this.createPaletteHandle();
+        this.categories.fixLayout();
+        this.fixLayout();
+    }
+    this.serializer.loadSpritesModel(xml, this);
 };
 
 IDE_Morph.prototype.openMediaString = function (str) {
@@ -4486,66 +7243,131 @@ IDE_Morph.prototype.openMediaString = function (str) {
 };
 
 IDE_Morph.prototype.openScriptString = function (str) {
-    var msg,
-        myself = this;
+    var msg;
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening script...');
-        },
-        function () {nop(); }, // yield (bug in Chrome)
-        function () {
-            myself.rawOpenScriptString(str);
-        },
-        function () {
+        () => msg = this.showMessage('Opening script...'),
+        () => {
+            this.rawOpenScriptString(str);
             msg.destroy();
         }
     ]);
 };
 
-IDE_Morph.prototype.rawOpenScriptString = function (str) {
-    var xml,
-        script,
-        scripts = this.currentSprite.scripts;
+IDE_Morph.prototype.rawOpenScriptString = function (str, silently) {
+    var world = this.world(),
+        script;
 
     if (Process.prototype.isCatchingErrors) {
         try {
-            xml = this.serializer.parse(str, this.currentSprite);
-            script = this.serializer.loadScript(xml, this.currentSprite);
+            script = this.deserializeScriptString(str);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        xml = this.serializer.loadScript(str, this.currentSprite);
-        script = this.serializer.loadScript(xml, this.currentSprite);
+        script = this.deserializeScriptString(str);
     }
-    script.setPosition(this.world().hand.position());
-    scripts.add(script);
-    scripts.adjustBounds();
-    scripts.lastDroppedBlock = script;
-    scripts.recordDrop(
-		{
+    script.fixBlockColor(null, true);
+    this.spriteBar.tabBar.tabTo('scripts');
+    if (silently) {
+        this.currentSprite.scripts.add(script);
+        this.currentSprite.scripts.cleanUp();
+    } else {
+        script.pickUp(world);
+        world.hand.grabOrigin = {
             origin: this.palette,
             position: this.palette.center()
-        }
-    );
+        };
+    }
     this.showMessage(
         'Imported Script.',
+        2
+    );
+    this.autoLoadExtensions();
+};
+
+IDE_Morph.prototype.deserializeScriptString = function (str) {
+    var xml = this.serializer.parse(str, true), // assert version
+        blocksModel = xml.childNamed('blocks'),
+        scriptModel = xml.childNamed('script') || xml,
+        blocks;
+
+    if (blocksModel) {
+        // load the custom block definitions the script depends on
+        blocks = this.serializer.loadBlocksModel(blocksModel, this.stage);
+        blocks.global.forEach(def => {
+            def.receiver = this.stage;
+            this.stage.globalBlocks.push(def);
+            this.stage.replaceDoubleDefinitionsFor(def);
+        });
+        blocks.local.forEach(def => {
+            def.receiver = this.currentSprite;
+            this.currentSprite.customBlocks.push(def);
+            this.currentSprite.replaceDoubleDefinitionsFor(def);
+        });
+        if (blocks.data) {
+            this.globalVariables.merge(blocks.data);
+            this.flushBlocksCache('variables');
+        }
+        if (blocks.localData) {
+            this.currentSprite.variables.merge(blocks.localData);
+            this.flushBlocksCache('variables');
+        }
+        this.flushPaletteCache();
+        this.refreshPalette();
+        this.createCategories();
+        this.refreshEmptyCategories();
+        this.createPaletteHandle();
+        this.categories.fixLayout();
+        this.fixLayout();
+    }
+    return this.serializer.loadScriptModel(scriptModel, this.currentSprite);
+};
+
+IDE_Morph.prototype.openScriptsOnlyString = function (str) {
+    // open scripts that do not contain dependencies such as variable
+    // declarations and custom block definitions (!)
+    var msg;
+    this.nextSteps([
+        () => msg = this.showMessage('Opening scripts...'),
+        () => {
+            this.rawOpenScriptsOnlyString(str);
+            msg.destroy();
+        }
+    ]);
+};
+
+IDE_Morph.prototype.rawOpenScriptsOnlyString = function (str) {
+    // import scripts that do not contain dependencies such as variable
+    // declarations and custom block definitions (!)
+    var object = this.currentSprite,
+        scripts = object.scripts,
+        xml;
+
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            xml = this.serializer.parse(str, true);
+            this.serializer.loadScripts(object, scripts, xml);
+        } catch (err) {
+            this.showMessage('Load failed: ' + err);
+        }
+    } else {
+        xml = this.serializer.parse(str, true);
+        this.serializer.loadScripts(object, scripts, xml);
+    }
+    scripts.changed();
+    this.spriteBar.tabBar.tabTo('scripts');
+    this.showMessage(
+        'Imported Scripts.',
         2
     );
 };
 
 IDE_Morph.prototype.openDataString = function (str, name, type) {
-    var msg,
-        myself = this;
+    var msg;
     this.nextSteps([
-        function () {
-            msg = myself.showMessage('Opening data...');
-        },
-        function () {nop(); }, // yield (bug in Chrome)
-        function () {
-            myself.rawOpenDataString(str, name, type);
-        },
-        function () {
+        () => msg = this.showMessage('Opening data...'),
+        () => {
+            this.rawOpenDataString(str, name, type);
             msg.destroy();
         }
     ]);
@@ -4558,12 +7380,12 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     function newVarName(name) {
         var existing = globals.names(),
             ix = name.indexOf('\('),
-            stem = (ix < 0) ? name : name.substring(0, ix),
+            stem = ((ix < 0) ? name : name.substring(0, ix)).trim(),
             count = 1,
             newName = stem;
         while (contains(existing, newName)) {
             count += 1;
-            newName = stem + '(' + count + ')';
+            newName = stem + ' (' + count + ')';
         }
         return newName;
     }
@@ -4583,10 +7405,8 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
     globals.setVar(vName, data);
     this.currentSprite.toggleVariableWatcher(vName, true); // global
     this.flushBlocksCache('variables');
-    this.currentCategory = 'variables';
-    this.categories.children.forEach(function (each) {
-        each.refresh();
-    });
+    this.currentCategory = this.scene.unifiedPalette ? 'unified' : 'variables';
+    this.categories.refresh();
     this.refreshPalette(true);
     if (data instanceof List) {
         dlg = new TableDialogMorph(data);
@@ -4594,22 +7414,156 @@ IDE_Morph.prototype.rawOpenDataString = function (str, name, type) {
         dlg.createLabel();
         dlg.popUp(this.world());
     }
+    this.autoLoadExtensions();
 };
 
-IDE_Morph.prototype.openProject = function (name) {
+IDE_Morph.prototype.openProjectName = function (name) {
     var str;
     if (name) {
         this.showMessage('opening project\n' + name);
         this.setProjectName(name);
         str = localStorage['-snap-project-' + name];
         this.openProjectString(str);
-        this.setURL('#open:' + str);
     }
 };
 
-IDE_Morph.prototype.setURL = function (str) {
-    // Set the URL to a project's XML contents
-    location.hash = this.projectsInURLs ? str : '';
+IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
+    var scn = project.currentScene || project.scenes.at(1),
+        tutorial;
+    if (this.isAddingScenes) {
+        project.scenes.itemsArray().forEach(scene => {
+            scene.name = this.newSceneName(scene.name, scene);
+            this.scenes.add(scene);
+        });
+    } else {
+        this.escapeTutorial();
+        this.scenes = project.scenes;
+    }
+    this.performerMode = false;
+    if (purgeCustomizedPrims) {
+        scn.blocks = SpriteMorph.prototype.primitiveBlocks();
+    }
+    if (scn.createdFromTemplate) {
+        // launch tutorial, if any exist
+        tutorial = detect(
+            project.scenes.asArray(),
+            each => each.role == 'tutorial'
+        );
+        if (tutorial) {
+            this.launchTutorial(tutorial);
+        }
+    }
+    this.switchToScene(
+        scn,
+        true,  // refresh album
+        null, // msg
+        null, // data
+        true // pause generic WHEN hat blocks
+    );
+};
+
+IDE_Morph.prototype.autoLoadExtensions = function (optionalScene) {
+    // experimental - allow auto-loading extensions from urls specified
+    // in global variables whose names start with "__module__".
+    // Still very much under construction, also needs to be tweaked for
+    // asynch operation
+    var urls = [],
+        context = this;
+    if (optionalScene) { context = optionalScene; }
+    Object.keys(context.globalVariables.vars).forEach(vName => {
+        var val;
+        if (vName.startsWith('__module__')) {
+            val = context.globalVariables.getVar(vName);
+            if (isString(val)) {
+                urls.push(val);
+            }
+        }
+    });
+    urls.forEach(url => {
+        var scriptElement;
+        if (contains(SnapExtensions.scripts, url)) {
+            return;
+        }
+        if (Process.prototype.enableJS || SnapExtensions.urls.some(
+            any => url.indexOf(any) === 0)
+        ) {
+            scriptElement = document.createElement('script');
+            scriptElement.onload = () => {
+                SnapExtensions.scripts.push(url);
+            };
+            document.head.appendChild(scriptElement);
+            scriptElement.src = url;
+        /*
+        } else {
+            // throw new Error(
+                'unlisted extension url:\n"' + url + '"\n' +
+                'JavaScript extensions for Snap!\nare turned off'
+            );
+        */
+        }
+    });
+};
+
+IDE_Morph.prototype.switchToScene = function (
+    scene,
+    refreshAlbum,
+    msg,
+    data,
+    pauseHats
+) {
+    var appMode = this.isAppMode,
+        listeners;
+    if (!scene || !scene.stage) {
+        return;
+    }
+    this.siblings().filter(
+        morph => !morph.nag
+    ).forEach(
+        morph => morph.destroy()
+    );
+    this.scene.captureGlobalSettings();
+    this.scene = scene;
+    this.globalVariables = scene.globalVariables;
+    listeners = this.stage.messageCallbacks;
+    this.stage.destroy();
+    this.add(scene.stage);
+    this.stage = scene.stage;
+    this.stage.messageCallbacks = listeners;
+    this.stage.tutorialMode = null;
+    this.sprites = scene.sprites;
+    if (pauseHats) {
+        this.stage.pauseGenericHatBlocks();
+    }
+    this.createCorral(!refreshAlbum); // keep scenes
+    scene.applyGlobalSettings();
+    this.selectSprite(this.scene.currentSprite, true);
+    this.corral.album.updateSelection();
+    this.hideSpritePanes(this.scene.hideSprites); // this.fixLayout();
+    this.corral.album.contents.children.forEach(function (morph) {
+        if (morph.state) {
+            morph.scrollIntoView();
+        }
+    });
+    if (!SpriteMorph.prototype.allCategories().includes(this.currentCategory)) {
+        this.currentCategory = 'motion';
+    }
+    if (!this.setUnifiedPalette(scene.unifiedPalette)) {
+        this.createCategories();
+        this.createPaletteHandle();
+        this.categories.fixLayout();
+        this.fixLayout();
+        this.flushBlocksCache();
+        this.refreshEmptyCategories();
+        this.currentSprite.palette(this.currentCategory);
+        this.refreshPalette(true);
+    }
+    this.toggleAppMode(appMode && !this.scene.hideSprites);
+    this.controlBar.stopButton.refresh();
+    this.world().keyboardFocus = this.stage;
+    this.autoLoadExtensions();
+    if (msg) {
+        this.stage.fireChangeOfSceneEvent(msg, data);
+    }
 };
 
 IDE_Morph.prototype.saveFileAs = function (
@@ -4675,7 +7629,6 @@ IDE_Morph.prototype.saveFileAs = function (
             world
         );
         dialog.fixLayout();
-        dialog.drawNew();
     }
 };
 
@@ -4715,7 +7668,7 @@ IDE_Morph.prototype.switchToUserMode = function () {
     this.isAutoFill = true;
     this.isDraggable = false;
     this.reactToWorldResize(world.bounds.copy());
-    this.siblings().forEach(function (morph) {
+    this.siblings().forEach(morph => {
         if (morph instanceof DialogBoxMorph) {
             world.add(morph); // bring to front
         } else {
@@ -4724,9 +7677,10 @@ IDE_Morph.prototype.switchToUserMode = function () {
     });
     this.flushBlocksCache();
     this.refreshPalette();
+    this.refreshEmptyCategories();
     // prevent non-DialogBoxMorphs from being dropped
     // onto the World in user-mode
-    world.reactToDropOf = function (morph) {
+    world.reactToDropOf = (morph) => {
         if (!(morph instanceof DialogBoxMorph ||
         		(morph instanceof MenuMorph))) {
             if (world.hand.grabOrigin) {
@@ -4737,7 +7691,6 @@ IDE_Morph.prototype.switchToUserMode = function () {
         }
     };
     this.showMessage('entering user mode', 1);
-
 };
 
 IDE_Morph.prototype.switchToDevMode = function () {
@@ -4752,6 +7705,7 @@ IDE_Morph.prototype.switchToDevMode = function () {
     this.setPosition(world.position().add(20));
     this.flushBlocksCache();
     this.refreshPalette();
+    this.refreshEmptyCategories();
     // enable non-DialogBoxMorphs to be dropped
     // onto the World in dev-mode
     delete world.reactToDropOf;
@@ -4765,18 +7719,18 @@ IDE_Morph.prototype.switchToDevMode = function () {
 
 IDE_Morph.prototype.flushBlocksCache = function (category) {
     // if no category is specified, the whole cache gets flushed
-    if (category) {
-        this.stage.blocksCache[category] = null;
-        this.stage.children.forEach(function (m) {
+    if (category && category !== 'unified') {
+        this.stage.primitivesCache[category] = null;
+        this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
-                m.blocksCache[category] = null;
+                m.primitivesCache[category] = null;
             }
         });
     } else {
-        this.stage.blocksCache = {};
-        this.stage.children.forEach(function (m) {
+        this.stage.primitivesCache = {};
+        this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
-                m.blocksCache = {};
+                m.primitivesCache = {};
             }
         });
     }
@@ -4787,19 +7741,27 @@ IDE_Morph.prototype.flushPaletteCache = function (category) {
     // if no category is specified, the whole cache gets flushed
     if (category) {
         this.stage.paletteCache[category] = null;
-        this.stage.children.forEach(function (m) {
+        this.stage.paletteCache.unified = null;
+        this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.paletteCache[category] = null;
+                m.paletteCache.unified = null;
             }
         });
     } else {
         this.stage.paletteCache = {};
-        this.stage.children.forEach(function (m) {
+        this.stage.children.forEach(m => {
             if (m instanceof SpriteMorph) {
                 m.paletteCache = {};
             }
         });
     }
+    this.stage.categoriesCache = null;
+    this.stage.children.forEach(m => {
+        if (m instanceof SpriteMorph) {
+            m.categoriesCache = null;
+        }
+    });
 };
 
 IDE_Morph.prototype.toggleZebraColoring = function () {
@@ -4812,44 +7774,36 @@ IDE_Morph.prototype.toggleZebraColoring = function () {
     }
 
     // select all scripts:
-    this.stage.children.concat(this.stage).forEach(function (morph) {
+    this.stage.children.concat(this.stage).forEach(morph => {
         if (isSnapObject(morph)) {
             scripts = scripts.concat(
-                morph.scripts.children.filter(function (morph) {
-                    return morph instanceof BlockMorph;
-                })
+                morph.scripts.children.filter(morph =>
+                    morph instanceof BlockMorph
+                )
             );
         }
     });
 
     // force-update all scripts:
-    scripts.forEach(function (topBlock) {
-        topBlock.fixBlockColor(null, true);
-    });
+    scripts.forEach(topBlock =>
+        topBlock.fixBlockColor(null, true)
+    );
 };
 
 IDE_Morph.prototype.toggleDynamicInputLabels = function () {
-    var projectData;
     SyntaxElementMorph.prototype.dynamicInputLabels =
         !SyntaxElementMorph.prototype.dynamicInputLabels;
-    if (Process.prototype.isCatchingErrors) {
-        try {
-            projectData = this.serializer.serialize(this.stage);
-        } catch (err) {
-            this.showMessage('Serialization failed: ' + err);
-        }
-    } else {
-        projectData = this.serializer.serialize(this.stage);
-    }
-    SpriteMorph.prototype.initBlocks();
-    this.spriteBar.tabBar.tabTo('scripts');
-    this.createCategories();
-    this.createCorralBar();
-    this.openProjectString(projectData);
+    this.refreshIDE();
 };
 
 IDE_Morph.prototype.toggleBlurredShadows = function () {
     window.useBlurredShadows = !useBlurredShadows;
+    this.rerender();
+    if (window.useBlurredShadows) {
+        this.removeSetting('solidshadow');
+    } else {
+        this.saveSetting('solidshadow', false);
+    }
 };
 
 IDE_Morph.prototype.toggleLongFormInputDialog = function () {
@@ -4877,11 +7831,6 @@ IDE_Morph.prototype.togglePreferEmptySlotDrops = function () {
         !ScriptsMorph.prototype.isPreferringEmptySlots;
 };
 
-IDE_Morph.prototype.toggleVirtualKeyboard = function () {
-    MorphicPreferences.useVirtualKeyboard =
-        !MorphicPreferences.useVirtualKeyboard;
-};
-
 IDE_Morph.prototype.toggleInputSliders = function () {
     MorphicPreferences.useSliderForInput =
         !MorphicPreferences.useSliderForInput;
@@ -4890,6 +7839,20 @@ IDE_Morph.prototype.toggleInputSliders = function () {
 IDE_Morph.prototype.toggleSliderExecute = function () {
     ArgMorph.prototype.executeOnSliderEdit =
         !ArgMorph.prototype.executeOnSliderEdit;
+};
+
+IDE_Morph.prototype.togglePerformerMode = function () {
+    this.setPerformerModeTo(!this.performerMode);
+};
+
+IDE_Morph.prototype.setPerformerModeTo = function (bool = false) {
+    this.performerMode = bool;
+    if (!this.performerMode) {
+        this.setStageExtent(new Point(480, 360));
+    }
+    this.buildPanes();
+    this.fixLayout();
+    this.selectSprite(this.currentSprite);
 };
 
 IDE_Morph.prototype.setEmbedMode = function () {
@@ -4922,6 +7885,29 @@ IDE_Morph.prototype.setEmbedMode = function () {
     this.fixLayout();
 };
 
+IDE_Morph.prototype.userSetPerformerModeScale = function () {
+   new DialogBoxMorph(
+        this,
+        num => {
+            this.performerScale = Math.min(Math.max(+num, 1), 32);
+            this.parentThatIsA(IDE_Morph).fixLayout();
+        },
+        this
+    ).prompt(
+        "Performer mode scale",
+        this.performerScale.toString(),
+        this.world(),
+        null, // pic
+        null, // choices
+        null, // read only
+        true, // numeric
+        1,    // slider min
+        32,   // slider max
+        nop,  // slider action
+        0     // decimals
+    );
+};
+
 IDE_Morph.prototype.toggleAppMode = function (appMode) {
     var world = this.world(),
         elements = [
@@ -4943,7 +7929,6 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
 
     this.isAppMode = isNil(appMode) ? !this.isAppMode : appMode;
 
-    Morph.prototype.trackChanges = false;
     if (this.isAppMode) {
 		this.wasSingleStepping = Process.prototype.enableSingleStepping;
 		if (this.wasSingleStepping) {
@@ -4952,16 +7937,16 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         this.setColor(this.appModeColor);
         this.controlBar.setColor(this.color);
         this.controlBar.appModeButton.refresh();
-        elements.forEach(function (e) {
-            e.hide();
-        });
-        world.children.forEach(function (morph) {
+        elements.forEach(e =>
+            e.hide()
+        );
+        world.children.forEach(morph => {
             if (morph instanceof DialogBoxMorph) {
                 morph.hide();
             }
         });
-        if (world.keyboardReceiver instanceof ScriptFocusMorph) {
-            world.keyboardReceiver.stopEditing();
+        if (world.keyboardFocus instanceof ScriptFocusMorph) {
+            world.keyboardFocus.stopEditing();
         }
     } else {
         if (this.wasSingleStepping && !Process.prototype.enableSingleStepping) {
@@ -4969,26 +7954,26 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         }
         this.setColor(this.backgroundColor);
         this.controlBar.setColor(this.frameColor);
-        elements.forEach(function (e) {
-            e.show();
-        });
+        elements.forEach(e =>
+            e.show()
+        );
         this.stage.setScale(1);
         // show all hidden dialogs
-        world.children.forEach(function (morph) {
+        world.children.forEach(morph => {
             if (morph instanceof DialogBoxMorph) {
                 morph.show();
             }
         });
         // prevent scrollbars from showing when morph appears
-        world.allChildren().filter(function (c) {
-            return c instanceof ScrollFrameMorph;
-        }).forEach(function (s) {
-            s.adjustScrollBars();
-        });
+        world.allChildren().filter(c =>
+            c instanceof ScrollFrameMorph
+        ).forEach(s =>
+            s.adjustScrollBars()
+        );
         // prevent rotation and draggability controls from
         // showing for the stage
         if (this.currentSprite === this.stage) {
-            this.spriteBar.children.forEach(function (child) {
+            this.spriteBar.children.forEach(child => {
                 if (child instanceof PushButtonMorph) {
                     child.hide();
                 }
@@ -4996,8 +7981,19 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
         }
         // update undrop controls
         this.currentSprite.scripts.updateToolbar();
+        // hide hidden panes
+        if (this.config.noSpriteEdits) {
+            this.spriteBar.hide();
+            this.stageHandle.hide();
+            this.corralBar.hide();
+            this.corral.hide();
+        }
+        // respect "blocks only" setting
+        if (this.config.noSprites) {
+            this.controlBar.stageSizeButton.hide();
+        }
     }
-    this.setExtent(this.world().extent()); // resume trackChanges
+    this.setExtent(this.world().extent());
 };
 
 IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
@@ -5015,19 +8011,24 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     function zoomTo(targetRatio) {
         myself.isSmallStage = true;
         world.animations.push(new Animation(
-            function (ratio) {
+            ratio => {
                 myself.stageRatio = ratio;
                 myself.setExtent(world.extent());
             },
-            function () {
-                return myself.stageRatio;
-            },
+            () => myself.stageRatio,
             targetRatio - myself.stageRatio,
             msecs,
             null, // easing
-            function () {
+            () => {
                 myself.isSmallStage = (targetRatio !== 1);
                 myself.controlBar.stageSizeButton.refresh();
+                /* // save the stage size as setting, commented out for now
+                if (myself.stageRatio === 1) {
+                    myself.removeSetting('stagescale');
+                } else {
+                    myself.saveSetting('stagescale', myself.stageRatio);
+                }
+                */
             }
         ));
     }
@@ -5054,31 +8055,79 @@ IDE_Morph.prototype.toggleStageSize = function (isSmall, forcedRatio) {
     }
 };
 
+IDE_Morph.prototype.toggleUnifiedPalette = function () {
+    this.setUnifiedPalette(!this.scene.unifiedPalette);
+    this.recordUnsavedChanges();
+};
+
+IDE_Morph.prototype.setUnifiedPalette = function (bool) {
+    // answer true or false indicating whether the palette
+    // has already been refreshed by this operation
+    if (this.scene.unifiedPalette === bool &&
+        (bool === (this.currentCategory === 'unified'))
+    ) {
+        return false;
+    }
+    this.scene.unifiedPalette = bool;
+    this.currentCategory = bool ? 'unified' : 'motion';
+    this.createCategories();
+    this.createPaletteHandle();
+    this.categories.fixLayout();
+    this.fixLayout();
+    this.flushBlocksCache();
+    this.refreshEmptyCategories();
+    this.currentSprite.palette(this.currentCategory);
+    this.refreshPalette(true);
+    return true;
+};
+
+IDE_Morph.prototype.toggleCategoryNames = function () {
+    this.scene.showCategories = !this.scene.showCategories;
+    this.flushBlocksCache();
+    this.refreshPalette();
+    this.recordUnsavedChanges();
+};
+
+IDE_Morph.prototype.togglePaletteButtons = function () {
+    this.scene.showPaletteButtons = !this.scene.showPaletteButtons;
+    this.flushBlocksCache();
+    this.refreshPalette();
+    this.recordUnsavedChanges();
+};
+
 IDE_Morph.prototype.setPaletteWidth = function (newWidth) {
     var msecs = this.isAnimating ? 100 : 0,
-        world = this.world(),
-        myself = this;
+        world = this.world();
 
     world.animations.push(new Animation(
-        function (newWidth) {
-            myself.paletteWidth = newWidth;
-            myself.setExtent(world.extent());
+        newWidth => {
+            this.paletteWidth = newWidth;
+            this.setExtent(world.extent());
         },
-        function () {
-            return myself.paletteWidth;
-        },
-        newWidth - myself.paletteWidth,
+        () => this.paletteWidth,
+        newWidth - this.paletteWidth,
         msecs
     ));
 };
 
 IDE_Morph.prototype.createNewProject = function () {
-    var myself = this;
-    this.confirm(
-        'Replace the current project with a new one?',
-        'New Project',
-        function () {myself.newProject(); }
-    );
+    this.backup(() => this.newProject());
+};
+
+IDE_Morph.prototype.addScene = function () {
+    var setting = this.isAddingScenes;
+    if (location.protocol === 'file:') {
+        // bypass the project import dialog and directly pop up
+        // the local file picker.
+        // this should not be necessary, we should be able
+        // to access the cloud even when running Snap! locally
+        // to be worked on.... (jens)
+        this.isAddingScenes = true;
+        this.importLocalFile();
+        this.isAddingScenes = setting;
+        return;
+    }
+    new ProjectDialogMorph(this, 'add').popUp();
 };
 
 IDE_Morph.prototype.openProjectsBrowser = function () {
@@ -5095,14 +8144,15 @@ IDE_Morph.prototype.openProjectsBrowser = function () {
 };
 
 IDE_Morph.prototype.saveProjectsBrowser = function () {
-    var myself = this;
-
     // temporary hack - only allow exporting projects to disk
     // when running Snap! locally without a web server
     if (location.protocol === 'file:') {
-        this.prompt('Export Project As...', function (name) {
-            myself.exportProject(name, false);
-        }, null, 'exportProject');
+        this.prompt(
+            'Export Project As...',
+            name => this.exportProject(name),
+            null,
+            'exportProject'
+        );
         return;
     }
 
@@ -5116,111 +8166,489 @@ IDE_Morph.prototype.saveProjectsBrowser = function () {
 
 IDE_Morph.prototype.microphoneMenu = function () {
     var menu = new MenuMorph(this),
-        world = this.world(),
-        pos = this.controlBar.settingsButton.bottomLeft(),
         resolutions = ['low', 'normal', 'high', 'max'],
-        microphone = this.stage.microphone;
+        microphone = this.stage.microphone,
+        tick = new SymbolMorph(
+            'tick',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        on = new SymbolMorph(
+            'checkedBox',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        empty = tick.fullCopy();
 
+    empty.render = nop;
     if (microphone.isReady) {
         menu.addItem(
-            '\u2611 ' + localize('Microphone'),
-            function () {microphone.stop(); }
+            [
+                on,
+                localize('Microphone')
+            ],
+            () => microphone.stop()
         );
         menu.addLine();
     }
-    resolutions.forEach(function (res, i) {
+    resolutions.forEach((res, i) => {
         menu.addItem(
-            (microphone.resolution === i + 1 ? '\u2713 ' : '    ') +
-                localize(res),
-            function () {
-                microphone.setResolution(i + 1);
-            }
+            [
+                microphone.resolution === i + 1 ? tick : empty,
+                localize(res)
+            ],
+            () => microphone.setResolution(i + 1)
         );
     });
-    menu.popup(world, pos);
+    return menu;
 };
 
 // IDE_Morph localization
 
 IDE_Morph.prototype.languageMenu = function () {
     var menu = new MenuMorph(this),
-        world = this.world(),
-        pos = this.controlBar.settingsButton.bottomLeft(),
-        myself = this;
-    SnapTranslator.languages().forEach(function (lang) {
+        tick = new SymbolMorph(
+            'tick',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        empty = tick.fullCopy();
+
+    empty.render = nop;
+    SnapTranslator.languages().forEach(lang =>
         menu.addItem(
-            (SnapTranslator.language === lang ? '\u2713 ' : '    ') +
-                SnapTranslator.languageName(lang),
-            function () {
-                myself.loadNewProject = false;
-                myself.setLanguage(lang);
+            [
+                SnapTranslator.language === lang ? tick : empty,
+                SnapTranslator.languageName(lang)
+            ],
+            () => {
+                this.loadNewProject = false;
+                this.setLanguage(
+                    lang,
+                    () => this.stage.fireUserEditEvent(
+                        this.currentSprite.name,
+                        ['project', 'language', lang],
+                        this.version
+                    )
+                );
             }
-        );
-    });
-    menu.popup(world, pos);
+        )
+    );
+    return menu;
 };
 
 IDE_Morph.prototype.setLanguage = function (lang, callback, noSave) {
     var translation = document.getElementById('language'),
-        src = this.resourceURL('locale', 'lang-' + lang + '.js'),
-        myself = this;
+        src;
     SnapTranslator.unload();
     if (translation) {
         document.head.removeChild(translation);
     }
+    if (!(lang in SnapTranslator.dict)) {
+        if (lang.includes('_') && lang.split('_')[0] in SnapTranslator.dict) {
+            lang = lang.split('_')[0];
+        } else {
+            lang = 'en';
+        }
+    }
     if (lang === 'en') {
         return this.reflectLanguage('en', callback, noSave);
     }
+
+    src = this.resourceURL('locale', 'lang-' + lang + '.js');
     translation = document.createElement('script');
     translation.id = 'language';
-    translation.onload = function () {
-        myself.reflectLanguage(lang, callback, noSave);
-    };
+    translation.onload = () =>
+        this.reflectLanguage(lang, callback, noSave);
     document.head.appendChild(translation);
     translation.src = src;
 };
 
 IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
-    var projectData,
+    var projectData, onComplete, name, tutorial,
         urlBar = location.hash;
     SnapTranslator.language = lang;
     if (!this.loadNewProject) {
+        if (this.scene.createdFromTemplate) {
+            name = this.scene.name;
+            tutorial = !isNil(this.tutorial);
+            this.scene.createdFromTemplate = false;
+            onComplete = () => {
+                this.scene.createdFromTemplate = true;
+                this.setProjectName(name, true);
+                if (tutorial) {
+                    this.launchProjectTutorial();
+                }
+            };
+        }
+        this.scene.captureGlobalSettings();
         if (Process.prototype.isCatchingErrors) {
             try {
-                projectData = this.serializer.serialize(this.stage);
+                projectData = this.serializer.serialize(
+                    new Project(this.scenes, this.scene, true)
+                );
             } catch (err) {
                 this.showMessage('Serialization failed: ' + err);
             }
         } else {
-            projectData = this.serializer.serialize(this.stage);
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene, true)
+            );
         }
     }
     SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
+    this.refreshEmptyCategories();
     this.createCorralBar();
+    this.refreshCustomizedPalette();
     this.fixLayout();
     if (this.loadNewProject) {
         this.newProject();
         location.hash = urlBar;
+        if (callback) {callback.call(this); }
     } else {
-        this.openProjectString(projectData);
+        this.openProjectString(
+            projectData,
+            callback,
+            null,
+            true, // keepRoles
+            onComplete // restore name and template origin
+        );
     }
     if (!noSave) {
         this.saveSetting('language', lang);
     }
-    if (callback) {callback.call(this); }
+};
+
+// IDE_Morph design settings
+
+IDE_Morph.prototype.looksMenu = function () {
+    var menu = new MenuMorph(this),
+        world = this.world(),
+        shiftClicked = (world.currentKey === 16),
+        tick = new SymbolMorph(
+            'tick',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        empty = tick.fullCopy(),
+        on = new SymbolMorph(
+            'checkedBox',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        off = new SymbolMorph(
+            'rectangle',
+            MorphicPreferences.menuFontSize * 0.75
+        );
+
+    menu.addPreference = function (label, toggle, test, onHint, offHint, hide) {
+        if (!hide || shiftClicked) {
+            menu.addItem(
+                [
+                    (test? on : off),
+                    localize(label)
+                ],
+                toggle,
+                test ? onHint : offHint,
+                hide ? new Color(100, 0, 0) : null
+            );
+        }
+    };
+
+    empty.render = nop;
+
+    menu.addItem(
+        [
+            MorphicPreferences.isFlat || IDE_Morph.prototype.isBright ? empty
+                : tick,
+            localize('Default')
+        ],
+        this.defaultLooks
+    );
+    menu.addItem(
+        [
+            MorphicPreferences.isFlat && IDE_Morph.prototype.isBright ? tick
+                : empty,
+            localize('Flat Bright')
+        ],
+        this.flatBrightLooks
+    );
+    menu.addLine();
+    menu.addPreference(
+        'Flat design',
+        () => {
+            if (MorphicPreferences.isFlat) {
+                return this.defaultDesign();
+            }
+            this.flatDesign();
+        },
+        MorphicPreferences.isFlat,
+        'uncheck for default\nGUI design',
+        'check for alternative\nGUI design',
+        false
+    );
+    menu.addPreference(
+        'Bright theme',
+        () => {
+            if (IDE_Morph.prototype.isBright) {
+                return this.defaultTheme();
+            }
+            this.brightTheme();
+        },
+        IDE_Morph.prototype.isBright,
+        'uncheck for default\nGUI theme',
+        'check for alternative\nGUI theme',
+        false
+    );
+    menu.addLine();
+    menu.addItem('Fade blocks...', 'userFadeBlocks');
+    menu.addItem('Afterglow blocks...', 'userSetBlocksAfterglow');
+    menu.addItem('Zoom blocks...', 'userSetBlocksScale');
+    menu.addLine();
+    menu.addPreference(
+        'Long form input dialog',
+        'toggleLongFormInputDialog',
+        InputSlotDialogMorph.prototype.isLaunchingExpanded,
+        'uncheck to use the input\ndialog in short form',
+        'check to always show slot\ntypes in the input dialog'
+    );
+    menu.addPreference(
+        'Plain prototype labels',
+        'togglePlainPrototypeLabels',
+        BlockLabelPlaceHolderMorph.prototype.plainLabel,
+        'uncheck to always show (+) symbols\nin block prototype labels',
+        'check to hide (+) symbols\nin block prototype labels'
+    );
+    menu.addPreference(
+        'Clicking sound',
+        () => {
+            BlockMorph.prototype.toggleSnapSound();
+            if (BlockMorph.prototype.snapSound) {
+                this.saveSetting('click', true);
+            } else {
+                this.removeSetting('click');
+            }
+        },
+        BlockMorph.prototype.snapSound,
+        'uncheck to turn\nblock clicking\nsound off',
+        'check to turn\nblock clicking\nsound on'
+    );
+    menu.addPreference(
+        'Blocks only',
+        () => this.hideSpritePanes(!this.scene.hideSprites),
+        this.scene.hideSprites,
+        'uncheck to show\nthe stage and\nsprite editor panes',
+        'check to hide\nthe stage and \nsprite editor panes'
+    );
+    return menu;
+};
+
+IDE_Morph.prototype.templateSettingsMenu = function () {
+    var menu = new MenuMorph(this),
+        settings = ['lang', 'zoom', 'scale', 'fade', 'flat', 'bright'],
+        tick = new SymbolMorph(
+            'tick',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        empty = tick.fullCopy(),
+        on = new SymbolMorph(
+            'checkedBox',
+            MorphicPreferences.menuFontSize * 0.75
+        ),
+        off = new SymbolMorph(
+            'rectangle',
+            MorphicPreferences.menuFontSize * 0.75
+        );
+
+    menu.addPreference = function (label, toggle, test, onHint, offHint) {
+        menu.addItem(
+            [
+                (test? on : off),
+                localize(label)
+            ],
+            toggle,
+            test ? onHint : offHint
+        );
+    };
+
+    menu.selectAll = () => settings.map(each =>
+        this.scene.template[each] = null);
+    menu.selectNone = () => settings.map(each =>
+        delete this.scene.template[each]);
+    menu.allSelected = () => settings.every(each =>
+        this.scene.template[each] !== undefined);
+    menu.noneSelected = () => settings.every(each =>
+        this.scene.template[each] === undefined);
+
+    empty.render = nop;
+
+    menu.addItem(
+        [
+            menu.allSelected() ? tick : empty,
+            localize('all')
+        ],
+        menu.selectAll
+    );
+    menu.addItem(
+        [
+            menu.noneSelected() ? tick : empty,
+            localize('none')
+        ],
+        menu.selectNone
+    );
+
+    menu.addLine();
+
+    menu.addPreference(
+        'Language',
+        () => {
+            if (this.scene.template.lang === undefined) {
+                this.scene.template.lang = null;
+            } else {
+                delete this.scene.template.lang;
+            }
+        },
+        this.scene.template.lang !== undefined
+    );
+    menu.addPreference(
+        'Magnification',
+        () => {
+            if (this.scene.template.zoom === undefined) {
+                this.scene.template.zoom = null;
+            } else {
+                delete this.scene.template.zoom;
+            }
+        },
+        this.scene.template.zoom !== undefined
+    );
+    menu.addPreference(
+        'Flat design',
+        () => {
+            if (this.scene.template.flat === undefined) {
+                this.scene.template.flat = null;
+            } else {
+                delete this.scene.template.flat;
+            }
+        },
+        this.scene.template.flat !== undefined
+    );
+    menu.addPreference(
+        'Bright theme',
+        () => {
+            if (this.scene.template.bright === undefined) {
+                this.scene.template.bright = null;
+            } else {
+                delete this.scene.template.bright;
+            }
+        },
+        this.scene.template.bright !== undefined
+    );
+    menu.addPreference(
+        'Fade blocks',
+        () => {
+            if (this.scene.template.fade === undefined) {
+                this.scene.template.fade = null;
+            } else {
+                delete this.scene.template.fade;
+            }
+        },
+        this.scene.template.fade !== undefined
+    );
+    menu.addPreference(
+        'Zoom blocks',
+        () => {
+            if (this.scene.template.scale === undefined) {
+                this.scene.template.scale = null;
+            } else {
+                delete this.scene.template.scale;
+            }
+        },
+        this.scene.template.scale !== undefined
+    );
+    return menu;
+};
+
+// IDE_Morph zoom
+
+IDE_Morph.prototype.userZoom = function () {
+    var max = Math.floor(this.maxZoom()),
+        options = {},
+        scales = [100, 110, 125, 150, 175, 200, 250, 300, 400, 500, max].filter(
+            n => n <= max),
+        initial = ZOOM,
+        ratio = this.stageRatio,
+        last = ZOOM * 100,
+        update,
+        dlg;
+    scales.forEach(n => options[n + '%'] = n);
+    dlg = new DialogBoxMorph(
+        this,
+        'setZoom'
+    ).withKey('zoom');
+    /*
+    if (MorphicPreferences.isTouchDevice) {
+        dlg.isDraggable = false;
+    }
+    */
+    dlg.cancel = () => {
+        // restore initial zoom and stage scale
+        this.setZoom(initial * 100);
+        this.stageRatio = ratio;
+        this.isSmallStage = (this.stageRatio !== 1);
+        this.controlBar.stageSizeButton.refresh();
+        this.setExtent(this.world().extent());
+        dlg.destroy();
+    };
+    update = n => {
+        var normal = dlg.position().divideBy(last / 100),
+            target = normal.multiplyBy(n / 100),
+            delta = dlg.position().subtract(target);
+        this.setZoom(n);
+        dlg.moveBy(delta);
+        last = n;
+    };
+    dlg.prompt(
+        'Magnification',
+        Math.round(ZOOM * 100).toString(),
+        this.world(),
+        null, // pic
+        options,
+        false, // read only?
+        true, // numeric
+        100, // slider min
+        max, // slider max
+        update, // slider action
+        2 // decimals
+    );
+};
+
+IDE_Morph.prototype.setZoom = function (percent, noSave) {
+    var wrld = this.world();
+    this.controlBar.stageSizeButton.refresh();
+    this.world().zoom(Math.max(Math.min(percent, this.maxZoom()), 100) / 100);
+    this.siblings().forEach(morph => morph.keepWithin(wrld));
+    if (noSave) {return; }
+    if (ZOOM > 1) {
+        this.saveSetting('magnification', ZOOM);
+    } else {
+        this.removeSetting('magnification');
+    }
+};
+
+IDE_Morph.prototype.maxZoom = function () {
+    var wc = this.world().worldCanvas;
+    return Math.min(
+        wc.width / this.minWidth(),
+        wc.height / this.minHeight()
+    ) * 100;
 };
 
 // IDE_Morph blocks scaling
 
 IDE_Morph.prototype.userSetBlocksScale = function () {
-    var myself = this,
-        scrpt,
+    var scrpt,
         blck,
         shield,
         sample,
-        action;
+        action,
+        dlg;
 
     scrpt = new CommandBlockMorph();
     scrpt.color = SpriteMorph.prototype.blockColor.motion;
@@ -5241,7 +8669,10 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     sample = new FrameMorph();
     sample.acceptsDrops = false;
     sample.color = IDE_Morph.prototype.groupColor;
-    sample.cachedTexture = this.scriptsPaneTexture;
+    if (!MorphicPreferences.isFlat &&
+            SyntaxElementMorph.prototype.alpha > 0.8) {
+        sample.cachedTexture = this.scriptsTexture();
+    }
     sample.setExtent(new Point(250, 180));
     scrpt.setPosition(sample.position().add(10));
     sample.add(scrpt);
@@ -5252,30 +8683,22 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     shield.setPosition(sample.position());
     sample.add(shield);
 
-    action = function (num) {
-    /*
-        var c;
-        blck.setScale(num);
-        blck.drawNew();
-        blck.setSpec(blck.blockSpec);
-        c = blck.inputs()[0];
-        c.setScale(num);
-        c.nestedBlock(scrpt);
-    */
-        scrpt.blockSequence().forEach(function (block) {
+    action = (num) => {
+        scrpt.blockSequence().forEach(block => {
             block.setScale(num);
-            block.drawNew();
             block.setSpec(block.blockSpec);
         });
-        scrpt.changed();
+        scrpt.fullChanged();
     };
 
-    new DialogBoxMorph(
+    dlg = new DialogBoxMorph(
         null,
-        function (num) {
-            myself.setBlocksScale(Math.min(num, 12));
-        }
-    ).withKey('zoomBlocks').prompt(
+        num => this.setBlocksScale(Math.min(num, 12))
+    ).withKey('zoomBlocks');
+    if (MorphicPreferences.isTouchDevice) {
+        dlg.isDraggable = false;
+    }
+    dlg.prompt(
         'Zoom blocks',
         SyntaxElementMorph.prototype.scale.toString(),
         this.world(),
@@ -5297,26 +8720,200 @@ IDE_Morph.prototype.userSetBlocksScale = function () {
     );
 };
 
-IDE_Morph.prototype.setBlocksScale = function (num) {
-    var projectData;
+IDE_Morph.prototype.setBlocksScale = function (num, noSave) {
+    var projectData, onComplete, name, tutorial;
+    if (this.scene.createdFromTemplate) {
+        name = this.scene.name;
+        tutorial = !isNil(this.tutorial);
+        this.scene.createdFromTemplate = false;
+        onComplete = () => {
+            this.scene.createdFromTemplate = true;
+            this.setProjectName(name);
+            if (tutorial) {
+                this.launchProjectTutorial();
+            }
+        };
+    }
+    this.scene.captureGlobalSettings();
     if (Process.prototype.isCatchingErrors) {
         try {
-            projectData = this.serializer.serialize(this.stage);
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene, true)
+            );
         } catch (err) {
             this.showMessage('Serialization failed: ' + err);
         }
     } else {
-        projectData = this.serializer.serialize(this.stage);
+        projectData = this.serializer.serialize(
+            new Project(this.scenes, this.scene, true)
+        );
     }
+    SpriteMorph.prototype.initBlocks();
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
-    SpriteMorph.prototype.initBlocks();
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
+    this.refreshEmptyCategories();
     this.createCorralBar();
+    this.refreshCustomizedPalette();
     this.fixLayout();
-    this.openProjectString(projectData);
-    this.saveSetting('zoom', num);
+    this.openProjectString(
+            projectData,
+            null,
+            null,
+            true,  // keepRoles
+            onComplete // restore name and template origin
+        );
+    if (!noSave) {
+        this.saveSetting('zoom', num);
+    }
+};
+
+// IDE_Morph blocks fading
+
+IDE_Morph.prototype.userFadeBlocks = function () {
+    var dlg,
+        initial = 100 - (SyntaxElementMorph.prototype.alpha * 100);
+
+    dlg = new DialogBoxMorph(
+        null,
+        num => this.setBlockTransparency(num, true) // and save setting
+    ).withKey('fadeBlocks');
+    if (MorphicPreferences.isTouchDevice) {
+        dlg.isDraggable = false;
+    }
+
+    dlg.cancel = () => {
+        this.setBlockTransparency(initial);
+        dlg.destroy();
+    };
+
+    dlg.prompt(
+        'Fade blocks',
+        initial.toString(),
+        this.world(),
+        null, // pic
+        {
+            'block-solid (0)' : 0,
+            'medium (50)' : 50,
+            'light (70)' : 70,
+            'shimmering (80)' : 80,
+            'elegant (90)' : 90,
+            'subtle (95)' : 95,
+            'text-only (100)' : 100
+        },
+        false, // read only?
+        true, // numeric
+        0, // slider min
+        100, // slider max
+        num => this.setBlockTransparency(num), // slider action
+        0 // decimals
+    );
+};
+
+IDE_Morph.prototype.setBlockTransparency = function (num, save) {
+    SyntaxElementMorph.prototype.setAlphaScaled(100 - num);
+    this.changed();
+    if (save) {
+        if (num === 0) {
+            this.removeSetting('fade');
+        } else {
+            this.saveSetting('fade', num);
+        }
+    }
+};
+
+// IDE_Morph blocks scaling
+
+IDE_Morph.prototype.userSetBlocksAfterglow = function () {
+    var glow = ThreadManager.prototype.afterglow,
+        scrpt,
+        blck,
+        shield,
+        sample,
+        action,
+        timeout,
+        dlg;
+
+    scrpt = new CommandBlockMorph();
+    scrpt.color = SpriteMorph.prototype.blockColor.motion;
+    scrpt.setSpec(localize('build'));
+    blck = new CommandBlockMorph();
+    blck.color = SpriteMorph.prototype.blockColor.sound;
+    blck.setSpec(localize('your own'));
+    scrpt.nextBlock(blck);
+    blck = new CommandBlockMorph();
+    blck.color = SpriteMorph.prototype.blockColor.operators;
+    blck.setSpec(localize('blocks'));
+    scrpt.bottomBlock().nextBlock(blck);
+
+    sample = new FrameMorph();
+    sample.acceptsDrops = false;
+    sample.color = IDE_Morph.prototype.groupColor;
+    if (!MorphicPreferences.isFlat &&
+            SyntaxElementMorph.prototype.alpha > 0.8) {
+        sample.cachedTexture = this.scriptsTexture();
+    }
+    sample.setExtent(new Point(250, 180));
+    scrpt.setPosition(sample.position().add(10));
+    sample.add(scrpt);
+
+    shield = new Morph();
+    shield.alpha = 0;
+    shield.setExtent(sample.extent());
+    shield.setPosition(sample.position());
+    shield.mouseClickLeft = () => action(glow);
+    sample.add(shield);
+
+    action = (num) => {
+        glow = num;
+        if (!isNil(timeout)) {
+            clearTimeout(timeout);
+        }
+        if (!scrpt.getHighlight()) {
+            scrpt.addHighlight();
+        }
+        timeout = setTimeout(
+            () => scrpt.removeHighlight(),
+            num * 16,67
+        );
+    };
+
+    dlg = new DialogBoxMorph(
+        null,
+        num => this.setBlocksAfterglow(Math.max(0, Math.min(num, 20)))
+    ).withKey('afterglow');
+    if (MorphicPreferences.isTouchDevice) {
+        dlg.isDraggable = false;
+    }
+    dlg.prompt(
+        'Afterglow blocks',
+        ThreadManager.prototype.afterglow.toString(),
+        this.world(),
+        sample, // pic
+        {
+            'off (0x)' : 0,
+            'short (1x)' : 1,
+            'normal (5x)' : 5,
+            'long (10x)' : 10,
+            'maximum (20x)' : 20
+        },
+        false, // read only?
+        true, // numeric
+        0, // slider min
+        20, // slider max
+        action, // slider action
+        0 // decimals
+    );
+};
+
+IDE_Morph.prototype.setBlocksAfterglow = function (num) {
+    ThreadManager.prototype.afterglow = num;
+    if (num === 5) {
+        this.removeSetting('glow');
+    } else {
+        this.saveSetting('glow', num);
+    }
 };
 
 // IDE_Morph stage size manipulation
@@ -5328,7 +8925,7 @@ IDE_Morph.prototype.userSetStageSize = function () {
         this
     ).promptVector(
         "Stage size",
-        StageMorph.prototype.dimensions,
+        this.stage.dimensions,
         new Point(480, 360),
         'Stage width',
         'Stage height',
@@ -5346,20 +8943,27 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     function zoom() {
         myself.step = function () {
             var delta = ext.subtract(
-                StageMorph.prototype.dimensions
+                myself.stage.dimensions
             ).divideBy(2);
             if (delta.abs().lt(new Point(5, 5))) {
-                StageMorph.prototype.dimensions = ext;
+                myself.stage.dimensions = ext;
                 delete myself.step;
             } else {
-                StageMorph.prototype.dimensions =
-                    StageMorph.prototype.dimensions.add(delta);
+                myself.stage.dimensions =
+                    myself.stage.dimensions.add(delta);
             }
-            myself.stage.setExtent(StageMorph.prototype.dimensions);
+            myself.stage.setExtent(myself.stage.dimensions);
             myself.stage.clearPenTrails();
             myself.fixLayout();
             this.setExtent(world.extent());
         };
+    }
+
+    if (this.performerMode) {
+        this.performerMode = false;
+        this.buildPanes();
+        this.fixLayout();
+        this.selectSprite(this.currentSprite);
     }
 
     this.stageRatio = 1;
@@ -5367,14 +8971,44 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
     this.controlBar.stageSizeButton.refresh();
     this.stage.stopVideo();
     this.setExtent(world.extent());
+    Costume.prototype.maxDimensions = aPoint;
+    this.stage.stopVideo();
+    this.stage.stopProjection();
     if (this.isAnimating) {
         zoom();
     } else {
-        StageMorph.prototype.dimensions = ext;
-        this.stage.setExtent(StageMorph.prototype.dimensions);
+        this.stage.dimensions = ext;
+        this.stage.setExtent(this.stage.dimensions);
         this.stage.clearPenTrails();
         this.fixLayout();
         this.setExtent(world.extent());
+    }
+};
+
+// IDE_Morph - hiding the sprites & stage related panes for "functions-first"
+// microworlds, experimental in v12, not sure if this is a good idea - jens
+
+IDE_Morph.prototype.hideSpritePanes = function (choice = true) {
+    this.scene.hideSprites = (choice === true);
+    if (this.scene.hideSprites) {
+        this.config.noSprites = true;
+        this.applyPaneHidingConfigurations();
+        this.controlBar.stageSizeButton.hide();
+        this.controlBar.appModeButton.hide();
+        this.controlBar.startButton.hide();
+        this.fixLayout();
+    } else {
+        this.config.noSprites = false;
+        this.config.noSpriteEdits = false;
+        this.controlBar.stageSizeButton.show();
+        this.controlBar.appModeButton.show();
+        this.controlBar.startButton.show();
+        this.spriteBar.show();
+        this.stageHandle.show();
+        this.stage.show();
+        this.corralBar.show();
+        this.corral.show();
+        this.fixLayout();
     }
 };
 
@@ -5383,12 +9017,10 @@ IDE_Morph.prototype.setStageExtent = function (aPoint) {
 IDE_Morph.prototype.userSetDragThreshold = function () {
     new DialogBoxMorph(
         this,
-        function (num) {
-            MorphicPreferences.grabThreshold = Math.min(
-                Math.max(+num, 0),
-                200
-            );
-        },
+        num => MorphicPreferences.grabThreshold = Math.min(
+            Math.max(+num, 0),
+            200
+        ),
         this
     ).prompt(
         "Dragging threshold",
@@ -5401,47 +9033,100 @@ IDE_Morph.prototype.userSetDragThreshold = function () {
     );
 };
 
+// IDE_Morph customize primitives
+
+IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
+    // highly experimental for v10 - tweak the palette blocks,
+    // e.g. replace all primitives with custom block definitions etc.
+    var projectData, onComplete, name, tutorial;
+    if (this.scene.createdFromTemplate) {
+        name = this.scene.name;
+        tutorial = !isNil(this.tutorial);
+        this.scene.createdFromTemplate = false;
+        onComplete = () => {
+            this.scene.createdFromTemplate = true;
+            this.setProjectName(name);
+            if (tutorial) {
+                this.launchProjectTutorial();
+            }
+        };
+    }
+    this.scene.captureGlobalSettings();
+    if (Process.prototype.isCatchingErrors) {
+        try {
+            projectData = this.serializer.serialize(
+                new Project(this.scenes, this.scene, true)
+            );
+        } catch (err) {
+            this.showMessage('Serialization failed: ' + err);
+        }
+    } else {
+        projectData = this.serializer.serialize(
+            new Project(this.scenes, this.scene, true)
+        );
+    }
+    SpriteMorph.prototype.initBlocks();
+    callback();
+    this.spriteBar.tabBar.tabTo('scripts');
+    this.createCategories();
+    this.refreshEmptyCategories();
+    this.createCorralBar();
+    this.fixLayout();
+    this.openProjectString(
+        projectData,
+        null,
+        true, // no prims
+        true, // keepRoles
+        onComplete // restore name and template origin
+    );
+};
+
 // IDE_Morph cloud interface
 
 IDE_Morph.prototype.initializeCloud = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.login(
-                user.username.toLowerCase(),
-                user.password,
-                user.choice,
-                function (username, role, response) {
-                    sessionStorage.username = username;
-                    myself.source = 'cloud';
-                    if (!isNil(response.days_left)) {
-                        new DialogBoxMorph().inform(
-                            'Unverified account: ' +
-                            response.days_left +
-                            ' days left',
-                            'You are now logged in, and your account\n' +
-                            'is enabled for three days.\n' +
-                            'Please use the verification link that\n' +
-                            'was sent to your email address when you\n' +
-                            'signed up.\n\n' +
-                            'If you cannot find that email, please\n' +
-                            'check your spam folder. If you still\n' +
-                            'cannot find it, please use the "Resend\n' +
-                            'Verification Email..." option in the cloud\n' +
-                            'menu.\n\n' +
-                            'You have ' + response.days_left + ' days left.',
-                            world,
-                            myself.cloudIcon(null, new Color(0, 180, 0))
-                        );
-                    } else {
-                        myself.showMessage(response.message, 2);
-                    }
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.login(
+            user.username.toLowerCase(),
+            user.password,
+            user.choice,
+            (username, role, response) => {
+                sessionStorage.username = username;
+                this.controlBar.cloudButton.refresh();
+                this.source = 'cloud';
+                if (!isNil(response.days_left)) {
+                    var duration = response.days_left + ' day' +
+                        (response.days_left > 1 ? 's' : '');
+                    new DialogBoxMorph().inform(
+                        'Unverified account: ' + duration + ' left' +
+                        'You are now logged in, and your account\n' +
+                        'is enabled for ' + duration + '.\n' +
+                        'Please use the verification link that\n' +
+                        'was sent to your email address when you\n' +
+                        'signed up.\n\n' +
+                        'If you cannot find that email, please\n' +
+                        'check your spam folder. If you still\n' +
+                        'cannot find it, please use the "Resend\n' +
+                        'Verification Email..." option in the cloud\n' +
+                        'menu.\n\n' +
+                        'You have ' + duration + ' left.',
+                        world,
+                        this.cloudIcon(null, new Color(0, 180, 0))
+                    );
+                } else if (response.title) {
+                    new DialogBoxMorph().inform(
+                        response.title,
+                        response.message,
+                        world,
+                        this.cloudIcon(null, new Color(0, 180, 0))
+                    );
+                } else {
+                    this.showMessage(response.message, 2);
+                }
+            },
+            this.cloudError()
+        )
     ).withKey('cloudlogin').promptCredentials(
         'Sign in',
         'login',
@@ -5451,72 +9136,61 @@ IDE_Morph.prototype.initializeCloud = function () {
         null,
         'stay signed in on this computer\nuntil logging out',
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.createCloudAccount = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
 
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.signup(
-                user.username,
-                user.password,
-                user.passwordRepeat,
-                user.email,
-                function (txt, title) {
-                    new DialogBoxMorph().inform(
-                        title,
-                        txt +
-                            '.\n\nYou can now log in.',
-                        world,
-                        myself.cloudIcon(null, new Color(0, 180, 0))
-                    );
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.signup(
+            user.username,
+            user.password,
+            user.passwordRepeat,
+            user.email,
+            (txt, title) => new DialogBoxMorph().inform(
+                title,
+                txt + '.\n\nYou can now log in.',
+                world,
+                this.cloudIcon(null, new Color(0, 180, 0))
+            ),
+            this.cloudError()
+        )
     ).withKey('cloudsignup').promptCredentials(
         'Sign up',
         'signup',
-        'http://snap.berkeley.edu/tos.html',
+        'https://snap.berkeley.edu/tos.html',
         'Terms of Service...',
-        'http://snap.berkeley.edu/privacy.html',
+        'https://snap.berkeley.edu/privacy.html',
         'Privacy...',
         'I have read and agree\nto the Terms of Service',
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.resetCloudPassword = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
 
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.resetPassword(
-                user.username,
-                function (txt, title) {
-                    new DialogBoxMorph().inform(
-                        title,
-                        txt +
-                            '\n\nAn e-mail with a link to\n' +
-                            'reset your password\n' +
-                            'has been sent to the address provided',
-                        world,
-                        myself.cloudIcon(null, new Color(0, 180, 0))
-                    );
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.resetPassword(
+            user.username,
+            (txt, title) => new DialogBoxMorph().inform(
+                title,
+                txt +
+                    '\n\nAn e-mail with a link to\n' +
+                    'reset your password\n' +
+                    'has been sent to the address provided',
+                world,
+                this.cloudIcon(null, new Color(0, 180, 0))
+            ),
+            this.cloudError()
+        )
     ).withKey('cloudresetpassword').promptCredentials(
         'Reset password',
         'resetPassword',
@@ -5526,31 +9200,26 @@ IDE_Morph.prototype.resetCloudPassword = function () {
         null,
         null,
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.resendVerification = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
 
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.resendVerification(
-                user.username,
-                function (txt, title) {
-                    new DialogBoxMorph().inform(
-                        title,
-                        txt,
-                        world,
-                        myself.cloudIcon(null, new Color(0, 180, 0))
-                    );
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.resendVerification(
+            user.username,
+            (txt, title) => new DialogBoxMorph().inform(
+                title,
+                txt,
+                world,
+                this.cloudIcon(null, new Color(0, 180, 0))
+            ),
+            this.cloudError()
+        )
     ).withKey('cloudresendverification').promptCredentials(
         'Resend verification email',
         'resendVerification',
@@ -5560,27 +9229,23 @@ IDE_Morph.prototype.resendVerification = function () {
         null,
         null,
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.changeCloudPassword = function () {
-    var myself = this,
-        world = this.world();
+    var world = this.world();
+
     new DialogBoxMorph(
         null,
-        function (user) {
-            myself.cloud.changePassword(
-                user.oldpassword,
-                user.password,
-                user.passwordRepeat,
-                function () {
-                    myself.showMessage('password has been changed.', 2);
-                },
-                myself.cloudError()
-            );
-        }
+        user => this.cloud.changePassword(
+            user.oldpassword,
+            user.password,
+            user.passwordRepeat,
+            () => this.showMessage('password has been changed.', 2),
+            this.cloudError()
+        )
     ).withKey('cloudpassword').promptCredentials(
         'Change Password',
         'changePassword',
@@ -5590,44 +9255,48 @@ IDE_Morph.prototype.changeCloudPassword = function () {
         null,
         null,
         world,
-        myself.cloudIcon(),
-        myself.cloudMsg
+        this.cloudIcon(),
+        this.cloudMsg
     );
 };
 
 IDE_Morph.prototype.logout = function () {
-    var myself = this;
     this.cloud.logout(
-        function () {
+        () => {
             delete(sessionStorage.username);
-            myself.showMessage('disconnected.', 2);
+            this.controlBar.cloudButton.refresh();
+            this.showMessage('disconnected.', 2);
         },
-        function () {
+        () => {
             delete(sessionStorage.username);
-            myself.showMessage('disconnected.', 2);
+            this.controlBar.cloudButton.refresh();
+            this.showMessage('disconnected.', 2);
         }
     );
 };
 
 IDE_Morph.prototype.buildProjectRequest = function () {
-    var xml = this.serializer.serialize(this.stage),
-        thumbnail = normalizeCanvas(
-            this.stage.thumbnail(
-                SnapSerializer.prototype.thumbnailSize
-        )).toDataURL(),
-        body;
+    var proj = new Project(this.scenes, this.scene),
+        body,
+        xml;
 
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
+    xml = this.serializer.serialize(proj);
     body = {
-        notes: this.projectNotes,
+        notes: proj.notes,
         xml: xml,
-        media: this.hasChangedMedia ?
-            this.serializer.mediaXML(this.projectName) : null,
-        thumbnail: thumbnail,
+        /*
+        media: this.hasChangedMedia ? // incremental media upload, disabled
+            this.serializer.mediaXML(proj.name) : null,
+        */
+        media: this.serializer.mediaXML(proj.name),
+        thumbnail: proj.thumbnail.toDataURL(),
         remixID: this.stage.remixID
     };
     this.serializer.isCollectingMedia = false;
     this.serializer.flushMedia();
+    this.scene.applyGlobalSettings();
 
     return body;
 };
@@ -5669,10 +9338,10 @@ IDE_Morph.prototype.verifyProject = function (body) {
 };
 
 IDE_Morph.prototype.saveProjectToCloud = function (name) {
-    var myself = this, projectBody, projectSize;
+    var projectBody, projectSize;
 
     if (name) {
-        this.setProjectName(name);
+        name = this.setProjectName(name);
     }
 
     this.showMessage('Saving project\nto the cloud...');
@@ -5683,22 +9352,27 @@ IDE_Morph.prototype.saveProjectToCloud = function (name) {
         'Uploading ' + Math.round(projectSize / 1024) + ' KB...'
     );
     this.cloud.saveProject(
-        this.projectName,
+        this.getProjectName(),
         projectBody,
-        function () {myself.showMessage('saved.', 2); },
+        (message) => {
+            this.recordSavedChanges();
+            this.showMessage(message, 2);
+        },
         this.cloudError()
     );
 };
 
 IDE_Morph.prototype.exportProjectMedia = function (name) {
     var menu, media;
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     if (name) {
         this.setProjectName(name);
         try {
             menu = this.showMessage('Exporting');
+            this.serializer.serialize(new Project(this.scenes, this.scene));
             media = this.serializer.mediaXML(name);
-            this.saveXMLAs(media, this.projectName + ' media');
+            this.saveXMLAs(media, this.getProjectName() + ' media');
             menu.destroy();
             this.showMessage('Exported!', 1);
         } catch (err) {
@@ -5717,14 +9391,17 @@ IDE_Morph.prototype.exportProjectMedia = function (name) {
 
 IDE_Morph.prototype.exportProjectNoMedia = function (name) {
     var menu, str;
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     if (name) {
-        this.setProjectName(name);
+        name = this.setProjectName(name);
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = this.serializer.serialize(this.stage);
-                this.saveXMLAs(str, this.projectName);
+                str = this.serializer.serialize(
+                    new Project(this.scenes, this.scene)
+                );
+                this.saveXMLAs(str, name);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -5733,8 +9410,10 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.stage);
-            this.saveXMLAs(str, this.projectName);
+            str = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
+            this.saveXMLAs(str, name);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -5745,16 +9424,19 @@ IDE_Morph.prototype.exportProjectNoMedia = function (name) {
 
 IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
     var menu, str, media, dta;
+    this.scene.captureGlobalSettings();
     this.serializer.isCollectingMedia = true;
     if (name) {
-        this.setProjectName(name);
+        name = this.setProjectName(name);
         if (Process.prototype.isCatchingErrors) {
             try {
                 menu = this.showMessage('Exporting');
-                str = this.serializer.serialize(this.stage);
+                str = this.serializer.serialize(
+                    new Project(this.scenes, this.scene)
+                );
                 media = this.serializer.mediaXML(name);
                 dta = '<snapdata>' + str + media + '</snapdata>';
-                this.saveXMLAs(str, this.projectName);
+                this.saveXMLAs(dta, name);
                 menu.destroy();
                 this.showMessage('Exported!', 1);
             } catch (err) {
@@ -5763,10 +9445,12 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
             }
         } else {
             menu = this.showMessage('Exporting');
-            str = this.serializer.serialize(this.stage);
+            str = this.serializer.serialize(
+                new Project(this.scenes, this.scene)
+            );
             media = this.serializer.mediaXML(name);
             dta = '<snapdata>' + str + media + '</snapdata>';
-            this.saveXMLAs(str, this.projectName);
+            this.saveXMLAs(str, name);
             menu.destroy();
             this.showMessage('Exported!', 1);
         }
@@ -5777,23 +9461,21 @@ IDE_Morph.prototype.exportProjectAsCloudData = function (name) {
 };
 
 IDE_Morph.prototype.cloudAcknowledge = function () {
-    var myself = this;
-    return function (responseText, url) {
+    return (responseText, url) => {
         nop(responseText);
         new DialogBoxMorph().inform(
             'Cloud Connection',
             'Successfully connected to:\n'
                 + 'http://'
                 + url,
-            myself.world(),
-            myself.cloudIcon(null, new Color(0, 180, 0))
+            this.world(),
+            this.cloudIcon(null, new Color(0, 180, 0))
         );
     };
 };
 
 IDE_Morph.prototype.cloudResponse = function () {
-    var myself = this;
-    return function (responseText, url) {
+    return (responseText, url) => {
         var response = responseText;
         if (response.length > 50) {
             response = response.substring(0, 50) + '...';
@@ -5804,54 +9486,34 @@ IDE_Morph.prototype.cloudResponse = function () {
                 + url + ':\n\n'
                 + 'responds:\n'
                 + response,
-            myself.world(),
-            myself.cloudIcon(null, new Color(0, 180, 0))
+            this.world(),
+            this.cloudIcon(null, new Color(0, 180, 0))
         );
     };
 };
 
 IDE_Morph.prototype.cloudError = function () {
-    var myself = this;
-
-    // try finding an eplanation what's going on
-    // has some issues, commented out for now
-    /*
-    function getURL(url) {
-        try {
-            var request = new XMLHttpRequest();
-            request.open('GET', url, false);
-            request.send();
-            if (request.status === 200) {
-                return request.responseText;
-            }
-            return null;
-        } catch (err) {
-            return null;
-        }
-    }
-    */
-
-    return function (responseText, url) {
+    return (responseText, url) => {
         // first, try to find out an explanation for the error
         // and notify the user about it,
         // if none is found, show an error dialog box
         var response = responseText,
-            // explanation = getURL('http://snap.berkeley.edu/cloudmsg.txt'),
+            // explanation = getURL('https://snap.berkeley.edu/cloudmsg.txt'),
             explanation = null;
-        if (myself.shield) {
-            myself.shield.destroy();
-            myself.shield = null;
+        if (this.shield) {
+            this.shield.destroy();
+            this.shield = null;
         }
         if (explanation) {
-            myself.showMessage(explanation);
+            this.showMessage(explanation);
             return;
         }
         new DialogBoxMorph().inform(
             'Snap!Cloud',
             (url ? url + '\n' : '')
                 + response,
-            myself.world(),
-            myself.cloudIcon(null, new Color(180, 0, 0))
+            this.world(),
+            this.cloudIcon(null, new Color(180, 0, 0))
         );
     };
 };
@@ -5873,11 +9535,14 @@ IDE_Morph.prototype.cloudIcon = function (height, color) {
 };
 
 IDE_Morph.prototype.setCloudURL = function () {
-    var myself = this;
     new DialogBoxMorph(
         null,
-        function (url) {
-            myself.cloud.url = url;
+        url => {
+            this.cloud.url = url;
+            this.cloud.checkCredentials(
+                () => this.controlBar.cloudButton.refresh(),
+                () => this.controlBar.cloudButton.refresh()
+            );
         }
     ).withKey('cloudURL').prompt(
         'Cloud URL',
@@ -5888,15 +9553,27 @@ IDE_Morph.prototype.setCloudURL = function () {
     );
 };
 
+IDE_Morph.prototype.urlParameters = function () {
+    var parameters = location.hash.slice(location.hash.indexOf(':') + 1);
+    return this.cloud.parseDict(parameters);
+};
+
+IDE_Morph.prototype.hasCloudProject = function () {
+    var params = this.urlParameters();
+    return params.hasOwnProperty('Username') &&
+        params.hasOwnProperty('ProjectName');
+};
+
 // IDE_Morph HTTP data fetching
 
 IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     // fetch the contents of a url and pass it into the specified callback.
     // If no callback is specified synchronously fetch and return it
     // Note: Synchronous fetching has been deprecated and should be switched
+    // Note: Do Not attemp to prevent caching of requests.
+    //   This has caused issues for BJC and the finch.
     var request = new XMLHttpRequest(),
         async = callback instanceof Function,
-        myself = this,
         rsp;
     if (async) {
         request.responseType = responseType || 'text';
@@ -5906,22 +9583,21 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     try {
         request.open('GET', url, async);
         if (async) {
-            request.onreadystatechange = function () {
+            request.onreadystatechange = () => {
                 if (request.readyState === 4) {
                     if (request[rsp]) {
                         callback.call(
-                            myself,
+                            this,
                             request[rsp]
                         );
                     } else {
                         callback.call(myself);
+                        // this.showMessage('unable to retrieve ' + url);
+                        // throw new Error('unable to retrieve ' + url);
                     }
                 }
             };
         }
-        // cache-control, commented out for now
-        // added for Snap4Arduino but has issues with local robot servers
-        // request.setRequestHeader('Cache-Control', 'max-age=0');
         request.send();
         if (!async) {
             if (request.status === 200) {
@@ -5930,7 +9606,7 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
             throw new Error('unable to retrieve ' + url);
         }
     } catch (err) {
-        myself.showMessage(err.toString());
+        this.showMessage(err.toString());
         if (async) {
             callback.call(this);
         } else {
@@ -5939,23 +9615,86 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
     }
 };
 
+// IDE_Morph serialization helper ops
+
+IDE_Morph.prototype.blocksLibraryXML = function (
+    definitions,
+    moreCategories,
+    asFile,
+    dataFrame, // optional: include global variable dependencies in libraries
+    localData // optional: include sprite-local variable dependencies
+) {
+    // answer an XML string encoding of an array of CustomBlockDefinitions
+    var prims = definitions.filter(def => def.isGlobal && def.selector),
+        globals = definitions.filter(def => def.isGlobal && !def.selector),
+        locals = definitions.filter(def => !def.isGlobal),
+        primStr = prims.length ? this.serializer.serialize(prims, true) : '',
+        glbStr = globals.length ? this.serializer.serialize(globals, true) : '',
+        locStr = locals.length ? this.serializer.serialize(locals, true) : '',
+        dtaStr = dataFrame && dataFrame.names(true).length ?
+            this.serializer.serialize(dataFrame, true)
+            : '',
+        ldtStr = localData && localData.names(true).length ?
+            this.serializer.serialize(localData, true)
+            : '',
+        cats = moreCategories || [],
+        appStr = ' app="' +
+            this.serializer.app +
+            '" version="' +
+            this.serializer.version +
+            '"';
+
+    return '<blocks' +
+        (asFile ? appStr : '' ) +
+        '>' +
+        this.paletteXML(definitions.map(def => def.category).concat(cats)) +
+        (globals.length ? glbStr : '') +
+        (prims.length ? ('<primitives>' + primStr + '</primitives>') : '') +
+        (locals.length ? ('<local>' + locStr + '</local>') : '') +
+        (dtaStr ? '<variables>' + dtaStr + '</variables>' : '') +
+        (ldtStr ? '<local-variables>' + ldtStr + '</local-variables>' : '') +
+        '</blocks>';
+};
+
+IDE_Morph.prototype.paletteXML = function (categoryNames) {
+    // answer an XML string containing the palette information
+    // found in an array of category names
+    var palette = new Map();
+    categoryNames.forEach(cat => {
+        if (SpriteMorph.prototype.customCategories.has(cat)) {
+            palette.set(
+                cat,
+                SpriteMorph.prototype.customCategories.get(cat)
+            );
+        }
+    });
+    return this.serializer.paletteToXML(palette);
+};
+
 // IDE_Morph user dialog shortcuts
 
-IDE_Morph.prototype.showMessage = function (message, secs) {
+IDE_Morph.prototype.showMessage = function (message, secs, atHand = false) {
     var m = new MenuMorph(null, message),
         intervalHandle;
-    m.popUpCenteredInWorld(this.world());
+    if (atHand) {
+        m.popUpCenteredAtHand(this.world());
+    } else {
+        m.popUpCenteredInWorld(this.world());
+    }
     if (secs) {
-        intervalHandle = setInterval(function () {
-            m.destroy();
-            clearInterval(intervalHandle);
-        }, secs * 1000);
+        intervalHandle = setInterval(
+            () => {
+                m.destroy();
+                clearInterval(intervalHandle);
+            },
+            secs * 1000
+        );
     }
     return m;
 };
 
 IDE_Morph.prototype.inform = function (title, message) {
-    new DialogBoxMorph().inform(
+    return new DialogBoxMorph().inform(
         title,
         localize(message),
         this.world()
@@ -5980,6 +9719,167 @@ IDE_Morph.prototype.prompt = function (message, callback, choices, key) {
     );
 };
 
+// IDE_Morph bracing against IE
+
+IDE_Morph.prototype.warnAboutIE = function () {
+    var dlg, txt;
+    if (this.isIE()) {
+        dlg = new DialogBoxMorph();
+        txt = new TextMorph(
+            'Please do not use Internet Explorer.\n' +
+                'Snap! runs best in a web-standards\n' +
+                'compliant browser',
+            dlg.fontSize,
+            dlg.fontStyle,
+            true,
+            false,
+            'center',
+            null,
+            null,
+            MorphicPreferences.isFlat ? null : new Point(1, 1),
+            WHITE
+        );
+
+        dlg.key = 'IE-Warning';
+        dlg.labelString = "Internet Explorer";
+        dlg.createLabel();
+        dlg.addBody(txt);
+        dlg.fixLayout();
+        dlg.popUp(this.world());
+        dlg.nag = true;
+    }
+};
+
+IDE_Morph.prototype.isIE = function () {
+    var ua = navigator.userAgent;
+    return ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+};
+
+// IDE_Morph warn about saving project in the dev version
+
+IDE_Morph.prototype.warnAboutDev = function () {
+    if (!SnapVersion.includes('-dev') || this.config.noDevWarning) {
+        return;
+    }
+    this.inform(
+        "CAUTION! Development Version",
+        'This version of Snap! is being developed.\n' +
+            '*** It is NOT supported for end users. ***\n' +
+            'Saving a project in THIS version is likely to\n' +
+            'make it UNUSABLE or DEFECTIVE for current and\n' +
+            'even future official versions!\n\n' +
+            'visit https://snap.berkeley.edu/run\n' +
+            'for the official Snap! installation.'
+    ).nag = true;
+};
+
+// IDE_Morph tutorial scene
+
+IDE_Morph.prototype.launchProjectTutorial = function () {
+    // if both a tutorial and a non-tutorial scene exist in the project,
+    // make sure the non-tutorial scene is active and launch the tutorial
+    var scns = this.scenes.itemsArray(),
+        help = scns.find(any => any.role === 'tutorial'),
+        work = scns.find(any => any.role !== 'tutorial');
+    if (help && work) {
+        if (this.scene.role === 'tutorial') {
+            this.switchToScene(work);
+        }
+        this.launchTutorial(help);
+    }
+};
+
+IDE_Morph.prototype.launchTutorial = function (scene) {
+    // open and run a scene in a separate dialog box
+    var dlg = new DialogBoxMorph(
+                null,
+                () => {
+                    scene.stop();
+                    this.tutorial = null;
+                    this.corral.fixLayout(); // update scene icons
+                }
+            ).withKey('tutorial ' + scene.name),
+        handle,
+        diff;
+
+    // handle loading extension modules for the tutorial scene
+    this.autoLoadExtensions(scene);
+
+    dlg.padding = MorphicPreferences.isFlat ? 1 : dlg.corner;
+    dlg.stackPadding = 0;
+    this.escapeTutorial();
+    dlg.scene = scene;
+    dlg.ide = this;
+    scene.stage.setScale(1);
+    scene.stage.tutorialMode = scene;
+    dlg.labelString = scene.name;
+    dlg.createLabel();
+    dlg.addBody(scene.stage);
+    // dlg.addButton('ok', 'OK');
+    dlg.fixLayout();
+    dlg.popUp(this.world(), true); // noFocus
+    dlg.nag = true; // don't close when switching scenes
+    dlg.cancel = nop; // disallow pressing ESC to close the window
+    this.tutorial = dlg;
+    this.corral.fixLayout(); // update scene icons
+    diff = dlg.extent().subtract(scene.stage.dimensions);
+    dlg.minScale = (100 - (Math.min(diff.x, diff.y))) /
+        Math.min(scene.stage.dimensions.x, scene.stage.dimensions.y);
+
+    handle = new HandleMorph(
+        dlg,
+        100,
+        100,
+        dlg.padding,
+        dlg.padding
+    );
+
+    handle.mouseMove = function (pos) {
+        var newPos, newExt;
+        newPos = pos.subtract(this.offset);
+        newExt = newPos.add(
+            this.extent().add(this.inset)
+        ).subtract(this.target.bounds.origin).subtract(diff);
+        newExt = newExt.max(this.minExtent);
+        scene.stage.setScale(Math.min(
+            newExt.x / scene.stage.dimensions.x,
+            newExt.y / scene.stage.dimensions.y
+        ));
+        this.target.fixLayout();
+    };
+
+    dlg.fixLayout = function () {
+        DialogBoxMorph.prototype.fixLayout.call(this);
+        handle.setPosition(
+            this.bottomRight().subtract(handle.extent().add(handle.inset))
+        );
+    };
+
+    dlg.outlinePathBody = function (ctx, radius) {
+        var th = Math.floor(fontHeight(this.titleFontSize)) +
+                this.titlePadding * 2;
+        ctx.roundRect(
+            0,
+            th,
+            this.width(),
+            this.height() - th,
+            MorphicPreferences.isFlat ? 0 : [0, 0, radius, radius]
+        );
+    };
+
+    scene.stage.fireGreenFlagEvent();
+};
+
+IDE_Morph.prototype.escapeTutorial = function () {
+    if (!this.tutorial) {
+        return;
+    }
+    this.tutorial.scene.stage.tutorialMode = null;
+    this.tutorial.ok();
+    this.tutorial = null;
+    this.corral.fixLayout(); // update scene icons
+};
+
 // ProjectDialogMorph ////////////////////////////////////////////////////
 
 // ProjectDialogMorph inherits from DialogBoxMorph:
@@ -5995,8 +9895,6 @@ function ProjectDialogMorph(ide, label) {
 }
 
 ProjectDialogMorph.prototype.init = function (ide, task) {
-    var myself = this;
-
     // additional properties:
     this.ide = ide;
     this.task = task || 'open'; // String describing what do do (open, save)
@@ -6028,12 +9926,23 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
     );
 
     // override inherited properites:
-    this.labelString = this.task === 'save' ? 'Save Project' : 'Open Project';
+    switch (this.task) {
+    case 'save':
+        this.labelString = 'Save Project';
+        break;
+    case 'add':
+        this.labelString = 'Add Scene';
+        break;
+    default: // 'open'
+        this.task = 'open';
+        this.labelString = 'Open Project';
+    }
+
     this.createLabel();
     this.key = 'project' + task;
 
     // build contents
-    if (task === 'open' && this.source === 'disk') {
+    if ((task === 'open' || task === 'add') && this.source === 'disk') {
         // give the user a chance to switch to another source
         this.source = null;
         this.buildContents();
@@ -6042,9 +9951,8 @@ ProjectDialogMorph.prototype.init = function (ide, task) {
         this.source = 'disk';
     } else {
         this.buildContents();
-        this.onNextStep = function () { // yield to show "updating" message
-            myself.setSource(myself.source);
-        };
+        this.onNextStep = () => // yield to show "updating" message
+            this.setSource(this.source);
     }
 };
 
@@ -6067,15 +9975,17 @@ ProjectDialogMorph.prototype.buildContents = function () {
             null, // width
             null, // font name
             new Point(1, 1), // shadow offset
-            new Color(255, 255, 255) // shadowColor
+            WHITE // shadowColor
         );
         notification.refresh = nop;
         this.srcBar.add(notification);
     }
 
-    this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    if (!this.ide.cloud.disabled) {
+        this.addSourceButton('cloud', localize('Cloud'), 'cloud');
+    }
 
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.buildFilterField();
         this.addSourceButton('examples', localize('Examples'), 'poster');
         if (this.hasLocalProjects() || this.ide.world().currentKey === 16) {
@@ -6089,7 +9999,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.body.add(this.srcBar);
 
     if (this.task === 'save') {
-        this.nameField = new InputFieldMorph(this.ide.projectName);
+        this.nameField = new InputFieldMorph(this.ide.getProjectName());
         this.body.add(this.nameField);
     }
 
@@ -6100,7 +10010,7 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.body.add(this.listField);
@@ -6111,16 +10021,16 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.preview.fontSize = InputFieldMorph.prototype.fontSize;
     this.preview.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.preview.contrast = InputFieldMorph.prototype.contrast;
-    this.preview.drawNew = function () {
-        InputFieldMorph.prototype.drawNew.call(this);
-        if (this.texture) {
-            this.drawTexture(this.texture);
+    this.preview.render = function (ctx) {
+        InputFieldMorph.prototype.render.call(this, ctx);
+        if (this.cachedTexture) {
+            this.renderCachedTexture(ctx);
+        } else if (this.texture) {
+            this.renderTexture(this.texture, ctx);
         }
     };
-    this.preview.drawCachedTexture = function () {
-        var context = this.image.getContext('2d');
-        context.drawImage(this.cachedTexture, this.edge, this.edge);
-        this.changed();
+    this.preview.renderCachedTexture = function (ctx) {
+        ctx.drawImage(this.cachedTexture, this.edge, this.edge);
     };
     this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
     this.preview.setExtent(
@@ -6128,14 +10038,13 @@ ProjectDialogMorph.prototype.buildContents = function () {
     );
 
     this.body.add(this.preview);
-    this.preview.drawNew();
     if (this.task === 'save') {
-        thumbnail = this.ide.stage.thumbnail(
+        thumbnail = this.ide.scenes.at(1).stage.thumbnail(
             SnapSerializer.prototype.thumbnailSize
         );
         this.preview.texture = null;
         this.preview.cachedTexture = thumbnail;
-        this.preview.drawCachedTexture();
+        this.preview.rerender();
     }
 
     this.notesField = new ScrollFrameMorph();
@@ -6145,16 +10054,16 @@ ProjectDialogMorph.prototype.buildContents = function () {
     this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
     this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.notesField.contrast = InputFieldMorph.prototype.contrast;
-    this.notesField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.notesField.render = InputFieldMorph.prototype.render;
     this.notesField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.notesField.acceptsDrops = false;
     this.notesField.contents.acceptsDrops = false;
 
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.notesText = new TextMorph('');
     } else { // 'save'
-        this.notesText = new TextMorph(this.ide.projectNotes);
+        this.notesText = new TextMorph(this.ide.getProjectNotes());
         this.notesText.isEditable = true;
         this.notesText.enableSelecting();
     }
@@ -6169,6 +10078,11 @@ ProjectDialogMorph.prototype.buildContents = function () {
     if (this.task === 'open') {
         this.addButton('openProject', 'Open');
         this.action = 'openProject';
+        this.recoverButton = this.addButton('recoveryDialog', 'Recover', true);
+        this.recoverButton.hide();
+    } else if (this.task === 'add') {
+        this.addButton('addScene', 'Add');
+        this.action = 'addScene';
         this.recoverButton = this.addButton('recoveryDialog', 'Recover', true);
         this.recoverButton.hide();
     } else { // 'save'
@@ -6226,16 +10140,6 @@ ProjectDialogMorph.prototype.createButtons = function () {
     this.buttons.add(this.buttons.bottomRow);
     this.add(this.buttons);
 
-    this.buttons.topRow.hide = function () {
-        this.isVisible = false;
-        this.changed();
-    };
-
-    this.buttons.topRow.show = function () {
-        this.isVisible = true;
-        this.changed();
-    };
-
     this.buttons.fixLayout = function () {
         if (this.topRow.children.some(function (any) {
             return any.isVisible;
@@ -6264,7 +10168,6 @@ ProjectDialogMorph.prototype.addButton = function (action, label, topRow) {
     button.outlineGradient = this.buttonOutlineGradient;
     button.padding = this.buttonPadding;
     button.contrast = this.buttonContrast;
-    button.drawNew();
     button.fixLayout();
     if (topRow) {
         this.buttons.topRow.add(button);
@@ -6281,8 +10184,7 @@ ProjectDialogMorph.prototype.addSourceButton = function (
     label,
     symbol
 ) {
-    var myself = this,
-        lbl1 = new StringMorph(
+    var lbl1 = new StringMorph(
             label,
             10,
             null,
@@ -6290,7 +10192,7 @@ ProjectDialogMorph.prototype.addSourceButton = function (
             null,
             null,
             new Point(1, 1),
-            new Color(255, 255, 255)
+            WHITE
         ),
         lbl2 = new StringMorph(
             label,
@@ -6301,7 +10203,7 @@ ProjectDialogMorph.prototype.addSourceButton = function (
             null,
             new Point(-1, -1),
             this.titleBarColor.darker(50),
-            new Color(255, 255, 255)
+            WHITE
         ),
         l1 = new Morph(),
         l2 = new Morph(),
@@ -6317,32 +10219,30 @@ ProjectDialogMorph.prototype.addSourceButton = function (
     lbl1.children[0].setCenter(lbl1.center());
     lbl1.children[0].setBottom(lbl1.top() - this.padding / 2);
 
-    l1.image = lbl1.fullImage();
+    l1.isCachingImage = true;
+    l1.cachedImage = lbl1.fullImage();
     l1.bounds = lbl1.fullBounds();
 
     lbl2.add(new SymbolMorph(
         symbol,
         24,
-        new Color(255, 255, 255),
+        WHITE,
         new Point(-1, -1),
         this.titleBarColor.darker(50)
     ));
     lbl2.children[0].setCenter(lbl2.center());
     lbl2.children[0].setBottom(lbl2.top() - this.padding / 2);
 
-    l2.image = lbl2.fullImage();
+    l2.isCachingImage = true;
+    l2.cachedImage = lbl2.fullImage();
     l2.bounds = lbl2.fullBounds();
 
     button = new ToggleButtonMorph(
         null, //colors,
-        myself, // the ProjectDialog is the target
-        function () { // action
-            myself.setSource(source);
-        },
+        this, // the ProjectDialog is the target
+        () => this.setSource(source), // action
         [l1, l2],
-        function () {  // query
-            return myself.source === source;
-        }
+        () => this.source === source // query
     );
 
     button.corner = this.buttonCorner;
@@ -6354,8 +10254,6 @@ ProjectDialogMorph.prototype.addSourceButton = function (
     button.padding = this.buttonPadding;
     button.contrast = this.buttonContrast;
     button.pressColor = this.titleBarColor.darker(20);
-
-    button.drawNew();
     button.fixLayout();
     button.refresh();
     this.srcBar.add(button);
@@ -6366,12 +10264,10 @@ ProjectDialogMorph.prototype.addSourceButton = function (
 ProjectDialogMorph.prototype.fixListFieldItemColors = function () {
     // remember to always fixLayout() afterwards for the changes
     // to take effect
-    var myself = this;
     this.listField.contents.children[0].alpha = 0;
-    this.listField.contents.children[0].children.forEach(function (item) {
-        item.pressColor = myself.titleBarColor.darker(20);
+    this.listField.contents.children[0].children.forEach(item => {
+        item.pressColor = this.titleBarColor.darker(20);
         item.color = new Color(0, 0, 0, 0);
-        item.noticesTransparentClick = true;
     });
 };
 
@@ -6381,23 +10277,22 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
     var myself = this;
 
     this.filterField = new InputFieldMorph('');
-    this.magnifyingGlass =
-        new SymbolMorph(
-            'magnifyingGlass',
-            this.filterField.height(),
-            this.titleBarColor.darker(50));
+    this.magnifyingGlass = new SymbolMorph(
+        'magnifyingGlass',
+        this.filterField.height(),
+        this.titleBarColor.darker(50)
+    );
 
     this.body.add(this.magnifyingGlass);
     this.body.add(this.filterField);
 
-    this.filterField.reactToKeystroke = function (evt) {
+    this.filterField.reactToInput = function (evt) {
         var text = this.getValue();
 
         myself.listField.elements =
-            myself.projectList.filter(function (aProject) {
+            myself.projectList.filter(aProject => {
                 var name = aProject.projectname || aProject.name,
                     notes = aProject.notes || '';
-
                 return name.toLowerCase().indexOf(text.toLowerCase()) > -1 ||
                     notes.toLowerCase().indexOf(text.toLowerCase()) > -1;
             });
@@ -6418,29 +10313,28 @@ ProjectDialogMorph.prototype.buildFilterField = function () {
 // ProjectDialogMorph ops
 
 ProjectDialogMorph.prototype.setSource = function (source) {
-    var myself = this,
-        msg;
+    var msg, setting;
 
     this.source = source;
-    this.srcBar.children.forEach(function (button) {
-        button.refresh();
-    });
+    this.srcBar.children.forEach(button =>
+        button.refresh()
+    );
 
     switch (this.source) {
     case 'cloud':
-        msg = myself.ide.showMessage('Updating\nproject list...');
+        msg = this.ide.showMessage('Updating\nproject list...');
         this.projectList = [];
-        myself.ide.cloud.getProjectList(
-            function (response) {
+        this.ide.cloud.getProjectList(
+            response => {
                 // Don't show cloud projects if user has since switched panes.
-                if (myself.source === 'cloud') {
-                    myself.installCloudProjectList(response.projects);
+                if (this.source === 'cloud') {
+                    this.installCloudProjectList(response.projects);
                 }
                 msg.destroy();
             },
-            function (err, lbl) {
+            (err, lbl) => {
                 msg.destroy();
-                myself.ide.cloudError().call(null, err, lbl);
+                this.ide.cloudError().call(null, err, lbl);
             }
         );
         return;
@@ -6456,7 +10350,14 @@ ProjectDialogMorph.prototype.setSource = function (source) {
             this.projectList = [];
         } else {
             this.destroy();
-            this.ide.importLocalFile();
+            if (this.task === 'add') {
+                setting = this.ide.isAddingScenes;
+                this.ide.isAddingScenes = true;
+                this.ide.importLocalFile();
+                this.ide.isAddingScenes = setting;
+            } else {
+                this.ide.importLocalFile();
+            }
             return;
         }
         break;
@@ -6466,11 +10367,10 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.listField = new ListMorph(
         this.projectList,
         this.projectList.length > 0 ?
-                function (element) {
-                    return element.name || element;
-                } : null,
+            (element) => {return element.name || element; }
+                : null,
         null,
-        function () {myself.ok(); }
+        () => this.ok()
     );
     if (this.source === 'disk') {
         this.listField.hide();
@@ -6482,64 +10382,57 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     if (this.source === 'local') {
-        this.listField.action = function (item) {
+        this.listField.action = (item) => {
             var src, xml;
-
             if (item === undefined) {return; }
-            if (myself.nameField) {
-                myself.nameField.setContents(item.name || '');
+            if (this.nameField) {
+                this.nameField.setContents(item.name || '');
             }
-            if (myself.task === 'open') {
-
+            if (this.task === 'open') {
                 src = localStorage['-snap-project-' + item.name];
-
                 if (src) {
-                    xml = myself.ide.serializer.parse(src);
-
-                    myself.notesText.text = xml.childNamed('notes').contents
-                        || '';
-                    myself.notesText.drawNew();
-                    myself.notesField.contents.adjustBounds();
-                    myself.preview.texture =
+                    xml = this.ide.serializer.parse(src);
+                    this.notesText.text =
+                        xml.childNamed('notes').contents || '';
+                    this.notesText.rerender();
+                    this.notesField.contents.adjustBounds();
+                    this.preview.texture =
                         xml.childNamed('thumbnail').contents || null;
-                    myself.preview.cachedTexture = null;
-                    myself.preview.drawNew();
+                    this.preview.cachedTexture = null;
+                    this.preview.rerender();
                 }
             }
-            myself.edit();
+            this.edit();
         };
     } else { // 'examples'; 'cloud' is initialized elsewhere
-        this.listField.action = function (item) {
+        this.listField.action = (item) => {
             var src, xml;
             if (item === undefined) {return; }
-            if (myself.nameField) {
-                myself.nameField.setContents(item.name || '');
+            if (this.nameField) {
+                this.nameField.setContents(item.name || '');
             }
-            src = myself.ide.getURL(
-                myself.ide.resourceURL('Examples', item.fileName)
+            src = this.ide.getURL(
+                this.ide.resourceURL('Examples', item.fileName)
             );
-
-            xml = myself.ide.serializer.parse(src);
-            myself.notesText.text = xml.childNamed('notes').contents
-                || '';
-            myself.notesText.drawNew();
-            myself.notesField.contents.adjustBounds();
-            myself.preview.texture = xml.childNamed('thumbnail').contents
-                || null;
-            myself.preview.cachedTexture = null;
-            myself.preview.drawNew();
-            myself.edit();
+            xml = this.ide.serializer.parse(src);
+            this.notesText.text = xml.childNamed('notes').contents || '';
+            this.notesText.rerender();
+            this.notesField.contents.adjustBounds();
+            this.preview.texture = xml.childNamed('thumbnail').contents || null;
+            this.preview.cachedTexture = null;
+            this.preview.rerender();
+            this.edit();
         };
     }
     this.body.add(this.listField);
     this.shareButton.hide();
     this.unshareButton.hide();
 
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.recoverButton.hide();
     }
 
@@ -6552,7 +10445,7 @@ ProjectDialogMorph.prototype.setSource = function (source) {
     }
     this.buttons.fixLayout();
     this.fixLayout();
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.clearDetails();
     }
 };
@@ -6561,9 +10454,9 @@ ProjectDialogMorph.prototype.hasLocalProjects = function () {
     // check and report whether old projects still exist in the
     // browser's local storage, which as of v5 has been deprecated,
     // so the user can recover and move them elsewhere
-    return Object.keys(localStorage).some(function (any) {
-        return any.indexOf('-snap-project-') === 0;
-    });
+    return Object.keys(localStorage).some(any =>
+        any.indexOf('-snap-project-') === 0
+    );
 };
 
 ProjectDialogMorph.prototype.getLocalProjectList = function () {
@@ -6581,9 +10474,9 @@ ProjectDialogMorph.prototype.getLocalProjectList = function () {
             projects.push(dta);
         }
     }
-    projects.sort(function (x, y) {
-        return x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1;
-    });
+    projects.sort((x, y) =>
+        x.name.toLowerCase() < y.name.toLowerCase() ? -1 : 1
+    );
     return projects;
 };
 
@@ -6592,31 +10485,28 @@ ProjectDialogMorph.prototype.getExamplesProjectList = function () {
 };
 
 ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
-    var myself = this;
     this.projectList = pl[0] ? pl : [];
-    this.projectList.sort(function (x, y) {
-        return x.projectname.toLowerCase() < y.projectname.toLowerCase() ?
-                 -1 : 1;
-    });
+    this.projectList.sort((x, y) =>
+        x.projectname.toLowerCase() < y.projectname.toLowerCase() ? -1 : 1
+    );
 
     this.listField.destroy();
     this.listField = new ListMorph(
         this.projectList,
         this.projectList.length > 0 ?
-                function (element) {
-                    return element.projectname || element;
-                } : null,
+            (element) => {return element.projectname || element; }
+                : null,
         [ // format: display shared project names bold
             [
                 'bold',
-                function (proj) { return proj.ispublic; }
+                proj => proj.ispublic
             ],
             [
                 'italic',
-                function (proj) { return proj.ispublished; }
+                proj => proj.ispublished
             ]
         ],
-        function () { myself.ok(); }
+        () => this.ok()
     );
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
@@ -6624,63 +10514,63 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-    this.listField.action = function (item) {
+    this.listField.action = (item) => {
         if (item === undefined) {return; }
-        if (myself.nameField) {
-            myself.nameField.setContents(item.projectname || '');
+        if (this.nameField) {
+            this.nameField.setContents(item.projectname || '');
         }
-        if (myself.task === 'open') {
-            myself.notesText.text = item.notes || '';
-            myself.notesText.drawNew();
-            myself.notesField.contents.adjustBounds();
-            myself.preview.texture = '';
-            myself.preview.drawNew();
+        if (this.task === 'open' || this.task === 'add') {
+            this.notesText.text = item.notes || '';
+            this.notesText.rerender();
+            this.notesField.contents.adjustBounds();
+            this.preview.texture = '';
+            this.preview.rerender();
             // we ask for the thumbnail when selecting a project
-            myself.ide.cloud.getThumbnail(
+            this.ide.cloud.getThumbnail(
                 null, // username is implicit
                 item.projectname,
-                function (thumbnail) {
-                    myself.preview.texture = thumbnail;
-                    myself.preview.cachedTexture = null;
-                    myself.preview.drawNew();
+                thumbnail => {
+                    this.preview.texture = thumbnail;
+                    this.preview.cachedTexture = null;
+                    this.preview.rerender();
                 });
-            (new SpeechBubbleMorph(new TextMorph(
+            new SpeechBubbleMorph(new TextMorph(
                 localize('last changed') + '\n' + item.lastupdated,
                 null,
                 null,
                 null,
                 null,
                 'center'
-            ))).popUp(
-                myself.world(),
-                myself.preview.rightCenter().add(new Point(2, 0))
+            )).popUp(
+                this.world(),
+                this.preview.rightCenter().add(new Point(2, 0))
             );
         }
         if (item.ispublic) {
-            myself.shareButton.hide();
-            myself.unshareButton.show();
+            this.shareButton.hide();
+            this.unshareButton.show();
             if (item.ispublished) {
-                myself.publishButton.hide();
-                myself.unpublishButton.show();
+                this.publishButton.hide();
+                this.unpublishButton.show();
             } else {
-                myself.publishButton.show();
-                myself.unpublishButton.hide();
+                this.publishButton.show();
+                this.unpublishButton.hide();
             }
         } else {
-            myself.unshareButton.hide();
-            myself.shareButton.show();
-            myself.publishButton.hide();
-            myself.unpublishButton.hide();
+            this.unshareButton.hide();
+            this.shareButton.show();
+            this.publishButton.hide();
+            this.unpublishButton.hide();
         }
-        myself.buttons.fixLayout();
-        myself.fixLayout();
-        myself.edit();
+        this.buttons.fixLayout();
+        this.fixLayout();
+        this.edit();
     };
     this.body.add(this.listField);
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.recoverButton.show();
     }
     this.shareButton.show();
@@ -6688,25 +10578,47 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     this.deleteButton.show();
     this.buttons.fixLayout();
     this.fixLayout();
-    if (this.task === 'open') {
+    if (this.task === 'open' || this.task === 'add') {
         this.clearDetails();
     }
 };
 
 ProjectDialogMorph.prototype.clearDetails = function () {
     this.notesText.text = '';
-    this.notesText.drawNew();
+    this.notesText.rerender();
     this.notesField.contents.adjustBounds();
     this.preview.texture = null;
     this.preview.cachedTexture = null;
-    this.preview.drawNew();
+    this.preview.rerender();
 };
 
 ProjectDialogMorph.prototype.recoveryDialog = function () {
     var proj = this.listField.selected;
     if (!proj) {return; }
-    new ProjectRecoveryDialogMorph(this.ide, proj.projectname, this).popUp();
+    this.removeShadow();
     this.hide();
+    new ProjectRecoveryDialogMorph(this.ide, proj.projectname, this).popUp();
+};
+
+ProjectDialogMorph.prototype.addScene = function () {
+    var proj = this.listField.selected,
+        src;
+    if (!proj) {return; }
+    this.ide.isAddingNextScene = true;
+    this.ide.source = this.source;
+    if (this.source === 'cloud') {
+        this.addCloudScene(proj);
+    } else if (this.source === 'examples') {
+        // Note "file" is a property of the parseResourceFile function.
+        src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
+        this.ide.openProjectString(src);
+        this.destroy();
+
+    } else { // 'local'
+        this.ide.source = null;
+        this.ide.openProjectName(proj.name);
+        this.destroy();
+    }
 };
 
 ProjectDialogMorph.prototype.openProject = function () {
@@ -6719,80 +10631,87 @@ ProjectDialogMorph.prototype.openProject = function () {
     } else if (this.source === 'examples') {
         // Note "file" is a property of the parseResourceFile function.
         src = this.ide.getURL(this.ide.resourceURL('Examples', proj.fileName));
-        this.ide.openProjectString(src);
+        this.ide.backup(() => this.ide.openProjectString(src));
         this.destroy();
+
     } else { // 'local'
         this.ide.source = null;
-        this.ide.openProject(proj.name);
+        this.ide.backup(() => this.ide.openProjectName(proj.name));
         this.destroy();
     }
 };
 
-ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
-    var myself = this;
-    myself.ide.nextSteps([
-        function () {
-            myself.ide.showMessage('Fetching project\nfrom the cloud...');
-        },
-        function () {
-            myself.rawOpenCloudProject(project, delta);
-        }
+ProjectDialogMorph.prototype.addCloudScene = function (project, delta) {
+    // no need to backup
+    this.ide.nextSteps([
+        () => this.ide.showMessage('Fetching project\nfrom the cloud...'),
+        () => this.rawOpenCloudProject(project, delta)
     ]);
 };
 
+ProjectDialogMorph.prototype.openCloudProject = function (project, delta) {
+    this.ide.backup(
+        () => {
+            SpriteMorph.prototype.initBlocks(); // reset prims
+            this.ide.nextSteps([
+                () => this.ide.showMessage('Fetching project\nfrom the cloud...'),
+                () => this.rawOpenCloudProject(project, delta)
+            ]);
+        }
+    );
+};
+
 ProjectDialogMorph.prototype.rawOpenCloudProject = function (proj, delta) {
-    var myself = this;
     this.ide.cloud.getProject(
         proj.projectname,
         delta,
-        function (clouddata) {
-            myself.ide.source = 'cloud';
-            myself.ide.nextSteps([
-                function () {
-                    myself.ide.openCloudDataString(clouddata);
-                }
+        clouddata => {
+            this.ide.source = 'cloud';
+            this.ide.nextSteps([
+                () => this.ide.openCloudDataString(clouddata)
             ]);
 			location.hash = '';
             if (proj.ispublic) {
                 location.hash = '#present:Username=' +
-                    encodeURIComponent(myself.ide.cloud.username) +
+                    encodeURIComponent(this.ide.cloud.username) +
                     '&ProjectName=' +
                     encodeURIComponent(proj.projectname);
             }
         },
-        myself.ide.cloudError()
+        this.ide.cloudError()
     );
     this.destroy();
 };
 
 ProjectDialogMorph.prototype.saveProject = function () {
     var name = this.nameField.contents().text.text,
-        notes = this.notesText.text,
-        myself = this;
+        notes = this.notesText.text;
 
-    this.ide.projectNotes = notes || this.ide.projectNotes;
+    if (this.ide.getProjectNotes() !== notes) {
+        this.ide.setProjectNotes(notes);
+    }
     if (name) {
         if (this.source === 'cloud') {
             if (detect(
                     this.projectList,
-                    function (item) {return item.projectname === name; }
+                    item => item.projectname === name
                 )) {
                 this.ide.confirm(
                     localize(
                         'Are you sure you want to replace'
                     ) + '\n"' + name + '"?',
                     'Replace Project',
-                    function () {
-                        myself.ide.setProjectName(name);
-                        myself.saveCloudProject();
+                    () => {
+                        this.ide.setProjectName(name);
+                        this.saveCloudProject();
                     }
                 );
             } else {
                 this.ide.setProjectName(name);
-                myself.saveCloudProject();
+                this.saveCloudProject();
             }
         } else if (this.source === 'disk') {
-            this.ide.exportProject(name, false);
+            this.ide.exportProject(name);
             this.ide.source = 'disk';
             this.destroy();
         }
@@ -6806,8 +10725,7 @@ ProjectDialogMorph.prototype.saveCloudProject = function () {
 };
 
 ProjectDialogMorph.prototype.deleteProject = function () {
-    var myself = this,
-        proj,
+    var proj,
         idx,
         name;
 
@@ -6819,21 +10737,19 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                     'Are you sure you want to delete'
                 ) + '\n"' + proj.projectname + '"?',
                 'Delete Project',
-                function () {
-                    myself.ide.cloud.deleteProject(
-                        proj.projectname,
-                        null, // username is implicit
-                        function () {
-                            myself.ide.hasChangedMedia = true;
-                            idx = myself.projectList.indexOf(proj);
-                            myself.projectList.splice(idx, 1);
-                            myself.installCloudProjectList(
-                                myself.projectList
-                            ); // refresh list
-                        },
-                        myself.ide.cloudError()
-                    );
-                }
+                () => this.ide.cloud.deleteProject(
+                    proj.projectname,
+                    null, // username is implicit
+                    () => {
+                        this.ide.hasChangedMedia = true;
+                        idx = this.projectList.indexOf(proj);
+                        this.projectList.splice(idx, 1);
+                        this.installCloudProjectList( // refresh list
+                            this.projectList
+                        );
+                    },
+                    this.ide.cloudError()
+                )
             );
         }
     } else { // 'local, examples'
@@ -6844,9 +10760,9 @@ ProjectDialogMorph.prototype.deleteProject = function () {
                     'Are you sure you want to delete'
                 ) + '\n"' + name + '"?',
                 'Delete Project',
-                function () {
+                () => {
                     delete localStorage['-snap-project-' + name];
-                    myself.setSource(myself.source); // refresh list
+                    this.setSource(this.source); // refresh list
                 }
             );
         }
@@ -6854,8 +10770,7 @@ ProjectDialogMorph.prototype.deleteProject = function () {
 };
 
 ProjectDialogMorph.prototype.shareProject = function () {
-    var myself = this,
-        ide = this.ide,
+    var ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -6865,26 +10780,25 @@ ProjectDialogMorph.prototype.shareProject = function () {
                 'Are you sure you want to share'
             ) + '\n"' + proj.projectname + '"?',
             'Share Project',
-            function () {
+            () => {
                 ide.showMessage('sharing\nproject...');
                 ide.cloud.shareProject(
                     proj.projectname,
                     null, // username is implicit
-                    function () {
+                    () => {
                         proj.ispublic = true;
-                        myself.unshareButton.show();
-                        myself.shareButton.hide();
-                        myself.publishButton.show();
-                        myself.unpublishButton.hide();
+                        this.unshareButton.show();
+                        this.shareButton.hide();
+                        this.publishButton.show();
+                        this.unpublishButton.hide();
                         entry.label.isBold = true;
-                        entry.label.drawNew();
-                        entry.label.changed();
-                        myself.buttons.fixLayout();
-                        myself.drawNew();
-                        myself.ide.showMessage('shared.', 2);
+                        entry.label.rerender();
+                        this.buttons.fixLayout();
+                        this.rerender();
+                        this.ide.showMessage('shared.', 2);
 
                         // Set the Shared URL if the project is currently open
-                        if (proj.projectname === ide.projectName) {
+                        if (proj.projectname === ide.getProjectName()) {
                             var usr = ide.cloud.username,
                                 projectId = 'Username=' +
                                     encodeURIComponent(usr.toLowerCase()) +
@@ -6893,7 +10807,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
                             location.hash = 'present:' + projectId;
                         }
                     },
-                    myself.ide.cloudError()
+                    this.ide.cloudError()
                 );
             }
         );
@@ -6901,8 +10815,7 @@ ProjectDialogMorph.prototype.shareProject = function () {
 };
 
 ProjectDialogMorph.prototype.unshareProject = function () {
-    var myself = this,
-        ide = this.ide,
+    var ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -6912,29 +10825,28 @@ ProjectDialogMorph.prototype.unshareProject = function () {
                 'Are you sure you want to unshare'
             ) + '\n"' + proj.projectname + '"?',
             'Unshare Project',
-            function () {
+            () => {
                 ide.showMessage('unsharing\nproject...');
                 ide.cloud.unshareProject(
                     proj.projectname,
                     null, // username is implicit
-                    function () {
+                    () => {
                         proj.ispublic = false;
-                        myself.shareButton.show();
-                        myself.unshareButton.hide();
-                        myself.publishButton.hide();
-                        myself.unpublishButton.hide();
+                        this.shareButton.show();
+                        this.unshareButton.hide();
+                        this.publishButton.hide();
+                        this.unpublishButton.hide();
                         entry.label.isBold = false;
                         entry.label.isItalic = false;
-                        entry.label.drawNew();
-                        entry.label.changed();
-                        myself.buttons.fixLayout();
-                        myself.drawNew();
-                        myself.ide.showMessage('unshared.', 2);
-                        if (proj.projectname === ide.projectName) {
+                        entry.label.rerender();
+                        this.buttons.fixLayout();
+                        this.rerender();
+                        this.ide.showMessage('unshared.', 2);
+                        if (proj.projectname === ide.getProjectName()) {
                             location.hash = '';
                         }
                     },
-                    myself.ide.cloudError()
+                    this.ide.cloudError()
                 );
             }
         );
@@ -6942,8 +10854,7 @@ ProjectDialogMorph.prototype.unshareProject = function () {
 };
 
 ProjectDialogMorph.prototype.publishProject = function () {
-    var myself = this,
-        ide = this.ide,
+    var ide = this.ide,
         proj = this.listField.selected,
         entry = this.listField.active;
 
@@ -6953,26 +10864,25 @@ ProjectDialogMorph.prototype.publishProject = function () {
                 'Are you sure you want to publish'
             ) + '\n"' + proj.projectname + '"?',
             'Publish Project',
-            function () {
+            () => {
                 ide.showMessage('publishing\nproject...');
                 ide.cloud.publishProject(
                     proj.projectname,
                     null, // username is implicit
-                    function () {
+                    () => {
                         proj.ispublished = true;
-                        myself.unshareButton.show();
-                        myself.shareButton.hide();
-                        myself.publishButton.hide();
-                        myself.unpublishButton.show();
+                        this.unshareButton.show();
+                        this.shareButton.hide();
+                        this.publishButton.hide();
+                        this.unpublishButton.show();
                         entry.label.isItalic = true;
-                        entry.label.drawNew();
-                        entry.label.changed();
-                        myself.buttons.fixLayout();
-                        myself.drawNew();
-                        myself.ide.showMessage('published.', 2);
+                        entry.label.rerender();
+                        this.buttons.fixLayout();
+                        this.rerender();
+                        this.ide.showMessage('published.', 2);
 
                         // Set the Shared URL if the project is currently open
-                        if (proj.projectname === ide.projectName) {
+                        if (proj.projectname === ide.getProjectName()) {
                             var usr = ide.cloud.username,
                                 projectId = 'Username=' +
                                     encodeURIComponent(usr.toLowerCase()) +
@@ -6981,7 +10891,7 @@ ProjectDialogMorph.prototype.publishProject = function () {
                             location.hash = 'present:' + projectId;
                         }
                     },
-                    myself.ide.cloudError()
+                    this.ide.cloudError()
                 );
             }
         );
@@ -6989,8 +10899,7 @@ ProjectDialogMorph.prototype.publishProject = function () {
 };
 
 ProjectDialogMorph.prototype.unpublishProject = function () {
-    var myself = this,
-        proj = this.listField.selected,
+    var proj = this.listField.selected,
         entry = this.listField.active;
 
     if (proj) {
@@ -6999,25 +10908,24 @@ ProjectDialogMorph.prototype.unpublishProject = function () {
                 'Are you sure you want to unpublish'
             ) + '\n"' + proj.projectname + '"?',
             'Unpublish Project',
-            function () {
-                myself.ide.showMessage('unpublishing\nproject...');
-                myself.ide.cloud.unpublishProject(
+            () => {
+                this.ide.showMessage('unpublishing\nproject...');
+                this.ide.cloud.unpublishProject(
                     proj.projectname,
                     null, // username is implicit
-                    function () {
+                    () => {
                         proj.ispublished = false;
-                        myself.unshareButton.show();
-                        myself.shareButton.hide();
-                        myself.publishButton.show();
-                        myself.unpublishButton.hide();
+                        this.unshareButton.show();
+                        this.shareButton.hide();
+                        this.publishButton.show();
+                        this.unpublishButton.hide();
                         entry.label.isItalic = false;
-                        entry.label.drawNew();
-                        entry.label.changed();
-                        myself.buttons.fixLayout();
-                        myself.drawNew();
-                        myself.ide.showMessage('unpublished.', 2);
+                        entry.label.rerender();
+                        this.buttons.fixLayout();
+                        this.rerender();
+                        this.ide.showMessage('unpublished.', 2);
                     },
-                    myself.ide.cloudError()
+                    this.ide.cloudError()
                 );
             }
         );
@@ -7037,10 +10945,7 @@ ProjectDialogMorph.prototype.edit = function () {
 ProjectDialogMorph.prototype.fixLayout = function () {
     var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
-        inputField = this.nameField || this.filterField,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+        inputField = this.nameField || this.filterField;
 
     if (this.buttons && (this.buttons.children.length > 0)) {
         this.buttons.fixLayout();
@@ -7062,7 +10967,6 @@ ProjectDialogMorph.prototype.fixLayout = function () {
             );
         inputField.setLeft(this.srcBar.right() + this.padding * 3);
         inputField.setTop(this.srcBar.top());
-        inputField.drawNew();
 
         this.listField.setLeft(this.srcBar.right() + this.padding);
         this.listField.setWidth(
@@ -7104,8 +11008,9 @@ ProjectDialogMorph.prototype.fixLayout = function () {
         this.buttons.setBottom(this.bottom() - this.padding);
     }
 
-    Morph.prototype.trackChanges = oldFlag;
-    this.changed();
+    // refresh shadow
+    this.removeShadow();
+    this.addShadow();
 };
 
 // ProjectRecoveryDialogMorph /////////////////////////////////////////
@@ -7166,16 +11071,16 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
     this.preview.fontSize = InputFieldMorph.prototype.fontSize;
     this.preview.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.preview.contrast = InputFieldMorph.prototype.contrast;
-    this.preview.drawNew = function () {
-        InputFieldMorph.prototype.drawNew.call(this);
-        if (this.texture) {
-            this.drawTexture(this.texture);
+    this.preview.render = function (ctx) {
+        InputFieldMorph.prototype.render.call(this, ctx);
+        if (this.cachedTexture) {
+            this.renderCachedTexture(ctx);
+        } else if (this.texture) {
+            this.renderTexture(this.texture, ctx);
         }
     };
-    this.preview.drawCachedTexture = function () {
-        var context = this.image.getContext('2d');
-        context.drawImage(this.cachedTexture, this.edge, this.edge);
-        this.changed();
+    this.preview.renderCachedTexture = function (ctx) {
+        ctx.drawImage(this.cachedTexture, this.edge, this.edge);
     };
     this.preview.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
     this.preview.setExtent(
@@ -7183,7 +11088,6 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
     );
 
     this.body.add(this.preview);
-    this.preview.drawNew();
 
     this.notesField = new ScrollFrameMorph();
     this.notesField.fixLayout = nop;
@@ -7192,7 +11096,7 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
     this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
     this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.notesField.contrast = InputFieldMorph.prototype.contrast;
-    this.notesField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.notesField.render = InputFieldMorph.prototype.render;
     this.notesField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.notesField.acceptsDrops = false;
@@ -7215,8 +11119,6 @@ ProjectRecoveryDialogMorph.prototype.buildContents = function () {
 };
 
 ProjectRecoveryDialogMorph.prototype.buildListField = function () {
-    var myself = this;
-
     this.listField = new ListMorph([]);
     this.fixListFieldItemColors();
     this.listField.fixLayout = nop;
@@ -7224,33 +11126,32 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-    this.listField.action = function (item) {
+    this.listField.action = (item) => {
         var version;
         if (item === undefined) { return; }
         version = detect(
-            myself.versions,
-            function (version) {
-                return version.lastupdated === item;
-            });
-        myself.notesText.text = version.notes || '';
-        myself.notesText.drawNew();
-        myself.notesField.contents.adjustBounds();
-        myself.preview.texture = version.thumbnail;
-        myself.preview.cachedTexture = null;
-        myself.preview.drawNew();
+            this.versions,
+            version => version.lastupdated === item
+        );
+        this.notesText.text = version.notes || '';
+        this.notesText.rerender();
+        this.notesField.contents.adjustBounds();
+        this.preview.texture = version.thumbnail;
+        this.preview.cachedTexture = null;
+        this.preview.rerender();
     };
 
     this.ide.cloud.getProjectVersionMetadata(
         this.projectName,
-        function (versions) {
+        versions => {
             var today = new Date(),
                 yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
-            myself.versions = versions;
-            myself.versions.forEach(function (version) {
+            this.versions = versions;
+            this.versions.forEach(version => {
                 var date = new Date(
                     new Date().getTime() - version.lastupdated * 1000
                 );
@@ -7264,16 +11165,15 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
                     version.lastupdated = date.toLocaleString();
                 }
             });
-            myself.listField.elements =
-                myself.versions.map(function (version) {
-                    return version.lastupdated;
-                });
-            myself.clearDetails();
-            myself.listField.buildListContents();
-            myself.fixListFieldItemColors();
-            myself.listField.adjustScrollBars();
-            myself.listField.scrollY(myself.listField.top());
-            myself.fixLayout();
+            this.listField.elements = this.versions.map(version =>
+                version.lastupdated
+            );
+            this.clearDetails();
+            this.listField.buildListContents();
+            this.fixListFieldItemColors();
+            this.listField.adjustScrollBars();
+            this.listField.scrollY(this.listField.top());
+            this.fixLayout();
         },
         this.ide.cloudError()
     );
@@ -7282,14 +11182,11 @@ ProjectRecoveryDialogMorph.prototype.buildListField = function () {
 };
 
 ProjectRecoveryDialogMorph.prototype.cancel = function () {
-    var myself = this;
     this.browser.show();
     this.browser.listField.select(
         detect(
             this.browser.projectList,
-            function (item) {
-                return item.projectname === myself.projectName;
-            }
+            item => item.projectname === this.projectName
         )
     );
     ProjectRecoveryDialogMorph.uber.cancel.call(this);
@@ -7298,10 +11195,9 @@ ProjectRecoveryDialogMorph.prototype.cancel = function () {
 ProjectRecoveryDialogMorph.prototype.recoverProject = function () {
     var lastupdated = this.listField.selected,
         version = detect(
-        this.versions,
-        function (version) {
-            return version.lastupdated === lastupdated;
-        });
+            this.versions,
+            version => version.lastupdated === lastupdated
+        );
 
     this.browser.openCloudProject(
         {projectname: this.projectName},
@@ -7332,10 +11228,7 @@ ProjectRecoveryDialogMorph.prototype.clearDetails =
 
 ProjectRecoveryDialogMorph.prototype.fixLayout = function () {
     var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
-        thin = this.padding / 2,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+        thin = this.padding / 2;
 
     if (this.body) {
         this.body.setPosition(this.position().add(new Point(
@@ -7383,8 +11276,9 @@ ProjectRecoveryDialogMorph.prototype.fixLayout = function () {
         this.buttons.setBottom(this.bottom() - this.padding);
     }
 
-    Morph.prototype.trackChanges = oldFlag;
-    this.changed();
+    // refresh shadow
+    this.removeShadow();
+    this.addShadow();
 };
 
 // LibraryImportDialogMorph ///////////////////////////////////////////
@@ -7403,6 +11297,11 @@ function LibraryImportDialogMorph(ide, librariesData) {
 }
 
 LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
+    // additional properties
+    this.isLoadingLibrary = false;
+    this.originalCategories = null;
+    this.captureOriginalCategories();
+
     // initialize inherited properties:
     LibraryImportDialogMorph.uber.init.call(
         this,
@@ -7413,14 +11312,19 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
 
     this.ide = ide;
     this.key = 'importLibrary';
-    this.librariesData = librariesData; // [{name: , fileName: , description:}]
+    this.action = 'importLibrary';
+
+    // [{name: , fileName: , description:, categories:, searchData:}]
+    this.librariesData = librariesData;
+    this.filteredLibrariesList = this.librariesData;
 
     // I contain a cached version of the libaries I have displayed,
     // because users may choose to explore a library many times before
     // importing.
-    this.libraryCache = {}; // {fileName: [blocks-array] }
+    this.libraryCache = new Map(); // fileName: { blocks: [], palette: {} }
 
     this.handle = null;
+    this.filterField = null;
     this.listField = null;
     this.palette = null;
     this.notesText = null;
@@ -7432,19 +11336,70 @@ LibraryImportDialogMorph.prototype.init = function (ide, librariesData) {
     this.buildContents();
 };
 
+LibraryImportDialogMorph.prototype.captureOriginalCategories = function () {
+    this.originalCategories = new Map();
+    SpriteMorph.prototype.customCategories.forEach((color, name) =>
+        this.originalCategories.set(name, color)
+    );
+};
+
 LibraryImportDialogMorph.prototype.buildContents = function () {
     this.addBody(new Morph());
     this.body.color = this.color;
+    this.buildFilterField();
 
     this.initializePalette();
     this.initializeLibraryDescription();
     this.installLibrariesList();
 
-    this.addButton('importLibrary', 'Import');
+    this.addButton('ok', 'Import');
     this.addButton('cancel', 'Cancel');
 
-    this.setExtent(new Point(460, 455));
+    this.setExtent(new Point(500, 500));
     this.fixLayout();
+};
+
+// LibraryImportDialogMorph filter field
+
+LibraryImportDialogMorph.prototype.buildFilterField = function () {
+    var myself = this;
+
+    function librarySearcText({name, description, categies, searchData}) {
+        return [name, description, categies, searchData].join(' ').toLowerCase();
+    }
+
+    this.filterField = new InputFieldMorph('');
+    this.magnifyingGlass = new SymbolMorph(
+        'magnifyingGlass',
+        this.filterField.height(),
+        this.titleBarColor.darker(50)
+    );
+
+    this.body.add(this.magnifyingGlass);
+    this.body.add(this.filterField);
+
+    this.filterField.reactToInput = function (evt) {
+        var text = this.getValue().toLowerCase();
+
+        myself.filteredLibrariesList =
+            myself.librariesData.filter(library =>
+                librarySearcText(library).indexOf(text) > -1);
+
+        if (myself.filteredLibrariesList.length === 0) {
+            myself.filteredLibrariesList.push({
+                name: localize('(no matches)'),
+                fileName: null,
+                description: null
+            });
+        }
+
+        myself.clearDetails();
+        myself.installLibrariesList();
+        myself.fixListFieldItemColors();
+        myself.listField.adjustScrollBars();
+        myself.listField.scrollY(myself.listField.top());
+        myself.fixLayout();
+    };
 };
 
 LibraryImportDialogMorph.prototype.initializePalette = function () {
@@ -7475,7 +11430,7 @@ LibraryImportDialogMorph.prototype.initializeLibraryDescription = function () {
     this.notesField.fontSize = InputFieldMorph.prototype.fontSize;
     this.notesField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.notesField.contrast = InputFieldMorph.prototype.contrast;
-    this.notesField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.notesField.render = InputFieldMorph.prototype.render;
     this.notesField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
     this.notesField.acceptsDrops = false;
@@ -7492,15 +11447,15 @@ LibraryImportDialogMorph.prototype.initializeLibraryDescription = function () {
 };
 
 LibraryImportDialogMorph.prototype.installLibrariesList = function () {
-    var myself = this;
-
     if (this.listField) {this.listField.destroy(); }
 
     this.listField = new ListMorph(
-        this.librariesData,
-        function (element) {return element.name; },
+        this.filteredLibrariesList,
+        element => element.name,
         null,
-        function () {myself.importLibrary(); }
+        () => this.importLibrary(),
+        '~', // separator
+        false // verbatim
     );
 
     this.fixListFieldItemColors();
@@ -7510,38 +11465,39 @@ LibraryImportDialogMorph.prototype.installLibrariesList = function () {
     this.listField.fontSize = InputFieldMorph.prototype.fontSize;
     this.listField.typeInPadding = InputFieldMorph.prototype.typeInPadding;
     this.listField.contrast = InputFieldMorph.prototype.contrast;
-    this.listField.drawNew = InputFieldMorph.prototype.drawNew;
+    this.listField.render = InputFieldMorph.prototype.render;
     this.listField.drawRectBorder = InputFieldMorph.prototype.drawRectBorder;
 
-    this.listField.action = function (item) {
-        if (isNil(item)) {return; }
+    this.listField.action = ({name, fileName, description}) => {
+        if (isNil(name) || isNil(fileName)) {return; }
 
-        myself.notesText.text = localize(item.description || '');
-        myself.notesText.drawNew();
-        myself.notesField.contents.adjustBounds();
+        this.notesText.text = localize(description) || '';
+        this.notesText.rerender();
+        this.notesField.contents.adjustBounds();
 
-        if (myself.hasCached(item.fileName)) {
-            myself.displayBlocks(item.fileName);
+        if (this.hasCached(fileName)) {
+            this.displayBlocks(fileName);
         } else {
-            myself.showMessage(
-                localize('Loading') + '\n' + localize(item.name)
-            );
-            myself.ide.getURL(
-                myself.ide.resourceURL('libraries', item.fileName),
-                function(libraryXML) {
-                    myself.cacheLibrary(
-                        item.fileName,
-                        myself.ide.serializer.loadBlocks(libraryXML)
+            this.showMessage(`${localize('Loading')}\n${localize(name)}`);
+            this.ide.getURL(
+                this.ide.resourceURL('libraries', fileName),
+                libraryXML => {
+                    let serializer = this.ide.serializer,
+                        palette = serializer.parse(
+                            libraryXML
+                        ).childNamed('palette');
+                    this.cacheLibrary(
+                        fileName,
+                        serializer.loadBlocks(libraryXML, null, true),
+                        palette ? serializer.loadPalette(palette) : {}
                     );
-                    myself.displayBlocks(item.fileName);
+                    this.displayBlocks(fileName);
                 }
             );
         }
     };
 
-    this.listField.setWidth(200);
     this.body.add(this.listField);
-
     this.fixLayout();
 };
 
@@ -7551,26 +11507,35 @@ LibraryImportDialogMorph.prototype.popUp = function () {
         LibraryImportDialogMorph.uber.popUp.call(this, world);
         this.handle = new HandleMorph(
             this,
-            300,
-            300,
+            500,
+            500,
             this.corner,
             this.corner
         );
     }
 };
 
+LibraryImportDialogMorph.prototype.destroy = function () {
+    LibraryImportDialogMorph.uber.destroy.call(this);
+    if (!this.isLoadingLibrary) {
+        SpriteMorph.prototype.customCategories = this.originalCategories;
+    }
+};
+
 LibraryImportDialogMorph.prototype.fixListFieldItemColors =
     ProjectDialogMorph.prototype.fixListFieldItemColors;
 
-LibraryImportDialogMorph.prototype.clearDetails =
-    ProjectDialogMorph.prototype.clearDetails;
+LibraryImportDialogMorph.prototype.clearDetails = function () {
+    this.notesText.text = '';
+    this.notesText.rerender();
+    this.notesField.contents.adjustBounds();
+    this.initializePalette();
+};
 
 LibraryImportDialogMorph.prototype.fixLayout = function () {
     var titleHeight = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         thin = this.padding / 2,
-        oldFlag = Morph.prototype.trackChanges;
-
-    Morph.prototype.trackChanges = false;
+        inputField = this.filterField;
 
     if (this.body) {
         this.body.setPosition(this.position().add(new Point(
@@ -7580,26 +11545,43 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.body.setExtent(new Point(
             this.width() - this.padding * 2,
             this.height()
-                - this.padding * 3 // top, bottom and button padding.
+                - this.padding * 4 // top, bottom, filterfield, button padding
                 - titleHeight
                 - this.buttons.height()
         ));
 
-        this.listField.setExtent(new Point(
-            200,
-            this.body.height()
-        ));
+        if (this.magnifyingGlass) {
+            this.magnifyingGlass.setTop(inputField.top());
+            this.magnifyingGlass.setLeft(this.body.left());
+        }
+
+        inputField.setWidth(
+            this.body.width() - this.padding - this.magnifyingGlass.width()
+        );
+        inputField.setLeft(this.magnifyingGlass.left() + this.padding * 2);
+        inputField.setTop(this.body.top());
+
+        this.listField.setLeft(this.body.left());
+        this.listField.setWidth(240);
+
+        this.listField.setTop(inputField.bottom() + this.padding);
+        this.listField.setHeight(
+            this.body.height() - inputField.height()
+        );
+        this.listField.contents.children[0].adjustWidths();
+
         this.notesField.setExtent(new Point(
             this.body.width() - this.listField.width() - thin,
             100
         ));
         this.palette.setExtent(new Point(
-            this.notesField.width(),
-            this.body.height() - this.notesField.height() - thin
+            this.body.width() - this.listField.width() - thin,
+            this.body.height() -
+                this.filterField.height() -
+                this.notesField.height() -
+                thin
         ));
-        this.listField.contents.children[0].adjustWidths();
 
-        this.listField.setPosition(this.body.position());
         this.palette.setPosition(this.listField.topRight().add(
             new Point(thin, 0)
         ));
@@ -7621,8 +11603,8 @@ LibraryImportDialogMorph.prototype.fixLayout = function () {
         this.buttons.setBottom(this.bottom() - this.padding);
     }
 
-    Morph.prototype.trackChanges = oldFlag;
-    this.changed();
+    this.removeShadow();
+    this.addShadow();
 };
 
 // Library Cache Utilities.
@@ -7630,69 +11612,106 @@ LibraryImportDialogMorph.prototype.hasCached = function (key) {
     return this.libraryCache.hasOwnProperty(key);
 };
 
-LibraryImportDialogMorph.prototype.cacheLibrary = function (key, blocks) {
-    this.libraryCache[key] = blocks ;
+LibraryImportDialogMorph.prototype.cacheLibrary = function (
+    key,
+    blocks,
+    palette
+) {
+    this.libraryCache.set(key, { blocks, palette });
 };
 
 LibraryImportDialogMorph.prototype.cachedLibrary = function (key) {
-    return this.libraryCache[key];
+    return this.libraryCache.get(key).blocks;
+};
+
+LibraryImportDialogMorph.prototype.cachedPalette = function (key) {
+    return this.libraryCache.get(key).palette;
 };
 
 LibraryImportDialogMorph.prototype.importLibrary = function () {
-    var blocks,
-        ide = this.ide,
+    if (!this.listField.selected) {return; }
+
+    var ide = this.ide,
         selectedLibrary = this.listField.selected.fileName,
         libraryName = this.listField.selected.name;
 
+    // restore captured user-blocks categories
+    SpriteMorph.prototype.customCategories = this.originalCategories;
+
+    /*
+    // importing previously cached blocks is disabled because
+    // of customized primitives, which aren't installed for caching
+    // to prevent polluting the project's palette
+    // code retained for reference, -jens (01/2025)
+
     if (this.hasCached(selectedLibrary)) {
-        blocks = this.cachedLibrary(selectedLibrary);
-        blocks.forEach(function (def) {
+        this.cachedLibrary(selectedLibrary).forEach(def => {
             def.receiver = ide.stage;
             ide.stage.globalBlocks.push(def);
             ide.stage.replaceDoubleDefinitionsFor(def);
         });
-        ide.showMessage(localize('Imported') + ' ' + localize(libraryName), 2);
+        this.cachedPalette(selectedLibrary).forEach((value, key) =>
+            SpriteMorph.prototype.customCategories.set(key, value)
+        );
+        ide.showMessage(`${localize('Imported')} ${libraryName}`, 2);
     } else {
-        ide.showMessage(localize('Loading') + ' ' + localize(libraryName));
+        ide.showMessage(`${localize('Loading')} ${libraryName}`);
         ide.getURL(
             ide.resourceURL('libraries', selectedLibrary),
-            function(libraryText) {
+            libraryText => {
                 ide.droppedText(libraryText, libraryName);
+                this.isLoadingLibrary = true;
             }
         );
     }
+    */
 
-    this.destroy();
+    ide.showMessage(`${localize('Loading')} ${libraryName}`);
+    ide.getURL(
+        ide.resourceURL('libraries', selectedLibrary),
+        libraryText => {
+            ide.droppedText(libraryText, libraryName);
+            this.isLoadingLibrary = true;
+        }
+    );
 };
 
 LibraryImportDialogMorph.prototype.displayBlocks = function (libraryKey) {
-    var x, y, blockImage, previousCategory, blockContainer,
-        myself = this,
+    var x, y, blockImage, blockContainer, text,
         padding = 4,
-        blocksList = this.cachedLibrary(libraryKey);
+        libraryBlocks = this.cachedLibrary(libraryKey),
+        blocksByCategory = new Map(
+            SpriteMorph.prototype.allCategories().map(cat => [cat, []])
+        );
 
-    if (!blocksList.length) {return; }
     // populate palette, grouped by categories.
     this.initializePalette();
     x = this.palette.left() + padding;
     y = this.palette.top();
 
-    SpriteMorph.prototype.categories.forEach(function (category) {
-        blocksList.forEach(function (definition) {
-            if (definition.category !== category) {return; }
-            if (category !== previousCategory) {
-                y += padding;
-            }
-            previousCategory = category;
+    libraryBlocks.global.concat(libraryBlocks.local).forEach(definition => {
+        if (!definition.isHelper) {
+            blocksByCategory.get(definition.category).push(definition);
+        }
+    });
 
+    blocksByCategory.forEach((blocks, category) => {
+        if (blocks.length > 0) {
+            text = SpriteMorph.prototype.categoryText(category);
+            text.setPosition(new Point(x, y));
+            this.palette.addContents(text);
+            y += text.fullBounds().height() + padding;
+        }
+
+        blocks.forEach(definition => {
             blockImage = definition.templateInstance().fullImage();
             blockContainer = new Morph();
-            blockContainer.setExtent(
-                new Point(blockImage.width, blockImage.height)
-            );
-            blockContainer.image = blockImage;
+            blockContainer.isCachingImage = true;
+            blockContainer.bounds.setWidth(blockImage.width);
+            blockContainer.bounds.setHeight(blockImage.height);
+            blockContainer.cachedImage = blockImage;
             blockContainer.setPosition(new Point(x, y));
-            myself.palette.addContents(blockContainer);
+            this.palette.addContents(blockContainer);
 
             y += blockContainer.fullBounds().height() + padding;
         });
@@ -7729,47 +11748,44 @@ SpriteIconMorph.uber = ToggleButtonMorph.prototype;
 SpriteIconMorph.prototype.thumbSize = new Point(40, 40);
 SpriteIconMorph.prototype.labelShadowOffset = null;
 SpriteIconMorph.prototype.labelShadowColor = null;
-SpriteIconMorph.prototype.labelColor = new Color(255, 255, 255);
+SpriteIconMorph.prototype.labelColor = WHITE;
 SpriteIconMorph.prototype.fontSize = 9;
 
 // SpriteIconMorph instance creation:
 
-function SpriteIconMorph(aSprite, aTemplate) {
-    this.init(aSprite, aTemplate);
+function SpriteIconMorph(aSprite) {
+    this.init(aSprite);
 }
 
-SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
-    var colors, action, query, hover, myself = this;
+SpriteIconMorph.prototype.init = function (aSprite) {
+    var colors, action, query, hover;
 
-    if (!aTemplate) {
-        colors = [
-            IDE_Morph.prototype.groupColor,
-            IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor
-        ];
+    colors = [
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor
+    ];
 
-    }
-
-    action = function () {
+    action = () => {
         // make my sprite the current one
-        var ide = myself.parentThatIsA(IDE_Morph);
+        var ide = this.parentThatIsA(IDE_Morph);
 
         if (ide) {
-            ide.selectSprite(myself.object);
+            ide.selectSprite(this.object);
         }
     };
 
-    query = function () {
+    query = () => {
         // answer true if my sprite is the current one
-        var ide = myself.parentThatIsA(IDE_Morph);
+        var ide = this.parentThatIsA(IDE_Morph);
 
         if (ide) {
-            return ide.currentSprite === myself.object;
+            return ide.currentSprite === this.object;
         }
         return false;
     };
 
-    hover = function () {
+    hover = () => {
         if (!aSprite.exemplar) {return null; }
         return (localize('parent') + ':\n' + aSprite.exemplar.name);
     };
@@ -7780,6 +11796,12 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
     this.thumbnail = null;
     this.rotationButton = null; // synchronous rotation of nested sprites
 
+    // additional properties for highlighting
+    this.isFlashing = false;
+    this.previousColor = null;
+    this.previousOutline = null;
+    this.previousState = null;
+
     // initialize inherited properties:
     SpriteIconMorph.uber.init.call(
         this,
@@ -7789,8 +11811,7 @@ SpriteIconMorph.prototype.init = function (aSprite, aTemplate) {
         this.object.name, // label string
         query, // predicate/selector
         null, // environment
-        hover, // hint
-        aTemplate // optional, for cached background images
+        hover // hint
     );
 
     // override defaults and build additional components
@@ -7806,16 +11827,22 @@ SpriteIconMorph.prototype.createThumbnail = function () {
     if (this.thumbnail) {
         this.thumbnail.destroy();
     }
-
-    this.thumbnail = new Morph();
-    this.thumbnail.setExtent(this.thumbSize);
-    if (this.object instanceof SpriteMorph) { // support nested sprites
-        this.thumbnail.image = this.object.fullThumbnail(this.thumbSize);
-        this.createRotationButton();
+    if (this.object.thumb) { // support nested sprites
+        this.thumbnail = this.object.thumb(this.thumbSize);
+        this.add(this.thumbnail);
+        if (this.object instanceof SpriteMorph) {
+            this.createRotationButton();
+        }
     } else {
-        this.thumbnail.image = this.object.thumbnail(this.thumbSize);
+        this.thumbnail = new Morph();
+        this.thumbnail.isCachingImage = true;
+        this.thumbnail.bounds.setExtent(this.thumbSize);
+        this.thumbnail.cachedImage = this.object.thumbnail(
+            this.thumbSize,
+            this.thumbnail.cachedImage
+        );
+        this.add(this.thumbnail);
     }
-    this.add(this.thumbnail);
 };
 
 SpriteIconMorph.prototype.createLabel = function () {
@@ -7846,7 +11873,7 @@ SpriteIconMorph.prototype.createLabel = function () {
 };
 
 SpriteIconMorph.prototype.createRotationButton = function () {
-    var button, myself = this;
+    var button;
 
     if (this.rotationButton) {
         this.rotationButton.destroy();
@@ -7859,28 +11886,21 @@ SpriteIconMorph.prototype.createRotationButton = function () {
     button = new ToggleButtonMorph(
         null, // colors,
         null, // target
-        function () {
-            myself.object.rotatesWithAnchor =
-                !myself.object.rotatesWithAnchor;
-        },
+        () => this.object.rotatesWithAnchor = !this.object.rotatesWithAnchor,
         [
             '\u2192',
             '\u21BB'
         ],
-        function () {  // query
-            return myself.object.rotatesWithAnchor;
-        }
+        () => this.object.rotatesWithAnchor // query
     );
 
     button.corner = 8;
     button.labelMinExtent = new Point(11, 11);
     button.padding = 0;
     button.pressColor = button.color;
-    button.drawNew();
     // button.hint = 'rotate synchronously\nwith anchor';
     button.fixLayout();
     button.refresh();
-    button.changed();
     this.rotationButton = button;
     this.add(this.rotationButton);
 };
@@ -7889,7 +11909,14 @@ SpriteIconMorph.prototype.createRotationButton = function () {
 
 SpriteIconMorph.prototype.step = function () {
     if (this.version !== this.object.version) {
-        this.createThumbnail();
+        if (this.object.thumb) {
+            this.thumbnail.rerender();
+        } else {
+            this.createThumbnail();
+        }
+        if (this.object instanceof SpriteMorph) {
+            this.createRotationButton();
+        }
         this.createLabel();
         this.fixLayout();
         this.version = this.object.version;
@@ -7902,14 +11929,14 @@ SpriteIconMorph.prototype.step = function () {
 SpriteIconMorph.prototype.fixLayout = function () {
     if (!this.thumbnail || !this.label) {return null; }
 
-    this.setWidth(
+    this.bounds.setWidth(
         this.thumbnail.width()
             + this.outline * 2
             + this.edge * 2
             + this.padding * 2
     );
 
-    this.setHeight(
+    this.bounds.setHeight(
         this.thumbnail.height()
             + this.outline * 2
             + this.edge * 2
@@ -7942,20 +11969,45 @@ SpriteIconMorph.prototype.fixLayout = function () {
 // SpriteIconMorph menu
 
 SpriteIconMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this),
-        myself = this;
+    var menu = new MenuMorph(this);
+
     if (this.object instanceof StageMorph) {
         menu.addItem(
             'pic...',
-            function () {
-                var ide = myself.parentThatIsA(IDE_Morph);
+            () => {
+                var ide = this.parentThatIsA(IDE_Morph);
                 ide.saveCanvasAs(
-                    myself.object.fullImageClassic(),
+                    this.object.fullImage(),
                     this.object.name
                 );
             },
-            'open a new window\nwith a picture of the stage'
+            'save a picture\nof the stage'
         );
+        if (this.object.trailsLog.length) {
+            menu.addLine();
+            menu.addItem(
+                'svg...',
+                () => this.object.exportTrailsLogAsSVG(),
+                'export pen trails\nline segments as SVG'
+            );
+
+            menu.addItem(
+                'poly svg...',
+                () => this.object.exportTrailsLogAsPolySVG(),
+                'export pen trails\nline segments as polyline SVG'
+            );
+            menu.addItem(
+                'dst...',
+                () => this.object.exportTrailsLogAsDST(),
+                'export pen trails\nas DST embroidery file'
+            );
+            menu.addItem(
+                'exp...',
+                () => this.object.exportTrailsLogAsEXP(),
+                'export pen trails\nas EXP embroidery file'
+            );
+
+        }
         return menu;
     }
     if (!(this.object instanceof SpriteMorph)) {return null; }
@@ -7967,6 +12019,32 @@ SpriteIconMorph.prototype.userMenu = function () {
     }
     menu.addItem("delete", 'removeSprite');
     menu.addLine();
+    if (this.object.solution) {
+        menu.addItem(
+            'extract solution',
+            () => {
+                this.parentThatIsA(IDE_Morph).undelete(
+                    this.object.solution.fullCopy(),
+                    this.center()
+                );
+            }
+        );
+        menu.addItem(
+            'delete solution',
+            () => {
+                this.parentThatIsA(IDE_Morph).removeSprite(
+                    this.object.solution
+                );
+                this.object.solution = null;
+                this.object.recordUserEdit(
+                    'sprite',
+                    'solution',
+                    'delete'
+                );
+            }
+        );
+        menu.addLine();
+    }
     if (StageMorph.prototype.enableInheritance) {
         /* version that hides refactoring capability unless shift-clicked
         if (this.world().currentKey === 16) { // shift-clicked
@@ -7990,13 +12068,13 @@ SpriteIconMorph.prototype.userMenu = function () {
     if (this.object.anchor) {
         menu.addItem(
             localize('detach from') + ' ' + this.object.anchor.name,
-            function () {myself.object.detachFromAnchor(); }
+            () => this.object.detachFromAnchor()
         );
     }
     if (this.object.parts.length) {
         menu.addItem(
             'detach all parts',
-            function () {myself.object.detachAllParts(); }
+            () => this.object.detachAllParts()
         );
     }
     menu.addItem("export...", 'exportSprite');
@@ -8034,6 +12112,11 @@ SpriteIconMorph.prototype.chooseExemplar = function () {
 
 SpriteIconMorph.prototype.releaseSprite = function () {
     this.object.release();
+    this.object.recordUserEdit(
+        'sprite',
+        'release',
+        this.object.name
+    );
 };
 
 SpriteIconMorph.prototype.showSpriteOnStage = function () {
@@ -8050,40 +12133,29 @@ SpriteIconMorph.prototype.mouseDoubleClick = function () {
 
 // SpriteIconMorph drawing
 
-SpriteIconMorph.prototype.createBackgrounds = function () {
-//    only draw the edges if I am selected
-    var context,
-        ext = this.extent();
-
-    if (this.template) { // take the backgrounds images from the template
-        this.image = this.template.image;
-        this.normalImage = this.template.normalImage;
-        this.highlightImage = this.template.highlightImage;
-        this.pressImage = this.template.pressImage;
-        return null;
+SpriteIconMorph.prototype.render = function (ctx) {
+    // only draw the edges if I am selected
+    switch (this.userState) {
+    case 'highlight':
+        this.drawBackground(ctx, this.highlightColor);
+        break;
+    case 'pressed':
+        this.drawOutline(ctx);
+        this.drawBackground(ctx, this.pressColor);
+        this.drawEdges(
+            ctx,
+            this.pressColor,
+            this.pressColor.lighter(40),
+            this.pressColor.darker(40)
+        );
+        break;
+    default:
+        this.drawBackground(ctx, this.getRenderColor());
     }
-
-    this.normalImage = newCanvas(ext);
-    context = this.normalImage.getContext('2d');
-    this.drawBackground(context, this.color);
-
-    this.highlightImage = newCanvas(ext);
-    context = this.highlightImage.getContext('2d');
-    this.drawBackground(context, this.highlightColor);
-
-    this.pressImage = newCanvas(ext);
-    context = this.pressImage.getContext('2d');
-    this.drawOutline(context);
-    this.drawBackground(context, this.pressColor);
-    this.drawEdges(
-        context,
-        this.pressColor,
-        this.pressColor.lighter(this.contrast),
-        this.pressColor.darker(this.contrast)
-    );
-
-    this.image = this.normalImage;
 };
+
+SpriteIconMorph.prototype.getRenderColor =
+    ScriptsMorph.prototype.getRenderColor;
 
 // SpriteIconMorph drag & drop
 
@@ -8095,7 +12167,7 @@ SpriteIconMorph.prototype.prepareToBeGrabbed = function () {
     if (ide) {
         idx = ide.sprites.asArray().indexOf(this.object);
         ide.sprites.remove(idx + 1);
-        ide.createCorral();
+        ide.createCorral(true); // keep scenes
         ide.fixLayout();
     }
 };
@@ -8108,13 +12180,18 @@ SpriteIconMorph.prototype.wantsDropOf = function (morph) {
     // allow scripts & media to be copied from one sprite to another
     // by drag & drop
     return morph instanceof BlockMorph
+        || (morph instanceof CommentMorph)
         || (morph instanceof CostumeIconMorph)
         || (morph instanceof SoundIconMorph);
 };
 
 SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
-    if (morph instanceof BlockMorph) {
-        this.copyStack(morph);
+    if (morph instanceof BlockMorph || morph instanceof CommentMorph) {
+        if (!(morph instanceof HatBlockMorph &&
+            morph.isCustomBlockSpecific())
+        ) {
+            this.copyStack(morph);
+        }
     } else if (morph instanceof CostumeIconMorph) {
         this.copyCostume(morph.object);
     } else if (morph instanceof SoundIconMorph) {
@@ -8127,22 +12204,24 @@ SpriteIconMorph.prototype.reactToDropOf = function (morph, hand) {
 SpriteIconMorph.prototype.copyStack = function (block) {
     var sprite = this.object,
     	dup = block.fullCopy(),
-        y = Math.max(sprite.scripts.children.map(function (stack) {
-            return stack.fullBounds().bottom();
-        }).concat([sprite.scripts.top()]));
+        y = Math.max(
+            sprite.scripts.children.map(stack =>
+                stack.fullBounds().bottom()
+            ).concat([sprite.scripts.top()])
+        );
 
     dup.setPosition(new Point(sprite.scripts.left() + 20, y + 20));
     sprite.scripts.add(dup);
-    dup.allComments().forEach(function (comment) {
-        comment.align(dup);
-    });
+    if (dup instanceof BlockMorph) {
+        dup.allComments().forEach(comment => comment.align(dup));
+    }
     sprite.scripts.adjustBounds();
 
     // delete all local custom blocks (methods) that the receiver
     // doesn't understand
-    dup.allChildren().forEach(function (morph) {
+    dup.allChildren().forEach(morph => {
 	    if (morph.isCustomBlock &&
-        		!morph.isGlobal &&
+            !morph.isGlobal &&
         		!sprite.getMethod(morph.blockSpec)
         ) {
             morph.deleteBlock();
@@ -8160,6 +12239,59 @@ SpriteIconMorph.prototype.copyCostume = function (costume) {
 SpriteIconMorph.prototype.copySound = function (sound) {
     var dup = sound.copy();
     this.object.addSound(dup.audio, dup.name);
+};
+
+// SpriteIconMorph flashing
+
+SpriteIconMorph.prototype.flash = function () {
+    var world = this.world();
+
+    if (this.isFlashing) {return; }
+    this.flashOn();
+
+    world.animations.push(new Animation(
+        nop,
+        nop,
+        0,
+        800,
+        nop,
+        () => this.flashOff()
+    ));
+};
+
+SpriteIconMorph.prototype.flashOn = function () {
+    var isFlat = MorphicPreferences.isFlat,
+        highlight = SpriteMorph.prototype.highlightColor;
+
+    if (this.isFlashing) {return; }
+
+    this.previousColor = isFlat ? this.pressColor : this.outlineColor;
+    this.previousOutline = this.outline;
+    this.previousState = this.userState;
+
+    if (isFlat) {
+        this.pressColor = highlight;
+    } else {
+        this.outlineColor = highlight;
+        this.outline = 2;
+    }
+    this.userState = 'pressed';
+    this.rerender();
+    this.isFlashing = true;
+};
+
+SpriteIconMorph.prototype.flashOff = function () {
+    if (!this.isFlashing) {return; }
+
+    if (MorphicPreferences.isFlat) {
+        this.pressColor = this.previousColor;
+    } else {
+        this.outlineColor = this.previousColor;
+        this.outline = this.previousOutline;
+    }
+    this.userState = this.previousState;
+    this.rerender();
+    this.isFlashing = false;
 };
 
 // CostumeIconMorph ////////////////////////////////////////////////////
@@ -8183,46 +12315,43 @@ CostumeIconMorph.uber = ToggleButtonMorph.prototype;
 CostumeIconMorph.prototype.thumbSize = new Point(80, 60);
 CostumeIconMorph.prototype.labelShadowOffset = null;
 CostumeIconMorph.prototype.labelShadowColor = null;
-CostumeIconMorph.prototype.labelColor = new Color(255, 255, 255);
+CostumeIconMorph.prototype.labelColor = WHITE;
 CostumeIconMorph.prototype.fontSize = 9;
 
 // CostumeIconMorph instance creation:
 
-function CostumeIconMorph(aCostume, aTemplate) {
-    this.init(aCostume, aTemplate);
+function CostumeIconMorph(aCostume) {
+    this.init(aCostume);
 }
 
-CostumeIconMorph.prototype.init = function (aCostume, aTemplate) {
-    var colors, action, query, myself = this;
+CostumeIconMorph.prototype.init = function (aCostume) {
+    var colors, action, query;
 
-    if (!aTemplate) {
-        colors = [
-            IDE_Morph.prototype.groupColor,
-            IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor
-        ];
+    colors = [
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor
+    ];
 
-    }
-
-    action = function () {
+    action = () => {
         // make my costume the current one
-        var ide = myself.parentThatIsA(IDE_Morph),
-            wardrobe = myself.parentThatIsA(WardrobeMorph);
+        var ide = this.parentThatIsA(IDE_Morph),
+            wardrobe = this.parentThatIsA(WardrobeMorph);
 
         if (ide) {
-            ide.currentSprite.wearCostume(myself.object);
+            ide.currentSprite.wearCostume(this.object);
         }
         if (wardrobe) {
             wardrobe.updateSelection();
         }
     };
 
-    query = function () {
+    query = () => {
         // answer true if my costume is the current one
-        var ide = myself.parentThatIsA(IDE_Morph);
+        var ide = this.parentThatIsA(IDE_Morph);
 
         if (ide) {
-            return ide.currentSprite.costume === myself.object;
+            return ide.currentSprite.costume === this.object;
         }
         return false;
     };
@@ -8241,8 +12370,7 @@ CostumeIconMorph.prototype.init = function (aCostume, aTemplate) {
         this.object.name, // label string
         query, // predicate/selector
         null, // environment
-        null, // hint
-        aTemplate // optional, for cached background images
+        null // hint
     );
 
     // override defaults and build additional components
@@ -8255,11 +12383,17 @@ CostumeIconMorph.prototype.init = function (aCostume, aTemplate) {
 };
 
 CostumeIconMorph.prototype.createThumbnail = function () {
-    var txt;
+    var watermark, txt;
     SpriteIconMorph.prototype.createThumbnail.call(this);
-    if (this.object instanceof SVG_Costume) {
+    watermark = this.object instanceof SVG_Costume ? 'svg'
+        : (this.object.embeddedData ? (
+                this.typeOfStringData(this.object.embeddedData) === 'data' ?
+                    'dta' : '</>'
+        )
+            : null);
+    if (watermark) {
         txt = new StringMorph(
-            'svg',
+            watermark,
             this.fontSize * 0.8,
             this.fontStyle,
             false,
@@ -8306,6 +12440,12 @@ CostumeIconMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", "duplicateCostume");
     menu.addItem("delete", "removeCostume");
     menu.addLine();
+    if (this.object.embeddedData) {
+        menu.addItem(
+            "get" + ' ' + this.typeOfStringData(this.object.embeddedData),
+            "importEmbeddedData"
+        );
+    }
     menu.addItem("export", "exportCostume");
     return menu;
 };
@@ -8331,8 +12471,13 @@ CostumeIconMorph.prototype.editCostume = function () {
 
 CostumeIconMorph.prototype.editRotationPointOnly = function () {
     var ide = this.parentThatIsA(IDE_Morph);
-    this.object.editRotationPointOnly(this.world());
+    this.object.editRotationPointOnly(this.world(), ide);
     ide.hasChangedMedia = true;
+    ide.currentSprite.recordUserEdit(
+        'costume',
+        'rotation point',
+        this.object.name
+    );
 };
 
 CostumeIconMorph.prototype.renameCostume = function () {
@@ -8342,7 +12487,8 @@ CostumeIconMorph.prototype.renameCostume = function () {
         ide = this.parentThatIsA(IDE_Morph);
     new DialogBoxMorph(
         null,
-        function (answer) {
+        answer => {
+            var old = costume.name;
             if (answer && (answer !== costume.name)) {
                 costume.name = wardrobe.sprite.newCostumeName(
                     answer,
@@ -8350,10 +12496,16 @@ CostumeIconMorph.prototype.renameCostume = function () {
                 );
                 costume.version = Date.now();
                 ide.hasChangedMedia = true;
+                wardrobe.sprite.recordUserEdit(
+                    'costume',
+                    'rename',
+                    old,
+                    costume.name
+                );
             }
         }
     ).prompt(
-        this.currentSprite instanceof SpriteMorph ?
+        wardrobe.sprite instanceof SpriteMorph ?
             'rename costume' : 'rename background',
         costume.name,
         this.world()
@@ -8375,12 +12527,41 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
 CostumeIconMorph.prototype.removeCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         idx = this.parent.children.indexOf(this),
-        off = CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2,
-        ide = this.parentThatIsA(IDE_Morph);
+        off = CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2;
     wardrobe.removeCostumeAt(idx - off); // ignore paintbrush and camera buttons
-    if (ide.currentSprite.costume === this.object) {
-        ide.currentSprite.wearCostume(null);
+    if (wardrobe.sprite.costume === this.object) {
+        wardrobe.sprite.wearCostume(null);
     }
+    wardrobe.sprite.recordUserEdit(
+        'costume',
+        'delete',
+        idx - off,
+        this.object.name
+    );
+};
+
+CostumeIconMorph.prototype.importEmbeddedData = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    ide.spriteBar.tabBar.tabTo('scripts');
+    ide.droppedText(this.object.embeddedData, this.object.name, '');
+};
+
+CostumeIconMorph.prototype.typeOfStringData = function (aString) {
+    // check for Snap specific files, projects, libraries, sprites, scripts
+    if (aString[0] === '<') {
+        if ([
+                'project',
+                'snapdata',
+                'blocks',
+                'sprites',
+                'block',
+                'script'
+            ].some(tag => aString.slice(1).startsWith(tag))
+        ) {
+            return 'blocks';
+        }
+    }
+    return 'data';
 };
 
 CostumeIconMorph.prototype.exportCostume = function () {
@@ -8388,6 +12569,9 @@ CostumeIconMorph.prototype.exportCostume = function () {
     if (this.object instanceof SVG_Costume) {
         // don't show SVG costumes in a new tab (shows text)
         ide.saveFileAs(this.object.contents.src, 'text/svg', this.object.name);
+    } else if (this.object.embeddedData) {
+        // embed payload data (e.g blocks)  inside the PNG image data
+        ide.saveFileAs(this.object.pngData(), 'image/png', this.object.name);
     } else { // rasterized Costume
         ide.saveCanvasAs(this.object.contents, this.object.name);
     }
@@ -8395,8 +12579,8 @@ CostumeIconMorph.prototype.exportCostume = function () {
 
 // CostumeIconMorph drawing
 
-CostumeIconMorph.prototype.createBackgrounds
-    = SpriteIconMorph.prototype.createBackgrounds;
+CostumeIconMorph.prototype.render
+    = SpriteIconMorph.prototype.render;
 
 // CostumeIconMorph inheritance
 
@@ -8436,31 +12620,28 @@ TurtleIconMorph.uber = ToggleButtonMorph.prototype;
 TurtleIconMorph.prototype.thumbSize = new Point(80, 60);
 TurtleIconMorph.prototype.labelShadowOffset = null;
 TurtleIconMorph.prototype.labelShadowColor = null;
-TurtleIconMorph.prototype.labelColor = new Color(255, 255, 255);
+TurtleIconMorph.prototype.labelColor = WHITE;
 TurtleIconMorph.prototype.fontSize = 9;
 
 // TurtleIconMorph instance creation:
 
-function TurtleIconMorph(aSpriteOrStage, aTemplate) {
-    this.init(aSpriteOrStage, aTemplate);
+function TurtleIconMorph(aSpriteOrStage) {
+    this.init(aSpriteOrStage);
 }
 
-TurtleIconMorph.prototype.init = function (aSpriteOrStage, aTemplate) {
-    var colors, action, query, myself = this;
+TurtleIconMorph.prototype.init = function (aSpriteOrStage) {
+    var colors, action, query;
 
-    if (!aTemplate) {
-        colors = [
-            IDE_Morph.prototype.groupColor,
-            IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor
-        ];
+    colors = [
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor
+    ];
 
-    }
-
-    action = function () {
+    action = () => {
         // make my costume the current one
-        var ide = myself.parentThatIsA(IDE_Morph),
-            wardrobe = myself.parentThatIsA(WardrobeMorph);
+        var ide = this.parentThatIsA(IDE_Morph),
+            wardrobe = this.parentThatIsA(WardrobeMorph);
 
         if (ide) {
             ide.currentSprite.wearCostume(null);
@@ -8470,9 +12651,9 @@ TurtleIconMorph.prototype.init = function (aSpriteOrStage, aTemplate) {
         }
     };
 
-    query = function () {
+    query = () => {
         // answer true if my costume is the current one
-        var ide = myself.parentThatIsA(IDE_Morph);
+        var ide = this.parentThatIsA(IDE_Morph);
 
         if (ide) {
             return ide.currentSprite.costume === null;
@@ -8494,8 +12675,7 @@ TurtleIconMorph.prototype.init = function (aSpriteOrStage, aTemplate) {
         'default', // label string
         query, // predicate/selector
         null, // environment
-        null, // hint
-        aTemplate // optional, for cached background images
+        null // hint
     );
 
     // override defaults and build additional components
@@ -8568,14 +12748,13 @@ TurtleIconMorph.prototype.fixLayout
 
 // TurtleIconMorph drawing
 
-TurtleIconMorph.prototype.createBackgrounds
-    = SpriteIconMorph.prototype.createBackgrounds;
+TurtleIconMorph.prototype.render
+    = SpriteIconMorph.prototype.render;
 
 // TurtleIconMorph user menu
 
 TurtleIconMorph.prototype.userMenu = function () {
-    var myself = this,
-        menu = new MenuMorph(this, 'pen'),
+    var menu = new MenuMorph(this, 'pen'),
         on = '\u25CF',
         off = '\u25CB';
     if (this.object instanceof StageMorph) {
@@ -8583,22 +12762,22 @@ TurtleIconMorph.prototype.userMenu = function () {
     }
     menu.addItem(
         (this.object.penPoint === 'tip' ? on : off) + ' ' + localize('tip'),
-        function () {
-            myself.object.penPoint = 'tip';
-            myself.object.changed();
-            myself.object.drawNew();
-            myself.object.changed();
+        () => {
+            this.object.penPoint = 'tip';
+            this.object.changed();
+            this.object.fixLayout();
+            this.object.rerender();
         }
     );
     menu.addItem(
         (this.object.penPoint === 'middle' ? on : off) + ' ' + localize(
             'middle'
         ),
-        function () {
-            myself.object.penPoint = 'middle';
-            myself.object.changed();
-            myself.object.drawNew();
-            myself.object.changed();
+        () => {
+            this.object.penPoint = 'middle';
+            this.object.changed();
+            this.object.fixLayout();
+            this.object.rerender();
         }
     );
     return menu;
@@ -8634,41 +12813,36 @@ WardrobeMorph.prototype.init = function (aSprite, sliderColor) {
     WardrobeMorph.uber.init.call(this, null, null, sliderColor);
 
     // configure inherited properties
-    this.fps = 2;
+    // this.fps = 2; // commented out to make scrollbars more responsive
     this.updateList();
 };
 
 // Wardrobe updating
 
 WardrobeMorph.prototype.updateList = function () {
-    var myself = this,
-        x = this.left() + 5,
+    var x = this.left() + 5,
         y = this.top() + 5,
         padding = 4,
         toolsPadding = 5,
-        oldFlag = Morph.prototype.trackChanges,
         oldPos = this.contents.position(),
         icon,
-        template,
         txt,
         paintbutton,
         cambutton;
 
     this.changed();
-    oldFlag = Morph.prototype.trackChanges;
-    Morph.prototype.trackChanges = false;
 
     this.contents.destroy();
     this.contents = new FrameMorph(this);
     this.contents.acceptsDrops = false;
-    this.contents.reactToDropOf = function (icon) {
-        myself.reactToDropOf(icon);
+    this.contents.reactToDropOf = (icon) => {
+        this.reactToDropOf(icon);
     };
     this.addBack(this.contents);
 
     icon = new TurtleIconMorph(this.sprite);
     icon.setPosition(new Point(x, y));
-    myself.addContents(icon);
+    this.addContents(icon);
     y = icon.bottom() + padding;
 
     paintbutton = new PushButtonMorph(
@@ -8686,7 +12860,6 @@ WardrobeMorph.prototype.updateList = function () {
     paintbutton.labelShadowColor = paintbutton.highlightColor;
     paintbutton.labelColor = TurtleIconMorph.prototype.labelColor;
     paintbutton.contrast = this.buttonContrast;
-    paintbutton.drawNew();
     paintbutton.hint = "Paint a new costume";
     paintbutton.setPosition(new Point(x, y));
     paintbutton.fixLayout();
@@ -8700,7 +12873,7 @@ WardrobeMorph.prototype.updateList = function () {
             this,
             "newFromCam",
             new SymbolMorph("camera", 15)
-            );
+        );
         cambutton.padding = 0;
         cambutton.corner = 12;
         cambutton.color = IDE_Morph.prototype.groupColor;
@@ -8711,7 +12884,6 @@ WardrobeMorph.prototype.updateList = function () {
         cambutton.labelShadowColor = paintbutton.highlightColor;
         cambutton.labelColor = TurtleIconMorph.prototype.labelColor;
         cambutton.contrast = this.buttonContrast;
-        cambutton.drawNew();
         cambutton.hint = "Import a new costume from your webcam";
         cambutton.setPosition(new Point(x, y));
         cambutton.fixLayout();
@@ -8728,7 +12900,7 @@ WardrobeMorph.prototype.updateList = function () {
 
         document.addEventListener(
             'cameraDisabled',
-            function () {
+            () => {
                 cambutton.disable();
                 cambutton.hint =
                     CamSnapshotDialogMorph.prototype.notSupportedMessage;
@@ -8746,17 +12918,16 @@ WardrobeMorph.prototype.updateList = function () {
     this.addContents(txt);
     y = txt.bottom() + padding;
 
-    this.sprite.costumes.asArray().forEach(function (costume) {
-        template = icon = new CostumeIconMorph(costume, template);
+    this.sprite.costumes.asArray().forEach(costume => {
+        icon = new CostumeIconMorph(costume);
         icon.setPosition(new Point(x, y));
-        myself.addContents(icon);
+        this.addContents(icon);
         y = icon.bottom() + padding;
     });
     this.costumesVersion = this.sprite.costumes.lastChanged;
 
     this.contents.setPosition(oldPos);
     this.adjustScrollBars();
-    Morph.prototype.trackChanges = oldFlag;
     this.changed();
 
     this.updateSelection();
@@ -8764,7 +12935,9 @@ WardrobeMorph.prototype.updateList = function () {
 
 WardrobeMorph.prototype.updateSelection = function () {
     this.contents.children.forEach(function (morph) {
-        if (morph.refresh) {morph.refresh(); }
+        if (morph.refresh) {
+            morph.refresh();
+        }
     });
     this.spriteVersion = this.sprite.version;
 };
@@ -8789,36 +12962,52 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
 };
 
 WardrobeMorph.prototype.paintNew = function () {
-    var cos = new Costume(
+    var ide = this.parentThatIsA(IDE_Morph),
+        cos = new Costume(
             newCanvas(null, true),
-            this.sprite.newCostumeName(localize('Untitled'))
-        ),
-        ide = this.parentThatIsA(IDE_Morph),
-        myself = this;
-    cos.edit(this.world(), ide, true, null, function () {
-        myself.sprite.shadowAttribute('costumes');
-        myself.sprite.addCostume(cos);
-        myself.updateList();
-        if (ide) {
-            ide.currentSprite.wearCostume(cos);
+            this.sprite.newCostumeName(localize('Untitled')),
+            null, // rotation center
+            null, // don't shrink-to-fit
+            ide.stage.dimensions // max extent
+        );
+
+    cos.edit(
+        this.world(),
+        ide,
+        true,
+        null,
+        () => {
+            this.sprite.shadowAttribute('costumes');
+            this.sprite.addCostume(cos);
+            this.updateList();
+            this.sprite.wearCostume(cos);
+            this.sprite.recordUserEdit(
+                'costume',
+                'draw',
+                cos.name
+            );
         }
-    });
+    );
 };
 
 WardrobeMorph.prototype.newFromCam = function () {
     var camDialog,
         ide = this.parentThatIsA(IDE_Morph),
-        myself = this,
         sprite = this.sprite;
 
     camDialog = new CamSnapshotDialogMorph(
         ide,
         sprite,
         nop,
-        function (costume) {
+        costume => {
             sprite.addCostume(costume);
             sprite.wearCostume(costume);
-            myself.updateList();
+            this.updateList();
+            sprite.recordUserEdit(
+                'costume',
+                'snap',
+                costume.name
+            );
         });
 
     camDialog.key = 'camera';
@@ -8836,7 +13025,7 @@ WardrobeMorph.prototype.reactToDropOf = function (icon) {
         costume = icon.object,
         top = icon.top();
     icon.destroy();
-    this.contents.children.forEach(function (item) {
+    this.contents.children.forEach(item => {
         if (item instanceof CostumeIconMorph && item.top() < top - 4) {
             idx += 1;
         }
@@ -8845,6 +13034,12 @@ WardrobeMorph.prototype.reactToDropOf = function (icon) {
     this.sprite.costumes.add(costume, idx + 1);
     this.updateList();
     icon.mouseClickLeft(); // select
+    this.sprite.recordUserEdit(
+        'costume',
+        'add',
+        costume.name,
+        idx + 1
+    );
 };
 
 // SoundIconMorph ///////////////////////////////////////////////////////
@@ -8865,34 +13060,27 @@ SoundIconMorph.uber = ToggleButtonMorph.prototype;
 SoundIconMorph.prototype.thumbSize = new Point(80, 60);
 SoundIconMorph.prototype.labelShadowOffset = null;
 SoundIconMorph.prototype.labelShadowColor = null;
-SoundIconMorph.prototype.labelColor = new Color(255, 255, 255);
+SoundIconMorph.prototype.labelColor = WHITE;
 SoundIconMorph.prototype.fontSize = 9;
 
 // SoundIconMorph instance creation:
 
-function SoundIconMorph(aSound, aTemplate) {
-    this.init(aSound, aTemplate);
+function SoundIconMorph(aSound) {
+    this.init(aSound);
 }
 
-SoundIconMorph.prototype.init = function (aSound, aTemplate) {
+SoundIconMorph.prototype.init = function (aSound) {
     var colors, action, query;
 
-    if (!aTemplate) {
-        colors = [
-            IDE_Morph.prototype.groupColor,
-            IDE_Morph.prototype.frameColor,
-            IDE_Morph.prototype.frameColor
-        ];
+    colors = [
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.frameColor
+    ];
 
-    }
+    action = nop; // When I am selected (which is never the case for sounds)
 
-    action = function () {
-        nop(); // When I am selected (which is never the case for sounds)
-    };
-
-    query = function () {
-        return false;
-    };
+    query = () => false;
 
     // additional properties:
     this.object = aSound; // mandatory, actually
@@ -8908,8 +13096,7 @@ SoundIconMorph.prototype.init = function (aSound, aTemplate) {
         this.object.name, // label string
         query, // predicate/selector
         null, // environment
-        null, // hint
-        aTemplate // optional, for cached background images
+        null // hint
     );
 
     // override defaults and build additional components
@@ -8927,7 +13114,7 @@ SoundIconMorph.prototype.createThumbnail = function () {
         this.thumbnail.destroy();
     }
     this.thumbnail = new Morph();
-    this.thumbnail.setExtent(this.thumbSize);
+    this.thumbnail.bounds.setExtent(this.thumbSize);
     this.add(this.thumbnail);
     label = new StringMorph(
         this.createInfo(),
@@ -8948,7 +13135,6 @@ SoundIconMorph.prototype.createThumbnail = function () {
         'toggleAudioPlaying',
         (this.object.previewAudio ? 'Stop' : 'Play')
     );
-    this.button.drawNew();
     this.button.hint = 'Play sound';
     this.button.fixLayout();
     this.thumbnail.add(this.button);
@@ -8965,15 +13151,16 @@ SoundIconMorph.prototype.createInfo = function () {
 };
 
 SoundIconMorph.prototype.toggleAudioPlaying = function () {
-    var myself = this;
     if (!this.object.previewAudio) {
         //Audio is not playing
         this.button.labelString = 'Stop';
         this.button.hint = 'Stop sound';
         this.object.previewAudio = this.object.play();
-        this.object.previewAudio.addEventListener('ended', function () {
-            myself.audioHasEnded();
-        }, false);
+        this.object.previewAudio.addEventListener(
+            'ended',
+            () => this.audioHasEnded(),
+            false
+        );
     } else {
         //Audio is currently playing
         this.button.labelString = 'Play';
@@ -9020,21 +13207,28 @@ SoundIconMorph.prototype.userMenu = function () {
 
 SoundIconMorph.prototype.renameSound = function () {
     var sound = this.object,
-        ide = this.parentThatIsA(IDE_Morph),
-        myself = this;
+        ide = this.parentThatIsA(IDE_Morph);
     this.disinherit();
-    (new DialogBoxMorph(
+    new DialogBoxMorph(
         null,
-        function (answer) {
-            if (answer && (answer !== sound.name)) {
+        answer => {
+            var old = sound.name;
+            if (answer && (answer !== old)) {
                 sound.name = answer;
                 sound.version = Date.now();
-                myself.createLabel(); // can be omitted once I'm stepping
-                myself.fixLayout(); // can be omitted once I'm stepping
+                this.createLabel(); // can be omitted once I'm stepping
+                this.fixLayout(); // can be omitted once I'm stepping
                 ide.hasChangedMedia = true;
+                ide.currentSprite.recordUserEdit(
+                    'sound',
+                    'rename',
+                    old,
+                    sound.name
+                );
+
             }
         }
-    )).prompt(
+    ).prompt(
         'rename sound',
         sound.name,
         this.world()
@@ -9045,6 +13239,12 @@ SoundIconMorph.prototype.removeSound = function () {
     var jukebox = this.parentThatIsA(JukeboxMorph),
         idx = this.parent.children.indexOf(this) - 1;
     jukebox.removeSound(idx);
+    jukebox.sprite.recordUserEdit(
+        'sound',
+        'delete',
+        idx,
+        this.object.name
+    );
 };
 
 SoundIconMorph.prototype.exportSound = function () {
@@ -9052,8 +13252,8 @@ SoundIconMorph.prototype.exportSound = function () {
     ide.saveAudioAs(this.object.audio, this.object.name);
 };
 
-SoundIconMorph.prototype.createBackgrounds
-    = SpriteIconMorph.prototype.createBackgrounds;
+SoundIconMorph.prototype.render
+    = SpriteIconMorph.prototype.render;
 
 SoundIconMorph.prototype.createLabel
     = SpriteIconMorph.prototype.createLabel;
@@ -9073,6 +13273,9 @@ SoundIconMorph.prototype.disinherit = function () {
 
 SoundIconMorph.prototype.prepareToBeGrabbed = function () {
     this.disinherit();
+    this.userState = 'pressed';
+    this.state = true;
+    this.rerender();
     this.removeSound();
 };
 
@@ -9103,34 +13306,27 @@ JukeboxMorph.prototype.init = function (aSprite, sliderColor) {
 
     // configure inherited properties
     this.acceptsDrops = false;
-    this.fps = 2;
+    // this.fps = 2; // commented out to make scrollbars more responsive
     this.updateList();
 };
 
 // Jukebox updating
 
 JukeboxMorph.prototype.updateList = function () {
-    var myself = this,
-        x = this.left() + 5,
+    var x = this.left() + 5,
         y = this.top() + 5,
         padding = 4,
-        oldFlag = Morph.prototype.trackChanges,
         icon,
-        template,
         txt,
         ide = this.sprite.parentThatIsA(IDE_Morph),
         recordButton;
 
     this.changed();
-    oldFlag = Morph.prototype.trackChanges;
-    Morph.prototype.trackChanges = false;
 
     this.contents.destroy();
     this.contents = new FrameMorph(this);
     this.contents.acceptsDrops = false;
-    this.contents.reactToDropOf = function (icon) {
-        myself.reactToDropOf(icon);
-    };
+    this.contents.reactToDropOf = (icon) => this.reactToDropOf(icon);
     this.addBack(this.contents);
 
     txt = new TextMorph(localize(
@@ -9156,7 +13352,6 @@ JukeboxMorph.prototype.updateList = function () {
     recordButton.labelShadowColor = recordButton.highlightColor;
     recordButton.labelColor = TurtleIconMorph.prototype.labelColor;
     recordButton.contrast = this.buttonContrast;
-    recordButton.drawNew();
     recordButton.hint = 'Record a new sound';
     recordButton.fixLayout();
     recordButton.label.setColor(new Color(255, 20, 20));
@@ -9166,23 +13361,23 @@ JukeboxMorph.prototype.updateList = function () {
 
     y = recordButton.bottom() + padding;
 
-    this.sprite.sounds.asArray().forEach(function (sound) {
-        template = icon = new SoundIconMorph(sound, template);
+    this.sprite.sounds.asArray().forEach(sound => {
+        icon = new SoundIconMorph(sound);
         icon.setPosition(new Point(x, y));
-        myself.addContents(icon);
+        this.addContents(icon);
         y = icon.bottom() + padding;
     });
     this.soundsVersion = this.sprite.sounds.lastChanged;
 
-    Morph.prototype.trackChanges = oldFlag;
     this.changed();
-
     this.updateSelection();
 };
 
 JukeboxMorph.prototype.updateSelection = function () {
-    this.contents.children.forEach(function (morph) {
-        if (morph.refresh) {morph.refresh(); }
+    this.contents.children.forEach(morph => {
+        if (morph.refresh) {
+            morph.refresh();
+        }
     });
     this.spriteVersion = this.sprite.version;
 };
@@ -9213,19 +13408,405 @@ JukeboxMorph.prototype.wantsDropOf = function (morph) {
 
 JukeboxMorph.prototype.reactToDropOf = function (icon) {
     var idx = 0,
-        costume = icon.object,
+        sound = icon.object,
         top = icon.top();
 
     icon.destroy();
-    this.contents.children.forEach(function (item) {
+    this.contents.children.forEach(item => {
         if (item instanceof SoundIconMorph && item.top() < top - 4) {
             idx += 1;
         }
     });
 
     this.sprite.shadowAttribute('sounds');
-    this.sprite.sounds.add(costume, idx + 1);
+    this.sprite.sounds.add(sound, idx + 1);
     this.updateList();
+
+    this.sprite.recordUserEdit(
+        'sound',
+        'add',
+        sound.name,
+        idx + 1
+    );
+};
+
+// SceneIconMorph ////////////////////////////////////////////////////
+
+/*
+    I am a selectable element in a SceneAlbum, keeping
+    a self-updating thumbnail of the scene I'm respresenting, and a
+    self-updating label of the scene's name (in case it is changed
+    elsewhere)
+*/
+
+// SceneIconMorph inherits from ToggleButtonMorph (Widgets)
+// ... and copies methods from SpriteIconMorph
+
+SceneIconMorph.prototype = new ToggleButtonMorph();
+SceneIconMorph.prototype.constructor = SceneIconMorph;
+SceneIconMorph.uber = ToggleButtonMorph.prototype;
+
+// SceneIconMorph settings
+
+SceneIconMorph.prototype.thumbSize = new Point(40, 30);
+SceneIconMorph.prototype.labelShadowOffset = null;
+SceneIconMorph.prototype.labelShadowColor = null;
+SceneIconMorph.prototype.labelColor = WHITE;
+SceneIconMorph.prototype.fontSize = 9;
+
+// SceneIconMorph instance creation:
+
+function SceneIconMorph(aScene) {
+    this.init(aScene);
+}
+
+SceneIconMorph.prototype.init = function (aScene) {
+    var colors, action, query;
+
+    colors = [
+        IDE_Morph.prototype.frameColor,
+        IDE_Morph.prototype.groupColor,
+        IDE_Morph.prototype.groupColor
+    ];
+
+    action = () => {
+        // make my scene the current one
+        var ide = this.parentThatIsA(IDE_Morph),
+            album = this.parentThatIsA(SceneAlbumMorph);
+        album.scene = this.object;
+        ide.switchToScene(this.object);
+    };
+
+    query = () => {
+        // answer true if my scene is the current one
+        var album = this.parentThatIsA(SceneAlbumMorph);
+        if (album) {
+            return album.scene === this.object;
+        }
+        return false;
+    };
+
+    // additional properties:
+    this.object = aScene || new Scene(); // mandatory, actually
+    this.version = this.object.stage.version;
+    this.thumbnail = null;
+
+    // initialize inherited properties:
+    SceneIconMorph.uber.init.call(
+        this,
+        colors, // color overrides, <array>: [normal, highlight, pressed]
+        null, // target - not needed here
+        action, // a toggle function
+        this.object.name || localize('untitled'), // label string
+        query, // predicate/selector
+        null, // environment
+        null // hint
+    );
+
+    // override defaults and build additional components
+    this.isDraggable = true;
+    this.createThumbnail();
+    this.padding = 2;
+    this.corner = 8;
+    this.fixLayout();
+    this.fps = 1;
+};
+
+SceneIconMorph.prototype.createThumbnail = function () {
+    if (this.thumbnail) {
+        this.thumbnail.destroy();
+    }
+
+    this.thumbnail = new Morph();
+    this.thumbnail.isCachingImage = true;
+    this.thumbnail.bounds.setExtent(this.thumbSize);
+    this.thumbnail.cachedImage = this.object.stage.thumbnail(
+        this.thumbSize,
+        this.thumbnail.cachedImage
+    );
+    this.add(this.thumbnail);
+};
+
+SceneIconMorph.prototype.createLabel = function () {
+    var txt;
+
+    if (this.label) {
+        this.label.destroy();
+    }
+    txt = new StringMorph(
+        this.object.name || localize('untitled'),
+        this.fontSize,
+        this.fontStyle,
+        false, // true
+        false,
+        false,
+        this.labelShadowOffset,
+        this.labelShadowColor,
+        this.labelColor
+    );
+
+    this.label = new FrameMorph();
+    this.label.acceptsDrops = false;
+    this.label.alpha = 0;
+    this.label.setExtent(txt.extent());
+    txt.setPosition(this.label.position());
+    this.label.add(txt);
+    this.add(this.label);
+};
+
+// SceneIconMorph stepping
+
+SceneIconMorph.prototype.step = function () {
+    if (this.version !== this.object.stage.version) {
+        this.createThumbnail();
+        this.createLabel();
+        this.fixLayout();
+        this.version = this.object.stage.version;
+        this.refresh();
+    }
+};
+
+// SceneIconMorph layout
+
+SceneIconMorph.prototype.fixLayout
+    = SpriteIconMorph.prototype.fixLayout;
+
+// SceneIconMorph menu
+
+SceneIconMorph.prototype.userMenu = function () {
+    var menu = new MenuMorph(this);
+    if (!(this.object instanceof Scene)) {
+        return null;
+    }
+    if (!this.isProjectScene()) {
+        if (!this.isCurrentScene()) {
+            menu.addItem(
+                "launch...",
+                "launchAsTutorial",
+                "open and run this scene as a tutorial\nin a separate pane"
+            );
+            menu.addLine();
+        }
+        menu.addItem("rename", "renameScene");
+        menu.addItem("delete", "removeScene");
+    }
+    menu.addItem("export", "exportScene");
+    return menu;
+};
+
+SceneIconMorph.prototype.launchAsTutorial = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (ide) {
+        ide.launchTutorial(this.object);
+    }
+};
+
+SceneIconMorph.prototype.renameScene = function () {
+    var scene = this.object,
+        ide = this.parentThatIsA(IDE_Morph);
+    new DialogBoxMorph(
+        null,
+        answer => {
+            if (answer && (answer !== scene.name)) {
+                scene.name = ide.newSceneName(
+                    answer,
+                    scene
+                );
+                scene.stage.version = Date.now();
+                if (scene === ide.scene) {
+                    ide.controlBar.updateLabel();
+                }
+                ide.recordUnsavedChanges();
+            }
+        }
+    ).prompt(
+        'rename scene',
+        scene.name,
+        this.world()
+    );
+};
+
+SceneIconMorph.prototype.removeScene = function () {
+    var album = this.parentThatIsA(SceneAlbumMorph),
+        idx = this.parent.children.indexOf(this) + 1,
+        off = 0, // 2,
+        ide = this.parentThatIsA(IDE_Morph);
+    album.removeSceneAt(idx - off); // ignore buttons
+    if (ide.scene === this.object) {
+        ide.switchToScene(ide.scenes.at(1));
+    }
+};
+
+SceneIconMorph.prototype.exportScene = function () {
+    // Export scene as project XML, saving a file to disk
+    var menu, str,
+        ide = this.parentThatIsA(IDE_Morph),
+        name = this.object.name || localize('untitled');
+
+    try {
+        menu = ide.showMessage('Exporting');
+        str = ide.serializer.serialize(
+            new Project(new List([this.object]), this.object)
+        );
+        ide.saveXMLAs(str, name);
+        menu.destroy();
+        ide.showMessage('Exported!', 1);
+    } catch (err) {
+        if (Process.prototype.isCatchingErrors) {
+            ide.showMessage('Export failed: ' + err);
+        } else {
+            throw err;
+        }
+    }
+};
+
+// SceneIconMorph ops
+
+SceneIconMorph.prototype.isProjectScene = function (anIDE) {
+    // the first scene of a project cannot be renamed, deleted or rearranged,
+    // because its name and project notes are those of the project
+    var ide = anIDE || this.parentThatIsA(IDE_Morph);
+    return ide.scenes.indexOf(this.object) === 1;
+};
+
+SceneIconMorph.prototype.isCurrentScene = function (anIDE) {
+    // the currently actife  scene of a project cannot be launched as a
+    // tutorial, because it cannot live in 2 locations at the same time
+    var ide = anIDE || this.parentThatIsA(IDE_Morph);
+    return ide.scene === this.object;
+};
+
+// SceneIconMorph drawing
+
+SceneIconMorph.prototype.render
+    = SpriteIconMorph.prototype.render;
+
+// SceneIconMorph drag & drop
+
+SceneIconMorph.prototype.rootForGrab = function () {
+    return this;
+};
+
+SceneIconMorph.prototype.prepareToBeGrabbed = function () {
+    this.mouseClickLeft(); // select me
+    this.removeScene();
+};
+
+// SceneAlbumMorph ///////////////////////////////////////////////////////
+
+// I am a watcher on a project's scenes list
+
+// SceneAlbumMorph inherits from ScrollFrameMorph
+
+SceneAlbumMorph.prototype = new ScrollFrameMorph();
+SceneAlbumMorph.prototype.constructor = SceneAlbumMorph;
+SceneAlbumMorph.uber = ScrollFrameMorph.prototype;
+
+// SceneAlbumMorph instance creation:
+
+function SceneAlbumMorph(anIDE, sliderColor) {
+    this.init(anIDE, sliderColor);
+}
+
+SceneAlbumMorph.prototype.init = function (anIDE, sliderColor) {
+    // additional properties
+    this.ide = anIDE;
+    this.scene = anIDE.scene;
+    this.version = null;
+
+    // initialize inherited properties
+    SceneAlbumMorph.uber.init.call(this, null, null, sliderColor);
+
+    // configure inherited properties
+    // this.fps = 2; // commented out to make scrollbars more responsive
+    this.updateList();
+    this.updateSelection();
+};
+
+// SceneAlbumMorph updating
+
+SceneAlbumMorph.prototype.updateList = function () {
+    var x = this.left() + 5,
+        y = this.top() + 5,
+        padding = 4,
+        oldPos = this.contents.position(),
+        icon;
+
+    this.changed();
+
+    this.contents.destroy();
+    this.contents = new FrameMorph(this);
+    this.contents.acceptsDrops = false;
+    this.contents.reactToDropOf = (icon) => {
+        this.reactToDropOf(icon);
+    };
+    this.addBack(this.contents);
+
+    this.ide.scenes.asArray().forEach((scene, i) => {
+        icon = new SceneIconMorph(scene);
+        if (i < 1) {
+            icon.isDraggable = false; // project scene cannot be rearranged
+        }
+        icon.setPosition(new Point(x, y));
+        this.addContents(icon);
+        y = icon.bottom() + padding;
+    });
+    this.version = this.ide.scenes.lastChanged;
+
+    this.contents.setPosition(oldPos);
+    this.adjustScrollBars();
+    this.changed();
+
+    this.updateSelection();
+};
+
+SceneAlbumMorph.prototype.updateSelection = function () {
+    this.scene = this.ide.scene;
+    this.contents.children.forEach(function (morph) {
+        if (morph.refresh) {
+            morph.refresh();
+        }
+    });
+};
+
+// SceneAlbumMorph stepping
+
+SceneAlbumMorph.prototype.step = function () {
+    if (this.version !== this.ide.scenes.lastChanged) {
+        this.updateList();
+    }
+    if (this.scene !== this.ide.scene) {
+        this.updateSelection();
+    }
+};
+
+// Wardrobe ops
+
+SceneAlbumMorph.prototype.removeSceneAt = function (idx) {
+    this.ide.scenes.remove(idx);
+    this.updateList();
+};
+
+// SceneAlbumMorph drag & drop
+
+SceneAlbumMorph.prototype.wantsDropOf = function (morph) {
+    return morph instanceof SceneIconMorph;
+};
+
+SceneAlbumMorph.prototype.reactToDropOf = function (icon) {
+    var idx = 0,
+        scene = icon.object,
+        top = icon.top();
+    icon.destroy();
+    this.contents.children.forEach(item => {
+        if (item instanceof SceneIconMorph && item.top() < top - 4) {
+            idx += 1;
+        }
+    });
+    idx = Math.max(idx, 1); // the project scene cannot the rearranged
+    this.ide.scenes.add(scene, idx + 1);
+    this.updateList();
+    icon.mouseClickLeft(); // select
 };
 
 // StageHandleMorph ////////////////////////////////////////////////////////
@@ -9246,72 +13827,68 @@ function StageHandleMorph(target) {
 
 StageHandleMorph.prototype.init = function (target) {
     this.target = target || null;
+    this.offset = null;
+    this.userState = 'normal'; // or 'highlight'
     HandleMorph.uber.init.call(this);
-    this.color = MorphicPreferences.isFlat ?
-            IDE_Morph.prototype.groupColor : new Color(190, 190, 190);
+    this.color = IDE_Morph.prototype.isBright ?
+            IDE_Morph.prototype.backgroundColor : new Color(190, 190, 190);
     this.isDraggable = false;
-    this.noticesTransparentClick = true;
     this.setExtent(new Point(12, 50));
 };
 
 // StageHandleMorph drawing:
 
-StageHandleMorph.prototype.drawNew = function () {
-    this.normalImage = newCanvas(this.extent());
-    this.highlightImage = newCanvas(this.extent());
-    this.drawOnCanvas(
-        this.normalImage,
-        this.color
-    );
-    this.drawOnCanvas(
-        this.highlightImage,
-        MorphicPreferences.isFlat ?
-                new Color(245, 245, 255) : new Color(100, 100, 255),
-        this.color
-    );
-    this.image = this.normalImage;
-    this.fixLayout();
+StageHandleMorph.prototype.render = function (ctx) {
+    if (this.userState === 'highlight') {
+        this.renderOn(
+            ctx,
+            IDE_Morph.prototype.isBright ?
+                    new Color(245, 245, 255) : new Color(100, 100, 255),
+            this.color
+        );
+    } else { // assume 'normal'
+        this.renderOn(ctx, this.color);
+    }
 };
 
-StageHandleMorph.prototype.drawOnCanvas = function (
-    aCanvas,
+StageHandleMorph.prototype.renderOn = function (
+    ctx,
     color,
     shadowColor
 ) {
-    var context = aCanvas.getContext('2d'),
-        l = aCanvas.height / 8,
-        w = aCanvas.width / 6,
+    var l = this.height() / 8,
+        w = this.width() / 6,
         r = w / 2,
         x,
         y,
         i;
 
-    context.lineWidth = w;
-    context.lineCap = 'round';
-    y = aCanvas.height / 2;
+    ctx.lineWidth = w;
+    ctx.lineCap = 'round';
+    y = this.height() / 2;
 
-    context.strokeStyle = color.toString();
-    x = aCanvas.width / 12;
+    ctx.strokeStyle = color.toString();
+    x = this.width() / 12;
     for (i = 0; i < 3; i += 1) {
         if (i > 0) {
-            context.beginPath();
-            context.moveTo(x, y - (l - r));
-            context.lineTo(x, y + (l - r));
-            context.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y - (l - r));
+            ctx.lineTo(x, y + (l - r));
+            ctx.stroke();
         }
         x += (w * 2);
         l *= 2;
     }
     if (shadowColor) {
-        context.strokeStyle = shadowColor.toString();
-        x = aCanvas.width / 12 + w;
-        l = aCanvas.height / 8;
+        ctx.strokeStyle = shadowColor.toString();
+        x = this.width() / 12 + w;
+        l = this.height() / 8;
         for (i = 0; i < 3; i += 1) {
             if (i > 0) {
-                context.beginPath();
-                context.moveTo(x, y - (l - r));
-                context.lineTo(x, y + (l - r));
-                context.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y - (l - r));
+                ctx.lineTo(x, y + (l - r));
+                ctx.stroke();
             }
             x += (w * 2);
             l *= 2;
@@ -9329,47 +13906,38 @@ StageHandleMorph.prototype.fixLayout = function () {
     if (ide) {ide.add(this); } // come to front
 };
 
-// StageHandleMorph stepping:
-
-StageHandleMorph.prototype.step = null;
-
-StageHandleMorph.prototype.mouseDownLeft = function (pos) {
-    var world = this.world(),
-        offset = this.right() - pos.x,
-        myself = this,
-        ide = this.target.parentThatIsA(IDE_Morph);
-
-    if (!this.target) {
-        return null;
-    }
-    ide.isSmallStage = true;
-    ide.controlBar.stageSizeButton.refresh();
-    this.step = function () {
-        var newPos, newWidth;
-        if (world.hand.mouseButton) {
-            newPos = world.hand.bounds.origin.x + offset;
-            newWidth = myself.target.right() - newPos;
-            ide.stageRatio = newWidth / myself.target.dimensions.x;
-            ide.setExtent(world.extent());
-
-        } else {
-            this.step = null;
-            ide.isSmallStage = (ide.stageRatio !== 1);
-            ide.controlBar.stageSizeButton.refresh();
-        }
-    };
-};
-
 // StageHandleMorph events:
 
 StageHandleMorph.prototype.mouseEnter = function () {
-    this.image = this.highlightImage;
-    this.changed();
+    this.userState = 'highlight';
+    this.rerender();
 };
 
 StageHandleMorph.prototype.mouseLeave = function () {
-    this.image = this.normalImage;
-    this.changed();
+    this.userState = 'normal';
+    this.rerender();
+};
+
+StageHandleMorph.prototype.mouseDownLeft = function (pos) {
+    var ide = this.target.parentThatIsA(IDE_Morph);
+    this.offset = this.right() - pos.x;
+    ide.isSmallStage = true;
+    ide.controlBar.stageSizeButton.refresh();
+    this.lockMouseFocus();
+};
+
+StageHandleMorph.prototype.mouseMove = function (pos) {
+    var ide = this.target.parentThatIsA(IDE_Morph),
+        newPos = pos.x + this.offset,
+        newWidth = this.target.right() - newPos;
+    ide.stageRatio = newWidth / this.target.dimensions.x;
+    if (ide.isSmallStage !== (ide.stageRatio !== 1)) {
+        ide.isSmallStage = (ide.stageRatio !== 1);
+        ide.controlBar.stageSizeButton.refresh();
+    }
+    ide.setExtent(ide.world().extent());
+    // save the stage size as setting, commented out for now
+    // ide.saveSetting('stagescale', ide.stageRatio);
 };
 
 StageHandleMorph.prototype.mouseDoubleClick = function () {
@@ -9395,21 +13963,22 @@ function PaletteHandleMorph(target) {
 
 PaletteHandleMorph.prototype.init = function (target) {
     this.target = target || null;
+    this.offset = null;
+    this.userState = 'normal';
     HandleMorph.uber.init.call(this);
-    this.color = MorphicPreferences.isFlat ?
-            new Color(255, 255, 255) : new Color(190, 190, 190);
+    this.color = IDE_Morph.prototype.isBright ?
+            IDE_Morph.prototype.backgroundColor : new Color(190, 190, 190);
     this.isDraggable = false;
-    this.noticesTransparentClick = true;
     this.setExtent(new Point(12, 50));
 };
 
 // PaletteHandleMorph drawing:
 
-PaletteHandleMorph.prototype.drawNew =
-    StageHandleMorph.prototype.drawNew;
+PaletteHandleMorph.prototype.render =
+    StageHandleMorph.prototype.render;
 
-PaletteHandleMorph.prototype.drawOnCanvas =
-    StageHandleMorph.prototype.drawOnCanvas;
+PaletteHandleMorph.prototype.renderOn =
+    StageHandleMorph.prototype.renderOn;
 
 // PaletteHandleMorph layout:
 
@@ -9421,34 +13990,6 @@ PaletteHandleMorph.prototype.fixLayout = function () {
     if (ide) {ide.add(this); } // come to front
 };
 
-// PaletteHandleMorph stepping:
-
-PaletteHandleMorph.prototype.step = null;
-
-PaletteHandleMorph.prototype.mouseDownLeft = function (pos) {
-    var world = this.world(),
-        offset = this.right() - pos.x,
-        ide = this.target.parentThatIsA(IDE_Morph);
-
-    if (!this.target) {
-        return null;
-    }
-    this.step = function () {
-        var newPos;
-        if (world.hand.mouseButton) {
-            newPos = world.hand.bounds.origin.x + offset;
-            ide.paletteWidth = Math.min(
-                Math.max(200, newPos),
-                ide.stageHandle.left() - ide.spriteBar.tabBar.width()
-            );
-            ide.setExtent(world.extent());
-
-        } else {
-            this.step = null;
-        }
-    };
-};
-
 // PaletteHandleMorph events:
 
 PaletteHandleMorph.prototype.mouseEnter
@@ -9456,6 +13997,27 @@ PaletteHandleMorph.prototype.mouseEnter
 
 PaletteHandleMorph.prototype.mouseLeave
     = StageHandleMorph.prototype.mouseLeave;
+
+PaletteHandleMorph.prototype.mouseDownLeft = function (pos) {
+    this.offset = this.right() - pos.x;
+    this.lockMouseFocus();
+};
+
+PaletteHandleMorph.prototype.mouseMove = function (pos) {
+    var ide = this.target.parentThatIsA(IDE_Morph),
+        cnf = ide.config,
+        border = cnf.border || 0,
+        newPos = pos.x + this.offset;
+    ide.paletteWidth = Math.min(
+        Math.max(
+            200, newPos - ide.left() - border * 2),
+            cnf.noSprites ?
+                ide.width() - border * 2
+                : ide.stageHandle.left() -
+                    ide.spriteBar.tabBar.width()
+    );
+    ide.setExtent(ide.world().extent());
+};
 
 PaletteHandleMorph.prototype.mouseDoubleClick = function () {
     this.target.parentThatIsA(IDE_Morph).setPaletteWidth(200);
@@ -9466,9 +14028,6 @@ PaletteHandleMorph.prototype.mouseDoubleClick = function () {
 /*
     I am a dialog morph that lets users take a snapshot using their webcam
     and use it as a costume for their sprites or a background for the Stage.
-
-    NOTE: Currently disabled because of issues with experimental technology
-    in Safari.
 */
 
 // CamSnapshotDialogMorph inherits from DialogBoxMorph:
@@ -9479,7 +14038,7 @@ CamSnapshotDialogMorph.uber = DialogBoxMorph.prototype;
 
 // CamSnapshotDialogMorph settings
 
-CamSnapshotDialogMorph.prototype.enableCamera = true; // off while experimental
+CamSnapshotDialogMorph.prototype.enableCamera = true;
 CamSnapshotDialogMorph.prototype.enabled = true;
 
 CamSnapshotDialogMorph.prototype.notSupportedMessage =
@@ -9487,7 +14046,7 @@ CamSnapshotDialogMorph.prototype.notSupportedMessage =
 	'and your camera is properly configured. \n\n' +
 	'Some browsers also require you to access Snap!\n' +
 	'through HTTPS to use the camera.\n\n' +
-    'Plase replace the "http://" part of the address\n' +
+    'Please replace the "http://" part of the address\n' +
     'in your browser by "https://" and try again.';
 
 // CamSnapshotDialogMorph instance creation
@@ -9509,6 +14068,7 @@ CamSnapshotDialogMorph.prototype.init = function (
     this.accept = onAccept;
     this.videoElement = null; // an HTML5 video element
     this.videoView = new Morph(); // a morph where we'll copy the video contents
+    this.videoView.isCachingImage = true;
 
     CamSnapshotDialogMorph.uber.init.call(this);
     this.labelString = 'Camera';
@@ -9541,20 +14101,22 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function (stream) {
-                myself.videoElement.srcObject = stream;
-                myself.videoElement.play().catch(noCameraSupport);
-                myself.videoElement.stream = stream;
-            })
-            .catch(noCameraSupport);
+            .then(stream => {
+                this.videoElement.srcObject = stream;
+                this.videoElement.play().catch(noCameraSupport);
+                this.videoElement.stream = stream;
+            }).catch(noCameraSupport);
     }
 
     this.videoView.setExtent(stage.dimensions);
-    this.videoView.image = newCanvas(stage.dimensions);
+    this.videoView.cachedImage = newCanvas(
+        stage.dimensions,
+        true, // retina, maybe overkill here
+        this.videoView.cachedImage
+    );
 
-    this.videoView.drawOn = function (aCanvas) {
-        var context = aCanvas.getContext('2d'),
-            videoWidth = myself.videoElement.videoWidth,
+    this.videoView.drawOn = function (ctx, rect) {
+        var videoWidth = myself.videoElement.videoWidth,
             videoHeight = myself.videoElement.videoHeight,
             w = stage.dimensions.x,
             h = stage.dimensions.y,
@@ -9562,11 +14124,11 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
 
         if (!videoWidth) { return; }
 
-        context.save();
+        ctx.save();
 
         // Flip the image so it looks like a mirror
-        context.translate(w, 0);
-        context.scale(-1, 1);
+        ctx.translate(w, 0);
+        ctx.scale(-1, 1);
 
         if (videoWidth / w > videoHeight / h) {
             // preserve height, crop width
@@ -9578,7 +14140,7 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
             clippingHeight = h * (videoWidth / w);
         }
 
-        context.drawImage(
+        ctx.drawImage(
             myself.videoElement,
             0,
             0,
@@ -9590,7 +14152,7 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
             h
             );
 
-        context.restore();
+        ctx.restore();
     };
 
     this.videoView.step = function () {
@@ -9605,14 +14167,16 @@ CamSnapshotDialogMorph.prototype.buildContents = function () {
     this.addButton('cancel', 'Cancel');
 
     this.fixLayout();
-    this.drawNew();
+    this.rerender();
 };
 
 CamSnapshotDialogMorph.prototype.ok = function () {
     this.accept(
         new Costume(
-            this.videoView.fullImageClassic(),
-            this.sprite.newCostumeName('camera')
+            this.videoView.fullImage(),
+            this.sprite.newCostumeName('camera'),
+            null,
+            true // no shrink-wrap
         ).flipped()
     );
 };
@@ -9679,32 +14243,25 @@ SoundRecorderDialogMorph.prototype.init = function (onAccept) {
 };
 
 SoundRecorderDialogMorph.prototype.buildContents = function () {
-    var myself = this,
-        audioChunks = [];
+    var audioChunks = [];
 
     this.recordButton = new PushButtonMorph(
         this,
         'record',
         new SymbolMorph('circleSolid', 10)
     );
-    this.recordButton.drawNew();
-    this.recordButton.fixLayout();
 
     this.stopButton = new PushButtonMorph(
         this,
         'stop',
         new SymbolMorph('rectangleSolid', 10)
     );
-    this.stopButton.drawNew();
-    this.stopButton.fixLayout();
 
     this.playButton = new PushButtonMorph(
         this,
         'play',
         new SymbolMorph('pointRight', 10)
     );
-    this.playButton.drawNew();
-    this.playButton.fixLayout();
 
     this.buildProgressBar();
 
@@ -9717,33 +14274,39 @@ SoundRecorderDialogMorph.prototype.buildContents = function () {
     this.body.fixLayout();
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(function (stream) {
-                myself.mediaRecorder = new MediaRecorder(stream);
-                myself.mediaRecorder.ondataavailable = function (event) {
-                    audioChunks.push(event.data);
+        navigator.mediaDevices.getUserMedia(
+            {
+                audio: {
+                    channelCount: 1 // force mono, currently only works on FF
+                }
+
+            }
+        ).then(stream => {
+            this.mediaRecorder = new MediaRecorder(stream);
+            this.mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+            this.mediaRecorder.onstop = (event) => {
+                var buffer = new Blob(audioChunks),
+                    reader = new window.FileReader();
+                reader.readAsDataURL(buffer);
+                reader.onloadend = () => {
+                    var base64 = reader.result;
+                    base64 = 'data:audio/mpeg;base64,' +
+                        base64.split(',')[1];
+                    this.audioElement.src = base64;
+                    this.audioElement.load();
+                    audioChunks = [];
                 };
-                myself.mediaRecorder.onstop = function (event) {
-					var buffer = new Blob(audioChunks),
-						reader = new window.FileReader();
-					reader.readAsDataURL(buffer);
-					reader.onloadend = function() {
-   						var base64 = reader.result;
-    					base64 = 'data:audio/ogg;base64,' +
-         	               base64.split(',')[1];
-						myself.audioElement.src = base64;
-                    	myself.audioElement.load();
-                    	audioChunks = [];
-					};
-                };
-            });
+            };
+        });
     }
 
     this.addButton('ok', 'Save');
     this.addButton('cancel', 'Cancel');
 
     this.fixLayout();
-    this.drawNew();
+    this.rerender();
 };
 
 SoundRecorderDialogMorph.prototype.buildProgressBar = function () {
@@ -9810,38 +14373,45 @@ SoundRecorderDialogMorph.prototype.stop = function () {
 };
 
 SoundRecorderDialogMorph.prototype.play = function () {
-    this.stop();
-    this.audioElement.oncanplaythrough = function () {
-        this.play();
-        this.oncanplaythrough = nop;
-    };
+    try {
+        this.audioElement.play();
+    } catch (err) {
+        this.audioElement.oncanplaythrough = function () {
+            this.play();
+            this.oncanplaythrough = nop;
+        };
+    }
     this.playButton.label.setColor(new Color(0, 255, 0));
 };
 
 SoundRecorderDialogMorph.prototype.ok = function () {
     var myself = this;
     this.stop();
-    this.audioElement.oncanplaythrough = function () {
-        if (this.duration && this.duration !== Infinity) {
-            myself.accept(this);
-            this.oncanplaythrough = nop;
-            myself.destroy();
-        } else {
-            // For some reason, we need to play the sound
-            // at least once to get its duration.
-            myself.buttons.children.forEach(function (button) {
-                button.disable();
-            });
-            this.play();
-        }
-    };
-
+    if (this.audioElement.readyState === 4) {
+        myself.accept(this.audioElement);
+        myself.destroy();
+    } else {
+        this.audioElement.oncanplaythrough = function () {
+            if (this.duration && this.duration !== Infinity) {
+                myself.accept(this);
+                this.oncanplaythrough = nop;
+                myself.destroy();
+            } else {
+                // For some reason, we need to play the sound
+                // at least once to get its duration.
+                myself.buttons.children.forEach(button =>
+                    button.disable()
+                );
+                this.play();
+            }
+        };
+    }
 };
 
 SoundRecorderDialogMorph.prototype.destroy = function () {
     this.stop();
     this.audioElement.remove();
-    if (this.mediaRecorder) {
+    if (this.mediaRecorder && this.mediaRecorder.stream) {
         this.mediaRecorder.stream.getTracks()[0].stop();
     }
     SoundRecorderDialogMorph.uber.destroy.call(this);

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://ns.adobe.com/acrobat/workflow/2012" title="Frobnicate Snap! Manual" description="Active TOC, Index, URLs, and Wikipedia links; compress size." majorVersion="1" minorVersion="0">
+	<Group label="Untitled">
+		<Command name="EVMP_AutoBookmarkLinksTOCToPages" pauseBefore="false">
+			<Items>
+				<Item name="ActionFilter" type="integer" value="3"/>
+				<Item name="ControlFile" type="text" value=""/>
+				<Item name="ConvertTextCase" type="integer" value="0"/>
+				<Item name="CountLineEnds" type="boolean" value="false"/>
+				<Item name="Description" type="text" value=""/>
+				<Item name="DictionaryFile" type="text" value=""/>
+				<Item name="FindWhat" type="text" value="^[^\n]+[.]+[ ]*([\d]+)[ ]*\n"/>
+				<Item name="FirstPage" type="integer" value="1"/>
+				<Item name="FirstPageExpression" type="text" value="2"/>
+				<Item name="Flags" type="integer" value="0"/>
+				<Items name="FontFilter">
+					<Item name="FontName" type="text" value=""/>
+					<Item name="FontSize" type="double" value="10.000000"/>
+					<Item name="FontSizeTolerance" type="double" value="0.500000"/>
+					<Item name="MatchFontName" type="boolean" value="false"/>
+					<Item name="MatchFontSize" type="boolean" value="false"/>
+				</Items>
+				<Item name="ImportExportFilename" type="text" value=""/>
+				<Item name="IncludeLinkAnnots" type="boolean" value="true"/>
+				<Item name="IncludeWidgetAnnots" type="boolean" value="true"/>
+				<Item name="LastPage" type="integer" value="2"/>
+				<Item name="LastPageExpression" type="text" value="3"/>
+				<Item name="LinkAttribute" type="integer" value="0"/>
+				<Item name="LinkingContext" type="text" value=""/>
+				<Items name="Margins">
+					<Item name="Bottom" type="double" value="750.199997"/>
+					<Item name="Left" type="double" value="28.100006"/>
+					<Item name="Right" type="double" value="606.199997"/>
+					<Item name="Top" type="double" value="30.199997"/>
+				</Items>
+				<Item name="MatchCase" type="boolean" value="true"/>
+				<Item name="MatchWholeWordsOnly" type="boolean" value="false"/>
+				<Item name="NewWindow" type="integer" value="0"/>
+				<Item name="PageNumberFormat" type="integer" value="0"/>
+				<Item name="PageOffset" type="integer" value="0"/>
+				<Item name="PageSelection" type="integer" value="2"/>
+				<Item name="PageSubset" type="integer" value="0"/>
+				<Item name="RepeatOperation" type="boolean" value="false"/>
+				<Item name="ReplaceWith" type="text" value=""/>
+				<Item name="SortOrder" type="integer" value="2"/>
+				<Item name="StartingNumber" type="integer" value="0"/>
+				<Items name="Style">
+					<Item name="BorderStyle" type="integer" value="85"/>
+					<Item name="BorderWidth" type="integer" value="0"/>
+					<Item name="ChangeTextColor" type="boolean" value="false"/>
+					<Items name="Color">
+						<Item name="Item0" type="double" value="0.000000"/>
+						<Item name="Item1" type="double" value="0.000000"/>
+						<Item name="Item2" type="double" value="1.000000"/>
+						<Item name="Item3" type="double" value="0.000000"/>
+						<Item name="Space" type="integer" value="1"/>
+					</Items>
+					<Item name="Flags" type="integer" value="0"/>
+					<Item name="HighlightMode" type="integer" value="78"/>
+					<Items name="TextColor">
+						<Item name="Item0" type="double" value="0.000000"/>
+						<Item name="Item1" type="double" value="0.000000"/>
+						<Item name="Item2" type="double" value="1.000000"/>
+						<Item name="Item3" type="double" value="0.000000"/>
+						<Item name="Space" type="integer" value="1"/>
+					</Items>
+				</Items>
+				<Item name="TOCFormat" type="integer" value="3"/>
+				<Item name="UseControlFile" type="boolean" value="false"/>
+				<Item name="UseFileSpecificFilenames" type="boolean" value="false"/>
+				<Item name="UseLinkingContext" type="boolean" value="false"/>
+				<Item name="UseMargins" type="boolean" value="true"/>
+				<Item name="UseRegExp" type="boolean" value="false"/>
+				<Items name="ViewDest">
+					<Items name="CustomRect">
+						<Item name="Bottom" type="double" value="0.000000"/>
+						<Item name="Left" type="double" value="0.000000"/>
+						<Item name="Right" type="double" value="0.000000"/>
+						<Item name="Top" type="double" value="0.000000"/>
+					</Items>
+					<Item name="CustomZoom" type="double" value="1.000000"/>
+					<Item name="ProcessNamedDest" type="boolean" value="true"/>
+					<Item name="ZoomFit" type="integer" value="0"/>
+				</Items>
+				<Item name="WidgetFilter" type="integer" value="65535"/>
+			</Items>
+		</Command>
+		<Command name="EVMP_AutoBookmarkLinkToNumbers" pauseBefore="false">
+			<Items>
+				<Item name="ActionFilter" type="integer" value="3"/>
+				<Item name="ControlFile" type="text" value=""/>
+				<Item name="ConvertTextCase" type="integer" value="0"/>
+				<Item name="CountLineEnds" type="boolean" value="false"/>
+				<Item name="Description" type="text" value=""/>
+				<Item name="DictionaryFile" type="text" value=""/>
+				<Item name="FindWhat" type="text" value=""/>
+				<Item name="FirstPage" type="integer" value="0"/>
+				<Item name="FirstPageExpression" type="text" value="b:Index"/>
+				<Item name="Flags" type="integer" value="0"/>
+				<Items name="FontFilter">
+					<Item name="FontName" type="text" value=""/>
+					<Item name="FontSize" type="double" value="10.000000"/>
+					<Item name="FontSizeTolerance" type="double" value="0.500000"/>
+					<Item name="MatchFontName" type="boolean" value="false"/>
+					<Item name="MatchFontSize" type="boolean" value="false"/>
+				</Items>
+				<Item name="ImportExportFilename" type="text" value=""/>
+				<Item name="IncludeLinkAnnots" type="boolean" value="true"/>
+				<Item name="IncludeWidgetAnnots" type="boolean" value="true"/>
+				<Item name="LastPage" type="integer" value="-1"/>
+				<Item name="LastPageExpression" type="text" value="Last"/>
+				<Item name="LinkAttribute" type="integer" value="0"/>
+				<Item name="LinkingContext" type="text" value=""/>
+				<Items name="Margins">
+					<Item name="Bottom" type="double" value="753.800003"/>
+					<Item name="Left" type="double" value="18.000000"/>
+					<Item name="Right" type="double" value="588.199997"/>
+					<Item name="Top" type="double" value="22.300003"/>
+				</Items>
+				<Item name="MatchCase" type="boolean" value="false"/>
+				<Item name="MatchWholeWordsOnly" type="boolean" value="false"/>
+				<Item name="NewWindow" type="integer" value="0"/>
+				<Item name="PageNumberFormat" type="integer" value="0"/>
+				<Item name="PageOffset" type="integer" value="0"/>
+				<Item name="PageSelection" type="integer" value="2"/>
+				<Item name="PageSubset" type="integer" value="0"/>
+				<Item name="RepeatOperation" type="boolean" value="false"/>
+				<Item name="ReplaceWith" type="text" value=""/>
+				<Item name="SortOrder" type="integer" value="2"/>
+				<Items name="Style">
+					<Item name="BorderStyle" type="integer" value="85"/>
+					<Item name="BorderWidth" type="integer" value="0"/>
+					<Item name="ChangeTextColor" type="boolean" value="false"/>
+					<Items name="Color">
+						<Item name="Item0" type="double" value="0.000000"/>
+						<Item name="Item1" type="double" value="0.000000"/>
+						<Item name="Item2" type="double" value="1.000000"/>
+						<Item name="Item3" type="double" value="0.000000"/>
+						<Item name="Space" type="integer" value="1"/>
+					</Items>
+					<Item name="Flags" type="integer" value="0"/>
+					<Item name="HighlightMode" type="integer" value="78"/>
+					<Items name="TextColor">
+						<Item name="Item0" type="double" value="0.000000"/>
+						<Item name="Item1" type="double" value="0.000000"/>
+						<Item name="Item2" type="double" value="1.000000"/>
+						<Item name="Item3" type="double" value="0.000000"/>
+						<Item name="Space" type="integer" value="1"/>
+					</Items>
+				</Items>
+				<Item name="TOCFormat" type="integer" value="4"/>
+				<Item name="UseControlFile" type="boolean" value="false"/>
+				<Item name="UseFileSpecificFilenames" type="boolean" value="false"/>
+				<Item name="UseLinkingContext" type="boolean" value="false"/>
+				<Item name="UseMargins" type="boolean" value="true"/>
+				<Item name="UseRegExp" type="boolean" value="true"/>
+				<Items name="ViewDest">
+					<Items name="CustomRect">
+						<Item name="Bottom" type="double" value="0.000000"/>
+						<Item name="Left" type="double" value="0.000000"/>
+						<Item name="Right" type="double" value="0.000000"/>
+						<Item name="Top" type="double" value="0.000000"/>
+					</Items>
+					<Item name="CustomZoom" type="double" value="1.000000"/>
+					<Item name="ProcessNamedDest" type="boolean" value="true"/>
+					<Item name="ZoomFit" type="integer" value="0"/>
+				</Items>
+				<Item name="WidgetFilter" type="integer" value="65535"/>
+			</Items>
+		</Command>
+		<Command name="EVMP_AutoBookmarkAddLinksToURLsCommand" pauseBefore="false">
+			<Items>
+				<Item name="ActionFilter" type="integer" value="3"/>
+				<Item name="ControlFile" type="text" value=""/>
+				<Item name="ConvertTextCase" type="integer" value="0"/>
+				<Item name="CountLineEnds" type="boolean" value="false"/>
+				<Item name="Description" type="text" value=""/>
+				<Item name="DictionaryFile" type="text" value=""/>
+				<Item name="FindWhat" type="text" value=""/>
+				<Item name="FirstPage" type="integer" value="0"/>
+				<Item name="FirstPageExpression" type="text" value=""/>
+				<Item name="Flags" type="integer" value="0"/>
+				<Items name="FontFilter">
+					<Item name="FontName" type="text" value=""/>
+					<Item name="FontSize" type="double" value="10.000000"/>
+					<Item name="FontSizeTolerance" type="double" value="0.500000"/>
+					<Item name="MatchFontName" type="boolean" value="false"/>
+					<Item name="MatchFontSize" type="boolean" value="false"/>
+				</Items>
+				<Item name="ImportExportFilename" type="text" value=""/>
+				<Item name="IncludeLinkAnnots" type="boolean" value="true"/>
+				<Item name="IncludeWidgetAnnots" type="boolean" value="true"/>
+				<Item name="LastPage" type="integer" value="-1"/>
+				<Item name="LastPageExpression" type="text" value=""/>
+				<Item name="LinkAttribute" type="integer" value="0"/>
+				<Item name="LinkingContext" type="text" value=""/>
+				<Items name="Margins">
+					<Item name="Bottom" type="double" value="0.000000"/>
+					<Item name="Left" type="double" value="0.000000"/>
+					<Item name="Right" type="double" value="0.000000"/>
+					<Item name="Top" type="double" value="0.000000"/>
+				</Items>
+				<Item name="MatchCase" type="boolean" value="true"/>
+				<Item name="MatchWholeWordsOnly" type="boolean" value="false"/>
+				<Item name="NewWindow" type="integer" value="0"/>
+				<Item name="PageNumberFormat" type="integer" value="0"/>
+				<Item name="PageOffset" type="integer" value="0"/>
+				<Item name="PageSelection" type="integer" value="0"/>
+				<Item name="PageSubset" type="integer" value="0"/>
+				<Item name="RepeatOperation" type="boolean" value="false"/>
+				<Item name="ReplaceWith" type="text" value=""/>
+				<Item name="SortOrder" type="integer" value="2"/>
+				<Items name="Style">
+					<Item name="BorderStyle" type="integer" value="85"/>
+					<Item name="BorderWidth" type="integer" value="1"/>
+					<Item name="ChangeTextColor" type="boolean" value="true"/>
+					<Items name="Color">
+						<Item name="Item0" type="double" value="0.000000"/>
+						<Item name="Item1" type="double" value="0.000000"/>
+						<Item name="Item2" type="double" value="1.000000"/>
+						<Item name="Item3" type="double" value="0.000000"/>
+						<Item name="Space" type="integer" value="1"/>
+					</Items>
+					<Item name="Flags" type="integer" value="0"/>
+					<Item name="HighlightMode" type="integer" value="78"/>
+					<Items name="TextColor">
+						<Item name="Item0" type="double" value="0.000000"/>
+						<Item name="Item1" type="double" value="0.000000"/>
+						<Item name="Item2" type="double" value="1.000000"/>
+						<Item name="Item3" type="double" value="0.000000"/>
+						<Item name="Space" type="integer" value="1"/>
+					</Items>
+				</Items>
+				<Item name="TOCFormat" type="integer" value="4"/>
+				<Item name="UseControlFile" type="boolean" value="false"/>
+				<Item name="UseFileSpecificFilenames" type="boolean" value="false"/>
+				<Item name="UseLinkingContext" type="boolean" value="false"/>
+				<Item name="UseMargins" type="boolean" value="false"/>
+				<Item name="UseRegExp" type="boolean" value="true"/>
+				<Items name="ViewDest">
+					<Items name="CustomRect">
+						<Item name="Bottom" type="double" value="0.000000"/>
+						<Item name="Left" type="double" value="0.000000"/>
+						<Item name="Right" type="double" value="0.000000"/>
+						<Item name="Top" type="double" value="0.000000"/>
+					</Items>
+					<Item name="CustomZoom" type="double" value="1.000000"/>
+					<Item name="ProcessNamedDest" type="boolean" value="true"/>
+					<Item name="ZoomFit" type="integer" value="0"/>
+				</Items>
+				<Item name="WidgetFilter" type="integer" value="65535"/>
+			</Items>
+		</Command>
+		<Command name="EVMP_AutoBookmarkCreateLinksCommand" pauseBefore="false">
+			<Items>
+				<Item name="ActionFilter" type="integer" value="3"/>
+				<Item name="ControlFile" type="text" value=""/>
+				<Item name="ConvertTextCase" type="integer" value="0"/>
+				<Item name="CountLineEnds" type="boolean" value="false"/>
+				<Item name="Description" type="text" value=""/>
+				<Item name="DictionaryFile" type="text" value="C:\Users\ucblo\Desktop\Snap Manual Link Dictionary.ald"/>
+				<Item name="FindWhat" type="text" value=""/>
+				<Item name="FirstPage" type="integer" value="0"/>
+				<Item name="FirstPageExpression" type="text" value="b:AppendixA"/>
+				<Item name="Flags" type="integer" value="0"/>
+				<Items name="FontFilter">
+					<Item name="FontName" type="text" value=""/>
+					<Item name="FontSize" type="double" value="10.000000"/>
+					<Item name="FontSizeTolerance" type="double" value="0.500000"/>
+					<Item name="MatchFontName" type="boolean" value="false"/>
+					<Item name="MatchFontSize" type="boolean" value="false"/>
+				</Items>
+				<Item name="ImportExportFilename" type="text" value=""/>
+				<Item name="IncludeLinkAnnots" type="boolean" value="true"/>
+				<Item name="IncludeWidgetAnnots" type="boolean" value="true"/>
+				<Item name="LastPage" type="integer" value="-1"/>
+				<Item name="LastPageExpression" type="text" value="b:AppendixB"/>
+				<Item name="LinkAttribute" type="integer" value="0"/>
+				<Item name="LinkingContext" type="text" value=""/>
+				<Items name="Margins">
+					<Item name="Bottom" type="double" value="0.000000"/>
+					<Item name="Left" type="double" value="0.000000"/>
+					<Item name="Right" type="double" value="0.000000"/>
+					<Item name="Top" type="double" value="0.000000"/>
+				</Items>
+				<Item name="MatchCase" type="boolean" value="true"/>
+				<Item name="MatchWholeWordsOnly" type="boolean" value="false"/>
+				<Item name="NewWindow" type="integer" value="0"/>
+				<Item name="PageNumberFormat" type="integer" value="0"/>
+				<Item name="PageOffset" type="integer" value="0"/>
+				<Item name="PageSelection" type="integer" value="2"/>
+				<Item name="PageSubset" type="integer" value="0"/>
+				<Item name="RepeatOperation" type="boolean" value="false"/>
+				<Item name="ReplaceWith" type="text" value=""/>
+				<Item name="SortOrder" type="integer" value="2"/>
+				<Items name="Style">
+					<Item name="BorderStyle" type="integer" value="85"/>
+					<Item name="BorderWidth" type="integer" value="0"/>
+					<Item name="ChangeTextColor" type="boolean" value="true"/>
+					<Items name="Color">
+						<Item name="Item0" type="double" value="0.000000"/>
+						<Item name="Item1" type="double" value="0.000000"/>
+						<Item name="Item2" type="double" value="1.000000"/>
+						<Item name="Item3" type="double" value="0.000000"/>
+						<Item name="Space" type="integer" value="1"/>
+					</Items>
+					<Item name="Flags" type="integer" value="0"/>
+					<Item name="HighlightMode" type="integer" value="78"/>
+					<Items name="TextColor">
+						<Item name="Item0" type="double" value="0.000000"/>
+						<Item name="Item1" type="double" value="0.000000"/>
+						<Item name="Item2" type="double" value="1.000000"/>
+						<Item name="Item3" type="double" value="0.000000"/>
+						<Item name="Space" type="integer" value="1"/>
+					</Items>
+				</Items>
+				<Item name="TOCFormat" type="integer" value="4"/>
+				<Item name="UseControlFile" type="boolean" value="false"/>
+				<Item name="UseFileSpecificFilenames" type="boolean" value="false"/>
+				<Item name="UseLinkingContext" type="boolean" value="false"/>
+				<Item name="UseMargins" type="boolean" value="false"/>
+				<Item name="UseRegExp" type="boolean" value="false"/>
+				<Items name="ViewDest">
+					<Items name="CustomRect">
+						<Item name="Bottom" type="double" value="0.000000"/>
+						<Item name="Left" type="double" value="0.000000"/>
+						<Item name="Right" type="double" value="0.000000"/>
+						<Item name="Top" type="double" value="0.000000"/>
+					</Items>
+					<Item name="CustomZoom" type="double" value="1.000000"/>
+					<Item name="ProcessNamedDest" type="boolean" value="true"/>
+					<Item name="ZoomFit" type="integer" value="0"/>
+				</Items>
+				<Item name="WidgetFilter" type="integer" value="65535"/>
+			</Items>
+		</Command>
+		<Command name="WorkflowPlaybackSaveFiles" pauseBefore="false" promptUser="false">
+			<Items>
+				<Item name="AddToBaseName" type="boolean" value="false"/>
+				<Item name="DocSaveDestType" type="string" value="WorkflowPlaybackSave"/>
+				<Item name="DontOverwrite" type="boolean" value="true"/>
+				<Item name="EmbedIndex" type="boolean" value="false"/>
+				<Item name="FileVariation" type="integer" value="0"/>
+				<Item name="HandleOutput" type="boolean" value="true"/>
+				<Item name="InsertAfterBaseName" type="text" value=""/>
+				<Item name="InsertBeforeBaseName" type="text" value=""/>
+				<Item name="NumbericNaming" type="boolean" value="false"/>
+				<Item name="OptimizePDF" type="boolean" value="true"/>
+				<Item name="PresetName" type="text" value="Standard"/>
+				<Item name="RunPDFOptimizer" type="boolean" value="false"/>
+			</Items>
+		</Command>
+		<Command name="CompressPDFApp" pauseBefore="false"/>
+	</Group>
+</Workflow>

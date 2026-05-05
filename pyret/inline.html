@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Using Snap! On Your Page</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="../src/morphic.js"></script>
+        <script src="../src/symbols.js"></script>
+        <script src="../src/widgets.js"></script>
+        <script src="../src/blocks.js"></script>
+        <script src="../src/threads.js"></script>
+        <script src="../src/objects.js"></script>
+        <script src="../src/scenes.js"></script>
+        <script src="../src/gui.js"></script>
+        <script src="../src/stdlib.js"></script>
+        <script src="../src/paint.js"></script>
+        <script src="../src/lists.js"></script>
+        <script src="../src/byob.js"></script>
+        <script src="../src/tables.js"></script>
+        <script src="../src/sketch.js"></script>
+        <script src="../src/video.js"></script>
+        <script src="../src/maps.js"></script>
+        <script src="../src/extensions.js?"></script>
+        <script src="../src/xml.js"></script>
+        <script src="../src/store.js"></script>
+        <script src="../src/locale.js"></script>
+        <script src="../src/cloud.js"></script>
+        <script src="../src/api.js"></script>
+        <script src="../src/sha512.js"></script>
+        <script src="../src/FileSaver.min.js"></script>
+        <script>
+            var world;
+            window.onload = function () {
+                var ide = new IDE_Morph({
+                        path: '../',
+                        load: 'transpile.xml',
+                        // onload: () => /* runs when "transpile.xml" is loaded */,
+                        design: "flat",
+                        theme: "bright",
+                        border: 1,
+                        hideControls: true,
+                        hideCategories: true,
+                        noDefaultCat: false,
+                        noSprites: true,
+                        noImports: true,
+                        noOwnBlocks: true,
+                        noRingify: true,
+                        noUserSettings: true,
+                        noDevWarning: true
+                    }),
+                    code = document.getElementById('code'),
+                    save = document.getElementById('save'),
+                    load = document.getElementById('load'),
+                    radio = document.querySelectorAll('input[name="pl"]'),
+                    loop = () => {
+                        requestAnimationFrame(loop);
+                        world.doOneCycle();
+                    };
+                world = new WorldMorph(document.getElementById('world'), false);
+                ide.openIn(world);
+                ide.addMessageListener('update', txt => code.value = txt);
+                save.addEventListener('click', () => ide.saveXMLAs(
+                    ide.getSpriteScriptsXML(), 'snap-scripts'));
+                clear.addEventListener('click', () =>
+                    ide.loadSpriteScriptsXML('<>'));
+                load.addEventListener("change", () => {
+                    var frd = new FileReader();
+                    if (!load.files[0]) {return; }
+                    frd.onloadend = (e) =>
+                        ide.loadSpriteScriptsXML(e.target.result);
+                    frd.readAsText(load.files[0]);
+                });
+                radio.forEach(bt => bt.addEventListener('click', () =>
+                    ide.broadcast(bt.value)));
+                code.onmouseup = function () {
+                    var ln = n => this.value.substr(0, n).split('\n').length;
+                    ide.unflashSpriteScripts();
+                    if (this.selectionStart < this.selectionEnd) {
+                        ide.flashSpriteScripts(
+                            ln(this.selectionStart),
+                            ln(this.selectionEnd),
+                            null, // optional sprite name
+                            null // '200,100,130' // optional rgb(a) color csv
+                        );
+
+                        /*
+                        // alternatively: highlight the block at the
+                        // selection start idx
+                        ide.flashSpriteScriptAt(
+                            this.selectionStart,
+                            null, // optional sprite name
+                            null // '200,100,130' // optional rgb(a) color csv
+                        );
+                        */
+
+                        /*
+                        // highlight the outline of block at the
+                        // selection start idx
+                        ide.flashSpriteScriptOutlineAt(
+                            this.selectionStart,
+                            null, // optional sprite name
+                            '200,100,130', // optional rgb(a) color csv
+                            3 // border
+                        );
+                        */
+
+                        /*
+                        // apop-up a balloon at the block at the
+                        // selection start idx
+                        ide.showScriptBalloonAt(
+                            'selection:\n' +
+                                this.selectionStart +
+                                ' - ' +
+                                this.selectionEnd,
+                            this.selectionStart,
+                            null, // optional sprite name
+                        );
+                        */
+                    }
+                };
+                requestAnimationFrame(loop);
+            };
+        </script>
+    </head>
+    <body>
+        <h1>Using Snap! On Your Page</h1>
+        <p>Did you now you can embed and configure Snap! on your own web page
+        directly without having to use an iFrame?</p>
+        <p>This way you can have the Snap! editor be part of your web IDE
+        and offer visual block based scripting for your textual programming
+        language.</p>
+        <p>You can also inline parts of Snap! such as a reduced palette with a
+        limited number of customized blocks and a little scripting area without
+        any sprites or media assets for exercises and Parsons problems
+        inside a larger narrative, such as an hour-of-code.</p>
+
+        <canvas id="world" tabindex="1" width="500" height="300"></canvas>
+        <textarea id="code" rows="19" cols="50" readonly style="resize: none;"></textarea>
+        <br>
+        <input type="radio" id="py" name="pl" value="Python" checked>
+        <label for="py">Python</label>
+        <input type="radio" id="js" name="pl" value="JavaScript">
+        <label for="js">JavaScript</label>
+        <input type="radio" id="st" name="pl" value="Smalltalk">
+        <label for="st">Smalltalk</label>
+        <input type="radio" id="c" name="pl" value="C">
+        <label for="c">C</label>
+        <br>
+        <button id="save">Save</button>
+        <button id="clear">Clear</button>
+        <input type="file" id="load" accept=".xml">
+
+        <p>This page is a work-in-progress to explore how we can use Snap! as
+        an alternative / secondary block based scripting editor for the
+        <a href="https://www.pyret.org/">Pyret</a> programming language
+        in the fabulous <a href="https://bootstrapworld.org/">Bootstrap</a>
+        curriculum (be sure to check it out if haven't already!).</p>
+        <p>If you see this page it's very likey that it doesn't yet do anything
+        or that it isn't even operational and throws a bazillion errors. We use
+        it together with our friends over at Bootstrap to internally try stuff
+        as we're testing some wild ideas. So please don't yet inquire about
+        details and don't yet report any bugs you might encounter.</p>
+        <p>Instead, stay tuned for some exciting updates down the road!</p>
+        <p>-Jens</p>
+    </body>
+</html>

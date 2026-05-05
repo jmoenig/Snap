@@ -34,7 +34,7 @@
 /*global modules, hex_sha512*/
 
 modules = modules || {};
-modules.cloud = '2019-July-01';
+modules.cloud = '2023-April-12';
 
 // Global stuff
 
@@ -47,8 +47,14 @@ function Cloud() {
 }
 
 Cloud.prototype.init = function () {
-    this.urlBasePath = '/api/v1';
-    this.url = this.determineCloudDomain() + this.urlBasePath;
+    this.apiBasePath = '/api/v1';
+    this.url = this.determineCloudDomain() + this.apiBasePath;
+    this.username = null;
+    this.disabled = false;
+};
+
+Cloud.prototype.disable = function () {
+    this.disabled = true;
     this.username = null;
 };
 
@@ -56,7 +62,7 @@ Cloud.prototype.init = function () {
 Cloud.MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 Cloud.prototype.knownDomains = {
-    'Snap!Cloud' : 'https://cloud.snap.berkeley.edu',
+    'Snap!Cloud' : 'https://snap.berkeley.edu',
     'Snap!Cloud (cs10)' : 'https://snap-cloud.cs10.org',
     'Snap!Cloud (staging)': 'https://snap-staging.cs10.org',
     'localhost': 'http://localhost:8080',
@@ -163,6 +169,8 @@ Cloud.prototype.request = function (
     wantsRawResponse,
     body) {
 
+    if (this.disabled) { return; }
+
     var request = new XMLHttpRequest(),
         myself = this,
         fullPath = this.url +
@@ -214,7 +222,7 @@ Cloud.prototype.request = function (
                 }
             }
         };
-        request.send(body);
+        request.send(typeof body === 'object' ? JSON.stringify(body) : body);
     } catch (err) {
         onError.call(this, err.toString(), 'Cloud Error');
     }
@@ -344,7 +352,7 @@ Cloud.prototype.login = function (
 };
 
 Cloud.prototype.signup = function (
-	username,
+    username,
     password,
     passwordRepeat,
     email,
@@ -353,7 +361,7 @@ Cloud.prototype.signup = function (
 ) {
     this.request(
         'POST',
-        '/users/' + encodeURIComponent(username) + '?' + this.encodeDict({
+        '/users/' + encodeURIComponent(username.trim()) + '?' + this.encodeDict({
             email: email,
             password: hex_sha512(password),
             password_repeat: hex_sha512(passwordRepeat)
@@ -423,7 +431,7 @@ Cloud.prototype.saveProject = function (projectName, body, onSuccess, onError) {
                     onError,
                     'Project could not be saved',
                     false,
-                    JSON.stringify(body) // POST body
+                    body // POST body
                 );
             } else {
                 onError.call(this, 'You are not logged in', 'Snap!Cloud');
@@ -460,6 +468,14 @@ Cloud.prototype.getPublishedProjectList = function (
     var path = '/projects' +
     		(username ? '/' + encodeURIComponent(username) : '') +
 	        '?ispublished=true';
+
+    if (!username) {
+        // When requesting the global list of published projects, filter out
+        // those with project names that are typical of online courses like
+        // Teals or BJC. When requesting a user's published projects, show them
+        // all.
+        path += '&filtered=true';
+    }
 
     if (withThumbnail) {
         path += '&withthumbnail=true';
@@ -703,7 +719,7 @@ Cloud.prototype.updateNotes = function (
         onError,
         'Could not update project notes',
         false, // wants raw response
-        JSON.stringify({ notes: notes })
+        { notes: notes }
     );
 };
 
@@ -722,7 +738,7 @@ Cloud.prototype.updateProjectName = function (
         onError,
         'Could not update project name',
         false, // wants raw response
-        JSON.stringify({ projectname: newName })
+        { projectname: newName }
     );
 };
 
@@ -829,7 +845,7 @@ Cloud.prototype.updateCollectionDescription = function (
         onError,
         'Could not update collection description',
         false, // wants raw response
-        JSON.stringify({ description: description })
+        { description: description }
     );
 };
 
@@ -849,7 +865,7 @@ Cloud.prototype.updateCollectionName = function (
         onError,
         'Could not update collection name',
         false, // wants raw response
-        JSON.stringify({ name: newName })
+        { name: newName }
     );
 };
 
@@ -938,10 +954,10 @@ Cloud.prototype.addProjectToCollection = function (
         onError,
         'Could not add project to collection',
         false, // wants raw response
-        JSON.stringify({
+        {
             username: projectUsername,
             projectname: projectName
-        })
+        }
     );
 };
 
@@ -980,11 +996,15 @@ Cloud.prototype.getUserCollections = function (
                 encodeURIComponent(collectionUsername) :
                 '%username') +
             '/collections?' +
-            this.encodeDict({
-                page: page || '',
-                pagesize: page ? pageSize || 16 : '',
-                matchtext: searchTerm ? encodeURIComponent(searchTerm) : ''
-            }),
+            this.encodeDict(
+                page > 0 ?
+                    {
+                        page: page,
+                        pagesize: pageSize || 16,
+                        matchtext:
+                            searchTerm ? encodeURIComponent(searchTerm) : ''
+                    } : {}
+            ),
         onSuccess,
         onError,
         'Could not fetch collections'
@@ -1071,9 +1091,7 @@ Cloud.prototype.addEditorToCollection = function (
         onError,
         'Could not add editor to collection',
         false, // wants raw response
-        JSON.stringify({
-            editor_username: editorUsername,
-        })
+        { editor_username: editorUsername }
     );
 };
 
@@ -1093,4 +1111,18 @@ Cloud.prototype.removeEditorFromCollection = function (
         onError,
         'Could not remove editor from collection'
     );
+};
+
+// Paths to front-end pages
+/*
+    This list of paths is incomplete, we will add them as necessary.
+    Important: a path is a string *without* a domain.
+    These paths are not prefixed by `apiBasePath`.
+*/
+
+Cloud.prototype.showProjectPath = function (username, projectname) {
+    return '/project?' + this.encodeDict({
+        username: username,
+        projectname: projectname
+    });
 };

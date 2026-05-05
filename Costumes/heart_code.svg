@@ -1,23 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 145.5608978 143.0700684" style="enable-background:new 0 0 145.5608978 143.0700684;" xml:space="preserve">
-<style type="text/css">
+
+<svg
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 145.5609 143.06941"
+   xml:space="preserve"
+   sodipodi:docname="heart_code.svg"
+   width="145.5609"
+   height="143.06941"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs11" /><sodipodi:namedview
+   id="namedview9"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1" />
+<style
+   type="text/css"
+   id="style2">
 	.st0{fill:#FFD499;stroke:#FFD499;stroke-width:15;stroke-linejoin:round;}
 	.st1{fill:#FFE9CC;stroke:#FFE9CC;stroke-width:15;stroke-linejoin:round;}
 	.st2{fill:#FF9400;}
 	.st3{font-family:'Helvetica';}
 	.st4{font-size:25.0793018px;}
 </style>
-<g id="ID0.2657389142550528">
-	<path id="ID0.2874125149101019" class="st0" d="M42.5074234,7.5C23.7326012,7.5,8.4950628,23.7647858,8.4950628,43.8053246
-		c0,40.7696724,38.5283508,51.4588737,64.7827759,91.76474c24.8219299-40.057785,64.7830582-52.2963104,64.7830582-91.76474
-		C138.0608978,23.7647858,122.8233566,7.5,104.0485382,7.5c-13.6185532,0-25.3397751,8.5831852-30.7706985,20.9324417
-		C67.8471985,16.0831852,56.1259727,7.5,42.5074234,7.5z"/>
-	<path id="ID0.2874125149101019_1_" class="st1" d="M39.5074234,8.5C21.839325,8.5,7.5,23.8060207,7.5,42.6652222
-		c0,38.3664093,36.257206,48.4255066,60.9640045,86.3554535c23.3587494-37.6964798,60.9642639-49.2135849,60.9642639-86.3554535
-		C129.4282684,23.8060207,115.0889435,8.5,97.4208527,8.5c-12.815773,0-23.8460617,8.0772285-28.9568481,19.6985302
-		C63.3534851,16.5772285,52.3231926,8.5,39.5074234,8.5z"/>
+<g
+   id="ID0.2657389142550528">
+	<path
+   id="ID0.2874125149101019"
+   class="st0"
+   d="M 42.507423,7.5 C 23.732601,7.5 8.4950628,23.764786 8.4950628,43.805325 c 0,40.769672 38.5283512,51.458873 64.7827762,91.764735 C 98.099769,95.51228 138.0609,83.273754 138.0609,43.805325 138.0609,23.764786 122.82336,7.5 104.04854,7.5 90.429985,7.5 78.708763,16.083185 73.27784,28.432442 67.847199,16.083185 56.125973,7.5 42.507423,7.5 Z" />
+	<path
+   id="ID0.2874125149101019_1_"
+   class="st1"
+   d="M 39.507423,8.5 C 21.839325,8.5 7.5,23.806021 7.5,42.665222 7.5,81.031632 43.757206,91.090729 68.464005,129.02068 91.822754,91.324196 129.42827,79.807091 129.42827,42.665222 129.42827,23.806021 115.08894,8.5 97.420853,8.5 84.60508,8.5 73.574791,16.577228 68.464005,28.19853 63.353485,16.577228 52.323193,8.5 39.507423,8.5 Z" />
 </g>
-<text id="ID0.7224274449981749" transform="matrix(1 0 0 1 20.415432 53.9042969)" class="st2 st3 st4">CODE IT</text>
+<text
+   id="ID0.7224274449981749"
+   class="st2 st3 st4"
+   x="20.415432"
+   y="53.904297">CODE IT</text>
 </svg>

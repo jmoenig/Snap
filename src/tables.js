@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2016 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -64,13 +64,16 @@
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global modules, Point, newCanvas, Morph, fontHeight, SliderMorph, List,
-MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, isString,
-SpriteMorph, Context, Costume, ArgMorph, BlockEditorMorph, SymbolMorph,
-SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, Sound,
-CellMorph, ListWatcherMorph, isNil, BoxMorph, Variable, isSnapObject*/
+/*global modules, Point, Morph, fontHeight, SliderMorph, isString, detect, List,
+MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph, isNil,
+SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
+SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
+ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows, Color,
+CostumeIconMorph, SoundIconMorph, localize, display*/
 
-modules.tables = '2019-June-04';
+/*jshint esversion: 6*/
+
+modules.tables = '2026-January-19';
 
 var Table;
 var TableCellMorph;
@@ -170,6 +173,10 @@ Table.prototype.columnNames = function () {
     return this.colNames;
 };
 
+Table.prototype.recordNames = function () {
+    return this.rowNames;
+};
+
 // Table setting:
 
 Table.prototype.set = function (data, col, row) {
@@ -245,9 +252,7 @@ Table.prototype.addCol = function (array, name) {
 
 Table.prototype.toList = function () {
     return new List(
-        this.contents.map(function (eachRow) {
-            return new List(eachRow);
-        })
+        this.contents.map(eachRow => new List(eachRow))
     );
 };
 
@@ -274,7 +279,19 @@ TableCellMorph.uber = Morph.prototype;
 
 // TableCellMorph global setting:
 
-TableCellMorph.prototype.listSymbol = ArgMorph.prototype.listIcon();
+TableCellMorph.prototype.cachedListSymbol = null;
+
+TableCellMorph.prototype.listSymbol = function () {
+    if (!this.cachedListSymbol || this.cachedListSymbol.height() !==
+            SyntaxElementMorph.prototype.fontSize) {
+        this.cachedListSymbol = new SymbolMorph(
+            'list',
+            SyntaxElementMorph.prototype.fontSize,
+            SpriteMorph.prototype.blockColor.lists.darker(50)
+        );
+    }
+    return this.cachedListSymbol;
+};
 
 // TableCellMorph instance creation:
 
@@ -286,39 +303,31 @@ TableCellMorph.prototype.init = function (data, extent, isLabel) {
     // additional properties:
     this.data = data;
     this.isLabel = isLabel || false;
+    this.labelString = null;
 
     // initialize inherited properties:
     TableCellMorph.uber.init.call(this, true);
 
     // override inherited properites:
-    this.noticesTransparentClick = true;
-    if (extent) {this.silentSetExtent(extent); }
-    this.drawNew();
+    if (extent) {this.bounds.setExtent(extent); }
+    this.fixLayout();
 };
 
 TableCellMorph.prototype.setData = function (data, extent) {
     this.data = data;
     if (extent && (!extent.eq(this.extent()))) {
-        this.silentSetExtent(extent);
-        this.drawNew();
-    } else {
-        this.drawData();
+        this.bounds.setExtent(extent);
     }
-    // note: don't call changed(), let the TableMorph handle it instead
+    this.rerender();
 };
 
 TableCellMorph.prototype.getData = function () {
     return this.data instanceof Array ? this.data[0] : this.data;
 };
 
-TableCellMorph.prototype.drawNew = function () {
-    this.image = newCanvas(this.extent());
-    this.drawData();
-};
-
-TableCellMorph.prototype.drawData = function (lbl, bg) {
-    var dta = lbl || this.dataRepresentation(this.data),
-        context = this.image.getContext('2d'),
+TableCellMorph.prototype.render = function (ctx) {
+    var dta = this.labelString || this.dataRepresentation(this.data),
+        raw = this.getData(),
         fontSize = SyntaxElementMorph.prototype.fontSize,
         empty = TableMorph.prototype.highContrast ? 'rgb(220, 220, 220)'
                 : 'transparent',
@@ -327,7 +336,8 @@ TableCellMorph.prototype.drawData = function (lbl, bg) {
                 (this.data instanceof Array ? 'italic'  : '')
                         : this.shouldBeList() ? 'bold' : '',
         font = fontStyle + ' ' + fontSize + 'px Helvetica, Arial, sans-serif',
-        background = bg || (this.isLabel ? empty
+        background = this.labelString ? 'rgb(220, 220, 250)'
+            : (this.isLabel ? empty
                 : (this.shouldBeList() ? orphaned
                         : (this.isOvershooting() ? 'white'
                                 : (isNil(this.data) ? empty : 'white')))),
@@ -339,49 +349,62 @@ TableCellMorph.prototype.drawData = function (lbl, bg) {
         x,
         y;
 
-    context.clearRect(0, 0, width, height);
-    context.fillStyle = background;
+    this.isDraggable = !SpriteMorph.prototype.disableDraggingData &&
+        ((raw instanceof Context) ||
+            (raw instanceof Costume) ||
+            (raw instanceof Sound));
+
+    ctx.fillStyle = background;
     if (this.shouldBeList()) {
         BoxMorph.prototype.outlinePath.call(
-            this, context, SyntaxElementMorph.prototype.corner + 1, 0
+            this, ctx, SyntaxElementMorph.prototype.corner + 1, 0
         );
-        context.fill();
+        ctx.fill();
     } else if (this.isOvershooting()) {
-        this.raggedBoxPath(context);
-        context.fill();
+        this.raggedBoxPath(ctx);
+        ctx.fill();
     } else {
-        context.fillRect(0, 0, width, height);
+        ctx.fillRect(0, 0, width, height);
     }
 
     if (!dta) {return; }
     if (dta instanceof HTMLCanvasElement) {
         x = Math.max((width - dta.width) / 2, 0);
         y = Math.max((height - dta.height) / 2, 0);
-        context.shadowOffsetX = 4;
-        context.shadowOffsetY = 4;
-        context.shadowBlur = 4;
-        context.shadowColor = 'lightgray';
-        context.drawImage(dta, x, y);
+        if (useBlurredShadows) {
+            ctx.shadowOffsetX = 4;
+            ctx.shadowOffsetY = 4;
+            ctx.shadowBlur = 4;
+            ctx.shadowColor = 'lightgray';
+        }
+        ctx.drawImage(dta, x, y);
+    } else if (dta instanceof Morph) {
+        ctx.save();
+        ctx.translate(
+            Math.max((width - dta.width()) / 2, 0),
+            Math.max((height - dta.height()) / 2, 0)
+        );
+        dta.render(ctx); // to do: center horizontally
+        ctx.restore();
     } else { // text
-        context.font = font;
-        context.textAlign = 'left';
-        context.textBaseline = 'bottom';
-        txtWidth = context.measureText(dta).width;
+        ctx.font = font;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        txtWidth = ctx.measureText(dta).width;
         txtHeight = fontHeight(fontSize);
-        context.fillStyle = foreground;
+        ctx.fillStyle = foreground;
         x = Math.max((width - txtWidth) / 2, 0);
         y = Math.max((height - txtHeight) / 2, 0);
-        context.fillText(dta, x, txtHeight + y);
+        ctx.fillText(dta, x, txtHeight + y);
     }
 };
 
 TableCellMorph.prototype.dataRepresentation = function (dta) {
     if (dta instanceof Morph) {
         if (isSnapObject(dta)) {
-            return dta.thumbnail(new Point(40, 40));
-        } else {
-            return dta.fullImageClassic();
+            return dta.thumbnail(new Point(40, 40), null, true); // no watchers
         }
+        return dta;
     } else if (isString(dta)) {
         return dta.length > 100 ? dta.slice(0, 100) + '...' : dta;
     } else if (typeof dta === 'number') {
@@ -390,8 +413,11 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         return SpriteMorph.prototype.booleanMorph.call(
             null,
             dta
-        ).fullImage();
+        );
     } else if (dta instanceof Array) {
+        if (dta[0] instanceof Array && isString(dta[0][0])) {
+            return display(dta[0]);
+        }
         return this.dataRepresentation(dta[0]);
     } else if (dta instanceof Variable) {
         return this.dataRepresentation(dta.value);
@@ -402,10 +428,16 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
     } else if (dta instanceof Costume) {
         return dta.thumbnail(new Point(40, 40));
     } else if (dta instanceof Sound) {
-        return new SymbolMorph('notes', 30).image;
+        return new SymbolMorph(
+            'notes', SyntaxElementMorph.prototype.fontSize
+        );
     } else if (dta instanceof List) {
-        return this.listSymbol;
-        // return new ListWatcherMorph(dta).fullImageClassic();
+        return this.listSymbol();
+    } else if (dta instanceof Color) {
+        return SpriteMorph.prototype.colorSwatch(
+            dta,
+            SyntaxElementMorph.prototype.fontSize * 1.4
+        );
     } else {
         return dta ? dta.toString() : (dta === 0 ? '0' : null);
     }
@@ -456,17 +488,97 @@ TableCellMorph.prototype.mouseEnter = function () {
         x = tm.world().hand.left() - tm.left();
         c = tm.columnAt(x);
         if (c > 0) {
-            this.drawData(c, 'rgb(220, 220, 250)');
-            this.changed();
+            this.labelString = c;
+            this.rerender();
         }
     }
 };
 
 TableCellMorph.prototype.mouseLeave = function () {
     if (this.isLabel) {
-        this.drawData();
-        this.changed();
+        this.labelString = null;
+        this.rerender();
     }
+};
+
+TableCellMorph.prototype.selectForEdit = function () {
+    if (this.getData() instanceof Context) {
+        return this.selectContextForEdit();
+    }
+    if (this.getData() instanceof Costume) {
+        return this.selectCostumeForEdit();
+    }
+    if (this.getData() instanceof Sound) {
+        return this.selectSoundForEdit();
+    }
+};
+
+TableCellMorph.prototype.selectContextForEdit = function () {
+    var script = this.getData().toUserBlock(),
+        prepare = script.prepareToBeGrabbed,
+        ide = this.parentThatIsA(IDE_Morph) ||
+            this.world().childThatIsA(IDE_Morph);
+
+    script.prepareToBeGrabbed = function (hand) {
+        prepare.call(this, hand);
+        hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.prepareToBeGrabbed = prepare;
+    };
+
+    if (ide.isAppMode) {return; }
+    script.setPosition(this.position());
+    return script;
+};
+
+TableCellMorph.prototype.selectCostumeForEdit = function () {
+    var cst = this.getData().copy(),
+        icon,
+        prepare,
+        ide = this.parentThatIsA(IDE_Morph)||
+            this.world().childThatIsA(IDE_Morph);
+
+    cst.name = ide.currentSprite.newCostumeName(cst.name);
+    icon = new CostumeIconMorph(cst);
+    prepare = icon.prepareToBeGrabbed;
+
+    icon.prepareToBeGrabbed = function (hand) {
+        hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.prepareToBeGrabbed = prepare;
+    };
+
+    if (ide.isAppMode) {return; }
+    icon.setCenter(this.center());
+    return icon;
+};
+
+TableCellMorph.prototype.selectSoundForEdit = function () {
+    var snd = this.getData().copy(),
+        icon,
+        prepare,
+        ide = this.parentThatIsA(IDE_Morph)||
+            this.world().childThatIsA(IDE_Morph);
+
+    snd.name = ide.currentSprite.newSoundName(snd.name);
+    icon = new SoundIconMorph(snd);
+    prepare = icon.prepareToBeGrabbed;
+
+    icon.prepareToBeGrabbed = function (hand) {
+        hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.prepareToBeGrabbed = prepare;
+    };
+
+    if (ide.isAppMode) {return; }
+    icon.setCenter(this.center());
+    return icon;
 };
 
 // TableMorph //////////////////////////////////////////////////////////
@@ -565,9 +677,9 @@ TableMorph.prototype.init = function (
 
     // override inherited properites:
     // this.fps = 3; // this will slow down the sliders (!)
-    if (extent) {this.silentSetExtent(extent); }
+    if (extent) {this.bounds.setExtent(extent); }
     this.initScrollBars();
-    this.drawNew();
+    this.fixLayout();
 };
 
 TableMorph.prototype.initScrollBars = function () {
@@ -615,7 +727,7 @@ TableMorph.prototype.updateScrollBars = function () {
             this.hBar.rangeSize() * this.columns.length / this.table.cols(),
             this.hBar.rangeSize() / 10
         );
-        this.hBar.drawNew();
+        this.hBar.fixLayout();
     }
 
     this.vBar.stop = this.maxStartRow;
@@ -628,41 +740,17 @@ TableMorph.prototype.updateScrollBars = function () {
             this.vBar.rangeSize() * this.rows / this.table.rows(),
             this.vBar.rangeSize() / 10
         );
-        this.vBar.drawNew();
+        this.vBar.fixLayout();
     }
 };
 
-TableMorph.prototype.drawNew = function () {
-    var context, w, i;
-    this.image = newCanvas(this.extent());
-    context = this.image.getContext('2d');
-    context.fillStyle = 'rgb(220, 220, 220)';
-    BoxMorph.prototype.outlinePath.call(
-        this, context, SyntaxElementMorph.prototype.corner + 1, 0
-    );
-    context.fill();
+TableMorph.prototype.fixLayout = function () {
+    TableMorph.uber.fixLayout.call(this);
 
     // determine and cache layout information
     this.rowLabelWidth = this.rowLabelsWidth();
     this.columns = this.columnsLayout();
     this.rows = this.visibleRows();
-
-    // optionally draw grid
-    if (this.highContrast && this.table.cols() > 1) {
-        w = this.padding;
-        for (i = this.startCol; i <= this.table.cols(); i += 1) {
-            w += (this.colWidth(i) + this.padding);
-        }
-        context.fillStyle = 'darkGray';
-        context.fillRect(
-            this.padding + this.rowLabelWidth,
-            this.padding + this.colLabelHeight,
-            w,
-            (this.rowHeight + this.padding) *
-                (this.table.rows() + 1 - this.startRow) +
-                this.padding
-        );
-    }
 
     this.buildCells();
 
@@ -673,6 +761,34 @@ TableMorph.prototype.drawNew = function () {
     this.vBar.setHeight(this.height() - this.hBar.height());
     this.vBar.setRight(this.right());
     this.vBar.setTop(this.top());
+};
+
+TableMorph.prototype.render = function (ctx) {
+    var w, i;
+    ctx.fillStyle = 'rgb(220, 220, 220)';
+    BoxMorph.prototype.outlinePath.call(
+        this,
+        ctx, SyntaxElementMorph.prototype.corner + 1,
+        0
+    );
+    ctx.fill();
+
+    // optionally draw grid
+    if (this.highContrast && this.table.cols() > 1) {
+        w = this.padding;
+        for (i = this.startCol; i <= this.table.cols(); i += 1) {
+            w += (this.colWidth(i) + this.padding);
+        }
+        ctx.fillStyle = 'darkGray';
+        ctx.fillRect(
+            this.padding + this.rowLabelWidth,
+            this.padding + this.colLabelHeight,
+            w,
+            (this.rowHeight + this.padding) *
+                (this.table.rows() + 1 - this.startRow) +
+                this.padding
+        );
+    }
 };
 
 TableMorph.prototype.buildCells = function () {
@@ -718,7 +834,6 @@ TableMorph.prototype.buildCells = function () {
     this.add(this.hBar);
     this.add(this.vBar);
     this.updateScrollBars();
-    this.changed();
 };
 
 TableMorph.prototype.drawData = function (noScrollUpdate) {
@@ -824,16 +939,16 @@ TableMorph.prototype.update = function () {
 // TableMorph layout helpers (all private):
 
 TableMorph.prototype.rowLabelsWidth = function () {
-    var ctx = newCanvas().getContext('2d');
+    var ctx = StringMorph.prototype.measureCtx;
     ctx.font = 'italic ' + SyntaxElementMorph.prototype.fontSize +
         'px Helvetica, Arial, sans-serif';
     return Math.max(
         0,
         Math.max.apply(
             null,
-            this.table.columnNames().map(function (name) {
-                return name ? ctx.measureText(name).width : 0;
-            })
+            this.table.recordNames().map(
+                name => name ? ctx.measureText(name).width : 0
+            )
         )
     ) || ctx.measureText(this.table.rows().toString()).width +
             (6 * SyntaxElementMorph.prototype.scale);
@@ -997,15 +1112,12 @@ TableMorph.prototype.resizeCells = function (pos) {
             }
         }
     }
-    if (this.highContrast) {
-        this.drawNew();
-    } else {
-        this.rowLabelWidth = this.rowLabelsWidth();
-        this.columns = this.columnsLayout();
-        this.rows = this.visibleRows();
-        this.buildCells();
-    }
+    this.rowLabelWidth = this.rowLabelsWidth();
+    this.columns = this.columnsLayout();
+    this.rows = this.visibleRows();
+    this.buildCells();
     this.resizeAnchor = pos;
+    this.changed();
 };
 
 TableMorph.prototype.columnAt = function (relativeX) {
@@ -1022,11 +1134,45 @@ TableMorph.prototype.columnAt = function (relativeX) {
 // TableMorph context menu
 
 TableMorph.prototype.userMenu = function () {
-    var menu = new MenuMorph(this);
+    var menu = new MenuMorph(this),
+        world = this.world(),
+        ide = detect(world.children, m => m instanceof IDE_Morph);
+
+    if (ide.isAppMode) {return; }
     if (this.parentThatIsA(TableDialogMorph)) {
         if (this.colWidths.length) {
             menu.addItem('reset columns', 'resetColumns');
             menu.addLine();
+        }
+        if (this.table instanceof List && this.table.canBeJSON()) {
+            menu.addItem(
+                'blockify',
+                () => {
+                    this.table.blockify().pickUp(world);
+                    world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                }
+            );
+            menu.addItem(
+                'export',
+                () => {
+                    if (this.table.canBeCSV()) {
+                        ide.saveFileAs(
+                            this.table.asCSV(),
+                            'text/csv;charset=utf-8', // RFC 4180
+                            localize('data') // name
+                        );
+                    } else {
+                        ide.saveFileAs(
+                            this.table.asJSON(true), // guessObjects
+                            'text/json;charset=utf-8',
+                            localize('data') // name
+                        );
+                    }
+                }
+            );
         }
         menu.addItem('open in another dialog...', 'openInDialog');
         return menu;
@@ -1035,22 +1181,51 @@ TableMorph.prototype.userMenu = function () {
     if (this.colWidths.length) {
         menu.addItem('reset columns', 'resetColumns');
     }
-    menu.addItem('list view...', 'showListView');
-    menu.addLine();
+    if (this.table instanceof List) {
+        menu.addItem('list view...', 'showListView');
+        if (this.table.canBeJSON()) {
+            menu.addItem(
+                'blockify',
+                () => {
+                    this.table.blockify().pickUp(world);
+                    world.hand.grabOrigin = {
+                        origin: ide.palette,
+                        position: ide.palette.center()
+                    };
+                }
+            );
+            menu.addItem(
+                'export',
+                () => {
+                    if (this.table.canBeCSV()) {
+                        ide.saveFileAs(
+                            this.table.asCSV(),
+                            'text/csv;charset=utf-8', // RFC 4180
+                            localize('data') // name
+                        );
+                    } else {
+                        ide.saveFileAs(
+                            this.table.asJSON(true), // guessObjects
+                            'text/json;charset=utf-8',
+                            localize('data') // name
+                        );
+                    }
+                }
+            );
+        }
+        menu.addLine();
+    }
     menu.addItem('open in dialog...', 'openInDialog');
     return menu;
 };
 
 TableMorph.prototype.resetColumns = function () {
     this.colWidths = [];
-    if (this.highContrast) {
-        this.drawNew();
-    } else {
-        this.rowLabelWidth = this.rowLabelsWidth();
-        this.columns = this.columnsLayout();
-        this.rows = this.visibleRows();
-        this.buildCells();
-    }
+    this.rowLabelWidth = this.rowLabelsWidth();
+    this.columns = this.columnsLayout();
+    this.rows = this.visibleRows();
+    this.buildCells();
+    this.changed();
 };
 
 TableMorph.prototype.openInDialog = function () {
@@ -1071,17 +1246,25 @@ TableMorph.prototype.showListView = function () {
     if (!view) {return; }
     if (view instanceof SpriteBubbleMorph) {
         view.changed();
-        view.drawNew(true);
+        view.contentsMorph.destroy();
+        view.contentsMorph = new ListWatcherMorph(this.table);
+        view.contentsMorph.step = view.contents.update;
+        view.contentsMorph.expand(this.extent());
+        view.parent.positionTalkBubble();
     } else if (view instanceof SpeechBubbleMorph) {
         view.contents = new ListWatcherMorph(this.table);
         view.contents.step = view.contents.update;
         view.contents.expand(this.extent());
-        view.drawNew(true);
     } else { // watcher cell
-        view.drawNew(true);
+        view.changed();
+        view.contentsMorph.destroy();
+        view.contentsMorph = new ListWatcherMorph(this.table);
+        view.add(view.contentsMorph);
+        view.contentsMorph.setPosition(this.position());
         view.contentsMorph.expand(this.extent());
     }
     view.fixLayout();
+    view.rerender();
 };
 
 // TableMorph updating:
@@ -1117,7 +1300,6 @@ TableFrameMorph.prototype.init = function (tableMorph, noResize) {
 
     // override inherited properites:
     this.color = 'transparent';
-    this.noticesTransparentClick = false;
     this.bounds = this.tableMorph.bounds.copy();
     this.add(this.tableMorph);
 
@@ -1131,21 +1313,18 @@ TableFrameMorph.prototype.init = function (tableMorph, noResize) {
         );
     }
 
-    this.drawNew();
+    this.fixLayout();
 };
 
 TableFrameMorph.prototype.fixLayout = function () {
     var ext = this.extent();
     if (this.tableMorph.extent().eq(ext)) {return; }
     this.tableMorph.setExtent(this.extent());
-    if (this.parent && this.parent.fixLayout) {
+    if (this.parent) {
+        this.parent.changed();
         this.parent.fixLayout();
-    }
-};
-
-TableFrameMorph.prototype.setExtent = function (aPoint, silently) {
-    TableFrameMorph.uber.setExtent.call(this, aPoint, silently);
-    this.fixLayout();
+        this.parent.rerender();
+   }
 };
 
 // TableFrameMorph result / speech balloon support:

@@ -1,8 +1,50 @@
-<svg version="1.1" width="97" height="46" viewBox="-1 9 97 46" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="95.297737"
+   height="54.503357"
+   viewBox="-1 9 95.297737 54.503357"
+   id="svg6"
+   sodipodi:docname="Hat.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <!-- Exported by Scratch - http://scratch.mit.edu/ -->
-  <g id="ID0.6560409157536924">
-    <path id="ID0.4420698448084295" fill="#006666" stroke="#000000" stroke-width="1" d="M 248.375 110.500 C 256.922 110.405 266.161 111.145 273.400 115.600 C 276.912 117.701 275.613 123.479 276.250 127.500 C 276.996 132.209 276.081 137.218 277.650 141.750 C 278.089 143.075 280.194 143.020 281.650 143.250 C 283.296 143.508 285.086 143.577 286.650 143 C 288.643 142.266 291.984 138.742 292.050 139.500 C 292.136 140.233 290.200 146.210 287.050 146.900 C 274.451 149.660 261.280 148.638 248.375 149 C 237.648 149.301 226.853 149.775 216.150 149 C 213.474 148.806 210.826 147.815 208.900 146 C 207.532 144.740 206.342 141.176 207.150 140.600 C 207.991 140.003 210.274 143.284 212.250 143.600 C 214.798 144.038 218.012 144.384 220.050 142.750 C 221.782 141.359 221.091 138.462 221.400 136.250 C 222.373 129.596 219.026 120.796 223.898 116.142 C 229.947 110.364 240.002 110.593 248.375 110.500 Z " transform="matrix(1.105932593345642, 0, 0, 1.105932593345642, -227.4, -110.4)"/>
-    <image id="ID0.314340996555984" width="2" height="2" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAADklEQVR42mNhgAIWGAMAAH4ACYwGaSAAAAAtdEVYdFNvZnR3YXJlAGJ5LmJsb29kZHkuY3J5cHRvLmltYWdlLlBORzI0RW5jb2RlcqgGf+4AAAAASUVORK5CYII=" transform="matrix(0.3868904709815979, 0, 0, 0.3868904709815979, 16.15, 0.9)"/>
-    <path id="ID0.2848035432398319" fill="#CCFFDD" stroke="#000000" stroke-width="2" d="M 141.250 93.250 L 172.550 95.750 L 215.250 96 L 249.500 95.250 L 291.700 92.500 L 292.200 99 L 291.700 96.650 L 293.200 103.500 L 294.650 107.500 L 263.400 109 L 216.750 110.750 L 173.550 109.500 L 139.800 107 L 140.550 103.900 L 140.800 100.650 L 141.250 93.250 Z " transform="matrix(0.38967201113700867, 0, 0, 0.7737809419631958, -36.35, -36.95)"/>
+  <g
+     id="ID0.6560409157536924"
+     transform="translate(-1.8490389,8.1)">
+    <path
+       id="ID0.4420698448084295"
+       fill="#006666"
+       stroke="#000000"
+       stroke-width="1"
+       d="m 248.375,110.5 c 8.547,-0.095 17.786,0.645 25.025,5.1 3.512,2.101 2.213,7.879 2.85,11.9 0.746,4.709 -0.169,9.718 1.4,14.25 0.439,1.325 2.544,1.27 4,1.5 1.646,0.258 3.436,0.327 5,-0.25 1.993,-0.734 5.334,-4.258 5.4,-3.5 0.086,0.733 -1.85,6.71 -5,7.4 -12.599,2.76 -25.77,1.738 -38.675,2.1 -10.727,0.301 -21.522,0.775 -32.225,0 -2.676,-0.194 -5.324,-1.185 -7.25,-3 -1.368,-1.26 -2.558,-4.824 -1.75,-5.4 0.841,-0.597 3.124,2.684 5.1,3 2.548,0.438 5.762,0.784 7.8,-0.85 1.732,-1.391 1.041,-4.288 1.35,-6.5 0.973,-6.654 -2.374,-15.454 2.498,-20.108 6.049,-5.778 16.104,-5.549 24.477,-5.642 z"
+       transform="matrix(1.1059326,0,0,1.1059326,-227.4,-110.4)" />
+    <image
+       id="ID0.314340996555984"
+       width="2"
+       height="2"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAADklEQVR42mNhgAIWGAMAAH4ACYwGaSAAAAAtdEVYdFNvZnR3YXJlAGJ5LmJsb29kZHkuY3J5cHRvLmltYWdlLlBORzI0RW5jb2RlcqgGf+4AAAAASUVORK5CYII="
+       transform="matrix(0.38689047,0,0,0.38689047,16.15,0.9)" />
+    <path
+       id="ID0.2848035432398319"
+       fill="#ccffdd"
+       stroke="#000000"
+       stroke-width="2"
+       d="m 141.25,93.25 31.3,2.5 42.7,0.25 34.25,-0.75 42.2,-2.75 0.5,6.5 -0.5,-2.35 1.5,6.85 1.45,4 -31.25,1.5 -46.65,1.75 -43.2,-1.25 -33.75,-2.5 0.75,-3.1 0.25,-3.25 z"
+       transform="matrix(0.38967201,0,0,0.77378094,-36.35,-36.95)" />
   </g>
 </svg>

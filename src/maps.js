@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2019 by Jens Mönig
+    Copyright (C) 2021 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -38,7 +38,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.maps = '2019-June-06';
+modules.maps = '2021-June-15';
 
 // WorldMap /////////////////////////////////////////////////////////////
 
@@ -147,7 +147,7 @@ function WorldMap(host) {
                 'CC-BY-SA, Imagery \u00A9 Mapbox'
         }
     };
-    this.api = this.tileServers[host || 'Wikimedia'];
+    this.api = this.tileServers[host || 'OpenStreetMap'];
     this.lon = -122.257852;
     this.lat = 37.872099;
     this.zoom = 13;
@@ -287,7 +287,10 @@ WorldMap.prototype.render = function () {
         }
     }
 
+    // create a new canvas. Note, we cannot reuse the existing canvas,
+    // because it could be queried while tiles are still rendering
     this.canvas = newCanvas(this.extent, true);
+
     ctx = this.canvas.getContext('2d');
     for (x = 0; x < tileGrid.x; x += 1) {
         for (y = 0; y < tileGrid.y; y += 1) {
@@ -334,7 +337,10 @@ WorldMap.prototype.initializeCredits = function () {
         ' ' + this.api.credits + ' ',
         8
     );
-    normalizeCanvas(this.creditsTxt.image);
+    this.creditsTxt.isCachingImage = true;
+    this.creditsTxt.cachedImage = normalizeCanvas(
+        this.creditsTxt.getImage(), true
+    );
     this.creditsBG = newCanvas(this.creditsTxt.extent(), true);
     ctx = this.creditsBG.getContext('2d');
     ctx.fillStyle = 'white';
@@ -343,7 +349,7 @@ WorldMap.prototype.initializeCredits = function () {
 
 WorldMap.prototype.addCredits = function () {
     var ctx = this.canvas.getContext('2d'),
-        crd = this.creditsTxt.image;
+        crd = this.creditsTxt.getImage();
     ctx.globalAlpha = 0.5;
     ctx.drawImage(
         this.creditsBG,
