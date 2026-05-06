@@ -10179,6 +10179,8 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents = new SymbolMorph('piano', 30);
     } else if (data instanceof Oscillator) {
         contents = new SymbolMorph('waveform', 30);
+    } else if (data instanceof Gain) {
+        contents = new SymbolMorph('gain', 30);
     } else if (data instanceof Filter) {
         contents = new SymbolMorph('filter', 30);
     } else if (data instanceof HTMLCanvasElement) {
@@ -11938,7 +11940,9 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph = new SymbolMorph('piano', 30);
         } else if (this.contents instanceof Oscillator) {
             this.contentsMorph = new SymbolMorph('waveform', 30);
-         } else if (this.contents instanceof Filter) {
+        } else if (this.contents instanceof Gain) {
+            this.contentsMorph = new SymbolMorph('gain', 30);
+        } else if (this.contents instanceof Filter) {
             this.contentsMorph = new SymbolMorph('filter', 30);
         } else if (this.contents instanceof List) {
             if (this.contents.isTable()) {

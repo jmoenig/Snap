@@ -159,7 +159,8 @@ SymbolMorph.prototype.names = [
     'piano',
     'waveform',
     'filter',
-    'effect'
+    'effect',
+    'gain'
 ];
 
 // SymbolMorph instance creation:
@@ -526,6 +527,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'effect':
         this.renderSymbolEffect(ctx, aColor);
+        break;
+    case 'gain':
+        this.renderSymbolGain(ctx, aColor);
         break;
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');
@@ -2632,13 +2636,58 @@ SymbolMorph.prototype.renderSymbolEffect = function (ctx, color) {
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    for (let i = 0; i < width; ++i){
+    for (let i = 0; i < width; ++i) {
         ctx.lineTo(i, (height * 0.25) * Math.atan(Math.tan(-2 * Math.PI * i / width))  + (height * 0.5));
     }
     ctx.stroke();
     ctx.closePath();
 }
 
+SymbolMorph.prototype.renderSymbolGain = function (ctx, color) {
+    const width = this.symbolWidth();
+    const height = this.size;
+    const r = Math.min(width / 3, height / 3);
+    const h = width / 2;
+    const k = height / 2;
+
+    // draw outer circle
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    for (let x = h - r; x <= h + r; ++x) {
+        const y = Math.sqrt(r * r - (x - h) * (x - h)) + k;
+        ctx.lineTo(x, y);
+    }
+    for (let x = h + r; x >= h - r; --x) {
+        const y = -1 * Math.sqrt(r * r - (x - h) * (x - h)) + k;
+        ctx.lineTo(x, y);
+    }    
+    ctx.stroke();
+    ctx.closePath();
+
+    // draw inner circle
+    const rp = 0.2 * r
+    ctx.beginPath();
+    for (let x = h - rp; x <= h + rp; ++x) {
+        const y = Math.sqrt(rp * rp - (x - h) * (x - h)) + k;
+        ctx.lineTo(x, y);
+    }
+    for (let x = h + rp; x >= h - rp; --x) {
+        const y = -1 * Math.sqrt(rp * rp - (x - h) * (x - h)) + k;
+        ctx.lineTo(x, y);
+    }    
+    ctx.stroke();
+    ctx.closePath();
+    ctx.fill();
+
+    //draw dial
+    ctx.beginPath();
+    ctx.moveTo(rp * Math.sqrt(2) / 2 + h, rp * Math.sqrt(2) / 2 + k);
+    ctx.lineTo(h - 3 * rp, k - 3 * rp);
+    ctx.lineTo(-1 * rp * Math.sqrt(2) / 2 + h, -1 * rp * Math.sqrt(2) / 2 + k);
+    ctx.stroke();
+    ctx.closePath();
+    ctx.fill();
+}
 /*
 // register examples with the World demo menu
 // comment out to shave off a millisecond loading speed ;-)

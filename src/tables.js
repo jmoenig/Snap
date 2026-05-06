@@ -422,6 +422,10 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         return new SymbolMorph(
             'effect', SyntaxElementMorph.prototype.fontSize
         ).getImage();
+    } else if (dta instanceof Gain) {
+        return new SymbolMorph(
+            'gain', SyntaxElementMorph.prototype.fontSize
+        ).getImage();
     } else if (dta instanceof List) {
         return this.listSymbol();
     } else if (dta instanceof Graph) {
