@@ -9014,7 +9014,7 @@ ScriptsMorph.prototype.showReporterDropFeedback = function (block, hand) {
   if (target === null) {
     return null;
   }
-  this.feedbackMorph.edge = SyntaxElementMorph.prototype.rounding;
+  this.feedbackMorph.edge = SyntaxElementMorph.prototype.rounding * 1.5;
   this.feedbackMorph.border = 2 * SyntaxElementMorph.prototype.scale;
   if (target instanceof MultiArgMorph) {
     this.feedbackMorph.color = SpriteMorph.prototype.blockColor.lists.copy();
@@ -14623,7 +14623,7 @@ ColorSlotMorph.prototype.render = function (ctx) {
   }
   ctx.fillStyle = this.color.toString();
   ctx.strokeStyle = "#FFFFFF";
-  ctx.lineWidth = 1 * this.scale;
+  ctx.lineWidth = this.flatEdge * 2;
   // cache my border colors
   this.cachedClr = borderColor.toString();
   this.cachedClrBright = borderColor.lighter(this.contrast).toString();
