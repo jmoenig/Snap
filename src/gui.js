@@ -4463,20 +4463,34 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
         menu.addItem(
             'Reset Password...',
-            'resetCloudPassword'
+            () => window.open('https://snap.berkeley.edu/forgot_password', '_blank')
         );
         menu.addItem(
             'Resend Verification Email...',
             'resendVerification'
         );
     } else {
+        menu.addLine();
+        menu.addItem(
+            'My Projects',
+            () => window.open('https://snap.berkeley.edu/my_projects', '_blank')
+        );
+        menu.addItem(
+            'My Collections',
+            () => window.open('https://snap.berkeley.edu/my_collections', '_blank')
+        );
+        menu.addItem(
+            'My Public Page',
+            () => window.open('https://snap.berkeley.edu/users/' + this.cloud.username, '_blank')
+        );
+        menu.addLine();
         menu.addItem(
             localize('Logout') + ' ' + this.cloud.username,
             'logout'
         );
         menu.addItem(
             'Change Password...',
-            'changeCloudPassword'
+            () => window.open('https://snap.berkeley.edu/change_password', '_blank')
         );
     }
     if (this.hasCloudProject()) {
@@ -9165,38 +9179,6 @@ IDE_Morph.prototype.createCloudAccount = function () {
         'https://snap.berkeley.edu/privacy.html',
         'Privacy...',
         'I have read and agree\nto the Terms of Service',
-        world,
-        this.cloudIcon(),
-        this.cloudMsg
-    );
-};
-
-IDE_Morph.prototype.resetCloudPassword = function () {
-    var world = this.world();
-
-    new DialogBoxMorph(
-        null,
-        user => this.cloud.resetPassword(
-            user.username,
-            (txt, title) => new DialogBoxMorph().inform(
-                title,
-                txt +
-                    '\n\nAn e-mail with a link to\n' +
-                    'reset your password\n' +
-                    'has been sent to the address provided',
-                world,
-                this.cloudIcon(null, new Color(0, 180, 0))
-            ),
-            this.cloudError()
-        )
-    ).withKey('cloudresetpassword').promptCredentials(
-        'Reset password',
-        'resetPassword',
-        null,
-        null,
-        null,
-        null,
-        null,
         world,
         this.cloudIcon(),
         this.cloudMsg
