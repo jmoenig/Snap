@@ -86,8 +86,7 @@ SnapExtensions.primitives.set('SciS_addMenuItemForSciSnapManuals()',
       menu.addItem('About...', 'aboutSnap');
       menu.addLine();
       menu.addItem('Reference manual', () => {
-        var url = this.resourceURL('help', 'SnapManual.pdf');
-        window.open(url, 'SnapReferenceManual');
+        window.open('https://docs.snap.berkeley.edu/', 'SnapReferenceManual');
       });
       menu.addItem('Snap! website', () => window.open('https://snap.berkeley.edu/', 'SnapWebsite'));
       menu.addItem('SciSnap! manual', () => window.open('https://emu-online.de/ProgrammingWithSciSnap3.pdf', ''));
@@ -97,7 +96,7 @@ SnapExtensions.primitives.set('SciS_addMenuItemForSciSnapManuals()',
         menu.addLine();
         menu.addItem('Switch back to user mode', 'switchToUserMode', 'disable deep-Morphic\ncontext menus' + '\nand show user-friendly ones',
           new Color(0, 100, 0));
-      } else if (world.currentKey === 16) { // shift-click   
+      } else if (world.currentKey === 16) { // shift-click
         menu.addLine();
         menu.addItem('Switch to dev mode', 'switchToDevMode', 'enable Morphic\ncontext menus\nand inspectors,' + '\nnot user-friendly!', new Color(100, 0, 0));
       }
@@ -1705,7 +1704,7 @@ SnapExtensions.primitives.set('SciS_MathPadPlotSet(set,setname,properties,atY,co
     var color = property('lineColor'), r = color.at(1), g = color.at(2), b = color.at(3), xMax = Number(property('xMax')), xMin = Number(property('xMin')),
         linewidth = Number(property('lineWidth')), width = Number(property('width')), height = Number(property('height')), leftOffset = Number(property('offsets').at(1)),
         upperOffset = Number(property('offsets').at(2)), ctx = costume.contents.getContext('2d'), x0 = -width * xMin / (xMax - xMin);
-    ctx.strokeStyle = new Color(0, 0, 0).toString(); ctx.lineWidth = 1; ctx.font = "" + 12 + "px sans-serif"; 
+    ctx.strokeStyle = new Color(0, 0, 0).toString(); ctx.lineWidth = 1; ctx.font = "" + 12 + "px sans-serif";
     ctx.beginPath(); ctx.moveTo(leftOffset,atY); ctx.lineTo(width+leftOffset,atY); ctx.fillText(setname, leftOffset+5, atY+15); ctx.closePath(); ctx.stroke();
     ctx.strokeStyle = new Color(r, g, b).toString(); ctx.lineWidth = linewidth; ctx.beginPath();
     for(var x=1;x < width;x++){if(isElement(xMin-(x*xMin)/x0,set,'')){ctx.moveTo(x+leftOffset,atY-3); ctx.lineTo(x+leftOffset,atY+3);}}
@@ -3710,7 +3709,7 @@ SnapExtensions.primitives.set(
 
 //================= options of the ImagePad palette ============================================================
 //add image to ImagePad ----------------------------------------------------------------------------------------------------------------------------------------------
-SnapExtensions.primitives.set('SciS_addImageToImagePad(data,properties,color,log,alpha,pixels,selection)', 
+SnapExtensions.primitives.set('SciS_addImageToImagePad(data,properties,color,log,alpha,pixels,selection)',
   function (data,properties,color,log,alpha,pixels,selection) {
     function property(key) {var i = 1;
       while (i <= properties.length()){if(properties.at(i).at(1) == key) return properties.at(i).at(2); i++;}
@@ -3738,7 +3737,7 @@ SnapExtensions.primitives.set('SciS_addImageToImagePad(data,properties,color,log
           else if (value < min + 4 * interval) newPixel = new List([0, n, 0, alpha]); else if (value < min + 5 * interval) newPixel = new List([n, 0, 0, alpha]);
           else if (value < min + 6 * interval) newPixel = new List([n, n / 2, 0, alpha]); else if (value < min + 7 * interval) newPixel = new List([n, n, 0, alpha]);
           else if (value < min + 8 * interval) newPixel = new List([n, n, n, alpha]); else newPixel = new List([255, 255, 255, alpha]);}
-        result = new List(); 
+        result = new List();
         if(selection==='create') result = newPixel;
           else if(selection==='add'){for (var n = 1; n <= 4; n++) result.add(Math.min(newPixel.at(n) + oldPixel.at(n),255));}
                  else if(selection==='mix'){ratio = newPixel.at(4) / 255; for (var n = 1; n <= 4; n++) result.add(ratio * newPixel.at(n) + (1.0 - ratio) * oldPixel.at(n));}
@@ -3773,7 +3772,7 @@ SnapExtensions.primitives.set('SciS_drawListOfPoints(costume,data,shape,size,pro
     value = value + Math.round(Math.random()*2*range-range);
     if(value>255) value = value+510-value;
     if(value<0) value = -value;
-    return value;   
+    return value;
     }
     var ctx = costume.contents.getContext('2d'), style = property("lineStyle").trim(), w = Number(property("lineWidth")), lineColor = property("lineColor"), fillColor = property("fillColor"),
       ro = Number(lineColor.at(1)), go = Number(lineColor.at(2)), bo = Number(lineColor.at(3)), r = Number(fillColor.at(1)), g = Number(fillColor.at(2)), b = Number(fillColor.at(3));
@@ -3805,7 +3804,7 @@ SnapExtensions.primitives.set('SciS_drawListOfPoints(costume,data,shape,size,pro
         ctx.fillRect(data.at(i).at(1) - size, data.at(i).at(2) - size, 2 * size, 2 * size);
         ctx.strokeRect(data.at(i).at(1) - size, data.at(i).at(2) - size, 2 * size, 2 * size);
         ctx.closePath();
-        ctx.stroke();  
+        ctx.stroke();
         ctx.fill();
       }
     }
@@ -4068,7 +4067,7 @@ SnapExtensions.primitives.set('SciS_addVerticesToGraph(n,amatrix,vlist,propertie
     function randomValue(a, b) {
       return Math.round((b - a) * Math.random() + a);
     }
-    var xLeft = Number(property('xLeft')), xRight = Number(property('xRight')), yUpper = Number(property('yUpper')), yLower = Number(property('yLower')), 
+    var xLeft = Number(property('xLeft')), xRight = Number(property('xRight')), yUpper = Number(property('yUpper')), yLower = Number(property('yLower')),
          size = Number(property('verticesMinRadius')), dx = Math.abs(0.1*(xRight-xLeft)), dy = Math.abs(0.1*(yLower-yUpper));
     //first add vertices to vertexlist
     if(point==='null'){ //random positions
@@ -4102,11 +4101,11 @@ SnapExtensions.primitives.set('SciS_drawGraphOnGraphPad(amatrix,vlist,properties
       }
       return '-';
     }
-    var costume = property('initialCostume'), ctx = costume.contents.getContext('2d'), costumeWidth = Number(property('costumeWidth')), costumeHeight = Number(property('costumeHeight')), 
+    var costume = property('initialCostume'), ctx = costume.contents.getContext('2d'), costumeWidth = Number(property('costumeWidth')), costumeHeight = Number(property('costumeHeight')),
         graphWidth = Number(property('width')), graphHeight = Number(property('heighth')), bcolor = property('backColor'),
         lineWidth = Number(property('lineWidth')), lcolor = property('lineColor'), minsize = Number(property('verticesMinRadius')), growing = property('verticesGrowing'),
         contentShown = property('verticesContentShown'), withWeights = property('edgesWithWeights'), showWeights = property('edgesShowWeights'),
-        directed = property('edgesDirected'), leftOffset = Number(property('offsets').at(1)), upperOffset = Number(property('offsets').at(2)),c, row, anz, v1, v2, x1, y1, x2, y2, n = amatrix.length(), 
+        directed = property('edgesDirected'), leftOffset = Number(property('offsets').at(1)), upperOffset = Number(property('offsets').at(2)),c, row, anz, v1, v2, x1, y1, x2, y2, n = amatrix.length(),
         label, textheight, weight, marked, xp, yp, alpha, l, dx, dy, dl, size;
     //count edges per vertex an set size per vertex
     for (var i = 1; i <= amatrix.length(); i++) {
@@ -4559,7 +4558,7 @@ SnapExtensions.primitives.set(
       }
       i++;
     }
-    return("no vertex at this position!");  
+    return("no vertex at this position!");
   });
 
 //================= options of the NNPad palette ============================================================
@@ -4860,12 +4859,12 @@ SnapExtensions.primitives.set('SciS_addGridToGridPad(costume,properties,withLine
     for (var x = 1; x <= xMax; x++) {
       for (var y = 1; y <= yMax; y++) {
         ctx.beginPath();
-        d = data.at(y).at(x); 
+        d = data.at(y).at(x);
         if (d > maxColors)
           d = maxColors;
         if (d < 1)
           d = 1;
-        cellcolor = colors.at(d).at(1); 
+        cellcolor = colors.at(d).at(1);
         ctx.fillStyle = new Color(cellcolor.at(1), cellcolor.at(2), cellcolor.at(3)).toString();
         ctx.fillRect((x - 1) * cellWidth, (y - 1) * cellHeight, cellWidth, cellHeight);
         ctx.closePath();
@@ -5299,7 +5298,7 @@ SnapExtensions.primitives.set(
             min = z;
          }
        }
-     } 
+     }
       if (operation === "sum")
         result.at(y).put(sum, x);
       if (operation === "min")
@@ -5311,7 +5310,7 @@ SnapExtensions.primitives.set(
           result.at(y).put(1.0 * sum / n, x);
         else
           result.at(y).put("", x);
-   } 
+   }
 
 
     result = listCopy(data);
@@ -5393,11 +5392,11 @@ SnapExtensions.primitives.set(
     no = Number(no); color0 = Number(color0); color1 = Number(color1);
     if ((no > 255) || (no < 0)) return "ERROR: number out of range!";
     //Convert the gridnumber to a bit pattern.
-    WolframData = new List(numberToBits(no)); 
+    WolframData = new List(numberToBits(no));
     //To avoid edge effects, lines are enlarged both left and right. The griddata are in the middle.
     for (var i = 1; i <= 3 * gridWidth; i++) lineData.add(color0);
     for (var i = gridWidth + 1; i <= 2 * gridWidth; i++)
-      lineData.put(grid.at(1).at(i - gridWidth), i); 
+      lineData.put(grid.at(1).at(i - gridWidth), i);
     lineLength = lineData.length();
     for (var y = 1; y < grid.length(); y++) {
     //Apply the Wolfram-process to all cells of a line.
@@ -5437,5 +5436,3 @@ SnapExtensions.primitives.set(
  function (params) {
  });
  */
-
-

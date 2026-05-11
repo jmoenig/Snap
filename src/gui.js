@@ -4396,10 +4396,7 @@ IDE_Morph.prototype.snapMenu = function () {
     menu.addLine();
     menu.addItem(
         'Reference manual',
-        () => {
-            var url = this.resourceURL('help', 'SnapManual.pdf');
-            window.open(url, 'SnapReferenceManual');
-        }
+        () => window.open('https://docs.snap.berkeley.edu/', 'SnapReferenceManual')
     );
     menu.addItem(
         'Snap! website',
