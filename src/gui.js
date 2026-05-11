@@ -498,6 +498,7 @@ IDE_Morph.prototype.openIn = function (world) {
         // to prevent the iFrame from involuntarily scrolling into view
         if (!myself.isEmbedMode) {
             world.worldCanvas.focus();
+            world.keyboardHandler.blur()
         }
     }
 
