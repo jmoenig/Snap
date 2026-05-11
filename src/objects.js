@@ -1462,6 +1462,12 @@ SpriteMorph.prototype.initBlocks = function () {
             spec: 'edges of graph %s',
             defaults: [null]
         },
+        getVertices: {
+            type: 'reporter',
+            category: 'graphs',
+            spec: 'vertices of graph %s',
+            default: [null]  
+        },
 
         // HOFs
         reportMap: {
@@ -2916,6 +2922,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('createFlow'));
         blocks.push(block('createFork'));
         blocks.push(block('getEdges'));
+        blocks.push(block('getVertices'));
 
     // for debugging: ///////////////
 
@@ -9342,6 +9349,7 @@ StageMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('createFlow'));
         blocks.push(block('createFork'));
         blocks.push(block('getEdges'));
+        blocks.push(block('getVertices'));
 
     // for debugging: ///////////////
 

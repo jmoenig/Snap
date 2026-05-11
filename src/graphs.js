@@ -102,6 +102,30 @@ Graph.prototype.getEdges = function () {
     return edges;
 }
 
+Graph.prototype.getVertices = function () {
+    var vertices = new List(),
+        graphSize = this.contents.length(),
+        temp,
+        i, j;
+
+    var _insertIf = function (item) {
+        if (vertices.indexOf(item) === 0)
+            vertices.add(item)
+    };
+        
+    for (i = 1; i <= graphSize; ++i) {
+        if (this.contents.at(i) instanceof Graph) {
+            temp = this.contents.at(i).getVertices();
+            for (j = 1; j <= temp.length(); ++j)
+                _insertIf(temp.at(j));
+        }
+        else
+            _insertIf(this.contents.at(i))
+    }
+    
+    return vertices;
+}
+
 Graph.prototype.getRoots = function () {
     var roots = new List(),
         graphSize = this.contents.length(),

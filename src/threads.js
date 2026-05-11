@@ -1980,7 +1980,6 @@ Process.prototype.doShowTable = function (list) {
 
 // Process graph data structures
 
-// TODO
 Process.prototype.createFlow = function (items) {
     return new Graph(items, 'directed flow');
 }
@@ -1993,6 +1992,12 @@ Process.prototype.getEdges = function (graph) {
     if (!(graph instanceof Graph))
         throw new Error('invalid type');
     return graph.getEdges();
+}
+
+Process.prototype.getVertices = function (graph) {
+    if (!(graph instanceof Graph))
+        throw new Error('invalid type');
+    return graph.getVertices();
 }
 
 
