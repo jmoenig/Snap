@@ -2613,6 +2613,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
   );
 
   // adjust CSlots and collect holes
+  this.containsCSlot = false;
   this.holes = [];
   parts.forEach((part) => {
     var adjustMultiWidth = 0;
@@ -2620,11 +2621,10 @@ SyntaxElementMorph.prototype.fixLayout = function () {
       part instanceof CSlotMorph ||
       (part.slotSpec && part.slotSpec.includes("%cs"))
     ) {
-      if (this.isPredicate) {
-        part.bounds.setWidth(
-          blockWidth - ico - this.rounding - this.inset - this.corner,
-        );
-        adjustMultiWidth = this.corner;
+      this.containsCSlot = true;
+      if (true) {
+        adjustMultiWidth = blockHeight / 2;
+        part.bounds.corner.x = blockWidth;
       } else {
         part.setRight(this.right());
         part.setLeft(this.left() + this.labelPadding);
@@ -2715,7 +2715,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     isClickable = true,
     ide = this.parentThatIsA(IDE_Morph) || target.parentThatIsA(IDE_Morph),
     anchor = this,
-    pos = this.center().add(new Point(0, this.height() / -2)),
+    pos = this.center().add(new Point(0, this.height() / 2)),
     sf = this.parentThatIsA(ScrollFrameMorph),
     wrrld = this.world() || target.world(),
     maxHeight,
@@ -2969,7 +2969,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
     }
     pos = anchor.center();
   }
-  bubble = new SpeechBubbleMorph(morphToShow, null, 5 * this.scale, 1);
+  bubble = new ReporterBubbleMorph(morphToShow, null, 5 * this.scale, 1);
   bubble.color = WHITE;
 
   bubble.popUp(wrrld, pos, isClickable);
@@ -8288,13 +8288,18 @@ ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
     h = this.height(),
     h2 = Math.floor(h / 2),
     r = h / 2,
+    corner = this.corner,
     right = w - r,
     pos = this.position(),
     cslots = this.cSlots();
 
   ctx.moveTo(inset, h2);
   ctx.lineTo(r, inset);
-  ctx.lineTo(right - inset, inset);
+  if (this.containsCSlot) {
+    ctx.arc(w - corner, corner, corner, radians(-90), radians(-0), false);
+  } else {
+    ctx.lineTo(right - inset, inset);
+  }
 
   if (cslots.length) {
     this.cSlots().forEach((slot) => {
@@ -8303,8 +8308,11 @@ ReporterBlockMorph.prototype.outlinePathDiamond = function (ctx, inset) {
   } else {
     ctx.lineTo(w - inset, h2);
   }
-
-  ctx.lineTo(right - inset, h - inset);
+  if (this.containsCSlot) {
+    ctx.arc(w - corner, h - corner, corner, radians(0), radians(90), false);
+  } else {
+    ctx.lineTo(right - inset, h - inset);
+  }
   ctx.lineTo(r, h - inset);
 };
 
@@ -14713,7 +14721,7 @@ BlockHighlightMorph.prototype.updateReadout = function () {
     readout.fixLayout();
     readout.rerender();
   } else {
-    readout = new SpeechBubbleMorph(
+    readout = new ReporterBubbleMorph(
       this.threadCount.toString(),
       this.color, // color,
       null, // edge,
@@ -14747,29 +14755,31 @@ ReporterBubbleMorph.prototype.outlinePath = function (ctx, radius, inset) {
   }
 
   // top left:
-  ctx.arc(offset, offset, radius, radians(-180), radians(-90), false);
+  ctx.arc(offset, offset + radius, radius, radians(-180), radians(-90), false);
+  if (!this.isThought) {
+    // draw speech bubble hook
+
+    ctx.lineTo(this.width() / 2 + 5, offset);
+    ctx.lineTo(this.width() / 2 + 0, inset);
+    ctx.lineTo(this.width() / 2 - 5, offset);
+  }
   // top right:
-  ctx.arc(w - offset, offset, radius, radians(-90), radians(-0), false);
+  ctx.arc(w - offset, offset + radius, radius, radians(-90), radians(-0), false);
   // bottom right:
   ctx.arc(
     w - offset,
-    h - offset - radius,
+    h - offset,
     radius,
     radians(0),
     radians(90),
     false,
   );
-  if (!this.isThought) {
-    // draw speech bubble hook
-
-    ctx.lineTo(this.width() / 2 + 5, h - offset);
-    ctx.lineTo(this.width() / 2 + 0, h - inset);
-    ctx.lineTo(this.width() / 2 - 10, h - offset);
-  }
+  
+  
   // bottom left:
   ctx.arc(
     offset,
-    h - offset - radius,
+    h - offset,
     radius,
     radians(90),
     radians(180),
@@ -14805,9 +14815,19 @@ ReporterBubbleMorph.prototype.outlinePath = function (ctx, radius, inset) {
   }
 };
 
+ReporterBubbleMorph.prototype.fixLayout = function () {
+  ReporterBubbleMorph.uber.fixLayout.call(this);
+  // position my contents
+  this.contentsMorph.setPosition(
+    this.position().add(
+      new Point(this.padding || this.edge, this.border + this.edge + this.padding + 1)
+    )
+  );
+}
+
 ReporterBubbleMorph.prototype.popUp = function (world, pos, isClickable) {
   this.fixLayout();
-  this.setPosition(pos.subtract(new Point(0, this.height())));
+  this.setPosition(pos.subtract(new Point(this.width() / 2, 0)));
   this.keepWithin(world);
   world.add(this);
   this.fullChanged();
