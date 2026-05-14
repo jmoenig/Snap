@@ -1175,7 +1175,7 @@ IDE_Morph.prototype.createProjectControlBar = function () {
 };
 
 IDE_Morph.prototype.getControlBarColor = function () {
-  if (this.isBright) {
+  if (true) {//this.isBright) {
     return this.accentColor;
   } else {
     return new Color(51, 51, 51);
