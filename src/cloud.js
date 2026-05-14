@@ -1096,7 +1096,7 @@ Cloud.prototype.addEditorToCollection = function (
 };
 
 Cloud.prototype.removeEditorFromCollection = function (
-        collectionUsername,
+    collectionUsername,
     collectionName,
     editorUsername,
     onSuccess,
@@ -1126,3 +1126,162 @@ Cloud.prototype.showProjectPath = function (username, projectname) {
         projectname: projectname
     });
 };
+
+
+// Cloud Path and URL Helpers
+Cloud.prototype.urlFor = function(path_or_name, replacements) {
+    return this.determineCloudDomain() + this.pathFor(path_or_name, replacements);
+}
+
+Cloud.prototype.pathFor = function(path_or_name, replacements) {
+    // Replace the URL parameters in a path with those from the replacements dict.
+    // Any data not in the path component of the URL get added as query parameters.
+    // Paths should use a : to indicate a parameter, e.g. :username
+    let path = this.lookupPath(path_or_name);
+    Object.keys(replacements).forEach(key => {
+        let original_path = path;
+        path = path.replace(`:${key}`, encodeURIComponent(replacements[key]));
+        if (path !== original_path) {
+            delete replacements[key];
+        }
+    });
+    if (Object.keys(replacements).length) {
+        path += `?${this.encodeDict(replacements)}`;
+    }
+    return path;
+}
+
+Cloud.prototype.lookupPath = function(path_or_name) {
+    // A somewhat quirky way to look up a path on server by route name
+    // Many routes are not named.
+    let path = Cloud.ALL_SERVER_ROUTES.find(item => item.name === path_or_name);
+    return path || path_or_name;
+}
+
+// This list was last dumped 2026-05-13 from app.ordered_routes
+Cloud.ALL_SERVER_ROUTES = [
+  { name: '', path: "/admin" },
+  { name: '', path: "/admin/bookmarks_feed" },
+  { name: '', path: "/all_totms" },
+  { name: '', path: "/api/v1/banned_ip/:ip" },
+  { name: '', path: "/api/v1/change_my_email" },
+  { name: '', path: "/api/v1/change_my_password" },
+  { name: '', path: "/api/v1/collection/:id" },
+  { name: '', path: "/api/v1/collection/:id/description" },
+  { name: '', path: "/api/v1/collection/:id/editor" },
+  { name: '', path: "/api/v1/collection/:id/enrollment" },
+  { name: '', path: "/api/v1/collection/:id/ffa" },
+  { name: '', path: "/api/v1/collection/:id/join_token" },
+  { name: '', path: "/api/v1/collection/:id/name" },
+  { name: '', path: "/api/v1/collection/:id/project/:project_id" },
+  { name: '', path: "/api/v1/collection/:id/publishing" },
+  { name: '', path: "/api/v1/collection/:id/sharing" },
+  { name: '', path: "/api/v1/collection/:id/thumbnail" },
+  { name: '', path: "/api/v1/collections/:username" },
+  { name: '', path: "/api/v1/discourse-sso" },
+  { name: '', path: "/api/v1/emails/:email/remind_username" },
+  { name: '', path: "/api/v1/feature_carousel" },
+  { name: '', path: "/api/v1/health_check" },
+  { name: '', path: "/api/v1/init" },
+  { name: '', path: "/api/v1/logout" },
+  { name: '', path: "/api/v1/my_user" },
+  { name: '', path: "/api/v1/project/:id" },
+  { name: '', path: "/api/v1/project/:id/bookmark/:user_id" },
+  { name: '', path: "/api/v1/project/:id/flag" },
+  { name: '', path: "/api/v1/project/:id/mark_as_remix" },
+  { name: '', path: "/api/v1/project/:id/publish" },
+  { name: '', path: "/api/v1/project/:id/share" },
+  { name: '', path: "/api/v1/projects" },
+  { name: '', path: "/api/v1/projects/:username" },
+  { name: '', path: "/api/v1/projects/:username/:projectname" },
+  { name: '', path: "/api/v1/projects/:username/:projectname/metadata" },
+  { name: '', path: "/api/v1/projects/:username/:projectname/thumbnail" },
+  { name: '', path: "/api/v1/projects/:username/:projectname/versions" },
+  { name: '', path: "/api/v1/set_locale" },
+  { name: '', path: "/api/v1/set_totm" },
+  { name: '', path: "/api/v1/signup" },
+  { name: '', path: "/api/v1/unbecome" },
+  { name: '', path: "/api/v1/users/:username" },
+  { name: '', path: "/api/v1/users/:username/become" },
+  { name: '', path: "/api/v1/users/:username/change_email" },
+  { name: '', path: "/api/v1/users/:username/change_username" },
+  { name: '', path: "/api/v1/users/:username/follow" },
+  { name: '', path: "/api/v1/users/:username/force_logout" },
+  { name: '', path: "/api/v1/users/:username/login" },
+  { name: '', path: "/api/v1/users/:username/newpassword" },
+  { name: '', path: "/api/v1/users/:username/password_reset" },
+  { name: '', path: "/api/v1/users/:username/resendverification" },
+  { name: '', path: "/api/v1/users/:username/send_email" },
+  { name: '', path: "/api/v1/users/:username/set_role" },
+  { name: '', path: "/api/v1/users/:username/set_teacher" },
+  { name: '', path: "/api/v1/users/:username/verify" },
+  { name: '', path: "/api/v1/users/c" },
+  { name: '', path: "/api/v1/users/create_learners" },
+  { name: '', path: "/api/v1/version" },
+  { name: '', path: "/api/v1/zombies/:username" },
+  { name: '', path: "/api/v1/zombies/:username/revive" },
+  { name: '', path: "/bookmarked" },
+  { name: '', path: "/bulk" },
+  { name: '', path: "/carousel_admin" },
+  { name: '', path: "/carousel" },
+  { name: '', path: "/collection" },
+  { name: '', path: "/collection/:token/join" },
+  { name: '', path: "/collections" },
+  { name: '', path: "/embed" },
+  { name: '', path: "/events" },
+  { name: '', path: "/examples" },
+  { name: '', path: "/explore" },
+  { name: '', path: "/flags" },
+  { name: '', path: "/followed_users" },
+  { name: '', path: "/followed" },
+  { name: '', path: "/index" },
+  { name: '', path: "/ip_admin" },
+  { name: '', path: "/learn" },
+  { name: '', path: "/learners" },
+  { name: '', path: "/materials" },
+  { name: '', path: "/my_collections" },
+  { name: '', path: "/my_followers" },
+  { name: '', path: "/my_projects" },
+  { name: '', path: "/profile" },
+  { name: '', path: "/search" },
+  { name: '', path: "/teacher" },
+  { name: '', path: "/user_admin" },
+  { name: '', path: "/user_collections/:username" },
+  { name: '', path: "/user_projects/:username" },
+  { name: '', path: "/user" },
+  { name: '', path: "/users" },
+  { name: '', path: "/zombie_admin" },
+  { name: 'admin/totm', path: "/totm" },
+  { name: 'about_page', path: "/about" },
+  { name: 'beetle_page', path: "/beetle" },
+  { name: 'bjc_page', path: "/bjc" },
+  { name: 'blog_page', path: "/blog" },
+  { name: 'change_email_page', path: "/change_email" },
+  { name: 'change_password_page', path: "/change_password" },
+  { name: 'coc_page', path: "/coc" },
+  { name: 'contact_page', path: "/contact" },
+  { name: 'credits_page', path: "/credits" },
+  { name: 'delete_user_page', path: "/delete_user" },
+  { name: 'dmca_page', path: "/dmca" },
+  { name: 'doc', path: "/doc/:doc_name" },
+  { name: 'donate_page', path: "/donate" },
+  { name: 'extensions_page', path: "/extensions" },
+  { name: 'forgot_password_page', path: "/forgot_password" },
+  { name: 'forgot_username_page', path: "/forgot_username" },
+  { name: 'index', path: "/" },
+  { name: 'login_page', path: "/login" },
+  { name: 'mirrors_page', path: "/mirrors" },
+  { name: 'offline_page', path: "/offline" },
+  { name: 'partners_page', path: "/partners" },
+  { name: 'password_reset', path: "/password_reset/:token" },
+  { name: 'privacy_page', path: "/privacy" },
+  { name: 'project', path: "/project" },
+  { name: 'research_page', path: "/research" },
+  { name: 'sign_up_page', path: "/sign_up" },
+  { name: 'snapinator_page', path: "/snapinator" },
+  { name: 'snapp_page', path: "/snapp" },
+  { name: 'source_page', path: "/source" },
+  { name: 'tos_page', path: "/tos" },
+  { name: 'verify_user', path: "/verify_me/:token" },
+  { name: 'versions_page', path: "/versions" },
+];
