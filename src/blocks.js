@@ -14759,9 +14759,9 @@ ReporterBubbleMorph.prototype.outlinePath = function (ctx, radius, inset) {
   if (!this.isThought) {
     // draw speech bubble hook
 
-    ctx.lineTo(this.width() / 2 + 5, offset);
+    ctx.lineTo(this.width() / 2 + offset, offset);
     ctx.lineTo(this.width() / 2 + 0, inset);
-    ctx.lineTo(this.width() / 2 - 5, offset);
+    ctx.lineTo(this.width() / 2 - offset, offset);
   }
   // top right:
   ctx.arc(w - offset, offset + radius, radius, radians(-90), radians(-0), false);
@@ -14816,6 +14816,7 @@ ReporterBubbleMorph.prototype.outlinePath = function (ctx, radius, inset) {
 };
 
 ReporterBubbleMorph.prototype.fixLayout = function () {
+  this.padding = 10;
   ReporterBubbleMorph.uber.fixLayout.call(this);
   // position my contents
   this.contentsMorph.setPosition(
