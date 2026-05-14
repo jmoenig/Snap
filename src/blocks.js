@@ -2622,7 +2622,7 @@ SyntaxElementMorph.prototype.fixLayout = function () {
       (part.slotSpec && part.slotSpec.includes("%cs"))
     ) {
       this.containsCSlot = true;
-      if (true) {
+      if (this.isPredicate) {
         adjustMultiWidth = blockHeight / 2;
         part.bounds.corner.x = blockWidth;
       } else {
@@ -8639,6 +8639,7 @@ RingMorph.prototype.render = function (ctx) {
     // draw the inner filled shaped
     // draw the outline
     ctx.fillStyle = this.cachedClr;
+    ctx.strokeStyle = this.cachedClrDark;
     ctx.beginPath();
     this.outlinePath(ctx, this.flatEdge);
 
@@ -8648,6 +8649,7 @@ RingMorph.prototype.render = function (ctx) {
     // ctx.closePath();
     ctx.clip("evenodd");
     ctx.fillRect(0, 0, this.width(), this.height());
+    ctx.stroke();
   } else {
     // draw the flat shape
     // draw the outline
