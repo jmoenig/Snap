@@ -4463,7 +4463,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
         menu.addItem(
             'Reset Password...',
-            () => window.open('https://snap.berkeley.edu/forgot_password', '_blank')
+            () => window.open(this.cloud.urlFor('/forgot_password'), '_blank')
         );
         menu.addItem(
             'Resend Verification Email...',
@@ -4473,15 +4473,18 @@ IDE_Morph.prototype.cloudMenu = function () {
         menu.addLine();
         menu.addItem(
             'My Projects',
-            () => window.open('https://snap.berkeley.edu/my_projects', '_blank')
+            () => window.open(this.cloud.urlFor('/my_projects'), '_blank')
         );
         menu.addItem(
             'My Collections',
-            () => window.open('https://snap.berkeley.edu/my_collections', '_blank')
+            () => window.open(this.cloud.urlFor('/my_collections'), '_blank')
         );
         menu.addItem(
-            'My Public Page',
-            () => window.open('https://snap.berkeley.edu/users/' + this.cloud.username, '_blank')
+            'My Public Profile',
+            () => window.open(
+                this.cloud.urlFor('/users/:username', {username: this.cloud.username}),
+                '_blank'
+            )
         );
         menu.addLine();
         menu.addItem(
@@ -4490,7 +4493,7 @@ IDE_Morph.prototype.cloudMenu = function () {
         );
         menu.addItem(
             'Change Password...',
-            () => window.open('https://snap.berkeley.edu/change_password', '_blank')
+            () => window.open(this.cloud.urlFor('/change_password'), '_blank')
         );
     }
     if (this.hasCloudProject()) {
