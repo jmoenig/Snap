@@ -5730,15 +5730,14 @@ SyntaxElementMorph.prototype.drawRoundedDent = function (ctx, inset, x, y, rever
   var w = this.dent * 1.75 + this.corner / 2,
     h = this.corner + this.dentPlus + inset,
     offset = this.inset + this.corner / 2,
-    c = this.dentCorner,
-    b1 = c + offset,
-    b2 = -h + h + inset,
-    b3 = h + inset,
-    b4 = c * 2 + offset,
-    b5 = h + inset / 4;
+    c = this.dentCorner;
   if (!isNil(x)) {
     ctx.save();
     ctx.translate(x || 0, y || 0);
+  }
+  if (reverse) {
+    ctx.translate(w + offset * 2, 0);
+    ctx.scale(-1, 1);
   }
   ctx.lineTo(0 + offset, -h + h + inset);
   ctx.bezierCurveTo(
@@ -7740,7 +7739,7 @@ HatBlockMorph.prototype.isRuleHat = function () {
 HatBlockMorph.prototype.outlinePath = function (ctx, inset) {
   var indent = this.corner * 2 + this.inset,
     bottom = this.height() - this.corner,
-    bottomCorner = this.height() - this.corner * 2,
+    bottomCorner = this.height() - this.corner - this.dentPlus * 2,
     radius = Math.max(this.corner - inset, 0),
     s = this.hatWidth,
     h = this.hatHeight,
@@ -7759,17 +7758,8 @@ HatBlockMorph.prototype.outlinePath = function (ctx, inset) {
     r / 1.4,
     0,
     radians(-sa - 90),
-    radians(-90),
-    0,
-  );
-  ctx.ellipse(
-    s / 2,
-    r / 1.4 + inset + 4 * this.scale,
-    r,
-    r / 1.4,
-    0,
-    radians(-sa - 90),
     radians(sa - 90),
+    0,
   );
   /*ctx.bezierCurveTo(
         s,
@@ -7798,7 +7788,7 @@ HatBlockMorph.prototype.outlinePath = function (ctx, inset) {
   // bottom right:
   ctx.arc(
     this.width() - this.corner,
-    bottomCorner - this.dentPlus,
+    bottomCorner + inset * 2 - radius,
     radius,
     radians(0),
     radians(90),
@@ -7806,54 +7796,22 @@ HatBlockMorph.prototype.outlinePath = function (ctx, inset) {
   );
 
   if (!this.isStop()) {
-    if (false) {
-      ctx.lineTo(this.width() - this.corner, bottom - inset - this.dentPlus);
-      ctx.lineTo(
-        this.corner * 3 + this.inset + this.dent,
-        bottom - inset - this.dentPlus,
-      );
-      ctx.lineTo(indent + this.dent, bottom + this.corner - inset);
-      ctx.lineTo(indent, bottom + this.corner - inset);
-      ctx.lineTo(this.corner + this.inset, bottom - inset - this.dentPlus);
-    } else {
       var w = this.dent * 1.75 + this.corner / 2,
         h = this.corner + this.dentPlus,
         offset = this.inset + this.corner / 2,
         c = this.dentCorner;
-      ctx.save();
-      ctx.translate(0, bottom - inset - this.dentPlus * 1);
-      ctx.lineTo(0 + offset, -h + h);
-      ctx.bezierCurveTo(
-        c + offset,
-        -h + h,
-        c + offset,
-        -0 + h,
-        c * 2 + offset,
-        -0 + h,
-      );
-      ctx.lineTo(w - c * 2 + offset, h);
-      ctx.bezierCurveTo(
-        w - c + offset,
-        0 + h,
-        w - c + offset,
-        -h + h,
-        w + offset,
-        -h + h,
-      );
-      ctx.restore();
-    }
+      this.drawRoundedDent(ctx, inset, 0, bottomCorner + inset, true);
   }
 
   // bottom left:
   ctx.arc(
     this.corner,
-    bottomCorner - this.dentPlus,
+    bottomCorner + inset * 2 - radius,
     radius,
     radians(90),
     radians(180),
     false,
   );
-  ctx.lineTo(0 + inset, h + this.corner);
 };
 
 HatBlockMorph.prototype.drawLeftEdge = function (ctx) {
@@ -8600,35 +8558,25 @@ RingMorph.prototype.render = function (ctx) {
   this.cachedClr = this.color.toString();
   this.cachedClrBright = this.bright();
   this.cachedClrDark = this.dark();
-
+  this.lineWidth = this.flatEdge;
+  
   if (MorphicPreferences.isFlat) {
-    // draw the outer filled shape
-    // draw the outline
-    ctx.fillStyle = this.cachedClrDark;
-    ctx.beginPath();
-    this.outlinePath(ctx, 0);
-
-    // render the hole:
-    slot.outlinePath(ctx, slot.position().subtract(pos));
-
-    // ctx.closePath();
-    ctx.clip("evenodd");
-    ctx.fillRect(0, 0, this.width(), this.height());
-
+    
     // draw the inner filled shaped
     // draw the outline
     ctx.fillStyle = this.cachedClr;
     ctx.strokeStyle = this.cachedClrDark;
+    ctx.lineWidth = this.flatEdge * 2;
     ctx.beginPath();
     this.outlinePath(ctx, this.flatEdge);
 
     // render the hole:
     slot.outlinePath(ctx, slot.position().subtract(pos));
+    ctx.stroke();
 
-    // ctx.closePath();
+    ctx.closePath();
     ctx.clip("evenodd");
     ctx.fillRect(0, 0, this.width(), this.height());
-    ctx.stroke();
   } else {
     // draw the flat shape
     // draw the outline
@@ -10765,7 +10713,8 @@ RingCommandSlotMorph.prototype.outlinePath = function (ctx, offset) {
     h = this.height(),
     rf = isFilled ? this.rfBorder : 0,
     y = h - this.corner - edge;
-
+  ctx.save();
+  ctx.translate(0, edge);
   // top left:
   ctx.arc(
     this.corner + edge + ox,
@@ -10858,6 +10807,7 @@ RingCommandSlotMorph.prototype.outlinePath = function (ctx, offset) {
     this.corner + edge + ox - this.corner, // this needs to be adjusted
     this.corner + edge + oy,
   );
+  ctx.restore();
 };
 
 // CSlotMorph ////////////////////////////////////////////////////
@@ -11049,36 +10999,16 @@ CSlotMorph.prototype.outlinePath = function (ctx, inset, offset) {
     this.width() - this.corner + ox,
     oy,
     radius,
-    radians(90),
     radians(0),
-    true,
+    radians(90)
   );
-
   // jigsaw shape:
-  ctx.lineTo(this.width() - this.corner + ox, this.corner + oy - inset);
-  if (false) {
-    ctx.lineTo(
-      this.inset * 2 + this.corner * 3 + this.dent + ox,
-      this.corner + oy - inset,
-    );
-    ctx.lineTo(
-      this.inset * 2 + this.corner * 2 + this.dent + ox,
-      this.corner * 2 + oy - inset + this.dentPlus,
-    );
-    ctx.lineTo(
-      this.inset * 2 + this.corner * 2 + ox,
-      this.corner * 2 + oy - inset + this.dentPlus,
-    );
-
-    ctx.lineTo(this.inset * 2 + this.corner + ox, this.corner + oy - inset);
-    ctx.lineTo(this.inset + this.corner + ox, this.corner + oy - inset);
-  } else {
     var w = this.dent * 1.75 + this.corner / 2,
       h = this.corner + this.dentPlus,
       offset = this.inset * 1 + this.dent / 1.6 + ox,
       c = this.dentCorner;
-    this.drawRoundedDent(ctx, inset, inset + this.corner * 2 + ox, this.corner + oy - inset, true)
-  }
+    this.drawRoundedDent(ctx, inset, inset + this.corner * 2 + ox, this.corner + oy - inset * 2, true);
+  
   ctx.arc(
     this.inset + this.corner + ox,
     this.corner * 2 + oy,
@@ -13798,7 +13728,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
   ctx.fill();
   if (this.parentThatIsA(BlockMorph)?.alpha < 0.6 || !this.isEmptySlot() || progress > 0) {
     var e = this.flatEdge / 2;
-    ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.2)";
     ctx.lineWidth = this.flatEdge;
     ctx.beginPath();
     ctx.moveTo(e, r);
