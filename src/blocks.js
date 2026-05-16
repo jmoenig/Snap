@@ -1837,7 +1837,7 @@ SyntaxElementMorph.prototype.bright = function () {
 };
 
 SyntaxElementMorph.prototype.dark = function () {
-  return this.color.darker(this.contrast).toString();
+  return this.colors?.tertiary || this.color.darker(this.contrast).toString();
 };
 
 // SyntaxElementMorph color changing:
@@ -5688,19 +5688,22 @@ BlockMorph.prototype.render = function (ctx) {
   this.cachedClrDark = this.dark();
 
   if (MorphicPreferences.isFlat) {
-    // draw the outline
+    /*// draw the outline
     ctx.fillStyle = this.cachedClrDark;
     ctx.beginPath();
     this.outlinePath(ctx, 0);
     ctx.closePath();
-    ctx.fill();
+    ctx.fill();*/
+    ctx.strokeStyle = this.cachedClrDark;
+    ctx.lineWidth = this.flatEdge;
 
     // draw the inner filled shaped
     ctx.fillStyle = this.cachedClr;
     ctx.beginPath();
-    this.outlinePath(ctx, this.flatEdge);
+    this.outlinePath(ctx, this.flatEdge / 2);
     ctx.closePath();
     ctx.fill();
+    ctx.stroke();
   } else {
     // draw the flat shape
     ctx.fillStyle = this.cachedClr;
@@ -5723,11 +5726,16 @@ BlockMorph.prototype.render = function (ctx) {
     this.drawMethodIcon(ctx);
   }
 };
-BlockMorph.prototype.drawRoundedDent = function (ctx, inset, x, y) {
+SyntaxElementMorph.prototype.drawRoundedDent = function (ctx, inset, x, y, reverse) {
   var w = this.dent * 1.75 + this.corner / 2,
     h = this.corner + this.dentPlus + inset,
     offset = this.inset + this.corner / 2,
-    c = this.dentCorner;
+    c = this.dentCorner,
+    b1 = c + offset,
+    b2 = -h + h + inset,
+    b3 = h + inset,
+    b4 = c * 2 + offset,
+    b5 = h + inset / 4;
   if (!isNil(x)) {
     ctx.save();
     ctx.translate(x || 0, y || 0);
@@ -7337,24 +7345,11 @@ CommandBlockMorph.prototype.outlinePath = function (ctx, inset) {
       h = this.corner + this.dentPlus + inset / 2,
       offset = this.inset + this.corner / 2,
       c = this.dentCorner;
-    ctx.lineTo(0 + offset, -h + h + inset);
-    ctx.bezierCurveTo(
-      c + offset,
-      -h + h + inset,
-      c + offset,
-      -0 + h + inset,
-      c * 2 + offset,
-      -0 + h + inset / 4,
-    );
-    ctx.lineTo(w - c * 2 + offset, h + inset / 4);
-    ctx.bezierCurveTo(
-      w - c + offset,
-      0 + h + inset,
-      w - c + offset,
-      -h + h + inset,
-      w + offset,
-      -h + h + inset,
-    );
+    this.drawRoundedDent(ctx, 
+      inset, 
+      0, 
+      0
+    )
   }
 
   ctx.lineTo(this.width() - this.corner, inset); // after dent
@@ -7402,28 +7397,12 @@ CommandBlockMorph.prototype.outlinePath = function (ctx, inset) {
         false,
       );
     } else {
-      ctx.save();
-      ctx.translate(0, bottom - this.dentPlus);
-      h -= inset;
-      ctx.lineTo(0 + offset, -h + h - inset);
-      ctx.bezierCurveTo(
-        c + offset,
-        -h + h - inset,
-        c + offset,
-        -0 + h - inset,
-        c * 2 + offset,
-        -0 + h - inset / 4,
-      );
-      ctx.lineTo(w - c * 2 + offset, h - inset / 4);
-      ctx.bezierCurveTo(
-        w - c + offset,
-        0 + h - inset,
-        w - c + offset,
-        -h + h - inset,
-        w + offset,
-        -h + h - inset,
-      );
-      ctx.restore();
+      this.drawRoundedDent(ctx, 
+      inset, 
+      0, 
+      bottom - this.dentPlus * 1.5,
+      true
+    )
     }
     ctx.lineTo(this.corner + this.inset, bottom - inset - this.dentPlus);
   }
@@ -11098,27 +11077,7 @@ CSlotMorph.prototype.outlinePath = function (ctx, inset, offset) {
       h = this.corner + this.dentPlus,
       offset = this.inset * 1 + this.dent / 1.6 + ox,
       c = this.dentCorner;
-    ctx.save();
-    ctx.translate(1 * this.scale, this.corner + oy - inset);
-    ctx.lineTo(0 + offset, -h + h);
-    ctx.bezierCurveTo(
-      c + offset,
-      -h + h,
-      c + offset,
-      -0 + h,
-      c * 2 + offset,
-      -0 + h,
-    );
-    ctx.lineTo(w - c * 2 + offset, h);
-    ctx.bezierCurveTo(
-      w - c + offset,
-      0 + h,
-      w - c + offset,
-      -h + h,
-      w + offset,
-      -h + h,
-    );
-    ctx.restore();
+    this.drawRoundedDent(ctx, inset, inset + this.corner * 2 + ox, this.corner + oy - inset, true)
   }
   ctx.arc(
     this.inset + this.corner + ox,
@@ -11149,30 +11108,7 @@ CSlotMorph.prototype.outlinePath = function (ctx, inset, offset) {
     if (block.bottomBlock().isStop()) flatEdge = false;
   }
   if (flatEdge) {
-    ctx.save();
-    ctx.translate(
-      1 * this.scale,
-      this.height() - this.corner + oy + inset - this.dentPlus,
-    );
-    ctx.lineTo(0 + offset, -h + h);
-    ctx.bezierCurveTo(
-      c + offset,
-      -h + h,
-      c + offset,
-      -0 + h,
-      c * 2 + offset,
-      -0 + h,
-    );
-    ctx.lineTo(w - c * 2 + offset, h);
-    ctx.bezierCurveTo(
-      w - c + offset,
-      0 + h,
-      w - c + offset,
-      -h + h,
-      w + offset,
-      -h + h,
-    );
-    ctx.restore();
+    this.drawRoundedDent(ctx, inset, inset + this.corner * 2 + ox, this.height() - this.corner + oy - this.dentPlus)
     ctx.lineTo(
       this.width() - this.corner + ox,
       this.height() - this.corner + oy + inset - this.dentPlus,
@@ -12970,7 +12906,7 @@ InputSlotMorph.prototype.render = function (ctx) {
   ctx.fillStyle = this.color.toString();
   if (this.isReadOnly && !this.cachedNormalColor) {
     // unless flashing
-    ctx.fillStyle = borderColor.darker(10).toString();
+    ctx.fillStyle = this.parent.colors?.secondary || borderColor.darker(10).toString();
     if (this.isStatic) {
       ctx.fillStyle = borderColor.toString();
     }
@@ -12979,8 +12915,8 @@ InputSlotMorph.prototype.render = function (ctx) {
   // cache my border colors
   this.cachedClr = borderColor.toString();
   this.cachedClrBright = borderColor.lighter(this.contrast).toString();
-  this.cachedClrDark = borderColor.darker(this.contrast).toString();
-  ctx.strokeStyle = this.parent.color.darker(20).toString();
+  this.cachedClrDark = this.parent.colors?.secondary || borderColor.darker(this.contrast).toString();
+  ctx.strokeStyle = this.parent.colors?.tertiary || this.parent.color.darker(20).toString();
   ctx.lineWidth = this.flatEdge * 2;
   if (this.isSquare()) {
     ctx.beginPath();

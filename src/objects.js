@@ -174,6 +174,78 @@ SpriteMorph.prototype.blockColor = {
   lists: new Color(255, 102, 26),
   other: new Color(170, 170, 170),
 };
+SpriteMorph.prototype.blockColors = {
+  motion: {
+    primary: new Color(76, 151, 255),
+    secondary: new Color(66, 128, 215),
+    tertiary: new Color(51, 115, 204),
+    quaternary: new Color(51, 115, 204),
+  },
+  looks: {
+    primary: new Color(153, 102, 255),
+    secondary: new Color(133, 92, 214),
+    tertiary: new Color(119, 77, 203),
+    quaternary: new Color(119, 77, 203),
+  },
+  sounds: {
+    primary: new Color(207, 99, 207),
+    secondary: new Color(201, 79, 201),
+    tertiary: new Color(189, 66, 189),
+    quaternary: new Color(189, 66, 189),
+  },
+  control: {
+    primary: new Color(255, 171, 25),
+    secondary: new Color(236, 156, 19),
+    tertiary: new Color(207, 139, 23),
+    quaternary: new Color(207, 139, 23),
+  },
+  events: {
+    primary: new Color(255, 191, 0),
+    secondary: new Color(230, 172, 0),
+    tertiary: new Color(204, 153, 0),
+    quaternary: new Color(204, 153, 0),
+  },
+  sensing: {
+    primary: new Color(92, 177, 214),
+    secondary: new Color(71, 168, 209),
+    tertiary: new Color(46, 142, 184),
+    quaternary: new Color(46, 142, 184),
+  },
+  pen: {
+    primary: new Color(15, 189, 140),
+    secondary: new Color(13, 165, 122),
+    tertiary: new Color(11, 142, 105),
+    quaternary: new Color(11, 142, 105),
+  },
+  operators: {
+    primary: new Color(89, 192, 89),
+    secondary: new Color(70, 185, 70),
+    tertiary: new Color(56, 148, 56),
+    quaternary: new Color(56, 148, 56),
+  },
+  variables: {
+    primary: new Color(255, 140, 26),
+    secondary: new Color(255, 128, 0),
+    tertiary: new Color(219, 110, 0),
+    quaternary: new Color(219, 110, 0),
+  },
+  lists: {
+    primary: new Color(255, 102, 26),
+    secondary: new Color(255, 85, 0),
+    tertiary: new Color(230, 77, 0),
+    quaternary: new Color(230, 77, 0),
+  },
+  more: {
+    primary: new Color(255, 102, 128),
+    secondary: new Color(255, 77, 106),
+    tertiary: new Color(255, 51, 85),
+    quaternary: new Color(255, 51, 85),
+  },
+  other: {
+    primary: new Color(170, 170, 170),
+  },
+  text: new Color(255, 255, 255),
+};
 SpriteMorph.prototype.isHighContrast = false;
 SpriteMorph.prototype.setDefaultBlockColor = function () {
   /*SpriteMorph.prototype.blockColor = {
@@ -222,6 +294,13 @@ SpriteMorph.prototype.blockColorFor = function (category) {
   return Object.hasOwn(this.blockColor, category)
     ? this.blockColor[category]
     : this.customCategories.get(category) || this.blockColor.other;
+};
+SpriteMorph.prototype.blockColorsFor = function (category) {
+  return Object.hasOwn(this.blockColor, category)
+    ? this.blockColors[category]
+    : {
+        primary: this.customCategories.get(category)
+      } || this.blockColors.other;
 };
 
 SpriteMorph.prototype.paletteColor = new Color(55, 55, 55);
@@ -3817,6 +3896,7 @@ SpriteMorph.prototype.blockForSelector = function (selector, setDefaults) {
         ? new RingMorph()
         : new ReporterBlockMorph(info.type === "predicate");
     block.color = this.blockColorFor(info.category);
+    block.colors = this.blockColorsFor(info.category);
     block.category = info.category;
     block.selector = migration ? migration.selector : selector;
     if (contains(["reifyReporter", "reifyPredicate"], block.selector)) {
