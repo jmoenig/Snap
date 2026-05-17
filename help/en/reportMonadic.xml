@@ -1,0 +1,86 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportMonadic">
+                <l><option>sqrt</option></l>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="down" annotation="1"/>
+                    <block s="doForever" annotation="2">
+                        <script>
+                            <block s="changeXPosition" annotation="3">
+                                <l>1</l>
+                            </block>
+                            <block s="changeYPosition" annotation="4">
+                                <block s="reportProduct">
+                                    <l>100</l>
+                                    <block s="reportMonadic">
+                                        <l><option>sin</option></l>
+                                        <block s="xPosition"/>
+                                    </block>
+                                </block>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Put the pen down</small-p>
+                    <small-p>Forever</small-p>
+                    <small-p>Move to the right</small-p>
+                    <small-p>
+                        Set the y position to a function of the x
+                    </small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <img src="reportMonadic_sine_wave.png" width="176" height="126"/>
+                <p rel-width="1">Set y based on the sine of x</p>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportMonadic" annotation="1">
+                        <l menu="1"><option>sqrt</option></l>
+                        <l>10</l>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item>abs</item>
+                        <item>neg</item>
+                        <item>ceiling</item>
+                        <item>floor</item>
+                        <item>sqrt</item>
+                        <item>sin</item>
+                        <item>cos</item>
+                        <item>tan</item>
+                        <item>asin</item>
+                        <item>acos</item>
+                        <item>atan</item>
+                        <item>ln</item>
+                        <item>log</item>
+                        <item>lg</item>
+                        <item>e^</item>
+                        <item>10^</item>
+                        <item>2^</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <p>
+                        This block performs a mathematical function. Choose
+                        the math function from the block's drop down menu.
+                    </p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

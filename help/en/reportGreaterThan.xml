@@ -1,0 +1,40 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportGreaterThan">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportGreaterThan">
+                                    <block s="xPosition"/>
+                                    <l>200</l>
+                                </block>
+                                <script>
+                                    <block s="setHeading" annotation="2">
+                                        <l>180</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        If y position is greater than 200 (near the top of
+                        the stage)
+                    </small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

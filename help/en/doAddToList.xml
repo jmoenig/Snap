@@ -1,0 +1,104 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doAddToList">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <row>
+                <script>
+                    <block s="doAddToList">
+                        <l>rock</l>
+                        <block var="my list"/>
+                    </block>
+                    <block s="doAddToList">
+                        <l>paper</l>
+                        <block var="my list"/>
+                    </block>
+                    <block s="doAddToList">
+                        <l>scissors</l>
+                        <block var="my list"/>
+                    </block>
+                </script>
+                <img src="doAddToList_my_list.png" width="105" height="93"/>
+            </row>
+            <diagram>
+                <script>
+                    <block s="bubble" annotation="1">
+                        <block s="reportListItem">
+                            <l><option>any</option></l>
+                            <block var="my list"/>
+                        </block>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Say one of the items in the list</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>Use this block to add an item to the end of a list.</p>
+	    <row>
+            <script>
+                <block s="doAddToList">
+                    <l>781</l>
+                    <block var="my list"/>
+                </block>
+            </script>
+            <script>
+                <block s="doAddToList">
+                    <block s="reportNewList">
+		      <list>
+		      <l>alpha</l>
+		      <l>beta</l>
+		      <l>gamma</l>
+		      </list>
+		    </block>
+                    <block var="my list"/>
+                </block>
+            </script>
+	    </row>
+	    <row>
+            <script>
+                <block s="doAddToList">
+		  <block s="reifyReporter">
+		    <autolambda>
+		      <block s="reportSum">
+			<l/>
+			<l/>
+		      </block>
+		    </autolambda>
+		    <list/>
+		  </block>
+		  <block var="my list"/>
+                </block>
+            </script>
+            <script>
+                <block s="doAddToList">
+                    <block s="newClone">
+		      <l><option>myself</option></l>
+		    </block>
+		    <block var="my list"/>
+                </block>
+            </script>
+	    </row>
+            <p>
+                <text>Make an empty list:</text>
+                <script>
+                    <block s="doSetVar">
+                        <l>my list</l>
+                        <block s="reportNewList">
+                            <list/>
+                        </block>
+                    </block>
+                </script>
+            </p>
+        </column>
+    </box>
+</help-screen>

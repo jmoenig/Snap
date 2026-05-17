@@ -9785,8 +9785,9 @@ IDE_Morph.prototype.getURL = function (url, callback, responseType) {
                             request[rsp]
                         );
                     } else {
-                        this.showMessage('unable to retrieve ' + url);
-                        throw new Error('unable to retrieve ' + url);
+                        callback.call(myself);
+                        // this.showMessage('unable to retrieve ' + url);
+                        // throw new Error('unable to retrieve ' + url);
                     }
                 }
             };

@@ -1,0 +1,68 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doReplaceInList">
+                <l/>
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doReplaceInList" annotation="1">
+                        <l>1</l>
+                        <block var="scoreboard"/>
+                        <block var="score"/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Replace item 1 in the list with the current score
+                    </small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="1">
+                    <p>Before:</p>
+                    <img src="doReplaceInList_scoreboard_before.png" width="105" height="93"/>
+                </column>
+                <column rel-width="1">
+                    <p>After:</p>
+                    <img src="doReplaceInList_scoreboard_after.png" width="105" height="93"/>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>You can choose where in a list to put an item. For example:</p>
+            <diagram>
+                <script>
+                    <block s="doReplaceInList" annotation="1">
+                        <l>2</l>
+                        <block var="race times"/>
+                        <block s="reportTimer"/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Replaces item 2 in the list</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="doReplaceInList" annotation="1">
+                        <l><option>last</option></l>
+                        <block var="questions"/>
+                        <l>How are you?</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Replaces last item in the list</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,116 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportMap">
+                <block s="reifyReporter">
+                    <script/>
+                    <list/>
+                </block>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportMap" bubble="1">
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <block s="reportSum">
+                                    <l/>
+                                    <l>3</l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>7</l>
+                                <l>8</l>
+                                <l>1</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportMap_list1.png" width="80" height="70"/>
+                </bubbles>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportMap" bubble="1">
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <block s="reportJoinWords">
+                                    <list>
+                                        <l/>
+                                        <l>s</l>
+                                    </list>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>book</l>
+                                <l>computer</l>
+                                <l>toy</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportMap_list2.png" width="85" height="70"/>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportMap" annotation="1">
+                        <block s="reifyReporter">
+                            <script/>
+                            <list/>
+                        </block>
+                        <l/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        This input takes a reporter. Empty input slots in the
+                        reporter will all be filled with each list item in
+                        turn.
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportMap" bubble="1">
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <block s="reportProduct">
+                                    <l/>
+                                    <l/>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <block s="reportNewList">
+                            <list>
+                                <l>7</l>
+                                <l>8</l>
+                                <l>1</l>
+                            </list>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportMap_list3.png" width="80" height="70"/>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,70 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportDate">
+                <l><option>date</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report current date or time</p>
+            <diagram>
+                <menu>
+                    <item annotation="1">year</item>
+                    <item annotation="2">month</item>
+                    <item annotation="3">date</item>
+                    <item annotation="4">day of week</item>
+                    <item annotation="5">hour</item>
+                    <item annotation="6">minute</item>
+                    <item annotation="7">seconds</item>
+                    <item annotation="8">time in milliseconds</item>
+                </menu>
+                <annotations>
+                    <small-p>Report current year, e.g., 2015</small-p>
+                    <small-p>Report month of year, Jan=1, Dec=12</small-p>
+                    <small-p>Report day number within month, 1-31</small-p>
+                    <small-p>Report day of week (Sun=0, Mon=1, ... Sat=6)</small-p>
+                    <small-p>Report hour of day, 0-23</small-p>
+                    <small-p>Report minute within hour, 0-59</small-p>
+                    <small-p>Report second within minute, 0-50</small-p>
+                    <small-p>Report milliseconds since midnight, Jan 1, 1970</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                All reported values are numbers; you can write blocks to
+                convert week days or months into words. Note that date
+                numbers start at 1, as in conventional written notation
+                (7/20/2015 or 20-7-2015 for July 20th), but time numbers
+                start at 0, as in 24-hour clock notation (15:49:20 is 3:49pm
+                plus 20 seconds).
+            </p>
+            <diagram>
+                <script>
+                    <block s="reportJoinWords" bubble="1">
+                        <list>
+                            <block s="reportDate">
+                                <l><option>month</option></l>
+                            </block>
+                            <l>/</l>
+                            <block s="reportDate">
+                                <l><option>date</option></l>
+                            </block>
+                            <l>/</l>
+                            <block s="reportDate">
+                                <l><option>year</option></l>
+                            </block>
+                        </list>
+                    </block>
+                </script>
+                <bubbles>
+                    <text>5/25/2015</text>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

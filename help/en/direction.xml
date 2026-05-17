@@ -1,0 +1,51 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="direction"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportEquals">
+                                    <block s="direction"/>
+                                    <l>0</l>
+                                </block>
+                                <script>
+                                    <block s="bubble" annotation="2">
+                                        <l>Looking up!</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If pointing in direction 0 (up)</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <row>
+            <img src="direction_watcher.png" width="131" height="21"/>
+            <column rel-width="1">
+                <p>
+                    To see this sprite's current direction, click the checkbox
+                    next to the block.
+                </p>
+                <row padding="5">
+                    <img src="checkbox.png" width="15" height="15"/>
+                    <script>
+                        <block s="direction"/>
+                    </script>
+                </row>
+            </column>
+        </row>
+    </box>
+</help-screen>

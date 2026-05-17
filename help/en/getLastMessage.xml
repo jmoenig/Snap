@@ -1,0 +1,37 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="getLastMessage"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report the most recently broadcast message.</p>
+            <script>
+                <block s="doBroadcast">
+                    <l>hi there</l>
+                </block>
+            </script>
+            <diagram>
+                <script>
+                    <block s="getLastMessage" bubble="1"/>
+                </script>
+                <bubbles>
+                    <text>hi there</text>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>This block is most useful in a script that starts with</text>
+                <script>
+                    <block s="receiveMessage">
+                        <l><option>any message</option></l>
+                    </block>
+                </script>
+            </p>
+        </column>
+    </box>
+</help-screen>

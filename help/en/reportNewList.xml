@@ -1,0 +1,127 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportNewList">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Reports a newly created list with the given items.</p>
+            <diagram>
+                <script>
+                    <block s="reportNewList" annotation="1">
+                        <l/>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Use the arrows to change the number of inputs.
+                    </small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="3">
+                    <diagram>
+                        <script>
+                            <block s="reportNewList" bubble="1">
+                                <list/>
+                            </block>
+                        </script>
+                        <bubbles>
+                            <img src="reportNewList_list1.png" width="80" height="69"/>
+                        </bubbles>
+                    </diagram>
+                    <small-p>Make an empty list.</small-p>
+                </column>
+                <column rel-width="4">
+                    <diagram>
+                        <script>
+                            <block s="reportNewList" bubble="1">
+                                <list>
+                                    <l>Build</l>
+                                    <l>Your</l>
+                                    <l>Own</l>
+                                    <l>Blocks</l>
+                                </list>
+                            </block>
+                        </script>
+                        <bubbles>
+                            <img src="reportNewList_list2.png" width="80" height="87"/>
+                        </bubbles>
+                    </diagram>
+                    <small-p>
+                        The list items can be anything; text, numbers,
+                        blocks, scripts, and even other lists!
+                    </small-p>
+                </column>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>You can put a list in a rectangular input slot:</p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="bubble">
+                            <l highlight="true"/>
+                        </block>
+                    </script>
+                </diagram>
+                <diagram rel-width="3">
+                    <script>
+                        <block s="bubble">
+                            <block s="reportNewList">
+                                <list>
+                                    <block s="reifyReporter">
+                                        <autolambda>
+                                            <block s="reportSum">
+                                                <l/>
+                                                <l/>
+                                            </block>
+                                        </autolambda>
+                                        <list/>
+                                    </block>
+                                    <block s="reportSum">
+                                        <l>3</l>
+                                        <l>4</l>
+                                    </block>
+                                </list>
+                            </block>
+                        </block>
+                    </script>
+                </diagram>
+                <img src="reportNewList_alonzo.png" width="167" height="118"/>
+            </row>
+            <p>and also in a lists-only input slot:</p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportListLength">
+                            <l highlight="true"/>
+                        </block>
+                    </script>
+                </diagram>
+                <diagram rel-width="4">
+                    <script>
+                        <block s="reportListLength">
+                            <block s="reportNewList">
+                                <list>
+                                    <l>Build</l>
+                                    <l>Your</l>
+                                    <l>Own</l>
+                                    <l>Blocks</l>
+                                </list>
+                            </block>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>4</text>
+                    </bubbles>
+                </diagram>
+            </row>
+        </column>
+    </box>
+</help-screen>

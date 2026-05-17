@@ -1,0 +1,35 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doPlaySoundAtRate">
+                <l/>
+                <l>44100</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>
+                A higher sampling rate will take less time to finish the
+                sound, but will make it higher pitched (squeakier).
+            </p>
+            <p>
+                Similarly, a lower sampling rate will slow down the sound,
+                but also make it lower pitched (deeper).
+            </p>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Most sounds have a natural sampling rate of 44100 Hz (44.1
+                kHz), because that's the rate at which CDs are made.
+            </p>
+            <p>
+                The highest pitch that can be included in a sound is just
+                under half the sampling rate, so CDs can reproduce up to 20
+                kHz, which is about the limit of human hearing.
+            </p>
+        </column>
+    </box>
+</help-screen>

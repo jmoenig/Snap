@@ -1,0 +1,44 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doUntil">
+                <l/>
+                <script/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doUntil">
+                        <block s="reportTouchingColor" annotation="1"/>
+                        <script>
+                            <block s="forward" annotation="2">
+                                <l>1</l>
+                            </block>
+                        </script>
+                    </block>
+                    <block s="bubble" annotation="3">
+                        <l>Hello</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Until this happens</small-p>
+                    <small-p>Do this</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="1">
+                    <img src="doUntil_sprites1.png" width="137" height="101"/>
+                    <p>Before</p>
+                </column>
+                <column rel-width="1">
+                    <img src="doUntil_sprites2.png" width="95" height="101"/>
+                    <p>After</p>
+                </column>
+            </row>
+        </column>
+    </box>
+</help-screen>

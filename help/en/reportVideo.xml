@@ -1,0 +1,51 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportVideo">
+                <l><option>motion</option></l>
+                <l><option>myself</option></l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Reports information from video capture.</p>
+            <p>
+                The second input is a menu of sprites, and restricts the
+                block's attention to the part of the stage taken up by the
+                chosen sprite. (“Stage” uses the entire stage area.)
+            </p>
+            <p>The first input specifies what information you want:</p>
+        </column>
+    </box>
+    <box color="blue">
+        <diagram>
+            <script>
+                <block s="reportVideo">
+                    <l menu="1"><option>motion</option></l>
+                    <l><option>myself</option></l>
+                </block>
+            </script>
+            <menus>
+                <menu>
+                    <item annotation="1">snap</item>
+                    <item annotation="2">motion</item>
+                    <item annotation="3">direction</item>
+                </menu>
+            </menus>
+            <annotations>
+                <small-p>
+                    Reports a snapshot of the video as a costume.
+                </small-p>
+                <small-p>
+                    Reports a number, the speed of a detected moving object
+                    in the video.
+                </small-p>
+                <small-p>
+                    Reports a number, the direction in which the object is
+                    moving, suitable for use as input in POINT IN DIRECTION.
+                </small-p>
+            </annotations>
+        </diagram>
+    </box>
+</help-screen>

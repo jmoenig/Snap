@@ -1,0 +1,52 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportURL">
+                <l>snap.berkeley.edu</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report web page text.</p>
+            <diagram>
+                <script>
+                    <block s="reportURL" bubble="1">
+                        <l>snap.berkeley.edu</l>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportURL_html.png" width="313" height="61"/>
+                </bubbles>
+            </diagram>
+            <p>Hint: Use SPLIT to see the result as a list of lines.</p>
+            <diagram>
+                <script>
+                    <block s="reportTextSplit">
+                        <block s="reportURL" bubble="1">
+                            <l>snap.berkeley.edu</l>
+                        </block>
+                        <l><option>line</option></l>
+                    </block>
+                </script>
+                <bubbles>
+                    <img src="reportURL_list.png" width="87" height="105"/>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Note: Many websites won't work with this block because of an
+                Internet security feature built into browsers, called “Cross
+                Origin Resource Sharing.” There's nothing Snap! can do about
+                this; you should try to get the provider of the website to
+                allow cross-origin requests from everyone, or at least for
+                your Internet domain. You can also look for a “CORS proxy,”
+                which is a website that funnels requests for arbitrary pages
+                regardless of CORS status.
+            </p>
+        </column>
+    </box>
+</help-screen>

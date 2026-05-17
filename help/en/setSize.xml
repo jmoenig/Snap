@@ -1,0 +1,34 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="setSize">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <block s="down" annotation="1"/>
+                    <block s="setColor" annotation="2">
+                        <color>112,173,255,1</color>
+                    </block>
+                    <block s="setSize" annotation="3">
+                        <l>20</l>
+                    </block>
+                    <block s="forward" annotation="4">
+                        <l>50</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Start leaving a pen trail</small-p>
+                    <small-p>Set the pen color to light blue</small-p>
+                    <small-p>Set the pen thickness to 20</small-p>
+                    <small-p>Move</small-p>
+                </annotations>
+            </diagram>
+            <img src="setSize_cat.png" width="54" height="96"/>
+        </row>
+    </box>
+</help-screen>

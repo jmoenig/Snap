@@ -1,0 +1,67 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="setScale">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="setScale" annotation="1">
+                            <l>50</l>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>
+                            Shrinks the sprite to half its original size
+                        </small-p>
+                    </annotations>
+                </diagram>
+                <img src="setScale_cat1.png" width="101" height="17"/>
+            </row>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="setScale" annotation="1">
+                            <l>200</l>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>
+                            Grows the sprite to twice its original size
+                        </small-p>
+                    </annotations>
+                </diagram>
+                <img src="setScale_cat2.png" width="101" height="49"/>
+            </row>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="setScale" annotation="1">
+                            <l>100</l>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>
+                            Returns to original size
+                        </small-p>
+                    </annotations>
+                </diagram>
+                <img src="setScale_cat3.png" width="101" height="25"/>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Note: There are limits to how small or how big you can make
+                a sprite. Experiment with different numbers to see how small
+                or big you can make it.
+            </p>
+        </column>
+    </box>
+</help-screen>

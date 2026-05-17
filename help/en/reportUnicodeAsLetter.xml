@@ -1,0 +1,87 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportUnicodeAsLetter">
+                <l>65</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Reports the letter with a given code.</p>
+            <p>
+                Letters and other characters are represented inside the
+                computer using a numeric code called Unicode. Type or paste
+                a single character into the input to get its Unicode number.
+            </p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportUnicodeAsLetter" bubble="1">
+                            <l>65</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>A</text>
+                    </bubbles>
+                </diagram>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportUnicodeAsLetter" bubble="1">
+                            <l>12069</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>⼥</text>
+                    </bubbles>
+                </diagram>
+            </row>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportUnicodeAsLetter" bubble="1">
+                            <l>960</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>π</text>
+                    </bubbles>
+                </diagram>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportUnicodeAsLetter" bubble="1">
+                            <l>9775</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>☯</text>
+                    </bubbles>
+                </diagram>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <row>
+            <column rel-width="2">
+                <small-p>Some Unicode values:</small-p>
+                <small-p>
+                    48-57: digits 0-9\n
+                    65-90: capital letters A-Z\n
+                    97-122: lower case letters
+                </small-p>
+                <small-p>32: space</small-p>
+            </column>
+            <column rel-width="5">
+                <p>
+                    See the complete official Unicode chart at
+                    http://www.unicode.org/charts/
+                </p>
+                <small-p>
+                    There are also unofficial Unicode values for fictional
+                    languages such as Tengwar (Elvish) and Klingon at
+                    http://www.evertype.com/standards/csur/conscript-table.html
+                </small-p>
+            </column>
+        </row>
+    </box>
+</help-screen>

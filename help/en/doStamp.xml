@@ -1,0 +1,38 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doStamp"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <block s="clear" annotation="1"/>
+                    <block s="doRepeat" annotation="2">
+                        <l>9</l>
+                        <script>
+                            <block s="forward" annotation="3">
+                                <l>70</l>
+                            </block>
+                            <block s="turn" annotation="4">
+                                <l>40</l>
+                            </block>
+                            <block s="doStamp" annotation="5"/>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Clear all the stamps and lines</small-p>
+                    <small-p>Repeat 9 times:</small-p>
+                    <small-p>Move</small-p>
+                    <small-p>Turn</small-p>
+                    <small-p>
+                        Stamp a print of your costume on the stage
+                    </small-p>
+                </annotations>
+            </diagram>
+            <img src="doStamp_cats.png" width="136" height="137"/>
+        </row>
+    </box>
+</help-screen>

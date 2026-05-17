@@ -1,0 +1,186 @@
+<help-screen version="1">
+    <blocks>
+        <block-definition s="initials %&apos;data&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%l"></input>
+            </inputs>
+            <script>
+                <block s="doIf" annotation="1">
+                    <block s="reportListIsEmpty">
+                        <block var="data"/>
+                        <script>
+                            <block s="doReport">
+                                <block s="reportNewList">
+                                    <list/>
+                                </block>
+                            </block>
+                        </script>
+                    </block>
+                    <block s="doReport">
+                        <block s="reportCONS">
+                            <block s="reportLetter">
+                                <l>1</l>
+                                <block s="reportListItem">
+                                    <l>1</l>
+                                    <block var="data"/>
+                                </block>
+                            </block>
+                            <custom-block s="initials %l">
+                                <block s="reportCDR">
+                                    <block var="data"/>
+                                </block>
+                            </custom-block>
+                        </block>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+        <block-definition s="some function %&apos;data&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%s"></input>
+            </inputs>
+        </block-definition>
+        <block-definition s="recursive call %&apos;data&apos;" type="reporter" category="looks">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%l"></input>
+            </inputs>
+        </block-definition>
+    </blocks>
+    <thumbnail>
+        <script>
+            <block s="reportCONS">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Report a list that extends another list with one new item.</p>
+            <row>
+                <diagram rel-width="4">
+                    <script>
+                        <block s="reportCONS">
+                            <l annotation="2"/>
+                            <l annotation="1"/>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>The list you want to extend</small-p>
+                        <small-p>New item (can be anything!)</small-p>
+                    </annotations>
+                </diagram>
+                <diagram rel-width="5">
+                    <script>
+                        <block s="reportCONS" bubble="1">
+                            <l>7</l>
+                            <block s="reportNewList">
+                                <list>
+                                    <l>8</l>
+                                    <l>1</l>
+                                </list>
+                            </block>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <img src="reportCONS_list1.png" width="80" height="70"/>
+                    </bubbles>
+                </diagram>
+            </row>
+            <p>Note: The new list shares structure with the old one!</p>
+            <script>
+                <block s="doSetVar">
+                    <l>foo</l>
+                    <block s="reportNewList">
+                        <list>
+                            <l>8</l>
+                            <l>1</l>
+                        </list>
+                    </block>
+                </block>
+                <block s="doSetVar">
+                    <l>baz</l>
+                    <block s="reportCONS">
+                        <l>7</l>
+                        <block var="foo"/>
+                    </block>
+                </block>
+            </script>
+            <diagram>
+                <script>
+                    <block s="reportIsIdentical" bubble="1">
+                        <block var="foo"/>
+                        <block s="reportCDR">
+                            <block var="baz"/>
+                        </block>
+                    </block>
+                </script>
+                <bubbles>
+                    <bool>true</bool>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <diagram>
+                <block-definition s="initials %l"/>
+                <annotations>
+                    <small-p>
+                        <script>
+                            <block s="reportCONS">
+                                <l/>
+                                <l/>
+                            </block>
+                        </script>
+                        <text>
+                            is most useful in writing recursive reporters
+                            like this one, to build up a list element by
+                            element.
+                        </text>
+                    </small-p>
+                </annotations>
+            </diagram>
+            <script>
+                <block s="reportCONS">
+                    <custom-block s="some function %s">
+                        <block s="reportListItem">
+                            <l>1</l>
+                            <block var="foo"/>
+                        </block>
+                    </custom-block>
+                    <custom-block s="recursive call %l">
+                        <block s="reportCDR">
+                            <block var="foo"/>
+                        </block>
+                    </custom-block>
+                </block>
+            </script>
+            <diagram>
+                <script>
+                    <custom-block s="initials %l" bubble="1">
+                        <block s="reportNewList">
+                            <list>
+                                <l>Three</l>
+                                <l>Letter</l>
+                                <l>Acronym</l>
+                            </list>
+                        </block>
+                    </custom-block>
+                </script>
+                <bubbles>
+                    <img src="reportCONS_list2.png" width="80" height="70"/>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,66 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="getScale"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportGreaterThan">
+                                    <block s="getScale"/>
+                                    <l>200</l>
+                                </block>
+                                <script>
+                                    <block s="setScale" annotation="2">
+                                        <l>100</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If size is greater than 200%</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </row>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="getScale"/>
+                </script>
+                <text>
+                    reports the % of the original size of the object.
+                </text>
+            </p>
+            <row>
+                <img src="getScale_watcher.png" width="108" height="21"/>
+                <p rel-width="1">
+                    <text>
+                        To view the value of size, click the checkbox next to
+                        the block
+                    </text>
+                    <row padding="5">
+                        <img src="checkbox.png" width="15" height="15"/>
+                        <script>
+                            <block s="getScale"/>
+                        </script>
+                    </row>
+                </p>
+            </row>
+            <p>
+                Note: There are limits to how small or how big you can make a
+                sprite. Experiment with different numbers to see how small or
+                big you can make it.
+            </p>
+        </column>
+    </box>
+</help-screen>

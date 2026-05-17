@@ -1,0 +1,80 @@
+<help-screen version="1">
+    <blocks>
+        <block-definition s="factorial %&apos;n&apos;" type="reporter" category="operators">
+            <header></header>
+            <code></code>
+            <translations></translations>
+            <inputs>
+                <input type="%n"></input>
+            </inputs>
+            <script>
+                <block s="doReport">
+                    <block s="reportIfElse">
+                        <block s="reportEquals">
+                            <block var="n"/>
+                            <l>0</l>
+                        </block>
+                        <l>1</l>
+                        <block s="reportProduct">
+                            <block var="n"/>
+                            <custom-block s="factorial %n">
+                                <block s="reportDifference">
+                                    <block var="n"/>
+                                    <l>1</l>
+                                </block>
+                            </custom-block>
+                        </block>
+                    </block>
+                </block>
+            </script>
+        </block-definition>
+    </blocks>
+    <thumbnail>
+        <script>
+            <block s="reportIfElse">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Choose which of two values to report.</p>
+            <diagram>
+                <script>
+                    <block s="reportIfElse" bubble="1">
+                        <block s="reportEquals">
+                            <l>2</l>
+                            <l>3</l>
+                        </block>
+                        <l>Yes</l>
+                        <l>No</l>
+                    </block>
+                </script>
+                <bubbles>
+                    <text>No</text>
+                </bubbles>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportIfElse" bubble="1">
+                        <block s="reportLessThan">
+                            <l>2</l>
+                            <l>3</l>
+                        </block>
+                        <l>Yes</l>
+                        <l>No</l>
+                    </block>
+                </script>
+                <bubbles>
+                    <text>Yes</text>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <block-definition s="factorial %n"/>
+        </column>
+    </box>
+</help-screen>

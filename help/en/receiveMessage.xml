@@ -1,0 +1,55 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="receiveMessage">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="receiveMessage" annotation="1">
+                        <l>jump</l>
+                    </block>
+                    <block s="changeYPosition" annotation="2">
+                        <l>40</l>
+                    </block>
+                    <block s="doWait">
+                        <l>0.5</l>
+                    </block>
+                    <block s="changeYPosition">
+                        <l>-40</l>
+                    </block>
+                    <block s="doWait">
+                        <l>0.5</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Whenever the message "jump" is broadcast
+                    </small-p>
+                    <small-p>Do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="receiveMessage">
+                        <l>jump</l>
+                    </block>
+                </script>
+                <text>waits for the message</text>
+                <script>
+                    <block s="doBroadcast">
+                        <l>jump</l>
+                    </block>
+                </script>
+            </p>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,41 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="reportAnd">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doForever">
+                        <script>
+                            <block s="doIf" annotation="1">
+                                <block s="reportAnd">
+                                    <block s="reportTouchingColor">
+                                        <color>255,255,255,1</color>
+                                    </block>
+                                    <block s="reportTouchingObject">
+                                        <l>Sprite(2)</l>
+                                    </block>
+                                </block>
+                                <script>
+                                    <block s="doSwitchToCostume" annotation="2">
+                                        <l>handshake</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>If touching Sprite(2)'s white gloves</small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

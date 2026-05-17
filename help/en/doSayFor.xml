@@ -1,0 +1,37 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doSayFor">
+                <l/>
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doSayFor" annotation="1">
+                        <l>Hello there!</l>
+                        <l>2</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Show "Hello there!" in a voice bubble for 2 seconds
+                    </small-p>
+                </annotations>
+            </diagram>
+            <row>
+                <column rel-width="1">
+                    <img src="doSayFor_cat_before.png" width="106" height="66"/>
+                    <p>Now</p>
+                </column>
+                <column rel-width="1">
+                    <img src="doSayFor_cat_after.png" width="106" height="66"/>
+                    <p>2 seconds later</p>
+                </column>
+            </row>
+        </column>
+    </box>
+</help-screen>

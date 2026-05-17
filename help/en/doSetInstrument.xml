@@ -1,0 +1,35 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doSetInstrument">
+                <l>1</l>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Set sound (timbre) for notes.</p>
+            <diagram>
+                <script>
+                    <block s="doSetInstrument">
+                        <l menu="1">1</l>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item annotation="1">(1) sine</item>
+                        <item>(2) square</item>
+                        <item>(3) sawtooth</item>
+                        <item>(4) triangle</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p>
+                        “Sine” is a pure, musical tone. The others sound more
+                        computery.
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

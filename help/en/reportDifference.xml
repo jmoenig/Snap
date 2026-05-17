@@ -1,0 +1,82 @@
+<help-screen version="1">
+    <thumbnail>
+        <column>
+            <row>
+                <script>
+                    <block s="reportSum">
+                        <l/>
+                        <l/>
+                    </block>
+                </script>
+                <script>
+                    <block s="reportProduct">
+                        <l/>
+                        <l/>
+                    </block>
+                </script>
+            </row>
+            <row>
+                <script>
+                    <block s="reportDifference">
+                        <l/>
+                        <l/>
+                    </block>
+                </script>
+                <script>
+                    <block s="reportQuotient">
+                        <l/>
+                        <l/>
+                    </block>
+                </script>
+            </row>
+        </column>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="reportSum" annotation="1">
+                        <l>6</l>
+                        <l>2</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Gives the result of 6 plus 2</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportDifference" annotation="1">
+                        <l>6</l>
+                        <l>2</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Gives the result of 6 minus 2</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportProduct" annotation="1">
+                        <l>6</l>
+                        <l>2</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Gives the result of 6 times 2</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="reportQuotient" annotation="1">
+                        <l>6</l>
+                        <l>2</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Gives the result of 6 divided by 2</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

@@ -1,0 +1,57 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="setXPosition">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <row>
+            <diagram rel-width="1">
+                <script>
+                    <block s="setXPosition" annotation="1">
+                        <l>0</l>
+                    </block>
+                    <block s="doWait" annotation="2">
+                        <l>1</l>
+                    </block>
+                    <block s="setXPosition" annotation="3">
+                        <l>240</l>
+                    </block>
+                    <block s="doWait" annotation="4">
+                        <l>1</l>
+                    </block>
+                    <block s="setXPosition" annotation="5">
+                        <l>-240</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Jump to the middle of stage</small-p>
+                    <small-p>Wait one second</small-p>
+                    <small-p>Jump to the far right edge of stage</small-p>
+                    <small-p>Wait one second</small-p>
+                    <small-p>Jump to the far left edge of stage</small-p>
+                </annotations>
+            </diagram>
+            <img src="setXPosition_range.png" width="195" height="77"/>
+        </row>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="setXPosition">
+                        <l/>
+                    </block>
+                </script>
+                <text>
+                    sets the sprite's x position (left to right). Type in a
+                    negative number to make the sprite go to the left side of
+                    the stage. Type in a positive number to go to the right
+                    side of the stage.
+                </text>
+            </p>
+        </column>
+    </box>
+</help-screen>

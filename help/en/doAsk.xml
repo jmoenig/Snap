@@ -1,0 +1,53 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doAsk">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doAsk" annotation="1">
+                        <l>What is your name?</l>
+                    </block>
+                    <block s="doSayFor" annotation="2">
+                        <l>It's nice to meet you.</l>
+                        <l>2</l>
+                    </block>
+                    <block s="doSayFor" annotation="3">
+                        <block s="reportLastAnswer"/>
+                        <l>2</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Ask and wait for the user to type their response</small-p>
+                    <small-p>Say "It's nice to meet you"</small-p>
+                    <small-p>Say the response</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <script>
+                    <block s="doAsk">
+                        <l/>
+                    </block>
+                </script>
+                <text>asks a question and stores the keyboard input in</text>
+                <script>
+                    <block s="reportLastAnswer"/>
+                </script>
+                <text>
+                    . The question appears in a voice balloon on the screen. The
+                    program waits as the user types in a response, until the
+                    Enter key is pressed or the check mark is clicked.
+                </text>
+            </p>
+        </column>
+    </box>
+</help-screen>

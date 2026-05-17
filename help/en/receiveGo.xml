@@ -1,0 +1,34 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="receiveGo"/>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="receiveGo" annotation="1"/>
+                    <block s="gotoXY" annotation="2">
+                        <l>0</l>
+                        <l>0</l>
+                    </block>
+                    <block s="doForever">
+                        <script>
+                            <block s="forward">
+                                <l>10</l>
+                            </block>
+                            <block s="turn">
+                                <l>15</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>When the green flag button is clicked</small-p>
+                    <small-p>Do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

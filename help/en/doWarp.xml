@@ -1,0 +1,63 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doWarp">
+                <script/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="black">
+        <column>
+            <p>Run fast; don't draw intermediate steps.</p>
+            <row padding="22">
+                <script>
+                    <block s="doRepeat">
+                        <l>4</l>
+                        <script>
+                            <block s="forward">
+                                <l>100</l>
+                            </block>
+                            <block s="turn">
+                                <l>90</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <img src="doWarp_steps1.png" width="365" height="62"/>
+            </row>
+            <row>
+                <script>
+                    <block s="doWarp">
+                        <script>
+                            <block s="doRepeat">
+                                <l>4</l>
+                                <script>
+                                    <block s="forward">
+                                        <l>100</l>
+                                    </block>
+                                    <block s="turn">
+                                        <l>90</l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <img src="doWarp_steps2.png" width="138" height="61"/>
+                <p rel-width="1">
+                    Other scripts can't run until the warp is finished.
+                </p>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                If your warped script has a bug and keeps running forever,
+                hold down the stop sign in the top right corner of the window
+                until it stops.
+            </p>
+            <img src="doWarp_ide.png" width="514" height="61"/>
+        </column>
+    </box>
+</help-screen>

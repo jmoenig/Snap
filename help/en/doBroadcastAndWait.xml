@@ -1,0 +1,86 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doBroadcastAndWait">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doBroadcastAndWait" annotation="1">
+                        <l>jump</l>
+                    </block>
+                    <block s="bubble" annotation="2">
+                        <l>That was fun!</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        Send the message "jump" and wait until all the jumps
+                        are done
+                    </small-p>
+                    <small-p>Then do this</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="receiveMessage" annotation="1">
+                        <l>jump</l>
+                    </block>
+                    <block s="changeYPosition" annotation="2">
+                        <l>50</l>
+                    </block>
+                    <block s="doWait">
+                        <l>1</l>
+                    </block>
+                    <block s="changeYPosition">
+                        <l>-50</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Whenever the message "jump" is sent</small-p>
+                    <small-p>Do this</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                <text>You can use</text>
+                <script>
+                    <block s="doBroadcastAndWait">
+                        <l/>
+                    </block>
+                </script>
+                <text>
+                    to send a message to all sprites to tell them to do
+                    something, and wait until they all finish before continuing.
+                </text>
+            </p>
+            <diagram>
+                <script>
+                    <block s="doBroadcastAndWait">
+                        <l annotation="1" menu="1"/>
+                    </block>
+                </script>
+                <menus>
+                    <menu>
+                        <item annotation="2">new...</item>
+                    </menu>
+                </menus>
+                <annotations>
+                    <small-p arrow-detour="10">
+                        Click to choose which message gets sent
+                    </small-p>
+                    <small-p>
+                        Choose "new" to type in your own message
+                    </small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

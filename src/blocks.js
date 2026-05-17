@@ -2609,7 +2609,9 @@ SyntaxElementMorph.prototype.isEmptySlot = function () {
 
 // SyntaxElementMorph speech bubble feedback:
 
-SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
+SyntaxElementMorph.prototype.showBubble = function (
+    value, exportPic, target, forHelpScreen
+) {
     var bubble,
         txt,
         img,
@@ -2632,7 +2634,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         }
     }
 
-    if ((value === undefined) || !wrrld) {
+    if ((value === undefined) || (!wrrld && !forHelpScreen)) {
         return null;
     }
     if (value instanceof ListWatcherMorph) {
@@ -2664,7 +2666,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
                     this.changed();
                 }
             };
-        } else if (value.isCustomSwatch) {
+        } else if (value.isCustomSwatch || forHelpScreen) {
             morphToShow = value;
         } else {
             img = value.fullImage();
@@ -2903,6 +2905,9 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         Math.max(this.rounding - 2, 6),
         0
     );
+    if (forHelpScreen) {
+        return bubble;
+    }
     bubble.popUp(
         wrrld,
         pos,
@@ -4556,9 +4561,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
     return leftOver;
 };
 
-// BlockMorph helpscreens
-
-BlockMorph.prototype.showHelp = function () {
+BlockMorph.prototype.showHelp = function (lang) {
     var myself = this,
         ide = this.parentThatIsA(IDE_Morph),
         pic = new Image(),
@@ -4568,7 +4571,10 @@ BlockMorph.prototype.showHelp = function () {
         comment,
         block,
         spec,
-        ctx;
+        sf,
+        padding = 15;
+
+    lang = lang || SnapTranslator.language;
 
     if (this.isCustomBlock) {
         if (this.isGlobal) {
@@ -4587,16 +4593,42 @@ BlockMorph.prototype.showHelp = function () {
         }
     }
 
-    pic.onload = function () {
-        help = newCanvas(new Point(pic.width, pic.height), true); // nonRetina
-        ctx = help.getContext('2d');
-        ctx.drawImage(pic, 0, 0);
+    pic.onload = function () {;
+        help = new Morph();
+        help.drawNew = function () {
+            var ctx;
+            this.image = newCanvas(this.extent());
+            ctx = this.image.getContext('2d');
+            ctx.drawImage(pic, 0, 0, this.width() - padding, this.height());
+        };
+        if (lang === 'old') {
+            help.setExtent(new Point(pic.width + padding, pic.height + padding));
+        } else {
+            help.setExtent(
+                new Point(pic.width / 2 + padding, pic.height / 2)
+            );
+        }
+        sf = new ScrollFrameMorph();
+        sf.contents.add(help);
+        sf.setColor(DialogBoxMorph.prototype.color);
+        sf.setWidth(help.width());
+        sf.setHeight(Math.min(help.height(), 400));
         new DialogBoxMorph().inform(
             'Help',
             null,
             myself.world(),
-            help
+            sf
         );
+    };
+    pic.onerror = function () {
+        if (lang === 'old') {
+            return;
+        }
+        if (lang === 'en') { // fall back to old help screens
+            myself.showHelp('old');
+            return;
+        }
+        myself.showHelp('en'); // fall back to english help screens
     };
 
     if (this.isCustomBlock) {
@@ -4627,7 +4659,9 @@ BlockMorph.prototype.showHelp = function () {
             return;
         }
     }
-    pic.src = ide.resourceURL('help', spec + '.png');
+    pic.src = ide.resourceURL(
+        'help', lang, spec + '.png'
+    );
 };
 
 // BlockMorph exporting picture with result bubble

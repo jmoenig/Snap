@@ -1,0 +1,81 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doChangeTempo">
+                <l/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doSetTempo" annotation="1">
+                        <l>60</l>
+                    </block>
+                    <block s="doForever" annotation="2">
+                        <script>
+                            <block s="doPlayNote" annotation="3">
+                                <l>64</l>
+                                <l>0.5</l>
+                            </block>
+                            <block s="doChangeTempo" annotation="4">
+                                <l>20</l>
+                            </block>
+                            <block s="doIf" annotation="5">
+                                <block s="reportGreaterThan">
+                                    <block s="getTempo"/>
+                                    <l>500</l>
+                                </block>
+                                <script>
+                                    <block s="doStopThis" annotation="6">
+                                        <l><option>this script</option></l>
+                                    </block>
+                                </script>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>Set tempo to 60 beats per minute</small-p>
+                    <small-p>Keep doing this:</small-p>
+                    <small-p>Play a note for 0.5 beats</small-p>
+                    <small-p>Increase the tempo by 20 beats</small-p>
+                    <small-p>If the tempo is greater than 500</small-p>
+                    <small-p>Stop this script</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Tempo is the speed (bpm = beats per minute) at which Snap! notes
+                and drums play. The larger the tempo value, the faster the notes
+                and drums will play.
+            </p>
+            <diagram>
+                <script>
+                    <block s="doPlayNote" annotation="1">
+                        <l>60</l>
+                        <l>0.5</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>0.5 beats = 0.5 seconds at 60 bpm</small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="doPlayNote" annotation="1">
+                        <l>48</l>
+                        <l>0.2</l>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>0.2 beats = 0.1 seconds at 120 bpm</small-p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

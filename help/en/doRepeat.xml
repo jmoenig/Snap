@@ -1,0 +1,32 @@
+<help-screen version="1">
+    <thumbnail>
+        <script>
+            <block s="doRepeat">
+                <l/>
+                <script/>
+            </block>
+        </script>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <diagram>
+                <script>
+                    <block s="doRepeat">
+                        <l>10</l>
+                        <script>
+                            <block s="forward" annotation="1">
+                                <l>10</l>
+                            </block>
+                            <block s="doWait">
+                                <l>0.5</l>
+                            </block>
+                        </script>
+                    </block>
+                </script>
+                <annotations>
+                    <p>Repeat this 10 times</p>
+                </annotations>
+            </diagram>
+        </column>
+    </box>
+</help-screen>

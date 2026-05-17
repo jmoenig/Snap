@@ -1,0 +1,150 @@
+<help-screen version="1">
+    <thumbnail>
+        <row>
+            <script>
+                <block s="reifyScript">
+                    <script/>
+                    <list/>
+                </block>
+            </script>
+            <script>
+                <block s="reifyReporter">
+                    <script/>
+                    <list/>
+                </block>
+            </script>
+            <script>
+                <block s="reifyPredicate">
+                    <script/>
+                    <list/>
+                </block>
+            </script>
+        </row>
+    </thumbnail>
+    <box color="gray">
+        <column>
+            <p>Reports a script or block as a value.</p>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reportSum" bubble="1">
+                            <l>2</l>
+                            <l>3</l>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <text>5</text>
+                    </bubbles>
+                </diagram>
+                <diagram rel-width="2">
+                    <script>
+                        <block s="reifyReporter" bubble="1">
+                            <autolambda>
+                                <block s="reportSum">
+                                    <l>2</l>
+                                    <l>3</l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                    </script>
+                    <bubbles>
+                        <script>
+                            <block s="reifyReporter" bubble="1">
+                                <autolambda>
+                                    <block s="reportSum">
+                                        <l>2</l>
+                                        <l>3</l>
+                                    </block>
+                                </autolambda>
+                                <list/>
+                            </block>
+                        </script>
+                    </bubbles>
+                </diagram>
+            </row>
+            <row>
+                <diagram rel-width="1">
+                    <script>
+                        <block s="reifyScript">
+                            <script>
+                                <block s="down"/>
+                                <block s="forward">
+                                    <l>10</l>
+                                </block>
+                            </script>
+                            <list/>
+                        </block>
+                    </script>
+                </diagram>
+                <diagram rel-width="2">
+                    <script>
+                        <block s="reifyScript" annotation="1">
+                            <script annotation="2"/>
+                            <list/>
+                        </block>
+                    </script>
+                    <annotations>
+                        <small-p>
+                            All rings are oval on the outside because a ring
+                            reports a value.
+                        </small-p>
+                        <small-p>
+                            The inside shape tells whether this ring expects
+                            a command script, a reporter, or a predicate
+                            block.
+                        </small-p>
+                    </annotations>
+                </diagram>
+            </row>
+        </column>
+    </box>
+    <box color="blue">
+        <column>
+            <p>
+                Some blocks have rings built in. These are input slots that
+                expect a script or block as the input value.
+            </p>
+            <diagram>
+                <script>
+                    <block s="evaluate">
+                        <block s="reifyReporter">
+                            <script annotation="1"/>
+                            <list/>
+                        </block>
+                        <list>
+                            <l/>
+                        </list>
+                    </block>
+                </script>
+                <annotations>
+                    <small-p>
+                        This slot in the CALL block takes a reporter as the
+                        input.
+                    </small-p>
+                </annotations>
+            </diagram>
+            <diagram>
+                <script>
+                    <block s="evaluate" bubble="1">
+                        <block s="reifyReporter">
+                            <autolambda>
+                                <block s="reportSum">
+                                    <l/>
+                                    <l>3</l>
+                                </block>
+                            </autolambda>
+                            <list/>
+                        </block>
+                        <list>
+                            <l>5</l>
+                        </list>
+                    </block>
+                </script>
+                <bubbles>
+                    <text>8</text>
+                </bubbles>
+            </diagram>
+        </column>
+    </box>
+</help-screen>
