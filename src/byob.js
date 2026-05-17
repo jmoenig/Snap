@@ -3125,11 +3125,13 @@ BlockDialogMorph.prototype.fixCategoriesLayout = function () {
 
 BlockDialogMorph.prototype.createTypeButtons = function () {
     var block,
-        clr = SpriteMorph.prototype.blockColorFor(this.category);
+        clr = SpriteMorph.prototype.blockColorFor(this.category),
+        clrs = SpriteMorph.prototype.blockColorsFor(this.category);
 
 
     block = new CommandBlockMorph();
     block.setColor(clr);
+    block.colors = clrs;
     block.setSpec(localize('Command'));
     this.addBlockTypeButton(
         () => this.setType('command'),
@@ -3139,6 +3141,7 @@ BlockDialogMorph.prototype.createTypeButtons = function () {
 
     block = new ReporterBlockMorph();
     block.setColor(clr);
+    block.colors = clrs;
     block.setSpec(localize('Reporter'));
     this.addBlockTypeButton(
         () => this.setType('reporter'),
@@ -3148,6 +3151,7 @@ BlockDialogMorph.prototype.createTypeButtons = function () {
 
     block = new ReporterBlockMorph(true);
     block.setColor(clr);
+    block.colors = clrs;
     block.setSpec(localize('Predicate'));
     this.addBlockTypeButton(
         () => this.setType('predicate'),
@@ -3157,6 +3161,7 @@ BlockDialogMorph.prototype.createTypeButtons = function () {
 
     block = new HatBlockMorph();
     block.setColor(clr);
+    block.colors = clrs;
     block.setSpec(localize('Event Hat'));
     this.addBlockTypeButton(
         () => this.setType('hat'),
@@ -4080,6 +4085,67 @@ PrototypeHatBlockMorph.prototype.blockSequence = function () {
 // PrototypeHatBlockMorph drawing:
 
 PrototypeHatBlockMorph.prototype.outlinePath = function (ctx, inset) {
+  var indent = this.corner * 2 + this.inset,
+    bottom = this.height() - this.corner,
+    bottomCorner = this.height() - this.corner - this.dentPlus * 2,
+    radius4 = Math.max(this.corner * 4 - inset, 0),
+    radius = Math.max(this.corner - inset, 0),
+    s = this.hatWidth,
+    h = this.hatHeight,
+    r = (4 * h * h + s * s) / (8 * h),
+    a = degrees(4 * Math.atan((2 * h) / s)),
+    sa = a / 2,
+    sp = Math.min(s * 1.7, this.width() - this.corner),
+    pos = this.position();
+
+  // top left:
+  ctx.arc(this.corner * 4, this.corner * 8, radius4, radians(-180), radians(-90), false);
+  
+  // top right:
+  ctx.arc(
+    this.width() - this.corner * 4,
+    this.corner * 8,
+    radius4,
+    radians(-90),
+    radians(-0),
+    false
+  );
+
+  // C-Slots
+  this.cSlots().forEach((slot) => {
+    slot.outlinePath(ctx, inset, slot.position().subtract(pos));
+  });
+
+  // bottom right:
+  ctx.arc(
+    this.width() - this.corner,
+    bottomCorner + inset * 2 - radius,
+    radius,
+    radians(0),
+    radians(90),
+    false,
+  );
+
+  if (!this.isStop()) {
+      var w = this.dent * 1.75 + this.corner / 2,
+        h = this.corner + this.dentPlus,
+        offset = this.inset + this.corner / 2,
+        c = this.dentCorner;
+      this.drawRoundedDent(ctx, inset, 0, bottomCorner + inset, true);
+  }
+
+  // bottom left:
+  ctx.arc(
+    this.corner,
+    bottomCorner + inset * 2 - radius,
+    radius,
+    radians(90),
+    radians(180),
+    false,
+  );
+};
+
+let x = function (ctx, inset) {
   var indent = this.corner * 2 + this.inset,
     bottom = this.height() - this.corner,
     bottomCorner = this.height() - this.corner * 2,

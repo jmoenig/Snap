@@ -187,7 +187,7 @@ SpriteMorph.prototype.blockColors = {
     tertiary: new Color(119, 77, 203),
     quaternary: new Color(119, 77, 203),
   },
-  sounds: {
+  sound: {
     primary: new Color(207, 99, 207),
     secondary: new Color(201, 79, 201),
     tertiary: new Color(189, 66, 189),
@@ -243,6 +243,9 @@ SpriteMorph.prototype.blockColors = {
   },
   other: {
     primary: new Color(170, 170, 170),
+    secondary: new Color(178, 178, 178),
+    tertiary: new Color(144, 144, 144),
+    quaternary: new Color(144, 144, 144),
   },
   text: new Color(255, 255, 255),
 };
@@ -4732,6 +4735,7 @@ SpriteMorph.prototype.makeBlock = function () {
     dlg.categories.refresh();
     dlg.types.children.forEach((each) => {
       each.setColor(clr);
+      each.colors = SpriteMorph.prototype.blockColorsFor(category);
       each.refresh();
     });
   }

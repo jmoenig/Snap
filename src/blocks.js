@@ -284,7 +284,7 @@ SyntaxElementMorph.prototype.setScale = function (num) {
   this.cSlotPadding = 4 * scale;
   this.typeInPadding = 3 * scale;
   this.labelPadding = 4 * scale;
-  this.labelFontName = "Helvetica, Arial"; //'Verdana';
+  this.labelFontName = '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif'; //'Verdana';
   this.labelFontStyle = "sans-serif";
   this.fontSize = 9.5 * scale; //10 * scale;
   this.embossing = new Point(
@@ -1836,8 +1836,22 @@ SyntaxElementMorph.prototype.bright = function () {
   return this.color.lighter(this.contrast).toString();
 };
 
-SyntaxElementMorph.prototype.dark = function () {
-  return this.colors?.tertiary || this.color.darker(this.contrast).toString();
+SyntaxElementMorph.prototype.dark = function (base) {
+  if (!base) {
+    base = this.color;
+  }
+  let isZebra = this.isZebra;
+  let color = this.colors?.tertiary || base.darker(this.contrast);
+  return isZebra ? color.lighter(this.zebraContrast).toString() : color.toString();
+};
+
+SyntaxElementMorph.prototype.secondary = function (base) {
+  if (!base) {
+    base = this.color;
+  }
+  let isZebra = this.isZebra;
+  let color = this.colors?.secondary || base.darker(this.contrast).darker(10);
+  return isZebra ? color.lighter(this.zebraContrast).toString() : color.toString();
 };
 
 // SyntaxElementMorph color changing:
@@ -1922,6 +1936,9 @@ SyntaxElementMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
   this.children.forEach((morph) => {
     if (morph instanceof SyntaxElementMorph) {
       morph.fixBlockColor(nearestBlock, isForced);
+    }
+    if (this.colors) {
+      morph.colors = Object.assign({}, this.colors);
     }
   });
 };
@@ -2189,6 +2206,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
     if (!contains(SymbolMorph.prototype.names, tokens[0])) {
       part = new StringMorph(tokens[0]);
       part.isBold = true;
+      
       part.fontName = this.labelFontName;
       part.fontStyle = this.labelFontStyle;
       part.fontSize = this.fontSize * (+tokens[1] || 1);
@@ -3071,6 +3089,8 @@ function BlockLabelMorph(
     color,
     fontName,
   );
+  this.fontWeight = 500;
+  this.fixLayout();
 }
 
 BlockLabelMorph.prototype.getRenderColor = function () {
@@ -5942,6 +5962,32 @@ BlockMorph.prototype.highlightImage = function (color, border) {
 
   return out;
 };
+BlockMorph.prototype.snapHighlight = function () {
+var fb, img, hi, ctx, out;
+  fb = this.fullBounds().extent();
+  this.doWithAlpha(1, () => {
+    let c = newCanvas(fb);
+    this.render(c.getContext("2d"));
+    img = c;
+  });
+
+  hi = newCanvas(fb);
+  ctx = hi.getContext("2d");
+
+  ctx.drawImage(img, 0, 0);
+
+  //ctx.globalCompositeOperation = "destination-out";
+  ctx.drawImage(img, 0, 0);
+
+  out = newCanvas(fb);
+  ctx = out.getContext("2d");
+  ctx.drawImage(hi, 0, 0);
+  ctx.globalCompositeOperation = "source-atop";
+  ctx.fillStyle = BLACK.toString();
+  ctx.fillRect(0, 0, out.width, out.height);
+
+  return out;
+}
 
 BlockMorph.prototype.highlightImageBlurred = function (color, blur) {
   var fb, img, hi, ctx;
@@ -6000,6 +6046,7 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
     return;
   }
   if (!this.zebraContrast && isForced) {
+    this.isZebra = false;
     return this.forceNormalColoring();
   }
 
@@ -6043,8 +6090,10 @@ BlockMorph.prototype.fixBlockColor = function (nearestBlock, isForced) {
 };
 
 BlockMorph.prototype.forceNormalColoring = function () {
+  this.isZebra = false;
   var clr = SpriteMorph.prototype.blockColorFor(this.category);
   this.setColor(clr);
+  this.colors = SpriteMorph.prototype.blockColorsFor(this.category);
   this.setLabelColor(
     WHITE,
     clr.darker(this.labelContrast),
@@ -6069,6 +6118,7 @@ BlockMorph.prototype.alternateBlockColor = function () {
   } else {
     this.setColor(clr, this.hasLabels()); // silently
   }
+  this.isZebra = !this.isZebra;
   this.fixLabelColor();
   this.fixChildrensBlockColor(true); // has issues if not forced
 };
@@ -8917,6 +8967,7 @@ ScriptsMorph.prototype.step = function () {
     this.feedbackMorph.destroy();
     this.feedbackMorph.parent = null;
   }
+  this.feedbackMorph.render = BoxMorph.prototype.render;
   if (
     this.focus &&
     (!world.keyboardFocus || world.keyboardFocus instanceof StageMorph)
@@ -8990,6 +9041,14 @@ ScriptsMorph.prototype.showCommandDropFeedback = function (block) {
   this.feedbackMorph.color = new Color(0, 0, 0, 0.5);
   // TODO: will add rendering;
   console.warn(target, SyntaxElementMorph.prototype.labelPadding);
+
+  let feedback = block.snapHighlight();
+  this.feedbackMorph.setExtent(block.fullBounds().extent());
+  this.feedbackMorph.render = function (ctx) {
+    ctx.globalAlpha = 0.5;
+    ctx.drawImage(feedback, 0, 0);
+  };
+
   x = target.element.left();
   y = target.point.y - target.element.corner - target.element.dentPlus;
   if (target.loc !== "bottom") {
@@ -12830,13 +12889,16 @@ InputSlotMorph.prototype.render = function (ctx) {
     borderColor = this.color;
   } else if (this.parent) {
     borderColor = this.parent.color;
+    this.colors = this.parent.colors;
+    this.isZebra = this.parent.isZebra;
+    this.zebraContrast = this.parent.zebraContrast;
   } else {
     borderColor = new Color(120, 120, 120);
   }
   ctx.fillStyle = this.color.toString();
   if (this.isReadOnly && !this.cachedNormalColor) {
     // unless flashing
-    ctx.fillStyle = this.parent.colors?.secondary || borderColor.darker(10).toString();
+    ctx.fillStyle = this.secondary(borderColor);
     if (this.isStatic) {
       ctx.fillStyle = borderColor.toString();
     }
@@ -12845,8 +12907,8 @@ InputSlotMorph.prototype.render = function (ctx) {
   // cache my border colors
   this.cachedClr = borderColor.toString();
   this.cachedClrBright = borderColor.lighter(this.contrast).toString();
-  this.cachedClrDark = this.parent.colors?.secondary || borderColor.darker(this.contrast).toString();
-  ctx.strokeStyle = this.parent.colors?.tertiary || this.parent.color.darker(20).toString();
+  this.cachedClrDark = this.secondary(borderColor);
+  ctx.strokeStyle = this.dark(this.parent.color);
   ctx.lineWidth = this.flatEdge * 2;
   if (this.isSquare()) {
     ctx.beginPath();
@@ -13108,6 +13170,9 @@ function InputSlotStringMorph(
     color,
     fontName,
   );
+  this.fontName = SyntaxElementMorph.prototype.labelFontName;
+  this.fontWeight = 500;
+  this.fixLayout();
 }
 
 InputSlotStringMorph.prototype.getRenderColor = function () {
@@ -13161,6 +13226,9 @@ function InputSlotTextMorph(
     shadowOffset,
     shadowColor,
   );
+  this.fontName = SyntaxElementMorph.prototype.labelFontName;
+  this.fontWeight = 500;
+  this.fixLayout();
 }
 
 InputSlotTextMorph.prototype.getRenderColor =
@@ -13199,6 +13267,7 @@ TemplateSlotMorph.prototype.init = function (name) {
   template.isTemplate = true;
   if (modules.objects !== undefined) {
     template.color = SpriteMorph.prototype.blockColor.variables;
+    template.colors = SpriteMorph.prototype.blockColors.variables;
     template.category = "variables";
   } else {
     template.color = new Color(243, 118, 29);
@@ -13297,6 +13366,7 @@ TemplateSlotMorph.prototype.unflashScope = function () {
 TemplateSlotMorph.prototype.render = function (ctx) {
   if (this.parent instanceof Morph) {
     this.color = this.parent.color.copy();
+    this.colors = this.parent.colors;
   }
   BlockMorph.prototype.render.call(this, ctx);
 };
@@ -13673,7 +13743,7 @@ BooleanSlotMorph.prototype.drawDiamond = function (ctx, progress) {
         clr = new Color(200, 0, 0);
         break;
       default:
-        clr = this.color.darker(25);
+        clr = this.dark();
     }
   }
   if (progress == -1) {
