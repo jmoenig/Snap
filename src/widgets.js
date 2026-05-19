@@ -56,6 +56,7 @@
         ToggleElementMorph
     MenuMorph*
         PianoMenuMorph
+        KeyboardMenuMorph
 
     * from Morphic.js
 
@@ -75,6 +76,8 @@
     InputFieldMorph
     PianoMenuMorph
     PianoKeyMorph
+    KeyboardMenuMorph
+    KeyboardKeyMorph
 
 */
 
@@ -101,6 +104,8 @@ var AlignmentMorph;
 var InputFieldMorph;
 var PianoMenuMorph;
 var PianoKeyMorph;
+var KeyboardMenuMorph;
+var KeyboardKeyMorph;
 
 // PushButtonMorph /////////////////////////////////////////////////////
 
@@ -3975,3 +3980,379 @@ PianoKeyMorph.prototype.mouseLeave = function () {
     this.userState = 'normal';
     this.rerender();
 };
+
+
+
+// KeyboardMenuMorph //////////////////////////////////////////////////////
+/* 
+    I am a menu that looks like a keyboard.
+*/
+
+// KeyboardMenuMorph inherits from MenuMorph
+
+KeyboardMenuMorph.prototype = new MenuMorph();
+KeyboardMenuMorph.prototype.constructor = KeyboardMenuMorph;
+KeyboardMenuMorph.uber = MenuMorph.prototype;
+
+// KeyboardMenuMorph instance creation:
+
+function KeyboardMenuMorph(target, environment, fontSize) {
+    this.shifted = false
+    this.init(target, environment, fontSize);
+}
+
+KeyboardMenuMorph.prototype.init = function (
+    target,
+    environment,
+    fontSize
+) {
+    KeyboardMenuMorph.uber.init.call(this, target, null, environment, fontSize);
+};
+
+KeyboardMenuMorph.prototype.createItems = function () {
+    var item,
+        fb,
+        x,
+        y,
+        label,
+        blackkey,
+        key,
+        keycolor,
+        keywidth,
+        keyheight = this.fontSize * 2,
+        keymargin = this.fontSize * 0.7,
+        keyposition,
+        rows;
+    
+    
+    rows = [
+        [['1','!'], ['2','@'], ['3','#'], ['4','$'], ['5','%'], ['6','^'], ['7','&'], ['8','*'], ['9', '('], ['0', ')'], ['-', '_'], ['=', '+']],
+        'qwertyuiop'.split('').map(letter => [letter, letter.toLocaleUpperCase()]).concat([['[','{'], [']','}'], ['\\','|']]),
+        'asdfghjkl'.split('').map(letter => [letter, letter.toLocaleUpperCase()]).concat([[';',':'], ["'",'"']]),
+        'zxcvbnm'.split('').map(letter => [letter, letter.toLocaleUpperCase()]).concat([[',','<'], ['.','>'], ['/','?']]),
+    ];
+
+    this.children.forEach(m => m.destroy());
+    this.children = [];
+    if (!this.isListContents) {
+        this.edge = MorphicPreferences.isFlat ? 3 : 5;
+        this.border = MorphicPreferences.isFlat ? 1 : 2;
+    }
+    this.color = WHITE;
+    this.borderColor = new Color(60, 60, 60);
+    this.bounds.setExtent(ZERO);
+
+    x = this.left() + keymargin + 1;
+    y = this.top() + keymargin + 1;
+
+    let createRow = (row) => {
+        keywidth = keyheight
+        row.forEach(tuple => {
+            console.log('creating key', tuple)
+            keyposition = new Point(x + 1, y);
+
+            item = new KeyboardKeyMorph(
+                this.target,
+                tuple,
+                tuple,
+                this.fontSize || MorphicPreferences.menuFontSize,
+                MorphicPreferences.menuFontName,
+                this.environment,
+                null, // bubble help hint
+                BLACK, // color
+                null, // bold
+                null, // italic
+                null, // doubleclick action
+                null  // shortcut
+            );
+            item.setPosition(keyposition);
+            this.add(item);
+
+            x += item.width() + keymargin
+            keyheight = item.height()
+        })
+    }
+
+    rows.forEach(row => {
+        x = this.left() + keymargin + 1;
+        createRow(row)
+        y += keyheight + keymargin
+    })
+
+    fb = this.fullBounds();
+    this.bounds.setExtent(fb.extent().add(2));
+};
+
+KeyboardMenuMorph.prototype.popup = function (world, pos) {
+	var scroller;
+
+    this.createItems();
+    this.setPosition(pos);
+    this.addShadow(new Point(2, 2), 80);
+    this.keepWithin(world);
+
+    if (this.bottom() > world.bottom()) {
+    	// scroll menu items if the menu is taller than the world
+    	this.removeShadow();
+        scroller = this.scroll();
+        this.bounds.corner.y = world.bottom() - 2;
+        this.addShadow(new Point(2, 2), 80);
+        scroller.setHeight(world.bottom() - scroller.top() - 6);
+        scroller.adjustScrollBars(); // ?
+     }
+
+    if (world.activeMenu) {
+        world.activeMenu.destroy();
+    }
+    // Don't check .items
+    // if (this.items.length < 1 && !this.title) { // don't show empty menus
+    //     return;
+    // }
+    world.add(this);
+    world.activeMenu = this;
+    this.world = world; // optionally enable keyboard support
+    this.fullChanged();
+};
+
+KeyboardMenuMorph.prototype.setShifted = function (shifted) {
+    if (this.shifted != shifted) {
+        this.shifted = shifted
+        console.log('setting shifted', shifted)
+        this.children.forEach(child => {
+            if (child instanceof KeyboardKeyMorph) {
+                child.setShifted(this.shifted)
+            }
+        })
+    }
+}
+
+KeyboardMenuMorph.prototype.processKeyDown = function (event) {
+    const keyMap = {
+        'ArrowUp': 'up arrow',
+        'ArrowDown': 'down arrow',
+        'ArrowLeft': 'left arrow',
+        'ArrowRight': 'right arrow',
+        ' ': 'space',
+    }
+
+    const modifiers = ['Shift', 'Alt', 'Meta', 'Control', 'CapsLock', 'NumLock', 'Tab']
+    
+    if (event.key == 'Escape') {
+        return this.destroy()
+    }
+
+    if (event.shiftKey) {
+        this.setShifted(true)
+    }
+
+    if (event.key) {
+        let key = event.key
+        key = keyMap[key] || key
+
+        if (!modifiers.includes(key)) {
+            if (key.length > 1) {
+                key = key.toLocaleLowerCase()
+            }
+            
+            this.target(key)
+            return this.destroy()
+        }
+    }
+
+// 
+//     for (let child of this.children) {
+//         if (child instanceof KeyboardKeyMorph) {
+//             if (child.testKey(event)) {
+//                 return child.mouseClickLeft()
+//             }
+//         }
+//     }
+};
+
+KeyboardMenuMorph.prototype.processKeyUp = function (event) {
+    if (!event.shiftKey) {
+        this.setShifted(false)
+    }
+};
+
+KeyboardMenuMorph.prototype.destroy = function () {
+    KeyboardMenuMorph.uber.destroy.call(this);
+};
+
+// KeyboardKeyMorph ///////////////////////////////////////////////////////
+
+KeyboardKeyMorph.prototype = new MenuItemMorph();
+KeyboardKeyMorph.prototype.constructor = KeyboardKeyMorph;
+KeyboardKeyMorph.uber = MenuItemMorph.prototype;
+
+function KeyboardKeyMorph(
+    target,
+    keys,
+    labelString, // can also be a Morph or a Canvas or a tuple: [icon, string]
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction, // optional when used as list morph item
+    shortcut
+) {
+    this.init(
+        target,
+        keys,
+        labelString,
+        fontSize,
+        fontStyle,
+        environment,
+        hint,
+        color,
+        bold,
+        italic,
+        doubleClickAction,
+        shortcut
+    );
+}
+
+KeyboardKeyMorph.prototype.init = function (
+    target,
+    keys,
+    labelString,
+    fontSize,
+    fontStyle,
+    environment,
+    hint,
+    color,
+    bold,
+    italic,
+    doubleClickAction,
+    shortcut
+) {
+    this.shifted = false
+    this.keys = keys
+    
+    KeyboardKeyMorph.uber.init.call(
+        this,
+        target,
+        keys[0],
+        labelString,
+        fontSize,
+        fontStyle,
+        environment,
+        hint,
+        color,
+        bold,
+        italic,
+        doubleClickAction,
+        shortcut
+    );
+
+    this.border = 2
+    this.borderColor = BLACK
+    this.edge = 6
+};
+
+KeyboardKeyMorph.prototype.createLabel = function () {
+    var w, h,
+        pad = this.fontSize * 2,
+        minSize = this.fontSize * 3;
+    if (this.label) {
+        this.label.destroy();
+        this.children = []
+    }
+
+    this.label = this.createLabelPart(this.labelString);
+    this.add(this.label);
+    w = this.label.width();
+    h = this.label.height();
+    this.setExtent(new Point(
+        Math.max(w + pad, minSize),
+        Math.max(h + pad, minSize),
+    ));
+};
+
+KeyboardKeyMorph.prototype.createLabelPart = function (source) {
+    if (isString(source)) {
+        return this.createLabelString(source);
+    }
+    if (source instanceof Array) {
+        let item = source[+this.shifted];
+
+        if (isString(item)) {
+            return this.createLabelString(item)
+        } else {
+            return this.createIcon(item)
+        }
+    }
+    // assume it's either a Morph or a Canvas
+    return this.createIcon(source);
+};
+
+KeyboardKeyMorph.prototype.setShifted = function (shifted) {
+    this.shifted = shifted
+    this.action = this.keys[+this.shifted]
+    this.createLabel()
+    this.fixLayout()
+}
+
+KeyboardKeyMorph.prototype.fixLayout = function () {
+    // this.edge = MorphicPreferences.isFlat ? 3 : 5;
+    // this.border = MorphicPreferences.isFlat ? 1 : 2;
+    // this.borderColor = BLACK
+
+    this.label.setPosition(
+        this.center().subtract(
+            this.label.extent().divideBy(2)
+        )
+    );
+};
+
+KeyboardKeyMorph.prototype.render = function (ctx) {
+    if ((this.edge === 0) && (this.border === 0)) {
+        KeyboardKeyMorph.uber.render.call(this, ctx);
+        return;
+    }
+    var colorBak = this.color;
+    if (this.userState === 'highlight') {
+        this.color = this.highlightColor;
+    } else if (this.userState === 'pressed') {
+        this.color = this.pressColor;
+    }
+
+    ctx.fillStyle = this.color.toString();
+    ctx.beginPath();
+    this.outlinePath(
+        ctx,
+        Math.max(this.edge - this.border, 0),
+        this.border
+    );
+    ctx.closePath();
+    ctx.fill();
+    if (this.border > 0) {
+        ctx.lineWidth = this.border;
+        ctx.strokeStyle = this.borderColor.toString();
+        ctx.beginPath();
+        this.outlinePath(ctx, this.edge, this.border / 2);
+        ctx.closePath();
+        ctx.stroke();
+    }
+    this.color = colorBak;
+};
+
+KeyboardKeyMorph.prototype.outlinePath = function (ctx, corner, inset) {
+    BoxMorph.prototype.outlinePath.call(this, ctx, corner, inset);
+};
+
+KeyboardKeyMorph.prototype.testKey = function (event) {
+    var keys;
+
+    if (typeof this.action === 'string') {
+        keys = [this.action]
+    } else {
+        keys = this.action
+    }
+    return keys.includes(event.key)
+}
+
+
