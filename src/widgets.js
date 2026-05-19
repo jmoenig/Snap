@@ -4046,27 +4046,32 @@ KeyboardMenuMorph.prototype.createItems = function () {
     x = this.left() + keymargin + 1;
     y = this.top() + keymargin + 1;
 
+    let addKey = (key, label, position) => {
+        item = new KeyboardKeyMorph(
+            this.target,
+            key,
+            label || key,
+            this.fontSize || MorphicPreferences.menuFontSize,
+            MorphicPreferences.menuFontName,
+            this.environment,
+            null, // bubble help hint
+            BLACK, // color
+            null, // bold
+            null, // italic
+            null, // doubleclick action
+            null  // shortcut
+        );
+        item.setPosition(position)
+        this.add(item);
+        return item
+    }
+
     let createRow = (row) => {
         keywidth = keysize
         row.forEach(tuple => {
             keyposition = new Point(x + 1, y);
 
-            item = new KeyboardKeyMorph(
-                this.target,
-                tuple,
-                tuple,
-                this.fontSize || MorphicPreferences.menuFontSize,
-                MorphicPreferences.menuFontName,
-                this.environment,
-                null, // bubble help hint
-                BLACK, // color
-                null, // bold
-                null, // italic
-                null, // doubleclick action
-                null  // shortcut
-            );
-            item.setPosition(keyposition);
-            this.add(item);
+            item = addKey(tuple, null, keyposition)
 
             x += item.width() + keymargin
             keysize = item.height()
@@ -4085,26 +4090,52 @@ KeyboardMenuMorph.prototype.createItems = function () {
     x = startx + keysize * 2.4
     createRow(rows[3])
 
-    x = this.left() + keysize * 5
+    let minArrowPos = x + keymargin * 2
+
+    x = startx
 
     keyposition = new Point(x + 1, y);
+    item = addKey(['any key'], null, keyposition)
 
-    item = new KeyboardKeyMorph(
-        this.target,
-        ['space'],
-        ['space'],
-        this.fontSize || MorphicPreferences.menuFontSize,
-        MorphicPreferences.menuFontName,
-        this.environment,
-        null, // bubble help hint
-        BLACK, // color
-        null, // bold
-        null, // italic
-        null, // doubleclick action
-        null  // shortcut
-    );
-    item.setPosition(keyposition);
-    this.add(item);
+    x = startx + keysize * 5
+
+    keyposition = new Point(x + 1, y);
+    item = addKey(['space'], null, keyposition)
+
+    x += item.width() + (keysize + keymargin) * 1
+    x = Math.max(x, minArrowPos - keysize)
+
+    keyposition = new Point(x + 1, y);
+    item = addKey(['left arrow'], [new SymbolMorph(
+        'arrowLeftThin',
+        this.fontSize,
+        BLACK,
+    )], keyposition)
+
+    x += item.width() + keymargin
+
+    keyposition = new Point(x + 1, y);
+    item = addKey(['down arrow'], [new SymbolMorph(
+        'arrowDownThin',
+        this.fontSize,
+        BLACK,
+    )], keyposition)
+
+    keyposition = new Point(x + 1, y - keysize - keymargin);
+    item = addKey(['up arrow'], [new SymbolMorph(
+        'arrowUpThin',
+        this.fontSize,
+        BLACK,
+    )], keyposition)
+
+    x += item.width() + keymargin
+
+    keyposition = new Point(x + 1, y);
+    item = addKey(['right arrow'], [new SymbolMorph(
+        'arrowRightThin',
+        this.fontSize,
+        BLACK,
+    )], keyposition)
 
     fb = this.fullBounds();
     this.bounds.setExtent(fb.extent().add(keymargin));
