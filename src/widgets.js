@@ -4203,7 +4203,7 @@ KeyboardMenuMorph.prototype.processKeyDown = function (event) {
     key = ctrl + keyName;
 
     if (keyName) {
-        this.target.call(this.environment, key)
+        this.target.call(this.environment, [key])
         return this.destroy()
     }
 };
@@ -4274,7 +4274,7 @@ KeyboardKeyMorph.prototype.init = function (
     KeyboardKeyMorph.uber.init.call(
         this,
         target,
-        keys[0],
+        [keys[0]],
         labelString,
         fontSize,
         fontStyle,
@@ -4333,10 +4333,22 @@ KeyboardKeyMorph.prototype.createLabelPart = function (source) {
     return this.createIcon(source);
 };
 
+KeyboardKeyMorph.prototype.createLabelString = function (string) {
+    var lbl = new TextMorph(
+        localize(string),
+        this.fontSize,
+        this.fontStyle,
+        this.labelBold,
+        this.labelItalic
+    );
+    lbl.setColor(this.labelColor);
+    return lbl;
+};
+
 KeyboardKeyMorph.prototype.setShifted = function (shifted) {
     this.shifted = shifted
     if (this.keys.length > 1) {
-        this.action = this.keys[+this.shifted]
+        this.action = [this.keys[+this.shifted]]
     }
     this.createLabel()
     this.fixLayout()
