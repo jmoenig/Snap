@@ -4028,9 +4028,9 @@ KeyboardMenuMorph.prototype.createItems = function () {
     
     rows = [
         [['`','~'], ['1','!'], ['2','@'], ['3','#'], ['4','$'], ['5','%'], ['6','^'], ['7','&'], ['8','*'], ['9', '('], ['0', ')'], ['-', '_'], ['=', '+'], ['backspace']],
-        [['tab']].concat('qwertyuiop'.split('').map(letter => [letter, letter.toLocaleUpperCase()])).concat([['[','{'], [']','}'], ['\\','|']]),
-        'asdfghjkl'.split('').map(letter => [letter, letter.toLocaleUpperCase()]).concat([[';',':'], ["'",'"'], ['enter']]),
-        'zxcvbnm'.split('').map(letter => [letter, letter.toLocaleUpperCase()]).concat([[',','<'], ['.','>'], ['/','?']]),
+        [['tab']].concat('qwertyuiop'.split('').map(letter => [letter]), [['[','{'], [']','}'], ['\\','|']]),
+        'asdfghjkl'.split('').map(letter => [letter]).concat([[';',':'], ["'",'"'], ['enter']]),
+        'zxcvbnm'.split('').map(letter => [letter]).concat([[',','<'], ['.','>'], ['/','?']]),
     ];
 
     this.children.forEach(m => m.destroy());
