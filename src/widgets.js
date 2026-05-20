@@ -4245,6 +4245,12 @@ KeyboardMenuMorph.prototype.processKeyUp = function (event) {
     }
 };
 
+KeyboardMenuMorph.prototype.getFocus = function () {
+    this.world.keyboardFocus = this;
+    this.selection = null;
+    this.hasFocus = true;
+};
+
 KeyboardMenuMorph.prototype.destroy = function () {
     KeyboardMenuMorph.uber.destroy.call(this);
 };
