@@ -185,3 +185,7 @@ Graph.prototype.getLeaves = function () {
 
     throw new Error('unsupported graph type');
 }
+
+Graph.prototype.valueOf = function () {
+    return NaN;
+}
