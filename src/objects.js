@@ -10969,16 +10969,16 @@ function Gain(value) {
 
 function Filter(type, parameters) {
     this.type = type;
-    this.parameters = parameters
+    this.parameters = parameters;
 }
 
 // Effect ////////////////////////////////////////////////////////////
 
 // This is a BeatBlox effect
 
-function AudioEffect(type) {
-    // TODO update this
+function AudioEffect(type, parameters) {
     this.type = type;
+    this.parameters = parameters;
 }
 
 // Sound /////////////////////////////////////////////////////////////
