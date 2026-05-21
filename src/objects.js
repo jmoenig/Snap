@@ -10191,6 +10191,8 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
         contents = new SymbolMorph('gain', 30);
     } else if (data instanceof Filter) {
         contents = new SymbolMorph('filter', 30);
+    } else if (data instanceof AudioEffect) {
+        contents = new SymbolMorph('effect', 30); 
     } else if (data instanceof HTMLCanvasElement) {
         img = data;
         contents = new Morph();
@@ -11952,6 +11954,8 @@ CellMorph.prototype.createContents = function () {
             this.contentsMorph = new SymbolMorph('gain', 30);
         } else if (this.contents instanceof Filter) {
             this.contentsMorph = new SymbolMorph('filter', 30);
+        } else if (this.contents instanceof AudioEffect) {
+            this.contentsMorph = new SymbolMorph('effect', 30);    
         } else if (this.contents instanceof List) {
             if (this.contents.isTable()) {
                 this.contentsMorph = new TableFrameMorph(new TableMorph(

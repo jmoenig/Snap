@@ -418,7 +418,7 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         return new SymbolMorph(
             'filter', SyntaxElementMorph.prototype.fontSize
         ).getImage();
-    } else if (dta instanceof Filter) {
+    } else if (dta instanceof AudioEffect) {
         return new SymbolMorph(
             'effect', SyntaxElementMorph.prototype.fontSize
         ).getImage();
