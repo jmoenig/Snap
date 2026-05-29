@@ -4204,9 +4204,10 @@ KeyboardMenuMorph.prototype.processKeyDown = function (event) {
     case 13:
         keyName = 'enter';
         break;
-    case 16:
-    case 17:
-    case 18:
+    case 16: // shift
+    case 17: // control
+    case 18: // alt
+    case 91: // meta
         return;
     case 27:
         keyName = 'esc';
