@@ -7291,7 +7291,8 @@ IDE_Morph.prototype.switchToScene = function (
     scene.applyGlobalSettings();
     this.selectSprite(this.scene.currentSprite, true);
     this.corral.album.updateSelection();
-    this.hideSpritePanes(this.scene.hideSprites); // this.fixLayout();
+    this.hideSpritePanes(this.scene.hideSprites);
+    this.fixLayout();
     this.corral.album.contents.children.forEach(function (morph) {
         if (morph.state) {
             morph.scrollIntoView();
