@@ -4112,7 +4112,7 @@ KeyboardMenuMorph.prototype.createItems = function () {
         'arrowUpThin',
         this.fontSize,
         BLACK,
-    )], keyposition);
+    )]);
 
     newRow();
     
@@ -4124,19 +4124,19 @@ KeyboardMenuMorph.prototype.createItems = function () {
         'arrowLeftThin',
         this.fontSize,
         BLACK,
-    )], keyposition);
+    )]);
 
     addKey(['down arrow'], 1, [new SymbolMorph(
         'arrowDownThin',
         this.fontSize,
         BLACK,
-    )], keyposition);
+    )]);
 
     addKey(['right arrow'], 1, [new SymbolMorph(
         'arrowRightThin',
         this.fontSize,
         BLACK,
-    )], keyposition);
+    )]);
 
     return;
 };
