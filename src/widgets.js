@@ -4010,28 +4010,12 @@ KeyboardMenuMorph.prototype.init = function (
 };
 
 KeyboardMenuMorph.prototype.createItems = function () {
-    var item,
-        fb,
-        startx,
-        x,
-        y,
-        label,
-        blackkey,
-        key,
-        keycolor,
-        keywidth,
-        keysize = this.fontSize * 2,
-        keymargin = this.fontSize * 0.7,
-        keyposition,
+    var keysize = this.fontSize * 2,
+        outsideMargin = this.fontSize * 0.7,
+        startX = this.left() + outsideMargin,
+        position = new Point(startX, this.top() + outsideMargin),
+        widths,
         rows;
-    
-    
-    rows = [
-        [['`','~'], ['1','!'], ['2','@'], ['3','#'], ['4','$'], ['5','%'], ['6','^'], ['7','&'], ['8','*'], ['9', '('], ['0', ')'], ['-', '_'], ['=', '+'], ['backspace']],
-        [['tab']].concat('qwertyuiop'.split('').map(letter => [letter]), [['[','{'], [']','}'], ['\\','|']]),
-        'asdfghjkl'.split('').map(letter => [letter]).concat([[';',':'], ["'",'"'], ['enter']]),
-        'zxcvbnm'.split('').map(letter => [letter]).concat([[',','<'], ['.','>'], ['/','?']]),
-    ];
 
     this.children.forEach(m => m.destroy());
     this.children = [];
@@ -4041,12 +4025,12 @@ KeyboardMenuMorph.prototype.createItems = function () {
     }
     this.color = WHITE;
     this.borderColor = new Color(60, 60, 60);
-    this.bounds.setExtent(ZERO);
+    this.bounds.setExtent(new Point(
+        keysize * 17.25 + outsideMargin * 2,
+        keysize * 5 + outsideMargin * 2
+    ));
 
-    x = this.left() + keymargin + 1;
-    y = this.top() + keymargin + 1;
-
-    let addKey = (key, label, position) => {
+    let addKey = (key, size, label) => {
         item = new KeyboardKeyMorph(
             this.target,
             key,
@@ -4054,91 +4038,107 @@ KeyboardMenuMorph.prototype.createItems = function () {
             this.fontSize || MorphicPreferences.menuFontSize,
             MorphicPreferences.menuFontName,
             this.environment,
+            keysize,
+            size || 1,
             null, // bubble help hint
             BLACK, // color
             null, // bold
             null, // italic
             null, // doubleclick action
-            null  // shortcut
         );
-        item.setPosition(position)
+        item.setPosition(position);
+        item.setExtent(new Point(keysize, keysize));
         this.add(item);
+        item.setShifted(false); // if we do this, it wont properly resize (if size is not 1). weird.
+        position.x += keysize * (size || 1);
         return item
+    };
+
+    let addSpacing = (size) => {
+        position.x += keysize * (size || 1);
     }
 
-    let createRow = (row) => {
-        keywidth = keysize
-        row.forEach(tuple => {
-            keyposition = new Point(x + 1, y);
+    widths = {
+        "backspace": 3
+    };
 
-            item = addKey(tuple, null, keyposition)
+    rows = [
+        [],
+        [['tab']].concat('qwertyuiop'.split('').map(letter => [letter]), [['[','{'], [']','}'], ['\\','|']]),
+        'asdfghjkl'.split('').map(letter => [letter]).concat([[';',':'], ["'",'"'], ['enter']]),
+        'zxcvbnm'.split('').map(letter => [letter]).concat([[',','<'], ['.','>'], ['/','?']]),
+    ];
 
-            x += item.width() + keymargin
-            keysize = item.height()
-        })
-        
-        y += keysize + keymargin
+    let newRow = () => {
+        position.x = startX;
+        position.y += keysize;
+    };
+
+    let addCharRow = (string) => {
+        for (const key of string.split('')) {
+            addKey([key]);
+        }
+    };
+
+    let addKeyList = (list) => {
+        for (const key of list) {
+            addKey(key);
+        }
     }
 
-    startx = this.left() + keymargin + 1;
-    x = startx;
-    createRow(rows[0])
-    x = startx
-    createRow(rows[1])
-    x = startx + keysize * 1.6
-    createRow(rows[2])
-    x = startx + keysize * 2.4
-    createRow(rows[3])
+    addKeyList([['`', '~'], ['1', '!'], ['2', '@'], ['3', '#'], ['4', '$'],
+        ['5', '%'], ['6', '^'], ['7', '&'], ['8', '*'], ['9', '('], ['0', ')'],
+        ['-', '_'], ['=', '+']]);
+    addKey(['backspace'], 3);
+    newRow();
 
-    let minArrowPos = x + keymargin * 2
+    addKey(['tab'], 1.5);
+    addCharRow('qwertyuiop');
+    addKeyList([['[','{'], [']','}'], ['\\','|']]);
+    newRow();
 
-    x = startx
+    addKey(['any key'], 1.75, "any");
+    addCharRow('asdfghjkl');
+    addKeyList([[';',':'], ["'",'"']])
+    addKey(['enter'], 2);
 
-    keyposition = new Point(x + 1, y);
-    item = addKey(['any key'], null, keyposition)
+    newRow();
 
-    x = startx + keysize * 5
-
-    keyposition = new Point(x + 1, y);
-    item = addKey(['space'], null, keyposition)
-
-    x += item.width() + (keysize + keymargin) * 1
-    x = Math.max(x, minArrowPos - keysize)
-
-    keyposition = new Point(x + 1, y);
-    item = addKey(['left arrow'], [new SymbolMorph(
-        'arrowLeftThin',
-        this.fontSize,
-        BLACK,
-    )], keyposition)
-
-    x += item.width() + keymargin
-
-    keyposition = new Point(x + 1, y);
-    item = addKey(['down arrow'], [new SymbolMorph(
-        'arrowDownThin',
-        this.fontSize,
-        BLACK,
-    )], keyposition)
-
-    keyposition = new Point(x + 1, y - keysize - keymargin);
-    item = addKey(['up arrow'], [new SymbolMorph(
+    addSpacing(2.25);
+    addCharRow('zxcvbnm');
+    addKeyList([[',','<'], ['.','>'], ['/','?']]);
+    addSpacing(3);
+    addKey(['up arrow'], 1, [new SymbolMorph(
         'arrowUpThin',
         this.fontSize,
         BLACK,
-    )], keyposition)
+    )], keyposition);
 
-    x += item.width() + keymargin
+    newRow();
+    
+    addSpacing(4.75);
+    addKey(['space'], 5);
+    
+    addSpacing(4.5);
+    addKey(['left arrow'], 1, [new SymbolMorph(
+        'arrowLeftThin',
+        this.fontSize,
+        BLACK,
+    )], keyposition);
 
-    keyposition = new Point(x + 1, y);
-    item = addKey(['right arrow'], [new SymbolMorph(
+    addKey(['down arrow'], 1, [new SymbolMorph(
+        'arrowDownThin',
+        this.fontSize,
+        BLACK,
+    )], keyposition);
+
+    addKey(['right arrow'], 1, [new SymbolMorph(
         'arrowRightThin',
         this.fontSize,
         BLACK,
-    )], keyposition)
+    )], keyposition);
 
-    fb = this.fullBounds();
-    this.bounds.setExtent(fb.extent().add(keymargin));
+    return;
 };
 
 KeyboardMenuMorph.prototype.popup = function (world, pos) {
@@ -4181,6 +4181,10 @@ KeyboardMenuMorph.prototype.setShifted = function (shifted) {
             }
         })
     }
+}
+
+KeyboardMenuMorph.prototype.toggleShift = function () {
+    this.setShifted(!this.shifted);
 }
 
 KeyboardMenuMorph.prototype.processKeyDown = function (event) {
@@ -4269,6 +4273,8 @@ function KeyboardKeyMorph(
     fontSize,
     fontStyle,
     environment,
+    keySize,
+    size,
     hint,
     color,
     bold,
@@ -4283,6 +4289,8 @@ function KeyboardKeyMorph(
         fontSize,
         fontStyle,
         environment,
+        keySize,
+        size,
         hint,
         color,
         bold,
@@ -4299,15 +4307,13 @@ KeyboardKeyMorph.prototype.init = function (
     fontSize,
     fontStyle,
     environment,
-    hint,
-    color,
-    bold,
-    italic,
-    doubleClickAction,
-    shortcut
+    keySize,
+    size
 ) {
     this.shifted = false
     this.keys = keys
+    this.keySize = keySize;
+    this.size = size;
     
     KeyboardKeyMorph.uber.init.call(
         this,
@@ -4317,23 +4323,16 @@ KeyboardKeyMorph.prototype.init = function (
         fontSize,
         fontStyle,
         environment,
-        hint,
-        color,
-        bold,
-        italic,
-        doubleClickAction,
-        shortcut
+        null,
+        BLACK,
     );
 
-    this.border = 2
-    this.borderColor = BLACK
-    this.edge = 6
+    this.border = 1;
+    this.borderColor = BLACK;
+    this.edge = 0;
 };
 
 KeyboardKeyMorph.prototype.createLabel = function () {
-    var w, h,
-        pad = this.fontSize * 2;
-    keySize = this.fontSize * 3;
     if (this.label) {
         this.label.destroy();
         this.children = []
@@ -4342,15 +4341,9 @@ KeyboardKeyMorph.prototype.createLabel = function () {
     this.label = this.createLabelPart(this.labelString);
     this.add(this.label);
 
-    if (this.action == 'space') {
-        w = keySize * 5
-    } else {
-        w = this.label.width();
-    }
-    h = this.label.height();
     this.setExtent(new Point(
-        Math.max(w + pad, keySize),
-        Math.max(h + pad, keySize),
+        this.keySize * this.size,
+        this.keySize
     ));
 };
 
