@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion, ADT_SlotMorph, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2026-April-30';
+modules.store = '2026-June-02';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -396,11 +396,9 @@ SnapSerializer.prototype.loadProjectModel = function (
     }
 
     function isLoadingAssets() {
-        return ide.sprites.asArray().concat([ide.stage]).some(any =>
-            (any.costume ? any.costume.loaded !== true : false) ||
-            any.costumes.asArray().some(each => each.loaded !== true) ||
-            any.sounds.asArray().some(each => each.loaded !== true)
-        );
+        return ide.scenes.itemsArray().some(any =>
+            any.stage.allAssets().some(each =>
+                each.loaded !== true));
     }
 
     if (ide && app && app !== this.app.split(' ')[0]) {

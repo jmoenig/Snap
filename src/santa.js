@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -39,7 +39,7 @@ SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.santa = '2025-December-01';
+modules.santa = '2026-June-02';
 
 // HatBlockMorph Xmas Skin (2024, 2025)
 
@@ -944,8 +944,11 @@ HatBlockMorph.prototype.renderHouseHat = function (ctx) {
     ctx.stroke();
 };
 
+IDE_Morph.prototype.pureLooksMenu = IDE_Morph.prototype.looksMenu;
+
 IDE_Morph.prototype.looksMenu = function () {
-    var menu = this.looksMenuData();
+    var menu = this.pureLooksMenu();
+    menu.addLine();
     menu.addPreference(
         'Santa Hats',
         () => {
@@ -961,10 +964,7 @@ IDE_Morph.prototype.looksMenu = function () {
         'check for XMas\nhat block skin',
         false
     );
-    menu.popup(
-        this.world(),
-        this.controlBar.settingsButton.bottomLeft()
-    );
+    return menu;
 };
 
 // DialogBoxMorph Xmas Skin (2025)

@@ -1343,7 +1343,7 @@
         "description": "Керуйте костюмами піксельно."
       },
       "zh_CN": {
-        "name": "像素",
+        "name": "像素操作库",
         "description": "逐像素操作造型"
       }
     },
@@ -1389,6 +1389,10 @@
       "ca": {
         "name": "Contorns i Halos",
         "description": "Crea i mostra contorns i halos dinàmics als vestits dels objectes"
+      },
+      "zh_CN": {
+        "name": "光环库",
+        "description": "计算并显示角色当前造型周围的光环"
       }
     }
   },
@@ -1441,7 +1445,7 @@
         "description": "Аналізуйте, маніпулюйте та створюйте звукові зразки."
       },
       "zh_CN": {
-        "name": "音频组件",
+        "name": "音频分析库",
         "description": "分析、操纵和生成声音样本."
       }
     },
@@ -2312,6 +2316,10 @@
       "ca": {
         "name": "Escrivint i formatant text",
         "description": "Escriu text utilitzant les fonts de Tethrarxitet"
+      },
+      "zh_CN": {
+        "name": "画笔美术字库",
+        "description": "允许画笔通过预定的格式打印文本，由官方社区贡献者Tethrarxitet提供"
       }
     }
   },

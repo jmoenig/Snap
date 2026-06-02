@@ -87,11 +87,11 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-May-19';
+modules.gui = '2026-June-02';
 
 // Declarations
 
-var SnapVersion = '12-rc1-260519';
+var SnapVersion = '12.0.1';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -279,6 +279,7 @@ function IDE_Morph(config = {}) {
         noSprites:      bool, hide/show the stage, corral, sprite editor
         noPalette:      bool, hide/show the palette including the categories
         noImports:      bool, disable/allow importing files via drag&drop
+        noShare:        bool, disable/allow sharing and publishing projects
         noOwnBlocks:    bool, hider/show "make a block" and "make a category"
         noRingify:      bool, disable/enable "ringify"/"unringify" in ctx menu
         noUserSettings: bool, disable/enable persistent user preferences
@@ -473,7 +474,10 @@ IDE_Morph.prototype.openIn = function (world) {
         if (dict.embedMode) {
             myself.setEmbedMode();
         }
-        if (dict.editMode || myself.config.noSprites) {
+        if (dict.editMode ||
+            myself.config.noSprites ||
+            myself.scene.createdFromTemplate
+        ) {
             myself.toggleAppMode(false);
         } else {
             myself.toggleAppMode(true);
@@ -487,6 +491,9 @@ IDE_Morph.prototype.openIn = function (world) {
         }
         if (dict.noExitWarning) {
             window.noExitWarning = true;
+        }
+        if (dict.noShare) {
+            myself.config.noShare = true;
         }
         if (dict.blocksZoom) {
             myself.savingPreferences = false;
@@ -519,11 +526,9 @@ IDE_Morph.prototype.openIn = function (world) {
     }
 
     function isLoadingAssets() {
-        return myself.sprites.asArray().concat([myself.stage]).some(any =>
-            (any.costume ? any.costume.loaded !== true : false) ||
-            any.costumes.asArray().some(each => each.loaded !== true) ||
-            any.sounds.asArray().some(each => each.loaded !== true)
-        );
+        return myself.scenes.itemsArray().some(any =>
+            any.stage.allAssets().some(each =>
+                each.loaded !== true));
     }
 
     // dynamic notifications from non-source text files
@@ -2246,6 +2251,9 @@ IDE_Morph.prototype.createSpriteBar = function () {
     // tab bar
     tabBar.tabTo = function (tabString) {
         var active;
+        if (myself.config.noSprites) {
+            tabString = 'scripts';
+        }
         if (myself.currentTab === tabString) {return; }
         myself.world().hand.destroyTemporaries();
         myself.currentTab = tabString;
@@ -2375,6 +2383,7 @@ IDE_Morph.prototype.createSpriteEditor = function () {
         this.spriteEditor.isDraggable = false;
         this.spriteEditor.acceptsDrops = false;
         this.spriteEditor.contents.acceptsDrops = true;
+        this.spriteEditor.updateList = () => nop();
 
         scripts.scrollFrame = this.spriteEditor;
         scripts.updateToolbar();
@@ -2816,7 +2825,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
                 (this.height() - this.controlBar.height() * 2 - padding * 2)
                     / this.stage.dimensions.y
             ));
-            this.stage.setCenter(this.center());
+            this.stage.setCenter(this.center().add(new Point(0, padding * 2)));
         } else {
             this.stage.setScale(this.isSmallStage ? this.stageRatio : 1);
             this.stage.setTop(
@@ -3650,7 +3659,11 @@ IDE_Morph.prototype.refreshIDE = function () {
         this.scene.createdFromTemplate = false;
         onComplete = () => {
             this.scene.createdFromTemplate = true;
-            this.setProjectName(name);
+            if (name?.length) {
+                this.setProjectName(name, true);
+            } else {
+                this.scenes.at(1).name = '';
+            }
             if (tutorial) {
                 this.launchProjectTutorial();
             }
@@ -4697,14 +4710,16 @@ IDE_Morph.prototype.settingsMenu = function () {
         'uncheck to run scripts\nat normal speed',
         'check to prioritize\nscript execution'
     );
-    addPreference(
-        'Performer mode',
-        () => this.togglePerformerMode(),
-        this.performerMode,
-        'uncheck to go back to regular\nlayout',
-        'check to have the stage use up\nall space and go behind the\n' +
-        'scripting area'
-    );
+    if (!this.scene.hideSprites) {
+        addPreference(
+            'Performer mode',
+            () => this.togglePerformerMode(),
+            this.performerMode,
+            'uncheck to go back to regular\nlayout',
+            'check to have the stage use up\nall space and go behind the\n' +
+            'scripting area'
+        );
+    }
     if (this.performerMode) {
         menu.addItem(
             'Performer mode scale...',
@@ -5193,7 +5208,7 @@ IDE_Morph.prototype.projectMenu = function () {
                     this.currentSprite
                 ).popUp(world)
         );
-        if (this.scene.template) {
+        if (this.scene.template.version) {
             menu.addItem(
                 'Restore palette',
                 () => this.stage.restoreHiddenGlobalBlocks(
@@ -7188,6 +7203,8 @@ IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
         scn.blocks = SpriteMorph.prototype.primitiveBlocks();
     }
     if (scn.createdFromTemplate) {
+        // switch to edit mode, unless when
+        this.toggleAppMode(false);
         // launch tutorial, if any exist
         tutorial = detect(
             project.scenes.asArray(),
@@ -8016,7 +8033,11 @@ IDE_Morph.prototype.reflectLanguage = function (lang, callback, noSave) {
             this.scene.createdFromTemplate = false;
             onComplete = () => {
                 this.scene.createdFromTemplate = true;
-                this.setProjectName(name, true);
+                if (name?.length) {
+                    this.setProjectName(name, true);
+                } else {
+                    this.scenes.at(1).name = '';
+                }
                 if (tutorial) {
                     this.launchProjectTutorial();
                 }
@@ -8465,13 +8486,15 @@ IDE_Morph.prototype.projectSettingsMenu = function () {
         'Stage size...',
         'userSetStageSize'
     );
-    menu.addPreference(
-        'Blocks only',
-        () => this.hideSpritePanes(!this.scene.hideSprites),
-        this.scene.hideSprites,
-        'uncheck to show\nthe stage and\nsprite editor panes',
-        'check to hide\nthe stage and \nsprite editor panes'
-    );
+    if (!this.performerMode) {
+        menu.addPreference(
+            'Blocks only',
+            () => this.hideSpritePanes(!this.scene.hideSprites),
+            this.scene.hideSprites,
+            'uncheck to show\nthe stage and\nsprite editor panes',
+            'check to hide\nthe stage and \nsprite editor panes'
+        );
+    }
     menu.addPreference(
         'Single palette',
         () => this.toggleUnifiedPalette(),
@@ -8922,7 +8945,11 @@ IDE_Morph.prototype.setBlocksScale = function (num, noSave) {
         this.scene.createdFromTemplate = false;
         onComplete = () => {
             this.scene.createdFromTemplate = true;
-            this.setProjectName(name);
+            if (name?.length) {
+                this.setProjectName(name, true);
+            } else {
+                this.scenes.at(1).name = '';
+            }
             if (tutorial) {
                 this.launchProjectTutorial();
             }
@@ -9190,7 +9217,6 @@ IDE_Morph.prototype.hideSpritePanes = function (choice = true) {
         this.controlBar.stageSizeButton.hide();
         this.controlBar.appModeButton.hide();
         this.controlBar.startButton.hide();
-        this.fixLayout();
     } else {
         this.config.noSprites = false;
         this.config.noSpriteEdits = false;
@@ -9202,8 +9228,8 @@ IDE_Morph.prototype.hideSpritePanes = function (choice = true) {
         this.stage.show();
         this.corralBar.show();
         this.corral.show();
-        this.fixLayout();
     }
+    this.fixLayout();
 };
 
 // IDE_Morph dragging threshold (internal feature)
@@ -9239,7 +9265,11 @@ IDE_Morph.prototype.userCustomizePalette = function (callback = nop) {
         this.scene.createdFromTemplate = false;
         onComplete = () => {
             this.scene.createdFromTemplate = true;
-            this.setProjectName(name);
+            if (name?.length) {
+                this.setProjectName(name, true);
+            } else {
+                this.scenes.at(1).name = '';
+            }
             if (tutorial) {
                 this.launchProjectTutorial();
             }
@@ -10742,21 +10772,23 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
                 this.preview.rightCenter().add(new Point(2, 0))
             );
         }
-        if (item.ispublic) {
-            this.shareButton.hide();
-            this.unshareButton.show();
-            if (item.ispublished) {
-                this.publishButton.hide();
-                this.unpublishButton.show();
+        if (!this.ide.config.noShare) {
+            if (item.ispublic) {
+                this.shareButton.hide();
+                this.unshareButton.show();
+                if (item.ispublished) {
+                    this.publishButton.hide();
+                    this.unpublishButton.show();
+                } else {
+                    this.publishButton.show();
+                    this.unpublishButton.hide();
+                }
             } else {
-                this.publishButton.show();
+                this.unshareButton.hide();
+                this.shareButton.show();
+                this.publishButton.hide();
                 this.unpublishButton.hide();
             }
-        } else {
-            this.unshareButton.hide();
-            this.shareButton.show();
-            this.publishButton.hide();
-            this.unpublishButton.hide();
         }
         this.buttons.fixLayout();
         this.fixLayout();
@@ -10766,8 +10798,10 @@ ProjectDialogMorph.prototype.installCloudProjectList = function (pl) {
     if (this.task === 'open' || this.task === 'add') {
         this.recoverButton.show();
     }
-    this.shareButton.show();
-    this.unshareButton.hide();
+    if (!this.ide.config.noShare) {
+        this.shareButton.show();
+        this.unshareButton.hide();
+    }
     this.deleteButton.show();
     this.buttons.fixLayout();
     this.fixLayout();

@@ -1,6 +1,28 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 12.0.1:
+* **Notable Fixes:**
+    * fixed loading multi-scene project-templates with an embedded language setting and costumes / sounds only inside global variables (looking at you, Jadga, haha!)
+    * keep unnamed project status when refreshing a project-template to adjust for language or block zoom
+    * prevent activating both blocks-only and performer modes
+    * suppress project sharing in Snap! Schule via a url parameter, thank you, Bernat!
+    * tweaked stage layout in presentation mode to prevent the outer frame from being cut-off in certain screen aspect ratios
+    * only display "restore palette" option in the project menu if the project is based on a template
+    * fixed santa hats looks-menu plugin
+
+### 2026-05-29
+* v12.0.0.1-dev
+* gui, objects, store: fixed loading multi-scene project-templates with language setting and costumes / sounds only inside global variables (looking at you, Jadga, haha!)
+* gui: keep unnamed project status when refreshing a project-template to adjust for language or block zoom
+* gui: prevent activating both blocks-only and performer modes
+* gui: tweaked stage layout in presentation mode to prevent the outer frame from being cut-off in certain screen aspect ratios
+* gui: only display "restore palette" option in the project menu if the project is based on a template
+* santa: fixed santa hats looks-menu plugin
+* v12.0.1 patch
+
+## 12.0.0:
 * **New Features:**
     * global zoom setting ("magnification"), scales everything seamlessly
         * new interactive "Magnification" dialog in the settings menu
@@ -10,6 +32,7 @@
         * marking a starter project / puzzle as "template" removes its name when loading it (and lets users create their own projects based on the template) 
         * projects based on a template let the user restore the visibility of global blocks in the template palette
         * template-projects can store their magnification level, block fade level, blocks zoom, language, design and theme and propagate them into the projects that are created from them
+        * template-projects always open in edit mode (but still auto-run unless supressed)
         * "generate puzzle" automatically turns the project into a template
     * tutorials
         * open and run a scene inside a separate modeless window
@@ -123,6 +146,32 @@
     * Chinese, thank you, @Ayist14 !
     * Catalan, thanks, Joan!
     * German
+
+### 2026-05-29
+* v12.0.0 major release
+
+### 2026-05-28
+* gui: open templates in edit mode
+* updated the Streams library, thanks, Mark de Boer and Brian!
+* v12 rc6 260528
+
+### 2026-05-27
+* gui: launch IDE in editMode when opening a template project with a tutorial scene
+* v12 rc5 260527
+
+### 2026-05-25
+* gui: prevent switching to costume or sound tabs in blocks-only mode
+* v12 rc4 260525
+
+### 2026-05-24
+* Chinese translation update
+* v12 rc3 260524
+
+### 2026-05-22
+* objects: disabled asset context menus in tutorial mode
+* sw: took out removed human photo costumes from the cache
+* sw: added Ketrina's new costume to the offline cache
+* v12 rc2 260522
 
 ### 2026-05-19
 * new Western Armenian translation, yay! Thanks to Avag Sayan and the Antrohoos Education Foundation!
