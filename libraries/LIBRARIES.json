@@ -1020,7 +1020,7 @@
       },
       "zh_CN": {
         "name": "3D甲虫教学库",
-        "description": "在三维空间中沿路径绘制点、线或多边形，以生成3D几何图形。\n对于TurboWarp或Gandi IDE用户：本库并非Snap! 3D的实现，\n而是Snap!改版Beetle Blocks的Snap! DSL(领域特定语言)重写版本\n(由于此前Beetle Blocks的服务器数据丢失，因此，在Snap! 10版本，Beetle Blocks被重写为Snap!库。)\n详见\nhttps://snapwiki.miraheze.org/wiki/Beetle_Blocks"
+        "description": "在三维空间中沿路径绘制点、线或多边形，以生成3D几何图形。"
       }
     }
   },
@@ -1725,7 +1725,7 @@
       },
       "zh_CN": {
         "name": "单词、句子处理库",
-        "description": "Scratch 遗漏了 Logo 的一个重要思想：将字符串视为由单词和句子组成的结构，而不仅仅是有若干字符组合成的字符串。这个库重新引入了这一思想。\n对于国内的Scratcher/Snapper：由于中文不像英文一样，每个词之间都有一个空格。因此，本库一开始的设计就只适用于英文句子处理"
+        "description": "（官方描述）Scratch 遗漏了 Logo 的一个重要思想：将字符串视为由单词和句子组成的结构，而不仅仅是有若干字符组合成的字符串。这个库重新引入了这一思想。"
       }
     },
     "searchData": [
@@ -1765,7 +1765,7 @@
       },
       "zh_CN": {
         "name": "纯单词处理库",
-        "description": "将文本视为单词列表来使用。这是单词、句子处理库的一个最小变体，适用于聊天机器人等语言项目。\n对于国内的Scratcher/Snapper：由于中文不像英文一样，每个词之间都有一个空格。因此，本库一开始的设计就只适用于英文句子处理"
+        "description": "将文本视为单词列表来使用。这是单词、句子处理库的一个最小变体，适用于聊天机器人等语言项目。"
       }
     },
     "searchData": [
