@@ -1803,8 +1803,8 @@
               "name": "Рядки, багаторядковий ввід"
           },
           "zh_CN": {
-              "name": "字符串，多行输入",
-              "description": ""
+              "name": "字符串操作库",
+              "description": "通过多种方式提取字符串的一部分字符串。通常情况下，文本参数只允许输入一行文本，但\"多行文本\"积木允许输入多行文本，并可以用于其他积木的文本参数"
           }
       },
       "searchData": [
@@ -1829,8 +1829,8 @@
               "description": "Substitueix totes les aparicions d'una lletra o d'una seqüència de lletres per unes altres en un text."
           },
           "zh_CN": {
-              "name": "替换字母",
-              "description": "在文本中将所有出现的字母或字母序列替换为另一个字母。"
+              "name": "文本替换库",
+              "description": "将所有出现在文本里的字符串替换为另一个字符串"
           }
       },
       "searchData": [
@@ -2804,7 +2804,7 @@
           },
           "zh_CN": {
               "name": "TuneScope",
-              "description": ""
+              "description": "音乐记谱、乐器、鼓、音调、和弦、轨道，来自弗吉尼亚大学 (Glen Bull)"
           }
       },
       "searchData": [

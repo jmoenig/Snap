@@ -280,11 +280,11 @@ SnapTranslator.dict.zh_CN = {
     'language_name':
         '简体中文',
     'language_translator':
-        '五百刀/邓江华/孟锡峰/曹儒林/moodykeke',
+        '五百刀/邓江华/孟锡峰/曹儒林/moodykeke/Ayist14',
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2026-05-24'
+        '2026-06-24'
 };
 
 SnapTranslator.dict.eo = {
