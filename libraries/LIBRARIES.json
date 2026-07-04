@@ -180,7 +180,7 @@
       ],
       "translations": {
           "zh_CN": {
-              "name": "表格处理库",
+              "name": "表格库",
               "description": "使用强大、通用的函数创建、选择、筛选、排序、转换、扩展和分析表格数据集。其设计灵感源自 Pyret 的 Tables 数据，详情可参阅：https://pyret.org/docs/latest/tables.html。感谢 Shriram Krishnamurthi 的启发、反馈与建议。示例作品(仍在开发中)：https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode"
           }
       }
@@ -241,7 +241,7 @@
               "description": "Classifica dades vectoritzades utilitzant xarxes neuronals. Entrena i valida els teus propis models interns."
           },
           "zh_CN": {
-              "name": "神经网络训练库",
+              "name": "神经网络库",
               "description": "借助神经网络对数据向量进行分类，训练并验证你自己的深度神经网络模型。本库完全用Snap!本身实现"
           }
       }
@@ -656,7 +656,7 @@
           },
           "zh_CN": {
               "name": "蜡笔库",
-              "description": ""
+              "description": "只保留蜡笔，并舍弃了颜色和蜡笔库的其它部分，使这个库变得快速和简洁。"
           }
       },
       "searchData": [
@@ -688,7 +688,7 @@
           },
           "zh_CN": {
               "name": "Scheme数字类型库",
-              "description": "集成了Scheme的完整数字类型，可通过\"使用Scheme的数字类型系统？ <True>\"导入这些数据类型"
+              "description": "集成了Scheme的完整数字类型，可通过\"使用Scheme的数字类型系统？ <True>\"积木导入这些数据类型"
           }
       },
       "searchData": [
@@ -723,7 +723,7 @@
           },
           "zh_CN": {
               "name": "异常处理库",
-              "description": "运行脚本；如果发生错误,不要用红色光环停止脚本,而是运行另一个脚本来处理错误.还包括一个积木,用于通过作为输入给出的消息来导致错误.还包括一个用于创建脚本变量并为其赋值的积木."
+              "description": "运行脚本；如果发生错误,不要用红色光环停止脚本，而是运行另一个脚本来处理错误。还包括一个积木，用于通过作为输入给出的消息来导致错误。还包括一个用于创建脚本变量并为其赋值的积木。"
           }
       },
       "searchData": [
@@ -954,7 +954,7 @@
               ]
           },
           "zh_CN": {
-              "name": "Snap!4Arduino硬件连接库",
+              "name": "Snap!4Arduino硬件库",
               "description": "增加Snap4Arduino(Snap!改版)的所有功能。将Snap!连接到任何兼容Firmata的板卡：UNO、Nano、Mega、Leonardo、Micro、Due、101、ESP8266、NodeMCU……以动态控制它们的功能。需要上传Firmata固件"
           }
       }
@@ -2071,7 +2071,7 @@
               "name": "Стовпчасті діаграми"
           },
           "zh_CN": {
-              "name": "条形图",
+              "name": "条形图库",
               "description": ""
           }
       },
@@ -2097,8 +2097,8 @@
               "description": "Representa una llista de nombres utilitzant línies verticals distribuïdes per tot l'escenari"
           },
           "zh_CN": {
-              "name": "条形",
-              "description": "将数字列表绘制为垂直线条，均匀分布在舞台上。"
+              "name": "条形绘制库",
+              "description": "将数字列表以垂直线条的形式呈现，并均匀分布在舞台上"
           }
       },
       "searchData": [
@@ -2170,8 +2170,8 @@
               "name": "Доступ до веб-служб (https)"
           },
           "zh_CN": {
-              "name": "网络服务访问(https)",
-              "description": ""
+              "name": "网络请求(https)库",
+              "description": "URL积木的扩展版本，支持POST、PUT、DELETE以及GET请求，允许使用安全的HTTPS协议，且能控制响应头等。同时还能解析JSON数据"
           }
       },
       "searchData": [
@@ -2212,7 +2212,7 @@
               "description": "Declara i inicialitza múltiples variables dins els programes"
           },
           "zh_CN": {
-              "name": "声明和初始化脚本变量",
+              "name": "脚本变量库",
               "description": "声明和初始化多个脚本变量"
           }
       }
@@ -2290,8 +2290,8 @@
               "description": "Operadors aritmètics 'bitwise' per a manipular dades a baix nivell (a nivell dels seus bits)"
           },
           "zh_CN": {
-              "name": "位运算符",
-              "description": "用于底层位操作的位算术运算符。"
+              "name": "位运算符库",
+              "description": "用于底层位操作的位运算符积木。"
           }
       },
       "searchData": [
@@ -2369,8 +2369,8 @@
               "description": "Crida els blocs propis dels objectes des de altres objectes"
           },
           "zh_CN": {
-              "name": "角色方法 API",
-              "description": "从另一个角色运行和调用角色的本地自制积木"
+              "name": "角色属性/方法库",
+              "description": "运行和调用指定角色的私有自制积木"
           }
       }
   },
@@ -2914,6 +2914,10 @@
       "translations": {
           "ca": {
               "description": "MQTT (Message Queuing Telemetry Transport - Transport de telemetria de missatges en cua) Protocol per connectar dispositius IoT amb diferent programari"
+          },
+          "zh_CN": {
+            "name": "MQTT库",
+            "description": "MQTT（Message Queuing Telemetry Transport）协议，适用于资源受限的设备和低带宽、高延迟或不稳定的网络环境。如连接物联网设备和/或其他软件"
           }
       },
       "searchData": [
@@ -2948,7 +2952,12 @@
       "categories": [
           "WebSockets"
       ],
-      "translations": {}
+      "translations": {
+        "zh_CN": {
+            "name": "WebSockets库",
+            "description": "连接到WebSockets服务器并与其交换数据。每个角色均可连接到不同的WebSocket服务器。"
+        }
+      }
   },
   {
       "fileName": "signada.xml",
@@ -2992,7 +3001,7 @@
               "description": "Взаємодія з пристроями MicroBlocks через Wi-Fi. Потрібно, щоб пристрій мав TFT-дисплей, дві кнопки та можливість Wi-Fi, а також завантажений проект Signada MicroBlocks. Citilab ED1 і низка плат M5Stack є одними з пристроїв, які працюють з Signada"
           },
           "zh_CN": {
-              "name": "Signada(网络远程控制)",
+              "name": "Signada(网络远程控制)库",
               "description": "通过WiFi与MicroBlocks设备进行交互。需要设备具备TFT显示屏、两个按钮和WiFi功能，以及加载了Signada MicroBlocks作品。Citilab ED1和一些M5Stack开发板是与Signada兼容的设备之一。"
           }
       },
@@ -3058,6 +3067,10 @@
       "translations": {
           "ca": {
               "description": "Posiciona i ajusta la mida de la finstra del tutorial."
+          },
+          "zh_CN": {
+            "name": "教程系统库",
+            "description": "显示、定位和缩放教程窗口"
           }
       }
   },
@@ -3111,7 +3124,7 @@
           },
           "zh_CN": {
               "name": "延续 + call/cc库",
-              "description": "动态获取continuation(延续)，以实现更多控制流\n译者注：call/cc的全称是“call-with-current-continuation”，Snap!的中文翻译传统之一是将其译为“带延续运行”/“带延续调用”。\ncall/cc的用例如：\n“循环、函数迭代和组合”库里的“非本地退出”积木、协程(Coroutine)、生成器(Generator)"
+              "description": "动态获取continuation(延续)，以实现更多控制流\n译者注：call/cc的全称是“call-with-current-continuation”，其会将程序下一步运行的代码封装为continuation(Snap!：环)，并传入至函数。\n当执行continuation时，会跳转到其对应的程序，继续向下运行，不会回到调用它的程序里。\ncall/cc的用例如：\n“循环、函数迭代和组合”库里的“非本地退出”积木、协程(Coroutine)、生成器(Generator)"
           }
       }
   },
