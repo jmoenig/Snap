@@ -3142,6 +3142,10 @@
           "de": {
               "name": "Male Pfade",
               "description": "Male Vektorpfade und Polygone direkt, ohne den Stift zu bewegen, wahlweise ausgefüllt oder umrandet"
+          },
+          "zh_CN": {
+            "name": "无画笔绘制图形库",
+            "description": "在不使用画笔的情况下，绘制需要填充或描边的折线和多边形。"
           }
       }
   },
@@ -3177,7 +3181,13 @@
       ],
       "categories": [
           "tables"
-      ]
+      ],
+      "translations": {
+        "zh_CN": {
+            "name": "图形库",
+            "description": "创建、组合、变换和显示几何图形，以支持“函数优先”的编程教学方法。灵感来源于 Pyret 的图像库，参见：https://pyret.org/docs/horizon/image.html (正在开发中)"
+        }
+      }
   },
   {
       "fileName": "~",

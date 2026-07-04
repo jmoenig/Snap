@@ -1891,5 +1891,13 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
   "palette": "积木区",
   "user features": "编辑器菜单选项",
   "fill?": "是否填充?",
-  "close?": "是否形成封闭图形?"
+  "close?": "是否形成封闭图形?",
+  "round?": "是否选择四舍五入?",
+  "line width": "线段粗细",
+  "vertically": "上下",
+  "horizontally": "左右",
+  "Shapes": "图形库 | 图形创建",
+  "Shapes - Compose": "图形库 | 图形组合",
+  "Shapes - Measure": "图形库 | 属性测量",
+  "Shapes - Transform": "图形库 | 图形变换"
 };
