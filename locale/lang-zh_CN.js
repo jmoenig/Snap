@@ -1889,5 +1889,7 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
   "ide": "图形化编辑器",
   "corral": "角色区",
   "palette": "积木区",
-  "user features": "编辑器菜单选项"
+  "user features": "编辑器菜单选项",
+  "fill?": "是否填充?",
+  "close?": "是否形成封闭图形?"
 };
