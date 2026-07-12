@@ -910,6 +910,7 @@
               "description": "Interactua amb dispositius programats amb Microblocks conentant-los per USB o per BLE. Els missatges enviats per Microblocks es reben automàticament a Snap! després de la connexió"
           },
           "zh_CN": {
+              "name": "MicroBlocks硬件库",
               "description": "通过USB或BLE无线连接与MicroBlocks设备进行交互。连接后，MicroBlocks设备生成的广播将自动在Snap!端接收"
           }
       },
@@ -3214,7 +3215,7 @@
       ],
       "translations": {
           "zh_CN": {
-              "name": "",
+              "name": "(EDC) UI对话库",
               "description": "向用户显示对话框和消息。"
           }
       }
@@ -3235,8 +3236,8 @@
       ],
       "translations": {
           "zh_CN": {
-              "name": "",
-              "description": "SAY 和 THINK 积木的文本格式化和基本函数支持。"
+              "name": "(EDC) 美术字库",
+              "description": "对话和独白积木的基本格式和函数支持。"
           }
       }
   },
@@ -3252,8 +3253,8 @@
       ],
       "translations": {
           "zh_CN": {
-              "name": "",
-              "description": "在舞台上写作的文本格式化和基本函数支持。"
+              "name": "(EDC) 舞台美术字库",
+              "description": "在舞台上打印文本的基本格式和函数支持。"
           }
       }
   },
@@ -3317,7 +3318,7 @@
       ],
       "translations": {
           "zh_CN": {
-              "name": "",
+              "name": "(EDC) 程序图库",
               "description": "将环形积木/脚本转换为造型"
           }
       }
@@ -3349,7 +3350,7 @@
       ],
       "translations": {
           "zh_CN": {
-              "name": "",
+              "name": "(EDC) 翻译库",
               "description": "支持翻译文本、积木和下拉/占位符值"
           }
       }
