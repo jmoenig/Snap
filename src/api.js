@@ -237,7 +237,18 @@ IDE_Morph.prototype.newList = function (array) {
 };
 
 IDE_Morph.prototype.getProjectXML = function () {
-    return this.serializer.serialize(new Project(this.scenes, this.scene));
+    // bracket the serialization in capture/applyGlobalSettings the way
+    // exportProject() does: Scene.toXML ends by assigning the bootstrapped
+    // customized-primitives *array* to SpriteMorph.prototype.blocks,
+    // clobbering the primitives dictionary (to an empty array when no
+    // primitive is customized), which silently breaks block search and any
+    // subsequent palette rebuild; applyGlobalSettings() restores the
+    // dictionary afterwards
+    var xml;
+    this.scene.captureGlobalSettings();
+    xml = this.serializer.serialize(new Project(this.scenes, this.scene));
+    this.scene.applyGlobalSettings();
+    return xml;
 };
 
 IDE_Morph.prototype.loadProjectXML = function (projectXML) {
