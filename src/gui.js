@@ -846,7 +846,10 @@ IDE_Morph.prototype.openIn = function (world) {
 
     if (location.protocol === 'file:') {
         Process.prototype.enableJS = true;
-    } else {
+    } else if (!this.config.noCloud) {
+        // honor config.noCloud here at startup: applyConfigurations() below
+        // does disable the cloud, but only after these requests would
+        // already have been sent
         if (!sessionStorage.username) {
             // check whether login should persist across browser sessions
             this.cloud.initSession(initUser);
