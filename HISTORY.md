@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-07-24
+* new dev version
+
 ## 12.0.6:
 * **Notable Changes:**
     * added "projectloaded" message post to support embedding the editor in an iFrame
