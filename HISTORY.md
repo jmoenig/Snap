@@ -1,9 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Fixes:**
+    * fixed display of continuations capturing variadic inputs
 
 ### 2026-07-24
 * new dev version
+* blocks: fixed display of continuations capturing variadic inputs
 
 ## 12.0.6:
 * **Notable Changes:**

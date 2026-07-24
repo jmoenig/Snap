@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-June-03';
+modules.blocks = '2026-July-24';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1710,7 +1710,7 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
             }
         } else if (this instanceof MultiArgMorph) {
             deflt = this.labelPart(this.slotSpecFor(inp));
-            if (this.parent.isCustomBlock) {
+            if (this.parent?.isCustomBlock) {
                 if (this.parent.isGlobal) {
                     def = this.parent.definition;
                 } else {
