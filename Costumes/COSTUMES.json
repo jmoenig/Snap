@@ -15,7 +15,8 @@
     "fileName": "Bear.svg",
     "name": "Bear",
     "translations": {
-    }
+    },
+    "category": "Animals"
   },
   {
     "fileName": "Butterfly.svg",
@@ -27,55 +28,64 @@
     "fileName": "Cat.svg",
     "name": "Cat",
     "translations": {
-    }
+    },
+    "category": "Animals"
   },
   {
     "fileName": "Chicken.svg",
     "name": "Chicken",
     "translations": {
-    }
+    },
+    "category": "Animals"
   },
   {
     "fileName": "Crab.svg",
     "name": "Crab",
     "translations": {
-    }
+    },
+    "category": "Animals"
   },
   {
     "fileName": "Dog.svg",
     "name": "Dog",
     "translations": {
-    }
+    },
+    "category": "Animals"
   },
   {
     "fileName": "Egg.svg",
     "name": "Egg",
     "translations": {
-    }
+    },
+    "category": "Food"
   },
   {
     "fileName": "Goldfish.svg",
     "name": "Goldfish",
     "translations": {
-    }
+    },
+    "category": "Animals"
   },
   {
     "fileName": "Hummingbird.svg",
     "name": "Hummingbird",
     "translations": {
-    }
+    },
+    "category": "Animals"
   },
   {
     "fileName": "Hummingbird2.svg",
     "name": "Hummingbird2",
     "translations": {
-    }
+    },
+    "category": "Animals"
   },
   {
     "fileName": "Jellyfish.svg",
     "name": "Jellyfish",
     "translations": {
-    }
+    },
+    "category": "Animals"
   },
   {
     "fileName": "Jellyfish2.svg",
@@ -249,13 +259,15 @@
     "fileName": "Human_01-arm_palmdown.svg",
     "name": "Human_01-arm_palmdown",
     "translations": {
-    }
+    },
+    "category": "Characters"
   },
   {
     "fileName": "Human_01-arm_palmup.svg",
     "name": "Human_01-arm_palmup",
     "translations": {
-    }
+    },
+    "category": "Characters"
   },
   {
     "fileName": "Human_01-head.svg",
@@ -903,31 +915,36 @@
     "fileName": "abby-a.svg",
     "name": "abby a",
     "translations": {
-    }
+    },
+    "category": "Characters"
   },
   {
     "fileName": "abby-b.svg",
     "name": "abby b",
     "translations": {
-    }
+    },
+    "category": "Characters"
   },
   {
     "fileName": "abby-c.svg",
     "name": "abby c",
     "translations": {
-    }
+    },
+    "category": "Characters"
   },
   {
     "fileName": "abby-d.svg",
     "name": "abby d",
     "translations": {
-    }
+    },
+    "category": "Characters"
   },
   {
     "fileName": "airplane2.png",
     "name": "airplane2",
     "translations": {
-    }
+    },
+    "category": "Transportation"
   },
   {
     "fileName": "aleassa01.png",
