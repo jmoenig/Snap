@@ -1,13 +1,13 @@
 [
     "Animals",
     "Characters",
+    "Clothing",
     "Food",
     "Insects",
-    "Letters",
     "Music",
     "Nature",
-    "Numbers",
     "Objects",
+    "Other",
     "Places",
     "Transportation"
 ]
