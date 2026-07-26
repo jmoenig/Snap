@@ -5462,6 +5462,10 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         turtle = new SymbolMorph('turtle', 60),
         myself = this,
         world = this.world(),
+        // fetch categories from Costumes/COSTUME-categories.json
+        categories = require('../Costumes/COSTUME-categories.json'),
+        selectedCategory = categories[0],
+        filteredItems = [... new Set(items.filter(item => item.category === selectedCategory)).sort((a, b) => a.name.localeCompare(b.name))],
         handle;
 
     frame.acceptsDrops = false;
@@ -5494,6 +5498,10 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             }
         }
     };
+
+    //dialog.loadCategory = function () {
+            filteredItems = items.filter(item => item.category === selectedCategory);
+    //};
 
     dialog.fixLayout = function () {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
@@ -5529,7 +5537,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.removeShadow();
         this.addShadow();
     };
-
+    if (folderName === 'Costumes') { items = filteredItems; }
     items.forEach(item => {
         // Caution: creating very many thumbnails can take a long time!
         var url = this.resourceURL(folderName, item.fileName),
