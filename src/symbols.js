@@ -71,6 +71,7 @@ SymbolMorph.prototype.names = [
     'stepForward',
     'gear',
     'gears',
+    'gearsAnimated',
     'gearPartial',
     'gearBig',
     'file',
@@ -178,6 +179,8 @@ SymbolMorph.prototype.init = function (
     this.size = size || 50;
     this.shadowOffset = shadowOffset || ZERO;
     this.shadowColor = shadowColor || null;
+    this.animationState = 0;
+    this.animationStep = 0;
     SymbolMorph.uber.init.call(this);
     this.color = color || BLACK;
     this.backgroundColor = bg || null;
@@ -275,6 +278,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'gears':
         this.renderSymbolGears(ctx, aColor);
+        break;
+    case 'gearsAnimated':
+        this.renderSymbolGearsAnimated(ctx, aColor);
         break;
     case 'gearBig':
         this.renderSymbolGearBig(ctx, aColor);
@@ -647,8 +653,22 @@ SymbolMorph.prototype.drawSingleGear = function (ctx, color, angle) {
 };
 
 SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
-    // draw gears
+    // draw interlocking gears
     this.drawGears(ctx, color, 10);
+};
+
+SymbolMorph.prototype.renderSymbolGearsAnimated = function (ctx, color) {
+    // draw animated interlocking gears
+    if (this.animationStep === 0) {
+        this.animationStep = 1;
+        
+        this.step = function () {
+            this.animationState =
+                (this.animationState + this.animationStep) % 45;
+            this.changed();
+        };
+    }
+    this.drawGears(ctx, color, this.animationState);
 };
 
 SymbolMorph.prototype.drawGears = function (ctx, color, angle) {
