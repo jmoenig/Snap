@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-July-24';
+modules.gui = '2026-July-27';
 
 // Declarations
 
@@ -1487,7 +1487,7 @@ IDE_Morph.prototype.createControlBar = function () {
     button = new PushButtonMorph(
         this,
         'settingsMenu',
-        new SymbolMorph('gears', 14)
+        new SymbolMorph('gear', 14)
         //'\u2699'
     );
     button.corner = 12;

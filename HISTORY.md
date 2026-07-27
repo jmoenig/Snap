@@ -6,7 +6,8 @@
 
 ### 2026-07-27
 * symbols: refactored drawing a single 8-spike gear symbol
-* symbols: added a single "gear" symbol, changed "gears" to a pair of interlocking gears 
+* symbols: added a single "gear" symbol, changed "gears" to a pair of interlocking gears
+* gui: changed (back) symbol for the settings button to a single gear symbol 
 
 ### 2026-07-24
 * new dev version
