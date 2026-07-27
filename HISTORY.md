@@ -11,6 +11,7 @@
 * symbols: refactored "gears" symbol rendering 
 * symbols: refactored singe "gear" symbol rendering
 * symbols: added new "gearsAnimated" symbol
+* symbols: added new "gearsApartAnimated" symbol
 
 ### 2026-07-24
 * new dev version
