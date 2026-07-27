@@ -12,6 +12,7 @@
 * symbols: refactored singe "gear" symbol rendering
 * symbols: added new "gearsAnimated" symbol
 * symbols: added new "gearsApartAnimated" symbol
+* symbols: increased speed of animated symbols
 
 ### 2026-07-24
 * new dev version

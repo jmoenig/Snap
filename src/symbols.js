@@ -664,7 +664,7 @@ SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
 SymbolMorph.prototype.renderSymbolGearsAnimated = function (ctx, color) {
     // draw animated interlocking gears
     if (this.animationStep === 0) {
-        this.animationStep = 1;
+        this.animationStep = 3;
         
         this.step = function () {
             this.animationState =
@@ -693,7 +693,7 @@ SymbolMorph.prototype.drawGears = function (ctx, color, angle) {
 SymbolMorph.prototype.renderSymbolGearsApartAnimated = function (ctx, color) {
     // draw animated non-interlocking gears
     if (this.animationStep === 0) {
-        this.animationStep = 1;
+        this.animationStep = 3;
         
         this.step = function () {
             this.animationState =
