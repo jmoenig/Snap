@@ -69,6 +69,7 @@ SymbolMorph.prototype.names = [
     'square',
     'pointRight',
     'stepForward',
+    'gear',
     'gears',
     'gearPartial',
     'gearBig',
@@ -268,6 +269,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'stepForward':
         this.renderSymbolStepForward(ctx, aColor);
+        break;
+    case 'gear':
+        this.renderSymbolGear(ctx, aColor);
         break;
     case 'gears':
         this.renderSymbolGears(ctx, aColor);
@@ -623,7 +627,7 @@ SymbolMorph.prototype.renderSymbolStepForward = function (ctx, color) {
     );
 };
 
-SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
+SymbolMorph.prototype.renderSymbolGear = function (ctx, color) {
     // draw gears
     var w = this.symbolWidth(),
         r = w / 2;
@@ -631,6 +635,21 @@ SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     this.drawGear(ctx, color, r, r, r, 0);
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
+    // draw gears
+    var w = this.symbolWidth(),
+        r = w / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    this.drawGear(ctx, color, r* 1.5, r*1.5, r, 10);
+    this.drawGear(ctx, color, r* 0.2, r* 0.2, r, 12.5);
 
     // fill
     ctx.clip('evenodd');
