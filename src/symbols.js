@@ -41,7 +41,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2026-February-13';
+modules.symbols = '2026-July-27';
 
 var SymbolMorph;
 
@@ -626,14 +626,25 @@ SymbolMorph.prototype.renderSymbolStepForward = function (ctx, color) {
 SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
     // draw gears
     var w = this.symbolWidth(),
-        r = w / 2,
+        r = w / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    this.drawGear(ctx, color, r, r, r, 0);
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.drawGear = function (ctx, color, x, y, r, orientation) {
+    // helper - draw a single 8-spike gear
+    var w = this.symbolWidth(),
+        // r = w / 2,
         spikes = 8,
         off = 8,
         shift = 10,
         angle, turn, i;
-
-    ctx.fillStyle = color.toString();
-    ctx.beginPath();
 
     // draw the spiked outline
     ctx.moveTo(w, r);
@@ -641,35 +652,31 @@ SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
     turn = angle * 0.5;
     for (i = 0; i < spikes; i += 1) {
         ctx.arc(
+            x,
+            y,
             r,
-            r,
-            r,
-            radians(i * angle + turn),
-            radians(i * angle + off + turn)
+            radians(orientation + (i * angle + turn)),
+            radians(orientation + (i * angle + off + turn))
         );
         ctx.arc(
-            r,
-            r,
+            x,
+            y,
             r * 0.7,
-            radians(i * angle - shift + angle * 0.5 + turn),
-            radians(i * angle + shift + angle * 0.5 + turn)
+            radians(orientation + (i * angle - shift + angle * 0.5 + turn)),
+            radians(orientation + (i * angle + shift + angle * 0.5 + turn))
         );
         ctx.arc(
+            x,
+            y,
             r,
-            r,
-            r,
-            radians((i + 1) * angle - off + turn),
-            radians((i + 1) * angle + turn)
+            radians(orientation + ((i + 1) * angle - off + turn)),
+            radians(orientation + ((i + 1) * angle + turn))
         );
     }
     ctx.lineTo(w, r);
 
     // draw the hole in the middle
-    ctx.arc(r, r, r * 0.3, radians(0), radians(360));
-
-    // fill
-    ctx.clip('evenodd');
-    ctx.fillRect(0, 0, w, w);
+    ctx.arc(x, y, r * 0.3, radians(0), radians(360));
 };
 
 SymbolMorph.prototype.renderSymbolGearBig = function (ctx, color) {
@@ -724,46 +731,11 @@ SymbolMorph.prototype.renderSymbolGearBig = function (ctx, color) {
 SymbolMorph.prototype.renderSymbolGearPartial = function (ctx, color) {
     // draw gears
     var w = this.symbolWidth(),
-        r = w * 0.75,
-        spikes = 8,
-        off = 8,
-        shift = 10,
-        angle, turn, i;
+        r = w * 0.75;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-
-    // draw the spiked outline
-    ctx.moveTo(w, r);
-    angle = 360 / spikes;
-    turn = angle * 0.5;
-    for (i = 0; i < spikes; i += 1) {
-        ctx.arc(
-            r,
-            r,
-            r,
-            radians(i * angle + turn),
-            radians(i * angle + off + turn)
-        );
-        ctx.arc(
-            r,
-            r,
-            r * 0.7,
-            radians(i * angle - shift + angle * 0.5 + turn),
-            radians(i * angle + shift + angle * 0.5 + turn)
-        );
-        ctx.arc(
-            r,
-            r,
-            r,
-            radians((i + 1) * angle - off + turn),
-            radians((i + 1) * angle + turn)
-        );
-    }
-    ctx.lineTo(w, r);
-
-    // draw the hole in the middle
-    ctx.arc(r, r, r * 0.3, radians(0), radians(360));
+    this.drawGear(ctx, color, r, r, r, 0);
 
     // fill
     ctx.clip('evenodd');
