@@ -643,13 +643,18 @@ SymbolMorph.prototype.renderSymbolGear = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
     // draw gears
+    this.drawGears(ctx, color, 10);
+};
+
+SymbolMorph.prototype.drawGears = function (ctx, color, angle) {
+    // draw gears
     var w = this.symbolWidth(),
         r = w / 2;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    this.drawGear(ctx, color, r* 1.5, r*1.5, r, 10);
-    this.drawGear(ctx, color, r* 0.2, r* 0.2, r, 12.5);
+    this.drawGear(ctx, color, r* 1.5, r*1.5, r, angle);
+    this.drawGear(ctx, color, r* 0.2, r* 0.2, r, 22.5 - angle);
 
     // fill
     ctx.clip('evenodd');
