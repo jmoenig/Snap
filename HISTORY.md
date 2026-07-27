@@ -9,6 +9,7 @@
 * symbols: added a single "gear" symbol, changed "gears" to a pair of interlocking gears
 * gui: changed (back) symbol for the settings button to a single gear symbol
 * symbols: refactored "gears" symbol rendering 
+* symbols: refactored singe "gear" symbol rendering 
 
 ### 2026-07-24
 * new dev version

@@ -629,12 +629,17 @@ SymbolMorph.prototype.renderSymbolStepForward = function (ctx, color) {
 
 SymbolMorph.prototype.renderSymbolGear = function (ctx, color) {
     // draw gears
+    this.drawSingleGear(ctx, color, 0);
+};
+
+SymbolMorph.prototype.drawSingleGear = function (ctx, color, angle) {
+    // draw gears
     var w = this.symbolWidth(),
         r = w / 2;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    this.drawGear(ctx, color, r, r, r, 0);
+    this.drawGear(ctx, color, r, r, r, angle);
 
     // fill
     ctx.clip('evenodd');
@@ -653,8 +658,8 @@ SymbolMorph.prototype.drawGears = function (ctx, color, angle) {
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    this.drawGear(ctx, color, r* 1.5, r*1.5, r, angle);
-    this.drawGear(ctx, color, r* 0.2, r* 0.2, r, 22.5 - angle);
+    this.drawGear(ctx, color, r * 1.5, r * 1.5, r, angle);
+    this.drawGear(ctx, color, r * 0.2, r * 0.2, r, 22.5 - angle);
 
     // fill
     ctx.clip('evenodd');
