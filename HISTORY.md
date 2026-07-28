@@ -1,8 +1,15 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * new animated and still symbols for interlocking gears
+* **Notable Changes:**
+    * changed small gear symbol to 6 spikes (from 8)
 * **Notable Fixes:**
     * fixed display of continuations capturing variadic inputs
+
+### 2026-07-27
+* symbols: changed small gear symbol to 6 spikes
 
 ### 2026-07-27
 * symbols: refactored drawing a single 8-spike gear symbol
