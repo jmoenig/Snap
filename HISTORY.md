@@ -8,8 +8,9 @@
 * **Notable Fixes:**
     * fixed display of continuations capturing variadic inputs
 
-### 2026-07-27
+### 2026-07-28
 * symbols: changed small gear symbol to 6 spikes
+* symbols: tweaked gear symbols and added another one (gearsApart)
 
 ### 2026-07-27
 * symbols: refactored drawing a single 8-spike gear symbol

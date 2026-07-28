@@ -75,6 +75,7 @@ SymbolMorph.prototype.names = [
     'gears',
     'gearsAnimated',
     'gearsApartAnimated',
+    'gearsApart',
     'gearPartial',
     'gearBig',
     'file',
@@ -287,6 +288,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'gearsApartAnimated':
         this.renderSymbolGearsApartAnimated(ctx, aColor);
+        break;
+    case 'gearsApart':
+        this.renderSymbolGearsApart(ctx, aColor);
         break;
     case 'gearBig':
         this.renderSymbolGearBig(ctx, aColor);
@@ -689,7 +693,7 @@ SymbolMorph.prototype.renderSymbolGearsAnimated = function (ctx, color) {
             this.changed();
         };
     }
-    this.drawGears(ctx, color, this.animationState, true);
+    this.drawGears(ctx, color, this.animationState);
 };
 
 SymbolMorph.prototype.renderSymbolGearsApartAnimated = function (ctx, color) {
@@ -714,7 +718,22 @@ SymbolMorph.prototype.drawGearsApart = function (ctx, color, angle) {
     ctx.fillStyle = color.toString();
     ctx.beginPath();
     this.drawGear(ctx, color, r * 1.5, r * 1.5, r, 10, 6);
-    this.drawGear(ctx, color, r * -0.2, r * -0.2, r, angle, 6);
+    this.drawGear(ctx, color, 0, 0, r, angle, 6);
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGearsApart = function (ctx, color) {
+    // draw animated non-interlocking gears
+    var w = this.symbolWidth(),
+        r = w / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    this.drawGear(ctx, color, r * 1.7, r * 1.7, r, 10, 6);
+    this.drawGear(ctx, color, 0, 0, r, 0, 6);
 
     // fill
     ctx.clip('evenodd');
