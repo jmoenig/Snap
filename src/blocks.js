@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-July-24';
+modules.blocks = '2026-July-28';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2647,6 +2647,30 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.isDraggable = false;
         morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
         isClickable = true;
+    } else if (value instanceof Process) {
+        morphToShow = new Morph();
+        morphToShow.color = new Color(255, 255, 255, 0);
+        morphToShow.setExtent(new Point(30, 30));
+        morphToShow.version = null;
+        morphToShow.readout = null;
+        morphToShow.step = function () {
+            if (this.version !== value.version) {
+                if (this.readout instanceof Morph) {
+                    this.removeChild(this.readout);
+                }
+                if (value.isPaused) {
+                    this.readout = new SymbolMorph('gearsApartAnimated', 30);
+                } else if (value.isRunning()) {
+                    this.readout = new SymbolMorph('gearsAnimated', 30);
+                } else {
+                    this.readout = new SymbolMorph('gearsApart', 30);
+                }
+                this.readout.setCenter(this.center());
+                this.add(this.readout);
+                this.version = value.version;
+                this.changed();
+            }
+        };
     } else if (value instanceof Morph) {
         if (isSnapObject(value)) {
             img = value.thumbnail(new Point(40, 40));
@@ -12105,6 +12129,7 @@ InputSlotMorph.prototype.typesMenu = function () {
     dict.reporter = ['reporter'];
     dict.predicate = ['predicate'];
     dict.hat = ['hat'];
+    dict.process = ['process'];
     dict['~'] = null;
     // the following entries are collective types and thus not unique:
     if (SpriteMorph.prototype.enableFirstClass) {
@@ -12136,6 +12161,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     }
     dict.name = ['name'];
     dict.scripts = ['scripts'];
+    dict.processes = ['processes'];
     dict.solutions = ['solutions'];
     dict.costume = ['costume'];
     dict.costumes = ['costumes'];

@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-June-02';
+modules.objects = '2026-July-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -13558,6 +13558,30 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             );
             return menu;
         };
+    } else if (data instanceof Process) {
+        contents = new Morph();
+        contents.color = new Color(255, 255, 255, 0);
+        contents.setExtent(new Point(30, 30));
+        contents.version = null;
+        contents.readout = null;
+        contents.step = function () {
+            if (this.version !== data.version) {
+                if (this.readout instanceof Morph) {
+                    this.removeChild(this.readout);
+                }
+                if (data.isPaused) {
+                    this.readout = new SymbolMorph('gearsApartAnimated', 30);
+                } else if (data.isRunning()) {
+                    this.readout = new SymbolMorph('gearsAnimated', 30);
+                } else {
+                    this.readout = new SymbolMorph('gearsApart', 30);
+                }
+                this.readout.setCenter(this.center());
+                this.add(this.readout);
+                this.version = data.version;
+                this.changed();
+            }
+        };
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
         contents = new Morph();
@@ -15369,6 +15393,13 @@ CellMorph.prototype.dataAsMorph = function (data) {
             contents.enableSelecting();
         }
         contents.setColor(WHITE);
+    } else if (data instanceof Process) {
+        if (data.isPaused) {
+            return new SymbolMorph('gearsApartAnimated', 30);
+        } else if (data.isRunning()) {
+            return new SymbolMorph('gearsAnimated', 30);
+        }
+        return new SymbolMorph('gearsApart', 30);
     } else if (typeof data === 'boolean') {
         img = SpriteMorph.prototype.booleanMorph.call(
             null,
@@ -15536,7 +15567,8 @@ CellMorph.prototype.update = function () {
     // special case for observing sprites
     if (!isSnapObject(this.contents) &&
         !(this.contents instanceof Costume) &&
-        !(this.contents instanceof Context)
+        !(this.contents instanceof Context) &&
+        !(this.contents instanceof Process)
     ) {
         return;
     }

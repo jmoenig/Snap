@@ -69,11 +69,11 @@ MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph, isNil,
 SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
 ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows, Color,
-CostumeIconMorph, SoundIconMorph, localize, display*/
+CostumeIconMorph, SoundIconMorph, Process, localize, display*/
 
 /*jshint esversion: 6*/
 
-modules.tables = '2026-January-19';
+modules.tables = '2026-July-28';
 
 var Table;
 var TableCellMorph;
@@ -430,6 +430,10 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
     } else if (dta instanceof Sound) {
         return new SymbolMorph(
             'notes', SyntaxElementMorph.prototype.fontSize
+        );
+    } else if (dta instanceof Process) {
+        return new SymbolMorph(
+            'gears', SyntaxElementMorph.prototype.fontSize
         );
     } else if (dta instanceof List) {
         return this.listSymbol();

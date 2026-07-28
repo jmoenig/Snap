@@ -2,6 +2,7 @@
 
 ## in development:
 * **New Features:**
+    * first-class processes
     * new animated and still symbols for interlocking gears
 * **Notable Changes:**
     * changed small gear symbol to 6 spikes (from 8)
@@ -11,6 +12,7 @@
 ### 2026-07-28
 * symbols: changed small gear symbol to 6 spikes
 * symbols: tweaked gear symbols and added another one (gearsApart)
+* objects, blocks, threads, tables, lists: First-Class Processes 
 
 ### 2026-07-27
 * symbols: refactored drawing a single 8-spike gear symbol

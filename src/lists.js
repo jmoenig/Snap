@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process, Table*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2026-January-19';
+modules.lists = '2026-July-28';
 
 var List;
 var ListWatcherMorph;
@@ -1593,7 +1593,8 @@ ListWatcherMorph.prototype.update = function (anyway) {
                 m.contentsMorph.update();
             } else if (isSnapObject(m.contents) ||
                 (m.contents instanceof Costume) ||
-                (m.contents instanceof Context)
+                (m.contents instanceof Context) ||
+                (m.contents instanceof Process)
             ) {
                 m.update();
             }
