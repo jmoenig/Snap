@@ -2620,6 +2620,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         pos = this.rightCenter().add(new Point(2, 0)),
         sf = this.parentThatIsA(ScrollFrameMorph),
         wrrld = this.world() || target.world(),
+        frame,
         maxHeight,
         scroller;
 
@@ -2640,7 +2641,10 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.update(true);
         morphToShow.step = value.update;
         morphToShow.isDraggable = false;
-        morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
+        frame = this.parentThatIsA(ScrollFrameMorph);
+        if (frame) {
+            morphToShow.expand(frame.extent());
+        }
         isClickable = true;
     } else if (value instanceof TableFrameMorph) {
         morphToShow = value;
