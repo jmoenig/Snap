@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-April-07';
+modules.extensions = '2026-July-28';
 
 // Global stuff
 
@@ -370,6 +370,61 @@ SnapExtensions.primitives.set(
     'snap_extensionexists(prim)',
     function (prim) {
         return !isNil(SnapExtensions.primitives.get(prim));
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_fork(script, inputs)',
+    function (script, inputs, proc) {
+        proc.assertType(script, ['command', 'reporter', 'predicate', 'hat']);
+        proc.assertType(inputs, 'list');
+        return proc.fork(script, inputs);
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_scriptof(process)',
+    function (process, proc) {
+        proc.assertType(process, 'process');
+        return process.topBlock.reify();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_stateof(process)',
+    function (process, proc) {
+        proc.assertType(process, 'process');
+        if (process.isPaused) {
+            return 'paused';
+        }
+        if (process.isRunning()) {
+            return 'running';
+        }
+        return 'terminated';
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_pause(process)',
+    function (process, proc) {
+        proc.assertType(process, 'process');
+        return process.pause();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_resume(process)',
+    function (process, proc) {
+        proc.assertType(process, 'process');
+        return process.resume();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_stop(process)',
+    function (process, proc) {
+        proc.assertType(process, 'process');
+        return process.stop();
     }
 );
 
