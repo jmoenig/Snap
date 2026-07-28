@@ -12,7 +12,8 @@
 ### 2026-07-28
 * symbols: changed small gear symbol to 6 spikes
 * symbols: tweaked gear symbols and added another one (gearsApart)
-* objects, blocks, threads, tables, lists: First-Class Processes 
+* objects, blocks, threads, tables, lists: First-Class Processes
+* changed dev version to 12.1 
 
 ### 2026-07-27
 * symbols: refactored drawing a single 8-spike gear symbol
