@@ -4,15 +4,18 @@
 * **New Features:**
     * first-class processes
     * extensions for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
-    * new animated and still symbols for interlocking gears
+    * new animated and still symbols for interlocking gears - used for process extensions
 * **Notable Changes:**
     * changed small gear symbol to 6 spikes (from 8)
 * **Notable Fixes:**
     * fixed display of continuations capturing variadic inputs
+* **Translation Updates:**
+    * German
 
 ### 2026-07-29
 * extensions: added "error" state to the process state extensions
-* extensions: added "block of process" extension for inspecting the current stackframe of another process 
+* extensions: added "block of process" extension for inspecting the current stackframe of another process
+* German translation update (for the new process extensions) 
 
 ### 2026-07-28
 * symbols: changed small gear symbol to 6 spikes
