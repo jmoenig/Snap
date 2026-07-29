@@ -10,6 +10,9 @@
 * **Notable Fixes:**
     * fixed display of continuations capturing variadic inputs
 
+### 2026-07-29
+* extensions: added "error" state to the process state extensions
+
 ### 2026-07-28
 * symbols: changed small gear symbol to 6 spikes
 * symbols: tweaked gear symbols and added another one (gearsApart)

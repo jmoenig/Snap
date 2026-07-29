@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-July-28';
+modules.extensions = '2026-July-29';
 
 // Global stuff
 
@@ -395,12 +395,15 @@ SnapExtensions.primitives.set(
     function (process, proc) {
         proc.assertType(process, 'process');
         if (process.isPaused) {
-            return 'paused';
+            return ['paused'];
         }
         if (process.isRunning()) {
-            return 'running';
+            return ['running'];
         }
-        return 'terminated';
+        if (process.errorFlag) {
+            return ['error'];
+        }
+        return ['terminated'];
     }
 );
 
