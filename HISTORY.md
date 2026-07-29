@@ -2,7 +2,8 @@
 
 ## in development:
 * **New Features:**
-    * first-class processes
+    * first-class processes - new built in data type
+    * new "processes" library for creating, pausing, resuming, stopping and inspecting (first-class) threads
     * extensions for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
     * new animated and still symbols for interlocking gears - used for process extensions
 * **Notable Changes:**
@@ -15,7 +16,8 @@
 ### 2026-07-29
 * extensions: added "error" state to the process state extensions
 * extensions: added "block of process" extension for inspecting the current stackframe of another process
-* German translation update (for the new process extensions) 
+* German translation update (for the new process extensions)
+* new "Processes" extension library for creating, pausing, resuming, stopping and inspecting (first-class) threads 
 
 ### 2026-07-28
 * symbols: changed small gear symbol to 6 spikes
