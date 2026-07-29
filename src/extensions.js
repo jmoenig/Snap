@@ -391,6 +391,14 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'snap_blockof(process)',
+    function (process, proc) {
+        proc.assertType(process, 'process');
+        return process.context;
+    }
+);
+
+SnapExtensions.primitives.set(
     'snap_stateof(process)',
     function (process, proc) {
         proc.assertType(process, 'process');

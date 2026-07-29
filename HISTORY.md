@@ -12,6 +12,7 @@
 
 ### 2026-07-29
 * extensions: added "error" state to the process state extensions
+* extensions: added "block of process" extension for inspecting the current stackframe of another process 
 
 ### 2026-07-28
 * symbols: changed small gear symbol to 6 spikes
