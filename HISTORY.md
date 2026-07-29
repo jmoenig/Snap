@@ -18,7 +18,8 @@
 * extensions: added "block of process" extension for inspecting the current stackframe of another process
 * German translation update (for the new process extensions)
 * new "Processes" extension library for creating, pausing, resuming, stopping and inspecting (first-class) threads
-* Neural Networks: fixed German translation for "render neural model" 
+* Neural Networks: fixed German translation for "render neural model"
+* fixed a mis-label in the new processes library
 
 ### 2026-07-28
 * symbols: changed small gear symbol to 6 spikes
