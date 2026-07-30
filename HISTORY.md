@@ -18,6 +18,7 @@
 * blocks, objects: added "broken gears" symbol to visualize a process that has an error
 * blocks, objects, threads: added context menu to process symbols in variables and list watchers, speech balloons and result bubbles
 * tables: added process-state aware symbols and context menus when displaying processes in tables
+* updated dev version
 
 ### 2026-07-29
 * extensions: added "error" state to the process state extensions
