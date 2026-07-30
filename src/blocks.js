@@ -2652,6 +2652,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
         isClickable = true;
     } else if (value instanceof Process) {
+        isClickable = true;
         morphToShow = new Morph();
         morphToShow.color = new Color(255, 255, 255, 0);
         morphToShow.setExtent(new Point(30, 30));
@@ -2681,6 +2682,33 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
                 this.changed();
             }
         };
+
+        // support directly interacting with processes:
+        morphToShow.userMenu = function () {
+            var menu = new MenuMorph(this),
+                size = MorphicPreferences.menuFontSize;
+
+            if (ide.isAppMode) {return; }
+            if (value.isPaused) {
+                menu.addPair(
+                    [new SymbolMorph('pointRight', size), localize('resume')],
+                    () => value.resume()
+                );
+            } else if (value.isRunning()) {
+                menu.addPair(
+                    [new SymbolMorph('pause', size), localize('pause')],
+                    () => value.pause()
+                );
+            } else if (!value.errorFlag) {
+                return;
+            }
+            menu.addPair(
+                [new SymbolMorph('square', size), localize('stop')],
+                () => value.stop()
+            );
+            return menu;
+        };
+
     } else if (value instanceof Morph) {
         if (isSnapObject(value)) {
             img = value.thumbnail(new Point(40, 40));

@@ -13588,6 +13588,35 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
                 this.changed();
             }
         };
+
+        // support directly interacting with processes:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                size = MorphicPreferences.menuFontSize,
+                ide = this.parentThatIsA(IDE_Morph) ||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            if (data.isPaused) {
+                menu.addPair(
+                    [new SymbolMorph('pointRight', size), localize('resume')],
+                    () => data.resume()
+                );
+            } else if (data.isRunning()) {
+                menu.addPair(
+                    [new SymbolMorph('pause', size), localize('pause')],
+                    () => data.pause()
+                );
+            } else if (!data.errorFlag) {
+                return;
+            }
+            menu.addPair(
+                [new SymbolMorph('square', size), localize('stop')],
+                () => data.stop()
+            );
+            return menu;
+        };
+
     } else if (typeof data === 'boolean') {
         img = sprite.booleanMorph(data).fullImage();
         contents = new Morph();
@@ -15401,17 +15430,47 @@ CellMorph.prototype.dataAsMorph = function (data) {
         contents.setColor(WHITE);
     } else if (data instanceof Process) {
         if (data.isPaused) {
-            return new SymbolMorph('gearsApartAnimated', 30);
+            contents = new SymbolMorph('gearsApartAnimated', 30);
         } else if (data.isRunning()) {
-            return new SymbolMorph('gearsAnimated', 30);
+            contents = new SymbolMorph('gearsAnimated', 30);
         } else if (data.errorFlag) {
-            return new SymbolMorph(
+            contents = new SymbolMorph(
                 'gearsAnimatedBroken',
                 30,
                 new Color(173, 15, 0)
             );
+        } else {
+            contents = new SymbolMorph('gearsApart', 30);
         }
-        return new SymbolMorph('gearsApart', 30);
+
+        // support directly interacting with processes:
+        contents.userMenu = function () {
+            var menu = new MenuMorph(this),
+                size = MorphicPreferences.menuFontSize,
+                ide = this.parentThatIsA(IDE_Morph) ||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide.isAppMode) {return; }
+            if (data.isPaused) {
+                menu.addPair(
+                    [new SymbolMorph('pointRight', size), localize('resume')],
+                    () => data.resume()
+                );
+            } else if (data.isRunning()) {
+                menu.addPair(
+                    [new SymbolMorph('pause', size), localize('pause')],
+                    () => data.pause()
+                );
+            } else if (!data.errorFlag) {
+                return;
+            }
+            menu.addPair(
+                [new SymbolMorph('square', size), localize('stop')],
+                () => data.stop()
+            );
+            return menu;
+        };
+
     } else if (typeof data === 'boolean') {
         img = SpriteMorph.prototype.booleanMorph.call(
             null,

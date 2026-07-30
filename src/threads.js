@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-July-28';
+modules.threads = '2026-July-30';
 
 var ThreadManager;
 var Process;
@@ -772,6 +772,7 @@ Process.prototype.stop = function () {
     this.readyToYield = true;
     this.readyToTerminate = true;
     this.errorFlag = false;
+    this.isPaused = false;
     if (this.context) {
         this.context.stopMusic();
     }
