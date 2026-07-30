@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-July-28';
+modules.objects = '2026-July-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -13573,6 +13573,12 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
                     this.readout = new SymbolMorph('gearsApartAnimated', 30);
                 } else if (data.isRunning()) {
                     this.readout = new SymbolMorph('gearsAnimated', 30);
+                } else if (data.errorFlag) {
+                    this.readout = new SymbolMorph(
+                        'gearsAnimatedBroken',
+                        30,
+                        new Color(173, 15, 0)
+                    );
                 } else {
                     this.readout = new SymbolMorph('gearsApart', 30);
                 }
@@ -15398,6 +15404,12 @@ CellMorph.prototype.dataAsMorph = function (data) {
             return new SymbolMorph('gearsApartAnimated', 30);
         } else if (data.isRunning()) {
             return new SymbolMorph('gearsAnimated', 30);
+        } else if (data.errorFlag) {
+            return new SymbolMorph(
+                'gearsAnimatedBroken',
+                30,
+                new Color(173, 15, 0)
+            );
         }
         return new SymbolMorph('gearsApart', 30);
     } else if (typeof data === 'boolean') {

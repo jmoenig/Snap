@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-July-28';
+modules.blocks = '2026-July-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2666,6 +2666,12 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
                     this.readout = new SymbolMorph('gearsApartAnimated', 30);
                 } else if (value.isRunning()) {
                     this.readout = new SymbolMorph('gearsAnimated', 30);
+                } else if (value.errorFlag) {
+                    this.readout = new SymbolMorph(
+                        'gearsAnimatedBroken',
+                        30,
+                        new Color(173, 15, 0)
+                    );
                 } else {
                     this.readout = new SymbolMorph('gearsApart', 30);
                 }

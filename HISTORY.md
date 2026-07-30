@@ -15,6 +15,7 @@
 
 ### 2026-07-30
 * symbols: new animated "broken gears" symbols
+* blocks, objects: added "broken gears" symbol to visualize a process that has an error
 
 ### 2026-07-29
 * extensions: added "error" state to the process state extensions
