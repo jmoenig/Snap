@@ -13,6 +13,9 @@
 * **Translation Updates:**
     * German
 
+### 2026-07-30
+* symbols: new animated "broken gears" symbols
+
 ### 2026-07-29
 * extensions: added "error" state to the process state extensions
 * extensions: added "block of process" extension for inspecting the current stackframe of another process
