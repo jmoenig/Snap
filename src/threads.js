@@ -463,7 +463,8 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                     proc.homeContext.receiver.stopTalking();
                 }
             }
-            if (proc.topBlock instanceof ReporterBlockMorph ||
+            if ((proc.topBlock instanceof ReporterBlockMorph &&
+                        proc.isClicked) ||
                     proc.isShowingResult || proc.exportResult) {
                 result = proc.homeContext.inputs[0];
                 if (proc.onComplete instanceof Function) {
