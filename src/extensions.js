@@ -409,6 +409,16 @@ SnapExtensions.primitives.set(
 );
 
 SnapExtensions.primitives.set(
+    'snap_objectof(process)',
+    function (process, proc) {
+        var value;
+        proc.assertType(process, 'process');
+        value = process.receiver;
+        return isNil(value) ? '' : value;
+    }
+);
+
+SnapExtensions.primitives.set(
     'snap_stateof(process)',
     function (process, proc) {
         proc.assertType(process, 'process');

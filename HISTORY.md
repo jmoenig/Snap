@@ -15,6 +15,7 @@
 
 ### 2026-07-31
 * extensions: added "result of process" extension
+* extensions: added "object of process" extension
 
 ### 2026-07-30
 * symbols: new animated "broken gears" symbols
