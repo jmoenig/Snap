@@ -18,6 +18,7 @@
 * extensions: added "object of process" extension
 * extensions, threads: added "step process" extension
 * blocks, objects, tables: added "step" entry to paused process context menu
+* German translation update for "result"
 
 ### 2026-07-30
 * symbols: new animated "broken gears" symbols
