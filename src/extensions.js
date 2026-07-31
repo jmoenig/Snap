@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-July-29';
+modules.extensions = '2026-July-31';
 
 // Global stuff
 
@@ -395,6 +395,16 @@ SnapExtensions.primitives.set(
     function (process, proc) {
         proc.assertType(process, 'process');
         return process.context;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_resultof(process)',
+    function (process, proc) {
+        var value;
+        proc.assertType(process, 'process');
+        value = process.homeContext.inputs[0];
+        return isNil(value) ? '' : value;
     }
 );
 
