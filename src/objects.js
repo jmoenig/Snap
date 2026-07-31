@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-July-30';
+modules.objects = '2026-July-31';
 
 var SpriteMorph;
 var StageMorph;
@@ -13599,6 +13599,10 @@ SpriteBubbleMorph.prototype.dataAsMorph = function (data) {
             if (ide.isAppMode) {return; }
             if (data.isPaused) {
                 menu.addPair(
+                    [new SymbolMorph('stepForward', size), localize('step')],
+                    () => data.step()
+                );
+                menu.addPair(
                     [new SymbolMorph('pointRight', size), localize('resume')],
                     () => data.resume()
                 );
@@ -15452,6 +15456,10 @@ CellMorph.prototype.dataAsMorph = function (data) {
 
             if (ide.isAppMode) {return; }
             if (data.isPaused) {
+                menu.addPair(
+                    [new SymbolMorph('stepForward', size), localize('step')],
+                    () => data.step()
+                );
                 menu.addPair(
                     [new SymbolMorph('pointRight', size), localize('resume')],
                     () => data.resume()

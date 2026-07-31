@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-July-30';
+modules.blocks = '2026-July-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2690,6 +2690,10 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
 
             if (ide.isAppMode) {return; }
             if (value.isPaused) {
+                menu.addPair(
+                    [new SymbolMorph('stepForward', size), localize('step')],
+                    () => value.step()
+                );
                 menu.addPair(
                     [new SymbolMorph('pointRight', size), localize('resume')],
                     () => value.resume()

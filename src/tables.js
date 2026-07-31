@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, Process, localize, display*/
 
 /*jshint esversion: 11*/
 
-modules.tables = '2026-July-30';
+modules.tables = '2026-July-31';
 
 var Table;
 var TableCellMorph;
@@ -461,6 +461,10 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
 
             if (ide?.isAppMode) {return; }
             if (dta.isPaused) {
+                menu.addPair(
+                    [new SymbolMorph('stepForward', size), localize('step')],
+                    () => dta.step()
+                );
                 menu.addPair(
                     [new SymbolMorph('pointRight', size), localize('resume')],
                     () => dta.resume()
