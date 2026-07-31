@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-July-30';
+modules.threads = '2026-July-31';
 
 var ThreadManager;
 var Process;
@@ -791,6 +791,15 @@ Process.prototype.pause = function () {
         this.pauseOffset = Date.now() - this.context.startTime;
     }
     this.version = Date.now();
+};
+
+Process.prototype.step = function () {
+    // only for UI
+    if (this.isPaused) {
+        this.resume();
+        this.runStep();
+        this.pause();
+    }
 };
 
 Process.prototype.resume = function () {

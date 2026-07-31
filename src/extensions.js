@@ -439,7 +439,7 @@ SnapExtensions.primitives.set(
     'snap_pause(process)',
     function (process, proc) {
         proc.assertType(process, 'process');
-        return process.pause();
+        process.pause();
     }
 );
 
@@ -447,7 +447,15 @@ SnapExtensions.primitives.set(
     'snap_resume(process)',
     function (process, proc) {
         proc.assertType(process, 'process');
-        return process.resume();
+        process.resume();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'snap_step(process)',
+    function (process, proc) {
+        proc.assertType(process, 'process');
+        process.step();
     }
 );
 
@@ -455,7 +463,7 @@ SnapExtensions.primitives.set(
     'snap_stop(process)',
     function (process, proc) {
         proc.assertType(process, 'process');
-        return process.stop();
+        process.stop();
     }
 );
 
