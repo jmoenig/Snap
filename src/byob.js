@@ -113,7 +113,7 @@ ADT_SlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-June-03';
+modules.byob = '2026-August-02';
 
 // Declarations
 
@@ -4167,6 +4167,8 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
         suff = ' \uFE19';
     } else if (this.type === '%obj') {
         suff = ' $turtleOutline';
+    } else if (this.type === '%p') {
+        suff = ' $gearBig';
     } else if (this.type === '%clr') {
         suff = ' $pipette';
     } else if (this.type === '%adt') {
@@ -5322,7 +5324,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
             (contains(
                 ['%mlt', '%code', '%obj', '%scriptVars', '%receive', '%send',
                     '%elseif', '%upvar', '%mult%upvar', '%parameter', '%adt',
-                    '%mult%parameter', '%mult%adt', '%nUE'],
+                    '%mult%parameter', '%mult%adt', '%nUE', '%p'],
                 this.fragment.type
             ) ? on : off) +
             localize('special'),
@@ -5375,6 +5377,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
     addSpecialSlotType('code', '%code');
     addSpecialSlotType('number \u03BB', '%nUE');
     addSpecialSlotType('object', '%obj');
+    addSpecialSlotType('process', '%p');
     addSpecialSlotType('parameter', '%parameter');
     addSpecialSlotType('custom type', '%adt');
     menu.addLine();

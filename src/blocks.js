@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-July-31';
+modules.blocks = '2026-August-02';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1031,6 +1031,10 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'slot',
         kind: 'list'
     },
+    '%p': {
+        type: 'slot',
+        kind: 'process'
+    },
 
     /*
         type: 'symbol'
@@ -1052,6 +1056,11 @@ SyntaxElementMorph.prototype.labelParts = {
     '$pipette': {
         type: 'symbol',
         name: 'pipette',
+        tags: 'protected'
+    },
+    '$gearBig': {
+        type: 'symbol',
+        name: 'gearBig',
         tags: 'protected'
     },
     '$clockwise': {
@@ -1078,6 +1087,10 @@ SyntaxElementMorph.prototype.labelParts = {
     '$list': {
         type: 'symbol',
         name: 'list'
+    },
+    '$process': {
+        type: 'symbol',
+        name: 'gearBig'
     },
     '$pause': {
         type: 'symbol',
@@ -1991,7 +2004,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
     if (((info && Object.hasOwn(info, 'type')) ||
         (spec[0] === '%' && spec.length > 1)) &&
         (this.selector !== 'reportGetVar' ||
-            (['$turtleOutline', '$pipette'].includes(spec) &&
+            (['$turtleOutline', '$pipette', '$gearBig'].includes(spec) &&
                 this.isObjInputFragment()
             )
         )
@@ -2264,7 +2277,7 @@ SyntaxElementMorph.prototype.isObjInputFragment = function () {
     // private - for displaying a symbol in a variable block template
     return (this.selector === 'reportGetVar') &&
         (this.getSlotSpec() === '%t') &&
-        (['%obj', '%clr'].includes(this.parent.fragment.type));
+        (['%obj', '%p', '%clr'].includes(this.parent.fragment.type));
 };
 
 // SyntaxElementMorph layout:
@@ -3246,6 +3259,7 @@ BlockSymbolMorph.prototype.getShadowRenderColor =
     %var    - chameleon colored rectangular drop-down for variable names
     %shd    - Chameleon colored rectuangular drop-down for shadowed var names
     %b      - chameleon colored hexagonal slot (for predicates)
+    %p      - process icon representing a large gear
     %bool   - chameleon colored hexagonal slot (for predicates), static
     %l      - list icon
     %c      - C-shaped command slot, special form for primitives
@@ -9961,6 +9975,7 @@ ScriptsMorph.prototype.balloonCodeIdx = function (idx, contents) {
     values, I act as an iconic slot myself:
 
         'list'      - a list symbol
+        'process'   - a gear symbol
         'object'    - a turtle symbol
 */
 
@@ -10038,7 +10053,12 @@ ArgMorph.prototype.justDropped = function () {
 // ArgMorph spec extrapolation (for demo purposes)
 
 ArgMorph.prototype.getSpec = function () {
-    return this.type === 'list' ? '%l' : '%s'; // default
+    if (this.type === 'list') {
+        return '%l';
+    } else if (this.type === 'process') {
+        return '%p';
+    }
+    return '%s'; // default
 };
 
 // ArgMorph menu
@@ -10085,6 +10105,10 @@ ArgMorph.prototype.createIcon = function () {
         this.icon = this.labelPart('$list');
         this.add(this.icon);
         break;
+    case 'process':
+        this.icon = this.labelPart('$process');
+        this.add(this.icon);
+        break;
     case 'object':
         this.icon = this.labelPart('$turtle');
         this.add(this.icon);
@@ -10105,7 +10129,7 @@ ArgMorph.prototype.fixLayout = function () {
 
 ArgMorph.prototype.render = function (ctx) {
     // make sure my icon's shadow color matches my block's color
-    var block;
+    var block, w;
     if (this.icon) {
         block = this.parentThatIsA(BlockMorph);
         if (block) {
@@ -10115,6 +10139,15 @@ ArgMorph.prototype.render = function (ctx) {
         case 'list':
             this.color = new Color(255, 140, 0); // list color
             break;
+        case 'process':
+            w = this.width();
+            ctx.save();
+            ctx.fillStyle = 'rgba(255,140,0,1)';
+            ctx.beginPath();
+            ctx.arc(w * 0.5, w * 0.5, w * 0.3, radians(0), radians(360));
+            ctx.fill();
+            ctx.restore();
+            return;
         default:
             return; // don't draw anything except the icon
         }
@@ -10133,7 +10166,14 @@ ArgMorph.prototype.isEmptySlot = function () {
 };
 
 ArgMorph.prototype.matches = function (typestring) {
-    var expected = [this.type === 'list' ? 'list' : 'actor', 'any'];
+    var expected = ['any'];
+    if (this.type === 'list') {
+        expected.push('list');
+    } else if (this.type === 'process') {
+        expected.push('process');
+    } else {
+        expected.push('actor');
+    }
     return expected.includes(typestring);
 };
 
