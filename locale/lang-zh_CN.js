@@ -1910,5 +1910,10 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
   "Shapes - Compose": "图形库 | 图形组合",
   "Shapes - Measure": "图形库 | 属性测量",
   "Shapes - Transform": "图形库 | 图形变换",
-  "running": "正在运行"
+  "running": "正在运行",
+  "paused": "已经暂停",
+  "error": "出现错误",
+  "terminated": "运行完毕",
+  "resume": "恢复运行",
+  "stop": "停止运行"
 };
