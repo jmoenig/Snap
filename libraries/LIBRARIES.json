@@ -723,7 +723,7 @@
           },
           "zh_CN": {
               "name": "异常处理库",
-              "description": "运行脚本；如果发生错误,不要用红色光环停止脚本，而是运行另一个脚本来处理错误。还包括一个积木，用于通过作为输入给出的消息来导致错误。还包括一个用于创建脚本变量并为其赋值的积木。"
+              "description": "当在第一个积木中运行一个Snap!程序时，如果出现错误，则不会直接报错来停止程序，而是运行另一个程序来处理错误。第二个积木用于通过指定的错误信息来进行报错。最后一个积木用于创建脚本变量并为其赋值。"
           }
       },
       "searchData": [
@@ -1024,7 +1024,7 @@
           },
           "zh_CN": {
               "name": "3D甲虫教学库",
-              "description": "在三维空间中沿路径绘制点、线或多边形，以生成3D几何图形。"
+              "description": "在三维空间中沿路径绘制点、线或多边形，以生成3D几何图形。\n本自制积木库的原型是Snap!改版Bettle Blocks，因服务器数据丢失，导致其于Snap! 10作为自制积木库引入。"
           }
       }
   },
@@ -2394,6 +2394,10 @@
       "translations": {
           "ca": {
               "description": "Funcions científiques, gràfics, comandes SQL i 'Machine Learning' creats per la Universitat de Göttingen (Eckart Modrow)"
+          },
+          "zh_CN": {
+            "name": "SciSnap!库(v3)",
+            "description": "（翻译未覆盖）科学计算函数、图形绘制、SQL接口、机器学习——由德国哥廷根大学计算机科学学院荣誉教授Eckart Modrow开发"
           }
       },
       "searchData": [
@@ -2804,8 +2808,8 @@
               ]
           },
           "zh_CN": {
-              "name": "TuneScope",
-              "description": "音乐记谱、乐器、鼓、音调、和弦、轨道，来自弗吉尼亚大学 (Glen Bull)"
+              "name": "TuneScope库",
+              "description": "（翻译未覆盖）音乐记谱、乐器、鼓、音调、和弦、轨道，来自弗吉尼亚大学 (Glen Bull)"
           }
       },
       "searchData": [
@@ -3125,7 +3129,7 @@
           },
           "zh_CN": {
               "name": "延续 + call/cc库",
-              "description": "动态获取continuation(延续)，以实现更多控制流\n译者注：call/cc的全称是“call-with-current-continuation”，其会将程序下一步运行的代码封装为continuation(Snap!：环)，并传入至函数。\n当执行continuation时，会跳转到其对应的程序，继续向下运行，不会回到调用它的程序里。\ncall/cc的用例如：\n“循环、函数迭代和组合”库里的“非本地退出”积木、协程(Coroutine)、生成器(Generator)"
+              "description": "用call/cc(全称“call-with-the-current-continuation”)动态获取程序运行于此的continuation(延续)，来实现更多控制流。例如“循环、函数迭代和组合”库里的“非本地退出”积木、协程(Coroutine)和生成器(Generator)"
           }
       }
   },
@@ -3303,6 +3307,10 @@
                   "um par (chave",
                   "altera o valor da configuração _ para _"
               ]
+          },
+          "zh_CN": {
+            "name": "(EDC) 微观教学环境库",
+            "description": "（翻译未覆盖）自定义Snap! UI界面，来创建一个适用于教学的微观编程环境"
           }
       }
   },
@@ -3319,7 +3327,7 @@
       "translations": {
           "zh_CN": {
               "name": "(EDC) 程序图库",
-              "description": "将环形积木/脚本转换为造型"
+              "description": "将环形积木/程序转换为造型"
           }
       }
   },
@@ -3351,7 +3359,7 @@
       "translations": {
           "zh_CN": {
               "name": "(EDC) 翻译库",
-              "description": "支持翻译文本、积木和下拉/占位符值"
+              "description": "（翻译未覆盖）支持翻译文本、积木和下拉/占位符值"
           }
       }
   }
