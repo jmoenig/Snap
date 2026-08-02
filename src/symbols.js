@@ -39,9 +39,11 @@
 
 /*global modules, Morph, Point, radians, ZERO, BLACK*/
 
+/*jshint esversion: 6*/
+
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2026-February-13';
+modules.symbols = '2026-July-30';
 
 var SymbolMorph;
 
@@ -69,7 +71,12 @@ SymbolMorph.prototype.names = [
     'square',
     'pointRight',
     'stepForward',
+    'gear',
     'gears',
+    'gearsAnimated',
+    'gearsAnimatedBroken',
+    'gearsApartAnimated',
+    'gearsApart',
     'gearPartial',
     'gearBig',
     'file',
@@ -177,6 +184,8 @@ SymbolMorph.prototype.init = function (
     this.size = size || 50;
     this.shadowOffset = shadowOffset || ZERO;
     this.shadowColor = shadowColor || null;
+    this.animationState = 0;
+    this.animationStep = 0;
     SymbolMorph.uber.init.call(this);
     this.color = color || BLACK;
     this.backgroundColor = bg || null;
@@ -269,8 +278,23 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'stepForward':
         this.renderSymbolStepForward(ctx, aColor);
         break;
+    case 'gear':
+        this.renderSymbolGear(ctx, aColor);
+        break;
     case 'gears':
         this.renderSymbolGears(ctx, aColor);
+        break;
+    case 'gearsAnimated':
+        this.renderSymbolGearsAnimated(ctx, aColor);
+        break;
+    case 'gearsAnimatedBroken':
+        this.renderSymbolGearsAnimatedBroken(ctx, aColor);
+        break;
+    case 'gearsApartAnimated':
+        this.renderSymbolGearsApartAnimated(ctx, aColor);
+        break;
+    case 'gearsApart':
+        this.renderSymbolGearsApart(ctx, aColor);
         break;
     case 'gearBig':
         this.renderSymbolGearBig(ctx, aColor);
@@ -623,53 +647,189 @@ SymbolMorph.prototype.renderSymbolStepForward = function (ctx, color) {
     );
 };
 
-SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
+SymbolMorph.prototype.renderSymbolGear = function (ctx, color) {
+    // draw gears
+    this.drawSingleGear(ctx, color, 30, 6);
+};
+
+SymbolMorph.prototype.drawSingleGear = function (ctx, color, angle, spikes) {
     // draw gears
     var w = this.symbolWidth(),
-        r = w / 2,
-        spikes = 8,
-        off = 8,
-        shift = 10,
-        angle, turn, i;
+        r = w / 2;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
+    this.drawGear(ctx, r, r, r, angle, spikes);
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGears = function (ctx, color) {
+    // draw interlocking gears
+    this.drawGears(ctx, color, 10);
+};
+
+SymbolMorph.prototype.drawGears = function (ctx, color, angle, noHole) {
+    // draw interlocking gears
+    var w = this.symbolWidth(),
+        r = w / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    this.drawGear(ctx, r * 1.5, r * 1.5, r, -angle, 6, noHole);
+    this.drawGear(ctx, r * 0.2, r * 0.2, r, angle, 6, noHole);
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGearsAnimated = function (ctx, color) {
+    // draw animated interlocking gears
+    if (this.animationStep === 0) {
+        this.animationStep = 3;
+        
+        this.step = function () {
+            this.animationState =
+                (this.animationState + this.animationStep) % 60;
+            this.changed();
+        };
+    }
+    this.drawGears(ctx, color, this.animationState);
+};
+
+SymbolMorph.prototype.renderSymbolGearsAnimatedBroken = function (ctx, color) {
+    // draw animated broken gears
+    var w = this.symbolWidth(),
+        r = w / 2;
+
+    if (this.animationStep === 0) {
+        this.animationStep = 3;
+        
+        this.step = function () {
+            this.animationState =
+                (this.animationState + this.animationStep) % 60;
+            this.changed();
+        };
+    }
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    this.drawGear(ctx, r * 1.5, r * 1.5, r, 47, 6, false, true);
+    this.drawGear(ctx, r * 0.2, r * 0.2, r, this.animationState, 6);
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGearsApartAnimated = function (ctx, color) {
+    // draw animated non-interlocking gears
+    if (this.animationStep === 0) {
+        this.animationStep = 3;
+        
+        this.step = function () {
+            this.animationState =
+                (this.animationState + this.animationStep) % 60;
+            this.changed();
+        };
+    }
+    this.drawGearsApart(ctx, color, this.animationState);
+};
+
+SymbolMorph.prototype.drawGearsApart = function (ctx, color, angle) {
+    // draw non-interlocking gears
+    var w = this.symbolWidth(),
+        r = w / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    this.drawGear(ctx, r * 1.5, r * 1.5, r, 10, 6);
+    this.drawGear(ctx, 0, 0, r, angle, 6);
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.renderSymbolGearsApart = function (ctx, color) {
+    // draw animated non-interlocking gears
+    var w = this.symbolWidth(),
+        r = w / 2;
+
+    ctx.fillStyle = color.toString();
+    ctx.beginPath();
+    this.drawGear(ctx, r * 1.7, r * 1.7, r, 10, 6);
+    this.drawGear(ctx, 0, 0, r, 0, 6);
+
+    // fill
+    ctx.clip('evenodd');
+    ctx.fillRect(0, 0, w, w);
+};
+
+SymbolMorph.prototype.drawGear = function (
+    ctx,
+    x,
+    y,
+    r,
+    orientation,
+    spikes = 8,
+    noHole = false,
+    broken = false
+) {
+    // helper - draw a single 8-spike gear
+    var w = this.symbolWidth(),
+        // r = w / 2,
+        off = 8,
+        shift = 10,
+        angle, turn, i;
 
     // draw the spiked outline
     ctx.moveTo(w, r);
     angle = 360 / spikes;
     turn = angle * 0.5;
     for (i = 0; i < spikes; i += 1) {
-        ctx.arc(
-            r,
-            r,
-            r,
-            radians(i * angle + turn),
-            radians(i * angle + off + turn)
-        );
-        ctx.arc(
-            r,
-            r,
-            r * 0.7,
-            radians(i * angle - shift + angle * 0.5 + turn),
-            radians(i * angle + shift + angle * 0.5 + turn)
-        );
-        ctx.arc(
-            r,
-            r,
-            r,
-            radians((i + 1) * angle - off + turn),
-            radians((i + 1) * angle + turn)
-        );
+        if (broken && (i === 2 || i == 3)) {
+            ctx.arc(
+                x,
+                y,
+                r * 0.5,
+                radians(orientation + (i * angle - shift + angle * 0.5 + turn)),
+                radians(orientation + (i * angle + shift + angle * 0.5 + turn))
+            );
+        } else {
+            ctx.arc(
+                x,
+                y,
+                r,
+                radians(orientation + (i * angle + turn)),
+                radians(orientation + (i * angle + off + turn))
+            );
+            ctx.arc(
+                x,
+                y,
+                r * 0.7,
+                radians(orientation + (i * angle - shift + angle * 0.5 + turn)),
+                radians(orientation + (i * angle + shift + angle * 0.5 + turn))
+            );
+            ctx.arc(
+                x,
+                y,
+                r,
+                radians(orientation + ((i + 1) * angle - off + turn)),
+                radians(orientation + ((i + 1) * angle + turn))
+            );
+        }
     }
-    ctx.lineTo(w, r);
+    // ctx.lineTo(w, r);
+    ctx.moveTo(w, r);
 
     // draw the hole in the middle
-    ctx.arc(r, r, r * 0.3, radians(0), radians(360));
-
-    // fill
-    ctx.clip('evenodd');
-    ctx.fillRect(0, 0, w, w);
+    if (!noHole) {
+        ctx.arc(x, y, r * 0.3, radians(0), radians(360));
+    }
 };
 
 SymbolMorph.prototype.renderSymbolGearBig = function (ctx, color) {
@@ -724,46 +884,11 @@ SymbolMorph.prototype.renderSymbolGearBig = function (ctx, color) {
 SymbolMorph.prototype.renderSymbolGearPartial = function (ctx, color) {
     // draw gears
     var w = this.symbolWidth(),
-        r = w * 0.75,
-        spikes = 8,
-        off = 8,
-        shift = 10,
-        angle, turn, i;
+        r = w * 0.75;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-
-    // draw the spiked outline
-    ctx.moveTo(w, r);
-    angle = 360 / spikes;
-    turn = angle * 0.5;
-    for (i = 0; i < spikes; i += 1) {
-        ctx.arc(
-            r,
-            r,
-            r,
-            radians(i * angle + turn),
-            radians(i * angle + off + turn)
-        );
-        ctx.arc(
-            r,
-            r,
-            r * 0.7,
-            radians(i * angle - shift + angle * 0.5 + turn),
-            radians(i * angle + shift + angle * 0.5 + turn)
-        );
-        ctx.arc(
-            r,
-            r,
-            r,
-            radians((i + 1) * angle - off + turn),
-            radians((i + 1) * angle + turn)
-        );
-    }
-    ctx.lineTo(w, r);
-
-    // draw the hole in the middle
-    ctx.arc(r, r, r * 0.3, radians(0), radians(360));
+    this.drawGear(ctx, r, r, r, 0);
 
     // fill
     ctx.clip('evenodd');

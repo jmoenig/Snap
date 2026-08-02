@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-June-03';
+modules.blocks = '2026-July-31';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1710,7 +1710,7 @@ SyntaxElementMorph.prototype.revertToEmptyInput = function (arg) {
             }
         } else if (this instanceof MultiArgMorph) {
             deflt = this.labelPart(this.slotSpecFor(inp));
-            if (this.parent.isCustomBlock) {
+            if (this.parent?.isCustomBlock) {
                 if (this.parent.isGlobal) {
                     def = this.parent.definition;
                 } else {
@@ -2620,6 +2620,7 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         pos = this.rightCenter().add(new Point(2, 0)),
         sf = this.parentThatIsA(ScrollFrameMorph),
         wrrld = this.world() || target.world(),
+        frame,
         maxHeight,
         scroller;
 
@@ -2640,13 +2641,78 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         morphToShow.update(true);
         morphToShow.step = value.update;
         morphToShow.isDraggable = false;
-        morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
+        frame = this.parentThatIsA(ScrollFrameMorph);
+        if (frame) {
+            morphToShow.expand(frame.extent());
+        }
         isClickable = true;
     } else if (value instanceof TableFrameMorph) {
         morphToShow = value;
         morphToShow.isDraggable = false;
         morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
         isClickable = true;
+    } else if (value instanceof Process) {
+        isClickable = true;
+        morphToShow = new Morph();
+        morphToShow.color = new Color(255, 255, 255, 0);
+        morphToShow.setExtent(new Point(30, 30));
+        morphToShow.version = null;
+        morphToShow.readout = null;
+        morphToShow.step = function () {
+            if (this.version !== value.version) {
+                if (this.readout instanceof Morph) {
+                    this.removeChild(this.readout);
+                }
+                if (value.isPaused) {
+                    this.readout = new SymbolMorph('gearsApartAnimated', 30);
+                } else if (value.isRunning()) {
+                    this.readout = new SymbolMorph('gearsAnimated', 30);
+                } else if (value.errorFlag) {
+                    this.readout = new SymbolMorph(
+                        'gearsAnimatedBroken',
+                        30,
+                        new Color(173, 15, 0)
+                    );
+                } else {
+                    this.readout = new SymbolMorph('gearsApart', 30);
+                }
+                this.readout.setCenter(this.center());
+                this.add(this.readout);
+                this.version = value.version;
+                this.changed();
+            }
+        };
+
+        // support directly interacting with processes:
+        morphToShow.userMenu = function () {
+            var menu = new MenuMorph(this),
+                size = MorphicPreferences.menuFontSize;
+
+            if (ide.isAppMode) {return; }
+            if (value.isPaused) {
+                menu.addPair(
+                    [new SymbolMorph('stepForward', size), localize('step')],
+                    () => value.step()
+                );
+                menu.addPair(
+                    [new SymbolMorph('pointRight', size), localize('resume')],
+                    () => value.resume()
+                );
+            } else if (value.isRunning()) {
+                menu.addPair(
+                    [new SymbolMorph('pause', size), localize('pause')],
+                    () => value.pause()
+                );
+            } else if (!value.errorFlag) {
+                return;
+            }
+            menu.addPair(
+                [new SymbolMorph('square', size), localize('stop')],
+                () => value.stop()
+            );
+            return menu;
+        };
+
     } else if (value instanceof Morph) {
         if (isSnapObject(value)) {
             img = value.thumbnail(new Point(40, 40));
@@ -12105,6 +12171,7 @@ InputSlotMorph.prototype.typesMenu = function () {
     dict.reporter = ['reporter'];
     dict.predicate = ['predicate'];
     dict.hat = ['hat'];
+    dict.process = ['process'];
     dict['~'] = null;
     // the following entries are collective types and thus not unique:
     if (SpriteMorph.prototype.enableFirstClass) {
@@ -12136,6 +12203,7 @@ InputSlotMorph.prototype.gettablesMenu = function () {
     }
     dict.name = ['name'];
     dict.scripts = ['scripts'];
+    dict.processes = ['processes'];
     dict.solutions = ['solutions'];
     dict.costume = ['costume'];
     dict.costumes = ['costumes'];

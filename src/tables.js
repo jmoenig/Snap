@@ -69,11 +69,11 @@ MorphicPreferences, FrameMorph, HandleMorph, DialogBoxMorph, StringMorph, isNil,
 SpriteMorph, Context, Costume, BlockEditorMorph, SymbolMorph, IDE_Morph, Sound,
 SyntaxElementMorph, MenuMorph, SpriteBubbleMorph, SpeechBubbleMorph, CellMorph,
 ListWatcherMorph, BoxMorph, Variable, isSnapObject, useBlurredShadows, Color,
-CostumeIconMorph, SoundIconMorph, localize, display*/
+CostumeIconMorph, SoundIconMorph, Process, localize, display*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
-modules.tables = '2026-January-19';
+modules.tables = '2026-July-31';
 
 var Table;
 var TableCellMorph;
@@ -400,6 +400,8 @@ TableCellMorph.prototype.render = function (ctx) {
 };
 
 TableCellMorph.prototype.dataRepresentation = function (dta) {
+    var readout, size;
+    this.userMenu = null;
     if (dta instanceof Morph) {
         if (isSnapObject(dta)) {
             return dta.thumbnail(new Point(40, 40), null, true); // no watchers
@@ -431,6 +433,59 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
         return new SymbolMorph(
             'notes', SyntaxElementMorph.prototype.fontSize
         );
+    } else if (dta instanceof Process) {
+        size = SyntaxElementMorph.prototype.fontSize;
+
+        // animated symbols are not yet supported inside table views
+        // already using them for when we address this in the future
+        if (dta.isPaused) {
+            readout = new SymbolMorph('gearsApartAnimated', size);
+        } else if (dta.isRunning()) {
+            readout = new SymbolMorph('gearsAnimated', size);
+        } else if (dta.errorFlag) {
+            readout = new SymbolMorph(
+                'gearsAnimatedBroken',
+                size,
+                new Color(173, 15, 0)
+            );
+        } else {
+            readout = new SymbolMorph('gearsApart', size);
+        }
+
+        // support directly interacting with processes:
+        this.userMenu = function () {
+            var menu = new MenuMorph(this),
+                size = MorphicPreferences.menuFontSize,
+                ide = this.parentThatIsA(IDE_Morph) ||
+                    this.world().childThatIsA(IDE_Morph);
+
+            if (ide?.isAppMode) {return; }
+            if (dta.isPaused) {
+                menu.addPair(
+                    [new SymbolMorph('stepForward', size), localize('step')],
+                    () => dta.step()
+                );
+                menu.addPair(
+                    [new SymbolMorph('pointRight', size), localize('resume')],
+                    () => dta.resume()
+                );
+            } else if (dta.isRunning()) {
+                menu.addPair(
+                    [new SymbolMorph('pause', size), localize('pause')],
+                    () => dta.pause()
+                );
+            } else if (!dta.errorFlag) {
+                return;
+            }
+            menu.addPair(
+                [new SymbolMorph('square', size), localize('stop')],
+                () => dta.stop()
+            );
+            return menu;
+        };
+
+        return readout;
+
     } else if (dta instanceof List) {
         return this.listSymbol();
     } else if (dta instanceof Color) {

@@ -1,6 +1,60 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * first-class processes - new built in data type
+    * new "processes" library for creating, pausing, resuming, stopping and inspecting (first-class) threads
+    * extensions for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
+    * new animated and still symbols for interlocking gears - used for process extensions
+* **Notable Changes:**
+    * changed small gear symbol to 6 spikes (from 8)
+* **Notable Fixes:**
+    * fixed display of continuations capturing variadic inputs
+* **Translation Updates:**
+    * German
+
+### 2026-07-31
+* extensions: added "result of process" extension
+* extensions: added "object of process" extension
+* extensions, threads: added "step process" extension
+* blocks, objects, tables: added "step" entry to paused process context menu
+* German translation update for "result"
+
+### 2026-07-30
+* symbols: new animated "broken gears" symbols
+* blocks, objects: added "broken gears" symbol to visualize a process that has an error
+* blocks, objects, threads: added context menu to process symbols in variables and list watchers, speech balloons and result bubbles
+* tables: added process-state aware symbols and context menus when displaying processes in tables
+* updated dev version
+
+### 2026-07-29
+* extensions: added "error" state to the process state extensions
+* extensions: added "block of process" extension for inspecting the current stackframe of another process
+* German translation update (for the new process extensions)
+* new "Processes" extension library for creating, pausing, resuming, stopping and inspecting (first-class) threads
+* Neural Networks: fixed German translation for "render neural model"
+* fixed a mis-label in the new processes library
+
+### 2026-07-28
+* symbols: changed small gear symbol to 6 spikes
+* symbols: tweaked gear symbols and added another one (gearsApart)
+* objects, blocks, threads, tables, lists: First-Class Processes
+* changed dev version to 12.1
+* extensions: added extensions for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
+
+### 2026-07-27
+* symbols: refactored drawing a single 8-spike gear symbol
+* symbols: added a single "gear" symbol, changed "gears" to a pair of interlocking gears
+* gui: changed (back) symbol for the settings button to a single gear symbol
+* symbols: refactored "gears" symbol rendering 
+* symbols: refactored singe "gear" symbol rendering
+* symbols: added new "gearsAnimated" symbol
+* symbols: added new "gearsApartAnimated" symbol
+* symbols: increased speed of animated symbols
+
+### 2026-07-24
+* new dev version
+* blocks: fixed display of continuations capturing variadic inputs
 
 ## 12.0.6:
 * **Notable Changes:**

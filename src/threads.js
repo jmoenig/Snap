@@ -66,7 +66,7 @@ CustomHatBlockMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-May-14';
+modules.threads = '2026-July-31';
 
 var ThreadManager;
 var Process;
@@ -424,6 +424,7 @@ ThreadManager.prototype.step = function (skipAnimations) {
 ThreadManager.prototype.removeTerminatedProcesses = function () {
     // and un-highlight their scripts
     var remaining = [],
+        now = Date.now(),
         count;
     this.processes.forEach(proc => {
         var result,
@@ -462,7 +463,8 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
                     proc.homeContext.receiver.stopTalking();
                 }
             }
-            if (proc.topBlock instanceof ReporterBlockMorph ||
+            if ((proc.topBlock instanceof ReporterBlockMorph &&
+                        proc.isClicked) ||
                     proc.isShowingResult || proc.exportResult) {
                 result = proc.homeContext.inputs[0];
                 if (proc.onComplete instanceof Function) {
@@ -499,6 +501,7 @@ ThreadManager.prototype.removeTerminatedProcesses = function () {
             } else if (proc.onComplete instanceof Function) {
                 proc.onComplete(proc.homeContext.inputs[0]);
             }
+            proc.version = now;
         } else {
             remaining.push(proc);
         }
@@ -657,7 +660,8 @@ function Process(topBlock, receiver, onComplete, yieldFirst) {
     this.errorFlag = false;
     this.context = null;
     this.homeContext = new Context(null, null, null, receiver);
-    this.lastYield =  Date.now();
+    this.lastYield = Date.now();
+    this.version = this.lastYield;
     this.isFirstStep = true;
     this.isAtomic = false;
     this.prompter = null;
@@ -769,10 +773,12 @@ Process.prototype.stop = function () {
     this.readyToYield = true;
     this.readyToTerminate = true;
     this.errorFlag = false;
+    this.isPaused = false;
     if (this.context) {
         this.context.stopMusic();
     }
     this.canBroadcast = false;
+    this.version = Date.now();
 };
 
 Process.prototype.pause = function () {
@@ -784,6 +790,16 @@ Process.prototype.pause = function () {
     if (this.context && this.context.startTime) {
         this.pauseOffset = Date.now() - this.context.startTime;
     }
+    this.version = Date.now();
+};
+
+Process.prototype.step = function () {
+    // only for UI
+    if (this.isPaused) {
+        this.resume();
+        this.runStep();
+        this.pause();
+    }
 };
 
 Process.prototype.resume = function () {
@@ -792,6 +808,7 @@ Process.prototype.resume = function () {
     }
     this.isPaused = false;
     this.pauseOffset = null;
+    this.version = Date.now();
 };
 
 Process.prototype.pauseStep = function () {
@@ -1661,6 +1678,7 @@ Process.prototype.fork = function (context, args) {
     proc.initializeFor(context, args);
     // proc.pushContext('doYield');
     stage.threads.processes.push(proc);
+    return proc;
 };
 
 Process.prototype.initializeFor = function (context, args) {
@@ -4984,6 +5002,9 @@ Process.prototype.reportTypeOf = function (thing) {
     if (thing instanceof Color) {
         return 'color';
     }
+    if (thing instanceof Process) {
+        return 'process';
+    }
     if (thing instanceof Context) {
         if (thing.expression instanceof RingMorph) {
             return thing.expression.dataType();
@@ -7464,6 +7485,9 @@ Process.prototype.reportGet = function (query) {
                     each => each.fullCopy().reify()
                 )
             );
+        case 'processes':
+            stage = thisObj.parentThatIsA(StageMorph);
+            return new List(stage ? stage.threads.processes : []);
         case 'solutions':
             if (thisObj.solution) {
                 return new List(
@@ -7543,6 +7567,7 @@ Process.prototype.reportGet = function (query) {
             'other clones',
             'neighbors',
             'scripts',
+            'processes',
             'solutions',
             'blocks',
             'categories',

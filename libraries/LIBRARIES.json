@@ -104,49 +104,79 @@
       }
   },
   {
-      "fileName": "colors_module.xml",
-      "name": "Colors",
-      "description": "mix, modify and transition colors",
-      "searchData": [
-          "mix _ with _ ratio _ %",
-          "color _ _ by _ %",
-          "shift _ of _ by _",
-          "transition _ over _"
-      ],
-      "categories": [
-          "pen"
-      ],
-      "translations": {
-          "de": {
-              "name": "Farben",
-              "searchData": [
-                  "mische _ mit _ im Verhältnis _ %",
-                  "Farbe _ _ um _ %",
-                  "verschiebe _ von _ um _",
-                  "Farbübergang _ Länge _"
-              ]
-          },
-          "ca": {
-              "name": "Colors",
-              "description": "Modifica, barreja i obté transicions de colors."
-          },
-          "es": {
-              "name": "Colores"
-          },
-          "it": {
-              "name": "Colori"
-          },
-          "ti": {
-              "name": "ሕብርታት"
-          },
-          "ua": {
-              "name": "Кольори"
-          },
-          "zh_CN": {
-              "name": "颜色调配库",
-              "description": "色彩调和、调整与渐变"
-          }
+    "fileName": "process_module.xml",
+    "name": "Processes",
+    "description": "Programmatically fork, pause, resume, stop and inspect threads",
+    "searchData": [
+      "new process _",
+      "_ of process _",
+      "is process _ _ ?",
+      "_ process _"
+    ],
+    "categories": [
+      "control"
+    ],
+    "translations": {
+      "de": {
+        "name": "Prozesse",
+        "description": "Mit Blöcken Prozesse starten, pausieren, fortsetzen, beenden und untersuchen",
+        "searchData": [
+          "neuer Prozess _",
+          "_ von Prozess _",
+          "ist Prozess _ _ ?",
+          "_ Prozess _"
+        ]
+      },
+      "zh_CN": {
+        "name": "线程管理库",
+        "description": "通过程序创建、暂停、恢复、停止和检查线程。"
       }
+    }
+  },
+  {
+    "fileName": "colors_module.xml",
+    "name": "Colors",
+    "description": "mix, modify and transition colors",
+    "searchData": [
+      "mix _ with _ ratio _ %",
+      "color _ _ by _ %",
+      "shift _ of _ by _",
+      "transition _ over _"
+    ],
+    "categories": [
+      "pen"
+    ],
+    "translations": {
+      "de": {
+        "name": "Farben",
+        "searchData": [
+          "mische _ mit _ im Verhältnis _ %",
+          "Farbe _ _ um _ %",
+          "verschiebe _ von _ um _",
+          "Farbübergang _ Länge _"
+        ]
+      },
+      "ca": {
+        "name": "Colors",
+        "description": "Modifica, barreja i obté transicions de colors."
+      },
+      "es": {
+        "name": "Colores"
+      },
+      "it": {
+        "name": "Colori"
+      },
+      "ti": {
+        "name": "ሕብርታት"
+      },
+      "ua": {
+        "name": "Кольори"
+      },
+      "zh_CN": {
+        "name": "颜色调配库",
+        "description": "色彩调和、调整与渐变"
+      }
+    }
   },
   {
       "fileName": "tables_module.xml",
