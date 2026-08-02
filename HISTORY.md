@@ -16,6 +16,7 @@
 
 ### 2026-08-02
 * blocks, byob: new special 'process' input slot type
+* updated process library with new input slots
 
 ### 2026-07-31
 * extensions: added "result of process" extension
