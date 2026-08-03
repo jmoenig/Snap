@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, Process, localize, display*/
 
 /*jshint esversion: 11*/
 
-modules.tables = '2026-July-31';
+modules.tables = '2026-August-03';
 
 var Table;
 var TableCellMorph;
@@ -400,7 +400,6 @@ TableCellMorph.prototype.render = function (ctx) {
 };
 
 TableCellMorph.prototype.dataRepresentation = function (dta) {
-    var readout, size;
     this.userMenu = null;
     if (dta instanceof Morph) {
         if (isSnapObject(dta)) {
@@ -434,58 +433,9 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
             'notes', SyntaxElementMorph.prototype.fontSize
         );
     } else if (dta instanceof Process) {
-        size = SyntaxElementMorph.prototype.fontSize;
-
-        // animated symbols are not yet supported inside table views
-        // already using them for when we address this in the future
-        if (dta.isPaused) {
-            readout = new SymbolMorph('gearsApartAnimated', size);
-        } else if (dta.isRunning()) {
-            readout = new SymbolMorph('gearsAnimated', size);
-        } else if (dta.errorFlag) {
-            readout = new SymbolMorph(
-                'gearsAnimatedBroken',
-                size,
-                new Color(173, 15, 0)
-            );
-        } else {
-            readout = new SymbolMorph('gearsApart', size);
-        }
-
-        // support directly interacting with processes:
-        this.userMenu = function () {
-            var menu = new MenuMorph(this),
-                size = MorphicPreferences.menuFontSize,
-                ide = this.parentThatIsA(IDE_Morph) ||
-                    this.world().childThatIsA(IDE_Morph);
-
-            if (ide?.isAppMode) {return; }
-            if (dta.isPaused) {
-                menu.addPair(
-                    [new SymbolMorph('stepForward', size), localize('step')],
-                    () => dta.step()
-                );
-                menu.addPair(
-                    [new SymbolMorph('pointRight', size), localize('resume')],
-                    () => dta.resume()
-                );
-            } else if (dta.isRunning()) {
-                menu.addPair(
-                    [new SymbolMorph('pause', size), localize('pause')],
-                    () => dta.pause()
-                );
-            } else if (!dta.errorFlag) {
-                return;
-            }
-            menu.addPair(
-                [new SymbolMorph('square', size), localize('stop')],
-                () => dta.stop()
-            );
-            return menu;
-        };
-
-        return readout;
-
+        this.userMenu = () => this.parentThatIsA(IDE_Morph)?.isAppMode ?
+            null : dta.menu();
+        return dta.widget().readout; // does not (yet) support animated symbols
     } else if (dta instanceof List) {
         return this.listSymbol();
     } else if (dta instanceof Color) {
@@ -849,7 +799,7 @@ TableMorph.prototype.render = function (ctx) {
 TableMorph.prototype.buildCells = function () {
     // also populate cells with the correct data and
     // arrange the layout of cells all in one pass
-    var cell, r, c,
+    var cell, r, c, dta,
         pos = this.position();
 
     // delete all existing cells
@@ -881,7 +831,8 @@ TableMorph.prototype.buildCells = function () {
                 ).add(pos)
             );
             this.add(cell);
-            if (isSnapObject(cell.getData())) {
+            dta = cell.getData();
+            if (isSnapObject(dta) || (dta instanceof Process)) {
                 this.wantsUpdate = true;
             }
         }
@@ -893,7 +844,7 @@ TableMorph.prototype.buildCells = function () {
 
 TableMorph.prototype.drawData = function (noScrollUpdate) {
     // redraw all cells with their current data or label
-    var cell, cellIdx = 0, r, c;
+    var cell, cellIdx = 0, r, c, dta;
     for (c = 0; c <= this.columns.length; c += 1) {
         for (r = 0; r <= this.rows; r += 1) {
             cell = this.children[cellIdx];
@@ -904,7 +855,8 @@ TableMorph.prototype.drawData = function (noScrollUpdate) {
                     !r ? r : r + this.startRow - 1
                 )
             );
-            if (isSnapObject(cell.getData())) {
+            dta = cell.getData();
+            if (isSnapObject(dta) || (dta instanceof Process)) {
                 this.wantsUpdate = true;
             }
         }

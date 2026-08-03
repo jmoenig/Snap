@@ -23,6 +23,7 @@
  * V1.7.5 17Apr2025 Change Base64 unicode string handling
  * V1.8.0 22May2025 Change Base64 binary list handling
  * V1.8.1 10May2025 Remove console logging primitive as available in Snap! dev mode
+ * V1.9.0 21Jun2025 Added "param flag" block
  *  */
 
 
@@ -541,3 +542,12 @@ var Base64Binary = {
 		return uarray;	
 	}
 }
+
+SnapExtensions.primitives.set(
+    'mqt_param_flag()',
+    function () {
+		let afterHash = window.location.hash.slice(1);
+		let flags = new URLSearchParams(afterHash);
+		return flags.get('param');		
+    }
+);

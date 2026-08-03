@@ -62,11 +62,11 @@ isNil, WatcherMorph, List, ListWatcherMorph, alert, console, TableMorph, BLACK,
 TableFrameMorph, ColorSlotMorph, isSnapObject, newCanvas, Symbol, SVG_Costume,
 SnapExtensions, AlignmentMorph, TextMorph, Cloud, HatBlockMorph, InputSlotMorph,
 StagePickerMorph, CustomBlockDefinition, CommentMorph, BooleanSlotMorph, Color,
-CustomHatBlockMorph*/
+CustomHatBlockMorph, SymbolMorph, MenuMorph, MorphicPreferences*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-July-31';
+modules.threads = '2026-August-03';
 
 var ThreadManager;
 var Process;
@@ -816,6 +816,77 @@ Process.prototype.pauseStep = function () {
     if (this.context && this.context.startTime) {
         this.context.startTime = this.lastYield - this.pauseOffset;
     }
+};
+
+// Process GUI
+
+Process.prototype.widget = function () {
+    // answer a morph representing my current state with a context menu
+    // that lets the user interact
+    var morph = new Morph(),
+        data = this;
+    morph.color = new Color(255, 255, 255, 0);
+    morph.setExtent(new Point(30, 30));
+    morph.version = null;
+    morph.readout = null;
+    morph.step = function () {
+        if (this.version !== data.version) {
+            if (this.readout instanceof Morph) {
+                this.removeChild(this.readout);
+            }
+            if (data.isPaused) {
+                this.readout = new SymbolMorph('gearsApartAnimated', 30);
+            } else if (data.isRunning()) {
+                this.readout = new SymbolMorph('gearsAnimated', 30);
+            } else if (data.errorFlag) {
+                this.readout = new SymbolMorph(
+                    'gearsAnimatedBroken',
+                    30,
+                    new Color(173, 15, 0)
+                );
+            } else {
+                this.readout = new SymbolMorph('gearsApart', 30);
+            }
+            this.readout.setCenter(this.center());
+            this.add(this.readout);
+            this.version = data.version;
+            this.changed();
+        }
+    };
+    morph.userMenu = function () {
+        if (this.parentThatIsA(IDE_Morph)?.isAppMode) {return; }
+        return data.menu();
+    };
+    morph.step();
+    return morph;
+};
+
+Process.prototype.menu = function () {
+    var menu = new MenuMorph(this),
+        size = MorphicPreferences.menuFontSize;
+
+    if (this.isPaused) {
+        menu.addPair(
+            [new SymbolMorph('stepForward', size), localize('step')],
+            'step'
+        );
+        menu.addPair(
+            [new SymbolMorph('pointRight', size), localize('resume')],
+            'resume'
+        );
+    } else if (this.isRunning()) {
+        menu.addPair(
+            [new SymbolMorph('pause', size), localize('pause')],
+            'pause'
+        );
+    } else if (!this.errorFlag) {
+        return;
+    }
+    menu.addPair(
+        [new SymbolMorph('square', size), localize('stop')],
+        'stop'
+    );
+    return menu;
 };
 
 // Process evaluation
