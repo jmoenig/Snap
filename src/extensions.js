@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-July-31';
+modules.extensions = '2026-August-03';
 
 // Global stuff
 
@@ -370,100 +370,6 @@ SnapExtensions.primitives.set(
     'snap_extensionexists(prim)',
     function (prim) {
         return !isNil(SnapExtensions.primitives.get(prim));
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_fork(script, inputs)',
-    function (script, inputs, proc) {
-        proc.assertType(script, ['command', 'reporter', 'predicate', 'hat']);
-        proc.assertType(inputs, 'list');
-        return proc.fork(script, inputs);
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_scriptof(process)',
-    function (process, proc) {
-        proc.assertType(process, 'process');
-        return process.topBlock.reify();
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_blockof(process)',
-    function (process, proc) {
-        proc.assertType(process, 'process');
-        return process.context;
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_resultof(process)',
-    function (process, proc) {
-        var value;
-        proc.assertType(process, 'process');
-        value = process.homeContext.inputs[0];
-        return isNil(value) ? '' : value;
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_objectof(process)',
-    function (process, proc) {
-        var value;
-        proc.assertType(process, 'process');
-        value = process.receiver;
-        return isNil(value) ? '' : value;
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_stateof(process)',
-    function (process, proc) {
-        proc.assertType(process, 'process');
-        if (process.isPaused) {
-            return ['paused'];
-        }
-        if (process.isRunning()) {
-            return ['running'];
-        }
-        if (process.errorFlag) {
-            return ['error'];
-        }
-        return ['terminated'];
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_pause(process)',
-    function (process, proc) {
-        proc.assertType(process, 'process');
-        process.pause();
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_resume(process)',
-    function (process, proc) {
-        proc.assertType(process, 'process');
-        process.resume();
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_step(process)',
-    function (process, proc) {
-        proc.assertType(process, 'process');
-        process.step();
-    }
-);
-
-SnapExtensions.primitives.set(
-    'snap_stop(process)',
-    function (process, proc) {
-        proc.assertType(process, 'process');
-        process.stop();
     }
 );
 

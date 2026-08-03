@@ -889,6 +889,64 @@ Process.prototype.menu = function () {
     return menu;
 };
 
+// Process primitives
+
+Process.prototype.reportNewProcess = function (script, inputs) {
+    this.assertType(script, ['command', 'reporter', 'predicate', 'hat']);
+    this.assertType(inputs, 'list');
+    return this.fork(script, inputs);
+};
+
+Process.prototype.reportProcessAttribute = function (choice, process) {
+    var value;
+    this.assertType(process, 'process');
+    switch (this.inputOption(choice)) {
+    case 'script':
+        return process.topBlock.reify();
+    case 'block':
+        return process.context;
+    case 'result':
+        value = process.homeContext.inputs[0];
+        return isNil(value) ? '' : value;
+    case 'object':
+        value = process.receiver;
+        return isNil(value) ? '' : value;
+    default:
+        return '';
+    }
+};
+
+Process.prototype.reportProcessState = function (process, choice) {
+    var state;
+    this.assertType(process, 'process');
+    if (process.isPaused) {
+        state = 'paused';
+    } else if (process.isRunning()) {
+        state = 'running';
+    } else if (process.errorFlag) {
+        state = 'error';
+    } else {
+        state = 'terminated';
+    }
+    return snapEquals(state, this.inputOption(choice));
+};
+
+Process.prototype.doChangeProcess = function (choice, process) {
+    this.assertType(process, 'process');
+    switch (this.inputOption(choice)) {
+    case 'pause':
+        return process.pause();
+    case 'resume':
+        return process.resume();
+    case 'step':
+        return process.step();
+    case 'stop':
+        return process.stop();
+    default:
+        return '';
+    }
+};
+
 // Process evaluation
 
 Process.prototype.evaluateContext = function () {

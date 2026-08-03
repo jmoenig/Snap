@@ -4,9 +4,8 @@
 * **New Features:**
     * first-class processes - new built in data type
     * new special "process" input slot type (large gear symbol with orange background)
-    * new "processes" library for creating, pausing, resuming, stopping and inspecting (first-class) threads
-    * extensions for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
-    * new animated and still symbols for interlocking gears - used for process extensions
+    * new blocks for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
+    * new animated and still symbols for interlocking gears - used for process data type
 * **Notable Changes:**
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
@@ -19,6 +18,7 @@
 * symbols: tweaked gear symbols
 * mqtt extension update, thanks, Simon and Xavier!
 * threads, objects, tables: refactored Process GUI
+* threads, objects, blocks, extensions: made first-class process blocks primitives 
 
 ### 2026-08-02
 * blocks, byob: new special 'process' input slot type

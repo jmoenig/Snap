@@ -1503,6 +1503,37 @@ SpriteMorph.prototype.primitiveBlocks = function () {
                         (cdr (get functions))))))`
         },
 
+        // Processes
+        reportNewProcess: {
+            type: 'reporter',
+            reports: 'process',
+            category: 'control',
+            spec: 'new process %cmdRing %inputs',
+            code: 'process'
+        },
+        reportProcessAttribute: {
+            type: 'reporter',
+            reports: 'any',
+            category: 'control',
+            spec: '%procAttribs of process %p',
+            defaults: [['script']],
+            code: 'getProcess'
+        },
+        reportProcessState: {
+            type: 'predicate',
+            category: 'control',
+            spec: 'is process %p %procStates ?',
+            defaults: [null, ['running']],
+            code: 'isProcess'
+        },
+        doChangeProcess: {
+            type: 'command',
+            category: 'control',
+            spec: '%procActions process %p',
+            defaults: [['pause']],
+            code: 'changeProcess'
+        },
+
         // Sensing
         reportTouchingObject: {
             only: SpriteMorph,
@@ -3031,6 +3062,14 @@ SpriteMorph.prototype.newPrimitivesSince = function (version) {
             'doDrawOn'
         );
     }
+    if (version < 12.1) {
+        selectors.push(
+            'reportNewProcess',
+            'reportProcessAttribute',
+            'reportProcessState',
+            'doChangeProcess'
+        );
+    }
 
     return selectors;
 };
@@ -4031,6 +4070,11 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('receiveSlotEvent'));
         blocks.push(block('doSetSlot'));
+        blocks.push('-');
+        blocks.push(block('reportNewProcess'));
+        blocks.push(block('reportProcessAttribute'));
+        blocks.push(block('reportProcessState'));
+        blocks.push(block('doChangeProcess'));
 
         // for debugging: ///////////////
         if (devMode) {
@@ -11858,6 +11902,11 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('receiveSlotEvent'));
         blocks.push(block('doSetSlot'));
+        blocks.push('-');
+        blocks.push(block('reportNewProcess'));
+        blocks.push(block('reportProcessAttribute'));
+        blocks.push(block('reportProcessState'));
+        blocks.push(block('doChangeProcess'));
 
         // for debugging: ///////////////
         if (this.world()?.isDevMode) {
