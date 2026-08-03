@@ -18,6 +18,7 @@
 ### 2026-08-03
 * symbols: tweaked gear symbols
 * mqtt extension update, thanks, Simon and Xavier!
+* threads, objects, tables: refactored Process GUI
 
 ### 2026-08-02
 * blocks, byob: new special 'process' input slot type
