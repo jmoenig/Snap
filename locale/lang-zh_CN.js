@@ -1915,5 +1915,6 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
   "error": "出现错误",
   "terminated": "运行完毕",
   "resume": "恢复运行",
-  "stop": "停止运行"
+  "stop": "停止运行",
+  "process": "进程"
 };
