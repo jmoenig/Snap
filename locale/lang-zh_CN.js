@@ -1925,5 +1925,9 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
   "bottom left": "左下方",
   "left (align)": "靠左",
   "center (align)": "居中",
-  "right (align)": "靠右"
+  "right (align)": "靠右",
+  "new process _ _": "创建新进程 _ _",
+  "_ of process _": "属性 _ 自进程 _",
+  "is process _ _ ?": "_ 处于 _ 的状态吗?",
+  "_ process _": "_ 进程 _"
 };
