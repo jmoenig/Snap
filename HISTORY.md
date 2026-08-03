@@ -18,7 +18,8 @@
 * symbols: tweaked gear symbols
 * mqtt extension update, thanks, Simon and Xavier!
 * threads, objects, tables: refactored Process GUI
-* threads, objects, blocks, extensions: made first-class process blocks primitives 
+* threads, objects, blocks, extensions: made first-class process blocks primitives
+* German translation update for process-related blocks 
 
 ### 2026-08-02
 * blocks, byob: new special 'process' input slot type
