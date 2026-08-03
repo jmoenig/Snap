@@ -104,36 +104,6 @@
       }
   },
   {
-    "fileName": "process_module.xml",
-    "name": "Processes",
-    "description": "Programmatically fork, pause, resume, stop and inspect threads",
-    "searchData": [
-      "new process _",
-      "_ of process _",
-      "is process _ _ ?",
-      "_ process _"
-    ],
-    "categories": [
-      "control"
-    ],
-    "translations": {
-      "de": {
-        "name": "Prozesse",
-        "description": "Mit Blöcken Prozesse starten, pausieren, fortsetzen, beenden und untersuchen",
-        "searchData": [
-          "neuer Prozess _",
-          "_ von Prozess _",
-          "ist Prozess _ _ ?",
-          "_ Prozess _"
-        ]
-      },
-      "zh_CN": {
-        "name": "进程管理库",
-        "description": "通过程序创建、暂停、恢复、停止和检查进程。"
-      }
-    }
-  },
-  {
     "fileName": "colors_module.xml",
     "name": "Colors",
     "description": "mix, modify and transition colors",

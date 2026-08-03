@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-02';
+modules.blocks = '2026-August-03';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -877,6 +877,36 @@ SyntaxElementMorph.prototype.labelParts = {
         type: 'input',
         tags: 'read-only',
         menu: 'shadowedVariablesMenu'
+    },
+    '%procAttribs': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'script' : ['script'],
+            'block' : ['block'],
+            'result' : ['result'],
+            'object' : ['object']
+        }
+    },
+    '%procStates': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'running' : ['running'],
+            'paused' : ['paused'],
+            'error' : ['error'],
+            'terminated' : ['terminated']
+        }
+    },
+    '%procActions': {
+        type: 'input',
+        tags: 'read-only static',
+        menu: {
+            'pause' : ['pause'],
+            'step' : ['step'],
+            'resume' : ['resume'],
+            'stop' : ['stop']
+        }
     },
 
     // code mapping
