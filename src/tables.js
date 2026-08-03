@@ -433,7 +433,8 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
             'notes', SyntaxElementMorph.prototype.fontSize
         );
     } else if (dta instanceof Process) {
-        this.userMenu = () => dta.menu();
+        this.userMenu = () => this.parentThatIsA(IDE_Morph)?.isAppMode ?
+            null : dta.menu();
         return dta.widget().readout; // does not (yet) support animated symbols
     } else if (dta instanceof List) {
         return this.listSymbol();
