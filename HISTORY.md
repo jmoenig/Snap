@@ -3,6 +3,7 @@
 ## in development:
 * **New Features:**
     * first-class processes - new built in data type
+    * new special "process" input slot type (large gear symbol with orange background)
     * new "processes" library for creating, pausing, resuming, stopping and inspecting (first-class) threads
     * extensions for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
     * new animated and still symbols for interlocking gears - used for process extensions
@@ -12,6 +13,11 @@
     * fixed display of continuations capturing variadic inputs
 * **Translation Updates:**
     * German
+
+### 2026-08-02
+* blocks, byob: new special 'process' input slot type
+* updated process library with new input slots
+* updated dev version
 
 ### 2026-07-31
 * extensions: added "result of process" extension
