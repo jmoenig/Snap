@@ -43,7 +43,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2026-July-30';
+modules.symbols = '2026-August-03';
 
 var SymbolMorph;
 
@@ -717,7 +717,7 @@ SymbolMorph.prototype.renderSymbolGearsAnimatedBroken = function (ctx, color) {
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    this.drawGear(ctx, r * 1.5, r * 1.5, r, 47, 6, false, true);
+    this.drawGear(ctx, r * 1.5, r * 1.5, r, 20, 6, false, true);
     this.drawGear(ctx, r * 0.2, r * 0.2, r, this.animationState, 6);
 
     // fill
@@ -755,14 +755,14 @@ SymbolMorph.prototype.drawGearsApart = function (ctx, color, angle) {
 };
 
 SymbolMorph.prototype.renderSymbolGearsApart = function (ctx, color) {
-    // draw animated non-interlocking gears
+    // draw non-interlocking gears
     var w = this.symbolWidth(),
         r = w / 2;
 
     ctx.fillStyle = color.toString();
     ctx.beginPath();
-    this.drawGear(ctx, r * 1.7, r * 1.7, r, 10, 6);
-    this.drawGear(ctx, 0, 0, r, 0, 6);
+    this.drawGear(ctx, r * 1.7, r * 1.7, r, 20, 6);
+    this.drawGear(ctx, r * 0.2, r * 0.2, r, 0, 6);
 
     // fill
     ctx.clip('evenodd');
@@ -828,7 +828,7 @@ SymbolMorph.prototype.drawGear = function (
 
     // draw the hole in the middle
     if (!noHole) {
-        ctx.arc(x, y, r * 0.3, radians(0), radians(360));
+        ctx.arc(x, y, r * (broken ? 0.3 : 0.4), radians(0), radians(360));
     }
 };
 

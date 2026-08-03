@@ -14,6 +14,9 @@
 * **Translation Updates:**
     * German
 
+### 2026-08-03
+* symbnols: tweaked gear symbols
+
 ### 2026-08-02
 * blocks, byob: new special 'process' input slot type
 * updated process library with new input slots
