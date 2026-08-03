@@ -9,13 +9,15 @@
     * new animated and still symbols for interlocking gears - used for process extensions
 * **Notable Changes:**
     * changed small gear symbol to 6 spikes (from 8)
+    * MQTT extension update, thanks, Simon and Xavier!
 * **Notable Fixes:**
     * fixed display of continuations capturing variadic inputs
 * **Translation Updates:**
     * German
 
 ### 2026-08-03
-* symbnols: tweaked gear symbols
+* symbols: tweaked gear symbols
+* mqtt extension update, thanks, Simon and Xavier!
 
 ### 2026-08-02
 * blocks, byob: new special 'process' input slot type
