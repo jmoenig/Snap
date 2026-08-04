@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-03';
+modules.blocks = '2026-August-04';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -10150,8 +10150,15 @@ ArgMorph.prototype.createIcon = function () {
 
 ArgMorph.prototype.fixLayout = function () {
     if (this.icon) {
-        this.icon.setPosition(this.position());
-        this.bounds.setExtent(this.icon.extent());
+        if (this.type === 'process') {
+            // render a chameleon-colored oval slot around the icon
+            this.bounds.setExtent(this.icon.extent().add(this.edge * 4));
+            this.bounds.setWidth(this.height() * 1.2);
+            this.icon.setCenter(this.center());
+        } else {
+            this.icon.setPosition(this.position());
+            this.bounds.setExtent(this.icon.extent());
+        }
     } else {
         ArgMorph.uber.fixLayout.call(this);
     }
@@ -10159,7 +10166,7 @@ ArgMorph.prototype.fixLayout = function () {
 
 ArgMorph.prototype.render = function (ctx) {
     // make sure my icon's shadow color matches my block's color
-    var block, w;
+    var block;
     if (this.icon) {
         block = this.parentThatIsA(BlockMorph);
         if (block) {
@@ -10170,19 +10177,272 @@ ArgMorph.prototype.render = function (ctx) {
             this.color = new Color(255, 140, 0); // list color
             break;
         case 'process':
-            w = this.width();
-            ctx.save();
-            ctx.fillStyle = 'rgba(255,140,0,1)';
-            ctx.beginPath();
-            ctx.arc(w * 0.5, w * 0.5, w * 0.3, radians(0), radians(360));
-            ctx.fill();
-            ctx.restore();
+            this.drawRoundSlot(ctx);
             return;
         default:
             return; // don't draw anything except the icon
         }
     }
     ArgMorph.uber.render.call(this, ctx);
+};
+
+ArgMorph.prototype.initSlotColor = function (ctx) {
+    var borderColor;
+    // initialize my surface property
+    if (this.cachedNormalColor) { // if flashing
+        borderColor = this.color;
+    } else if (this.parent) {
+        borderColor = this.parent.color;
+    } else {
+        borderColor = new Color(120, 120, 120);
+    }
+    ctx.fillStyle = this.color.toString();
+    if (!this.cachedNormalColor) { // unless flashing
+        ctx.fillStyle = borderColor.darker().toString();
+    }
+
+    // cache my border colors
+    this.cachedClr = borderColor.toString();
+    this.cachedClrBright = borderColor.lighter(this.contrast)
+        .toString();
+    this.cachedClrDark = borderColor.darker(this.contrast).toString();
+};
+
+ArgMorph.prototype.drawRectSlot = function (ctx) {
+    this.initSlotColor(ctx);
+    ctx.fillRect(
+        this.edge,
+        this.edge,
+        this.width() - this.edge * 2,
+        this.height() - this.edge * 2
+    );
+    if (!MorphicPreferences.isFlat) {
+        this.drawRectBorder(ctx);
+    }
+};
+
+ArgMorph.prototype.drawRoundSlot = function (ctx) {
+    var r = Math.max((this.height() - (this.edge * 2)) / 2, 0);
+    this.initSlotColor(ctx);
+    ctx.beginPath();
+    ctx.arc(
+        r + this.edge,
+        r + this.edge,
+        r,
+        radians(90),
+        radians(-90),
+        false
+    );
+    ctx.arc(
+        this.width() - r - this.edge,
+        r + this.edge,
+        r,
+        radians(-90),
+        radians(90),
+        false
+    );
+    ctx.closePath();
+    ctx.fill();
+    if (!MorphicPreferences.isFlat) {
+        this.drawRoundBorder(ctx);
+    }
+};
+
+ArgMorph.prototype.drawRectBorder = function (ctx) {
+    var shift = this.edge * 0.5,
+        gradient;
+
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    if (useBlurredShadows) {
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.color.darker(80).toString();
+    }
+
+    gradient = ctx.createLinearGradient(
+        0,
+        0,
+        0,
+        this.edge
+    );
+    gradient.addColorStop(0, this.cachedClr);
+    gradient.addColorStop(1, this.cachedClrDark);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.edge, shift);
+    ctx.lineTo(this.width() - this.edge - shift, shift);
+    ctx.stroke();
+
+    ctx.shadowOffsetY = 0;
+
+    gradient = ctx.createLinearGradient(
+        0,
+        0,
+        this.edge,
+        0
+    );
+    gradient.addColorStop(0, this.cachedClr);
+    gradient.addColorStop(1, this.cachedClrDark);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(shift, this.edge);
+    ctx.lineTo(shift, this.height() - this.edge - shift);
+    ctx.stroke();
+
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
+
+    gradient = ctx.createLinearGradient(
+        0,
+        this.height() - this.edge,
+        0,
+        this.height()
+    );
+    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.edge, this.height() - shift);
+    ctx.lineTo(this.width() - this.edge, this.height() - shift);
+    ctx.stroke();
+
+    gradient = ctx.createLinearGradient(
+        this.width() - this.edge,
+        0,
+        this.width(),
+        0
+    );
+    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(this.width() - shift, this.edge);
+    ctx.lineTo(this.width() - shift, this.height() - this.edge);
+    ctx.stroke();
+
+};
+
+ArgMorph.prototype.drawRoundBorder = function (ctx) {
+    var shift = this.edge * 0.5,
+        r = Math.max((this.height() - (this.edge * 2)) / 2, 0),
+        start,
+        end,
+        gradient;
+
+    ctx.lineWidth = this.edge;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    // straight top edge:
+    start = r + this.edge;
+    end = this.width() - r - this.edge;
+    if (end > start) {
+
+        if (useBlurredShadows) {
+            ctx.shadowOffsetX = shift;
+            ctx.shadowOffsetY = shift;
+            ctx.shadowBlur = this.edge;
+            ctx.shadowColor = this.color.darker(80).toString();
+        }
+
+        gradient = ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            this.edge
+        );
+        gradient.addColorStop(0, this.cachedClr);
+        gradient.addColorStop(1, this.cachedClrDark);
+        ctx.strokeStyle = gradient;
+        ctx.beginPath();
+
+        ctx.moveTo(start, shift);
+        ctx.lineTo(end, shift);
+        ctx.stroke();
+
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 0;
+    }
+
+    // straight bottom edge:
+    gradient = ctx.createLinearGradient(
+        0,
+        this.height() - this.edge,
+        0,
+        this.height()
+    );
+    gradient.addColorStop(0, this.cachedClrBright);
+    gradient.addColorStop(1, this.cachedClr);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(r + this.edge, this.height() - shift);
+    ctx.lineTo(this.width() - r - this.edge, this.height() - shift);
+    ctx.stroke();
+
+    r = Math.max(this.height() / 2, this.edge);
+
+    if (useBlurredShadows) {
+        ctx.shadowOffsetX = shift;
+        ctx.shadowOffsetY = shift;
+        ctx.shadowBlur = this.edge;
+        ctx.shadowColor = this.color.darker(80).toString();
+    }
+
+    // top edge: left corner
+    gradient = ctx.createRadialGradient(
+        r,
+        r,
+        r - this.edge,
+        r,
+        r,
+        r
+    );
+    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.cachedClrDark);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(
+        r,
+        r,
+        r - shift,
+        radians(180),
+        radians(270),
+        false
+    );
+
+    ctx.stroke();
+
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 0;
+
+    // bottom edge: right corner
+    gradient = ctx.createRadialGradient(
+        this.width() - r,
+        r,
+        r - this.edge,
+        this.width() - r,
+        r,
+        r
+    );
+    gradient.addColorStop(1, this.cachedClr);
+    gradient.addColorStop(0, this.cachedClrBright);
+    ctx.strokeStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(
+        this.width() - r,
+        r,
+        r - shift,
+        radians(0),
+        radians(90),
+        false
+    );
+    ctx.stroke();
 };
 
 // ArgMorph evaluation
@@ -12887,7 +13147,24 @@ InputSlotMorph.prototype.unflash = function () {
 // InputSlotMorph drawing:
 
 InputSlotMorph.prototype.render = function (ctx) {
-    var borderColor, r;
+    if (!this.isNumeric) {
+        this.drawRectSlot(ctx);
+    } else {
+        this.drawRoundSlot(ctx);
+    }
+
+	// draw my "wish" block, if any
+	if (this.selectedBlock) {
+ 		ctx.drawImage(
+        	this.doWithAlpha(1, () => this.selectedBlock.fullImage()),
+            this.edge + this.typeInPadding,
+            this.edge
+        );
+ 	}
+};
+
+InputSlotMorph.prototype.initSlotColor = function (ctx) {
+    var borderColor;
 
     // initialize my surface property
     if (this.cachedNormalColor) { // if flashing
@@ -12907,248 +13184,6 @@ InputSlotMorph.prototype.render = function (ctx) {
     this.cachedClrBright = borderColor.lighter(this.contrast)
         .toString();
     this.cachedClrDark = borderColor.darker(this.contrast).toString();
-
-    if (!this.isNumeric) {
-        ctx.fillRect(
-            this.edge,
-            this.edge,
-            this.width() - this.edge * 2,
-            this.height() - this.edge * 2
-        );
-        if (!MorphicPreferences.isFlat) {
-            this.drawRectBorder(ctx);
-        }
-    } else {
-        r = Math.max((this.height() - (this.edge * 2)) / 2, 0);
-        ctx.beginPath();
-        ctx.arc(
-            r + this.edge,
-            r + this.edge,
-            r,
-            radians(90),
-            radians(-90),
-            false
-        );
-        ctx.arc(
-            this.width() - r - this.edge,
-            r + this.edge,
-            r,
-            radians(-90),
-            radians(90),
-            false
-        );
-        ctx.closePath();
-        ctx.fill();
-        if (!MorphicPreferences.isFlat) {
-            this.drawRoundBorder(ctx);
-        }
-    }
-
-	// draw my "wish" block, if any
-	if (this.selectedBlock) {
- 		ctx.drawImage(
-        	this.doWithAlpha(1, () => this.selectedBlock.fullImage()),
-            this.edge + this.typeInPadding,
-            this.edge
-        );
- 	}
-};
-
-InputSlotMorph.prototype.drawRectBorder = function (ctx) {
-    var shift = this.edge * 0.5,
-        gradient;
-
-    ctx.lineWidth = this.edge;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-
-    if (useBlurredShadows) {
-        ctx.shadowOffsetY = shift;
-        ctx.shadowBlur = this.edge;
-        ctx.shadowColor = this.color.darker(80).toString();
-    }
-
-    gradient = ctx.createLinearGradient(
-        0,
-        0,
-        0,
-        this.edge
-    );
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(this.edge, shift);
-    ctx.lineTo(this.width() - this.edge - shift, shift);
-    ctx.stroke();
-
-    ctx.shadowOffsetY = 0;
-
-    gradient = ctx.createLinearGradient(
-        0,
-        0,
-        this.edge,
-        0
-    );
-    gradient.addColorStop(0, this.cachedClr);
-    gradient.addColorStop(1, this.cachedClrDark);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(shift, this.edge);
-    ctx.lineTo(shift, this.height() - this.edge - shift);
-    ctx.stroke();
-
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-    ctx.shadowBlur = 0;
-
-    gradient = ctx.createLinearGradient(
-        0,
-        this.height() - this.edge,
-        0,
-        this.height()
-    );
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(this.edge, this.height() - shift);
-    ctx.lineTo(this.width() - this.edge, this.height() - shift);
-    ctx.stroke();
-
-    gradient = ctx.createLinearGradient(
-        this.width() - this.edge,
-        0,
-        this.width(),
-        0
-    );
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(this.width() - shift, this.edge);
-    ctx.lineTo(this.width() - shift, this.height() - this.edge);
-    ctx.stroke();
-
-};
-
-InputSlotMorph.prototype.drawRoundBorder = function (ctx) {
-    var shift = this.edge * 0.5,
-        r = Math.max((this.height() - (this.edge * 2)) / 2, 0),
-        start,
-        end,
-        gradient;
-
-    ctx.lineWidth = this.edge;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-
-    // straight top edge:
-    start = r + this.edge;
-    end = this.width() - r - this.edge;
-    if (end > start) {
-
-        if (useBlurredShadows) {
-            ctx.shadowOffsetX = shift;
-            ctx.shadowOffsetY = shift;
-            ctx.shadowBlur = this.edge;
-            ctx.shadowColor = this.color.darker(80).toString();
-        }
-
-        gradient = ctx.createLinearGradient(
-            0,
-            0,
-            0,
-            this.edge
-        );
-        gradient.addColorStop(0, this.cachedClr);
-        gradient.addColorStop(1, this.cachedClrDark);
-        ctx.strokeStyle = gradient;
-        ctx.beginPath();
-
-        ctx.moveTo(start, shift);
-        ctx.lineTo(end, shift);
-        ctx.stroke();
-
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
-        ctx.shadowBlur = 0;
-    }
-
-    // straight bottom edge:
-    gradient = ctx.createLinearGradient(
-        0,
-        this.height() - this.edge,
-        0,
-        this.height()
-    );
-    gradient.addColorStop(0, this.cachedClrBright);
-    gradient.addColorStop(1, this.cachedClr);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.moveTo(r + this.edge, this.height() - shift);
-    ctx.lineTo(this.width() - r - this.edge, this.height() - shift);
-    ctx.stroke();
-
-    r = Math.max(this.height() / 2, this.edge);
-
-    if (useBlurredShadows) {
-        ctx.shadowOffsetX = shift;
-        ctx.shadowOffsetY = shift;
-        ctx.shadowBlur = this.edge;
-        ctx.shadowColor = this.color.darker(80).toString();
-    }
-
-    // top edge: left corner
-    gradient = ctx.createRadialGradient(
-        r,
-        r,
-        r - this.edge,
-        r,
-        r,
-        r
-    );
-    gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrDark);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(
-        r,
-        r,
-        r - shift,
-        radians(180),
-        radians(270),
-        false
-    );
-
-    ctx.stroke();
-
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-    ctx.shadowBlur = 0;
-
-    // bottom edge: right corner
-    gradient = ctx.createRadialGradient(
-        this.width() - r,
-        r,
-        r - this.edge,
-        this.width() - r,
-        r,
-        r
-    );
-    gradient.addColorStop(1, this.cachedClr);
-    gradient.addColorStop(0, this.cachedClrBright);
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(
-        this.width() - r,
-        r,
-        r - shift,
-        radians(0),
-        radians(90),
-        false
-    );
-    ctx.stroke();
 };
 
 // InputSlotStringMorph ///////////////////////////////////////////////

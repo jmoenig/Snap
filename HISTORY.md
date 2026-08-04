@@ -14,8 +14,9 @@
 * **Translation Updates:**
     * German
 
-### 2026-08-03
+### 2026-08-04
 * objects: added custom fallback code for "launch" primitive
+* blocks: refactored argument slot rendering, draw a "slot" shape round the gear symbol when rendering a process type slot
 
 ### 2026-08-03
 * symbols: tweaked gear symbols
