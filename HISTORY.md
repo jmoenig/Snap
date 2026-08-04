@@ -18,6 +18,7 @@
 * objects: added custom fallback code for "launch" primitive
 * blocks: refactored argument slot rendering, draw a "slot" shape round the gear symbol when rendering a process type slot
 * threads: added metaprogramming support for process type slots
+* updated dev version
 
 ### 2026-08-03
 * symbols: tweaked gear symbols
