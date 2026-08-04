@@ -15,6 +15,9 @@
     * German
 
 ### 2026-08-03
+* objects: added custom fallback code for "launch" primitive
+
+### 2026-08-03
 * symbols: tweaked gear symbols
 * mqtt extension update, thanks, Simon and Xavier!
 * threads, objects, tables: refactored Process GUI
