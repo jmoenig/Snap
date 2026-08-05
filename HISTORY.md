@@ -7,12 +7,16 @@
     * new blocks for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
     * new animated and still symbols for interlocking gears - used for process data type
 * **Notable Changes:**
+    * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
 * **Notable Fixes:**
     * fixed display of continuations capturing variadic inputs
 * **Translation Updates:**
     * German
+
+### 2026-08-05
+* objects: shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
 
 ### 2026-08-04
 * objects: added custom fallback code for "launch" primitive
