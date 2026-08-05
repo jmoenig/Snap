@@ -3397,7 +3397,6 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
                 each.isCustomBlock && each.variables.names().length))
         ) {
             c.scripts = this.scripts.fullCopy();
-
         } else {
             shadowed.push('scripts');
         }
