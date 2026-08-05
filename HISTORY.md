@@ -17,6 +17,7 @@
 
 ### 2026-08-05
 * objects: shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
+* updated dev version
 
 ### 2026-08-04
 * objects: added custom fallback code for "launch" primitive
