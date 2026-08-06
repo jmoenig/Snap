@@ -3,16 +3,27 @@
 ## in development:
 * **New Features:**
     * first-class processes - new built in data type
-    * new special "process" input slot type (large gear symbol with orange background)
+    * new special "process" input slot type (large gear symbol inside an oval "slot" shape)
     * new blocks for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
     * new animated and still symbols for interlocking gears - used for process data type
 * **Notable Changes:**
+    * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
 * **Notable Fixes:**
     * fixed display of continuations capturing variadic inputs
 * **Translation Updates:**
     * German
+
+### 2026-08-05
+* objects: shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
+* updated dev version
+
+### 2026-08-04
+* objects: added custom fallback code for "launch" primitive
+* blocks: refactored argument slot rendering, draw a "slot" shape round the gear symbol when rendering a process type slot
+* threads: added metaprogramming support for process type slots
+* updated dev version
 
 ### 2026-08-03
 * symbols: tweaked gear symbols

@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-August-03';
+modules.objects = '2026-August-05';
 
 var SpriteMorph;
 var StageMorph;
@@ -1321,7 +1321,10 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         fork: {
             type: 'command',
             category: 'control',
-            spec: 'launch %cmdRing %inputs'
+            spec: 'launch %cmdRing %inputs',
+            src: `(
+                (prim t fork sript inputs)
+                (run (process (get sript) : (get inputs))))`
         },
         evaluate: {
             type: 'reporter',
@@ -3352,7 +3355,7 @@ SpriteMorph.prototype.init = function (globals) {
 SpriteMorph.prototype.fullCopy = function (forClone) {
     var c = SpriteMorph.uber.fullCopy.call(this),
         arr = [],
-        cb, effect;
+        shadowed, cb, effect;
 
     // make sure the clone has its own canvas to recycle
     // needs to be copied instead of redrawn, because at
@@ -3376,6 +3379,7 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
     this.inheritedAttributes.forEach(att => arr.push(att));
     c.inheritedAttributes = arr;
     if (forClone) {
+        shadowed = ['costumes', 'sounds'];
         c.exemplar = this;
         c.customBlocks = [];
         c.variables = new VariableFrame(null, c);
@@ -3385,7 +3389,18 @@ SpriteMorph.prototype.fullCopy = function (forClone) {
         );
         this.addSpecimen(c);
         this.cachedPropagation = false;
-        ['scripts', 'costumes', 'sounds'].forEach(att => {
+
+        // scan my toplevel scripts for custom blocks with block-instance vars
+        // if there aren't any my scripts can safely be inherited
+        if (
+            this.scripts.children.some(any => any.allChildren().some(each =>
+                each.isCustomBlock && each.variables.names().length))
+        ) {
+            c.scripts = this.scripts.fullCopy();
+        } else {
+            shadowed.push('scripts');
+        }
+        shadowed.forEach(att => {
             if (!contains(c.inheritedAttributes, att)) {
                 c.inheritedAttributes.push(att);
             }
