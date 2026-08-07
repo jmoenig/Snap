@@ -20,6 +20,7 @@
 * objects: fixed a typo in the fallback code for "launch"
 * German translation update for the new "Body Language" custom blocks category of the "Edge Computer Vision" library
 * new "Body Language" category in the "Edge AI" library
+* updated dev version
 
 ### 2026-08-05
 * objects: shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
