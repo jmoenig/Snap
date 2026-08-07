@@ -15,6 +15,9 @@
 * **Translation Updates:**
     * German
 
+### 2026-08-07
+* objects: fixed a typo in the fallback code for "launch"
+
 ### 2026-08-05
 * objects: shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
 * updated dev version

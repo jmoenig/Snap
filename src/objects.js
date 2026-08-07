@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-August-05';
+modules.objects = '2026-August-07';
 
 var SpriteMorph;
 var StageMorph;
@@ -1323,8 +1323,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             category: 'control',
             spec: 'launch %cmdRing %inputs',
             src: `(
-                (prim t fork sript inputs)
-                (run (process (get sript) : (get inputs))))`
+                (prim t fork script inputs)
+                (run (process (get script) : (get inputs))))`
         },
         evaluate: {
             type: 'reporter',
