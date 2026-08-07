@@ -6,6 +6,7 @@
     * new special "process" input slot type (large gear symbol inside an oval "slot" shape)
     * new blocks for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
     * new animated and still symbols for interlocking gears - used for process data type
+    * new "Body Language" category in the "Edge AI" library 
 * **Notable Changes:**
     * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
     * changed small gear symbol to 6 spikes (from 8)
@@ -18,6 +19,7 @@
 ### 2026-08-07
 * objects: fixed a typo in the fallback code for "launch"
 * German translation update for the new "Body Language" custom blocks category of the "Edge Computer Vision" library
+* new "Body Language" category in the "Edge AI" library
 
 ### 2026-08-05
 * objects: shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
