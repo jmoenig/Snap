@@ -19,6 +19,7 @@
 
 ### 2026-08-08
 * gui: hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
+* updated dev version
 
 ### 2026-08-07
 * objects: fixed a typo in the fallback code for "launch"
