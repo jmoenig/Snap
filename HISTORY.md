@@ -8,6 +8,7 @@
     * new animated and still symbols for interlocking gears - used for process data type
     * new "Body Language" category in the "Edge AI" library 
 * **Notable Changes:**
+    * hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
     * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
@@ -15,6 +16,9 @@
     * fixed display of continuations capturing variadic inputs
 * **Translation Updates:**
     * German
+
+### 2026-08-08
+* gui: hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
 
 ### 2026-08-07
 * objects: fixed a typo in the fallback code for "launch"
