@@ -13,6 +13,7 @@
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
 * **Notable Fixes:**
+    * disable empty category buttons when switching back from "hide empty categories" setting
     * fixed display of continuations capturing variadic inputs
 * **Translation Updates:**
     * German
@@ -20,6 +21,7 @@
 ### 2026-08-08
 * gui: hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
 * updated dev version
+* gui: disable empty category buttons when switching back from "hide empty categories" setting
 
 ### 2026-08-07
 * objects: fixed a typo in the fallback code for "launch"

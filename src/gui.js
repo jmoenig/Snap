@@ -8538,6 +8538,7 @@ IDE_Morph.prototype.projectSettingsMenu = function () {
         () => {
             this.scene.hideEmptyCategories = !this.scene.hideEmptyCategories;
             this.createCategories();
+            this.refreshEmptyCategories();
             this.createPaletteHandle();
             this.fixLayout();
         },
