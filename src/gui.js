@@ -5659,7 +5659,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             }
         });
         dialog.fixLayout();
-    };
+    }
     if (folderName !== 'Costumes') {
         filteredItems = items;
     }
