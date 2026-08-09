@@ -3,10 +3,11 @@
 ## in development:
 * **New Features:**
     * first-class processes - new built in data type
-    * new special "process" input slot type (large gear symbol inside an oval "slot" shape)
+    * new special "process" input slot type (large gear symbol)
     * new blocks for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
     * new animated and still symbols for interlocking gears - used for process data type
-    * new "Body Language" category in the "Edge AI" library 
+    * new "Body Language" category in the "Edge AI" library
+    * new category selection buttons in the costumes browser dialog, thank you, Victoria!
 * **Notable Changes:**
     * hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
     * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
@@ -22,6 +23,8 @@
 ### 2026-08-09
 * pulled some fixes from gigamonkey and others, updated file versions
 * Chinese translation update
+* new category selection buttons in the costumes browser dialog, thank you, Victoria!
+* updated dev version
 
 ### 2026-08-08
 * gui: hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
