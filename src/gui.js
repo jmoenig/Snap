@@ -5474,17 +5474,22 @@ IDE_Morph.prototype.importMedia = function (folderName) {
 
 };
 
+
 IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     // private - this gets called by importMedia() and creates
     // the actual dialog
     var dialog = new DialogBoxMorph().withKey('import' + folderName),
         frame = new ScrollFrameMorph(),
+        categoryBar = new Morph(),
         selectedIcon = null,
         turtle = new SymbolMorph('turtle', 60),
         myself = this,
         world = this.world(),
+        // fetch categories from Costumes/COSTUME-categories.json
+        categories = JSON.parse(this.getURL(this.resourceURL('Costumes', 'COSTUME-categories.json'))),
+        selectedCategory = categories[0],
+        filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))],
         handle;
-
     frame.acceptsDrops = false;
     frame.contents.acceptsDrops = false;
     frame.color = myself.groupColor;
@@ -5494,6 +5499,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     dialog.addBody(frame);
     dialog.addButton('ok', 'Import');
     dialog.addButton('cancel', 'Cancel');
+    frame.addContents(categoryBar);
 
     dialog.ok = function () {
         if (selectedIcon) {
@@ -5516,6 +5522,20 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         }
     };
 
+    categories.forEach(category => {
+        let button = new PushButtonMorph(
+            null,
+            function () { 
+                selectedCategory = category;
+                filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))];
+                renderItems(filteredItems);
+            }, 
+                category
+        );
+        categoryBar.add(button);
+    });
+
+    
     dialog.fixLayout = function () {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
             x = 0,
@@ -5532,8 +5552,32 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         ));
         fp = this.body.position();
         fw = this.body.width();
+
+        let bx = 0;
+        let by = 3;
+        const spacing = 4;
+
+        categoryBar.children.forEach(function (button) {
+            button.setPosition(fp.add(new Point(bx, by)));
+
+            bx += button.width() + spacing;
+
+            if (bx + button.width() > fw) {
+                bx = 0;
+                by += button.height() + spacing;
+            }
+        });
+
+        categoryBar.setExtent(new Point(
+            fw,
+            by + categoryBar.children[0].height() + spacing
+        ));
+        categoryBar.color = dialog.color;
+        y = by + categoryBar.children[0].height() + 10;
+
         frame.contents.children.forEach(function (icon) {
-              icon.setPosition(fp.add(new Point(x, y)));
+            if (icon === categoryBar) { return; }
+            icon.setPosition(fp.add(new Point(x, y)));
             x += icon.width();
             if (x + icon.width() > fw) {
                 x = 0;
@@ -5550,67 +5594,76 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.removeShadow();
         this.addShadow();
     };
+    function renderItems (items) {
+        frame.contents.children
+            .filter(child => child !== categoryBar)
+            .forEach(child => child.destroy());
+        items.forEach(item => {
+            // Caution: creating very many thumbnails can take a long time!
+            var url = myself.resourceURL(folderName, item.fileName),
+                img = new Image(),
+                suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
+                isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
+                isSound = contains(['wav', 'mp3'], suffix),
+                icon;
 
-    items.forEach(item => {
-        // Caution: creating very many thumbnails can take a long time!
-        var url = this.resourceURL(folderName, item.fileName),
-            img = new Image(),
-            suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase(),
-            isSVG = suffix === 'svg' && !MorphicPreferences.rasterizeSVGs,
-            isSound = contains(['wav', 'mp3'], suffix),
-            icon;
+            if (isSound) {
+                icon = new SoundIconMorph(new Sound(new Audio(), item.name));
+            } else {
+                icon = new CostumeIconMorph(
+                    new Costume(turtle.getImage(), item.name)
+                );
+            }
+            icon.isDraggable = false;
+            icon.userMenu = nop;
+            icon.action = function () {
+                if (selectedIcon === icon) {return; }
+                var prevSelected = selectedIcon;
+                selectedIcon = icon;
+                if (prevSelected) {prevSelected.refresh(); }
+            };
+            icon.doubleClickAction = dialog.ok;
+            icon.query = function () {
+                return icon === selectedIcon;
+            };
+            frame.addContents(icon);
+            if (isSound) {
+                icon.object.audio.onloadeddata = function () {
+                    icon.createThumbnail();
+                    icon.fixLayout();
+                    icon.refresh();
+                };
 
-        if (isSound) {
-            icon = new SoundIconMorph(new Sound(new Audio(), item.name));
-        } else {
-            icon = new CostumeIconMorph(
-                new Costume(turtle.getImage(), item.name)
-            );
-        }
-        icon.isDraggable = false;
-        icon.userMenu = nop;
-        icon.action = function () {
-            if (selectedIcon === icon) {return; }
-            var prevSelected = selectedIcon;
-            selectedIcon = icon;
-            if (prevSelected) {prevSelected.refresh(); }
-        };
-        icon.doubleClickAction = dialog.ok;
-        icon.query = function () {
-            return icon === selectedIcon;
-        };
-        frame.addContents(icon);
-        if (isSound) {
-            icon.object.audio.onloadeddata = function () {
-                icon.createThumbnail();
-                icon.fixLayout();
-                icon.refresh();
-            };
-
-            icon.object.audio.src = url;
-            icon.object.audio.load();
-        } else if (isSVG) {
-            img.onload = function () {
-                icon.object = new SVG_Costume(img, item.name);
-                icon.createThumbnail();
-                icon.refresh();
-            };
-            this.getURL(
-                url,
-                txt => img.src = 'data:image/svg+xml;base64,' +
-                    window.btoa(txt)
-            );
-        } else {
-            img.onload = function () {
-                var canvas = newCanvas(new Point(img.width, img.height), true);
-                canvas.getContext('2d').drawImage(img, 0, 0);
-                icon.object = new Costume(canvas, item.name);
-                icon.createThumbnail();
-                icon.refresh();
-            };
-            img.src = url;
-        }
-    });
+                icon.object.audio.src = url;
+                icon.object.audio.load();
+            } else if (isSVG) {
+                img.onload = function () {
+                    icon.object = new SVG_Costume(img, item.name);
+                    icon.createThumbnail();
+                    icon.refresh();
+                };
+                myself.getURL(
+                    url,
+                    txt => img.src = 'data:image/svg+xml;base64,' +
+                        window.btoa(txt)
+                );
+            } else {
+                img.onload = function () {
+                    var canvas = newCanvas(new Point(img.width, img.height), true);
+                    canvas.getContext('2d').drawImage(img, 0, 0);
+                    icon.object = new Costume(canvas, item.name);
+                    icon.createThumbnail();
+                    icon.refresh();
+                };
+                img.src = url;
+            }
+        });
+        dialog.fixLayout();
+    };
+    if (folderName !== 'Costumes') {
+        filteredItems = items;
+    }
+    renderItems(filteredItems);
     dialog.popUp(world);
     dialog.setExtent(new Point(400, 300));
     dialog.setCenter(world.center());
