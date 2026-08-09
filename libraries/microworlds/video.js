@@ -210,6 +210,15 @@ VideoCanvasWrapper.prototype.addLoadedMetadataAction = function(action) {
 }
 
 VideoCanvasWrapper.prototype.loadVideo = function(src){
+    var parsedUrl;
+    try {
+        parsedUrl = new URL(src);
+    } catch(e) {
+        throw new Error("Invalid video URL.");
+    }
+    if(parsedUrl.protocol !== 'https:' && parsedUrl.protocol !== 'http:') {
+        throw new Error("Video URL must use http or https protocol.");
+    }
     fetch(src).then(function(response) {
         return response;
     }).catch(function() {
