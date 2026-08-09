@@ -87,11 +87,11 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-August-07';
+modules.gui = '2026-August-08';
 
 // Declarations
 
-var SnapVersion = '12.1.0-dev-260807';
+var SnapVersion = '12.1.0-dev-260808';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1699,6 +1699,8 @@ IDE_Morph.prototype.createCategories = function () {
         categoryQueryAction = this.scene.unifiedPalette ? queryTopCategory
             : queryCurrentCategory,
         shift = this.config.noDefaultCat ? 4 : 0,
+        dict = this.currentSprite.populatedCategories(),
+        customCats = SpriteMorph.prototype.customCategories,
         flag = true;
 
     if (this.categories) {
@@ -1728,6 +1730,14 @@ IDE_Morph.prototype.createCategories = function () {
         // retained for backwards compatibility in 3rd party extensions
         myself.refreshEmptyCategories();
     };
+
+    // filter out empty custom categories
+    if (this.scene.hideEmptyCategories) {
+        customCats = new Map(
+            [...customCats.entries()].filter(([cat, flag]) =>
+                Object.hasOwn(dict, cat) && (dict[cat]))
+        );
+    }
 
     function changePalette(category) {
         return () => {
@@ -1836,7 +1846,7 @@ IDE_Morph.prototype.createCategories = function () {
         var button = categoryButton('motion'),
             buttonWidth = button.width(),
             buttonHeight = button.height(),
-            more = SpriteMorph.prototype.customCategories.size,
+            more = customCats.size,
             len = primCats.length,
             halve = Math.ceil(len / 2),
             border = 3,
@@ -1906,7 +1916,7 @@ IDE_Morph.prototype.createCategories = function () {
 
     // sort alphabetically
     Array.from(
-        SpriteMorph.prototype.customCategories.keys()
+        customCats.keys()
     ).sort().forEach(name =>
         addCustomCategoryButton(
             name,
@@ -8528,6 +8538,7 @@ IDE_Morph.prototype.projectSettingsMenu = function () {
         () => {
             this.scene.hideEmptyCategories = !this.scene.hideEmptyCategories;
             this.createCategories();
+            this.refreshEmptyCategories();
             this.createPaletteHandle();
             this.fixLayout();
         },
