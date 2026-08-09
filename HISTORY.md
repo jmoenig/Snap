@@ -18,6 +18,9 @@
 * **Translation Updates:**
     * German
 
+### 2026-08-09
+* pulled some fixes from gigamonkey and others, updated file versions
+
 ### 2026-08-08
 * gui: hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
 * updated dev version
