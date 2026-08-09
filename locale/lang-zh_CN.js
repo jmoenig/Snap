@@ -1,104 +1,3 @@
-/*
-你好，欢迎参与Snap!的简体中文汉化贡献！
-
-由于Snap!完全独立于Scratch和Blockly(并且Snap!的祖先是Scratch 1.4，不是Blockly！)，
-因此，如果你是新来的Snap!官方编辑器的汉化贡献者，或者是第一次试图修改汉化版本的Scratcher/Snapper，
-请详细查看本注释提供的汉化教程
-(长期参与汉化贡献的资深用户可忽略这一教程)
-
-一、如何翻译Snap!编辑器
-
-  1. 翻译文本部分
-    若要翻译编辑器的一些文本(包括积木名称)，可通过"<英文原文>": "<译文>"来追加。例如：
-      ·"sprite": "角色";
-      ·"stage": "舞台";
-      ·......
-
-  2. 如何表示积木
-    一个积木的名字由特殊图标(用"$"标识)、文本和参数(用"_"表示)构成。例如：
-      ·"当 $greenflag 被点击"(当绿旗被点击)";
-      ·"移动 _ 步";
-      ·"碰到边缘就反弹";
-      ·"列表 _"(注：可变参数同样用"_"表示);
-      ·......
-    
-    特殊图标也可以用"_"表示。例如：
-      ·"当 _ 被点击"(当 $greenflag 被点击);
-      ·"pipe _ _"(pipe $arrowRight _);
-      ·......
-    
-    翻译格式同"翻译文本部分"。
-  
-二、如何翻译Snap!的内置库
-
-  1. 翻译内置库的名字和描述
-    在Snap!源码里，所有内置库的名字、描述和语言翻译都会保存在library/LIBRARIES.json里。
-    一个库在LIBRARIES.json的表示详见该文件的一个例子：
-    (p.s.: 在Snap!源码里，简体中文用"zh_CN"表示，繁体中文用"zh_TW"表示)
-
-    {
-      //库的对应文件
-      "fileName": "code2blocks_module.xml",
-      //库的名字
-      "name": "Code to Blocks to Code",
-      //库的描述
-      "description": "Translate text code to blocks and vice-versa",
-      //所有显示在积木面板上的积木
-      "searchData": [
-        "parse code _ to blocks",
-        "encode blocks _ to text _ pretty"
-      ],
-      //积木所在的类别，其中原生积木类别用英文表示
-      "categories": [
-        "operators" //运算类别
-      ],
-      //库的对应翻译。翻译部分格式同上且可选。
-      "translations": {
-        //德语翻译
-        "de": {
-          "searchData": [
-            "verwandle Code _ in Blöcke\rca",
-            "verwandle Blöcke _ in Code _ formatiert\rca"
-          ]
-        },
-        //加泰罗尼亚语翻译
-        "ca": {
-          "name": "Codi textual dels blocs",
-          "description": "Obté el codi textual dels blocs i viceversa",
-          "searchData": [
-            "blocs del codi textual _",
-            "codi textual dels blocs _ formatats _"
-          ]
-        },
-        //简体中文翻译
-        "zh_CN": {
-          "name": "积木与代码互转库",
-          "description": "伪Lisp代码与积木双向转换"
-        }
-      }
-    },
-    
-    因此，若要翻译名字和描述，
-    请直接在library/LIBRARIES.json里找到对应名字(查看name部分)并翻译，
-    不要直接在本文件里加。
-  
-  2. 翻译内置库的积木
-    翻译内置库的积木的步骤如下：
-        1. 点击"文件"选项;
-        2. 在菜单中点击"自制积木库...";
-        3. 选择自制积木库并导入;
-        4. 右键点击自制积木，并点击菜单里的"编辑..."选项。此时会出现积木编辑器;
-        5. 右键点击定义积木处，并点击菜单里的"翻译..."选项;
-        6. 在弹出的窗口处追加"zh_CN:<积木名字>";
-        7. 重复第4-6步，直到这个库的所有积木(包括隐藏积木)均已翻译完;
-        8. 导出自制积木库，重命名为LIBRARIES.json里库的对应文件名;
-        9. 移动至libraries。
-      
-    (自制积木的翻译也不要动不动加到本文件里！)
-
-- Ayist14
-*/
-
 SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "0": "0",
     "1": "1",
@@ -367,13 +266,13 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "check to enable\nproject data in URLs": "网址携带作品数据",
     "check to enable\nsaving linked sublist identities": "保存子列表的ID",
     "check to enable\nsprite composition": "允许角色组合",
-    "check to enable alternating\ncolors for nested blocks": "使用深浅相间的颜色\n显示嵌套的同类积木\n对于TurboWarp用户：TurboWarp的\"交替积木颜色\"插件起源于此，于2010年引入\n(此前作为隐藏选项存在)\n后作为插件被Snapper(Snap!用户)贡献至TurboWarp里",
+    "check to enable alternating\ncolors for nested blocks": "使用深浅相间的颜色\n显示嵌套的同类积木",
     "check to enable auto-wrapping\ninside nested block stacks": "选中以启用嵌套积木堆栈内的自动换行",
     "check to enable dynamic\nlabels for variadic inputs": "可变输入项使用动态标记",
     "check to enable support\n for first-class sprite": "将角色作为一等公民",
     "check to enable using operators on lists and tables": "勾选以启用作用于列表和表格的超级运算符",
     "check to enable virtual keyboard support for mobile devices": "使用移动设备的虚拟键盘",
-    "check to enforce\nstatically typed inputs": "勾选以允许积木参数\n选择性嵌入类型匹配的表达式\n对于任何用户: 声明这个积木所返回的数据类型\n对于任何用户: Snap! 12的类型注解和严格类型检查属于IDE功能————————不仅允许声明返回类型，如果启用严格类型检查，还能允许积木参数(通过仅限于ADT的类型推断)\n嵌入与其类型相匹配的表达式。\n这一功能不仅同时适用于所有积木(包括Snap!的原生积木)，\n也使Snap!成为首个开始注意类型安全的图形化编程语言(Scratch社区：图形化编辑器)",
+    "check to enforce\nstatically typed inputs": "勾选以允许积木参数\n选择性嵌入类型匹配的表达式",
     "check to have the stage use up\nall space and go behind the\nscripting area": "勾选启用演示模式",
     "check to hide (+) symbols\nin block prototype labels": "不在积木编辑器的积木部分上显示(+)号",
     "check to hide empty primitive block categories": "勾选以隐藏所有无积木的积木类别",
@@ -386,8 +285,8 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "check to show\ncategory names\nin the palette": "显示面板上的类别名称",
     "check to show all blocks in a single palette": "勾选之后所有的积木会在同一个积木面板里显示",
     "check to show buttons\nin the palette": "显示面板上的按钮",
-    "check to show extension\nprimitives in the palette": "显示“extension”及“primitive”积木，以使用已导入的扩展函数\n对于TurboWarp/Gandi IDE用户：由于Snap!的自定义扩展(即自定义扩展函数(组))只是\"JavaScript Function\"积木的替代方案，\n因此Snap!扩展完全不兼容TurboWarp或Gandi IDE\n(更何况是国人新发布的02Engine、AutraEditor和Bilup这三个TurboWarp改版)\nSnapper编辑的Snap!扩展可通过内置扩展函数“src_load(url)”导入\nSnap!扩展开发教程(官方版本)详见https://github.com/jmoenig/Snap/blob/master/docs/Extensions.md",
-    "check to support\nnative JavaScript functions": "取消勾选以解除JavaScript Function积木的使用限制\n对于02Engine用户：Snap!比02Engine早十年实现JS + 积木混合编程，其原理是JavaScript的函数是一等公民\n由于Snap!的列表、函数(Snap! Lambda，即环)、角色/舞台、造型、声音及延续(continuation)均为一等公民，\n故在混合编程的灵活性上比02Engine强得多\n用JavaScript Function积木动态创建的JavaScript Lambda可通过\"运行\"或\"调用\"积木直接运行",
+    "check to show extension\nprimitives in the palette": "显示“extension”及“primitive”积木，以使用已导入的扩展函数",
+    "check to support\nnative JavaScript functions": "取消勾选以解除JavaScript Function积木的使用限制",
     "check to switch pen colors\nand graphic effects to HSL": "勾选后更改画笔颜色为HSL模式",
     "check to turn\nblock clicking\nsound on": "点击积木发出声音",
     "check to turn on\n visible stepping (slow)": "勾选以开始显示每一步的执行",
@@ -1346,7 +1245,7 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "select": "选择",
     "Select a costume from the media library": "从媒体库中挑选一个造型",
     "Select a sound from the media library": "从媒体库中挑选一个声音",
-    "Select categories of additional blocks to add to this project.": "挑选更多(自制)积木，添加到作品中\n对于Scratcher：由于自制积木和扩展的特殊性，Snap!严格区分库和扩展。\n不仅如此，Snap!库也有社区贡献者(如Snap!官方社区用户Tethrarxitet向Snap!源码贡献的画笔美术字库)，\n不过他们通常直接在Snap!官网以作品的方式发布，或直接在Github里开源，而不是像TurboWarp和Gandi iDE用户那样发布在专门的扩展平台上",
+    "Select categories of additional blocks to add to this project.": "挑选更多(自制)积木，添加到作品中",
     "selection": "选择",
     "Selection tool": "选择工具",
     "selector...": "对应的原生积木...",
@@ -1609,7 +1508,7 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "unable to nest (disabled or circular?)": "无法嵌套(禁用还是循环？)",
     "uncheck for default\nGUI design": "使用默认的用户界面",
     "uncheck for default\nGUI theme": "取消选中默认 \nGUI 主题",
-    "uncheck for dynamically\ntyped inputs": "取消勾选以使积木参数允许任意类型传入\n对于任何用户: Snap! 12的类型注解和严格类型检查属于IDE功能————————不仅允许声明返回类型，如果启用严格类型检查，还能允许积木参数(通过仅限于ADT的类型推断)\n嵌入与其类型相匹配的表达式。\n这一功能不仅同时适用于所有积木(包括Snap!的原生积木)，\n也使Snap!成为首个开始注意类型安全的图形化编程语言(Scratch社区：图形化编辑器)",
+    "uncheck for dynamically\ntyped inputs": "取消勾选以使积木参数允许任意类型传入",
     "uncheck for greater speed at variable frame rates": "改变帧率保证播放速度 (牺牲平滑程度)",
     "uncheck for less contrast\nmulti-column list views": "浅色表格线",
     "uncheck for lower resolution, saves computing resources": "取消选中较低的分辨率,节省计算资源",
@@ -1634,11 +1533,11 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "uncheck to disable\nusing operators on lists and tables": "取消勾选以禁用作用于列表和表格的超级运算符",
     "uncheck to disable\nvirtual keyboard support for mobile devices": "不使用移动设备的虚拟键盘",
     "uncheck to disable\nwrapping list indices": "取消勾选以禁用列表索引循环",
-    "uncheck to disable alternating\ncolors for nested block": "使用同样的颜色\n显示嵌套的同类积木\n对于TurboWarp用户：TurboWarp的\"交替积木颜色\"插件起源于此，于2010年引入\n(此前作为隐藏选项存在)\n后作为插件被Snapper(Snap!用户)贡献至TurboWarp里",
+    "uncheck to disable alternating\ncolors for nested block": "使用同样的颜色\n显示嵌套的同类积木",
     "uncheck to disable dynamic\nlabels for variadic inputs": "可变输入项不使用动态标记",
     "uncheck to disable editing primitives\nin the palette as custom blocks": "取消勾选以禁用调色板中的\n作为",
     "uncheck to disable support\nfor first-class sprites": "不将角色作为一等公民",
-    "uncheck to disable support for\nnative JavaScript functions": "取消勾选以禁用JavaScript Function积木\n对于TurboWarp/Gandi IDE用户：由于Snap!的自定义扩展(即自定义扩展函数(组))只是\"JavaScript Function\"积木的替代方案，\n因此Snap!扩展完全不兼容TurboWarp或Gandi IDE\n(更何况是国人新发布的02Engine、AutraEditor和Bilup这三个TurboWarp改版)\nSnapper编辑的Snap!扩展可通过内置扩展函数“src_load(url)”导入\nSnap!扩展开发教程(官方版本)详见https://github.com/jmoenig/Snap/blob/master/docs/Extensions.md",
+    "uncheck to disable support for\nnative JavaScript functions": "取消勾选以禁用JavaScript Function积木",
     "uncheck to disinherit": "取消勾选以继承",
     "uncheck to drag media\nand blocks out of\nwatchers and balloons": "取消勾选以拖动媒体和积木从监视器和气球",
     "uncheck to enable\ndirectly running blocks\nby clicking on them": "取消勾选后可以点击积木直接运行",
@@ -1773,7 +1672,6 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "Zebra coloring": "斑马着色",
     "Zoom blocks": "调整积木大小",
     "Zoom blocks...": "调整积木大小...",
-    //积木库菜单、部分文本/Snap! 11及以上版本功能的汉化
     "number?": "是否为数字？",
     "complex?": "是否为复数？",
     "real?": "是否为实数？",
@@ -1893,11 +1791,11 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "98 purple #7f007f": "98 紫色 #7f007f",
     "99 dark magenta #8b008b": "99 深洋红 #8b008b",
     "return data type ...": "返回类型注解...",
-    "specify what kind of data this block reports": "声明这个积木所返回的数据类型\n对于任何用户: Snap! 12的类型注解和严格类型检查属于IDE功能————————不仅允许声明返回类型，如果启用严格类型检查，还能允许积木参数(通过仅限于ADT的类型推断)\n嵌入与其类型相匹配的表达式。\n这一功能不仅同时适用于所有积木(包括Snap!的原生积木)，\n也使Snap!成为首个开始注意类型安全的图形化编程语言(Scratch社区：图形化编辑器)",
+    "specify what kind of data this block reports": "声明这个积木所返回的数据类型",
     "Return Data Type": "返回类型",
     "Enforce input types": "全局性严格类型检查(可选，仅限于当前更改)",
-    "disable dropping reporters\ninto unmatching slots": "勾选以禁止部分表达式\n嵌入类型不匹配的积木参数里\n声明这个积木所返回的数据类型\n对于任何用户: Snap! 12的类型注解和严格类型检查属于IDE功能————————不仅允许声明返回类型，如果启用严格类型检查，还能允许积木参数(通过仅限于ADT的类型推断)\n嵌入与其类型相匹配的表达式。\n这一功能不仅同时适用于所有积木(包括Snap!的原生积木)，\n也使Snap!成为首个开始注意类型安全的图形化编程语言(Scratch社区：图形化编辑器)",
-    "uncheck to allow\ndropping reporters\ninto unmatching slots": "取消勾选以允许任意表达式嵌入至积木参数里\n对于任何用户: Snap! 12的类型注解和严格类型检查属于IDE功能————————不仅允许声明返回类型，如果启用严格类型检查，还能允许积木参数(通过仅限于ADT的类型推断)\n嵌入与其类型相匹配的表达式。\n这一功能不仅同时适用于所有积木(包括Snap!的原生积木)，\n也使Snap!成为首个开始注意类型安全的图形化编程语言(Scratch社区：图形化编辑器)",
+    "disable dropping reporters\ninto unmatching slots": "勾选以禁止部分表达式\n嵌入类型不匹配的积木参数里",
+    "uncheck to allow\ndropping reporters\ninto unmatching slots": "取消勾选以允许任意表达式嵌入至积木参数里",
     "number λ": "数字(封装成环)",
     "Project notes": "作品说明",
     "Project name": "作品名称",
@@ -1936,8 +1834,8 @@ SnapTranslator.dict.zh_CN = { ...SnapTranslator.dict.zh_CN,
     "running": "平针",
     "triple run": "三重平针",
     "Blocks only": "隐藏交互对象区",
-    "check to hide\nthe stage and \nsprite editor panes": "勾选以隐藏舞台区和角色区。效果类似于02Engine的舞台、角色窗口",
-    "uncheck to show\nthe stage and\nsprite editor panes": "取消勾选以显示舞台区和角色区。效果类似于隐藏02Engine的舞台、角色窗口",
+    "check to hide\nthe stage and \nsprite editor panes": "勾选以隐藏舞台区和角色区。",
+    "uncheck to show\nthe stage and\nsprite editor panes": "取消勾选以显示舞台区和角色区。",
     "change a category...": "修改积木类别...",
     "Constrain proportions of shapes?\n(you can also hold shift)": "规范所绘制的形状\n(包括矩形、圆形和直线，相当于按住Shift键)",
     "Paintbrush tool\n(free draw)": "切换成画笔\n(自由绘制)",
