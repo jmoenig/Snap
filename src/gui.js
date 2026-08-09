@@ -5487,7 +5487,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         world = this.world(),
         // fetch categories from Costumes/COSTUME-categories.json
         // categories = JSON.parse(this.getURL(this.resourceURL('Costumes', 'COSTUME-categories.json'))),
-        categories = Array.from(new Set(items.map(each => each.category).filter(each => each.length))),
+        categories = Array.from(new Set(items.map(each => each.category).filter(each => isString(each)))),
         selectedCategory = categories[0],
         filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))],
         handle;
