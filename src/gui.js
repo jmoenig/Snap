@@ -5474,7 +5474,6 @@ IDE_Morph.prototype.importMedia = function (folderName) {
 
 };
 
-
 IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     // private - this gets called by importMedia() and creates
     // the actual dialog
@@ -5485,12 +5484,15 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         turtle = new SymbolMorph('turtle', 60),
         myself = this,
         world = this.world(),
-        // fetch categories from Costumes/COSTUME-categories.json
-        // categories = JSON.parse(this.getURL(this.resourceURL('Costumes', 'COSTUME-categories.json'))),
-        categories = Array.from(new Set(items.map(each => each.category).filter(each => isString(each)))), // +++
+        categories = Array.from(new Set(items.map(each =>
+            each.category).filter(each => isString(each)))),
+        hasCategories = categories.length > 0,
         selectedCategory = categories[0],
         filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))],
         handle;
+    if (hasCategories) {
+        categories.unshift('all');
+    }
     frame.acceptsDrops = false;
     frame.contents.acceptsDrops = false;
     frame.color = myself.groupColor;
@@ -5526,12 +5528,16 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     categories.forEach(category => {
         let button = new PushButtonMorph(
             null,
-            function () { 
+            function () {
                 selectedCategory = category;
-                filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))];
+                if (category === 'all') {
+                    filteredItems = items;
+                } else {
+                    filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))];
+                }
                 renderItems(filteredItems);
-            }, 
-                category
+            },
+            category
         );
         categoryBar.add(button);
     });
@@ -5571,11 +5577,14 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
 
         categoryBar.setExtent(new Point(
             fw,
-            // by + categoryBar.children[0].height() + spacing
-            by + (categories.length ? categoryBar.children[0].height() + spacing : 0)
+            by + (hasCategories ?
+                categoryBar.children[0].height() + spacing :
+                0)
         ));
         categoryBar.color = dialog.color;
-        y = by + (categories.length ? categoryBar.children[0].height() + 10 : 0);
+        if (hasCategories) {
+            y = by + categoryBar.children[0].height() + 10;
+        }
 
         frame.contents.children.forEach(function (icon) {
             if (icon === categoryBar) { return; }
