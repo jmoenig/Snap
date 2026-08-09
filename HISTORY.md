@@ -17,6 +17,11 @@
     * fixed display of continuations capturing variadic inputs
 * **Translation Updates:**
     * German
+    * Chinese
+
+### 2026-08-09
+* pulled some fixes from gigamonkey and others, updated file versions
+* Chinese translation update
 
 ### 2026-08-08
 * gui: hide empty custom categories in puzzles and when selecting the "hide empty categories" setting

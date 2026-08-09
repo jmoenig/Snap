@@ -7,7 +7,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2024 by Jens Mönig
+    Copyright (C) 2026 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -46,7 +46,7 @@ VariableFrame*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.api = '2024-February-22';
+modules.api = '2026-August-09';
 
 // IDE_Morph external communication API
 /*
@@ -237,7 +237,18 @@ IDE_Morph.prototype.newList = function (array) {
 };
 
 IDE_Morph.prototype.getProjectXML = function () {
-    return this.serializer.serialize(new Project(this.scenes, this.scene));
+    // bracket the serialization in capture/applyGlobalSettings the way
+    // exportProject() does: Scene.toXML ends by assigning the bootstrapped
+    // customized-primitives *array* to SpriteMorph.prototype.blocks,
+    // clobbering the primitives dictionary (to an empty array when no
+    // primitive is customized), which silently breaks block search and any
+    // subsequent palette rebuild; applyGlobalSettings() restores the
+    // dictionary afterwards
+    var xml;
+    this.scene.captureGlobalSettings();
+    xml = this.serializer.serialize(new Project(this.scenes, this.scene));
+    this.scene.applyGlobalSettings();
+    return xml;
 };
 
 IDE_Morph.prototype.loadProjectXML = function (projectXML) {

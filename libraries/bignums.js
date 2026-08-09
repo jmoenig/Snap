@@ -102,16 +102,15 @@ function loadBlocks (useBigNums) {
     if (useBigNums) {
         InputSlotMorph.prototype.evaluate = function () {
             var contents = this.contents();
-
+            
             if (this.selectedBlock) {
-                    return this.selectedBlock;
+                return this.selectedBlock;
             }
-
             if (this.constant) {
                 return this.constant;
             }
             if (this.isNumeric) {
-                return parseNumber(contents.text || '0');
+                return isNaN(Number(contents.text))?contents.text:parseNumber(contents.text || '0');
             }
             return contents.text;
         };
@@ -120,8 +119,8 @@ function loadBlocks (useBigNums) {
                 value,
                 newValue;
             if (frame) {
-                value = parseNumber(frame.vars[name].value);
-                newValue = Number.isNaN(value) ? delta : fn['+'](value, parseNumber(delta));
+                value = frame.vars[name].value;
+                newValue = Process.prototype.reportSum(value,delta);
                 if (sender instanceof SpriteMorph &&
                         (frame.owner instanceof SpriteMorph) &&
                         (sender !== frame.owner)) {

@@ -1,7 +1,7 @@
 # Snap<em>!</em> Development Documentation
-> last updated May 6, 2023.
+> last updated August 9, 2026.
 
-This guide is intended for _developers_ who want to ingrate Snap! into existing projects. Each of these guides is a breif introduction to maintaining an extension. The goal is to _minimize_ the amount of customizations you need to make to the Snap! source code, located in `src/`.
+This guide is intended for _developers_ who want to integrate Snap! into existing projects. Each of these guides is a brief introduction to maintaining an extension. The goal is to _minimize_ the amount of customizations you need to make to the Snap! source code, located in `src/`.
 
 **Before contributing source code modifications, please review [the contributations guide](./CONTRIBUTING.md) and get in touch!
 
