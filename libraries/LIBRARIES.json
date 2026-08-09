@@ -1805,7 +1805,7 @@
           },
           "zh_CN": {
               "name": "字符串操作库",
-              "description": "通过多种方式提取字符串的一部分字符串。通常情况下，文本参数只允许输入一行文本，但\"多行文本\"积木允许输入多行文本，并可以用于其他积木的文本参数"
+              "description": "通过多种方式提取字符串的一部分字符串。通常情况下，文本参数只允许输入一行文本，但\"多行文本\"积木允许输入多行文本，并可以用于其它积木的文本参数"
           }
       },
       "searchData": [
@@ -2922,7 +2922,7 @@
           },
           "zh_CN": {
             "name": "MQTT库",
-            "description": "MQTT（Message Queuing Telemetry Transport）协议，适用于资源受限的设备和低带宽、高延迟或不稳定的网络环境。如连接物联网设备和/或其他软件"
+            "description": "MQTT（Message Queuing Telemetry Transport）协议，适用于资源受限的设备和低带宽、高延迟或不稳定的网络环境。如连接物联网设备和/或其它软件"
           }
       },
       "searchData": [
