@@ -274,6 +274,7 @@ function IDE_Morph(config = {}) {
         hideCategories: bool, hide/show the palette block category buttons
         hideProjectName:bool, hide/show the project title in the tool bar
         noProjectItems: bood, hide/show project specific menu items
+        noStorageItems: bool, hide/show only the load/save menu items
         noDefaultCat:   bool, hide/show the buit-in bloc category buttons
         noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
@@ -5075,27 +5076,34 @@ IDE_Morph.prototype.projectMenu = function () {
     menu.addItem('Notes...', 'editNotes');
     menu.addLine();
     if (!this.config.noProjectItems) {
-        menu.addPair('New', 'createNewProject', '^N');
-        menu.addPair('Open...', 'openProjectsBrowser', '^O');
-        menu.addPair('Save', "save", '^S');
-        menu.addItem('Save As...', 'saveProjectsBrowser');
-        if (backup) {
-            menu.addItem(
-                'Restore unsaved project',
-                'restore',
-                backup,
-                shiftClicked ? new Color(100, 0, 0) : null
-            );
-            if (shiftClicked) {
+        // Setting noProjectItems removes a bunch of things from the project
+        // menu. This flag enables a more selective disabling of just the menu
+        // items that deal with the Snap! storage system. This is useful for
+        // embedding Snap! in a site that manages saving and loading the
+        // project.xml itself.
+        if (!this.config.noStorageItems) {
+            menu.addPair('New', 'createNewProject', '^N');
+            menu.addPair('Open...', 'openProjectsBrowser', '^O');
+            menu.addPair('Save', "save", '^S');
+            menu.addItem('Save As...', 'saveProjectsBrowser');
+            if (backup) {
                 menu.addItem(
-                    'Clear backup',
-                    'clearBackup',
+                    'Restore unsaved project',
+                    'restore',
                     backup,
-                    new Color(100, 0, 0)
+                    shiftClicked ? new Color(100, 0, 0) : null
                 );
+                if (shiftClicked) {
+                    menu.addItem(
+                        'Clear backup',
+                        'clearBackup',
+                        backup,
+                        new Color(100, 0, 0)
+                    );
+                }
             }
+            menu.addLine();
         }
-        menu.addLine();
         menu.addItem(
             'Import...',
             'importLocalFile',
