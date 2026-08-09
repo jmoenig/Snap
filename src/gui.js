@@ -5575,7 +5575,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             by + (categories.length ? categoryBar.children[0].height() + spacing : 0)
         ));
         categoryBar.color = dialog.color;
-        y = by + categoryBar.children[0].height() + 10;
+        y = by + (categories.length ? categoryBar.children[0].height() + 10 : 0);
 
         frame.contents.children.forEach(function (icon) {
             if (icon === categoryBar) { return; }
