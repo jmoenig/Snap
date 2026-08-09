@@ -5487,7 +5487,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         world = this.world(),
         // fetch categories from Costumes/COSTUME-categories.json
         // categories = JSON.parse(this.getURL(this.resourceURL('Costumes', 'COSTUME-categories.json'))),
-        categories = Array.from(new Set(items.map(each => each.category).filter(each => isString(each)))),
+        categories = Array.from(new Set(items.map(each => each.category).filter(each => isString(each)))), // +++
         selectedCategory = categories[0],
         filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))],
         handle;
@@ -5571,7 +5571,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
 
         categoryBar.setExtent(new Point(
             fw,
-            by + categoryBar.children[0].height() + spacing
+            // by + categoryBar.children[0].height() + spacing
+            by + categories.length ? categoryBar.children[0].height() + spacing : 0
         ));
         categoryBar.color = dialog.color;
         y = by + categoryBar.children[0].height() + 10;
