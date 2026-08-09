@@ -5572,7 +5572,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         categoryBar.setExtent(new Point(
             fw,
             // by + categoryBar.children[0].height() + spacing
-            by + categories.length ? categoryBar.children[0].height() + spacing : 0
+            by + (categories.length ? categoryBar.children[0].height() + spacing : 0)
         ));
         categoryBar.color = dialog.color;
         y = by + categoryBar.children[0].height() + 10;
