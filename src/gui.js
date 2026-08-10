@@ -5487,8 +5487,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         categories = Array.from(new Set(items.map(each =>
             each.category).filter(each => isString(each)))),
         hasCategories = categories.length > 0,
-        selectedCategory, // +++  = categories[0], // +++ needs to be adjusted for "All"
-        // +++ filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))], // +++ get rid of this
+        selectedCategory,
         handle;
     if (hasCategories) {
         categories.unshift('All');
@@ -5526,23 +5525,6 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     };
 
     categories.forEach(category => {
-
-/*
-        let button = new PushButtonMorph(
-            null,
-            function () {
-                selectedCategory = category;
-                if (category === 'All') {
-                    filteredItems = items;
-                } else {
-                    filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))];
-                }
-                renderItems(filteredItems);
-            },
-            category
-        );
-*/
-
         let button = new ToggleButtonMorph(
             null, // colors
             null, // target
@@ -5617,7 +5599,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         if (name === 'All') {
             filteredItems = items;
         } else {
-            filteredItems = [... new Set(items.filter(item => item.category === name))];
+            filteredItems = [... new Set(items.filter(item =>
+                item.category === name))];
         }
         categoryBar.children.forEach(button => button.refresh());
         renderItems(filteredItems);
@@ -5678,7 +5661,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
                 );
             } else {
                 img.onload = function () {
-                    var canvas = newCanvas(new Point(img.width, img.height), true);
+                    var canvas = newCanvas(
+                        new Point(img.width, img.height), true);
                     canvas.getContext('2d').drawImage(img, 0, 0);
                     icon.object = new Costume(canvas, item.name);
                     icon.createThumbnail();
@@ -5690,16 +5674,9 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         dialog.fixLayout();
     }
 
-/*
-    if (folderName !== 'Costumes') { // +++ get rid of this
-        filteredItems = items;
-    }
-*/
-
     selectCategory('All');
-// +++    renderItems(filteredItems);
     dialog.popUp(world);
-    dialog.setExtent(new Point(400, 300));
+    dialog.setExtent(new Point(480, 300));
     dialog.setCenter(world.center());
 
     handle = new HandleMorph(
