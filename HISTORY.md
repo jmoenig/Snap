@@ -20,6 +20,10 @@
     * German
     * Chinese
 
+### 2026-08-10
+* gui: worked on cosstume category selectors
+* German translation update for costume category names
+
 ### 2026-08-09
 * pulled some fixes from gigamonkey and others, updated file versions
 * Chinese translation update
