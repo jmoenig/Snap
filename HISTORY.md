@@ -29,6 +29,7 @@
 * updated dev version
 * objects: changed default / initial video transparency from 50% to solid (0%)
 * objects: reverted video transparency default to 50%
+* Edge-AI library update
 
 ### 2026-08-09
 * pulled some fixes from gigamonkey and others, updated file versions
