@@ -10739,7 +10739,7 @@ StageMorph.prototype.init = function (globals) {
     this.stopProjectionSource = null; // function to turn off video stream etc.
     this.continuousProjection = false; // turn ON for video
     this.projectionCanvas = null;
-    this.projectionTransparency = 0;
+    this.projectionTransparency = 50;
 
     // video motion detection, transient
     this.mirrorVideo = true;
