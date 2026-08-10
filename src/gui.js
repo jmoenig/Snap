@@ -87,11 +87,11 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-August-08';
+modules.gui = '2026-August-10';
 
 // Declarations
 
-var SnapVersion = '12.1.0-dev-260808';
+var SnapVersion = '12.1.0-dev-260810';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -5474,7 +5474,6 @@ IDE_Morph.prototype.importMedia = function (folderName) {
 
 };
 
-
 IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     // private - this gets called by importMedia() and creates
     // the actual dialog
@@ -5485,11 +5484,15 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         turtle = new SymbolMorph('turtle', 60),
         myself = this,
         world = this.world(),
-        // fetch categories from Costumes/COSTUME-categories.json
-        categories = JSON.parse(this.getURL(this.resourceURL('Costumes', 'COSTUME-categories.json'))),
-        selectedCategory = categories[0],
-        filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))],
+        categories = Array.from(new Set(items.map(each =>
+            each.category).filter(each => isString(each)))).sort((a, b) =>
+                localize(a) > localize(b) ? 1 : -1),
+        hasCategories = categories.length > 0,
+        selectedCategory,
         handle;
+    if (hasCategories) {
+        categories.unshift('All');
+    }
     frame.acceptsDrops = false;
     frame.contents.acceptsDrops = false;
     frame.color = myself.groupColor;
@@ -5523,19 +5526,17 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     };
 
     categories.forEach(category => {
-        let button = new PushButtonMorph(
-            null,
-            function () { 
-                selectedCategory = category;
-                filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))];
-                renderItems(filteredItems);
-            }, 
-                category
+        let button = new ToggleButtonMorph(
+            null, // colors
+            null, // target
+            () => selectCategory(category), // action
+            category, // label
+            () => selectedCategory === category // query
         );
+
         categoryBar.add(button);
     });
 
-    
     dialog.fixLayout = function () {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
             x = 0,
@@ -5558,22 +5559,20 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         const spacing = 4;
 
         categoryBar.children.forEach(function (button) {
-            button.setPosition(fp.add(new Point(bx, by)));
-
-            bx += button.width() + spacing;
-
             if (bx + button.width() > fw) {
                 bx = 0;
                 by += button.height() + spacing;
             }
+            button.setPosition(fp.add(new Point(bx, by)));
+            bx += button.width() + spacing;
         });
-
-        categoryBar.setExtent(new Point(
-            fw,
-            by + categoryBar.children[0].height() + spacing
-        ));
+        if (hasCategories) {
+            by += categoryBar.children[0].height();
+            by += spacing;
+        }
+        categoryBar.setExtent(new Point(fw, by));
         categoryBar.color = dialog.color;
-        y = by + categoryBar.children[0].height() + 10;
+        y = by;
 
         frame.contents.children.forEach(function (icon) {
             if (icon === categoryBar) { return; }
@@ -5594,6 +5593,20 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.removeShadow();
         this.addShadow();
     };
+
+    function selectCategory (name) {
+        var filteredItems;
+        selectedCategory = name;
+        if (name === 'All') {
+            filteredItems = items;
+        } else {
+            filteredItems = [... new Set(items.filter(item =>
+                item.category === name))];
+        }
+        categoryBar.children.forEach(button => button.refresh());
+        renderItems(filteredItems);
+    }
+
     function renderItems (items) {
         frame.contents.children
             .filter(child => child !== categoryBar)
@@ -5649,7 +5662,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
                 );
             } else {
                 img.onload = function () {
-                    var canvas = newCanvas(new Point(img.width, img.height), true);
+                    var canvas = newCanvas(
+                        new Point(img.width, img.height), true);
                     canvas.getContext('2d').drawImage(img, 0, 0);
                     icon.object = new Costume(canvas, item.name);
                     icon.createThumbnail();
@@ -5660,12 +5674,10 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         });
         dialog.fixLayout();
     }
-    if (folderName !== 'Costumes') {
-        filteredItems = items;
-    }
-    renderItems(filteredItems);
+
+    selectCategory('All');
     dialog.popUp(world);
-    dialog.setExtent(new Point(400, 300));
+    dialog.setExtent(new Point(480, 300));
     dialog.setCenter(world.center());
 
     handle = new HandleMorph(

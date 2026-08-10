@@ -2,11 +2,12 @@
 
 ## in development:
 * **New Features:**
-    * first-class processes - new built in data type
-    * new special "process" input slot type (large gear symbol inside an oval "slot" shape)
+    * first-class processes - new built-in data type
+    * new special "process" input slot type (large gear symbol)
     * new blocks for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
-    * new animated and still symbols for interlocking gears - used for process data type
-    * new "Body Language" category in the "Edge AI" library 
+    * new animated and still symbols depicting interlocking gears - used for process data type
+    * new "Body Language" category in the "Edge AI" library
+    * new category selection buttons in the costumes browser dialog, thank you, Victoria!
 * **Notable Changes:**
     * hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
     * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
@@ -15,13 +16,26 @@
 * **Notable Fixes:**
     * disable empty category buttons when switching back from "hide empty categories" setting
     * fixed display of continuations capturing variadic inputs
+* **Documentation Updates:**
+    * updated API.md with new "noStorageItems" configuration key
 * **Translation Updates:**
     * German
     * Chinese
 
+### 2026-08-10
+* gui: worked on cosstume category selectors
+* German translation update for costume category names
+* updated API.md with Peter's new "noStorageItems" configuration setting
+* updated dev version
+* objects: changed default / initial video transparency from 50% to solid (0%)
+* objects: reverted video transparency default to 50%
+* Edge-AI library update
+
 ### 2026-08-09
 * pulled some fixes from gigamonkey and others, updated file versions
 * Chinese translation update
+* new category selection buttons in the costumes browser dialog, thank you, Victoria!
+* updated dev version
 
 ### 2026-08-08
 * gui: hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
