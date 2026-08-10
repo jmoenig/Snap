@@ -5485,7 +5485,8 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         myself = this,
         world = this.world(),
         categories = Array.from(new Set(items.map(each =>
-            each.category).filter(each => isString(each)))),
+            each.category).filter(each => isString(each)))).sort((a, b) =>
+                localize(a) > localize(b) ? 1 : -1),
         hasCategories = categories.length > 0,
         selectedCategory,
         handle;
