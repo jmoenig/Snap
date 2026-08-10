@@ -5572,7 +5572,7 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         }
         categoryBar.setExtent(new Point(fw, by));
         categoryBar.color = dialog.color;
-        y = by + (hasCategories ? categoryBar.children[0].height() + 10 : 0);
+        y = by + (hasCategories ? categoryBar.children[0].height() : 0);
 
         frame.contents.children.forEach(function (icon) {
             if (icon === categoryBar) { return; }
