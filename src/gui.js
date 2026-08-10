@@ -5487,11 +5487,11 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         categories = Array.from(new Set(items.map(each =>
             each.category).filter(each => isString(each)))),
         hasCategories = categories.length > 0,
-        selectedCategory = categories[0],
-        filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))],
+        selectedCategory, // +++  = categories[0], // +++ needs to be adjusted for "All"
+        // +++ filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))], // +++ get rid of this
         handle;
     if (hasCategories) {
-        categories.unshift('all');
+        categories.unshift('All');
     }
     frame.acceptsDrops = false;
     frame.contents.acceptsDrops = false;
@@ -5526,11 +5526,13 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
     };
 
     categories.forEach(category => {
+
+/*
         let button = new PushButtonMorph(
             null,
             function () {
                 selectedCategory = category;
-                if (category === 'all') {
+                if (category === 'All') {
                     filteredItems = items;
                 } else {
                     filteredItems = [... new Set(items.filter(item => item.category === selectedCategory))];
@@ -5539,10 +5541,19 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
             },
             category
         );
+*/
+
+        let button = new ToggleButtonMorph(
+            null, // colors
+            null, // target
+            () => selectCategory(category), // action
+            category, // label
+            () => selectedCategory === category // query
+        );
+
         categoryBar.add(button);
     });
 
-    
     dialog.fixLayout = function () {
         var th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
             x = 0,
@@ -5599,6 +5610,19 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         this.removeShadow();
         this.addShadow();
     };
+
+    function selectCategory (name) {
+        var filteredItems;
+        selectedCategory = name;
+        if (name === 'All') {
+            filteredItems = items;
+        } else {
+            filteredItems = [... new Set(items.filter(item => item.category === name))];
+        }
+        categoryBar.children.forEach(button => button.refresh());
+        renderItems(filteredItems);
+    }
+
     function renderItems (items) {
         frame.contents.children
             .filter(child => child !== categoryBar)
@@ -5665,10 +5689,15 @@ IDE_Morph.prototype.popupMediaImportDialog = function (folderName, items) {
         });
         dialog.fixLayout();
     }
-    if (folderName !== 'Costumes') {
+
+/*
+    if (folderName !== 'Costumes') { // +++ get rid of this
         filteredItems = items;
     }
-    renderItems(filteredItems);
+*/
+
+    selectCategory('All');
+// +++    renderItems(filteredItems);
     dialog.popUp(world);
     dialog.setExtent(new Point(400, 300));
     dialog.setCenter(world.center());
