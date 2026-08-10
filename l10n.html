@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Snap! L10N</title>
+        <link rel="shortcut icon" href="favicon.ico">
+        <style>
+            body {
+                font-family: sans-serif;
+                font-size: 14px;
+                background-color: #373737;
+                color: white;
+            }
+            input, textarea, select {
+                background-color: #B0B0B0;
+                border-width: 1px;
+                color: black;
+                font-family: sans-serif;
+                font-size: 14px;
+                border-radius: 0px;
+                border-color: #161616 #EAEAEA #EAEAEA #161616;
+                padding: 4px;
+            }
+            select, option {
+                -webkit-appearance: none;
+                -moz-appearance : none;
+                appearance: none;
+                outline: none;
+            }
+            select {
+                padding-right: 20px;
+            }
+            input[type='checkbox'] {
+                width: 14px;
+                height: 14px;
+                outline: none;
+            }
+            .select {
+                position: relative;
+                display: inline-block;
+            }
+            .select::after {
+                content: " ";
+                position: absolute;
+                top: 50%;
+                right: 7px;
+                z-index: 2;
+                pointer-events: none;
+                width: 0;
+                height: 0;
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                border-top: 7px solid black;
+                margin-top: -3px;
+                display: inline-block;
+            }
+            button::-moz-focus-inner { 
+                border: 0; 
+                padding: 0; 
+                margin-top:-2px; 
+                margin-bottom: -2px; 
+            }
+            button {
+                background-color: #161616;
+                color: white;
+                font-family: sans-serif;
+                font-size: 14px;
+                border-width: 1px;
+                padding: 5px 10px;
+                border-radius: 14px;
+                line-height: 1;
+                outline: none;
+            }
+            .content {
+                width: 910px;
+                margin: 0 auto;
+            }
+            textarea#result {
+                font-family: monospace;
+                font-size: 12px;
+                width: 900px;
+            }
+            .panel {
+                border: solid 1px gray;
+                border-radius: 3px;
+                background-color: #eee;
+                color: black;
+                padding: 10px 14px;
+                margin: 5px auto;
+            }
+            .usage {
+                display: none;
+            }
+            .usage b {
+                border: solid 1px gray;
+                border-radius: 12px;
+                background-color: black;
+                color: white;
+                padding: 2px 5px;
+                margin-right: 5px;
+            }
+            .usage i {
+                border: solid 1px black;
+                background-color: #B0B0B0;
+                padding: 2px 5px;
+            }
+            .usage li {
+                line-height: 1.6;
+            }
+            .usage code {
+                background-color: #B0B0B0;
+                color: purple;
+                padding: 2px 2px;
+            }
+            .log {
+            }
+            .option {
+                border: solid 1px white;
+                border-radius: 3px;
+                margin: 5px auto;
+                padding: 10px 14px;
+                display: none;
+            }
+            .option .column {
+                display: inline-block;
+                width: 270px;
+                margin-right: 20px;
+                vertical-align: top;
+            }
+            .option label {
+                display: block;
+            }
+            .log .info {
+                color: blue;
+            }
+            .log .error {
+                color: red;
+            }
+            .separator {
+                width: 0px;
+                margin: auto 20px;
+            }
+        </style>
+    </head>
+    <body onload="SnapTranslator.setup()">
+        <div class="content">
+            <form name="action" onsubmit="return false;">
+                <label for="base">Base locale:
+                <!--<input id="base" name="base" size="7" type="text">-->
+                    <div class="select">
+                    <select id="base" name="base" size="1" class="snap"></select>
+                    </div>
+                </label>
+                <label for="locale">Target locale:
+                <!--<input id="locale" name="locale" size="7" type="text">-->
+                    <div class="select">
+                    <select id="locale" name="locale" size="1" class="snap"></select>
+                    </div>
+                </label>
+                <button id="diff" type="submit" onclick="SnapTranslator.diff()" >Compare</button>
+                <button id="gen"  type="button" onclick="SnapTranslator.gen()">New</button>
+                <button id="lint" type="button" onclick="SnapTranslator.lint()">Check</button>
+                <span class="separator"></span>
+                <button id="opts" type="button" onclick="SnapTranslator.opts()">Options <small>&#9654;</small></button>
+                <button id="help" type="button" onclick="SnapTranslator.help()">Help <small>&#9654;</small></button>
+            </form>
+            <div id="usage"  class="panel usage">
+                <h3>Snap! L10N Tool Usage</h3>
+                <p>How to use this tool to update your translation (lang-xx.js file):</p>
+                <ol>
+                    <li>Open this file from a local web server. (Note: the lang-xx.js files should be put in same location).</li>
+                    <li>Fill <i>base locale</i> (e.g. 'de'), and <i>target locale</i> (e.g. 'zh').</li>
+                    <li>Click <b>Compare </b> to show differences between base and target lang-xx.js.</li>
+                    <li>Click <b>New lang-xx.js</b> to generate lang-xx.js content in target locale, with items from base incorporating translations from current lang-xx.js file. Items needs translation are marked with <code>#__TODO__#</code>.</li>
+                    <li>Use above generated content to update your lang-xx.js.</li>
+                    <li>Click <b>Check </b> to scan updated lang-xx.js in target locale for potential problems. Currently only checks % placeholder type and order. (And ending punctuations for some locale.)</li>
+                </ol>
+            </div>
+            <form name="option">
+                <div id="option" class="option">
+                    <!-- add more options here -->
+                    <div id="diff-option" class="column">
+                        <strong>Compare</strong>
+                        <hr noshade="">
+                        <label for="diff-notodo"
+                            title="Ignore TODO marks, only reports addition/deletion.">
+                            <input type="checkbox" id="diff-notodo" name="diff-notodo"> Igore TODO mark
+                        </label>
+                    </div>
+                    <div id="gen-option" class="column">
+                        <strong>New</strong>
+                        <hr noshade="">
+                        <label for="gen-keepnew" 
+                            title="If target is newer than base, don't remove entries only exist in target locale.">
+                            <input type="checkbox" id="gen-keepnew" name="gen-keepnew"> Keep newer entries
+                        </label>
+                        <label for="gen-keepall" 
+                            title="Don't remove any entries in target locale.">
+                            <input type="checkbox" id="gen-keepall" name="gen-keepall"> Keep all entries
+                        </label>
+                        <label for="gen-nocomment"
+                            title="Don't include comment in generated lang-xx.js.">
+                            <input type="checkbox" id="gen-nocomment" name="gen-nocomment"> No comments
+                        </label>
+                    </div>
+                    <div id="lint-option" class="column">
+                        <strong>Check</strong>
+                        <hr noshade="">
+                        <label for="lint-enpunct"
+                            title="When checking translation, don't warn for untranslated punctuations.">
+                            <input type="checkbox" id="lint-enpunct" name="lint-enpunct"> Allow English punctuation
+                        </label>
+                    </div>
+                </div>
+            </form>
+            <div id="log" class="panel log"></div>
+            <textarea id="result" cols="100" rows="40" readonly=""></textarea>
+        </div>
+        <!-- // script tags holds lang-xx.js will be dynamically created //
+            <script id="baseDict" type="text/javascript"></script>
+            <script id="targetDict" type="text/javascript"></script>
+        -->
+        <script type="text/javascript">
+            var modules = {}; // for locale.js
+        </script>
+        <script type="text/javascript" src="locale.js"></script>
+        <script type="text/javascript">
+        (function () {
+            // Space separated puncutation list (same order as 'en'), used by lint().
+            // If one puncuation can have multiple translations, just group them together.
+            SnapTranslator.punctuations = {
+                en: '` ~ ! @ # $ % ^ & * ( ) - _ = + [ { } ] \\ | ; : \' " , . < > / ? ...',
+                zh: '‘ ～ ！ ＠@ ＃ ＄￥ ％ ＾ ＆ ＊ （ ） －— ＿ ＝ ＋ 【［ ｛ ｝ ］】 ＼ ｜ ； ： 「‘’」 『“”』 ，、 。 ＜ ＞ ／ ？ …',
+                // Add additional locales here.
+            };
+
+            var TODO = '#__TODO__#'; // marks untranslated entries in generated file
+
+            var actionForm = document.forms['action'];
+            var optionForm = document.forms['option'];
+
+            SnapTranslator.setup = function () {
+                setup();
+                loadDict(showDiff);
+            };
+            
+            SnapTranslator.diff = function () {
+                loadDict(showDiff);
+            };
+
+            SnapTranslator.gen = function () {
+                loadDict(genLangJS);
+            };
+
+            SnapTranslator.lint = function () {
+                loadDict(lintLangJS);
+            };
+
+            SnapTranslator.opts = function () {
+                var opts = document.getElementById('option');
+                var optsButton = document.getElementById('opts');
+                if (opts.style.display === 'none' || !opts.style.display) {
+                    opts.style.display = 'block';
+                    optsButton.innerHTML = 'Options <small>&#9660;</small>';
+                }
+                else {
+                    opts.style.display = 'none';
+                    optsButton.innerHTML = 'Options <small>&#9654;</small>';
+                }
+            };
+
+            SnapTranslator.help = function () {
+                var usage = document.getElementById('usage');
+                var helpButton = document.getElementById('help');
+                if (usage.style.display === 'none' || !usage.style.display) {
+                    usage.style.display = 'block';
+                    helpButton.innerHTML = 'Help <small>&#9660;</small>';
+                }
+                else {
+                    usage.style.display = 'none';
+                    helpButton.innerHTML = 'Help <small>&#9654;</small>';
+                }
+            };
+
+            function loadSetting(key) {
+                return localStorage ? localStorage.getItem(key) : undefined;
+            }
+
+            function saveSetting(key, value) {
+                if (localStorage) {
+                    localStorage.setItem(key, value);
+                }
+            }
+
+            function logMsg(cls, msg, append) {
+                var logBox = document.getElementById('log');
+                msg.split('\n').forEach(function (line, i, lines) {
+                    if (line.length) {
+                        var span = document.createElement('span');
+                        span.className = cls;
+                        span.textContent = line;
+                        if (!append) logBox.innerHTML = "";
+                        logBox.appendChild(span);
+                    }
+                    if (i < lines.length - 1) {
+                        logBox.appendChild(document.createElement('p'));
+                    }
+                });
+            }
+
+            function singleQuote(str) { // quote string with (')
+                return '\'' + str.replace(/\n/g, '\\n').replace(/'/g, '\\\'') + '\'';
+            }
+
+            function createScriptElement(id) {
+                if (document.getElementById(id)) {
+                    document.body.removeChild(document.getElementById(id));
+                }
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.id = id;
+
+                return script;
+            }
+
+            // FIXME: change to async request
+            function getURL(url) {
+                var request = new XMLHttpRequest();
+                request.open('GET', url, false);
+                request.send();
+
+                if (request.status === 200) {
+                    return request.responseText;
+                }
+                else
+                    throw new Error('Failed to load ' + url 
+                        + ' - (' + request.status + ') ' + request.statusText);
+
+                return null;
+            }
+
+            /**
+             * Load saved settings and setup event listeners for inputs/options.
+             * Should be called upon page loading.
+             */
+            function setup() {
+                var localeKey = '-snap-l10n-locale';
+                var baseKey = '-snap-l10n-base';
+                var langKey = '-snap-setting-language';
+
+                Object.keys(SnapTranslator.dict).sort().forEach(function (locale) {
+                    var option = document.createElement('option');
+                    option.value = option.textContent = locale;
+                    actionForm.base.appendChild(option);
+                    actionForm.locale.appendChild(option.cloneNode(true));
+                });
+
+                actionForm.base.value = loadSetting(baseKey) || 'de';
+                var hashLocale = window.location.hash.substr(1);
+                if (hashLocale in SnapTranslator.dict)
+                     actionForm.locale.value = hashLocale;
+                 else {
+                    actionForm.locale.value = loadSetting(langKey) 
+                        || navigator.language.substr(0, 2) || 'de';
+                    window.location.hash = actionForm.locale.value;
+                 }
+
+                actionForm.base.addEventListener('change', function (event) {
+                    saveSetting(baseKey, actionForm.base.value);
+                });
+
+                actionForm.locale.addEventListener('change', function (event) {
+                    saveSetting(localeKey, actionForm.locale.value);
+                    window.location.hash = actionForm.locale.value;
+                    document.getElementById('gen').textContent = 
+                        'New lang-' + actionForm.locale.value + '.js'
+                });
+
+                Array.prototype.forEach.call(document.querySelectorAll('#option input'), function (checkbox) {
+                    checkbox.checked = loadSetting('-snap-l10n-'+checkbox.id) === 'true';
+                    checkbox.addEventListener('change', function (event) {
+                        saveSetting('-snap-l10n-'+checkbox.id, checkbox.checked);
+                    })
+                });
+            }
+
+            /**
+             * Load dictionary file (lang-xx.js) and invoke a callback for further processing
+             * @param  {Function} callback :to be invoked when dict file is loaded
+             * @return {void}
+             */
+            function loadDict(callback) {
+                var locale = actionForm.locale.value;
+                var baseLocale = actionForm.base.value;
+
+                if (!locale) {
+                    logMsg('error', 'Please choose target locale.');
+                    return;
+                }
+                if (!baseLocale) {
+                    logMsg('error', 'Please choose base locale.');
+                    return;
+                }
+
+                var baseJS = createScriptElement('baseDict');
+                var targetJS = createScriptElement('targetDict');
+
+                try {
+                    baseJS.innerHTML = getURL('lang-'+baseLocale+'.js');
+
+                    document.body.appendChild(baseJS);
+
+                    if (locale) {
+                        actionForm.locale.value = locale;
+                    }
+                    else {
+                        logMsg('error', 'No valid locale specified. (Examples: zh, es)');
+                        return;
+                    }
+
+                    targetJS.innerHTML = getURL('lang-'+locale+'.js');
+
+                    document.body.appendChild(targetJS);
+                    document.getElementById('gen').innerHTML = 
+                        'New lang-' + locale + '.js';
+                    if (typeof callback === 'function')
+                        callback.call();
+                }
+                catch (err) {
+                    if (err.name === 'NetworkError' && window.location.protocol === 'file:')
+                        logMsg('error', 'You need to open this file from a web server.');
+                    logMsg('error', '\n' + err, true);
+                    throw err;
+                    return;
+                }
+            }
+
+            /**
+             * Compare target dictionary with base, show differences.
+             */
+            function showDiff() {
+                logMsg('info', 'Comparing files ... ');
+                var locale = actionForm.locale.value;
+                var baseLocale = actionForm.base.value;
+                var baseDict = SnapTranslator.dict[baseLocale];
+                var targetDict = SnapTranslator.dict[locale];
+                var addition = [], deletion = [], todo = [];
+                for (var baseKey in baseDict) {
+                    if (!(baseKey in targetDict)) {
+                        addition.push(baseKey.replace(/\n/g, "\\n"));
+                    }
+                }
+                for (var targetKey in targetDict) {
+                    if (!(targetKey in baseDict)) {
+                        deletion.push(targetKey.replace(/\n/g, "\\n"));
+                    }
+                    else if (targetDict[targetKey].indexOf(TODO) === 0) {
+                        todo.push(targetKey.replace(/\n/g, "\\n"));
+                    }
+                }
+                result.value = 'Base  : lang-' + baseLocale + '.js, '
+                             + Object.keys(baseDict).length + ' entries, '
+                             + 'last_changed = ' + baseDict.last_changed
+                             + '\nTarget: lang-' + locale + '.js, '
+                             + Object.keys(targetDict).length + ' entries, '
+                             + 'last_changed = ' + targetDict.last_changed + '\n\n';
+                if (addition.length === 0 && deletion.length === 0 && todo.length === 0) {
+                    logMsg('info', 'Done. Base/target dictionaries contain same items!', true);
+                    result.value += '(No addition/deletion/todo detected.)'
+                    return;
+                }
+
+                result.value += '============ Addition(' + addition.length 
+                             + '): in base, not in target ============\n'
+                             + (addition.length ? '+ ' + addition.join('\n+ ') : '(None)\n');
+                result.value += '\n============ Deletion(' + deletion.length 
+                             + '): in target, not in base ============\n'
+                             + (deletion.length ? '- ' + deletion.join('\n- ') : '(None)\n');
+                if (!optionForm['diff-notodo'].checked) {
+                    result.value += '\n============== TODO(' + todo.length 
+                                 + '): in base/target, marked with TODO ==============\n'
+                                 + (todo.length ? '* ' + todo.join('\n* ') : '(None)\n');
+                }
+
+                logMsg('error', 'Done. Differences found: '
+                             + addition.length + ' addition(s), '
+                             + deletion.length + ' deletion(s). ', true);
+                if (!optionForm['diff-notodo'].checked)
+                    logMsg('error', todo.length + ' TODO(s).', true);
+            }
+
+            /**
+             * Generate new lang-xx.js, using keys from base locale 
+             * and values from target locale.
+             */
+            function genLangJS() {
+                var locale = actionForm.locale.value;
+                var baseLocale = actionForm.base.value;
+                var baseJS = document.getElementById('baseDict').textContent;
+                var baseDict = SnapTranslator.dict[baseLocale];
+                var targetDict = SnapTranslator.dict[locale];
+                var targetJS = document.getElementById('targetDict').textContent;
+                var srcLines = baseJS.split('\n');
+                var blockCommentOpen = false;
+                var entry = null;
+                var todos = 0, entries = 0;
+                var translation = null;
+                var continuedLine = false;
+                var closingLine = null;
+                var now = new Date();
+
+                logMsg('info', 'Generating lang-'+locale+'.js ...');
+
+                // FIXME: The regexp's are simplified, not handling tricky cases,
+                //           e.g. "*/ ... /*", or "/*" inside quoted string, ...
+                //        This should be fine with current lang-xx.js for now.
+                var newLines = srcLines.map(function (line) {
+                    blockCommentOpen = blockCommentOpen    
+                                     ? line.match(/\*\//) === null
+                                     : (line.match(/\/\*/) !== null 
+                                         && line.match(/\*\//) === null);
+                    if (blockCommentOpen) {
+                        if (optionForm['gen-nocomment'].checked) 
+                            return '';
+                        else if (line.match(/translation for SNAP!/i))
+                            return '    ' + targetDict.language_name + ' translation for SNAP!';
+                        else if (line.match(/written by /i))
+                            return ([].concat(targetJS.match(/^\s*written by .*$/))[0] 
+                                    || '    written by ' + targetDict.language_translator);
+                        else if (line.match(/Copyright/i))
+                            return ([].concat(targetJS.match(/^\s*Copyright.*$/i)))[0]
+                                    || '    Copyright (C) ' + now.getFullYear() + ' by ' + targetDict.language_translator;
+                        else if (line.match(/^\s*lang-\w+\.js\s*/))
+                            return '    lang-'+ locale +'.js';
+                        else
+                            return line;
+                    }
+
+                    if (line.match(/\*\//))
+                        return optionForm['gen-nocomment'].checked 
+                            ? line.replace(/.*\*\//, '') : line;
+
+                    if (line.match(/^\s+\/\/.*/)) // one line comment
+                        return optionForm['gen-nocomment'].checked ? '' : line;
+
+                    var match = line.match(/('.+'):/)
+                    if (match) {  // matches a new entry
+                        //entry = match[1].replace(/\\n/g, '\n').replace(/\\'/g, '\'');
+                        eval('entry = '+match[1]);
+                        entries ++;
+                        return line;
+                    }
+
+                    if (entry && line.match(/'.*'/)) { // matches a new value
+                        if (entry in targetDict) {
+                            if (entry === 'last_changed')
+                                translation = singleQuote((new Date()).toISOString().substr(0, 10));
+                            else
+                                translation = singleQuote(targetDict[entry]);
+                            // line ends with (+) to be continued to next line
+                            continuedLine = line.match(/\+\s*$/) !== null;
+                        }
+                        else {
+                            todos ++;
+                            translation = singleQuote(TODO + entry);
+                        }
+                        entry = null;
+                        return  '        ' + translation + ',';
+                    }
+                    else if (line.match(/^\s+\+/)) 
+                        // skip line starts with (+), which is a continuation from last line
+                        return '';
+                    else if (continuedLine) {
+                        // skip a continued line, and test if it will be continued
+                        continuedLine = line.match(/\+\s*$/) !== null;
+                        return '';
+                    }
+                    else if (line.match(/SnapTranslator.dict.\w+/))
+                        return line.replace(baseLocale, locale);
+                    else if (line.match(/^\s*};?/)) {
+                        closingLine = line;
+                        return '';
+                    }
+                    else
+                        return line;
+                });
+
+                // adding target entries missing from base:
+                var isTargetNewer = new Date(targetDict.last_changed)
+                                  > new Date(baseDict.last_changed);
+                if (optionForm['gen-keepall'].checked
+                    || (isTargetNewer && optionForm['gen-keepnew'].checked)) {
+                    for (var entry in targetDict) {
+                        if (entry in baseDict) continue;
+                        entries ++;
+                        newLines.push('    '+singleQuote(entry)+':');
+                        newLines.push('        '+singleQuote(targetDict[entry])+',');
+                    }
+                }
+
+                // adding closing line
+                if (!closingLine) {
+                    logMsg('error', 'Done. Cannot find closing bracket.', true);
+                    return;
+                }
+                newLines.push(closingLine);
+
+                result.value = newLines.filter(function (line, i) {
+                    return line !== '' || newLines[i-1] !== '';    // remove extra empty lines
+                }).join('\n')
+                  .replace(/^( *)\t/mg, "$1    ") // reformat leading tab to 4 spaces
+                  .replace(/^( *)\t/mg, "$1    ")
+                  .replace(/^( *)\t/mg, "$1    ");
+
+                logMsg('info', 'Done, '
+                    + entries + ' entries, '
+                    + todos + ' translation(s) needed. ', true);
+                if (todos > 0)
+                    logMsg('error', '\nPlease check lines with ' + TODO + ' mark.', true);
+            }
+
+            /**
+             * Syntax check for lang-xx.js. Currently implemented:
+             *    - placeholder type/order check
+             *    - ending punctuation check
+             */
+            function lintLangJS() {
+                logMsg('info', 'Scanning for problems ... ');
+                var locale = actionForm.locale.value;
+                var targetDict = SnapTranslator.dict[locale];
+                var enPucts = SnapTranslator.punctuations.en.split(' ');
+                var targetPuncts = (locale in SnapTranslator.punctuations) 
+                                 ? SnapTranslator.punctuations[locale].split(' ') : null;
+                var errors = [];
+
+                result.value = '';
+                for (var text in targetDict) {
+                    var translation = targetDict[text];
+                    // check for placeholder match:
+                    var srcSlots = text.match(/%\w+/g) || [];
+                    var targetSlots = translation.match(/%\w+/g) || [];
+                    var entry = singleQuote(text) + ':\n    ' + singleQuote(translation);
+                    srcSlots.every(function (slot, i) {
+                        if (slot === targetSlots[i]) return true;
+
+                        errors.push(text);
+                        result.value += entry + ' // placeholder #' + (i+1) + ' mismatch\n';
+                        return false;
+                    });
+
+                    // check for punctuation match
+                    if (targetPuncts) {
+                        var srcPunct = text.substr(-3) === '...' ? '...' : text.substr(-1);
+                        var translatedPuct = translation.substr(-3) === '...' ? '...' : translation.substr(-1);
+                        var punctId = enPucts.indexOf(srcPunct);
+                        
+                        if (punctId === -1) continue; // text doesn't end with punctuation
+
+                        if (srcPunct === translatedPuct) {
+                            if (optionForm['lint-enpunct'].checked) continue;
+                            errors.push(text);
+                            result.value += entry + ' // untranslated ending punctuation (probably ok)\n';
+                        }
+                        else if (targetPuncts[punctId].indexOf(translatedPuct) === -1) {
+                            errors.push(text);
+                            result.value += entry + ' // ending punctuation mismatch\n';
+                        }
+                    }
+                }
+
+                if (errors.length > 0)
+                    logMsg('error', 'Done.\n' + errors.length + ' problem(s) found.', true);
+                else 
+                    logMsg('info', 'Done. No problem found.', true);
+            }
+
+        })();
+
+        </script>
+    </body>
+</html>
