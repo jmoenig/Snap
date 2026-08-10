@@ -16,6 +16,8 @@
 * **Notable Fixes:**
     * disable empty category buttons when switching back from "hide empty categories" setting
     * fixed display of continuations capturing variadic inputs
+* **Documentation Updates:**
+    * updated API.md with new "noStorageItems" configuration key
 * **Translation Updates:**
     * German
     * Chinese
@@ -23,6 +25,7 @@
 ### 2026-08-10
 * gui: worked on cosstume category selectors
 * German translation update for costume category names
+* updated API.md with Peter's new "noStorageItems" configuration setting
 
 ### 2026-08-09
 * pulled some fixes from gigamonkey and others, updated file versions

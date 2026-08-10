@@ -1,6 +1,6 @@
 # The Snap! API
 
-Jens Mönig, Bernat Romagosa, June 04, 2026
+Jens Mönig, Bernat Romagosa, August 10, 2026
 
 This document describes how Snap! can be accessed from an outside program to start scripts, send and retrieve information. The model use case is embedding interactive Snap! projects in other websites such as MOOCs or other adaptive learning platforms.
 
@@ -132,7 +132,8 @@ You can configure the looks and behavior of the IDE by passing it a configuratio
 |hideProjectName:	|bool	|hide/show the project title in the tool bar|
 |hideProjects:	|bool	|hide/show the projects menu button in the tool bar|
 |hideSettings:	|bool	|hide/show the settings menu button in the tool bar|
-|noProjectItems:	|bool	|hide/show project specific menu items in the file/project menu|
+|noProjectItems:    |bool    |hide/show project specific menu items in the file/project menu|
+|noStorageItems:	|bool	|hide/show only the load/save menu items|
 |noDefaultCat:	|bool	|hide/show the default built-in category buttons|
 |noShare:    |bool    |hide/show the share project button option in the project dialog|
 |noSpriteEdits:	|bool	|hide/show the corral & sprite controls/menus|
