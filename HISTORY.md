@@ -11,6 +11,7 @@
 * **Notable Changes:**
     * hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
     * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
+    * changed default / initial video transparency from 50% to solid (0%)
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
 * **Notable Fixes:**
@@ -27,6 +28,7 @@
 * German translation update for costume category names
 * updated API.md with Peter's new "noStorageItems" configuration setting
 * updated dev version
+* objects: changed default / initial video transparency from 50% to solid (0%)
 
 ### 2026-08-09
 * pulled some fixes from gigamonkey and others, updated file versions

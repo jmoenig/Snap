@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-August-07';
+modules.objects = '2026-August-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -10739,7 +10739,7 @@ StageMorph.prototype.init = function (globals) {
     this.stopProjectionSource = null; // function to turn off video stream etc.
     this.continuousProjection = false; // turn ON for video
     this.projectionCanvas = null;
-    this.projectionTransparency = 50;
+    this.projectionTransparency = 0;
 
     // video motion detection, transient
     this.mirrorVideo = true;
