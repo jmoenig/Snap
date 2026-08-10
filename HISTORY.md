@@ -2,10 +2,10 @@
 
 ## in development:
 * **New Features:**
-    * first-class processes - new built in data type
+    * first-class processes - new built-in data type
     * new special "process" input slot type (large gear symbol)
     * new blocks for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
-    * new animated and still symbols for interlocking gears - used for process data type
+    * new animated and still symbols depicting interlocking gears - used for process data type
     * new "Body Language" category in the "Edge AI" library
     * new category selection buttons in the costumes browser dialog, thank you, Victoria!
 * **Notable Changes:**
@@ -26,6 +26,7 @@
 * gui: worked on cosstume category selectors
 * German translation update for costume category names
 * updated API.md with Peter's new "noStorageItems" configuration setting
+* updated dev version
 
 ### 2026-08-09
 * pulled some fixes from gigamonkey and others, updated file versions
