@@ -485,6 +485,7 @@ Note that when Snap! encodes a function to LISP syntax it automatically recogniz
 |  | go back _ layers | **back** |  | ` (back 1) ` |
 | **sound** | play sound _ | **play** |  | ` (play nil) ` |
 |  | play sound _ until done | **playAll** |  | ` (playAll nil) ` |
+|  | stop sound _ | **stopSound** |  | ` (stopSound nil) ` |
 |  | stop all sounds | **stopSounds** |  | ` (stopSounds) ` |
 |  | play sound _ at _ Hz | **playAt** |  | ` (playAt nil 44100) ` |
 |  | _ of sound _ | **sound** | *reporter* | ` (sound [duration] nil) ` |
