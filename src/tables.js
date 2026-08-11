@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, Process, localize, display*/
 
 /*jshint esversion: 11*/
 
-modules.tables = '2026-August-03';
+modules.tables = '2026-August-11';
 
 var Table;
 var TableCellMorph;
@@ -400,7 +400,7 @@ TableCellMorph.prototype.render = function (ctx) {
 };
 
 TableCellMorph.prototype.dataRepresentation = function (dta) {
-    this.userMenu = null;
+    this.userMenu = () => null;
     if (dta instanceof Morph) {
         if (isSnapObject(dta)) {
             return dta.thumbnail(new Point(40, 40), null, true); // no watchers

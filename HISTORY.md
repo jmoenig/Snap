@@ -22,6 +22,9 @@
     * German
     * Chinese
 
+### 2026-08-11
+* tables: fixed context menu for table cells
+
 ### 2026-08-10
 * gui: worked on cosstume category selectors
 * German translation update for costume category names
