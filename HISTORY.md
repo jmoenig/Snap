@@ -24,6 +24,7 @@
 
 ### 2026-08-11
 * tables: fixed context menu for table cells
+* v12.1.0-rc1
 
 ### 2026-08-10
 * gui: worked on cosstume category selectors
