@@ -22,6 +22,9 @@
     * German
     * Chinese
 
+### 2026-08-12
+* lists: fixed clicking on the down-arrow in a list watcher to pop up the index range menu
+
 ### 2026-08-11
 * tables: fixed context menu for table cells
 * v12.1.0-rc1

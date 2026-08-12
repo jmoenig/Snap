@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process, Table*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2026-July-28';
+modules.lists = '2026-August-12';
 
 var List;
 var ListWatcherMorph;
@@ -1539,6 +1539,7 @@ ListWatcherMorph.prototype.init = function (list, parentCell) {
         'down',
         SyntaxElementMorph.prototype.fontSize
     );
+    this.arrow.mouseDownLeft = () => null;
     this.arrow.mouseClickLeft = function () {myself.startIndexMenu(); };
     this.arrow.setRight(this.handle.right());
     this.arrow.setBottom(this.handle.top());
