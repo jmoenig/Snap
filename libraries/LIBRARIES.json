@@ -1729,7 +1729,7 @@
           },
           "zh_CN": {
               "name": "单词、句子处理库",
-              "description": "用来处理英文单词和句子的库"
+              "description": "（官方描述）Scratch 遗漏了 Logo 的一个重要思想：将字符串视为由单词和句子组成的结构，而不仅仅是有若干字符组合成的字符串。这个库重新引入了这一思想。"
           }
       },
       "searchData": [
@@ -3129,7 +3129,7 @@
           },
           "zh_CN": {
               "name": "延续 + call/cc库",
-              "description": "用call/cc(全称“call-with-the-current-continuation”)动态获取程序运行于此的continuation(延续)，来实现更多控制流。例如“循环、函数迭代和组合”库里的“非本地跳转”积木、协程(Coroutine)和生成器(Generator)"
+              "description": "用call/cc(全称“call-with-the-current-continuation”)动态获取程序运行于此的continuation(延续)，来实现更多控制流。例如“循环、函数迭代和组合”库里的“非本地退出”积木、协程(Coroutine)和生成器(Generator)"
           }
       }
   },
