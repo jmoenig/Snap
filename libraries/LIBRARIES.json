@@ -268,7 +268,7 @@
       "translations": {
           "zh_CN": {
               "name": "Edge AI视觉检测库",
-              "description": "通过 Google 的 Edge AI 计算机视觉 API 检测手部、人脸和身体特征或手势"
+              "description": "（翻译未完全覆盖）通过 Google 的 Edge AI 计算机视觉 API 检测手部、人脸和身体特征或手势"
           }
       }
   },
