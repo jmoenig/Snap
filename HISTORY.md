@@ -25,6 +25,7 @@
 
 ### 2026-08-13
 * byob: automatically infer the return data type for custom reporters that don't yet have one by scanning their definition when editing them
+* v12.1.0-rc3
 
 ### 2026-08-12
 * lists: fixed clicking on the down-arrow in a list watcher to pop up the index range menu
