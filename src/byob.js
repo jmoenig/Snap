@@ -113,7 +113,7 @@ ADT_SlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-August-02';
+modules.byob = '2026-August-13';
 
 // Declarations
 
@@ -3771,6 +3771,11 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         this.definition.primitive = null;
     }
 
+    // infer the return data type for reporters if none is given
+    if ((this.definition.type === 'reporter') && !this.definition.reports) {
+        this.definition.reports = this.inferredReturnType(this.definition.body);
+    }
+
     // make sure the spec is unique
     spec = this.definition.spec;
     while (this.target.doubleDefinitionsFor(this.definition).length > 0) {
@@ -3817,6 +3822,31 @@ BlockEditorMorph.prototype.context = function (prototypeHat) {
     stackFrame.outerContext = null;
     stackFrame.comment = head?.comment?.text();
     return stackFrame;
+};
+
+BlockEditorMorph.prototype.inferredReturnType = function (context) {
+    var script = context.expression,
+        reportBlock,
+        reportExpression,
+        reportLiteral;
+    if (script instanceof BlockMorph) {
+        if (script instanceof ReporterBlockMorph) {
+            return script.reports;
+        }
+        reportBlock = script.allBlocks().find(block =>
+            block.selector === 'doReport');
+        if (reportBlock instanceof CommandBlockMorph) {
+            reportExpression = reportBlock.inputs()[0];
+            if (reportExpression instanceof ReporterBlockMorph) {
+                return reportExpression.reports;
+            }
+            reportLiteral = reportExpression.evaluate();
+            if (reportLiteral.length) {
+                return Process.prototype.reportTypeOf(reportLiteral);
+            }
+        }
+    }
+    return null;
 };
 
 BlockEditorMorph.prototype.prototypeSpec = function () {
