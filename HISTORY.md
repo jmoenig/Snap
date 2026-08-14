@@ -13,6 +13,7 @@
     * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
     * custom reporters without an explicit return data type declaration automatically infer one from their definition script when they are edited
     * ADT slots can be made localizable by using the dollar-underscore prefix
+    * updated shapes library with translatable "shape" ADT input slots
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
     * rearranged shapes library into the first group
