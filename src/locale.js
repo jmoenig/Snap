@@ -284,7 +284,7 @@ SnapTranslator.dict.zh_CN = {
     'translator_e-mail':
         'ubertao@qq.com/djh@rhjxx.cn/simon@snapontop.org',
     'last_changed':
-        '2026-08-09'
+        '2026-08-14'
 };
 
 SnapTranslator.dict.eo = {
