@@ -31,6 +31,7 @@
 * German translation update for common ADT slots used in standard libraries
 * updated shapes library with translatable "shape" ADT input slots
 * Chinese translation update, thank you, @Ayist14! 
+* v12.1.0-rc4
 
 ### 2026-08-13
 * byob: automatically infer the return data type for custom reporters that don't yet have one by scanning their definition when editing them
