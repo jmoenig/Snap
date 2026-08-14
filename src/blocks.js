@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-04';
+modules.blocks = '2026-August-14';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -14534,6 +14534,7 @@ ADT_SlotMorph.prototype.init = function (typeString) {
     contents.isShowingBlanks = false;
     contents.shadowOffset = new Point(1, 1);
     ADT_SlotMorph.uber.init.call(this);
+    this.type = typeString;
     this.add(contents);
     contents.isEditable = false;
     contents.isDraggable = false;
@@ -14551,7 +14552,9 @@ ADT_SlotMorph.prototype.contents = InputSlotMorph.prototype.contents;
 ADT_SlotMorph.prototype.setContents = function (typeString = 'type') {
     var cnts = this.contents(),
         block = this.parentThatIsA(BlockMorph); // could be inside a multi-arg
-    cnts.text = typeString;
+    this.type = typeString;
+    cnts.text = typeString instanceof Array ? localize(typeString[0])
+        : typeString;
     cnts.fixLayout();
     if (block) {
         block.fixLabelColor();
@@ -14563,7 +14566,8 @@ ADT_SlotMorph.prototype.evaluate = function () {
 };
 
 ADT_SlotMorph.prototype.matches = function (typestring) {
-    return [this.contents().text, 'any'].includes(typestring);
+    return [this.type instanceof Array ? this.type[0]
+        : this.type, 'any'].includes(typestring);
 };
 
 ADT_SlotMorph.prototype.isEmptySlot = function () {
