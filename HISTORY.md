@@ -21,6 +21,7 @@
 * **Notable Fixes:**
     * disable empty category buttons when switching back from "hide empty categories" setting
     * fixed display of continuations capturing variadic inputs
+    * fixed zebra coloring for chameleon-colored variadic input slots
 * **Documentation Updates:**
     * updated API.md with new "noStorageItems" configuration key
 * **Translation Updates:**
@@ -29,6 +30,7 @@
 
 ### 2026-08-15
 * blocks: made dynamic dropdown menus translatable using the $-underscore prefix
+* blocks: fixed zebra coloring for chameleon-colored variadic input slots
 
 ### 2026-08-14
 * blocks: support translating ADT input slots using the $-underscore prefix

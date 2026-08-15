@@ -13176,7 +13176,12 @@ InputSlotMorph.prototype.initSlotColor = function (ctx) {
     if (this.cachedNormalColor) { // if flashing
         borderColor = this.color;
     } else if (this.parent) {
-        borderColor = this.parent.color;
+        if (this.parent instanceof MultiArgMorph) {
+            borderColor = this.parent.parentThatIsA(BlockMorph)?.color
+                || this.parent.color;
+        } else {
+            borderColor = this.parent.color;
+        }
     } else {
         borderColor = new Color(120, 120, 120);
     }
