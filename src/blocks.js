@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-14';
+modules.blocks = '2026-August-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11943,7 +11943,13 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
                 each.inputs()[1].evaluateOption() === 'menu'),
         stage = rcvr.parentThatIsA(StageMorph),
         isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta,
-        vars, show, format;
+        vars, show, select, translate, format;
+
+    select = dta => (isString(dta) && dta.startsWith('$_')) ?
+        [dta.slice(2)] : dta;
+
+    translate = dta => (isString(dta) && dta.startsWith('$_')) ?
+        localize(dta.slice(2)) : dta;
 
     format = list => {
         var dict = {};
@@ -11957,13 +11963,13 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
                 val = item.at(2);
                 if (isTxtOrNum(key)) {
                     if (val instanceof List) {
-                        dict[key] = format(val);
+                        dict[translate(key)] = format(val);
                     } else if (isTxtOrNum(val)) {
-                        dict[key] = val;
+                        dict[translate(key)] = select(val);
                     }
                 }
             } else if (isTxtOrNum(item)) {
-                dict[item] = item;
+                dict[translate(item)] = select(item);
             }
         });
         return dict;

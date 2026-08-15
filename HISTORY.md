@@ -13,6 +13,7 @@
     * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
     * custom reporters without an explicit return data type declaration automatically infer one from their definition script when they are edited
     * ADT slots can be made localizable by using the dollar-underscore prefix
+    * dynamic dropdown menu items can be localized by using the dollar-underscore prefix
     * updated shapes library with translatable "shape" ADT input slots
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
@@ -25,6 +26,9 @@
 * **Translation Updates:**
     * German
     * Chinese
+
+### 2026-08-15
+* blocks: made dynamic dropdown menus translatable using the $-underscore prefix
 
 ### 2026-08-14
 * blocks: support translating ADT input slots using the $-underscore prefix
