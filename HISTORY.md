@@ -33,6 +33,7 @@
 * blocks: made dynamic dropdown menus translatable using the $-underscore prefix
 * blocks: fixed zebra coloring for chameleon-colored variadic input slots
 * reduced the number of blocks shapes library and changed the UI of the composition blocks
+* German translation update for certain geometrical measures
 
 ### 2026-08-14
 * blocks: support translating ADT input slots using the $-underscore prefix
