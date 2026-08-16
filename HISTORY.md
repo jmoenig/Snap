@@ -29,6 +29,9 @@
     * German
     * Chinese
 
+### 2026-08-16
+* v12.1.0-rc5
+
 ### 2026-08-15
 * blocks: made dynamic dropdown menus translatable using the $-underscore prefix
 * blocks: fixed zebra coloring for chameleon-colored variadic input slots
