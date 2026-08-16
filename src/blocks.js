@@ -6080,13 +6080,13 @@ BlockMorph.prototype.pickUp = function (wrrld) {
 
 // BlockMorph events
 
-BlockMorph.prototype.mouseClickLeft = function () {
+BlockMorph.prototype.mouseClickLeft = function (pos) {
     var top = this.topBlock(),
         receiver = top.scriptTarget(),
         shiftClicked = this.world().currentKey === 16,
         stage;
     if (shiftClicked && !this.isTemplate) {
-        return this.selectForEdit().focus(); // enable copy-on-edit
+        return this.selectForEdit().focus(pos); // enable copy-on-edit
     }
     if (top instanceof PrototypeHatBlockMorph) {
         return; // top.mouseClickLeft();
@@ -6099,7 +6099,9 @@ BlockMorph.prototype.mouseClickLeft = function () {
     }
 };
 
-BlockMorph.prototype.focus = function () {
+BlockMorph.prototype.focus = function (pos) {
+    // if the click position is given and lies in my lower half,
+    // place the focus below me rather than above
     var scripts = this.parentThatIsA(ScriptsMorph),
         world = this.world(),
         focus;
@@ -6110,6 +6112,9 @@ BlockMorph.prototype.focus = function () {
     scripts.focus = focus;
     focus.getFocus(world);
     if (this instanceof HatBlockMorph) {
+        focus.nextCommand();
+    } else if (pos && this instanceof CommandBlockMorph &&
+            pos.y > this.center().y) {
         focus.nextCommand();
     }
 };
@@ -9811,14 +9816,46 @@ ScriptsMorph.prototype.droppedImage = function (aCanvas, name, embeddedData) {
 // ScriptsMorph keyboard support
 
 ScriptsMorph.prototype.edit = function (pos) {
-    var target,
+    var target, block,
 		world = this.world();
     if (this.focus) {this.focus.stopEditing(); }
     world.stopEditing();
     if (!ScriptsMorph.prototype.enableKeyboard) {return; }
     target = this.selectForEdit(); // enable copy-on-edit
-    target.focus = new ScriptFocusMorph(target, target, pos);
+    block = target.bottomBlockNear(pos);
+    if (block) {
+        target.focus = new ScriptFocusMorph(target, block);
+        target.focus.atEnd = true;
+    } else {
+        target.focus = new ScriptFocusMorph(target, target, pos);
+    }
     target.focus.getFocus(world);
+};
+
+ScriptsMorph.prototype.bottomBlockNear = function (pos) {
+    // answer the bottom block of a script whose bottom edge is close
+    // enough above pos for the keyboard focus to attach to it,
+    // or null if there is none
+    var thresh = Math.max(
+            SyntaxElementMorph.prototype.corner * 2 +
+                SyntaxElementMorph.prototype.dent,
+            SyntaxElementMorph.prototype.minSnapDistance
+        ),
+        answer = null,
+        best = thresh;
+    this.children.forEach(morph => {
+        var block, dist;
+        if (morph instanceof CommandBlockMorph) {
+            block = morph.bottomBlock();
+            dist = pos.y - block.bottom();
+            if (dist >= 0 && dist < best && !block.isStop() &&
+                    pos.x >= block.left() && pos.x <= block.right()) {
+                best = dist;
+                answer = block;
+            }
+        }
+    });
+    return answer;
 };
 
 ScriptsMorph.prototype.toggleKeyboardEntry = function () {
@@ -17330,7 +17367,11 @@ CommentMorph.prototype.stackHeight = function () {
 
     activate:
       - shift + click on a scripting pane's background
+        (if the click is close below the end of a script the focus
+        attaches to that script's bottom, otherwise it floats freely)
       - shift + click on any block
+        (clicking a command block's lower half places the focus below
+        the block, clicking its upper half places it above)
       - shift + enter in the IDE's edit mode
 
     stop editing:
