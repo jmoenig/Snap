@@ -26,6 +26,7 @@
     * fixed zebra coloring for chameleon-colored variadic input slots
 * **Documentation Updates:**
     * updated API.md with new "noStorageItems" configuration key
+    * updated CONTRIBUTING.md with instruction to issue PRs against the dev branch, thanks, Peter!
 * **Translation Updates:**
     * German
     * Chinese
