@@ -29,6 +29,9 @@
     * German
     * Chinese
 
+### 2026-08-17
+* further refined and simplified the shapes library
+
 ### 2026-08-16
 * v12.1.0-rc5
 
