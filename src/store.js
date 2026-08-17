@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion, ADT_SlotMorph, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2026-June-08';
+modules.store = '2026-August-17';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -816,7 +816,9 @@ SnapSerializer.prototype.loadScene = function (
                 watcher.cellMorph.contentsMorph.setHeight(+extY);
             }
             // adjust my contentsMorph's handle position
-            watcher.cellMorph.contentsMorph.handle.fixLayout();
+            if (watcher.cellMorph.contentsMorph.handle) { // can also be an ADT
+                watcher.cellMorph.contentsMorph.handle.fixLayout();
+            }
         }
     });
 

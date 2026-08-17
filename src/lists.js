@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process, Table*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2026-August-12';
+modules.lists = '2026-August-17';
 
 var List;
 var ListWatcherMorph;
@@ -462,7 +462,7 @@ List.prototype.cols = function () {
 
     for (i = 1; i <= len; i += 1) {
         r = this.at(i);
-        if (r instanceof List) {
+        if (r instanceof List && !r.isADT()) {
             count = Math.max(count, r.length());
         }
     }
@@ -1595,7 +1595,8 @@ ListWatcherMorph.prototype.update = function (anyway) {
             } else if (isSnapObject(m.contents) ||
                 (m.contents instanceof Costume) ||
                 (m.contents instanceof Context) ||
-                (m.contents instanceof Process)
+                (m.contents instanceof Process) ||
+                (m.contents instanceof List && m.contents.isADT())
             ) {
                 m.update();
             }

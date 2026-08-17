@@ -14,6 +14,7 @@
     * custom reporters without an explicit return data type declaration automatically infer one from their definition script when they are edited
     * ADT slots can be made localizable by using the dollar-underscore prefix
     * dynamic dropdown menu items can be localized by using the dollar-underscore prefix
+    * ADTs (custom types) are rendered as "box" symbols in variable-, list- and table watchers where they cannot render their own morph methods for lack of a full process
     * reduced the number of blocks shapes library and changed the UI of the composition blocks
     * updated shapes library with translatable "shape" ADT input slots
     * updated neural networks library with translatable "neural network" ADT input slots
@@ -34,6 +35,7 @@
 ### 2026-08-17
 * further refined and simplified the shapes library
 * updated neural networks library with translatable "neural network" ADT input slots
+* lists, objects, tables, store: render ADTs as box / cube symbol in situations where they cannot be rendered by their own method, e.g. inside list / table / variable watchers
 
 ### 2026-08-16
 * v12.1.0-rc5

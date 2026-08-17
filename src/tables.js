@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, Process, localize, display*/
 
 /*jshint esversion: 11*/
 
-modules.tables = '2026-August-11';
+modules.tables = '2026-August-17';
 
 var Table;
 var TableCellMorph;
@@ -280,6 +280,7 @@ TableCellMorph.uber = Morph.prototype;
 // TableCellMorph global setting:
 
 TableCellMorph.prototype.cachedListSymbol = null;
+TableCellMorph.prototype.cachedADTSymbol = null;
 
 TableCellMorph.prototype.listSymbol = function () {
     if (!this.cachedListSymbol || this.cachedListSymbol.height() !==
@@ -291,6 +292,18 @@ TableCellMorph.prototype.listSymbol = function () {
         );
     }
     return this.cachedListSymbol;
+};
+
+TableCellMorph.prototype.adtSymbol = function () {
+    if (!this.cachedADTSymbol || this.cachedADTSymbol.height() !==
+            SyntaxElementMorph.prototype.fontSize) {
+        this.cachedADTSymbol = new SymbolMorph(
+            'cube',
+            SyntaxElementMorph.prototype.fontSize,
+            SpriteMorph.prototype.blockColor.lists.darker(50)
+        );
+    }
+    return this.cachedADTSymbol;
 };
 
 // TableCellMorph instance creation:
@@ -437,6 +450,9 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
             null : dta.menu();
         return dta.widget().readout; // does not (yet) support animated symbols
     } else if (dta instanceof List) {
+        if (dta.isADT()) {
+            return this.adtSymbol();
+        }
         return this.listSymbol();
     } else if (dta instanceof Color) {
         return SpriteMorph.prototype.colorSwatch(
