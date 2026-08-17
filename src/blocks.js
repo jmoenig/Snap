@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-15';
+modules.blocks = '2026-August-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -9224,11 +9224,15 @@ ScriptsMorph.prototype.userMenu = function () {
     }
 
     menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
-    menu.addItem(
-        'clean unhatted',
-        'cleanUnhatted',
-        'arrange scripts vertically,\nremoving all scripts\nnot attached to a hat block'
-    );
+    if (shiftClicked) {
+        menu.addItem(
+            'clean unhatted',
+            'cleanUnhatted',
+            'arrange scripts vertically,\nremoving all scripts\n' +
+                'not attached to a hat block',
+            new Color(100, 0, 0)
+        );
+    }
     menu.addItem('add comment', 'addComment');
     menu.addItem(
         'scripts pic...',
