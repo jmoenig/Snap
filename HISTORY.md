@@ -16,6 +16,7 @@
     * dynamic dropdown menu items can be localized by using the dollar-underscore prefix
     * reduced the number of blocks shapes library and changed the UI of the composition blocks
     * updated shapes library with translatable "shape" ADT input slots
+    * updated neural networks library with translatable "neural network" ADT input slots
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
     * rearranged shapes library into the first group
@@ -31,6 +32,7 @@
 
 ### 2026-08-17
 * further refined and simplified the shapes library
+* updated neural networks library with translatable "neural network" ADT input slots
 
 ### 2026-08-16
 * v12.1.0-rc5
