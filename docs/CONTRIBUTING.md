@@ -1,6 +1,6 @@
 # How to contribute
 
-last updated on Jun. 09, 2023
+last updated on Aug. 17, 2026
 
 Attached is the current development code base for Snap! (formerly known as BYOB4).
 It consists of several JavaScript, HTML and text files, and while some of it may
@@ -11,13 +11,16 @@ collaborative code contribution works out.
 
 ## Coding
 
-Please check your code frequently with JSLint, either at JSlint.com or
-via a locally installed jslint.
+Please check your code frequently with JSHint, either at jshint.com or
+via a locally installed jJSHint.
 
-For our Snap code set JSLint's settings to:
+For our Snap code set JSHint's settings to:
 
 * assume a browser
 * tolerate missing 'use strict' pragma
+
+For readability purposes please  make sure to format all code with
+
 * `4` indentation
 * `78` maximum line length
 
@@ -29,9 +32,9 @@ If you're working on the core Morphic library you can also
 although you'll probably not ever going to need either EVAL or FORIN in your
 changesets anyway.
 
-There are, of course, other tools - like JSHint and browser debug tools - that
+There are, of course, other tools - like JSLint and browser debug tools - that
 help you debug your code. Feel free to use whichever suits you best, but let's
-all agree on JSLint's (nitpicky!) formatting rules so we get code that's well
+all agree on JSHint's rules as minimum standard so we get code that's well
 readable and easily shareable among ourselves.
 
 
@@ -102,7 +105,7 @@ object.
 
 Snap! is hosted on Github at https://github.com/jmoenig/Snap. You can make a fork
 via the Github "Fork" button and then create a PR by pushing a branch to your fork
-and then creating a PR against the master brancd of `jmoenig/Snap`. You can see
+and then creating a PR against the dev brancd of `jmoenig/Snap`. You can see
 current PRs here: https://github.com/jmoenig/Snap/pulls
 
 ---
@@ -167,7 +170,7 @@ comma after the last pair (again, just overwrite the template file and you'll be
 fine).
 
 If something doesn't work, or if you're unsure about the formalities you
-should check your file with [JSLint](https://JSLint.com)
+should check your file with [JSHint](https://jshint.com)
 
 This will inform you about any missed commas etc.
 
