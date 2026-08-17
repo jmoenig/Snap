@@ -38,6 +38,7 @@
 * updated neural networks library with translatable "neural network" ADT input slots
 * lists, objects, tables, store: render ADTs as box / cube symbol in situations where they cannot be rendered by their own method, e.g. inside list / table / variable watchers
 * blocks: new - as of yet "hidden" behind shift-right-click script pane menu item "clean unhatted", thank you, Peter!
+* v12.1.0-rc6
 
 ### 2026-08-16
 * v12.1.0-rc5
