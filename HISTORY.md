@@ -38,6 +38,7 @@
 * shapes: added "round rect" blocks to the "shapes" library
 * German translation update for geometrical corner names
 * shapes: added "skew" transformation block
+* v12.1.0-rc7
 
 ### 2026-08-17
 * further refined and simplified the shapes library
