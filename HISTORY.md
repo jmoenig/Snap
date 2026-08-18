@@ -36,6 +36,7 @@
 
 ### 2026-08-18
 * shapes: added "round rect" blocks to the "shapes" library
+* German translation update for geometrical corner names
 
 ### 2026-08-17
 * further refined and simplified the shapes library
