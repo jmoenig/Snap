@@ -9,7 +9,7 @@
     * new "Body Language" category in the "Edge AI" library
     * new category selection buttons in the costumes browser dialog, thank you, Victoria!
     * new - as of yet "hidden" behind shift-right-click script pane menu item "clean unhatted", thank you, Peter!
-    * added "round rect" and "skew" transformation blocks to the "shapes" library
+    * added "round rect", "skew" and "paint all" transformation blocks to the "shapes" library
 * **Notable Changes:**
     * hide empty custom categories in puzzles and when selecting the "hide empty categories" setting
     * shadow (don't inherit / delegate) scripts that use block-instance variables for sprite-clones
@@ -33,6 +33,9 @@
 * **Translation Updates:**
     * German
     * Chinese
+
+### 2026-08-19
+* shapes: added new "paint all" transformation block to the shapes library
 
 ### 2026-08-18
 * shapes: added "round rect" blocks to the "shapes" library
