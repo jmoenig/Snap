@@ -25,6 +25,7 @@
     * rearranged shapes library into the first group
     * added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
     * added dynamic slot contents support to color and Boolean type slots
+    * added special "basic" input types (23 for "any" and 24 for "numeric") immune to readonly and dropdown menus for use inside variadic input groups
 * **Notable Fixes:**
     * disable empty category buttons when switching back from "hide empty categories" setting
     * fixed display of continuations capturing variadic inputs
@@ -43,6 +44,7 @@
 * v12.1.0-rc8
 * blocks: added dynamic slot contents support to color and Boolean type slots
 * shapes: collapsed both "round rect" blocks into a single one
+* threads, blocks: added special "basic" input types immune to readonly and dropdown menus for use inside variadic input groups
 
 ### 2026-08-19
 * shapes: added new "paint all" transformation block to the shapes library

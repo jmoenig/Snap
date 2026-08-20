@@ -314,7 +314,7 @@ SyntaxElementMorph.prototype.labelParts = {
 
         type: 'input'
         tags: 'numeric numstring alphanum read-only unevaluated landscape
-               static'
+               static basic'
         menu: dictionary or selector
         react: selector
         value: string, number or Array for localized strings / constants
@@ -325,6 +325,14 @@ SyntaxElementMorph.prototype.labelParts = {
     '%n': {
         type: 'input',
         tags: 'numeric'
+    },
+    '%basic': {
+        type: 'input',
+        tags: 'basic'
+    },
+    '%basic#': {
+        type: 'input',
+        tags: 'numeric basic'
     },
     '%nUE': {
         type: 'input',
@@ -2210,6 +2218,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                         break;
                     case 'static':
                         part.isStatic = true;
+                        break;
+                    case 'basic':
+                        part.isBasic = true;
                         break;
                     case 'landscape':
                         part.minWidth = part.height() * 1.7;
@@ -11596,11 +11607,17 @@ CSlotMorph.prototype.drawBottomEdge = function (ctx) {
     isReadOnly                - governs whether I am editable or not
     isNumeric                 - governs my outer shape (round or rect)
 
+    there is also - for use inside variadic input groups
+    
+    isBasic                   - prevents readonly and dropdowns
+
     my block specs are:
 
     %s        - string input, rectangular
     %n        - numerical input, semi-circular vertical edges
     %anyUE    - any unevaluated
+    %basic    - any basic (immune to readonly and dropdown menus)
+    %basic#   - numerical basic (immune to readonly and dropdown menus)
 
     evaluate() returns my displayed string, cast to float if I'm numerical
 
@@ -11652,6 +11669,7 @@ InputSlotMorph.prototype.init = function (
     this.minWidth = 0; // can be chaged for text-type inputs ("landscape")
     this.constant = null;
     this.onSetContents = null;
+    this.isBasic = false; // disables readonly and dropdowns
 
     InputSlotMorph.uber.init.call(this, null, true);
     this.color = WHITE;
@@ -12881,8 +12899,8 @@ InputSlotMorph.prototype.fixLayout = function () {
         tp = this.topBlock();
 
     contents.isNumeric = this.isNumeric && !this.isAlphanumeric;
-    contents.isEditable = (!this.isReadOnly);
-    if (this.isReadOnly) {
+    contents.isEditable = !this.isReadOnly || this.isBasic;
+    if (this.isReadOnly && !this.isBasic) {
         contents.disableSelecting();
         contents.color = WHITE;
     } else {
@@ -12890,7 +12908,7 @@ InputSlotMorph.prototype.fixLayout = function () {
         contents.color = BLACK;
     }
 
-    if (this.choices) {
+    if (this.choices && !this.isBasic) {
         arrow.setSize(fontHeight(this.fontSize));
         arrow.show();
     } else {
@@ -12965,7 +12983,7 @@ InputSlotMorph.prototype.fixLayout = function () {
 // InputSlotMorph events:
 
 InputSlotMorph.prototype.mouseDownLeft = function (pos) {
-    if (this.isReadOnly || this.symbol ||
+    if ((this.isReadOnly && !this.isBasic) || this.symbol ||
             this.arrow().bounds.containsPoint(pos)) {
         this.escalateEvent('mouseDownLeft', pos);
     } else {
@@ -12976,7 +12994,7 @@ InputSlotMorph.prototype.mouseDownLeft = function (pos) {
 InputSlotMorph.prototype.mouseClickLeft = function (pos) {
     if (this.arrow().bounds.containsPoint(pos)) {
         this.dropDownMenu();
-    } else if (this.isReadOnly || this.symbol) {
+    } else if ((this.isReadOnly && !this.isBasic) || this.symbol) {
         this.dropDownMenu();
     } else {
         this.contents().edit();
@@ -13228,7 +13246,8 @@ InputSlotMorph.prototype.initSlotColor = function (ctx) {
         borderColor = new Color(120, 120, 120);
     }
     ctx.fillStyle = this.color.toString();
-    if (this.isReadOnly && !this.cachedNormalColor) { // unless flashing
+    if (this.isReadOnly && !this.cachedNormalColor && !this.isBasic) {
+        // unless flashing
         ctx.fillStyle = borderColor.darker().toString();
     }
 
