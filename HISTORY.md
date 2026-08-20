@@ -23,6 +23,7 @@
     * changed small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
     * rearranged shapes library into the first group
+    * added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
 * **Notable Fixes:**
     * disable empty category buttons when switching back from "hide empty categories" setting
     * fixed display of continuations capturing variadic inputs
@@ -33,6 +34,9 @@
 * **Translation Updates:**
     * German
     * Chinese
+
+### 2026-08-20
+* blocks: added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
 
 ### 2026-08-19
 * shapes: added new "paint all" transformation block to the shapes library

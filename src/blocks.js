@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-17';
+modules.blocks = '2026-August-20';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -12069,12 +12069,15 @@ InputSlotMorph.prototype.dynamicContents = function () {
                 each.inputs()[0].evaluate() === inputName &&
                 each.inputs()[1].evaluateOption() === 'expand'),
         stage = rcvr.parentThatIsA(StageMorph),
-        isTxtOrNum = dta => isString(dta) || parseFloat(dta) === +dta,
+        isTxtOrNum = dta => isString(dta) ||
+            (dta instanceof Array && isString(dta[0])) ||
+            parseFloat(dta) === +dta,
         vars, fill;
 
     fill = (result = new List()) => {
         if (isTxtOrNum(result)) {
-            this.setContents(result);
+            this.setContents(isString(result) && result.startsWith('$_') ?
+                result.slice(2) : result);
         }
     };
 
