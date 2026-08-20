@@ -39,6 +39,7 @@
 * blocks: added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
 * German translation update for "with x:" string
 * shapes: added new "fill all of" transformation block to the shapes library 
+* v12.1.0-rc8
 
 ### 2026-08-19
 * shapes: added new "paint all" transformation block to the shapes library
