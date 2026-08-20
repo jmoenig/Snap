@@ -12075,7 +12075,13 @@ InputSlotMorph.prototype.dynamicContents = function () {
         vars, fill;
 
     fill = (result = new List()) => {
-        if (isTxtOrNum(result)) {
+        if (this instanceof BooleanSlotMorph &&
+            [true, false, null].includes(result)
+        ) {
+            this.setContents(result);
+        } else if (this instanceof ColorSlotMorph && result instanceof Color) {
+            this.setContents(result);
+        } else if (isTxtOrNum(result)) {
             this.setContents(isString(result) && result.startsWith('$_') ?
                 result.slice(2) : result);
         }
@@ -13763,6 +13769,11 @@ BooleanSlotMorph.prototype.mouseLeave = function () {
     this.rerender();
 };
 
+// BooleanSlotMorph dynamic, user-scriptable contents
+
+BooleanSlotMorph.prototype.dynamicContents =
+    InputSlotMorph.prototype.dynamicContents;
+
 // BooleanSlotMorph menu:
 
 BooleanSlotMorph.prototype.slotMenu = function () {
@@ -14510,6 +14521,11 @@ ColorSlotMorph.prototype.evaluate = function () {
 ColorSlotMorph.prototype.matches = function (typestring) {
     return ['color', 'any'].includes(typestring);
 };
+
+// ColorSlotMorph dynamic, user-scriptable contents
+
+ColorSlotMorph.prototype.dynamicContents =
+    InputSlotMorph.prototype.dynamicContents;
 
 // ColorSlotMorph drawing:
 

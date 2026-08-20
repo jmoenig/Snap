@@ -24,6 +24,7 @@
     * MQTT extension update, thanks, Simon and Xavier!
     * rearranged shapes library into the first group
     * added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
+    * added dynamic slot contents support to color and Boolean type slots
 * **Notable Fixes:**
     * disable empty category buttons when switching back from "hide empty categories" setting
     * fixed display of continuations capturing variadic inputs
@@ -40,6 +41,7 @@
 * German translation update for "with x:" string
 * shapes: added new "fill all of" transformation block to the shapes library 
 * v12.1.0-rc8
+* blocks: added dynamic slot contents support to color and Boolean type slots
 
 ### 2026-08-19
 * shapes: added new "paint all" transformation block to the shapes library
