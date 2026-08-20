@@ -42,6 +42,7 @@
 * shapes: added new "fill all of" transformation block to the shapes library 
 * v12.1.0-rc8
 * blocks: added dynamic slot contents support to color and Boolean type slots
+* shapes: collapsed both "round rect" blocks into a single one
 
 ### 2026-08-19
 * shapes: added new "paint all" transformation block to the shapes library
