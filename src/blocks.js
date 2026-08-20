@@ -1989,7 +1989,7 @@ SyntaxElementMorph.prototype.setLabelColor = function (
                 || morph instanceof ADT_SlotMorph
                 || (morph instanceof SymbolMorph && !morph.isProtectedLabel)
                 || (morph instanceof InputSlotMorph
-                    && morph.isReadOnly)) {
+                    && morph.isReadOnly && !morph.isBasic)) {
             morph.setLabelColor(textColor, shadowColor, shadowOffset);
         } else if (morph.isLoop) { // C-shaped slot with loop arrow symbol
             morph.loop().setLabelColor(textColor, shadowColor, shadowOffset);
@@ -11735,7 +11735,7 @@ InputSlotMorph.prototype.setContents = function (data) {
             dta = '';
         } else {
             dta = localize(dta[0]);
-            cnts.isItalic = !this.isReadOnly;
+            cnts.isItalic = !this.isReadOnly || this.isBasic;
         }
     } else if (dta instanceof BlockMorph) {
     	this.selectedBlock = dta;
@@ -11755,7 +11755,7 @@ InputSlotMorph.prototype.setContents = function (data) {
     } else if (dta.toString) {
         cnts.text = dta.toString();
     }
-    if (this.isReadOnly && !MorphicPreferences.isFlat) {
+    if (this.isReadOnly && !this.isBasic && !MorphicPreferences.isFlat) {
         cnts.shadowOffset = new Point(1, 1); // correct initial dimensions
     }
     cnts.fixLayout();
@@ -11764,7 +11764,7 @@ InputSlotMorph.prototype.setContents = function (data) {
     this.constant = isConstant ? data : null;
 
     // adjust to zebra coloring:
-    if (this.isReadOnly) {
+    if (this.isReadOnly && !this.isBasic) {
         block = this.parentThatIsA(BlockMorph); // could be inside a multi-arg
         if (block) {
             block.fixLabelColor();
