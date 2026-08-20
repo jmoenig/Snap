@@ -12083,7 +12083,7 @@ InputSlotMorph.prototype.dynamicContents = function () {
             this.setContents(result);
         } else if (isTxtOrNum(result)) {
             this.setContents(isString(result) && result.startsWith('$_') ?
-                result.slice(2) : result);
+                [result.slice(2)] : result);
         }
     };
 
