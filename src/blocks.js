@@ -14421,7 +14421,7 @@ TextSlotMorph.prototype.contents = function () {
 };
 
 TextSlotMorph.prototype.matches = function (typestring) {
-    return ['text', 'number'].includes(typestring);
+    return ['text', 'number', 'any'].includes(typestring);
 };
 
 // TextSlotMorph events:
