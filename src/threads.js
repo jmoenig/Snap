@@ -66,7 +66,7 @@ CustomHatBlockMorph, SymbolMorph, MenuMorph, MorphicPreferences*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-August-20';
+modules.threads = '2026-August-21';
 
 var ThreadManager;
 var Process;
@@ -1897,6 +1897,8 @@ Process.prototype.reportEnvironment = function (choice, trgt = this.context) {
         return this.reportInputs(trgt);
     case 'object':
         return this.reportData(trgt);
+    case 'process':
+        return this;
     default:
         return this.reportSelf(trgt);
     }

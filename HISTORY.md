@@ -39,6 +39,7 @@
 
 ### 2026-08-21
 * blocks: fixed and tweaked slot label zebra coloring for variadic inputs
+* blocks, threads: added 'process' item to the "this" reporter's dropdown menu
 
 ### 2026-08-20
 * blocks: added support for localizable dynamic variadic input slot contents (when slot signals 'expand')

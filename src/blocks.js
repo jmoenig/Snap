@@ -657,7 +657,8 @@ SyntaxElementMorph.prototype.labelParts = {
             continuation: ['continuation'],
             '~' : null,
             inputs : ['inputs'],
-            object : ['object']
+            object : ['object'],
+            process : ['process']
         }
     },
     '%snd': {
