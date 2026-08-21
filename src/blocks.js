@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-20';
+modules.blocks = '2026-August-21';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1980,7 +1980,10 @@ SyntaxElementMorph.prototype.setLabelColor = function (
     shadowOffset
 ) {
     this.children.forEach(morph => {
-        if (morph instanceof StringMorph && !morph.isProtectedLabel) {
+        // if (morph instanceof StringMorph && !morph.isProtectedLabel) {
+        if (morph instanceof InputSlotTextMorph ||
+            (morph instanceof StringMorph && !morph.isProtectedLabel)
+        ) {
             morph.shadowOffset = shadowOffset || morph.shadowOffset;
             morph.shadowColor = shadowColor || morph.shadowColor;
             morph.setColor(textColor);
@@ -1988,8 +1991,8 @@ SyntaxElementMorph.prototype.setLabelColor = function (
                 || morph instanceof ArgLabelMorph
                 || morph instanceof ADT_SlotMorph
                 || (morph instanceof SymbolMorph && !morph.isProtectedLabel)
-                || (morph instanceof InputSlotMorph
-                    && morph.isReadOnly && !morph.isBasic)) {
+                || (morph instanceof InputSlotMorph && morph.isReadOnly)
+        ) {
             morph.setLabelColor(textColor, shadowColor, shadowOffset);
         } else if (morph.isLoop) { // C-shaped slot with loop arrow symbol
             morph.loop().setLabelColor(textColor, shadowColor, shadowOffset);
@@ -10232,24 +10235,36 @@ ArgMorph.prototype.render = function (ctx) {
 
 ArgMorph.prototype.initSlotColor = function (ctx) {
     var borderColor;
+
     // initialize my surface property
     if (this.cachedNormalColor) { // if flashing
         borderColor = this.color;
     } else if (this.parent) {
-        borderColor = this.parent.color;
+        if (this.parent instanceof MultiArgMorph) {
+            borderColor = this.parent.parentThatIsA(BlockMorph)?.color
+                || this.parent.color;
+        } else {
+            borderColor = this.parent.color;
+        }
     } else {
         borderColor = new Color(120, 120, 120);
     }
-    ctx.fillStyle = this.color.toString();
-    if (!this.cachedNormalColor) { // unless flashing
-        ctx.fillStyle = borderColor.darker().toString();
-    }
+
+    // set my fill color, if any
+    this.initSlotFillColor(ctx, borderColor);
 
     // cache my border colors
     this.cachedClr = borderColor.toString();
     this.cachedClrBright = borderColor.lighter(this.contrast)
         .toString();
     this.cachedClrDark = borderColor.darker(this.contrast).toString();
+};
+
+ArgMorph.prototype.initSlotFillColor = function (ctx, borderColor) {
+    ctx.fillStyle = this.color.toString();
+    if (!this.cachedNormalColor) { // unless flashing
+        ctx.fillStyle = borderColor.darker().toString();
+    }
 };
 
 ArgMorph.prototype.drawRectSlot = function (ctx) {
@@ -11709,6 +11724,10 @@ InputSlotMorph.prototype.arrow = function () {
     );
 };
 
+InputSlotMorph.prototype.readonly = function () {
+    return this.isReadOnly && !this.isBasic;
+};
+
 InputSlotMorph.prototype.setContents = function (data) {
 	// data can be a String, Float, or "wish" Block
     var cnts = this.contents(),
@@ -11735,7 +11754,7 @@ InputSlotMorph.prototype.setContents = function (data) {
             dta = '';
         } else {
             dta = localize(dta[0]);
-            cnts.isItalic = !this.isReadOnly || this.isBasic;
+            cnts.isItalic = !this.isReadOnly;
         }
     } else if (dta instanceof BlockMorph) {
     	this.selectedBlock = dta;
@@ -11755,7 +11774,7 @@ InputSlotMorph.prototype.setContents = function (data) {
     } else if (dta.toString) {
         cnts.text = dta.toString();
     }
-    if (this.isReadOnly && !this.isBasic && !MorphicPreferences.isFlat) {
+    if (this.readonly() && !MorphicPreferences.isFlat) {
         cnts.shadowOffset = new Point(1, 1); // correct initial dimensions
     }
     cnts.fixLayout();
@@ -11764,7 +11783,7 @@ InputSlotMorph.prototype.setContents = function (data) {
     this.constant = isConstant ? data : null;
 
     // adjust to zebra coloring:
-    if (this.isReadOnly && !this.isBasic) {
+    if (this.isReadOnly) {
         block = this.parentThatIsA(BlockMorph); // could be inside a multi-arg
         if (block) {
             block.fixLabelColor();
@@ -12877,6 +12896,7 @@ InputSlotMorph.prototype.setChoices = function (dict, readonly) {
     // externally specify choices and read-only status,
     // used for custom blocks
     var cnts = this.contents();
+    if (this.isBasic) {return; }
     this.choices = dict;
     this.isReadOnly = readonly || false;
     if (this.parent instanceof BlockMorph) {
@@ -12899,8 +12919,8 @@ InputSlotMorph.prototype.fixLayout = function () {
         tp = this.topBlock();
 
     contents.isNumeric = this.isNumeric && !this.isAlphanumeric;
-    contents.isEditable = !this.isReadOnly || this.isBasic;
-    if (this.isReadOnly && !this.isBasic) {
+    contents.isEditable = !this.readonly();
+    if (this.readonly()) {
         contents.disableSelecting();
         contents.color = WHITE;
     } else {
@@ -12908,7 +12928,7 @@ InputSlotMorph.prototype.fixLayout = function () {
         contents.color = BLACK;
     }
 
-    if (this.choices && !this.isBasic) {
+    if (this.choices) {
         arrow.setSize(fontHeight(this.fontSize));
         arrow.show();
     } else {
@@ -12983,7 +13003,7 @@ InputSlotMorph.prototype.fixLayout = function () {
 // InputSlotMorph events:
 
 InputSlotMorph.prototype.mouseDownLeft = function (pos) {
-    if ((this.isReadOnly && !this.isBasic) || this.symbol ||
+    if (this.isReadOnly || this.symbol ||
             this.arrow().bounds.containsPoint(pos)) {
         this.escalateEvent('mouseDownLeft', pos);
     } else {
@@ -12994,7 +13014,7 @@ InputSlotMorph.prototype.mouseDownLeft = function (pos) {
 InputSlotMorph.prototype.mouseClickLeft = function (pos) {
     if (this.arrow().bounds.containsPoint(pos)) {
         this.dropDownMenu();
-    } else if ((this.isReadOnly && !this.isBasic) || this.symbol) {
+    } else if (this.isReadOnly || this.symbol) {
         this.dropDownMenu();
     } else {
         this.contents().edit();
@@ -13229,34 +13249,20 @@ InputSlotMorph.prototype.render = function (ctx) {
  	}
 };
 
-InputSlotMorph.prototype.initSlotColor = function (ctx) {
-    var borderColor;
-
-    // initialize my surface property
-    if (this.cachedNormalColor) { // if flashing
-        borderColor = this.color;
-    } else if (this.parent) {
-        if (this.parent instanceof MultiArgMorph) {
-            borderColor = this.parent.parentThatIsA(BlockMorph)?.color
-                || this.parent.color;
-        } else {
-            borderColor = this.parent.color;
-        }
-    } else {
-        borderColor = new Color(120, 120, 120);
-    }
+InputSlotMorph.prototype.initSlotFillColor = function (ctx, borderColor) {
     ctx.fillStyle = this.color.toString();
-    if (this.isReadOnly && !this.cachedNormalColor && !this.isBasic) {
-        // unless flashing
+    if (this.isReadOnly && !this.cachedNormalColor) {
         ctx.fillStyle = borderColor.darker().toString();
     }
-
-    // cache my border colors
-    this.cachedClr = borderColor.toString();
-    this.cachedClrBright = borderColor.lighter(this.contrast)
-        .toString();
-    this.cachedClrDark = borderColor.darker(this.contrast).toString();
 };
+
+ArgMorph.prototype.initSlotFillColor = function (ctx, borderColor) {
+    ctx.fillStyle = this.color.toString();
+    if (!this.cachedNormalColor) { // unless flashing
+        ctx.fillStyle = borderColor.darker().toString();
+    }
+};
+
 
 // InputSlotStringMorph ///////////////////////////////////////////////
 
@@ -14678,23 +14684,8 @@ ADT_SlotMorph.prototype.fixLayout = function () {
 };
 
 ADT_SlotMorph.prototype.render = function (ctx) {
-    var borderColor,
-        r;
-
-    if (this.parent) {
-        borderColor = this.parent.color;
-    } else {
-        borderColor = new Color(120, 120, 120);
-    }
-    ctx.fillStyle = borderColor.darker().toString();
-
-    // cache my border colors
-    this.cachedClr = borderColor.toString();
-    this.cachedClrBright = borderColor.lighter(this.contrast)
-        .toString();
-    this.cachedClrDark = borderColor.darker(this.contrast).toString();
-
-    r = Math.max((this.height() - (this.edge * 2)) / 2, 0);
+    var r = Math.max((this.height() - (this.edge * 2)) / 2, 0);
+    this.initSlotColor(ctx);
     ctx.beginPath();
     ctx.arc(
         r + this.edge,

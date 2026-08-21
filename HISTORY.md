@@ -37,6 +37,9 @@
     * German
     * Chinese
 
+### 2026-08-21
+* blocks: fixed and tweaked slot label zebra coloring for variadic inputs
+
 ### 2026-08-20
 * blocks: added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
 * German translation update for "with x:" string
