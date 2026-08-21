@@ -42,6 +42,7 @@
 * blocks, threads: added 'process' item to the "this" reporter's dropdown menu
 * German translation upddate for "process" and "processes"
 * simplified shapes library blocks
+* v12.1.0-rc9
 
 ### 2026-08-20
 * blocks: added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
