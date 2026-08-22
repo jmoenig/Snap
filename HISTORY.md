@@ -39,6 +39,7 @@
 
 ### 2026-08-22
 * German translation update for "My Shapes" (for snap.schule)
+* shapes: minor speed-up optimizations
 
 ### 2026-08-21
 * blocks: fixed and tweaked slot label zebra coloring for variadic inputs
