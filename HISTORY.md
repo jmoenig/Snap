@@ -40,6 +40,7 @@
 ### 2026-08-22
 * German translation update for "My Shapes" (for snap.schule)
 * shapes: minor speed-up optimizations
+* blocks: fixed a rendering glitch for ADT slots in flat mode
 
 ### 2026-08-21
 * blocks: fixed and tweaked slot label zebra coloring for variadic inputs

@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-21';
+modules.blocks = '2026-August-22';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -14644,6 +14644,10 @@ ADT_SlotMorph.prototype.setContents = function (typeString = 'type') {
     this.type = typeString;
     cnts.text = typeString instanceof Array ? localize(typeString[0])
         : typeString;
+
+    // correct initial dimensions
+    cnts.shadowOffset = MorphicPreferences.isFlat ?
+        new Point(0, 0) : new Point(1, 1);
     cnts.fixLayout();
     if (block) {
         block.fixLabelColor();
