@@ -37,6 +37,9 @@
     * German
     * Chinese
 
+### 2026-08-22
+* German translation update for "My Shapes" (for snap.schule)
+
 ### 2026-08-21
 * blocks: fixed and tweaked slot label zebra coloring for variadic inputs
 * blocks, threads: added 'process' item to the "this" reporter's dropdown menu
