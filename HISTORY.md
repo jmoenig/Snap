@@ -39,6 +39,7 @@
 
 ### 2026-08-23
 * threads, blocks: added special "basic$" input type immune to readonly and dropdown menus for use inside variadic input groups
+* v12.1.0-rc11
 
 ### 2026-08-22
 * German translation update for "My Shapes" (for snap.schule)
