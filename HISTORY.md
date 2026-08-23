@@ -25,7 +25,7 @@
     * rearranged shapes library into the first group
     * added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
     * added dynamic slot contents support to color and Boolean type slots
-    * added special "basic" input types (23 for "any" and 24 for "numeric") immune to readonly and dropdown menus for use inside variadic input groups
+    * added special "basic" input types (23 for "any", 24 for "numeric", 25 for "text") immune to readonly and dropdown menus for use inside variadic input groups
 * **Notable Fixes:**
     * disable empty category buttons when switching back from "hide empty categories" setting
     * fixed display of continuations capturing variadic inputs
@@ -36,6 +36,9 @@
 * **Translation Updates:**
     * German
     * Chinese
+
+### 2026-08-23
+* threads, blocks: added special "basic$" input type immune to readonly and dropdown menus for use inside variadic input groups
 
 ### 2026-08-22
 * German translation update for "My Shapes" (for snap.schule)

@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-22';
+modules.blocks = '2026-August-23';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -1032,7 +1032,7 @@ SyntaxElementMorph.prototype.labelParts = {
 
     /*
         type: 'text entry'
-        tags: 'monospace'
+        tags: 'monospace basic'
     */
     '%mlt': {
         type: 'text entry',
@@ -1040,6 +1040,10 @@ SyntaxElementMorph.prototype.labelParts = {
     '%code': {
         type: 'text entry',
         tags: 'monospace'
+    },
+    '%basic$': {
+        type: 'text entry',
+        tags: 'basic'
     },
 
     /*
