@@ -4055,7 +4055,7 @@ KeyboardMenuMorph.prototype.createItems = function () {
     };
 
     let addSpacing = (size) => {
-        position.x += keysize * (size || 1);
+        position.x += (keysize - 1) * (size || 1);
     }
 
     widths = {
