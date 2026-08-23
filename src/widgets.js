@@ -4026,8 +4026,8 @@ KeyboardMenuMorph.prototype.createItems = function () {
     this.color = WHITE;
     this.borderColor = new Color(60, 60, 60);
     this.bounds.setExtent(new Point(
-        keysize * 17.25 + outsideMargin * 2,
-        keysize * 5 + outsideMargin * 2
+        (keysize - 1) * 17.25 + outsideMargin * 2,
+        (keysize - 1) * 5 + outsideMargin * 2
     ));
 
     let addKey = (key, size, label) => {
@@ -4050,7 +4050,7 @@ KeyboardMenuMorph.prototype.createItems = function () {
         item.setExtent(new Point(keysize, keysize));
         this.add(item);
         item.setShifted(false); // if we do this, it wont properly resize (if size is not 1). weird.
-        position.x += keysize * (size || 1);
+        position.x += keysize * (size || 1) - 1;
         return item
     };
 
@@ -4071,7 +4071,7 @@ KeyboardMenuMorph.prototype.createItems = function () {
 
     let newRow = () => {
         position.x = startX;
-        position.y += keysize;
+        position.y += keysize - 1;
     };
 
     let addCharRow = (string) => {
