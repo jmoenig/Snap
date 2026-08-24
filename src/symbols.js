@@ -2175,7 +2175,7 @@ SymbolMorph.prototype.renderSymbolMagnifierMinus = function (ctx, color) {
     ctx.lineWidth = l;
     ctx.beginPath();
     ctx.moveTo(w - (l / 2), h - (l / 2));
-    ctx.lineTo(x + Math.sqrt(r + l * 2), y + Math.sqrt(r + l * 2));
+    ctx.lineTo(x + Math.sqrt(r) + l * 0.9, y + Math.sqrt(r) + l * 1.65);
     ctx.closePath();
     ctx.stroke();
 };
@@ -2208,7 +2208,7 @@ SymbolMorph.prototype.renderSymbolMagnifierPlus = function (ctx, color) {
     ctx.lineWidth = l;
     ctx.beginPath();
     ctx.moveTo(w - (l / 2), h - (l / 2));
-    ctx.lineTo(x + Math.sqrt(r + l * 2), y + Math.sqrt(r + l * 2));
+    ctx.lineTo(x + Math.sqrt(r) + l * 0.9, y + Math.sqrt(r) + l * 1.65);
     ctx.closePath();
     ctx.stroke();
 };
