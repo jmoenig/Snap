@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-August-23';
+modules.gui = '2026-August-24';
 
 // Declarations
 
@@ -5266,7 +5266,7 @@ IDE_Morph.prototype.projectMenu = function () {
             menu.addItem(
                 'Generate puzzle',
                 'generatePuzzle',
-                'generate a Parson\'s Puzzle\n' +
+                'generate a Parsons Puzzle\n' +
                     'from the current sprite'
             );
         }
