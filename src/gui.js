@@ -2787,7 +2787,6 @@ IDE_Morph.prototype.createZoomBar = function () {
     this.zoomBar.add(inButton);
 
     this.zoomBar.fixLayout();
-    this.add(this.zoomBar);
 };
 
 // IDE_Morph layout
@@ -2978,7 +2977,7 @@ IDE_Morph.prototype.fixLayout = function (situation) {
 
     // zoomBar
     if (this.zoomBar.isVisible) {
-        this.add(this.zoomBar);
+        this.world().add(this.zoomBar); // bring to front
         this.zoomBar.setRight(this.right() - MorphicPreferences.scrollBarSize);
         this.zoomBar.setBottom(this.bottom());
     }
