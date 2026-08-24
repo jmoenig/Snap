@@ -26,7 +26,6 @@
     * added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
     * added dynamic slot contents support to color and Boolean type slots
     * added special "basic" input types (23 for "any", 24 for "numeric", 25 for "text") immune to readonly and dropdown menus for use inside variadic input groups
-    * changed orientation of some of Ketrina's new costumes to match the stage's orientation
 * **Notable Fixes:**
     * disable empty category buttons when switching back from "hide empty categories" setting
     * fixed display of continuations capturing variadic inputs
@@ -43,7 +42,6 @@
 * fixed / updated German translations for the costume and vector editors
 * fixed / updated German translations for the project and context menus
 * more German translation fixes
-* changed orientation of some of Ketrina's new costumes to match the stage's orientation
 
 ### 2026-08-23
 * threads, blocks: added special "basic$" input type immune to readonly and dropdown menus for use inside variadic input groups
