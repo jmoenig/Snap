@@ -6,6 +6,7 @@
     * new special "process" input slot type (large gear symbol)
     * new blocks for creating new processes, getting their state, pausing, resuming and stopping them individually and programmatically
     * new animated and still symbols depicting interlocking gears - used for process data type
+    * new zoom bar at the bottom right of the IDE, new magnifier plus / minus symbols used for zooming the IDE in and out
     * new "Body Language" category in the "Edge AI" library
     * new category selection buttons in the costumes browser dialog, thank you, Victoria!
     * new - as of yet "hidden" behind shift-right-click script pane menu item "clean unhatted", thank you, Peter!
@@ -42,6 +43,8 @@
 * fixed / updated German translations for the costume and vector editors
 * fixed / updated German translations for the project and context menus
 * more German translation fixes
+* symbols: added new "magnifierPlus/Minus" symbols
+* gui: new zoom bar
 
 ### 2026-08-23
 * threads, blocks: added special "basic$" input type immune to readonly and dropdown menus for use inside variadic input groups

@@ -346,6 +346,7 @@ IDE_Morph.prototype.init = function (config) {
     this.stageHandle = null;
     this.corralBar = null;
     this.corral = null;
+    this.zoomBar = null;
 
     this.embedPlayButton = null;
     this.embedOverlay = null;
@@ -1052,6 +1053,7 @@ IDE_Morph.prototype.buildPanes = function () {
     this.createSpriteEditor();
     this.createCorralBar();
     this.createCorral();
+    this.createZoomBar();
 };
 
 IDE_Morph.prototype.createLogo = function () {
@@ -2749,6 +2751,45 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
     };
 };
 
+IDE_Morph.prototype.createZoomBar = function () {
+    var shade = new Color(140, 140, 140),
+        inButton, outButton;
+
+
+    this.zoomBar = new AlignmentMorph('row');
+
+    outButton = new PushButtonMorph(
+        this,
+        "zoomOut",
+        new SymbolMorph("magnifierMinus", 24)
+    );
+    outButton.alpha = 0.2;
+    outButton.padding = 1;
+    // outButton.hint = localize('zoom out') + '...';
+    outButton.labelShadowColor = shade;
+    outButton.edge = 0;
+    outButton.padding = 3;
+    outButton.fixLayout();
+    this.zoomBar.add(outButton);
+
+    inButton = new PushButtonMorph(
+        this,
+        "zoomIn",
+        new SymbolMorph("magnifierPlus", 24)
+    );
+    inButton.alpha = 0.2;
+    inButton.padding = 1;
+    // inButton.hint = localize('zoom in') + '...';
+    inButton.labelShadowColor = shade;
+    inButton.edge = 0;
+    inButton.padding = 3;
+    inButton.fixLayout();
+    this.zoomBar.add(inButton);
+
+    this.zoomBar.fixLayout();
+    this.add(this.zoomBar);
+};
+
 // IDE_Morph layout
 
 IDE_Morph.prototype.fixLayout = function (situation) {
@@ -2933,6 +2974,13 @@ IDE_Morph.prototype.fixLayout = function (situation) {
             this.corral.setHeight(this.bottom() - this.corral.top() - border);
             this.corral.fixLayout();
         }
+    }
+
+    // zoomBar
+    if (this.zoomBar.isVisible) {
+        this.add(this.zoomBar);
+        this.zoomBar.setRight(this.right() - MorphicPreferences.scrollBarSize);
+        this.zoomBar.setBottom(this.bottom());
     }
 
     // adjust the global zoom if necessary
@@ -3418,6 +3466,16 @@ IDE_Morph.prototype.mouseDoubleClick = function () {
     if (this.world().currentKey === 16 && !this.config.hideSettings) {
         this.setZoom(100);
     }
+};
+
+IDE_Morph.prototype.zoomIn = function () {
+    var interval = 10;
+    this.setZoom(Math.floor(ZOOM * interval) * interval + interval);
+};
+
+IDE_Morph.prototype.zoomOut = function () {
+    var interval = 10;
+    this.setZoom(Math.ceil(ZOOM * interval) * interval - interval);
 };
 
 // IDE_Morph button actions
@@ -7775,7 +7833,8 @@ IDE_Morph.prototype.toggleAppMode = function (appMode) {
             this.spriteEditor,
             this.spriteBar,
             this.palette,
-            this.categories
+            this.categories,
+            this.zoomBar
         ];
 
     this.isAppMode = isNil(appMode) ? !this.isAppMode : appMode;
