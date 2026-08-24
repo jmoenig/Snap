@@ -2768,7 +2768,6 @@ IDE_Morph.prototype.createZoomBar = function () {
     // outButton.hint = localize('zoom out') + '...';
     outButton.labelShadowColor = shade;
     outButton.edge = 0;
-    outButton.padding = 3;
     outButton.fixLayout();
     this.zoomBar.add(outButton);
 
@@ -2782,7 +2781,6 @@ IDE_Morph.prototype.createZoomBar = function () {
     // inButton.hint = localize('zoom in') + '...';
     inButton.labelShadowColor = shade;
     inButton.edge = 0;
-    inButton.padding = 3;
     inButton.fixLayout();
     this.zoomBar.add(inButton);
 
