@@ -43,7 +43,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2026-August-03';
+modules.symbols = '2026-August-24';
 
 var SymbolMorph;
 
@@ -139,6 +139,8 @@ SymbolMorph.prototype.names = [
     'robot',
     'magnifyingGlass',
     'magnifierOutline',
+    'magnifierMinus',
+    'magnifierPlus',
     'selection',
     'polygon',
     'closedBrush',
@@ -484,6 +486,12 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'magnifierOutline':
         this.renderSymbolMagnifierOutline(ctx, aColor);
+        break;
+    case 'magnifierMinus':
+        this.renderSymbolMagnifierMinus(ctx, aColor);
+        break;
+    case 'magnifierPlus':
+        this.renderSymbolMagnifierPlus(ctx, aColor);
         break;
     case 'selection':
         this.renderSymbolSelection(ctx, aColor);
@@ -2143,6 +2151,67 @@ SymbolMorph.prototype.renderSymbolMagnifierOutline = function (ctx, color) {
     ctx.stroke();
 };
 
+SymbolMorph.prototype.renderSymbolMagnifierMinus = function (ctx, color) {
+    // draw a magnifying glass with a "minus" sign inside
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 10, 1),
+        sp = l,
+        r = w * 0.4 - l / 2,
+        x = w * 2 / 3 - Math.sqrt(r),
+        y = h / 3 + Math.sqrt(r);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 0.5;
+
+    ctx.beginPath();
+    ctx.arc(x, y, r, radians(0), radians(360), false);
+    ctx.stroke();
+
+    ctx.moveTo(x - (r - sp), y);
+    ctx.lineTo(x + (r - sp), y);
+    ctx.stroke();
+
+    ctx.lineWidth = l;
+    ctx.beginPath();
+    ctx.moveTo(w - (l / 2), h - (l / 2));
+    ctx.lineTo(x + Math.sqrt(r + l * 2), y + Math.sqrt(r + l * 2));
+    ctx.closePath();
+    ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolMagnifierPlus = function (ctx, color) {
+    // draw a magnifying glass with a "plus" sign inside
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 10, 1),
+        sp = l,
+        r = w * 0.4 - l / 2,
+        x = w * 2 / 3 - Math.sqrt(r),
+        y = h / 3 + Math.sqrt(r);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 0.5;
+
+    ctx.beginPath();
+    ctx.arc(x, y, r, radians(0), radians(360), false);
+    ctx.stroke();
+
+    ctx.moveTo(x - (r - sp), y);
+    ctx.lineTo(x + (r - sp), y);
+    ctx.stroke();
+
+    ctx.moveTo(x, y - (r - sp));
+    ctx.lineTo(x, y + (r - sp));
+    ctx.stroke();
+
+    ctx.lineWidth = l;
+    ctx.beginPath();
+    ctx.moveTo(w - (l / 2), h - (l / 2));
+    ctx.lineTo(x + Math.sqrt(r + l * 2), y + Math.sqrt(r + l * 2));
+    ctx.closePath();
+    ctx.stroke();
+};
 
 SymbolMorph.prototype.renderSymbolSelection = function (ctx, color) {
     // draw a filled arrow and a dashed rectangle
