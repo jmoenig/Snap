@@ -45,6 +45,7 @@
 * more German translation fixes
 * symbols: added new "magnifierPlus/Minus" symbols
 * gui: new zoom bar
+* v12.1.0-rc12
 
 ### 2026-08-23
 * threads, blocks: added special "basic$" input type immune to readonly and dropdown menus for use inside variadic input groups
