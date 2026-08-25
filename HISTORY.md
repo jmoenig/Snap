@@ -40,6 +40,7 @@
 
 ### 2026-08-25
 * gui: tweaked zoom bar buttons
+* v12.1.0-rc13
 
 ### 2026-08-24
 * gui: fixed a typo in hover-help for puzzles
