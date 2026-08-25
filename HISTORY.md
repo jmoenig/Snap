@@ -42,6 +42,7 @@
 * gui: tweaked zoom bar buttons
 * v12.1.0-rc13
 * shapes library: changed German translation for rhombus (Raute)
+* updated shapes library: changed defaults from 'pinhole' to 'center', combined "paint" and "fill" transformations
 
 ### 2026-08-24
 * gui: fixed a typo in hover-help for puzzles
