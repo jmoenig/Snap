@@ -9816,7 +9816,7 @@ ScriptsMorph.prototype.droppedImage = function (aCanvas, name, embeddedData) {
 // ScriptsMorph keyboard support
 
 ScriptsMorph.prototype.edit = function (pos) {
-    var target, block, slot,
+    var target, block, slot, end,
         below = false,
 		world = this.world();
     if (this.focus) {this.focus.stopEditing(); }
@@ -9838,10 +9838,10 @@ ScriptsMorph.prototype.edit = function (pos) {
             target.focus = new ScriptFocusMorph(target, slot);
         }
     } else {
-        block = target.bottomBlockNear(pos);
-        if (block) {
-            target.focus = new ScriptFocusMorph(target, block);
-            target.focus.atEnd = true;
+        end = target.scriptEndNear(pos);
+        if (end) {
+            target.focus = new ScriptFocusMorph(target, end.block);
+            target.focus.atEnd = end.atEnd;
         } else {
             target.focus = new ScriptFocusMorph(target, target, pos);
         }
@@ -9869,10 +9869,13 @@ ScriptsMorph.prototype.cSlotAt = function (pos) {
     return answer;
 };
 
-ScriptsMorph.prototype.bottomBlockNear = function (pos) {
-    // answer the bottom block of a script whose bottom edge is close
-    // enough above pos for the keyboard focus to attach to it,
-    // or null if there is none
+ScriptsMorph.prototype.scriptEndNear = function (pos) {
+    // answer the block at whichever end of a script - top or bottom -
+    // is closest to pos, if that end is close enough for the keyboard
+    // focus to attach to it, or null if there is none. The answer is
+    // an object {block, atEnd} matching the focus's attachment state:
+    // {bottom block, true} below a script's end, {top block, false}
+    // above a script's beginning.
     var thresh = Math.max(
             SyntaxElementMorph.prototype.corner * 2 +
                 SyntaxElementMorph.prototype.dent,
@@ -9888,7 +9891,14 @@ ScriptsMorph.prototype.bottomBlockNear = function (pos) {
             if (dist >= 0 && dist < best && !block.isStop() &&
                     pos.x >= block.left() && pos.x <= block.right()) {
                 best = dist;
-                answer = block;
+                answer = {block: block, atEnd: true};
+            }
+            dist = morph.top() - pos.y;
+            if (dist >= 0 && dist < best &&
+                    !(morph instanceof HatBlockMorph) &&
+                    pos.x >= morph.left() && pos.x <= morph.right()) {
+                best = dist;
+                answer = {block: morph, atEnd: false};
             }
         }
     });
@@ -17405,8 +17415,8 @@ CommentMorph.prototype.stackHeight = function () {
     activate:
       - shift + click on a scripting pane's background
         (if the click is inside a C-slot the focus attaches inside it,
-        if it is close below the end of a script the focus attaches to
-        that script's bottom, otherwise it floats freely)
+        if it is close to either end of a script the focus attaches to
+        that script's bottom or top, otherwise it floats freely)
       - shift + click on any block
         (clicking a command block's lower half places the focus below
         the block, clicking its upper half places it above)
