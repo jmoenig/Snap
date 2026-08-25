@@ -9816,20 +9816,57 @@ ScriptsMorph.prototype.droppedImage = function (aCanvas, name, embeddedData) {
 // ScriptsMorph keyboard support
 
 ScriptsMorph.prototype.edit = function (pos) {
-    var target, block,
+    var target, block, slot,
+        below = false,
 		world = this.world();
     if (this.focus) {this.focus.stopEditing(); }
     world.stopEditing();
     if (!ScriptsMorph.prototype.enableKeyboard) {return; }
     target = this.selectForEdit(); // enable copy-on-edit
-    block = target.bottomBlockNear(pos);
-    if (block) {
-        target.focus = new ScriptFocusMorph(target, block);
-        target.focus.atEnd = true;
+    slot = target.cSlotAt(pos);
+    if (slot) {
+        block = slot.nestedBlock();
+        if (block) {
+            // attach the focus to the nested script's command at the
+            // click's height, above or below it depending on the half
+            while (block.nextBlock() && pos.y > block.bottom()) {
+                block = block.nextBlock();
+            }
+            target.focus = new ScriptFocusMorph(target, block);
+            below = pos.y > block.center().y;
+        } else {
+            target.focus = new ScriptFocusMorph(target, slot);
+        }
     } else {
-        target.focus = new ScriptFocusMorph(target, target, pos);
+        block = target.bottomBlockNear(pos);
+        if (block) {
+            target.focus = new ScriptFocusMorph(target, block);
+            target.focus.atEnd = true;
+        } else {
+            target.focus = new ScriptFocusMorph(target, target, pos);
+        }
     }
     target.focus.getFocus(world);
+    if (below) {
+        target.focus.nextCommand();
+    }
+};
+
+ScriptsMorph.prototype.cSlotAt = function (pos) {
+    // answer the innermost C-slot whose interior lies under pos, or
+    // null if there is none. A C-slot's interior is a hit-detection
+    // "hole", so clicks inside it fall through to the scripting pane -
+    // this test mirrors Morph.topMorphAt's hole test.
+    var answer = null;
+    this.allChildren().forEach(morph => {
+        if (morph instanceof CSlotMorph &&
+                morph.holes.some(hole =>
+                    hole.translateBy(morph.position()).containsPoint(pos))
+        ) {
+            answer = morph; // preorder: a later match is nested deeper
+        }
+    });
+    return answer;
 };
 
 ScriptsMorph.prototype.bottomBlockNear = function (pos) {
@@ -17367,8 +17404,9 @@ CommentMorph.prototype.stackHeight = function () {
 
     activate:
       - shift + click on a scripting pane's background
-        (if the click is close below the end of a script the focus
-        attaches to that script's bottom, otherwise it floats freely)
+        (if the click is inside a C-slot the focus attaches inside it,
+        if it is close below the end of a script the focus attaches to
+        that script's bottom, otherwise it floats freely)
       - shift + click on any block
         (clicking a command block's lower half places the focus below
         the block, clicking its upper half places it above)
