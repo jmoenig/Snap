@@ -38,6 +38,9 @@
     * German
     * Chinese
 
+### 2026-08-25
+* gui: tweaked zoom bar buttons
+
 ### 2026-08-24
 * gui: fixed a typo in hover-help for puzzles
 * fixed / updated German translations for the costume and vector editors

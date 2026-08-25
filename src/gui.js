@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-August-24';
+modules.gui = '2026-August-25';
 
 // Declarations
 
@@ -2761,10 +2761,10 @@ IDE_Morph.prototype.createZoomBar = function () {
     outButton = new PushButtonMorph(
         this,
         "zoomOut",
-        new SymbolMorph("magnifierMinus", 24)
+        new SymbolMorph("magnifierMinus", 28)
     );
     outButton.alpha = 0.2;
-    outButton.padding = 1;
+    outButton.padding = 0;
     // outButton.hint = localize('zoom out') + '...';
     outButton.labelShadowColor = shade;
     outButton.edge = 0;
@@ -2774,10 +2774,10 @@ IDE_Morph.prototype.createZoomBar = function () {
     inButton = new PushButtonMorph(
         this,
         "zoomIn",
-        new SymbolMorph("magnifierPlus", 24)
+        new SymbolMorph("magnifierPlus", 28)
     );
     inButton.alpha = 0.2;
-    inButton.padding = 1;
+    inButton.padding = 0;
     // inButton.hint = localize('zoom in') + '...';
     inButton.labelShadowColor = shade;
     inButton.edge = 0;
