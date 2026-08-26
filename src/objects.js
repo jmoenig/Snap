@@ -5072,6 +5072,7 @@ SpriteMorph.prototype.searchBlocks = function (
             IDE_Morph.prototype.isBright ? new Color(150, 200, 255) : WHITE,
             2
         );
+        focus.mouseClickLeft = () => searchPane.accept();
         searchPane.contents.add(focus);
         focus.scrollIntoView();
     }
@@ -5088,6 +5089,20 @@ SpriteMorph.prototype.searchBlocks = function (
         blocks.forEach(block => {
             block.setPosition(new Point(x, y));
             searchPane.addContents(block);
+            if (scriptFocus) {
+                // clicking anywhere on a block inserts it at the focus,
+                // same as selecting it with the arrow keys and pressing
+                // enter, instead of the palette's normal click behaviors
+                // (run the block, edit a slot, expand a multi-arg)
+                block.allChildren().forEach(morph => {
+                    if (morph.mouseClickLeft) {
+                        morph.mouseClickLeft = () => {
+                            selection = block;
+                            searchPane.accept();
+                        };
+                    }
+                });
+            }
             y += block.height();
             y += unit * 0.3;
         });
