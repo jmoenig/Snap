@@ -5065,6 +5065,56 @@ SpriteMorph.prototype.searchBlocks = function (
         selection,
         focus;
 
+    function makeClickHandler(block) {
+        // clicking anywhere on a block inserts it at the focus, same as
+        // selecting it with the arrow keys and pressing enter, instead of
+        // the palette's normal click behaviors (run the block, edit a
+        // slot, expand a multi-arg)
+        var handler = function () {
+            selection = block;
+            searchPane.accept();
+        };
+        handler.isSearchClickHandler = true;
+        return handler;
+    }
+
+    function removeClickHandlers(block) {
+        // strip the search-pane handlers off a block leaving the pane
+        // (inserted at the focus, or grabbed by the hand) so they don't
+        // shadow its normal behaviors in the scripting area
+        block.allChildren().forEach(morph =>
+            ['mouseClickLeft', 'prepareToBeGrabbed'].forEach(prop => {
+                if (morph[prop] && morph[prop].isSearchClickHandler) {
+                    delete morph[prop];
+                }
+            })
+        );
+    }
+
+    function makeClickable(block) {
+        block.allChildren().forEach(morph => {
+            if (morph.mouseClickLeft &&
+                !Object.prototype.hasOwnProperty.call(
+                    morph,
+                    'mouseClickLeft'
+                )
+            ) {
+                morph.mouseClickLeft = makeClickHandler(block);
+            }
+        });
+        // dragging is still possible; clean up the grabbed morph, which
+        // is a copy of the block if it is a template (a copy shares the
+        // block's own properties, including these handlers) or else the
+        // block itself
+        block.prepareToBeGrabbed = function (hand) {
+            removeClickHandlers(this); // also removes this override
+            if (this.prepareToBeGrabbed) {
+                this.prepareToBeGrabbed(hand);
+            }
+        };
+        block.prepareToBeGrabbed.isSearchClickHandler = true;
+    }
+
     function showSelection() {
         if (focus) {focus.destroy(); }
         if (!selection || !scriptFocus) {return; }
@@ -5072,7 +5122,10 @@ SpriteMorph.prototype.searchBlocks = function (
             IDE_Morph.prototype.isBright ? new Color(150, 200, 255) : WHITE,
             2
         );
+        // the outline hit-tests as a rectangle covering the whole
+        // selected block, so route clicks and grabs on it to the block
         focus.mouseClickLeft = () => searchPane.accept();
+        focus.rootForGrab = () => selection;
         searchPane.contents.add(focus);
         focus.scrollIntoView();
     }
@@ -5090,18 +5143,7 @@ SpriteMorph.prototype.searchBlocks = function (
             block.setPosition(new Point(x, y));
             searchPane.addContents(block);
             if (scriptFocus) {
-                // clicking anywhere on a block inserts it at the focus,
-                // same as selecting it with the arrow keys and pressing
-                // enter, instead of the palette's normal click behaviors
-                // (run the block, edit a slot, expand a multi-arg)
-                block.allChildren().forEach(morph => {
-                    if (morph.mouseClickLeft) {
-                        morph.mouseClickLeft = () => {
-                            selection = block;
-                            searchPane.accept();
-                        };
-                    }
-                });
+                makeClickable(block);
             }
             y += block.height();
             y += unit * 0.3;
@@ -5126,6 +5168,7 @@ SpriteMorph.prototype.searchBlocks = function (
         if (scriptFocus) {
             searchBar.cancel();
             if (selection) {
+                removeClickHandlers(selection);
                 scriptFocus.insertBlock(selection);
             }
             myself.recordUserEdit(
