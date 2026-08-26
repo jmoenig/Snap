@@ -38,6 +38,9 @@
     * German
     * Chinese
 
+### 2026-08-26
+* shapes: fixed broken measure blocks (move / center / place pinhole)
+
 ### 2026-08-25
 * gui: tweaked zoom bar buttons
 * v12.1.0-rc13
