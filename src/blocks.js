@@ -10218,6 +10218,22 @@ ArgMorph.prototype.reactToSliderEdit = function () {
     }
 };
 
+ArgMorph.prototype.focus = function () {
+    // attach the keyboard focus to me, so a block entered at it lands
+    // in my slot; answer the focus, or null if I'm not in a scripting
+    // pane open to keyboard editing
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        world = this.world(),
+        focus;
+    if (!scripts || !ScriptsMorph.prototype.enableKeyboard) {return null; }
+    if (scripts.focus) {scripts.focus.stopEditing(); }
+    world.stopEditing();
+    focus = new ScriptFocusMorph(scripts, this);
+    scripts.focus = focus;
+    focus.getFocus(world);
+    return focus;
+};
+
 ArgMorph.prototype.setContents = function () {
     // subclass responsibility
     nop();
@@ -13134,6 +13150,14 @@ InputSlotMorph.prototype.fixLayout = function () {
 // InputSlotMorph events:
 
 InputSlotMorph.prototype.mouseDownLeft = function (pos) {
+    var cursor = this.root().cursor;
+    if (this.world().currentKey === 16 &&
+            !(cursor && cursor.target === this.contents())) {
+        // shift-click: wait for the mouse up, which attaches the
+        // keyboard focus to me instead of editing my contents, unless
+        // I'm already being edited - then extend the selection as usual
+        return;
+    }
     if (this.isReadOnly || this.symbol ||
             this.arrow().bounds.containsPoint(pos)) {
         this.escalateEvent('mouseDownLeft', pos);
@@ -13143,6 +13167,10 @@ InputSlotMorph.prototype.mouseDownLeft = function (pos) {
 };
 
 InputSlotMorph.prototype.mouseClickLeft = function (pos) {
+    if (this.world().currentKey === 16 && // shift-clicked
+            this.selectForEdit().focus()) {
+        return;
+    }
     if (this.arrow().bounds.containsPoint(pos)) {
         this.dropDownMenu();
     } else if (this.isReadOnly || this.symbol) {
@@ -13448,6 +13476,21 @@ InputSlotStringMorph.prototype.getShadowRenderColor = function () {
     return this.parent.alpha > 0.25 ? this.shadowColor : CLEAR;
 };
 
+InputSlotStringMorph.prototype.mouseClickLeft = function (pos) {
+    // shift-click: attach the keyboard focus to my slot, unless I'm
+    // the text currently being edited - then extend the selection to
+    // the click as usual
+    var cursor = this.root().cursor,
+        slot = this.parentThatIsA(InputSlotMorph);
+    if (this.world().currentKey === 16 &&
+            !(cursor && cursor.target === this) &&
+            slot &&
+            slot.selectForEdit().focus()) {
+        return;
+    }
+    StringMorph.prototype.mouseClickLeft.call(this, pos);
+};
+
 // InputSlotTextMorph ///////////////////////////////////////////////
 
 /*
@@ -13490,6 +13533,9 @@ InputSlotTextMorph.prototype.getRenderColor =
 
 InputSlotTextMorph.prototype.getShadowRenderColor =
     InputSlotStringMorph.prototype.getShadowRenderColor;
+
+InputSlotTextMorph.prototype.mouseClickLeft =
+    InputSlotStringMorph.prototype.mouseClickLeft;
 
 // TemplateSlotMorph ///////////////////////////////////////////////////
 
@@ -13904,6 +13950,10 @@ BooleanSlotMorph.prototype.nextValue = function () {
 // BooleanSlotMorph events:
 
 BooleanSlotMorph.prototype.mouseClickLeft = function () {
+    if (this.world().currentKey === 16 && // shift-clicked
+            this.selectForEdit().focus()) {
+        return;
+    }
     this.toggleValue();
     if (isNil(this.value)) {return; }
     this.reactToSliderEdit();
@@ -14665,6 +14715,10 @@ ColorSlotMorph.prototype.getUserColor = function () {
 // ColorSlotMorph events:
 
 ColorSlotMorph.prototype.mouseClickLeft = function () {
+    if (this.world().currentKey === 16 && // shift-clicked
+            this.selectForEdit().focus()) {
+        return;
+    }
     this.selectForEdit().getUserColor();
 };
 
