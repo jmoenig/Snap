@@ -40,6 +40,7 @@
 
 ### 2026-08-26
 * shapes: fixed broken measure blocks (move / center / place pinhole)
+* v12.1.0-rc14
 
 ### 2026-08-25
 * gui: tweaked zoom bar buttons
