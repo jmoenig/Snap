@@ -40,6 +40,7 @@
 
 ### 2026-08-27
 * objects: removed "number" type declaration for "... at ..." sensing reporter
+* v12.1.0-rc15
 
 ### 2026-08-26
 * shapes: fixed broken measure blocks (move / center / place pinhole)
