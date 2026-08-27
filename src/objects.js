@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-August-17';
+modules.objects = '2026-August-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -1563,7 +1563,6 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         },
         reportAspect: {
             type: 'reporter',
-            reports: 'number',
             category: 'sensing',
             spec: '%asp at %loc',
             defaults: [['hue'], ['mouse-pointer']],
