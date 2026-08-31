@@ -1480,7 +1480,13 @@ CustomCommandBlockMorph.prototype.refreshPrototype = function () {
                 );
                 words.forEach(word => {
                     newFrag = part.fragment.copy();
-                    newFrag.labelString = word;
+                    if (word[0] === '%' && word.length > 1) {
+                        // treat as a new input, mirroring labelPart()
+                        newFrag.labelString = word.replace(/%/g, '');
+                        newFrag.type = '%s';
+                    } else {
+                        newFrag.labelString = word;
+                    }
                     frags.push(newFrag);
                 });
             }
