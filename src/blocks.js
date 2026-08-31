@@ -6099,13 +6099,13 @@ BlockMorph.prototype.pickUp = function (wrrld) {
 
 // BlockMorph events
 
-BlockMorph.prototype.mouseClickLeft = function () {
+BlockMorph.prototype.mouseClickLeft = function (pos) {
     var top = this.topBlock(),
         receiver = top.scriptTarget(),
         shiftClicked = this.world().currentKey === 16,
         stage;
     if (shiftClicked && !this.isTemplate) {
-        return this.selectForEdit().focus(); // enable copy-on-edit
+        return this.selectForEdit().focus(pos); // enable copy-on-edit
     }
     if (top instanceof PrototypeHatBlockMorph) {
         return; // top.mouseClickLeft();
@@ -6118,7 +6118,9 @@ BlockMorph.prototype.mouseClickLeft = function () {
     }
 };
 
-BlockMorph.prototype.focus = function () {
+BlockMorph.prototype.focus = function (pos) {
+    // if the click position is given and lies in my lower half,
+    // place the focus below me rather than above
     var scripts = this.parentThatIsA(ScriptsMorph),
         world = this.world(),
         focus;
@@ -6129,6 +6131,9 @@ BlockMorph.prototype.focus = function () {
     scripts.focus = focus;
     focus.getFocus(world);
     if (this instanceof HatBlockMorph) {
+        focus.nextCommand();
+    } else if (pos && this instanceof CommandBlockMorph &&
+            pos.y > this.center().y) {
         focus.nextCommand();
     }
 };
@@ -9863,14 +9868,93 @@ ScriptsMorph.prototype.droppedImage = function (aCanvas, name, embeddedData) {
 // ScriptsMorph keyboard support
 
 ScriptsMorph.prototype.edit = function (pos) {
-    var target,
+    var target, block, slot, end,
+        below = false,
 		world = this.world();
     if (this.focus) {this.focus.stopEditing(); }
     world.stopEditing();
     if (!ScriptsMorph.prototype.enableKeyboard) {return; }
     target = this.selectForEdit(); // enable copy-on-edit
-    target.focus = new ScriptFocusMorph(target, target, pos);
+    slot = target.cSlotAt(pos);
+    if (slot) {
+        block = slot.nestedBlock();
+        if (block) {
+            // attach the focus to the nested script's command at the
+            // click's height, above or below it depending on the half
+            while (block.nextBlock() && pos.y > block.bottom()) {
+                block = block.nextBlock();
+            }
+            target.focus = new ScriptFocusMorph(target, block);
+            below = pos.y > block.center().y;
+        } else {
+            target.focus = new ScriptFocusMorph(target, slot);
+        }
+    } else {
+        end = target.scriptEndNear(pos);
+        if (end) {
+            target.focus = new ScriptFocusMorph(target, end.block);
+            target.focus.atEnd = end.atEnd;
+        } else {
+            target.focus = new ScriptFocusMorph(target, target, pos);
+        }
+    }
     target.focus.getFocus(world);
+    if (below) {
+        target.focus.nextCommand();
+    }
+};
+
+ScriptsMorph.prototype.cSlotAt = function (pos) {
+    // answer the innermost C-slot whose interior lies under pos, or
+    // null if there is none. A C-slot's interior is a hit-detection
+    // "hole", so clicks inside it fall through to the scripting pane -
+    // this test mirrors Morph.topMorphAt's hole test.
+    var answer = null;
+    this.allChildren().forEach(morph => {
+        if (morph instanceof CSlotMorph &&
+                morph.holes.some(hole =>
+                    hole.translateBy(morph.position()).containsPoint(pos))
+        ) {
+            answer = morph; // preorder: a later match is nested deeper
+        }
+    });
+    return answer;
+};
+
+ScriptsMorph.prototype.scriptEndNear = function (pos) {
+    // answer the block at whichever end of a script - top or bottom -
+    // is closest to pos, if that end is close enough for the keyboard
+    // focus to attach to it, or null if there is none. The answer is
+    // an object {block, atEnd} matching the focus's attachment state:
+    // {bottom block, true} below a script's end, {top block, false}
+    // above a script's beginning.
+    var thresh = Math.max(
+            SyntaxElementMorph.prototype.corner * 2 +
+                SyntaxElementMorph.prototype.dent,
+            SyntaxElementMorph.prototype.minSnapDistance
+        ),
+        answer = null,
+        best = thresh;
+    this.children.forEach(morph => {
+        var block, dist;
+        if (morph instanceof CommandBlockMorph) {
+            block = morph.bottomBlock();
+            dist = pos.y - block.bottom();
+            if (dist >= 0 && dist < best && !block.isStop() &&
+                    pos.x >= block.left() && pos.x <= block.right()) {
+                best = dist;
+                answer = {block: block, atEnd: true};
+            }
+            dist = morph.top() - pos.y;
+            if (dist >= 0 && dist < best &&
+                    !(morph instanceof HatBlockMorph) &&
+                    pos.x >= morph.left() && pos.x <= morph.right()) {
+                best = dist;
+                answer = {block: morph, atEnd: false};
+            }
+        }
+    });
+    return answer;
 };
 
 ScriptsMorph.prototype.toggleKeyboardEntry = function () {
@@ -10116,6 +10200,22 @@ ArgMorph.prototype.reactToSliderEdit = function () {
             }
         }
     }
+};
+
+ArgMorph.prototype.focus = function () {
+    // attach the keyboard focus to me, so a block entered at it lands
+    // in my slot; answer the focus, or null if I'm not in a scripting
+    // pane open to keyboard editing
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        world = this.world(),
+        focus;
+    if (!scripts || !ScriptsMorph.prototype.enableKeyboard) {return null; }
+    if (scripts.focus) {scripts.focus.stopEditing(); }
+    world.stopEditing();
+    focus = new ScriptFocusMorph(scripts, this);
+    scripts.focus = focus;
+    focus.getFocus(world);
+    return focus;
 };
 
 ArgMorph.prototype.setContents = function () {
@@ -13008,6 +13108,14 @@ InputSlotMorph.prototype.fixLayout = function () {
 // InputSlotMorph events:
 
 InputSlotMorph.prototype.mouseDownLeft = function (pos) {
+    var cursor = this.root().cursor;
+    if (this.world().currentKey === 16 &&
+            !(cursor && cursor.target === this.contents())) {
+        // shift-click: wait for the mouse up, which attaches the
+        // keyboard focus to me instead of editing my contents, unless
+        // I'm already being edited - then extend the selection as usual
+        return;
+    }
     if (this.isReadOnly || this.symbol ||
             this.arrow().bounds.containsPoint(pos)) {
         this.escalateEvent('mouseDownLeft', pos);
@@ -13017,6 +13125,10 @@ InputSlotMorph.prototype.mouseDownLeft = function (pos) {
 };
 
 InputSlotMorph.prototype.mouseClickLeft = function (pos) {
+    if (this.world().currentKey === 16 && // shift-clicked
+            this.selectForEdit().focus()) {
+        return;
+    }
     if (this.arrow().bounds.containsPoint(pos)) {
         this.dropDownMenu();
     } else if (this.isReadOnly || this.symbol) {
@@ -13322,6 +13434,21 @@ InputSlotStringMorph.prototype.getShadowRenderColor = function () {
     return this.parent.alpha > 0.25 ? this.shadowColor : CLEAR;
 };
 
+InputSlotStringMorph.prototype.mouseClickLeft = function (pos) {
+    // shift-click: attach the keyboard focus to my slot, unless I'm
+    // the text currently being edited - then extend the selection to
+    // the click as usual
+    var cursor = this.root().cursor,
+        slot = this.parentThatIsA(InputSlotMorph);
+    if (this.world().currentKey === 16 &&
+            !(cursor && cursor.target === this) &&
+            slot &&
+            slot.selectForEdit().focus()) {
+        return;
+    }
+    StringMorph.prototype.mouseClickLeft.call(this, pos);
+};
+
 // InputSlotTextMorph ///////////////////////////////////////////////
 
 /*
@@ -13364,6 +13491,9 @@ InputSlotTextMorph.prototype.getRenderColor =
 
 InputSlotTextMorph.prototype.getShadowRenderColor =
     InputSlotStringMorph.prototype.getShadowRenderColor;
+
+InputSlotTextMorph.prototype.mouseClickLeft =
+    InputSlotStringMorph.prototype.mouseClickLeft;
 
 // TemplateSlotMorph ///////////////////////////////////////////////////
 
@@ -13778,6 +13908,10 @@ BooleanSlotMorph.prototype.nextValue = function () {
 // BooleanSlotMorph events:
 
 BooleanSlotMorph.prototype.mouseClickLeft = function () {
+    if (this.world().currentKey === 16 && // shift-clicked
+            this.selectForEdit().focus()) {
+        return;
+    }
     this.toggleValue();
     if (isNil(this.value)) {return; }
     this.reactToSliderEdit();
@@ -14539,6 +14673,10 @@ ColorSlotMorph.prototype.getUserColor = function () {
 // ColorSlotMorph events:
 
 ColorSlotMorph.prototype.mouseClickLeft = function () {
+    if (this.world().currentKey === 16 && // shift-clicked
+            this.selectForEdit().focus()) {
+        return;
+    }
     this.selectForEdit().getUserColor();
 };
 
@@ -17401,7 +17539,12 @@ CommentMorph.prototype.stackHeight = function () {
 
     activate:
       - shift + click on a scripting pane's background
+        (if the click is inside a C-slot the focus attaches inside it,
+        if it is close to either end of a script the focus attaches to
+        that script's bottom or top, otherwise it floats freely)
       - shift + click on any block
+        (clicking a command block's lower half places the focus below
+        the block, clicking its upper half places it above)
       - shift + enter in the IDE's edit mode
 
     stop editing:
