@@ -40,6 +40,7 @@
 
 ### 2026-08-31
 * German translation update (restored some hover help strings)
+* v12.1.0-rc16
 
 ### 2026-08-27
 * objects: removed "number" type declaration for "... at ..." sensing reporter
