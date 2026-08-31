@@ -18,12 +18,12 @@
     * ADT slots can be made localizable by using the dollar-underscore prefix
     * dynamic dropdown menu items can be localized by using the dollar-underscore prefix
     * ADTs (custom types) are rendered as "box" symbols in variable-, list- and table watchers where they cannot render their own morph methods for lack of a full process
-    * reduced the number of blocks shapes library and changed the UI of the composition blocks
-    * updated shapes library with translatable "shape" ADT input slots
-    * updated neural networks library with translatable "neural network" ADT input slots
-    * changed small gear symbol to 6 spikes (from 8)
+    * reduced the number of blocks in the shapes library and changed the UI of the composition blocks
+    * updated the shapes library with translatable "shape" ADT input slots
+    * updated the neural networks library with translatable "neural network" ADT input slots
+    * changed the small gear symbol to 6 spikes (from 8)
     * MQTT extension update, thanks, Simon and Xavier!
-    * rearranged shapes library into the first group
+    * rearranged and moved the shapes library into the first group
     * added support for localizable dynamic variadic input slot contents (when slot signals 'expand')
     * added dynamic slot contents support to color and Boolean type slots
     * added special "basic" input types (23 for "any", 24 for "numeric", 25 for "text") immune to readonly and dropdown menus for use inside variadic input groups
