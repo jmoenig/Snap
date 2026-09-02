@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="181.34113"
+   height="34.802631"
+   viewBox="-1 -1 181.34113 34.802631"
+   id="svg5"
+   sodipodi:docname="cloud-d.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <!-- Exported by Scratch - http://scratch.mit.edu/ -->
+  <g
+     id="ID0.22178661404177547"
+     transform="matrix(0.90249997,0,0,0.90249997,-1.6746411,-1.9127025)">
+    <path
+       id="ID0.942875714506954"
+       fill="#e3deee"
+       d="m 579.3,828.3 c -2.2,11.9 20.2,26.7 73.1,29.3 46.1,2.3 134.6,5.6 170.5,3.3 35.9,-2.3 90.1,-7.9 83.4,-31.7 -4,-14 -35.6,-12.5 -53.5,-8.1 -19.6,4.8 -31,9 -31.8,8.3 -1,-0.9 -0.1,-8.6 -17.6,-5.8 -18.9,3 -46.9,15.1 -52.9,17.4 -29.7,-14 -73.6,-50 -95.6,-40.7 -14.4,6.1 -7,25.6 -9.3,27 -2.3,1.4 -22,-8.4 -38.7,-9.3 -13.6,-0.7 -26.2,2.8 -27.6,10.3 z"
+       transform="matrix(0.61313254,0,0,0.61313254,-354.35,-488.75)" />
+    <path
+       id="ID0.9047978580929339"
+       fill="#ffffff"
+       stroke="#e3deee"
+       d="m 887.6,848.2 c 13.6,-5.1 19.6,-13.1 17.4,-21.6 -7.1,-11.1 -35.6,-9.5 -52.3,-5.4 -19.6,4.8 -31,9 -31.8,8.3 -1,-0.9 -0.1,-8.6 -17.6,-5.8 -18.9,3 -46.9,15.1 -52.9,17.4 20.3,10.9 32.9,14 53.3,16.3 27.4,2.9 68.8,-3.7 83.9,-9.2 z"
+       transform="matrix(0.61313254,0,0,0.61313254,-354.35,-488.75)" />
+  </g>
+</svg>

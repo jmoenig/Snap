@@ -1,6 +1,8 @@
 # Snap! (BYOB) History
 
 ## in development:
+
+## 12.1.0:
 * **New Features:**
     * first-class processes - new built-in data type
     * new special "process" input slot type (large gear symbol)
@@ -37,6 +39,9 @@
 * **Translation Updates:**
     * German
     * Chinese
+
+### 2026-09-02
+* prepared v12.1 release
 
 ### 2026-08-31
 * German translation update (restored some hover help strings)

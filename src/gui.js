@@ -87,11 +87,11 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-August-31';
+modules.gui = '2026-September-02';
 
 // Declarations
 
-var SnapVersion = '12.1.0-rc16';
+var SnapVersion = '12.1.0';
 
 var IDE_Morph;
 var ProjectDialogMorph;
