@@ -4934,6 +4934,8 @@ SpriteMorph.prototype.blocksMatching = function (
     if (!varNames) {varNames = []; }
 
     function labelOf(aBlockSpec) {
+        // answer the visible label text followed by the text of any
+        // input slot menus, so that menu entries are searchable too
         var words = (BlockMorph.prototype.parseSpec(aBlockSpec)),
             filtered = words.filter(each =>
                 each.indexOf('%') !== 0 || each.length === 1
@@ -4942,6 +4944,13 @@ SpriteMorph.prototype.blocksMatching = function (
                 each.length > 1 && each.indexOf('%') === 0
             ).map(spec => moreTextIn(spec));
         return filtered.join(' ') + ' ' + slots.join(' ');
+    }
+
+    function visibleLabelOf(aBlockSpec) {
+        // answer only the label text as it appears on the block
+        return BlockMorph.prototype.parseSpec(aBlockSpec).filter(each =>
+            each.indexOf('%') !== 0 || each.length === 1
+        ).join(' ');
     }
 
     function moreTextIn(aSlotSpec) {
@@ -4973,14 +4982,28 @@ SpriteMorph.prototype.blocksMatching = function (
         return ans;
     }
 
-    function relevance(aBlockLabel, aSearchString) {
+    function relevance(aBlockLabel, aSearchString, visibleLength) {
+        // answer a sortable string key, or -1 if the label doesn't match.
+        // matches are ranked by: whole-word match first, then by the
+        // position of the match, then by the length of the label
+        // (shorter first, so "clear" precedes "clear graphic effects").
+        // Because the search string is a substring of every match, the
+        // label length is equivalent to its edit distance from the search.
+        // If the match occurs in the visible part of the label only that
+        // part's length counts, otherwise (i.e. when matching text from an
+        // input slot's menu) the full searchable text counts.
         var lbl = ' ' + aBlockLabel.toLowerCase(),
             idx = lbl.indexOf(aSearchString),
+            len = aBlockLabel.length,
             atWord;
         if (idx === -1) {return -1; }
         atWord = (lbl.charAt(idx - 1) === ' ');
         if (strictly && !atWord) {return -1; }
-        return (atWord ? '1' : '2') + fillDigits(idx, 4, '0');
+        if (!isNil(visibleLength) && idx <= visibleLength) {
+            len = visibleLength;
+        }
+        return (atWord ? '1' : '2') + fillDigits(idx, 4, '0') +
+            fillDigits(len, 4, '0');
     }
 
     function primitive(selector) {
@@ -5001,9 +5024,10 @@ SpriteMorph.prototype.blocksMatching = function (
         blocksList.forEach(definition => {
             if (contains(types, definition.type)) {
                 var spec = definition.localizedSpec(),
-                    rel = relevance(labelOf(
-                        spec) + ' ' + definition.menuSearchWords(),
-                        search
+                    rel = relevance(
+                        labelOf(spec) + ' ' + definition.menuSearchWords(),
+                        search,
+                        visibleLabelOf(spec).length
                     );
                 if (rel !== -1) {
                     blocks.push([definition.templateInstance(), rel + '2']);
@@ -5018,7 +5042,11 @@ SpriteMorph.prototype.blocksMatching = function (
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
                 spec = BlockMorph.prototype.localizeBlockSpec(block.spec),
-                rel = relevance(labelOf(spec), search);
+                rel = relevance(
+                    labelOf(spec),
+                    search,
+                    visibleLabelOf(spec).length
+                );
             if (rel === -1 && block.alias) {
                 rel = relevance(block.alias, search);
             }
@@ -5040,7 +5068,7 @@ SpriteMorph.prototype.blocksMatching = function (
             blocks.push([reporterized, '']);
         }
     }
-    blocks.sort((x, y) => x[1] < y[1] ? -1 : 1);
+    blocks.sort((x, y) => x[1] < y[1] ? -1 : (x[1] > y[1] ? 1 : 0));
     blocks = blocks.map(each => each[0]);
     return blocks.filter(each =>
         !this.isHidingBlock(each) &&
