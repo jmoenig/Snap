@@ -4953,6 +4953,17 @@ SpriteMorph.prototype.blocksMatching = function (
         ).join(' ');
     }
 
+    function displayedLengthOf(aBlock) {
+        // answer the length of the block's text as displayed, i.e. its
+        // label plus the (default) contents shown in its input slots
+        return visibleLabelOf(aBlock.blockSpec).length +
+            aBlock.inputs().reduce((sum, slot) =>
+                sum + (slot instanceof InputSlotMorph ?
+                    slot.contents().text.length : 0),
+                0
+            );
+    }
+
     function moreTextIn(aSlotSpec) {
         var info = BlockMorph.prototype.labelParts[aSlotSpec] || {},
             menu = info.menu,
@@ -4982,16 +4993,23 @@ SpriteMorph.prototype.blocksMatching = function (
         return ans;
     }
 
-    function relevance(aBlockLabel, aSearchString, visibleLength) {
+    function relevance(
+        aBlockLabel,
+        aSearchString,
+        visibleLength, // optional, length of the label text on the block
+        displayedLength // optional, function answering the length of the
+                        // block's text as displayed, incl. slot contents
+    ) {
         // answer a sortable string key, or -1 if the label doesn't match.
         // matches are ranked by: whole-word match first, then by the
-        // position of the match, then by the length of the label
+        // position of the match, then by the length of the block's text
         // (shorter first, so "clear" precedes "clear graphic effects").
         // Because the search string is a substring of every match, the
         // label length is equivalent to its edit distance from the search.
-        // If the match occurs in the visible part of the label only that
-        // part's length counts, otherwise (i.e. when matching text from an
-        // input slot's menu) the full searchable text counts.
+        // If the match occurs in the visible part of the label the length
+        // of the text displayed on the block counts, otherwise (i.e. when
+        // matching text from an input slot's menu) the full searchable
+        // text counts.
         var lbl = ' ' + aBlockLabel.toLowerCase(),
             idx = lbl.indexOf(aSearchString),
             len = aBlockLabel.length,
@@ -5000,7 +5018,7 @@ SpriteMorph.prototype.blocksMatching = function (
         atWord = (lbl.charAt(idx - 1) === ' ');
         if (strictly && !atWord) {return -1; }
         if (!isNil(visibleLength) && idx <= visibleLength) {
-            len = visibleLength;
+            len = displayedLength ? displayedLength() : visibleLength;
         }
         return (atWord ? '1' : '2') + fillDigits(idx, 4, '0') +
             fillDigits(len, 4, '0');
@@ -5024,13 +5042,21 @@ SpriteMorph.prototype.blocksMatching = function (
         blocksList.forEach(definition => {
             if (contains(types, definition.type)) {
                 var spec = definition.localizedSpec(),
+                    template,
                     rel = relevance(
                         labelOf(spec) + ' ' + definition.menuSearchWords(),
                         search,
-                        visibleLabelOf(spec).length
+                        visibleLabelOf(spec).length,
+                        () => {
+                            template = definition.templateInstance();
+                            return displayedLengthOf(template);
+                        }
                     );
                 if (rel !== -1) {
-                    blocks.push([definition.templateInstance(), rel + '2']);
+                    blocks.push([
+                        template || definition.templateInstance(),
+                        rel + '2'
+                    ]);
                 }
             }
         })
@@ -5042,10 +5068,15 @@ SpriteMorph.prototype.blocksMatching = function (
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
                 spec = BlockMorph.prototype.localizeBlockSpec(block.spec),
+                template,
                 rel = relevance(
                     labelOf(spec),
                     search,
-                    visibleLabelOf(spec).length
+                    visibleLabelOf(spec).length,
+                    () => {
+                        template = primitive(selector);
+                        return displayedLengthOf(template);
+                    }
                 );
             if (rel === -1 && block.alias) {
                 rel = relevance(block.alias, search);
@@ -5055,7 +5086,7 @@ SpriteMorph.prototype.blocksMatching = function (
                     (!block.dev) &&
                     (!block.only || (block.only === this.constructor))
             ) {
-                blocks.push([primitive(selector), rel + '3']);
+                blocks.push([template || primitive(selector), rel + '3']);
             }
         }
     });
