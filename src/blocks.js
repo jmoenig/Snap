@@ -7888,11 +7888,13 @@ ReporterBlockMorph.prototype.snap = function (hand) {
     } else if (hand && hand.grabOrigin && scripts.rejectedInput(this)) {
         // dropped by hand on top of an input slot that rejected me,
         // e.g. the static variable dropdown of "set var to":
-        // slide back to where I was dragged from instead of
-        // visually covering the slot. Nothing has changed, so
-        // there is no drop to record for undrop / redrop
-        scripts.slideBack(this, hand.grabOrigin);
-        return;
+        // retreat along the way I was dragged in, instead of
+        // visually covering the slot
+        if (!scripts.retreat(this, hand.grabOrigin)) {
+            // slid all the way back to where I came from, so
+            // nothing has changed and there is no drop to record
+            return;
+        }
     }
     this.fixBlockColor();
     ReporterBlockMorph.uber.snap.call(this);
@@ -9160,11 +9162,51 @@ ScriptsMorph.prototype.rejectedInput = function (reporter) {
     );
 };
 
-ScriptsMorph.prototype.slideBack = function (reporter, situation) {
-    // slide the reporter back to where it was dragged from, the same
-    // way "undrop" does: to the spot or slot it came out of in a
-    // scripting pane, or, if it was dragged out of the palette,
-    // back into the palette where it vanishes
+ScriptsMorph.prototype.retreat = function (reporter, situation) {
+    // move a reporter that was dropped onto a slot which rejected it
+    // out of the way: glide it back along the way it was dragged in,
+    // from where it was dropped towards where it came from, just far
+    // enough that it no longer overlaps any other script in this pane,
+    // and answer true, so the move gets recorded as the drop. If there
+    // is no such spot inside the pane before reaching the origin, e.g.
+    // because the reporter came out of the very block it was dropped
+    // on, slide it all the way back instead, the way "undrop" does:
+    // into the slot or spot it came out of, or, if it was dragged
+    // out of the palette, back into the palette where it vanishes,
+    // and answer false
+    var start = reporter.position(),
+        end = situation.origin.position().add(situation.position),
+        fb = reporter.fullBounds(),
+        margin = this.cleanUpSpacing / 3,
+        others = this.children.filter(child =>
+            child !== reporter &&
+                (child instanceof BlockMorph ||
+                    child instanceof CommentMorph)
+        ),
+        steps = Math.ceil(start.distanceTo(end) / 2),
+        i, pos, area;
+
+    for (i = 1; i < steps; i += 1) {
+        pos = start.add(end.subtract(start).multiplyBy(i / steps)).round();
+        area = fb.translateBy(pos.subtract(start));
+        if (this.bounds.containsRectangle(area) &&
+            !others.some(other =>
+                other.fullBounds().intersects(area.expandBy(margin))
+            )
+        ) {
+            this.isAnimating = true;
+            reporter.glideTo(
+                pos,
+                null,
+                null,
+                () => {
+                    this.isAnimating = false;
+                    this.adjustBounds();
+                }
+            );
+            return true;
+        }
+    }
     this.isAnimating = true;
     reporter.slideBackTo(
         situation,
@@ -9179,6 +9221,7 @@ ScriptsMorph.prototype.slideBack = function (reporter, situation) {
             this.adjustBounds();
         }
     );
+    return false;
 };
 
 ScriptsMorph.prototype.closestBlock = function (comment, hand) {
