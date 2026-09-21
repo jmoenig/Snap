@@ -4,6 +4,7 @@
 
 ### 2026-09-21
 * German translation update
+* new dev version
 
 ## 12.1.3:
 * **Notable Fixes:**
