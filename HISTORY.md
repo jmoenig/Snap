@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-09-21
+* German translation update
+
 ## 12.1.3:
 * **Notable Fixes:**
     * fixed a visible stepping glitch when displaying intermediate custom reporter results
