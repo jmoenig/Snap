@@ -5815,8 +5815,10 @@ IDE_Morph.prototype.undelete = function (aSprite, pos) {
             aSprite.fixLayout();
             aSprite.rerender();
             this.sprites.add(aSprite);
-            this.corral.addSprite(aSprite);
-            this.selectSprite(aSprite);
+            if (!aSprite.isHiddenInCorral) {
+                this.corral.addSprite(aSprite);
+                this.selectSprite(aSprite);
+            }
             this.scene.updateTrash();
         }
     );
