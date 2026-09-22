@@ -11,6 +11,7 @@
 ### 2026-09-22
 * objects, gui, store: added ability to hide sprites in the corral via the corral-bar's context menu, use for pedagogical puzzles
 * incremented dev version to v12.2
+* prepared v12.2 release
 
 ### 2026-09-21
 * German translation update
