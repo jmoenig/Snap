@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-August-27';
+modules.objects = '2026-September-22';
 
 var SpriteMorph;
 var StageMorph;
@@ -3271,6 +3271,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.isTemporary = false; // indicate a temporary Scratch-style clone
     this.isCorpse = false; // indicate whether a sprite/clone has been deleted
     this.cloneOriginName = '';
+    this.isHiddeninCorral = false;
 
     // volume and stereo-pan support
     this.volume = 100;
@@ -5961,7 +5962,7 @@ SpriteMorph.prototype.userMenu = function () {
                 'make permanent and\nshow in the sprite corral'
             );
         }
-    } else {
+    } else if (!this.isHiddeninCorral) {
         menu.addItem("edit", 'edit');
     }
     menu.addLine();
@@ -8833,7 +8834,7 @@ SpriteMorph.prototype.receiveUserInteraction = function (
 };
 
 SpriteMorph.prototype.mouseDoubleClick = function () {
-    if (this.isTemporary) {return; }
+    if (this.isTemporary || this.isHiddeninCorral) {return; }
     this.edit();
 };
 
