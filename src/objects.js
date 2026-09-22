@@ -3271,7 +3271,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.isTemporary = false; // indicate a temporary Scratch-style clone
     this.isCorpse = false; // indicate whether a sprite/clone has been deleted
     this.cloneOriginName = '';
-    this.isHiddeninCorral = false;
+    this.isHiddenInCorral = false;
 
     // volume and stereo-pan support
     this.volume = 100;
@@ -5962,7 +5962,7 @@ SpriteMorph.prototype.userMenu = function () {
                 'make permanent and\nshow in the sprite corral'
             );
         }
-    } else if (!this.isHiddeninCorral) {
+    } else if (!this.isHiddenInCorral) {
         menu.addItem("edit", 'edit');
     }
     menu.addLine();
@@ -8834,7 +8834,7 @@ SpriteMorph.prototype.receiveUserInteraction = function (
 };
 
 SpriteMorph.prototype.mouseDoubleClick = function () {
-    if (this.isTemporary || this.isHiddeninCorral) {return; }
+    if (this.isTemporary || this.isHiddenInCorral) {return; }
     this.edit();
 };
 
