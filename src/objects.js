@@ -4500,11 +4500,18 @@ SpriteMorph.prototype.makeBlock = function () {
     dlg = new BlockDialogMorph(
         null,
         definition => {
+            var spec = definition.spec,
+                count = 1;
             if (definition.spec !== '') {
                 if (definition.isGlobal) {
                     stage.globalBlocks.push(definition);
                 } else {
                     this.customBlocks.push(definition);
+                }
+                // make sure the spec is unique
+                while (this.doubleDefinitionsFor(definition).length > 0) {
+                    count += 1;
+                    definition.spec = spec + ' (' + count + ')';
                 }
                 ide.flushPaletteCache();
                 ide.refreshEmptyCategories();
