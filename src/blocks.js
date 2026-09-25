@@ -13461,10 +13461,12 @@ TemplateSlotMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
     if (droppedMorph.selector === 'reportGetVar') {
         this.template().unflash(); // in case I was flashed as reorder target
         srcSlot = hand ? this.reorderSourceSlot(hand) : null;
+        // destroy the dropped copy before re-layouting, otherwise it still
+        // counts towards my full bounds and distorts the slot spacing
+        droppedMorph.destroy();
         if (srcSlot) {
             this.parent.moveSlot(srcSlot, this);
         }
-        droppedMorph.destroy();
     }
 };
 
