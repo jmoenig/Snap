@@ -13456,10 +13456,27 @@ TemplateSlotMorph.prototype.wantsDropOf = function (aMorph) {
     return aMorph.selector === 'reportGetVar';
 };
 
-TemplateSlotMorph.prototype.reactToDropOf = function (droppedMorph) {
+TemplateSlotMorph.prototype.reactToDropOf = function (droppedMorph, hand) {
+    var srcSlot;
     if (droppedMorph.selector === 'reportGetVar') {
+        this.template().unflash(); // in case I was flashed as reorder target
+        srcSlot = hand ? this.reorderSourceSlot(hand) : null;
+        if (srcSlot) {
+            this.parent.moveSlot(srcSlot, this);
+        }
         droppedMorph.destroy();
     }
+};
+
+TemplateSlotMorph.prototype.reorderSourceSlot = function (hand) {
+    // answer the sibling slot of my multi-arg parent from which
+    // a variable template is currently being dragged, if any,
+    // so dropping it onto me reorders the variables
+    var src = hand.grabOrigin ? hand.grabOrigin.origin : null;
+    return (src instanceof TemplateSlotMorph &&
+        src !== this &&
+        src.parent === this.parent &&
+        this.parent instanceof MultiArgMorph) ? src : null;
 };
 
 // TemplateSlotMorph visualizing scope:
@@ -13474,6 +13491,20 @@ TemplateSlotMorph.prototype.mouseLeave = function () {
     if (Process.prototype.enableSingleStepping) {
         this.unflashScope();
     }
+};
+
+TemplateSlotMorph.prototype.mouseEnterDragging = function (draggedMorph) {
+    // highlight myself as a reorder target when a sibling variable
+    // template is being dragged across me
+    if (draggedMorph &&
+            draggedMorph.selector === 'reportGetVar' &&
+            this.reorderSourceSlot(this.world().hand)) {
+        this.template().flash();
+    }
+};
+
+TemplateSlotMorph.prototype.mouseLeaveDragging = function () {
+    this.template().unflash();
 };
 
 TemplateSlotMorph.prototype.flashScope = function () {
@@ -15416,6 +15447,33 @@ MultiArgMorph.prototype.insertNewInputBefore = function (anInput, contents) {
         block.abstractBlockSpec()
     );
     return newPart;
+};
+
+MultiArgMorph.prototype.moveSlot = function (srcSlot, trgSlot) {
+    // move srcSlot to trgSlot's position, shifting the slots in between,
+    // e.g. for reordering the variable names of a "script variables" block
+    var srcIdx = this.children.indexOf(srcSlot),
+        trgIdx = this.children.indexOf(trgSlot),
+        block = this.parentThatIsA(BlockMorph),
+        sprite = block.scriptTarget();
+    if (this.infix || srcIdx < 0 || trgIdx < 0 || srcIdx === trgIdx) {
+        return;
+    }
+    this.children.splice(srcIdx, 1);
+    this.children.splice(trgIdx, 0, srcSlot);
+    this.fixLayout();
+    if (this.parent instanceof BlockMorph) {
+        this.parent.fixLabelColor();
+    }
+    sprite.recordUserEdit(
+        'scripts',
+        'poly slot',
+        'move',
+        block.abstractBlockSpec()
+    );
+    if (block.isCustomBlock) {
+        block.fireSlotEditedEvent(this);
+    }
 };
 
 // MultiArgMorph arity control:
