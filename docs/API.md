@@ -111,7 +111,7 @@ A page that embeds its own Snap! editor might be structured like this:
 </html>
 ```
 
-Note that in this setup you are explicitly creating an instance of the IDE and can simply assign it to a variable for further communication. Also note that when instantiating a new WorldMorph you can specify a flag indicating whether it is to take over all the available browser real-eastate or not.
+Note that in this setup you are explicitly creating an instance of the IDE and can simply assign it to a variable for further communication. Also note that when instantiating a new WorldMorph you can specify a flag indicating whether it is to take over all the available browser real-estate or not.
 
 You can configure the looks and behavior of the IDE by passing it a configuration dictionary object. Currently the following preferences are supported:
 
