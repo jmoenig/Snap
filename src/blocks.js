@@ -4660,6 +4660,11 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
                     inp.constant = old.constant;
                 }
             }
+        } else if (old instanceof BooleanSlotMorph &&
+                inp instanceof BooleanSlotMorph &&
+                !isNil(old.value)) {
+            // keep a toggled true / false state
+            inp.setContents(old.value);
         } else if (old instanceof CSlotMorph && inp instanceof CSlotMorph) {
             nb = old.nestedBlock();
             if (nb) {
