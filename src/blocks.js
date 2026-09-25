@@ -4665,6 +4665,42 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
             if (nb) {
                 inp.nestedBlock(nb.fullCopy());
             }
+        } else if (old instanceof CSlotMorph &&
+                inp instanceof MultiArgMorph &&
+                inp.slotSpec instanceof Array &&
+                inp.slotSpec.some(spec =>
+                    contains(['%c', '%cs', '%ca', '%loop'], spec))) {
+            // e.g. relabelling "if else" to "if" with variadic "else if"
+            // slots: expand a group of slots and nest the former C-slot's
+            // blocks in the new group's first C-slot ("else if <true>")
+            nb = old.nestedBlock();
+            if (nb) {
+                for (i = 0; i < inp.slotSpec.length; i += 1) {
+                    inp.addInput();
+                }
+                inp.inputs().find(
+                    slot => slot instanceof CommandSlotMorph
+                ).nestedBlock(nb.fullCopy());
+            }
+        } else if (old instanceof MultiArgMorph &&
+                inp instanceof CSlotMorph) {
+            // e.g. relabelling "if" with an "else if" branch to "if else":
+            // nest the first branch's blocks in the target C-slot and
+            // preserve any other blocks in the variadic input
+            old.inputs().forEach(slot => {
+                if (slot instanceof CommandSlotMorph) {
+                    nb = slot.nestedBlock();
+                    if (nb) {
+                        if (inp.nestedBlock()) {
+                            leftOver.push(nb);
+                        } else {
+                            inp.nestedBlock(nb.fullCopy());
+                        }
+                    }
+                } else if (slot instanceof ReporterBlockMorph) {
+                    leftOver.push(slot);
+                }
+            });
         } else if (old instanceof MultiArgMorph &&
                 inp instanceof MultiArgMorph &&
                 (old.slotSpec === inp.slotSpec) &&
