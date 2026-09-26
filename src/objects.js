@@ -15761,6 +15761,7 @@ WatcherMorph.prototype.init = function (
     this.version = null;
     this.objName = '';
     this.isGhosted = false; // transient, don't persist
+    this.owningProcess = null; // transient, don't persist
 
     // initialize inherited properties
     WatcherMorph.uber.init.call(
@@ -15838,9 +15839,20 @@ WatcherMorph.prototype.setSliderMax = function (num, noUpdate) {
 // WatcherMorph updating:
 
 WatcherMorph.prototype.update = function () {
-    var newValue, sprite, num, att,
+    var newValue, sprite, num, att, stage,
         isInherited = false;
 
+    if (this.owningProcess) {
+        // I watch a script variable, which goes out of scope when the
+        // process that showed me is gone from the thread manager
+        stage = this.parentThatIsA(StageMorph);
+        if (stage &&
+            !contains(stage.threads.processes, this.owningProcess)
+        ) {
+            this.destroy();
+            return;
+        }
+    }
     if (this.target && this.getter) {
         this.updateLabel();
         if (this.target instanceof VariableFrame) {
