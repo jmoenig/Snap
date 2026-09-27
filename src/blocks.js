@@ -4471,7 +4471,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
     menu = new MenuMorph(this);
     oldInputs = this.inputs();
     alternativeSelectors.forEach(alternative => {
-        var block, selector, offset;
+        var selector, offset;
         if (alternative instanceof Array) {
             selector = alternative[0];
             offset = -alternative[1];
@@ -4479,24 +4479,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
             selector = alternative;
             offset = 0;
         }
-        block = SpriteMorph.prototype.blockForSelector(selector, true);
-        block.restoreInputs(oldInputs, offset);
-        block.fixBlockColor(null, true);
-        block.addShadow(new Point(3, 3));
-        menu.addItem(
-            block.doWithAlpha(1, () => block.fullImage()),
-            () => {
-                var old = this.abstractBlockSpec();
-                this.setSelector(selector, -offset);
-                this.scriptTarget().recordUserEdit(
-                    'scripts',
-                    'block',
-                    'relabel',
-                    old,
-                    this.abstractBlockSpec()
-                );
-            }
-        );
+        this.addRelabelItems(menu, oldInputs, selector, offset);
     });
     menu.popup(this.world(), this.bottomLeft().subtract(new Point(
         8,
@@ -4504,11 +4487,66 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
     )));
 };
 
+BlockMorph.prototype.addRelabelItems = function (
+    menu,
+    oldInputs,
+    selector,
+    offset
+) {
+    // private - used only by relabel()
+    // add one menu item morphing me into the given selector, and, if one
+    // of my empty C-slots can alternatively be preserved as an expanded
+    // empty input group - e.g. relabelling "if else" with an empty else
+    // branch to "if" with an empty "else if <true>" arm - a second item
+    // offering that variant
+    var addItem = preserveEmpty => {
+            var block = SpriteMorph.prototype.blockForSelector(
+                selector,
+                true
+            );
+            block.restoreInputs(oldInputs, offset, preserveEmpty);
+            block.fixBlockColor(null, true);
+            block.addShadow(new Point(3, 3));
+            menu.addItem(
+                block.doWithAlpha(1, () => block.fullImage()),
+                () => {
+                    var old = this.abstractBlockSpec();
+                    this.setSelector(selector, -offset, preserveEmpty);
+                    this.scriptTarget().recordUserEdit(
+                        'scripts',
+                        'block',
+                        'relabel',
+                        old,
+                        this.abstractBlockSpec()
+                    );
+                }
+            );
+            return block;
+        },
+        base = addItem(false);
+    if (oldInputs.some((slot, i) => {
+        var trg = base.inputs()[i];
+        return slot instanceof CSlotMorph &&
+            !slot.nestedBlock() &&
+            trg instanceof MultiArgMorph &&
+            trg.slotSpec instanceof Array &&
+            trg.slotSpec.some(spec =>
+                contains(['%c', '%cs', '%ca', '%loop'], spec)) &&
+            !trg.inputs().length;
+    })) {
+        addItem(true);
+    }
+};
 
-BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
+
+BlockMorph.prototype.setSelector = function (
+    aSelector,
+    inputOffset = 0,
+    preserveEmpty = false
+) {
     // private - used only for relabel()
     // input offset is optional and can be used to shift the inputs
-    // to be restored
+    // to be restored; preserveEmpty is passed on to restoreInputs()
     var oldInputs = this.inputs(),
         scripts = this.parentThatIsA(ScriptsMorph),
         surplus,
@@ -4535,7 +4573,7 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     }
 
     // restore previous inputs
-    surplus = this.restoreInputs(oldInputs, -inputOffset);
+    surplus = this.restoreInputs(oldInputs, -inputOffset, preserveEmpty);
     this.fixLabelColor();
     this.fixLayout();
 
@@ -4548,12 +4586,18 @@ BlockMorph.prototype.setSelector = function (aSelector, inputOffset = 0) {
     }
 };
 
-BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
+BlockMorph.prototype.restoreInputs = function (
+    oldInputs,
+    offset = 0,
+    preserveEmpty = false
+) {
     // private - used only for relabel()
     // try to restore my previous inputs when my spec has been changed
     // return an Array of left-over blocks, if any
     // optional offset parameter allows for shifting the range
-    // of inputs to be restored
+    // of inputs to be restored; optional preserveEmpty parameter makes
+    // an empty C-slot expand a group-type variadic target slot, e.g.
+    // keeping an empty "else" branch as an empty "else if <true>" arm
     var old, nb, i, src, trg,
         element = this,
         inputs = this.inputs(),
@@ -4677,15 +4721,18 @@ BlockMorph.prototype.restoreInputs = function (oldInputs, offset = 0) {
                     contains(['%c', '%cs', '%ca', '%loop'], spec))) {
             // e.g. relabelling "if else" to "if" with variadic "else if"
             // slots: expand a group of slots and nest the former C-slot's
-            // blocks in the new group's first C-slot ("else if <true>")
+            // blocks in the new group's first C-slot ("else if <true>");
+            // an empty C-slot expands the group only if preserveEmpty
             nb = old.nestedBlock();
-            if (nb) {
+            if (nb || preserveEmpty) {
                 for (i = 0; i < inp.slotSpec.length; i += 1) {
                     inp.addInput();
                 }
-                inp.inputs().find(
-                    slot => slot instanceof CommandSlotMorph
-                ).nestedBlock(nb.fullCopy());
+                if (nb) {
+                    inp.inputs().find(
+                        slot => slot instanceof CommandSlotMorph
+                    ).nestedBlock(nb.fullCopy());
+                }
             }
         } else if (old instanceof MultiArgMorph &&
                 inp instanceof CSlotMorph) {
