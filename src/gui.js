@@ -87,11 +87,11 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-September-22';
+modules.gui = '2026-October-01';
 
 // Declarations
 
-var SnapVersion = '12.2.0';
+var SnapVersion = '12.2.1';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -1619,6 +1619,7 @@ IDE_Morph.prototype.createControlBar = function () {
 
     this.controlBar.refreshSlider = function () {
         if (Process.prototype.enableSingleStepping && !myself.isAppMode) {
+            slider.value = Process.prototype.flashTime * 100 + 1;
             slider.fixLayout();
             slider.rerender();
             slider.show();

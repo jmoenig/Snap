@@ -66,7 +66,7 @@ CustomHatBlockMorph, SymbolMorph, MenuMorph, MorphicPreferences*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-September-10';
+modules.threads = '2026-October-01';
 
 var ThreadManager;
 var Process;
@@ -7618,6 +7618,7 @@ Process.prototype.reportGet = function (query) {
             );
         case 'processes':
             stage = thisObj.parentThatIsA(StageMorph);
+            stage.threads.removeTerminatedProcesses();
             return new List(stage ? stage.threads.processes : []);
         case 'solutions':
             if (thisObj.solution) {

@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 12.2.1:
+* no notables changes
+* no fixes
+* just some extension tweaks for evil educators with no courage or imagination
+
+### 2026-10-01
+* extension tweaks for evil educators with no courage or imagination
+
 ## 12.2.0:
 * **New Features:**
     * ability to hide sprites in the corral via the corral-bar's context menu, use for pedagogical puzzles
