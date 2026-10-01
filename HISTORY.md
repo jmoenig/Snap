@@ -1,6 +1,11 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **New Features:**
+    * keyboard shortcuts for zooming blocks: ctrl/cmd + and - step through the zoom presets, ctrl/cmd 0 toggles between normal size and the last used presentation zoom
+
+### 2026-10-01
+* objects, gui, morphic: keyboard shortcuts for zooming blocks (ctrl/cmd +, -, 0)
 
 ## 12.2.2:
 * **Notable Changes:**
