@@ -8345,7 +8345,7 @@ IDE_Morph.prototype.looksMenu = function () {
         'Magnification') + '...',
         'userZoom'
     );
-    menu.addItem('Zoom blocks...', 'userSetBlocksScale');
+    menu.addPair('Zoom blocks...', 'userSetBlocksScale', '^+ ^- ^0');
     menu.addItem('Fade blocks...', 'userFadeBlocks');
     if (shiftClicked) {
         menu.addLine();
@@ -8423,7 +8423,7 @@ IDE_Morph.prototype.accessibilityMenu = function () {
         'Magnification') + '...',
         'userZoom'
     );
-    menu.addItem('Zoom blocks...', 'userSetBlocksScale');
+    menu.addPair('Zoom blocks...', 'userSetBlocksScale', '^+ ^- ^0');
     menu.addItem('Fade blocks...', 'userFadeBlocks');
     menu.addItem(
         'Afterglow blocks...',
@@ -9166,6 +9166,36 @@ IDE_Morph.prototype.setBlocksScale = function (num, noSave) {
         );
     if (!noSave) {
         this.saveSetting('zoom', num);
+    }
+};
+
+// IDE_Morph blocks zoom keyboard shortcuts (ctrl/cmd +, -, 0)
+
+IDE_Morph.prototype.blocksZoomSteps = [1, 1.2, 1.4, 2, 4, 8, 10];
+
+IDE_Morph.prototype.zoomBlocksIn = function () {
+    var current = +SyntaxElementMorph.prototype.scale,
+        next = this.blocksZoomSteps.find(step => step > current);
+    if (next) {this.setBlocksScale(next); }
+};
+
+IDE_Morph.prototype.zoomBlocksOut = function () {
+    var current = +SyntaxElementMorph.prototype.scale,
+        prev = this.blocksZoomSteps.filter(step => step < current).pop();
+    if (prev) {this.setBlocksScale(prev); }
+};
+
+IDE_Morph.prototype.toggleBlocksZoom = function () {
+    // switch between normal size and the most recently used larger
+    // "presentation" zoom, defaulting to 1.4x the first time
+    var current = +SyntaxElementMorph.prototype.scale,
+        zoom;
+    if (current === 1) {
+        zoom = +this.getSetting('presentationZoom') || 1.4;
+        this.setBlocksScale(Math.max(1, Math.min(zoom, 12)));
+    } else {
+        this.saveSetting('presentationZoom', current);
+        this.setBlocksScale(1);
     }
 };
 
