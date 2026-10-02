@@ -373,6 +373,7 @@ IDE_Morph.prototype.init = function (config) {
     this.shield = null;
 
     this.savingPreferences = true; // for bh's infamous "Eisenbergification"
+    this.presentationZoom = null; // last blocks zoom > 1, for ctrl/cmd-0
 
     this.bulkDropInProgress = false; // for handling multiple file-drops
     this.cachedSceneFlag = null; // for importing multiple scenes at once
@@ -9151,6 +9152,9 @@ IDE_Morph.prototype.setBlocksScale = function (num, noSave) {
     SpriteMorph.prototype.initBlocks();
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
+    if (+num !== 1) {
+        this.presentationZoom = +num; // remember for toggling with ctrl-0
+    }
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.refreshEmptyCategories();
@@ -9166,6 +9170,9 @@ IDE_Morph.prototype.setBlocksScale = function (num, noSave) {
         );
     if (!noSave) {
         this.saveSetting('zoom', num);
+        if (+num !== 1) {
+            this.saveSetting('presentationZoom', num);
+        }
     }
 };
 
@@ -9187,14 +9194,16 @@ IDE_Morph.prototype.zoomBlocksOut = function () {
 
 IDE_Morph.prototype.toggleBlocksZoom = function () {
     // switch between normal size and the most recently used larger
-    // "presentation" zoom, defaulting to 1.4x the first time
+    // "presentation" zoom, however it was set, defaulting to 1.4x if
+    // blocks haven't been zoomed yet in this session or a saved one
     var current = +SyntaxElementMorph.prototype.scale,
         zoom;
     if (current === 1) {
-        zoom = +this.getSetting('presentationZoom') || 1.4;
+        zoom = this.presentationZoom ||
+            +this.getSetting('presentationZoom') ||
+            1.4;
         this.setBlocksScale(Math.max(1, Math.min(zoom, 12)));
     } else {
-        this.saveSetting('presentationZoom', current);
         this.setBlocksScale(1);
     }
 };
