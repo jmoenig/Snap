@@ -11236,7 +11236,9 @@ StageMorph.prototype.scheduleFrame = function () {
     this.threads.stepHalos();
 
     if (this.isFastTracked && this.threads.processes.length) {
-        while (this.isFastTracked && (Date.now() - this.lastTime) < 16.7) {
+        while (this.isFastTracked && !this.threads.isPaused() &&
+                (Date.now() - this.lastTime) < 16.7) {
+            // stop early when paused, e.g. by a breakpoint
             this.stepGenericConditions();
             this.threads.step(); // approx. 60 fps
             this.twostep(); // double-clock event hats
