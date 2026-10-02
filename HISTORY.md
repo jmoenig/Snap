@@ -4,10 +4,12 @@
 
 * **Notable Changes:**
     * tables ADT library: added "export" option to tables' context menus
+    * neural networks & plot bars libraries: updated the "plot bars" command - removed input type enforcing
 
 ### 2026-10-02
 * tables: added "export" option to table's context menus (for table ADTs)
 * neural networks library: updated the "plot bars" command - removed input type enforcing
+* plot bars library: updated the "plot bars" command - removed input type enforcing
 
 ## 12.2.1:
 * no notables changes
