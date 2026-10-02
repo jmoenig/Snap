@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, Process, localize, display*/
 
 /*jshint esversion: 11*/
 
-modules.tables = '2026-August-17';
+modules.tables = '2026-October-02';
 
 var Table;
 var TableCellMorph;
@@ -1159,7 +1159,8 @@ TableMorph.prototype.columnAt = function (relativeX) {
 TableMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
-        ide = detect(world.children, m => m instanceof IDE_Morph);
+        ide = detect(world.children, m => m instanceof IDE_Morph),
+        raw;
 
     if (ide.isAppMode) {return; }
     if (this.parentThatIsA(TableDialogMorph)) {
@@ -1196,6 +1197,31 @@ TableMorph.prototype.userMenu = function () {
                     }
                 }
             );
+        } else if (this.table instanceof Table) {
+            raw = new List().cons(
+                new List(this.table.colNames),
+                this.table.toList()
+            );
+            if (raw.canBeJSON()) {
+                menu.addItem(
+                    'export',
+                    () => {
+                        if (raw.canBeCSV()) {
+                            ide.saveFileAs(
+                                raw.asCSV(),
+                                'text/csv;charset=utf-8', // RFC 4180
+                                localize('data') // name
+                            );
+                        } else {
+                            ide.saveFileAs(
+                                raw.asJSON(true), // guessObjects
+                                'text/json;charset=utf-8',
+                                localize('data') // name
+                            );
+                        }
+                    }
+                );
+            }
         }
         menu.addItem('open in another dialog...', 'openInDialog');
         return menu;
@@ -1237,6 +1263,31 @@ TableMorph.prototype.userMenu = function () {
             );
         }
         menu.addLine();
+    } else if (this.table instanceof Table) {
+        raw = new List().cons(
+            new List(this.table.colNames),
+            this.table.toList()
+        );
+        if (raw.canBeJSON()) {
+            menu.addItem(
+                'export',
+                () => {
+                    if (raw.canBeCSV()) {
+                        ide.saveFileAs(
+                            raw.asCSV(),
+                            'text/csv;charset=utf-8', // RFC 4180
+                            localize('data') // name
+                        );
+                    } else {
+                        ide.saveFileAs(
+                            raw.asJSON(true), // guessObjects
+                            'text/json;charset=utf-8',
+                            localize('data') // name
+                        );
+                    }
+                }
+            );
+        }
     }
     menu.addItem('open in dialog...', 'openInDialog');
     return menu;

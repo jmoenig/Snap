@@ -2,6 +2,12 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * tables ADT library: added "export" option to tables' context menus
+
+### 2026-10-02
+* tables: added "export" option to table's context menus (for table ADTs)
+
 ## 12.2.1:
 * no notables changes
 * no fixes
