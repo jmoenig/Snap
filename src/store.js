@@ -839,28 +839,34 @@ SnapSerializer.prototype.loadScene = function (
 SnapSerializer.prototype.loadBlocks = function (
     xmlString,
     targetStage,
-    forPreview
+    forPreview,
+    origin
 ) { // public - answer a new dictionary of custom block definitions
     // represented by the given XML String
     // forPreview is an optional Boolean flag that prevents customized
     // primitives from being installed when merely previewing the blocks
     // of a library before actually importing them
+    // origin is an optional provenance string ("<kind>:<identifier>")
+    // recorded on every definition that doesn't already carry one
     var model = this.parse(xmlString);
     if (+model.attributes.version > this.version) {
         throw 'Module uses newer version of Serializer';
     }
-    return this.loadBlocksModel(model, targetStage, forPreview);
+    return this.loadBlocksModel(model, targetStage, forPreview, origin);
 };
 
 SnapSerializer.prototype.loadBlocksModel = function (
     model,
     targetStage,
-    forPreview
+    forPreview,
+    origin
 ) { // public - answer a new dictionary of custom block definitions
     // represented by the given already parsed XML Node,
     // forPreview is an optional Boolean flag that prevents customized
     // primitives from being installed when merely previewing the blocks
     // of a library before actually importing them
+    // origin is an optional provenance string ("<kind>:<identifier>")
+    // recorded on every definition that doesn't already carry one
     var stage, varModel, varFrame, localVarFrame;
 
     this.scene = new Scene();
@@ -879,6 +885,13 @@ SnapSerializer.prototype.loadBlocksModel = function (
     if (model.local) {
         this.loadCustomBlocks(stage, model.local, false); // not global
         this.populateCustomBlocks( stage, model.local, false); // not global
+    }
+    if (origin) {
+        stage.globalBlocks.concat(stage.customBlocks).forEach(def => {
+            if (!def.origin) {
+                def.origin = origin;
+            }
+        });
     }
     model.primitives = model.childNamed('primitives');
     if (model.primitives && !forPreview) {
@@ -1209,6 +1222,7 @@ SnapSerializer.prototype.loadCustomBlocks = function (
         definition.enforceTypes = (child.attributes.strict === 'true') || false;
         definition.spaceAbove = (child.attributes.space === 'true') || false;
         definition.semantics = child.attributes.semantics || null;
+        definition.origin = child.attributes.origin || null;
         definition.isGlobal = (isGlobal === true);
         if (isDispatch) {
             object.inheritedMethodsCache.push(definition);
@@ -2780,7 +2794,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
     }
 
     return serializer.format(
-        '<block-definition s="@" type="@" category="@"%%%%%%%>' +
+        '<block-definition s="@" type="@" category="@"%%%%%%%%>' +
             '%' +
             (this.variableNames.length ? '<variables>%</variables>' : '@') +
             '<header>@</header>' +
@@ -2805,6 +2819,7 @@ CustomBlockDefinition.prototype.toXML = function (serializer) {
         this.enforceTypes ? ' strict="true"' : '',
         this.type === 'hat' && this.semantics === 'rule' ?
             ' semantics="rule"' : '',
+        this.origin ? serializer.format(' origin="@"', this.origin) : '',
         this.comment ? this.comment.toXML(serializer) : '',
         (this.variableNames.length ?
                 serializer.store(new List(this.variableNames)) : ''),

@@ -589,7 +589,8 @@ IDE_Morph.prototype.openIn = function (world) {
                             if (hasImportanbleCode(embeddedData)) {
                                 return this.rawOpenScriptString(
                                     embeddedData,
-                                    true
+                                    true,
+                                    'url:' + hash
                                 );
                             }
                         } else {
@@ -635,7 +636,8 @@ IDE_Morph.prototype.openIn = function (world) {
                                     this.rawOpenBlocksString(
                                         projectData,
                                         null, // name, optional
-                                        true  // silently
+                                        true, // silently
+                                        'url:' + hash
                                     );
                                 }
                                 this.hasChangedMedia = true;
@@ -3379,12 +3381,17 @@ IDE_Morph.prototype.droppedAudio = function (anAudio, name) {
     }
 };
 
-IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
+IDE_Morph.prototype.droppedText = function (aString, name, fileType, origin) {
+    // origin is an optional provenance string ("<kind>:<identifier>")
+    // recorded on imported custom block definitions, defaults to the
+    // dropped file's name
     if (this.config.noImports) {return; }
 
     var lbl = name ? name.split('.')[0] : '',
         ext = name ? name.slice(name.lastIndexOf('.') + 1).toLowerCase() : '',
         setting = this.isAddingScenes;
+
+    origin = origin || (name ? 'file:' + name : 'import');
 
     // handle the special situation of adding a scene to the current project
     if (this.isAddingNextScene) {
@@ -3419,10 +3426,10 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
     this.recordUnsavedChanges();
 
     if (aString.indexOf('<blocks') === 0) {
-        return this.openBlocksString(aString, lbl, true);
+        return this.openBlocksString(aString, lbl, true, origin);
     }
     if (aString.indexOf('<sprites') === 0) {
-        return this.openSpritesString(aString);
+        return this.openSpritesString(aString, origin);
     }
     if (aString.indexOf('<media') === 0) {
         return this.openMediaString(aString);
@@ -3434,7 +3441,7 @@ IDE_Morph.prototype.droppedText = function (aString, name, fileType) {
         return this.openScriptsOnlyString(aString);
     }
     if (aString.indexOf('<script') === 0) {
-        return this.openScriptString(aString);
+        return this.openScriptString(aString, origin);
     }
 
     // check for encoded data-sets, CSV, JSON
@@ -7043,30 +7050,37 @@ IDE_Morph.prototype.rawOpenCloudDataString = function (str) {
     this.isAddingNextScene = false;
 };
 
-IDE_Morph.prototype.openBlocksString = function (str, name, silently) {
+IDE_Morph.prototype.openBlocksString = function (str, name, silently, origin) {
     var msg;
     this.nextSteps([
         () => msg = this.showMessage('Opening blocks...'),
         () => {
-            this.rawOpenBlocksString(str, name, silently);
+            this.rawOpenBlocksString(str, name, silently, origin);
             msg.destroy();
         }
     ]);
 };
 
-IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
-    // name is optional (string), so is silently (bool)
+IDE_Morph.prototype.rawOpenBlocksString = function (
+    str,
+    name,
+    silently,
+    origin
+) {
+    // name is optional (string), so is silently (bool) and origin,
+    // an optional provenance string ("<kind>:<identifier>") recorded
+    // on the imported custom block definitions
     var blocks;
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
-            blocks = this.serializer.loadBlocks(str, this.stage);
+            blocks = this.serializer.loadBlocks(str, this.stage, false, origin);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        blocks = this.serializer.loadBlocks(str, this.stage);
+        blocks = this.serializer.loadBlocks(str, this.stage, false, origin);
     }
     if (silently) {
         blocks.global.forEach(def => {
@@ -7108,40 +7122,47 @@ IDE_Morph.prototype.rawOpenBlocksString = function (str, name, silently) {
     this.autoLoadExtensions();
 };
 
-IDE_Morph.prototype.openSpritesString = function (str) {
+IDE_Morph.prototype.openSpritesString = function (str, origin) {
     var msg;
     this.nextSteps([
         () => msg = this.showMessage('Opening sprite...'),
         () => {
-            this.rawOpenSpritesString(str);
+            this.rawOpenSpritesString(str, origin);
             msg.destroy();
         },
     ]);
 };
 
-IDE_Morph.prototype.rawOpenSpritesString = function (str) {
+IDE_Morph.prototype.rawOpenSpritesString = function (str, origin) {
+    // origin is an optional provenance string ("<kind>:<identifier>")
+    // recorded on the custom block definitions the sprites depend on
     this.toggleAppMode(false);
     this.spriteBar.tabBar.tabTo('scripts');
     if (Process.prototype.isCatchingErrors) {
         try {
-            this.deserializeSpritesString(str);
+            this.deserializeSpritesString(str, origin);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        this.deserializeSpritesString(str);
+        this.deserializeSpritesString(str, origin);
     }
     this.autoLoadExtensions();
 };
 
-IDE_Morph.prototype.deserializeSpritesString = function (str) {
+IDE_Morph.prototype.deserializeSpritesString = function (str, origin) {
     var xml = this.serializer.parse(str, true), // assert version
         blocksModel = xml.childNamed('blocks'),
         blocks;
 
     if (blocksModel) {
         // load the custom block definitions the sprites depend on
-        blocks = this.serializer.loadBlocksModel(blocksModel, this.stage);
+        blocks = this.serializer.loadBlocksModel(
+            blocksModel,
+            this.stage,
+            false,
+            origin
+        );
         blocks.global.forEach(def => {
             def.receiver = this.stage;
             this.stage.globalBlocks.push(def);
@@ -7178,29 +7199,31 @@ IDE_Morph.prototype.openMediaString = function (str) {
     this.showMessage('Imported Media Module.', 2);
 };
 
-IDE_Morph.prototype.openScriptString = function (str) {
+IDE_Morph.prototype.openScriptString = function (str, origin) {
     var msg;
     this.nextSteps([
         () => msg = this.showMessage('Opening script...'),
         () => {
-            this.rawOpenScriptString(str);
+            this.rawOpenScriptString(str, false, origin);
             msg.destroy();
         }
     ]);
 };
 
-IDE_Morph.prototype.rawOpenScriptString = function (str, silently) {
+IDE_Morph.prototype.rawOpenScriptString = function (str, silently, origin) {
+    // origin is an optional provenance string ("<kind>:<identifier>")
+    // recorded on the custom block definitions the script depends on
     var world = this.world(),
         script;
 
     if (Process.prototype.isCatchingErrors) {
         try {
-            script = this.deserializeScriptString(str);
+            script = this.deserializeScriptString(str, origin);
         } catch (err) {
             this.showMessage('Load failed: ' + err);
         }
     } else {
-        script = this.deserializeScriptString(str);
+        script = this.deserializeScriptString(str, origin);
     }
     script.fixBlockColor(null, true);
     this.spriteBar.tabBar.tabTo('scripts');
@@ -7221,7 +7244,7 @@ IDE_Morph.prototype.rawOpenScriptString = function (str, silently) {
     this.autoLoadExtensions();
 };
 
-IDE_Morph.prototype.deserializeScriptString = function (str) {
+IDE_Morph.prototype.deserializeScriptString = function (str, origin) {
     var xml = this.serializer.parse(str, true), // assert version
         blocksModel = xml.childNamed('blocks'),
         scriptModel = xml.childNamed('script') || xml,
@@ -7229,7 +7252,12 @@ IDE_Morph.prototype.deserializeScriptString = function (str) {
 
     if (blocksModel) {
         // load the custom block definitions the script depends on
-        blocks = this.serializer.loadBlocksModel(blocksModel, this.stage);
+        blocks = this.serializer.loadBlocksModel(
+            blocksModel,
+            this.stage,
+            false,
+            origin
+        );
         blocks.global.forEach(def => {
             def.receiver = this.stage;
             this.stage.globalBlocks.push(def);
@@ -12076,7 +12104,12 @@ LibraryImportDialogMorph.prototype.importLibrary = function () {
     ide.getURL(
         ide.resourceURL('libraries', selectedLibrary),
         libraryText => {
-            ide.droppedText(libraryText, libraryName);
+            ide.droppedText(
+                libraryText,
+                libraryName,
+                '',
+                'library:' + selectedLibrary
+            );
             this.isLoadingLibrary = true;
         }
     );
