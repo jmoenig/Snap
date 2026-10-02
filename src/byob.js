@@ -181,6 +181,11 @@ function CustomBlockDefinition(spec, receiver) {
     // allow hat blocks to distinguish between "events" (default) and "rules"
     this.semantics = null;
 
+    // provenance: null if authored in this project, otherwise a string
+    // "<kind>:<identifier>" naming where the definition was imported from,
+    // e.g. "library:iteration-composition.xml", "file:my blocks.xml"
+    this.origin = null;
+
     // don't serialize (not needed for functionality):
     this.receiver = receiver || null; // for serialization only (pointer)
     this.editorDimensions = null; // a rectangle, last bounds of the editor
@@ -1776,7 +1781,7 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
         rcvr = this.scriptTarget(),
         myself = this,
         shiftClicked = this.world().currentKey === 16,
-        dlg, menu, def;
+        dlg, menu, def, imported;
 
     function addOption(label, toggle, test, onHint, offHint) {
         menu.addItem(
@@ -2083,8 +2088,31 @@ CustomCommandBlockMorph.prototype.userMenu = function () {
             monitor(vName)
         );
     }
+    imported = this.isGlobal ? this.definition
+        : rcvr.getMethod(this.blockSpec);
+    if (imported && imported.origin) {
+        menu.addItem(
+            "imported from...",
+            () => this.showOrigin(imported),
+            'show where this block\nwas imported from'
+        );
+    }
     menu.addItem("edit...", 'edit'); // works also for prototypes
     return menu;
+};
+
+CustomCommandBlockMorph.prototype.showOrigin = function (definition) {
+    // inform the user where the given imported definition came from
+    var origin = definition.origin || '',
+        idx = origin.indexOf(':'),
+        kind = idx > -1 ? origin.slice(0, idx) : origin,
+        id = idx > -1 ? origin.slice(idx + 1) : '';
+    new DialogBoxMorph().inform(
+        'Imported block',
+        localize('imported from') + ' ' + localize(kind) +
+            (id ? ':\n' + id : ''),
+        this.world()
+    );
 };
 
 CustomCommandBlockMorph.prototype.moveInPalette = function (dir = 'up') {
@@ -2164,6 +2192,8 @@ CustomCommandBlockMorph.prototype.duplicateBlockDefinition = function () {
             }
         });
     }
+
+    dup.origin = null; // a duplicate is the user's own block
 
     if (this.isGlobal) {
         ide.stage.globalBlocks.push(dup);
@@ -2492,6 +2522,9 @@ CustomReporterBlockMorph.prototype.isInUse
 CustomReporterBlockMorph.prototype.userMenu
     = CustomCommandBlockMorph.prototype.userMenu;
 
+CustomReporterBlockMorph.prototype.showOrigin
+    = CustomCommandBlockMorph.prototype.showOrigin;
+
 CustomReporterBlockMorph.prototype.moveInPalette =
     CustomCommandBlockMorph.prototype.moveInPalette;
 
@@ -2656,6 +2689,9 @@ CustomHatBlockMorph.prototype.attachTargets
 
 CustomHatBlockMorph.prototype.userMenu
     = CustomCommandBlockMorph.prototype.userMenu;
+
+CustomHatBlockMorph.prototype.showOrigin
+    = CustomCommandBlockMorph.prototype.showOrigin;
 
 CustomHatBlockMorph.prototype.moveInPalette =
     CustomCommandBlockMorph.prototype.moveInPalette;
