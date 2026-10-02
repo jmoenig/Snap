@@ -2342,6 +2342,9 @@ Process.prototype.doShowVar = function (varName, context) {
             if (watcher !== null) {
                 watcher.show();
                 watcher.fixLayout(); // re-hide hidden parts
+                if (watcher.isTemporary()) {
+                    watcher.owningProcess = this;
+                }
                 return;
             }
             // if no watcher exists, create a new one
@@ -2366,6 +2369,9 @@ Process.prototype.doShowVar = function (varName, context) {
                 watcher.setTop(others[others.length - 1].bottom());
             }
             stage.add(watcher);
+            if (watcher.isTemporary()) {
+                watcher.owningProcess = this;
+            }
             watcher.fixLayout();
             watcher.rerender();
         }
