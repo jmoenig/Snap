@@ -37,7 +37,7 @@
 
 */
 
-/*global modules, Morph, Point, radians, ZERO, BLACK*/
+/*global modules, Morph, Point, radians, ZERO, BLACK, Color*/
 
 /*jshint esversion: 6*/
 
@@ -136,6 +136,8 @@ SymbolMorph.prototype.names = [
     'arrowRight',
     'arrowRightOutline',
     'arrowRightThin',
+    'stepIn',
+    'stepOut',
     'robot',
     'magnifyingGlass',
     'magnifierOutline',
@@ -481,6 +483,12 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'arrowRightThin':
         this.renderSymbolArrowRightThin(ctx, aColor);
+        break;
+    case 'stepIn':
+        this.renderSymbolStepIn(ctx, aColor);
+        break;
+    case 'stepOut':
+        this.renderSymbolStepOut(ctx, aColor);
         break;
     case 'robot':
         this.renderSymbolRobot(ctx, aColor);
@@ -1872,6 +1880,71 @@ SymbolMorph.prototype.renderSymbolArrowUp = function (ctx, color) {
     ctx.lineTo(w * 0.65, h - l);
     ctx.lineTo(w * 0.35, h - l);
     ctx.lineTo(w * 0.35, n);
+    ctx.closePath();
+    ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolStepIn = function (ctx, color) {
+    // draw an arrow pointing into a command block
+    this.renderStepInOutSymbol(ctx, color, false);
+};
+
+SymbolMorph.prototype.renderSymbolStepOut = function (ctx, color) {
+    // draw an arrow pointing out of a command block
+    this.renderStepInOutSymbol(ctx, color, true);
+};
+
+SymbolMorph.prototype.renderStepInOutSymbol = function (ctx, color, isOut) {
+    var w = this.symbolWidth(),
+        h = this.size;
+
+    // block
+    ctx.save();
+    ctx.translate(0.2 * w, h - this.size * 0.3);
+    this.drawStepBlockShape(ctx);
+    ctx.restore();
+
+    // arrow
+    ctx.save();
+    ctx.translate(0.25 * w, 0.25 * h);
+    ctx.rotate(radians(-45));
+    ctx.translate(-w / 2, -0.5 * h);
+    if (isOut) {
+        this.renderSymbolArrowUp(ctx, color);
+    } else {
+        this.renderSymbolArrowDown(ctx, color);
+    }
+    ctx.restore();
+};
+
+SymbolMorph.prototype.drawStepBlockShape = function (ctx) {
+    // a single command block, always amber to set it apart from the arrow
+    var step = this.size * 0.1,
+        side = this.size * 0.4,
+        right = this.symbolWidth();
+
+    ctx.fillStyle = new Color(220, 170, 67).toString();
+    ctx.beginPath();
+
+    // top
+    ctx.moveTo(0, step);
+    ctx.lineTo(step * 2, 0);
+    ctx.lineTo(step * 3, 0);
+    ctx.lineTo(step * 5, step);
+    ctx.lineTo(step * 6, step);
+    ctx.lineTo(right, step);
+
+    // right
+    ctx.lineTo(right, side);
+
+    // bottom
+    ctx.lineTo(step * 6, side);
+    ctx.lineTo(step * 5, step + side);
+    ctx.lineTo(step * 3, step + side);
+    ctx.lineTo(step * 2, side);
+    ctx.lineTo(0, side);
+
+    // left
     ctx.closePath();
     ctx.fill();
 };
