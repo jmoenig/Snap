@@ -89,7 +89,7 @@ IDE_Morph*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2026-March-03';
+modules.widgets = '2026-October-03';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2685,6 +2685,16 @@ DialogBoxMorph.prototype.getInput = function () {
 DialogBoxMorph.prototype.justDropped = function (hand) {
     hand.world.keyboardFocus = this;
     this.edit();
+};
+
+DialogBoxMorph.prototype.reactToClickInside = function () {
+    // bring myself to the front when clicked anywhere inside,
+    // e.g. when several overlapping block editors are open
+    var owner = this.parent;
+    if (owner && owner.children[owner.children.length - 1] !== this) {
+        owner.add(this);
+        this.fullChanged();
+    }
 };
 
 DialogBoxMorph.prototype.destroy = function () {

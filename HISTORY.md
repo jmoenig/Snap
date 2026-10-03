@@ -1,6 +1,12 @@
 # Snap! (BYOB) History
 
 ## in development:
+* **Notable Changes:**
+    * clicking anywhere inside a dialog box (e.g. a block editor) brings it to the front
+
+### 2026-10-03
+* morphic: new optional "reactToClickInside" hook, invoked on the clicked morph and all its owners on mouse-down
+* widgets: dialog boxes come to the front when clicked anywhere inside them, e.g. overlapping block editors
 
 ## 12.2.2:
 * **Notable Changes:**
