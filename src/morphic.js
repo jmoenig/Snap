@@ -5798,6 +5798,11 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.cancel();
     } else if (keyName === "Enter" && (singleLineText || shift)) {
         this.accept();
+        // let the edited text's owner react to the key event that
+        // accepted the edit, e.g. to a modifier key held with it
+        if (this.target.parent) {
+            this.target.escalateEvent('reactToAccept', event);
+        }
     } else {
         // catch "up arrow" and "down arrow" keys
         if (keyName === 'ArrowDown') {
