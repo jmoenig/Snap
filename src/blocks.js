@@ -13148,6 +13148,15 @@ InputSlotMorph.prototype.reactToKeystroke = function () {
     }
 };
 
+InputSlotMorph.prototype.reactToAccept = function (event) {
+    // the edit of my contents was accepted with the enter key:
+    // if shift was held, attach the keyboard focus to me, the same
+    // as shift-clicking me
+    if (event.shiftKey) {
+        this.selectForEdit().focus();
+    }
+};
+
 InputSlotMorph.prototype.reactToEdit = function () {
     var block = this.parentThatIsA(BlockMorph),
         trgt = block.scriptTarget(true);
@@ -17545,6 +17554,8 @@ CommentMorph.prototype.stackHeight = function () {
       - shift + click on any block
         (clicking a command block's lower half places the focus below
         the block, clicking its upper half places it above)
+      - shift + click on an input slot, or shift + enter while editing
+        an input slot's text (the focus attaches to that slot)
       - shift + enter in the IDE's edit mode
 
     stop editing:
