@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion, ADT_SlotMorph, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2026-June-08';
+modules.store = '2026-September-22';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -816,7 +816,9 @@ SnapSerializer.prototype.loadScene = function (
                 watcher.cellMorph.contentsMorph.setHeight(+extY);
             }
             // adjust my contentsMorph's handle position
-            watcher.cellMorph.contentsMorph.handle.fixLayout();
+            if (watcher.cellMorph.contentsMorph.handle) { // can also be an ADT
+                watcher.cellMorph.contentsMorph.handle.fixLayout();
+            }
         }
     });
 
@@ -946,6 +948,7 @@ SnapSerializer.prototype.loadSpritesModel = function (xmlNode, ide) {
         );
         sprite.isDraggable = model.attributes.draggable !== 'false';
         sprite.isVisible = model.attributes.hidden !== 'true';
+        sprite.isHiddenInCorral = model.attributes.corral === 'false';
         sprite.heading = parseFloat(model.attributes.heading) || 0;
         sprite.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
         this.loadObject(sprite, model);
@@ -1939,6 +1942,7 @@ SnapSerializer.prototype.loadValue = function (model, object, silently) {
         );
         v.isDraggable = model.attributes.draggable !== 'false';
         v.isVisible = model.attributes.hidden !== 'true';
+        v.isHiddenInCorral = model.attributes.corral === 'false';
         v.heading = parseFloat(model.attributes.heading) || 0;
         if (!silently) {
             v.gotoXY(+model.attributes.x || 0, +model.attributes.y || 0);
@@ -2443,7 +2447,8 @@ SpriteMorph.prototype.toXML = function (serializer) {
             ' rotation="@"' +
             '%' +
             ' draggable="@"' +
-            '%' +
+            '%' + // hidden
+            '%' + // hidden in corral
             ' costume="@" color="@,@,@,@" pen="@" ~>' +
             '%' + // solution info
             '%' + // inheritance info
@@ -2469,6 +2474,7 @@ SpriteMorph.prototype.toXML = function (serializer) {
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
         this.isDraggable,
         this.isVisible ? '' : ' hidden="true"',
+        this.isHiddenInCorral ? ' corral="false"' : '',
         costumeIdx,
         this.color.r,
         this.color.g,

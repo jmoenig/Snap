@@ -73,7 +73,7 @@ CostumeIconMorph, SoundIconMorph, Process, localize, display*/
 
 /*jshint esversion: 11*/
 
-modules.tables = '2026-August-11';
+modules.tables = '2026-October-02';
 
 var Table;
 var TableCellMorph;
@@ -280,6 +280,7 @@ TableCellMorph.uber = Morph.prototype;
 // TableCellMorph global setting:
 
 TableCellMorph.prototype.cachedListSymbol = null;
+TableCellMorph.prototype.cachedADTSymbol = null;
 
 TableCellMorph.prototype.listSymbol = function () {
     if (!this.cachedListSymbol || this.cachedListSymbol.height() !==
@@ -291,6 +292,18 @@ TableCellMorph.prototype.listSymbol = function () {
         );
     }
     return this.cachedListSymbol;
+};
+
+TableCellMorph.prototype.adtSymbol = function () {
+    if (!this.cachedADTSymbol || this.cachedADTSymbol.height() !==
+            SyntaxElementMorph.prototype.fontSize) {
+        this.cachedADTSymbol = new SymbolMorph(
+            'cube',
+            SyntaxElementMorph.prototype.fontSize,
+            SpriteMorph.prototype.blockColor.lists.darker(50)
+        );
+    }
+    return this.cachedADTSymbol;
 };
 
 // TableCellMorph instance creation:
@@ -437,6 +450,9 @@ TableCellMorph.prototype.dataRepresentation = function (dta) {
             null : dta.menu();
         return dta.widget().readout; // does not (yet) support animated symbols
     } else if (dta instanceof List) {
+        if (dta.isADT()) {
+            return this.adtSymbol();
+        }
         return this.listSymbol();
     } else if (dta instanceof Color) {
         return SpriteMorph.prototype.colorSwatch(
@@ -1143,7 +1159,8 @@ TableMorph.prototype.columnAt = function (relativeX) {
 TableMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
-        ide = detect(world.children, m => m instanceof IDE_Morph);
+        ide = detect(world.children, m => m instanceof IDE_Morph),
+        raw;
 
     if (ide.isAppMode) {return; }
     if (this.parentThatIsA(TableDialogMorph)) {
@@ -1180,6 +1197,31 @@ TableMorph.prototype.userMenu = function () {
                     }
                 }
             );
+        } else if (this.table instanceof Table) {
+            raw = new List().cons(
+                new List(this.table.colNames),
+                this.table.toList()
+            );
+            if (raw.canBeJSON()) {
+                menu.addItem(
+                    'export',
+                    () => {
+                        if (raw.canBeCSV()) {
+                            ide.saveFileAs(
+                                raw.asCSV(),
+                                'text/csv;charset=utf-8', // RFC 4180
+                                localize('data') // name
+                            );
+                        } else {
+                            ide.saveFileAs(
+                                raw.asJSON(true), // guessObjects
+                                'text/json;charset=utf-8',
+                                localize('data') // name
+                            );
+                        }
+                    }
+                );
+            }
         }
         menu.addItem('open in another dialog...', 'openInDialog');
         return menu;
@@ -1221,6 +1263,31 @@ TableMorph.prototype.userMenu = function () {
             );
         }
         menu.addLine();
+    } else if (this.table instanceof Table) {
+        raw = new List().cons(
+            new List(this.table.colNames),
+            this.table.toList()
+        );
+        if (raw.canBeJSON()) {
+            menu.addItem(
+                'export',
+                () => {
+                    if (raw.canBeCSV()) {
+                        ide.saveFileAs(
+                            raw.asCSV(),
+                            'text/csv;charset=utf-8', // RFC 4180
+                            localize('data') // name
+                        );
+                    } else {
+                        ide.saveFileAs(
+                            raw.asJSON(true), // guessObjects
+                            'text/json;charset=utf-8',
+                            localize('data') // name
+                        );
+                    }
+                }
+            );
+        }
     }
     menu.addItem('open in dialog...', 'openInDialog');
     return menu;
