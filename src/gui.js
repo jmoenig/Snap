@@ -373,7 +373,6 @@ IDE_Morph.prototype.init = function (config) {
     this.shield = null;
 
     this.savingPreferences = true; // for bh's infamous "Eisenbergification"
-    this.presentationZoom = null; // last blocks zoom > 1, for ctrl/cmd-0
 
     this.bulkDropInProgress = false; // for handling multiple file-drops
     this.cachedSceneFlag = null; // for importing multiple scenes at once
@@ -8346,7 +8345,7 @@ IDE_Morph.prototype.looksMenu = function () {
         'Magnification') + '...',
         'userZoom'
     );
-    menu.addPair('Zoom blocks...', 'userSetBlocksScale', '^+ ^- ^0');
+    menu.addItem('Zoom blocks...', 'userSetBlocksScale');
     menu.addItem('Fade blocks...', 'userFadeBlocks');
     if (shiftClicked) {
         menu.addLine();
@@ -8424,7 +8423,7 @@ IDE_Morph.prototype.accessibilityMenu = function () {
         'Magnification') + '...',
         'userZoom'
     );
-    menu.addPair('Zoom blocks...', 'userSetBlocksScale', '^+ ^- ^0');
+    menu.addItem('Zoom blocks...', 'userSetBlocksScale');
     menu.addItem('Fade blocks...', 'userFadeBlocks');
     menu.addItem(
         'Afterglow blocks...',
@@ -9152,9 +9151,6 @@ IDE_Morph.prototype.setBlocksScale = function (num, noSave) {
     SpriteMorph.prototype.initBlocks();
     SyntaxElementMorph.prototype.setScale(num);
     CommentMorph.prototype.refreshScale();
-    if (+num !== 1) {
-        this.presentationZoom = +num; // remember for toggling with ctrl-0
-    }
     this.spriteBar.tabBar.tabTo('scripts');
     this.createCategories();
     this.refreshEmptyCategories();
@@ -9170,41 +9166,6 @@ IDE_Morph.prototype.setBlocksScale = function (num, noSave) {
         );
     if (!noSave) {
         this.saveSetting('zoom', num);
-        if (+num !== 1) {
-            this.saveSetting('presentationZoom', num);
-        }
-    }
-};
-
-// IDE_Morph blocks zoom keyboard shortcuts (ctrl/cmd +, -, 0)
-
-IDE_Morph.prototype.blocksZoomSteps = [1, 1.2, 1.4, 2, 4, 8, 10];
-
-IDE_Morph.prototype.zoomBlocksIn = function () {
-    var current = +SyntaxElementMorph.prototype.scale,
-        next = this.blocksZoomSteps.find(step => step > current);
-    if (next) {this.setBlocksScale(next); }
-};
-
-IDE_Morph.prototype.zoomBlocksOut = function () {
-    var current = +SyntaxElementMorph.prototype.scale,
-        prev = this.blocksZoomSteps.filter(step => step < current).pop();
-    if (prev) {this.setBlocksScale(prev); }
-};
-
-IDE_Morph.prototype.toggleBlocksZoom = function () {
-    // switch between normal size and the most recently used larger
-    // "presentation" zoom, however it was set, defaulting to 1.4x if
-    // blocks haven't been zoomed yet in this session or a saved one
-    var current = +SyntaxElementMorph.prototype.scale,
-        zoom;
-    if (current === 1) {
-        zoom = this.presentationZoom ||
-            +this.getSetting('presentationZoom') ||
-            1.4;
-        this.setBlocksScale(Math.max(1, Math.min(zoom, 12)));
-    } else {
-        this.setBlocksScale(1);
     }
 };
 

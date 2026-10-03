@@ -11414,11 +11414,10 @@ StageMorph.prototype.processKeyEvent = function (event, action) {
                     (event.shiftKey ? 'shift ' : '') + keyName;
         }
     }
-    action.call(this, keyName, event);
+    action.call(this, keyName);
 };
 
-StageMorph.prototype.fireKeyEvent = function (key, event) {
-    // event is optional, used to ignore auto-repeats of some shortcuts
+StageMorph.prototype.fireKeyEvent = function (key) {
     var evt = key.toLowerCase(),
         procs = [],
         ide = this.parentThatIsA(IDE_Morph);
@@ -11456,18 +11455,6 @@ StageMorph.prototype.fireKeyEvent = function (key, event) {
     }
     if (evt === 'ctrl shift s') {
         if (!ide.isAppMode) {return ide.saveProjectsBrowser(); }
-        return;
-    }
-    if (contains(['ctrl =', 'ctrl +', 'ctrl shift =', 'ctrl shift +'], evt)) {
-        if (!ide.isAppMode && !event?.repeat) {ide.zoomBlocksIn(); }
-        return;
-    }
-    if (contains(['ctrl -', 'ctrl shift -', 'ctrl shift _'], evt)) {
-        if (!ide.isAppMode && !event?.repeat) {ide.zoomBlocksOut(); }
-        return;
-    }
-    if (evt === 'ctrl 0') {
-        if (!ide.isAppMode && !event?.repeat) {ide.toggleBlocksZoom(); }
         return;
     }
     if (evt === 'esc' && !ide.isAppMode) {
