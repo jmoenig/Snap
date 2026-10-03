@@ -12378,9 +12378,9 @@ WorldMorph.prototype.initKeyboardHandler = function () {
                 }
                 event.preventDefault();
             }
-            // suppress cmd-d/f/i/p/s and browser zoom (cmd-+/-/0) override
+            // suppress cmd-d/f/i/p/s override
             if ((event.ctrlKey || event.metaKey) &&
-                    'dfiops=+-_0'.includes(event.key)) {
+                    'dfiops'.includes(event.key)) {
                 event.preventDefault();
             }
         },
