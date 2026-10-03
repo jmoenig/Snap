@@ -89,7 +89,7 @@ IDE_Morph*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2026-October-03';
+modules.widgets = '2026-March-03';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
