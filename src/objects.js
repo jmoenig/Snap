@@ -4461,6 +4461,104 @@ SpriteMorph.prototype.customBlockTemplatesForCategory = function (
     return blocks;
 };
 
+SpriteMorph.prototype.reorderableCustomBlockDefinitionOf = function (block) {
+    // answer the definition of the given custom block if its position among
+    // the custom blocks in my palette can be changed by me, i.e. if it is
+    // either a global one or one of my own local ones (as opposed to an
+    // inherited one), otherwise null
+    var def, stage;
+    if (!block.isCustomBlock) {
+        return null;
+    }
+    if (block.isGlobal) {
+        def = block.definition;
+        stage = this.parentThatIsA(StageMorph);
+        return def && stage && stage.globalBlocks.includes(def) ? def : null;
+    }
+    return this.getLocalMethod(block.semanticSpec) || null;
+};
+
+SpriteMorph.prototype.customBlockDefinitionsContaining = function (def) {
+    // answer the array of custom block definitions the given definition
+    // is ordered in: either the stage's global ones or my own local ones
+    return def.isGlobal ?
+        this.parentThatIsA(StageMorph).globalBlocks
+        : this.customBlocks;
+};
+
+SpriteMorph.prototype.customBlockDropTargetFor = function (block, palette) {
+    // answer a dictionary {element, definition, loc} indicating the custom
+    // block template in the palette before ("top") or after ("bottom") which
+    // the given custom block - dragged from the palette - would be inserted
+    // if it were dropped at its current position, or null if dropping it
+    // there would not change the order of my custom block definitions
+    var def, defs, templates, current, target;
+
+    if (palette.isForSearching) {
+        return null;
+    }
+    def = this.reorderableCustomBlockDefinitionOf(block);
+    if (!def) {
+        return null;
+    }
+    defs = this.customBlockDefinitionsContaining(def);
+    templates = palette.contents.children.map(each =>
+        each.isTemplate && each.isCustomBlock ?
+            {
+                element: each,
+                definition: this.reorderableCustomBlockDefinitionOf(each)
+            }
+            : null
+    ).filter(each =>
+        each &&
+            each.definition &&
+            each.definition.category === def.category &&
+            defs.includes(each.definition)
+    );
+    current = templates.findIndex(each => each.definition === def);
+    if (current === -1) {
+        return null;
+    }
+    // insert before the first sibling whose middle is below the top edge
+    // of the dragged block, or after the last one
+    target = templates.findIndex(each =>
+        each.element.center().y > block.top()
+    );
+    if (target === -1) {
+        target = templates.length;
+    }
+    if (target === current || target === current + 1) {
+        return null;
+    }
+    if (target === templates.length) {
+        target = templates[templates.length - 1];
+        target.loc = 'bottom';
+    } else {
+        target = templates[target];
+        target.loc = 'top';
+    }
+    return target;
+};
+
+SpriteMorph.prototype.reorderCustomBlock = function (block, palette) {
+    // move the definition of the given custom block - dragged from and
+    // dropped back onto the palette - so it appears in the palette where
+    // it has been dropped. Answer the definition if its position changed,
+    // otherwise null
+    var target = this.customBlockDropTargetFor(block, palette),
+        def, defs, idx;
+
+    if (!target) {
+        return null;
+    }
+    def = this.reorderableCustomBlockDefinitionOf(block);
+    defs = this.customBlockDefinitionsContaining(def);
+    defs.splice(defs.indexOf(def), 1);
+    idx = defs.indexOf(target.definition);
+    defs.splice(target.loc === 'top' ? idx : idx + 1, 0, def);
+    return def;
+};
+
 SpriteMorph.prototype.makeBlockButton = function (category) {
     // answer a button that prompts the user to make a new block
     var button = new PushButtonMorph(
@@ -12755,6 +12853,18 @@ StageMorph.prototype.deleteVariableButton
 
 StageMorph.prototype.customBlockTemplatesForCategory
     = SpriteMorph.prototype.customBlockTemplatesForCategory;
+
+StageMorph.prototype.reorderableCustomBlockDefinitionOf
+    = SpriteMorph.prototype.reorderableCustomBlockDefinitionOf;
+
+StageMorph.prototype.customBlockDefinitionsContaining
+    = SpriteMorph.prototype.customBlockDefinitionsContaining;
+
+StageMorph.prototype.customBlockDropTargetFor
+    = SpriteMorph.prototype.customBlockDropTargetFor;
+
+StageMorph.prototype.reorderCustomBlock
+    = SpriteMorph.prototype.reorderCustomBlock;
 
 StageMorph.prototype.getPrimitiveTemplates
     = SpriteMorph.prototype.getPrimitiveTemplates;

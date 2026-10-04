@@ -2032,6 +2032,80 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
 
     this.palette.wantsDropOf = (morph) => !(morph instanceof DialogBoxMorph);
 
+    // feedback for reordering custom blocks by dragging them within the
+    // palette:
+    this.palette.feedbackMorph = new BoxMorph();
+    this.palette.feedbackMorph.color = ScriptsMorph.prototype.feedbackColor;
+    this.palette.feedbackMorph.border = 0;
+    this.palette.feedbackMorph.edge = 0;
+
+    this.palette.step = function () {
+        var world = this.world(),
+            hand = world.hand,
+            block, target, y;
+
+        if (this.feedbackMorph.parent) {
+            this.feedbackMorph.destroy();
+            this.feedbackMorph.parent = null;
+        }
+        if (hand.children.length === 0 ||
+            !this.bounds.containsPoint(hand.bounds.origin) ||
+            !hand.grabOrigin ||
+            hand.grabOrigin.origin !== this.contents
+        ) {
+            return null;
+        }
+        block = hand.children[0];
+        if (!(block instanceof BlockMorph) ||
+            !contains(hand.morphAtPointer().allParents(), this)
+        ) {
+            return null;
+        }
+        target = myself.currentSprite.customBlockDropTargetFor(block, this);
+        if (!target) {
+            return null;
+        }
+        this.feedbackMorph.bounds.setWidth(target.element.width());
+        this.feedbackMorph.bounds.setHeight(Math.max(
+            SyntaxElementMorph.prototype.corner,
+            SyntaxElementMorph.prototype.feedbackMinHeight
+        ));
+        y = target.loc === 'top' ?
+            target.element.top() - this.feedbackMorph.height()
+            : target.element.bottom();
+        this.feedbackMorph.setPosition(new Point(target.element.left(), y));
+        this.feedbackMorph.rerender();
+        this.add(this.feedbackMorph);
+    };
+
+    this.palette.reorderCustomBlock = (block, hand) => {
+        // answer true if the given custom block has been dragged from this
+        // palette and dropped back onto it such that its definition changed
+        // its position among the current sprite's custom blocks
+        var def;
+        if (!hand ||
+            !hand.grabOrigin ||
+            hand.grabOrigin.origin !== this.palette.contents
+        ) {
+            return false;
+        }
+        def = this.currentSprite.reorderCustomBlock(block, this.palette);
+        if (!def) {
+            return false;
+        }
+        block.destroy();
+        this.flushPaletteCache();
+        this.refreshPalette();
+        this.currentSprite.recordUserEdit(
+            'palette',
+            'custom block',
+            def.isGlobal ? 'global' : 'local',
+            'reorder',
+            def.abstractBlockSpec()
+        );
+        return true;
+    };
+
     this.palette.reactToDropOf = (droppedMorph, hand) => {
         if (droppedMorph instanceof SpriteMorph) {
             this.removeSprite(droppedMorph);
@@ -2042,6 +2116,9 @@ IDE_Morph.prototype.createPalette = function (forSearching) {
             // this.currentSprite.wearCostume(null); // do we need this?
             droppedMorph.perish(myself.isAnimating ? 200 : 0);
         } else if (droppedMorph instanceof BlockMorph) {
+            if (this.palette.reorderCustomBlock(droppedMorph, hand)) {
+                return;
+            }
             this.stage.threads.stopAllForBlock(droppedMorph);
             if (hand && hand.grabOrigin.origin instanceof ScriptsMorph) {
                 hand.grabOrigin.origin.clearDropInfo();
