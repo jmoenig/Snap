@@ -7885,6 +7885,16 @@ ReporterBlockMorph.prototype.snap = function (hand) {
             }
         }
         */
+    } else if (hand && hand.grabOrigin && scripts.rejectedInput(this)) {
+        // dropped by hand on top of an input slot that rejected me,
+        // e.g. the static variable dropdown of "set var to":
+        // retreat along the way I was dragged in, instead of
+        // visually covering the slot
+        if (!scripts.retreat(this, hand.grabOrigin)) {
+            // slid all the way back to where I came from, so
+            // nothing has changed and there is no drop to record
+            return;
+        }
     }
     this.fixBlockColor();
     ReporterBlockMorph.uber.snap.call(this);
@@ -9118,6 +9128,100 @@ ScriptsMorph.prototype.closestInput = function (reporter, hand) {
                         !contains(blackList, input) &&
                             touchingVariadicArrowsIfAny(input)
     );
+};
+
+ScriptsMorph.prototype.rejectedInput = function (reporter) {
+    // answer an input slot the reporter visually covers but cannot
+    // be dropped into, or null if there is none. Meant to be asked
+    // after closestInput() has answered null, so any covered slot
+    // is one that rejected the reporter: a static (locked) slot such
+    // as the variable dropdown of "set var to", an upvar template,
+    // a slot in a block prototype, or a type-checked slot of the wrong
+    // type. Containers such as C-slots, rings and variadic groups don't
+    // count as slots here, only the leaf inputs inside them do.
+    var fb = reporter.fullBoundsNoShadow(),
+        blackList = reporter.allInputs(),
+        all = [];
+
+    this.children.forEach(child => {
+        if (child instanceof BlockMorph &&
+                child.fullBounds().intersects(fb)) {
+            child.allBlocks().forEach(block => {
+                all = all.concat(block.allBlockInputs());
+            });
+        }
+    });
+    return detect(
+        all,
+        input => (input !== reporter) &&
+            !(input instanceof MultiArgMorph) &&
+                !(input instanceof CommandSlotMorph) &&
+                    !(input instanceof RingMorph) &&
+                        input.fullBounds().intersects(fb) &&
+                            !contains(blackList, input)
+    );
+};
+
+ScriptsMorph.prototype.retreat = function (reporter, situation) {
+    // move a reporter that was dropped onto a slot which rejected it
+    // out of the way: glide it back along the way it was dragged in,
+    // from where it was dropped towards where it came from, just far
+    // enough that it no longer overlaps any other script in this pane,
+    // and answer true, so the move gets recorded as the drop. If there
+    // is no such spot inside the pane before reaching the origin, e.g.
+    // because the reporter came out of the very block it was dropped
+    // on, slide it all the way back instead, the way "undrop" does:
+    // into the slot or spot it came out of, or, if it was dragged
+    // out of the palette, back into the palette where it vanishes,
+    // and answer false
+    var start = reporter.position(),
+        end = situation.origin.position().add(situation.position),
+        fb = reporter.fullBounds(),
+        margin = this.cleanUpSpacing / 3,
+        others = this.children.filter(child =>
+            child !== reporter &&
+                (child instanceof BlockMorph ||
+                    child instanceof CommentMorph)
+        ),
+        steps = Math.ceil(start.distanceTo(end) / 2),
+        i, pos, area;
+
+    for (i = 1; i < steps; i += 1) {
+        pos = start.add(end.subtract(start).multiplyBy(i / steps)).round();
+        area = fb.translateBy(pos.subtract(start));
+        if (this.bounds.containsRectangle(area) &&
+            !others.some(other =>
+                other.fullBounds().intersects(area.expandBy(margin))
+            )
+        ) {
+            this.isAnimating = true;
+            reporter.glideTo(
+                pos,
+                null,
+                null,
+                () => {
+                    this.isAnimating = false;
+                    this.adjustBounds();
+                }
+            );
+            return true;
+        }
+    }
+    this.isAnimating = true;
+    reporter.slideBackTo(
+        situation,
+        null,
+        null,
+        () => {
+            if (!reporter.parentThatIsA(ScriptsMorph)) {
+                // came from a palette or search pane, so it's a copy
+                reporter.destroy();
+            }
+            this.isAnimating = false;
+            this.adjustBounds();
+        }
+    );
+    return false;
 };
 
 ScriptsMorph.prototype.closestBlock = function (comment, hand) {
