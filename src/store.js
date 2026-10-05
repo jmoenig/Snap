@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion, ADT_SlotMorph, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2026-September-22';
+modules.store = '2026-October-05';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -565,6 +565,10 @@ SnapSerializer.prototype.loadScene = function (
     }
     if (model.stage.attributes.pan) {
         scene.stage.pan = +model.stage.attributes.pan;
+    }
+    if (model.stage.attributes.corral) {
+        scene.stage.isHiddenInCorral =
+            (model.stage.attributes.corral === 'false');
     }
     if (model.stage.attributes.penlog) {
         scene.enablePenLogging =
@@ -2331,6 +2335,7 @@ StageMorph.prototype.toXML = function (serializer) {
     return serializer.format(
             '<stage name="@" width="@" height="@" ' +
             'costume="@" color="@,@,@,@" tempo="@" threadsafe="@" ' +
+            '%' +
             'penlog="@" ' +
             '%' +
             'volume="@" ' +
@@ -2360,6 +2365,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.color.a,
         this.getTempo(),
         this.isThreadSafe,
+        this.isHiddenInCorral ? ' corral="false"' : '',
         this.enablePenLogging,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',

@@ -10680,6 +10680,7 @@ StageMorph.prototype.init = function (globals) {
     this.isFastTracked = false;
     this.enableCustomHatBlocks = true;
     this.cloneCount = 0;
+    this.isHiddenInCorral = false;
 
     this.timerStart = Date.now();
     this.tempo = 60; // bpm
@@ -12225,7 +12226,9 @@ StageMorph.prototype.userMenu = function () {
         // menu.addItem('help', 'nop');
         return menu;
     }
-    menu.addItem("edit", 'edit');
+    if (!this.isHiddenInCorral) {
+        menu.addItem("edit", 'edit');
+    }
     menu.addItem("show all", 'showAll');
     menu.addItem(
         "pic...",

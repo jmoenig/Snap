@@ -5,6 +5,7 @@
 * **Notable Changes:**
     * unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script)
     * added "script" return type declaration to "parse code" reporter in the code2blocks library
+    * added ability to hide the stage in the corral via the corral-bar's context menu, use for pedagogical puzzles (only!)
 * **Notable Fixes:**
     * mark custom predicate blocks to always report a Boolean data type
 
@@ -13,6 +14,7 @@
 * blocks, objects: unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script). This also addresses #3575
 * byob: mark custom predicate blocks to always report a Boolean data type
 * code2blocks library: added "script" return type declaration to "parse code" reporter
+* gui, objects, store: added ability to hide the stage in the corral via the corral-bar's context menu, use for pedagogical puzzles (only!)
 
 ## 12.2.2:
 * **Notable Changes:**
