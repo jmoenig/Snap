@@ -2,6 +2,13 @@
 
 ## in development:
 
+* **Notable Changes:**
+    * unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script)
+
+### 2026-10-05
+* new dev version
+* blocks, objects: unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script). This also addresses #3575
+
 ## 12.2.2:
 * **Notable Changes:**
     * tables ADT library: added "export" option to tables' context menus

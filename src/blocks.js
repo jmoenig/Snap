@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-August-23';
+modules.blocks = '2026-October-05';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -8654,12 +8654,18 @@ RingMorph.prototype.vanishForSimilar = function () {
     */
     if ((block.selector === 'reportGetVar' &&
             !contains(this.inputNames(), block.blockSpec)) ||
-        // block.selector === 'reportListItem' ||
-        block.selector === 'reportJSFunction' ||
-        block.selector === 'reportAttributeOf' ||
-        block.selector === 'reportCompiled' ||
-        block.selector === 'reportThisContext' ||
-        (block instanceof RingMorph)
+        [   // 'reportListItem',
+            'reportAttributeOf',
+            'reportEnvironment'
+        ].includes(block.selector) ||
+        (block instanceof RingMorph) ||
+        [
+            'command',
+            'reporter',
+            'predicate',
+            'hat',
+            'script'
+        ].includes(block.reports)
     ) {
         this.parent.replaceInput(this, block);
     }
