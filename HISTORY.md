@@ -4,10 +4,13 @@
 
 * **Notable Changes:**
     * unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script)
+* **Notable Fixes:**
+    * mark custom predicate blocks to always report a Boolean data type
 
 ### 2026-10-05
 * new dev version
 * blocks, objects: unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script). This also addresses #3575
+* byob: mark custom predicate blocks to always report a Boolean data type
 
 ## 12.2.2:
 * **Notable Changes:**

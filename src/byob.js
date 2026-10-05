@@ -113,7 +113,7 @@ ADT_SlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-August-13';
+modules.byob = '2026-October-05';
 
 // Declarations
 
@@ -2406,7 +2406,7 @@ CustomReporterBlockMorph.prototype.init = function (
         this.isTemplate = true;
     }
     this.category = definition.category;
-    this.reports = definition.reports;
+    this.reports = isPredicate ? 'Boolean' : definition.reports;
     this.storedTranslations = null; // transient - only for "wishes"
     this.variables = new VariableFrame();
     this.initializeVariables(definition.variableNames);
@@ -2425,7 +2425,7 @@ CustomReporterBlockMorph.prototype.reactToTemplateCopy =
 CustomReporterBlockMorph.prototype.refresh = function (aDefinition, offset) {
     var def = aDefinition || this.definition;
     CustomCommandBlockMorph.prototype.refresh.call(this, aDefinition, offset);
-    this.reports = def.reports;
+    this.reports = this.isPredicate ? 'Boolean' : def.reports;
     if (!this.isPrototype) {
         this.isPredicate = (def.type === 'predicate');
     }
