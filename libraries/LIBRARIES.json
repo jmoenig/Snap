@@ -12,6 +12,8 @@
     ],
     "translations": {
       "de": {
+        "name": "Von Blöcken zu Textcode und zurück",
+        "description": "Blöcke in Textcode übersetzen und aus Textcode Blöcke erzeugen",
         "searchData": [
           "verwandle Code _ in Blöcke\rca",
           "verwandle Blöcke _ in Code _ formatiert\rca"
