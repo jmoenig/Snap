@@ -8659,7 +8659,15 @@ RingMorph.prototype.vanishForSimilar = function () {
         block.selector === 'reportAttributeOf' ||
         block.selector === 'reportCompiled' ||
         block.selector === 'reportThisContext' ||
-        (block instanceof RingMorph)
+        (block instanceof RingMorph) ||
+        // a reporter without any empty slots isn't using my implicit
+        // parameters, so it's presumably computing the function itself,
+        // unless it references one of my explicit input names
+        (block instanceof ReporterBlockMorph &&
+            block.allEmptySlots().length === 0 &&
+            !block.allChildren().some(any =>
+                any.selector === 'reportGetVar' &&
+                contains(this.inputNames(), any.blockSpec)))
     ) {
         this.parent.replaceInput(this, block);
     }
