@@ -5798,6 +5798,11 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.cancel();
     } else if (keyName === "Enter" && (singleLineText || shift)) {
         this.accept();
+        // let the edited text's owner react to the key event that
+        // accepted the edit, e.g. to a modifier key held with it
+        if (this.target.parent) {
+            this.target.escalateEvent('reactToAccept', event);
+        }
     } else {
         // catch "up arrow" and "down arrow" keys
         if (keyName === 'ArrowDown') {
@@ -8049,6 +8054,7 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     this.hasFocus = false;
     this.selection = null;
     this.submenu = null;
+    this.typedPrefix = ''; // keyboard type-ahead selection
 
     // initialize inherited properties:
     MenuMorph.uber.init.call(this);
@@ -8414,6 +8420,7 @@ MenuMorph.prototype.closeSubmenu = function () {
 MenuMorph.prototype.getFocus = function () {
     this.world.keyboardFocus = this;
     this.selection = null;
+    this.typedPrefix = '';
     this.selectFirst();
     this.hasFocus = true;
 };
@@ -8421,8 +8428,13 @@ MenuMorph.prototype.getFocus = function () {
 MenuMorph.prototype.processKeyDown = function (event) {
     // console.log(event.keyCode);
     switch (event.keyCode) {
-    case 13: // 'enter'
     case 32: // 'space'
+        // while typing ahead, a space can be part of the item's label
+        if (this.typedPrefix && this.selectByPrefix(this.typedPrefix + ' ')) {
+            return;
+        }
+        // fall through
+    case 13: // 'enter'
         if (this.selection) {
             this.selection.mouseClickLeft();
             if (this.submenu) {
@@ -8430,18 +8442,30 @@ MenuMorph.prototype.processKeyDown = function (event) {
             }
         }
         return;
+    case 8: // 'backspace'
+        return this.selectByPrefix(this.typedPrefix.slice(0, -1));
     case 27: // 'esc'
         return this.destroy();
     case 37: // 'left arrow'
         return this.leaveSubmenu();
     case 38: // 'up arrow'
+        this.typedPrefix = '';
         return this.selectUp();
     case 39: // 'right arrow'
         return this.enterSubmenu();
     case 40: // 'down arrow'
+        this.typedPrefix = '';
         return this.selectDown();
     default:
-        nop();
+        if (event.key && event.key.length === 1 &&
+                !event.ctrlKey && !event.metaKey && !event.altKey) {
+            // type-ahead: select the first item whose label starts with
+            // the characters typed so far, or - if none does - start over
+            // with just the character typed last
+            if (!this.selectByPrefix(this.typedPrefix + event.key)) {
+                this.selectByPrefix(event.key);
+            }
+        }
     }
 };
 
@@ -8453,32 +8477,60 @@ MenuMorph.prototype.processKeyPress = function (event) {
     nop(event);
 };
 
-MenuMorph.prototype.selectFirst = function () {
-    var scroller, items, i;
-
-    scroller = detect(
+MenuMorph.prototype.itemMorphs = function () {
+    // answer an array of my MenuItemMorphs in display order,
+    // regardless of whether they're inside a scroll frame
+    var scroller = detect(
         this.children,
         morph => morph instanceof ScrollFrameMorph
     );
-    items = scroller ? scroller.contents.children : this.children;
-    for (i = 0; i < items.length; i += 1) {
-        if (items[i] instanceof MenuItemMorph) {
-            this.select(items[i]);
-            return;
-    	}
-	}
+    return (scroller ? scroller.contents.children : this.children).filter(
+        each => each instanceof MenuItemMorph
+    );
+};
+
+MenuMorph.prototype.selectFirst = function () {
+    var items = this.itemMorphs();
+    if (items.length) {
+        this.select(items[0]);
+    }
+};
+
+MenuMorph.prototype.selectByPrefix = function (prefix) {
+    // select the first item whose label starts with the given prefix
+    // (ignoring case) and remember the prefix for subsequent keystrokes.
+    // Answer true if a matching item was found, false otherwise.
+    // An empty prefix always succeeds and just resets the type-ahead.
+    var lower = prefix.toLowerCase(),
+        match;
+
+    if (!prefix) {
+        this.typedPrefix = '';
+        return true;
+    }
+    match = detect(
+        this.itemMorphs(),
+        item => {
+            var label = item.labelString;
+            if (label instanceof Array) { // [icon, string]
+                label = label[1];
+            }
+            return isString(label) &&
+                label.toLowerCase().startsWith(lower);
+        }
+    );
+    if (!match) {
+        return false;
+    }
+    this.typedPrefix = prefix;
+    this.select(match);
+    return true;
 };
 
 MenuMorph.prototype.selectUp = function () {
-    var scroller, triggers, idx;
+    var triggers = this.itemMorphs(),
+        idx;
 
-	scroller = detect(
-        this.children,
-        morph => morph instanceof ScrollFrameMorph
-    );
-    triggers = (scroller ? scroller.contents.children : this.children).filter(
-    	each => each instanceof MenuItemMorph
-    );
     if (!this.selection) {
         if (triggers.length) {
             this.select(triggers[0]);
@@ -8493,15 +8545,9 @@ MenuMorph.prototype.selectUp = function () {
 };
 
 MenuMorph.prototype.selectDown = function () {
-    var scroller, triggers, idx;
+    var triggers = this.itemMorphs(),
+        idx;
 
-    scroller = detect(
-        this.children,
-        morph => morph instanceof ScrollFrameMorph
-    );
-    triggers = (scroller ? scroller.contents.children : this.children).filter(
-        each => each instanceof MenuItemMorph
-    );
     if (!this.selection) {
         if (triggers.length) {
             this.select(triggers[0]);
