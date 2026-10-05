@@ -4,6 +4,7 @@
 
 * **Notable Changes:**
     * unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script)
+    * added "script" return type declaration to "parse code" reporter in the code2blocks library
 * **Notable Fixes:**
     * mark custom predicate blocks to always report a Boolean data type
 
@@ -11,6 +12,7 @@
 * new dev version
 * blocks, objects: unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script). This also addresses #3575
 * byob: mark custom predicate blocks to always report a Boolean data type
+* code2blocks library: added "script" return type declaration to "parse code" reporter
 
 ## 12.2.2:
 * **Notable Changes:**
