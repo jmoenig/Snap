@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 12.2.3:
 * **Notable Changes:**
     * unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script)
     * added "script" return type declaration to "parse code" reporter in the code2blocks library
@@ -16,6 +17,7 @@
 * added German translation for the code2blocks library name and description
 * German translation update for some missing strings
 * gui: clicking on the pencil icon or project label saves the project if there are unsaved changes (i.e. if the pencil icon is showing)
+* prepared v12.2.3 patch
 
 ### 2026-10-05
 * new dev version
