@@ -8,6 +8,11 @@
     * added ability to hide the stage in the corral via the corral-bar's context menu, use for pedagogical puzzles (only!)
 * **Notable Fixes:**
     * mark custom predicate blocks to always report a Boolean data type
+* **Translation Updates:**
+    * German
+
+### 2026-10-06
+* added German translation for the code2blocks library name and description
 
 ### 2026-10-05
 * new dev version

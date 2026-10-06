@@ -12,11 +12,11 @@
     ],
     "translations": {
       "de": {
-        "name": "Von Blöcken zu Textcode und zurück",
+        "name": "Blöcke -> Textcode",
         "description": "Blöcke in Textcode übersetzen und aus Textcode Blöcke erzeugen",
         "searchData": [
-          "verwandle Code _ in Blöcke\rca",
-          "verwandle Blöcke _ in Code _ formatiert\rca"
+          "verwandle Blöcke _ in Code _ formatiert",
+          "verwandle Code _ in Blöcke"
         ]
       },
       "ca": {
