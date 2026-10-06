@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-October-05';
+modules.gui = '2026-October-06';
 
 // Declarations
 
@@ -1694,6 +1694,13 @@ IDE_Morph.prototype.createControlBar = function () {
         );
         this.label.setCenter(this.center());
         this.label.setLeft(this.settingsButton.right() + padding);
+
+        this.label.mouseClickLeft = function () {
+            if (myself.hasUnsavedEdits()) {
+                myself.save();
+            }
+        };
+
         this.add(this.label);
     };
 };

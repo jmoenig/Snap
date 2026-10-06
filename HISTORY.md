@@ -6,6 +6,7 @@
     * unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script)
     * added "script" return type declaration to "parse code" reporter in the code2blocks library
     * added ability to hide the stage in the corral via the corral-bar's context menu, use for pedagogical puzzles (only!)
+    * clicking on the pencil icon or project label saves the project if there are unsaved changes (i.e. if the pencil icon is showing)
 * **Notable Fixes:**
     * mark custom predicate blocks to always report a Boolean data type
 * **Translation Updates:**
@@ -14,6 +15,7 @@
 ### 2026-10-06
 * added German translation for the code2blocks library name and description
 * German translation update for some missing strings
+* gui: clicking on the pencil icon or project label saves the project if there are unsaved changes (i.e. if the pencil icon is showing)
 
 ### 2026-10-05
 * new dev version
