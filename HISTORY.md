@@ -13,6 +13,7 @@
 
 ### 2026-10-06
 * added German translation for the code2blocks library name and description
+* German translation update for some missing strings
 
 ### 2026-10-05
 * new dev version

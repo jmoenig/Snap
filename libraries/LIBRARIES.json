@@ -1518,6 +1518,10 @@
         "name": "Anàlisi de la distribució de freqüències",
         "description": "Analitza les dades de distribució de freqüències."
       },
+      "de": {
+       "name": "Häufigkeitsverteilungsanalyse",
+       "description": "Daten auf die Verteilung ihrer Häufigkeit hin untersuchen"
+      },
       "es": {
         "name": "Análisis de distribución de frecuencias"
       },
