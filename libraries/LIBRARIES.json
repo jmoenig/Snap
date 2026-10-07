@@ -2806,14 +2806,13 @@
   {
     "fileName": "TuneScope.xml",
     "name": "TuneScope",
-    "description": "Music Notation, Instruments, Drums, Tones, Chords, Tracks, from the University of Virginia (Glen Bull)",
+    "description": "Music Notation, Instruments, Drums, Chords, Tracks, from the University of Virginia (Glen Bull)",
     "translations": {
       "ca": {
-        "description": "Notació musical, instruments, bateries, tons, acords i pistes creats per la Universitat de Virginia (Glen Bull)",
+        "description": "Notació musical, instruments, bateries, acords i pistes creats per la Universitat de Virginia (Glen Bull)",
         "searchData": [
           "mostra la variable _\res",
-          "assigna a _ el valor _\res",
-          "associació _ _"
+          "assigna a _ el valor _\res"
         ]
       }
     },
@@ -2822,45 +2821,35 @@
       "set var _ to _",
       "create _ var _",
       "Initialize TuneScope",
+      "Set Global Volume To _ %",
+      "Set Tempo To _ bpm",
       "Set Instrument To _",
-      "Set Volume To _ %",
       "Set Instrument _ Volume to _ %",
-      "Play Note _ for Duration _ and Wait",
-      "Play Note _ for Duration _",
-      "Play Chord _ for Duration _",
+      "Play Note _ _ for Duration _ and Wait _",
+      "Play Chord _ for Duration _ and Wait _",
       "Rest for Note Duration _",
+      "Current Note",
       "_ Scale: _ Octave: _",
-      "Note _ in _ Scale: _ Octave: _",
-      "Interval Between Note _ to _ in the _ Scale _",
-      "_ Chord: _ Octave: _",
-      "_ Chord: _ Octave: _ Chord Position: _",
-      "Add Note _ to Chord _",
-      "Chord Rest",
-      "Drum Pattern _",
-      "Drum _ _ Beat _ Times _",
+      "_ Chord: _ Octave: _ _ _",
+      "_ Scale: _ Octave: _ Chord Position: _ _ _",
       "Measure _",
       "Section _",
       "Track: _ Instrument: _  Musical Notation (Notes or Chords): _",
-      "Play Tracks _ Time Signature: _",
+      "Drum Track _ _ Beat _ Times _",
+      "Play Tracks _ in Time Signature _ and Wait _ _",
+      "Export Tracks _ as _ named _",
       "Beats in Measure _  Time Signature _",
-      "Note Duration Value _",
-      "Note [ Pitch: _ Duration: _ ]",
-      "Tone Number: _ Frequency: _ Amplitude: _",
-      "Tone Number: _ _ On/Off",
-      "Tone Off",
-      "Play MIDI Controller: _ Instrument: _",
-      "Stop MIDI Controller",
-      "Convert MIDI _ to Note",
-      "Convert Note _ to MIDI",
-      "flash turbo fast assoc _ _",
+      "Open MIDI Stream: _ Instrument: _",
+      "Record MIDI Stream  Time Signature: _ Smallest Note: _  Click While Recording: _",
+      "Close MIDI Stream",
       "Import MIDI File",
-      "Convert MIDI File _ to TuneScope",
-      "Current Note"
+      "Delete MIDI Tracks",
+      "Turn On Visualizer _",
+      "Turn Off Visualizer"
     ],
     "categories": [
       "variables",
-      "Music",
-      "lists"
+      "Music"
     ]
   },
   {
