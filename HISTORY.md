@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-10-09
+* new dev version
+
 ## 12.2.3:
 * **Notable Changes:**
     * unring reporters dropped into ring-slots that are declared to report a block or function (command, reporter, predicate, hat, script)
