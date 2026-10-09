@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-October-05';
+modules.blocks = '2026-October-09';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -11237,6 +11237,67 @@ CSlotMorph.prototype.elementsAtLOC = function (definitions) {
     return elementLOC;
 };
 
+// CSlotMorph dynamic contents:
+
+CSlotMorph.prototype.dynamicContents = function () {
+    if (this.isUnevaluated) {return; }
+    var block = this.parentThatIsA(BlockMorph),
+        rcvr = block.scriptTarget(),
+        def = block.isGlobal ? block.definition
+            : rcvr.getMethod(block.blockSpec),
+        names = def.inputNames(),
+        inputName = names[block.inputs().indexOf(this.parent)], // multi-slot
+        script = detect(def.scripts, each =>
+            each.selector === 'receiveSlotEvent' &&
+                each.inputs()[0].evaluate() === inputName &&
+                each.inputs()[1].evaluateOption() === 'expand'),
+        stage = rcvr.parentThatIsA(StageMorph),
+        isTxtOrNum = dta => isString(dta) ||
+            (dta instanceof Array && isString(dta[0])) ||
+            parseFloat(dta) === +dta,
+        vars, fill;
+
+    fill = (result = new List()) => {
+        if (this instanceof BooleanSlotMorph &&
+            [true, false, null].includes(result)
+        ) {
+            this.setContents(result);
+        } else if (this instanceof ColorSlotMorph && result instanceof Color) {
+            this.setContents(result);
+        } else if (this instanceof CSlotMorph && result instanceof Context) {
+            if (result.expression instanceof CommandBlockMorph &&
+                !(result.expression instanceof HatBlockMorph)
+            ) {
+                this.nestedBlock(result.expression.fullCopy());
+            }
+        } else if (isTxtOrNum(result)) {
+            this.setContents(isString(result) && result.startsWith('$_') ?
+                [result.slice(2)] : result);
+        }
+    };
+
+    if (!script) {return; }
+
+    // fully evaluate the block's inputs, including embedded reporters, if any
+    vars = new InputList(block, names);
+
+    // evaluate the script that reports the dynamic content
+    stage.threads.startProcess(
+        script,
+        rcvr,
+        null, // threadsafe
+        null, // export result
+        fill, // callback
+        null, // clicked
+        true, // right away
+        null, // atomic
+        vars,
+        null,
+        null,
+        true // silent variable reference - dynamic user-scripted widgets
+    );
+};
+
 // CSlotMorph layout:
 
 CSlotMorph.prototype.fixLayout = function () {
@@ -12104,58 +12165,8 @@ InputSlotMorph.prototype.dynamicMenu = function (searching, enableKeyboard) {
     );
 };
 
-InputSlotMorph.prototype.dynamicContents = function () {
-    if (this.isUnevaluated) {return; }
-    var block = this.parentThatIsA(BlockMorph),
-        rcvr = block.scriptTarget(),
-        def = block.isGlobal ? block.definition
-            : rcvr.getMethod(block.blockSpec),
-        names = def.inputNames(),
-        inputName = names[block.inputs().indexOf(this.parent)], // multi-slot
-        script = detect(def.scripts, each =>
-            each.selector === 'receiveSlotEvent' &&
-                each.inputs()[0].evaluate() === inputName &&
-                each.inputs()[1].evaluateOption() === 'expand'),
-        stage = rcvr.parentThatIsA(StageMorph),
-        isTxtOrNum = dta => isString(dta) ||
-            (dta instanceof Array && isString(dta[0])) ||
-            parseFloat(dta) === +dta,
-        vars, fill;
-
-    fill = (result = new List()) => {
-        if (this instanceof BooleanSlotMorph &&
-            [true, false, null].includes(result)
-        ) {
-            this.setContents(result);
-        } else if (this instanceof ColorSlotMorph && result instanceof Color) {
-            this.setContents(result);
-        } else if (isTxtOrNum(result)) {
-            this.setContents(isString(result) && result.startsWith('$_') ?
-                [result.slice(2)] : result);
-        }
-    };
-
-    if (!script) {return; }
-
-    // fully evaluate the block's inputs, including embedded reporters, if any
-    vars = new InputList(block, names);
-
-    // evaluate the script that reports the dynamic content
-    stage.threads.startProcess(
-        script,
-        rcvr,
-        null, // threadsafe
-        null, // export result
-        fill, // callback
-        null, // clicked
-        true, // right away
-        null, // atomic
-        vars,
-        null,
-        null,
-        true // silent variable reference - dynamic user-scripted widgets
-    );
-};
+InputSlotMorph.prototype.dynamicContents =
+    CSlotMorph.prototype.dynamicContents;
 
 InputSlotMorph.prototype.menuSelectorsMenu = function () {
     var blockEditor = this.parentThatIsA(BlockEditorMorph),

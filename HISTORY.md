@@ -2,8 +2,12 @@
 
 ## in development:
 
+* **New Features:**
+    * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
+
 ### 2026-10-09
 * new dev version
+* blocks: added dynamic contents support for CSlots
 
 ## 12.2.3:
 * **Notable Changes:**
