@@ -164,6 +164,7 @@ SymbolMorph.prototype.names = [
     'blocks',
     'speaker',
     'picture',
+    'shirt',
     'infinity'
 ];
 
@@ -563,6 +564,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'picture':
         this.renderSymbolPicture(ctx, aColor);
+        break;
+    case 'shirt':
+        this.renderSymbolShirt(ctx, aColor);
         break;
     case 'infinity':
         this.renderSymbolInfinity(ctx, aColor);
@@ -2868,6 +2872,52 @@ SymbolMorph.prototype.renderSymbolPicture = function (ctx, color) {
     ctx.beginPath();
     ctx.arc(w * 0.4, h * 0.4, l * 2, radians(0), radians(360), false);
     ctx.fill();
+};
+
+SymbolMorph.prototype.renderSymbolShirt = function (ctx, color) {
+    // draw a t-shirt symbol
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 30, 0.2);
+
+    ctx.strokeStyle = color.toString();
+    ctx.fillStyle = color.toString();
+    ctx.lineWidth = l;
+
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.2);
+    ctx.lineTo(w * 0.15, h * 0.05);
+    ctx.lineTo(w * 0.3, 0);
+
+    ctx.lineTo(w * 0.4, h * 0.15);
+    ctx.lineTo(w * 0.5, h * 0.175);
+    ctx.lineTo(w * 0.6, h * 0.15);
+
+    ctx.lineTo(w * 0.7, 0);
+    ctx.lineTo(w * 0.85, h * 0.05);
+    ctx.lineTo(w, h * 0.2);
+    
+    ctx.lineTo(w * 0.95, h * 0.5);
+    ctx.lineTo(w * 0.8, h * 0.45);
+    ctx.lineTo(w * 0.8, h);
+
+    ctx.lineTo(w * 0.2, h);
+    ctx.lineTo(w * 0.2, h * 0.45);
+    ctx.lineTo(w * 0.05, h * 0.5);
+
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(w * 0.3, 0);
+
+    ctx.lineTo(w * 0.4, h * 0.05);
+    ctx.lineTo(w * 0.5, h * 0.065);
+    ctx.lineTo(w * 0.6, h * 0.05);
+
+    ctx.lineTo(w * 0.7, 0);
+
+    ctx.stroke();
 };
 
 /*
