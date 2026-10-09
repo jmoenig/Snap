@@ -4,10 +4,13 @@
 
 * **New Features:**
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
+* **Notable Fixes:**
+    * fixed a type inference glitch in the block editor
 
 ### 2026-10-09
 * new dev version
 * blocks: added dynamic contents support for CSlots
+* byob: fixed a type inference glitch in the block editor
 
 ## 12.2.3:
 * **Notable Changes:**

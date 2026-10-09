@@ -113,7 +113,7 @@ ADT_SlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-October-05';
+modules.byob = '2026-October-09';
 
 // Declarations
 
@@ -3825,7 +3825,7 @@ BlockEditorMorph.prototype.context = function (prototypeHat) {
 };
 
 BlockEditorMorph.prototype.inferredReturnType = function (context) {
-    var script = context.expression,
+    var script = context?.expression,
         reportBlock,
         reportExpression,
         reportLiteral;
