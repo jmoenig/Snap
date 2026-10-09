@@ -4,6 +4,8 @@
 
 * **New Features:**
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
+* **Notable Changes:**
+    * new "picture" symbol
 * **Notable Fixes:**
     * fixed a type inference glitch in the block editor
 
@@ -11,6 +13,7 @@
 * new dev version
 * blocks: added dynamic contents support for CSlots
 * byob: fixed a type inference glitch in the block editor
+* symbols: added new "picture" symbol
 
 ## 12.2.3:
 * **Notable Changes:**

@@ -43,7 +43,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2026-August-24';
+modules.symbols = '2026-October-09';
 
 var SymbolMorph;
 
@@ -163,6 +163,7 @@ SymbolMorph.prototype.names = [
     'cubeSolid',
     'blocks',
     'speaker',
+    'picture',
     'infinity'
 ];
 
@@ -560,6 +561,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'speaker':
         this.renderSymbolSpeaker(ctx, aColor);
         break;
+    case 'picture':
+        this.renderSymbolPicture(ctx, aColor);
+        break;
     case 'infinity':
         this.renderSymbolInfinity(ctx, aColor);
         break;
@@ -594,6 +598,7 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'turtlePlus':
     case 'turtleOutline':
     case 'stage':
+    case 'picture':
         return size * 1.3;
     case 'cloud':
     case 'cloudGradient':
@@ -2832,6 +2837,37 @@ SymbolMorph.prototype.renderPlus = function (
     ctx.moveTo(lt, y_middle);
     ctx.lineTo(rt, y_middle);
     ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolPicture = function (ctx, color) {
+    // draw a photo symbol with hills and the sun
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 20, 0.5);
+
+    // frame
+    ctx.strokeStyle = color.toString();
+    ctx.fillStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.strokeRect(0, 0, w, h);
+
+    // hills
+    ctx.lineWidth = l;
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.85);
+    ctx.lineTo(w * 0.2, h * 0.6);
+    ctx.lineTo(w * 0.4, h * 0.8);
+    ctx.lineTo(w * 0.75, h * 0.35);
+    ctx.lineTo(w, h * 0.65);
+    ctx.lineTo(w, h);
+    ctx.lineTo(0, h);
+    ctx.closePath();
+    ctx.fill();
+
+    // sun
+    ctx.beginPath();
+    ctx.arc(w * 0.4, h * 0.4, l * 2, radians(0), radians(360), false);
+    ctx.fill();
 };
 
 /*
