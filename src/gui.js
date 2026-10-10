@@ -12953,7 +12953,7 @@ CostumeIconMorph.prototype.duplicateCostume = function () {
 CostumeIconMorph.prototype.removeCostume = function () {
     var wardrobe = this.parentThatIsA(WardrobeMorph),
         idx = this.parent.children.indexOf(this),
-        off = CamSnapshotDialogMorph.prototype.enableCamera ? 3 : 2;
+        off = CamSnapshotDialogMorph.prototype.enableCamera ? 4 : 3;
     wardrobe.removeCostumeAt(idx - off); // ignore paintbrush and camera buttons
     if (wardrobe.sprite.costume === this.object) {
         wardrobe.sprite.wearCostume(null);
@@ -13015,7 +13015,7 @@ CostumeIconMorph.prototype.disinherit = function () {
         idx = this.parent.children.indexOf(this);
     if (wardrobe.sprite.inheritsAttribute('costumes')) {
         wardrobe.sprite.shadowAttribute('costumes');
-        this.object = wardrobe.sprite.costumes.at(idx - 3);
+        this.object = wardrobe.sprite.costumes.at(idx - 4);
     }
 };
 

@@ -12,6 +12,7 @@
 
 ### 2026-10-10
 * gui: added "import costume from library" button to the wardrobe
+* gui: adjusted wardrobe indices to the additional "import" button
 
 ### 2026-10-09
 * new dev version
