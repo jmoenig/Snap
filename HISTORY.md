@@ -4,6 +4,7 @@
 
 * **New Features:**
     * added "import costume from library" button to the wardrobe
+    * added "import sound from library" button to the jukebox
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
 * **Notable Changes:**
     * new "picture" and "shirt" symbols
@@ -13,6 +14,7 @@
 ### 2026-10-10
 * gui: added "import costume from library" button to the wardrobe
 * gui: adjusted wardrobe indices to the additional "import" button
+* gui: added "import sound from library" button to the jukebox
 
 ### 2026-10-09
 * new dev version

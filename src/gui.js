@@ -13699,7 +13699,7 @@ SoundIconMorph.prototype.renameSound = function () {
 
 SoundIconMorph.prototype.removeSound = function () {
     var jukebox = this.parentThatIsA(JukeboxMorph),
-        idx = this.parent.children.indexOf(this) - 1;
+        idx = this.parent.children.indexOf(this) - 2;
     jukebox.removeSound(idx);
     jukebox.sprite.recordUserEdit(
         'sound',
@@ -13727,7 +13727,7 @@ SoundIconMorph.prototype.disinherit = function () {
         idx = this.parent.children.indexOf(this);
     if (jukebox.sprite.inheritsAttribute('sounds')) {
         jukebox.sprite.shadowAttribute('sounds');
-        this.object = jukebox.sprite.sounds.at(idx - 1);
+        this.object = jukebox.sprite.sounds.at(idx - 2);
     }
 };
 
@@ -13781,6 +13781,7 @@ JukeboxMorph.prototype.updateList = function () {
         icon,
         txt,
         ide = this.sprite.parentThatIsA(IDE_Morph),
+        importButton,
         recordButton;
 
     this.changed();
@@ -13798,6 +13799,27 @@ JukeboxMorph.prototype.updateList = function () {
     txt.setColor(SpriteMorph.prototype.paletteTextColor);
     txt.setPosition(new Point(x, y));
     this.addContents(txt);
+
+    importButton = new PushButtonMorph(
+        this,
+        'importNew',
+        new SymbolMorph('notes', 15)
+    );
+    importButton.padding = 0;
+    importButton.corner = 12;
+    importButton.color = IDE_Morph.prototype.groupColor;
+    importButton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    importButton.pressColor = importButton.highlightColor;
+    importButton.labelMinExtent = new Point(36, 18);
+    importButton.labelShadowOffset = new Point(-1, -1);
+    importButton.labelShadowColor = importButton.highlightColor;
+    importButton.labelColor = TurtleIconMorph.prototype.labelColor;
+    importButton.contrast = this.buttonContrast;
+    importButton.hint = 'Select a sound from the media library';
+    importButton.fixLayout();
+    importButton.setPosition(txt.bottomLeft().add(new Point(0, padding * 2)));
+
+    this.addContents(importButton);
 
     recordButton = new PushButtonMorph(
         ide,
@@ -13818,7 +13840,8 @@ JukeboxMorph.prototype.updateList = function () {
     recordButton.fixLayout();
     recordButton.label.setColor(new Color(255, 20, 20));
     recordButton.setPosition(txt.bottomLeft().add(new Point(0, padding * 2)));
-
+    recordButton.setPosition(txt.bottomLeft().add(new Point(0, padding * 2)));
+    recordButton.setLeft(importButton.right() + padding);
     this.addContents(recordButton);
 
     y = recordButton.bottom() + padding;
@@ -13860,6 +13883,15 @@ JukeboxMorph.prototype.step = function () {
 JukeboxMorph.prototype.removeSound = function (idx) {
     this.sprite.sounds.remove(idx);
     this.updateList();
+};
+
+JukeboxMorph.prototype.importNew = function () {
+    var ide = this.parentThatIsA(IDE_Morph);
+    if (location.protocol === 'file:') {
+        ide.importLocalFile();
+        return;
+    }
+    ide.importMedia('Sounds');
 };
 
 // Jukebox drag & drop
