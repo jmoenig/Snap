@@ -13,6 +13,9 @@
     * changed the contrast of the wardrobe's and jukeboxe's creation buttons
 * **Notable Fixes:**
     * fixed a type inference glitch in the block editor
+    * fixed a syntax error (missing argument slot) in the Spanish translation of the "switch to scene" command block
+* **Translation Updates:**
+    * Spanish
 
 ### 2026-10-10
 * gui: added "import costume from library" button to the wardrobe
