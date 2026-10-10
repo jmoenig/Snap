@@ -16,6 +16,7 @@
     * fixed a syntax error (missing argument slot) in the Spanish translation of the "switch to scene" command block
     * fixed color picker for custom categories when zooming the IDE's magnification
     * fixed the pipette tool in the paint editor when zooming the IDE's magnification
+    * fixed localization issue with translatable single-item options in custom blocks' user defined dropdown menus
 * **Translation Updates:**
     * Spanish
 
@@ -28,6 +29,7 @@
 * objects: pressing the green flag button first stops all active processes before (re-) starting the green-flagged scripts
 * widgets: fixed color picker for custom categories when zooming the IDE's magnification
 * paint: fixed the pipette tool in the paint editor when zooming the IDE's magnification
+* byob: fixed localization issue with translatable single-item options in custom blocks' user defined dropdown menus
 
 ### 2026-10-09
 * new dev version
