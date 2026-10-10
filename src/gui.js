@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-October-09';
+modules.gui = '2026-October-10';
 
 // Declarations
 
@@ -13253,6 +13253,7 @@ WardrobeMorph.prototype.updateList = function () {
         oldPos = this.contents.position(),
         icon,
         txt,
+        shapesbutton,
         paintbutton,
         cambutton;
 
@@ -13270,6 +13271,30 @@ WardrobeMorph.prototype.updateList = function () {
     icon.setPosition(new Point(x, y));
     this.addContents(icon);
     y = icon.bottom() + padding;
+
+    shapesbutton = new PushButtonMorph(
+        this,
+        "importNew",
+        new SymbolMorph("picture", 15)
+    );
+
+    shapesbutton.padding = 0;
+    shapesbutton.corner = 12;
+    shapesbutton.color = IDE_Morph.prototype.groupColor;
+    shapesbutton.highlightColor = IDE_Morph.prototype.frameColor.darker(50);
+    shapesbutton.pressColor = shapesbutton.highlightColor;
+    shapesbutton.labelMinExtent = new Point(36, 18);
+    shapesbutton.labelShadowOffset = new Point(-1, -1);
+    shapesbutton.labelShadowColor = shapesbutton.highlightColor;
+    shapesbutton.labelColor = TurtleIconMorph.prototype.labelColor;
+    shapesbutton.contrast = this.buttonContrast;
+    shapesbutton.hint = "Select a costume from the media library";
+    shapesbutton.setPosition(new Point(x, y));
+    shapesbutton.fixLayout();
+    shapesbutton.setCenter(icon.center());
+    shapesbutton.setLeft(icon.right() + padding * 4);
+
+    this.addContents(shapesbutton);
 
     paintbutton = new PushButtonMorph(
         this,
@@ -13290,7 +13315,7 @@ WardrobeMorph.prototype.updateList = function () {
     paintbutton.setPosition(new Point(x, y));
     paintbutton.fixLayout();
     paintbutton.setCenter(icon.center());
-    paintbutton.setLeft(icon.right() + padding * 4);
+    paintbutton.setLeft(shapesbutton.right() + padding);
 
     this.addContents(paintbutton);
 
@@ -13385,6 +13410,17 @@ WardrobeMorph.prototype.removeCostumeAt = function (idx) {
     this.sprite.shadowAttribute('costumes');
     this.sprite.costumes.remove(idx);
     this.updateList();
+};
+
+WardrobeMorph.prototype.importNew = function () {
+    var ide = this.parentThatIsA(IDE_Morph),
+        graphicsName = ide.currentSprite instanceof SpriteMorph ?
+                'Costumes' : 'Backgrounds';
+    if (location.protocol === 'file:') {
+        ide.importLocalFile();
+        return;
+    }
+    ide.importMedia(graphicsName);
 };
 
 WardrobeMorph.prototype.paintNew = function () {

@@ -3,11 +3,15 @@
 ## in development:
 
 * **New Features:**
+    * added "import costume from library" button to the wardrobe
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
 * **Notable Changes:**
     * new "picture" and "shirt" symbols
 * **Notable Fixes:**
     * fixed a type inference glitch in the block editor
+
+### 2026-10-10
+* gui: added "import costume from library" button to the wardrobe
 
 ### 2026-10-09
 * new dev version
