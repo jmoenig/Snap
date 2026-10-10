@@ -17,6 +17,7 @@
     * fixed color picker for custom categories when zooming the IDE's magnification
     * fixed the pipette tool in the paint editor when zooming the IDE's magnification
     * fixed localization issue with translatable single-item options in custom blocks' user defined dropdown menus
+    * fixed an error catching glitch in the speech-recognition extension
 * **Translation Updates:**
     * Spanish
 
@@ -30,6 +31,7 @@
 * widgets: fixed color picker for custom categories when zooming the IDE's magnification
 * paint: fixed the pipette tool in the paint editor when zooming the IDE's magnification
 * byob: fixed localization issue with translatable single-item options in custom blocks' user defined dropdown menus
+* extensions: fixed an error catching glitch in the speech-recognition extension
 
 ### 2026-10-09
 * new dev version

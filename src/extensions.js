@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-October-01';
+modules.extensions = '2026-October-10';
 
 // Global stuff
 
@@ -965,7 +965,7 @@ SnapExtensions.primitives.set(
             acc.voice.onspeechstart = () => acc.start = true;
             done = () => acc.text = '';
             acc.voice.onnomatch = done;
-            acc.voice.orreror = done;
+            acc.voice.onerror = done;
             acc.voice.start();
         } else if (acc.text !== null) {
             return acc.text;
