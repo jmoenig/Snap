@@ -1,6 +1,8 @@
 // play note function
 var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContextFunc();
+window.audioContext = audioContext;
+
 
 // calculate midi pitches and frequencies
 var tempMidiPitches = {}
@@ -16,7 +18,7 @@ for (var i = 0; i <= 127; i++) {
     tempMidiFreqs[note] = 440 * Math.pow(2, (i - 69)/12)
 }
 
-window._currentNote = ""
+window.currentNote = ""
 window._parsed = ""
 window._isParsed = false
 window.parent._ts_pausePlayback = false;
@@ -26,9 +28,15 @@ const original_stop = _ide.stopAllScripts.bind(_ide);
 _ide.stopAllScripts = function() {
   original_stop();
   window.parent._ts_pausePlayback = true;
+  window.tsPerformanceEnd = null; // the next Play Tracks starts afresh, not where the stopped one would have ended
+  if (window.tsPlayer) window.tsPlayer.cancelQueue(audioContext); // silence notes still sounding
 }
 
 const _convertToSharp = (note) => {
+    if (typeof note !== "string") return note;
+    // E# and B# have no key of their own: E#4 is F4, B#3 is C4
+    if (/^E#-?\d+$/.test(note)) return "F" + note.slice(2);
+    if (/^B#-?\d+$/.test(note)) return "C" + (parseInt(note.slice(2), 10) + 1);
     const splitByFlat = note.split("b");
     if (splitByFlat.length < 2) return note; // does not include a flat
 
@@ -37,50 +45,239 @@ const _convertToSharp = (note) => {
 
     const indexOfLetter = notes.indexOf(letter);
     if (indexOfLetter === -1) return note; // TODO: handle this error
-    let previousSharp;
     if (indexOfLetter === 0) {
-        previousSharp = notes[notes.length - 1];
-    } else {
-        previousSharp = notes[indexOfLetter - 1];
+        // Cb wraps to B in the octave below (Cb4 = B3); other flats stay in octave
+        return notes[notes.length - 1] + (parseInt(number, 10) - 1);
     }
-    return previousSharp + number;
+    return notes[indexOfLetter - 1] + number;
 }
+window._convertToSharp = _convertToSharp;
 window.parent.midiPitches = tempMidiPitches;
 window.parent.midiFreqs = tempMidiFreqs;
 
 
-window.playNote = (note, noteLength, instrumentName, volume) => {
-  window._currentNote = note
-   if (note == "R" || note == "r") return;
+// one player for all notes, so that finished sound nodes are reused and the
+// stop button can silence everything that is still sounding
+const tsPlayer = new WebAudioFontPlayer();
+window.tsPlayer = tsPlayer;
 
-   note = _convertToSharp(note);
-   
-			var player=new WebAudioFontPlayer();
-   instrumentName = instrumentName || window.parent.currentInstrumentName;
-   instrumentName = instrumentName.toLowerCase()
-   // console.log(instrumentName);
-   let currentInstrumentData = window.parent.instrumentData[instrumentName]
-			player.loader.decodeAfterLoading(audioContext, currentInstrumentData.name);
-			function play(){
-    const vol = volume || window.parent.instrumentVolumes[instrumentName] || window.parent.globalInstrumentVolume;
-    console.log(note, noteLength, instrumentName, vol)
-				player.queueWaveTable(audioContext, audioContext.destination
-					, window[currentInstrumentData.name], 0, window.parent.midiPitches[note], noteLength, vol
-    );
-				return false;
-			}
-   play();
+// Every note on the speakers passes through this gain node, so the visualizer
+// can listen to the mix by connecting an analyser to it (see TuneScope.js).
+const tsBus = audioContext.createGain();
+tsBus.connect(audioContext.destination);
+window.tsBus = tsBus;
+
+// A few output stages for notes whose loudness changes while they sound (a
+// slide that swells into a louder note). The player reuses its envelopes per
+// output node, so a small fixed set keeps its pool from growing.
+const tsStages = [];
+let tsNextStage = 0;
+function tsGainStage(ctx, start, gains) {
+  if (ctx !== audioContext) { // a rendering: a fresh stage, nothing to reuse
+    const stage = ctx.createGain();
+    stage.connect(ctx.destination);
+    stage.gain.setValueAtTime(1, start);
+    gains.forEach((g) => stage.gain.linearRampToValueAtTime(Math.max(0.000001, g.ratio), start + g.when));
+    return stage;
+  }
+  if (tsStages.length < 16) {
+    const stage = audioContext.createGain();
+    stage.connect(tsBus);
+    tsStages.push(stage);
+  }
+  const stage = tsStages[tsNextStage];
+  tsNextStage = (tsNextStage + 1) % 16;
+  stage.gain.cancelScheduledValues(start);
+  stage.gain.setValueAtTime(1, start);
+  gains.forEach((g) => stage.gain.linearRampToValueAtTime(Math.max(0.000001, g.ratio), start + g.when));
+  return stage;
 }
 
+// A slide re-pitches one recording by playing it faster or slower. Past the
+// range that recording covers, its vibrato and tone change with the speed: an
+// octave up doubles the vibrato. So when a bend reaches a pitch that another
+// zone of the font covers, that zone's recording is faded in across the bend
+// while the old one fades out, as a sampler does. The incoming recording
+// starts a little early, silent, at the pitch sounding then, so its attack
+// has passed before it is heard: one continuous sound, as in a slur.
+const TS_XFADE_LEAD = 0.1;                            // seconds of silent head start
+const TS_XFADE_OUT = [1, 0.924, 0.707, 0.383, 0];      // equal-power fade: cos 0..90 degrees
+const TS_XFADE_IN = [0, 0.383, 0.707, 0.924, 1];       // and sin
+const tsFades = [];
+let tsNextFade = 0;
+function tsFadeStage(ctx, out) {
+  if (ctx !== audioContext) { // a rendering
+    const stage = ctx.createGain();
+    stage.connect(out);
+    return stage;
+  }
+  if (tsFades.length < 32) tsFades.push(audioContext.createGain());
+  const stage = tsFades[tsNextFade];
+  tsNextFade = (tsNextFade + 1) % 32;
+  stage.disconnect();
+  stage.connect(out);
+  return stage;
+}
+function tsRampSteps(param, values, t0, t1) {
+  for (let k = 1; k < values.length; k++) param.linearRampToValueAtTime(values[k], t0 + (t1 - t0) * k / (values.length - 1));
+}
+// the legs of a slide: one per recording, each with its start, its own slide
+// points and the bends across which it fades in or out
+window.tsSlideLegs = (preset, pitch, slides, length, player, ctx) => {
+  const pts = [{ delta: 0, when: 0 }].concat(slides.slice().sort((a, b) => a.when - b.when));
+  const pitchAt = (t) => {
+    for (let i = 1; i < pts.length; i++) {
+      if (t <= pts[i].when) {
+        const a = pts[i - 1], b = pts[i];
+        return pitch + a.delta + (b.when > a.when ? (b.delta - a.delta) * (t - a.when) / (b.when - a.when) : 0);
+      }
+    }
+    return pitch + pts[pts.length - 1].delta;
+  };
+  const zoneOf = (p) => (player || tsPlayer).findZone(ctx || audioContext, preset, p);
+  const legs = [{ zone: zoneOf(pitch), start: 0, pitch: pitch, fadeIn: null, fadeOut: null, end: length }];
+  for (let i = 1; i < pts.length; i++) {
+    if (pts[i].delta === pts[i - 1].delta) continue;                 // a hold
+    const zone = zoneOf(pitch + pts[i].delta), leg = legs[legs.length - 1];
+    if (zone === leg.zone || !zone) continue;                        // the same recording serves
+    const t0 = pts[i - 1].when, t1 = pts[i].when, start = Math.max(leg.start + 0.001, t0 - TS_XFADE_LEAD);
+    leg.fadeOut = { t0: t0, t1: t1 };
+    leg.end = t1;
+    legs.push({ zone: zone, start: start, pitch: pitchAt(start), fadeIn: { t0: t0, t1: t1 }, fadeOut: null, end: length });
+  }
+  legs.forEach((leg) => {
+    leg.duration = leg.end - leg.start;
+    leg.slides = pts.filter((q) => q.when > leg.start && q.when <= leg.end)
+                    .map((q) => ({ delta: pitch + q.delta - leg.pitch, when: q.when - leg.start }));
+    // a recording other than the font's own choice for the pitch: offer it alone
+    leg.preset = (leg === legs[0]) ? preset : { zones: [Object.assign({}, leg.zone, { keyRangeLow: 0, keyRangeHigh: 127 })] };
+  });
+  return legs;
+};
+
+// Export Tracks renders a performance off-line: while tsRenderTarget is set,
+// playNote queues its sounds into that context through that player instead of
+// the speakers (see TS_export.js).
+window.tsRenderTarget = null;
+
+// slides: optional [{delta: semitones, when: seconds}] pitch changes inside the note
+// gains: optional [{ratio, when: seconds}] loudness changes inside the note, relative to volume
+window.playNote = (note, noteLength, instrumentName, recordNote, volume, when, slides, gains) => {
+  const ctx = window.tsRenderTarget ? window.tsRenderTarget.context : audioContext;
+  const player = window.tsRenderTarget ? window.tsRenderTarget.player : tsPlayer;
+  if (recordNote) window.currentNote = note;
+  if (note == "R" || note == "r") return;
+  // a tie marker that reaches this far degrades to a plain note instead of silence
+  if (typeof note === "string" && note.charAt(note.length - 1) === "~") note = note.slice(0, -1);
+
+  let name = (instrumentName || window.parent.currentInstrumentName).toLowerCase();
+  if (window.tsCanonicalInstrument) name = window.tsCanonicalInstrument(name); // an old name means a new instrument
+  const data = window.parent.instrumentData[name];
+  if (!data) throw new Error('Unknown instrument "' + name + '". Choose one from the Set Instrument To menu.');
+  const preset = window[data.name];
+  if (!preset || !preset.zones || !preset.zones.every(zone => zone.buffer)) {
+    if (!window.parent.loadedTuneScope) throw new Error('TuneScope is not loaded. Run Initialize TuneScope first.');
+    if (window.tsLoadInstrument) window.tsLoadInstrument(name); // fetch it now, for the next try
+    throw new Error('The instrument "' + name + '" is still loading. Try again in a moment.');
+  }
+
+  // a drum plays its own key; a MIDI number is used directly; a note name is looked up
+  const pitch = (data.drumPitch !== undefined) ? data.drumPitch
+              : (parseFloat(note) === +note) ? +note : window.parent.midiPitches[_convertToSharp(note)];
+
+  // an explicit volume wins; otherwise the instrument's volume (default 100%) scales the global volume
+  const instrumentScale = (typeof window.parent.instrumentVolumes[name] === 'number')
+      ? window.parent.instrumentVolumes[name] : 1;
+  const vol = (typeof volume === 'number') ? volume : window.parent.globalInstrumentVolume * instrumentScale;
+
+  // zero means silence: the player would treat a volume of 0 as "not given" and play at 0.5
+  if (!(vol > 0)) return null;
+
+  // a percussion sound rings for its whole recording, as on a drum machine, whatever
+  // length it is written with; the written length still places the next note.
+  // A looped recording has no end, so it keeps the written length.
+  if (data.percussion) {
+    const zone = player.findZone(ctx, preset, pitch);
+    if (zone && zone.buffer && !(zone.loopEnd > zone.loopStart && zone.loopStart > 0)) {
+      const rate = Math.pow(2, (100 * pitch - (zone.originalPitch - 100 * zone.coarseTune - zone.fineTune)) / 1200);
+      noteLength = Math.max(noteLength, (zone.buffer.duration - (zone.delay || 0)) / rate);
+    }
+  }
+
+  // the envelope is returned so that a live MIDI note can be cut when its key is released
+  const startWhen = Math.max(when || 0, ctx.currentTime);
+  const target = (gains && gains.length) ? tsGainStage(ctx, startWhen, gains) : (ctx === audioContext ? tsBus : ctx.destination);
+  const legs = (slides && slides.length) ? window.tsSlideLegs(preset, pitch, slides, noteLength, player, ctx) : null;
+  if (!legs || legs.length === 1) return player.queueWaveTable(ctx, target, preset, when || 0, pitch, noteLength, vol, slides);
+  let first = null;
+  legs.forEach((leg) => {
+    const stage = tsFadeStage(ctx, target), begin = startWhen + leg.start;
+    stage.gain.cancelScheduledValues(begin);
+    if (leg.fadeIn) {
+      stage.gain.setValueAtTime(0, begin);
+      stage.gain.setValueAtTime(0, startWhen + leg.fadeIn.t0);
+      tsRampSteps(stage.gain, TS_XFADE_IN, startWhen + leg.fadeIn.t0, startWhen + leg.fadeIn.t1);
+    } else {
+      stage.gain.setValueAtTime(1, begin);
+    }
+    if (leg.fadeOut) {
+      stage.gain.setValueAtTime(1, startWhen + leg.fadeOut.t0);
+      tsRampSteps(stage.gain, TS_XFADE_OUT, startWhen + leg.fadeOut.t0, startWhen + leg.fadeOut.t1);
+    }
+    const env = player.queueWaveTable(ctx, stage, leg.preset, begin, leg.pitch, leg.duration, vol, leg.slides);
+    if (!first) first = env;
+  });
+  return first;
+}
+
+// [beats per measure, length of one beat in quarter notes]: a measure lasts
+// beats * beat value quarter notes, and a quarter note lasts 60 / tempo seconds
 window.timeSignatureToBeatsPerMeasure = {
-    "4/4": [4,1], // 4 beats per measure, Quarter note gets the beat
-    "3/4": [3,1],
-    "5/4": [5,1],
-    "7/4": [7,1],
-    "6/8": [6,0.5], // 6 beats per measure, Eighth note gets the beat
-    "9/8": [9,0.5],
-    "12/8": [12,0.5]
+    "2/2": [2, 2],  // cut time: 2 beats per measure, half note gets the beat
+    "3/2": [3, 2],
+    "2/4": [2, 1],
+    "3/4": [3, 1],
+    "4/4": [4, 1],  // 4 beats per measure, quarter note gets the beat
+    "5/4": [5, 1],
+    "6/4": [6, 1],
+    "7/4": [7, 1],
+    "3/8": [3, 0.5],
+    "5/8": [5, 0.5],
+    "6/8": [6, 0.5], // 6 beats per measure, eighth note gets the beat
+    "7/8": [7, 0.5],
+    "9/8": [9, 0.5],
+    "12/8": [12, 0.5]
 }
+
+// "n/d" -> [n, 4 / d]; the table above first, then any beats/note-value pair
+window.tsParseTimeSignature = (text) => {
+    const key = String(text == null ? '' : text).replace(/\s+/g, '');
+    const known = window.timeSignatureToBeatsPerMeasure[key];
+    if (known) return known;
+    const m = /^(\d+)\/(\d+)$/.exec(key);
+    if (!m || +m[1] < 1 || [1, 2, 4, 8, 16, 32].indexOf(+m[2]) === -1) {
+        throw new Error('Unknown time signature "' + text + '". Write beats per measure over the beat value, such as 3/4 or 6/8.');
+    }
+    return [+m[1], 4 / +m[2]];
+}
+
+// instruments whose pitch can slide continuously (a / glide mark bends the
+// note into the next); the others play a glide as a run of semitones, and
+// drums ignore it
+// a glide bends the pitch on the instruments marked bends in TS_instruments.js;
+// on the others it plays every semitone instead
+// true for the sounds of the Percussion group, which ring out whatever their written length
+window.tsIsPercussion = (name) => {
+    let key = String(name).toLowerCase();
+    if (window.tsCanonicalInstrument) key = window.tsCanonicalInstrument(key);
+    const data = window.parent.instrumentData && window.parent.instrumentData[key];
+    return !!(data && data.percussion);
+};
+
+window.tsCanSlide = (name) => {
+    const data = window.parent.instrumentData && window.parent.instrumentData[String(name).toLowerCase()];
+    return !!(data && data.bends);
+};
 
 window.baseTempo = 60;
 
@@ -99,163 +296,28 @@ window.noteLengthToTimeValue = {
     "sixteenth": 0.25,
     "dotted thirtysecond": 0.1875,
     "thirtysecond": 0.125,
-    "whole triplet": 2.667,
-    "half triplet": 1.333,
-    "quarter triplet": 0.667,
-    "eighth triplet": 0.333,
-    "sixteenth triplet": 0.167,
-    "thirtysecond triplet": 0.0417
+    "whole triplet": 8/3,
+    "half triplet": 4/3,
+    "quarter triplet": 2/3,
+    "eighth triplet": 1/3,
+    "sixteenth triplet": 1/6,
+    "thirtysecond triplet": 1/12,
+    "thirty second triplet": 1/12
 }
+
+// Match note-duration names regardless of case, spaces, or hyphens, so
+// "thirty-second", "thirty second", and "Thirtysecond" all resolve.
+window.noteLengthNormalized = {};
+for (var __dk in window.noteLengthToTimeValue) {
+    if (Object.prototype.hasOwnProperty.call(window.noteLengthToTimeValue, __dk)) {
+        window.noteLengthNormalized[__dk.toLowerCase().replace(/[\s\-]+/g, '')] = window.noteLengthToTimeValue[__dk];
+    }
+}
+
 
 // instrument data
-window.parent.instrumentData = {
-    "accordion": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0230_Aspirin_sf2_file.js",
-        name: "_tone_0230_Aspirin_sf2_file"
-    },
-    "bass, acoustic": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0320_GeneralUserGS_sf2_file.js",
-        name: "_tone_0320_GeneralUserGS_sf2_file"
-    },
-    "bass, electric (finger)": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0350_JCLive_sf2_file.js",
-        name: "_tone_0350_JCLive_sf2_file"
-    },
-    "guitar, acoustic": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0241_JCLive_sf2_file.js",
-        name: "_tone_0241_JCLive_sf2_file"
-    },
-    "guitar, electric": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0260_JCLive_sf2_file.js",
-        name: "_tone_0260_JCLive_sf2_file"
-    },
-    "guitar, overdrive": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0291_LesPaul_sf2_file.js",
-        name: "_tone_0291_LesPaul_sf2_file"
-    },
-    "piano": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0020_JCLive_sf2_file.js",
-        name: "_tone_0020_JCLive_sf2_file"
-    },
-    "organ": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0180_Chaos_sf2_file.js",
-        name: "_tone_0180_Chaos_sf2_file"
-    },
-    "banjo": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/1050_FluidR3_GM_sf2_file.js",
-        name: "_tone_1050_FluidR3_GM_sf2_file"
-    },
-    "saxophone": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0650_FluidR3_GM_sf2_file.js",
-        name: "_tone_0650_FluidR3_GM_sf2_file"
-    },
-    "shakuhachi": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0770_SBLive_sf2.js",
-        name: "_tone_0770_SBLive_sf2"
-    },
-    "sitar": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/1040_Aspirin_sf2_file.js",
-        name: "_tone_1040_Aspirin_sf2_file"
-    },
-    "bassoon": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0700_FluidR3_GM_sf2_file.js",
-        name: "_tone_0700_FluidR3_GM_sf2_file"
-    },
-    "bass": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0350_JCLive_sf2_file.js",
-        name: "_tone_0350_JCLive_sf2_file"
-    },
-    "violin": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0400_JCLive_sf2_file.js",
-        name: "_tone_0400_JCLive_sf2_file"
-    },
-    "cello": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0420_JCLive_sf2_file.js",
-        name: "_tone_0420_JCLive_sf2_file"
-    },
-    "clarinet": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0710_Chaos_sf2_file.js",
-        name: "_tone_0710_Chaos_sf2_file"
-    },
-    "flute": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0730_JCLive_sf2_file.js",
-        name: "_tone_0730_JCLive_sf2_file"
-    },
-    "french horn": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0600_GeneralUserGS_sf2_file.js",
-        name: "_tone_0600_GeneralUserGS_sf2_file"
-    },
-    "harp": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0460_GeneralUserGS_sf2_file.js",
-        name: "_tone_0460_GeneralUserGS_sf2_file"
-    },
-    "koto": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/1070_FluidR3_GM_sf2_file.js",
-        name: "_tone_1070_FluidR3_GM_sf2_file"
-    },
-    "marimba": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0121_FluidR3_GM_sf2_file.js",
-        name: "_tone_0121_FluidR3_GM_sf2_file"
-    },
-    "music box": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0100_SBLive_sf2.js",
-        name: "_tone_0100_SBLive_sf2"
-    },
-    "oboe": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0680_JCLive_sf2_file.js",
-        name: "_tone_0680_JCLive_sf2_file"
-    },
-    "trumpet": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0560_GeneralUserGS_sf2_file.js",
-        name: "_tone_0560_GeneralUserGS_sf2_file"
-    },
-    "tuba": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0580_GeneralUserGS_sf2_file.js",
-        name: "_tone_0580_GeneralUserGS_sf2_file"
-    },
-    "vibraphone": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/0110_GeneralUserGS_sf2_file.js",
-        name: "_tone_0110_GeneralUserGS_sf2_file"
-    },
-
-    // drums
-
-    "cabasa": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12869_6_JCLive_sf2_file.js",
-        name: "_drum_69_6_JCLive_sf2_file"
-    },
-    "snare drum": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12840_6_JCLive_sf2_file.js",
-        name: "_drum_40_6_JCLive_sf2_file"
-    },
-    "bass drum": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12835_21_FluidR3_GM_sf2_file.js",
-        name: "_drum_35_21_FluidR3_GM_sf2_file"
-    },
-    "closed hi-hat": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12842_0_FluidR3_GM_sf2_file.js",
-        name: "_drum_42_0_FluidR3_GM_sf2_file"
-    },
-    "open hi-hat": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12846_0_FluidR3_GM_sf2_file.js",
-        name: "_drum_46_0_FluidR3_GM_sf2_file"
-    },
-    "mid tom": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12847_21_FluidR3_GM_sf2_file.js",
-        name: "_drum_47_21_FluidR3_GM_sf2_file"
-    },
-    "high tom": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12848_21_FluidR3_GM_sf2_file.js",
-        name: "_drum_48_21_FluidR3_GM_sf2_file"
-    },
-    "crash cymbal": {
-        path: "https://surikov.github.io/webaudiofontdata/sound/12849_21_FluidR3_GM_sf2_file.js",
-        name: "_drum_49_21_FluidR3_GM_sf2_file"
-    },
-}
-
-// load all instruments
-let instrumentNames = Object.keys(window.parent.instrumentData);
+// The instrument table, name -> {name: the sound file's variable, file, drumPitch?, bends},
+// is built by TS_instruments.js, which stores it as window.parent.instrumentData.
 window.parent.currentInstrumentName = "piano";
 
 // initialize volumes
@@ -434,12 +496,12 @@ function convertListToArrayRecursive(list) {
     let temp = []
     // need to do more testing for chords and nested lists
     if (!(list.contents === undefined)) {
-        for (var i = 0; i < list.contents.length; i++) {
-            temp[i] = convertListToArrayRecursive(list.contents[i]);
-        }
-        return temp;
+      for (var i = 0; i < list.contents.length; i++) {
+          temp[i] = convertListToArrayRecursive(list.contents[i]);
+      }
+      return temp;
     } else {
-        return list;
+      return list;
     }
 }
 window.convertListToArrayRecursive = convertListToArrayRecursive;
@@ -455,12 +517,14 @@ const convertArrayToListRecursive = (array) => {
 }
 window.convertArrayToListRecursive = convertArrayToListRecursive;
 
-function _typeOf(value) {
+function typeOf(value) {
     return Object.prototype.toString.call(value).slice(8, -1);
 }
 
 const _isObject = (obj) => {
-  return (typeof obj === "object" || _typeOf(obj) === "Array") && obj !== null;
+  //typeof obj === 'object'
+  return (typeof obj === "object" || typeOf(obj) === "Array") && obj !== null;
+
 }
 
 const _objToArray = (obj) => {
@@ -473,20 +537,52 @@ const _objToArray = (obj) => {
 }
 window._objToArray = _objToArray;
 
-function isNumber(myString) {
-  return /^\d+\.\d+$/.test(myString);
-}
-window.isNumber = isNumber;
-
 function hasNumber(myString) {
   return /\d/.test(myString);
 }
 window.hasNumber = hasNumber;
 
+function isNumber(myString) {
+  return /^\d*\.?\d+$/.test(String(myString));
+}
+window.isNumber = isNumber;
+
 function deep_copy(array) {
   return JSON.parse(JSON.stringify(array));
 }
 window.deep_copy = deep_copy;
+
+// decode one instrument file's recordings so that its first note plays at once.
+// Resolves when every sample buffer is ready.
+// The compressed audio of an instrument is in a .bin file beside its .js file;
+// each zone names its bytes there with fileOffset and fileLength.
+window.tsAttachSamples = (preset, buffer) => {
+  preset.zones.forEach(zone => {
+    if (zone.fileLength !== undefined && !zone.buffer && !zone.fileData) {
+      zone.fileData = buffer.slice(zone.fileOffset, zone.fileOffset + zone.fileLength);
+    }
+  });
+};
+
+window.tsDecodePreset = (preset) => {
+  tsPlayer.adjustPreset(audioContext, preset);
+  return new Promise(resolve => {
+    const check = () => {
+      if (preset.zones.every(zone => zone.buffer)) resolve();
+      else setTimeout(check, 50);
+    };
+    check();
+  });
+};
+
+// decode every instrument whose file is loaded; called by ts_load() in TuneScope.js
+// after the preload instruments arrive, which then sets window.parent.loadedTuneScope.
+window.tsDecodeAll = () => {
+  const presets = Object.values(window.parent.instrumentData)
+    .map(data => window[data.name])
+    .filter((preset, i, all) => preset && preset.zones && all.indexOf(preset) === i);
+  return Promise.all(presets.map(window.tsDecodePreset)).then(() => undefined);
+};
 
 /**
  * Select file(s).
@@ -508,26 +604,10 @@ function _selectFile(contentType, multiple) {
             else
                 resolve(files[0]);
         };
+        // the window was closed without a choice (browsers from 2023 on fire this)
+        input.addEventListener('cancel', () => resolve(multiple ? [] : null));
 
         input.click();
     });
 }
 window._selectFile = _selectFile;
-
-// play dummy sound to initialize
-
-setTimeout(() => {
-  console.log("playing initialization sound")
-  for (let i = 0; i < instrumentNames.length; i++) {
-    let instrumentName = instrumentNames[i];
-    if (instrumentName === "shakuhachi") return;
-    window.playNote("C4", 1, instrumentName, 0);
-  }
-}, 1000 * 3);
-
-// set loaded to true
-
-setTimeout(() => {
-  console.log("TuneScope Loaded")
-  window.parent.loadedTuneScope = true;
-}, 1000 * 4)
