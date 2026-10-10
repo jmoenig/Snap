@@ -43,7 +43,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2026-October-09';
+modules.symbols = '2026-October-10';
 
 var SymbolMorph;
 
@@ -165,6 +165,7 @@ SymbolMorph.prototype.names = [
     'speaker',
     'picture',
     'shirt',
+    'microphone',
     'infinity'
 ];
 
@@ -568,6 +569,9 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
     case 'shirt':
         this.renderSymbolShirt(ctx, aColor);
         break;
+    case 'microphone':
+        this.renderSymbolMicrophone(ctx, aColor);
+        break;
     case 'infinity':
         this.renderSymbolInfinity(ctx, aColor);
         break;
@@ -591,6 +595,8 @@ SymbolMorph.prototype.symbolWidth = function () {
         return size * 0.5;
     case 'location':
         return size * 0.6;
+    case 'microphone':
+        return size * 0.7;
     case 'flash':
     case 'file':
     case 'list':
@@ -2918,6 +2924,44 @@ SymbolMorph.prototype.renderSymbolShirt = function (ctx, color) {
     ctx.lineTo(w * 0.7, 0);
 
     ctx.stroke();
+};
+
+SymbolMorph.prototype.renderSymbolMicrophone = function (ctx, color) {
+    // draw a microphone symbol
+    var w = this.symbolWidth(),
+        h = this.size,
+        l = Math.max(w / 8, 1),
+        r = w / 2,
+        r2 = r - l * 1;
+
+    ctx.strokeStyle = color.toString();
+    ctx.fillStyle = color.toString();
+    ctx.lineWidth = l;
+    ctx.lineCap = 'round';
+
+    // cradle
+    ctx.beginPath();
+    ctx.arc(r, h - w * 0.75, r - l / 2, radians(0), radians(180), false);
+    ctx.stroke();
+
+    // stand
+    ctx.beginPath();
+    ctx.moveTo(r, h - w * 0.25);
+    ctx.lineTo(r, h);
+    ctx.moveTo(w * 0.2, h - l / 2);
+    ctx.lineTo(w * 0.8, h - l / 2);
+    ctx.stroke();
+
+    // body
+    ctx.beginPath();
+
+    // bottom
+    ctx.arc(r, h - w * 0.75, r2 - l / 2, radians(0), radians(180), false);
+
+    // top
+    ctx.arc(r, r2 - l / 2, r2 - l / 2, radians(180), radians(0), false);
+    ctx.closePath();
+    ctx.fill();
 };
 
 /*
