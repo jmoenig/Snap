@@ -14,6 +14,7 @@
 * **Notable Fixes:**
     * fixed a type inference glitch in the block editor
     * fixed a syntax error (missing argument slot) in the Spanish translation of the "switch to scene" command block
+    * fixed color picker for custom categories when zooming the IDE's magnification
 * **Translation Updates:**
     * Spanish
 

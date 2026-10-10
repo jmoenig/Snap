@@ -84,12 +84,12 @@
 StringMorph, Morph, TextMorph, nop, detect, StringFieldMorph, ColorPaletteMorph,
 HTMLCanvasElement, fontHeight, SymbolMorph, localize, SpeechBubbleMorph, isNil,
 ArrowMorph, MenuMorph, isString, SliderMorph, MorphicPreferences, BLACK, WHITE,
-ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf,
+ScrollFrameMorph, MenuItemMorph, useBlurredShadows, getDocumentPositionOf, ZOOM,
 IDE_Morph*/
 
 /*jshint esversion: 6*/
 
-modules.widgets = '2026-March-03';
+modules.widgets = '2026-October-10';
 
 var PushButtonMorph;
 var ToggleButtonMorph;
@@ -2148,7 +2148,9 @@ DialogBoxMorph.prototype.promptCategory = function (
         pal.setPosition(picker.topRight().add(new Point(this.edge,0)));
 
         hand.processMouseMove = (event) => {
-            var clr = world.getGlobalPixelColor(hand.position());
+            var clr = world.getGlobalPixelColor(
+                    hand.position().divideBy(ZOOM)
+                );
             hand.setPosition(new Point(
                 event.pageX - posInDocument.x,
                 event.pageY - posInDocument.y
