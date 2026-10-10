@@ -91,7 +91,7 @@ modules.gui = '2026-October-10';
 
 // Declarations
 
-var SnapVersion = '12.3.0-def';
+var SnapVersion = '12.3.0-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -13824,7 +13824,7 @@ JukeboxMorph.prototype.updateList = function () {
     recordButton = new PushButtonMorph(
         ide,
         'recordNewSound',
-        new SymbolMorph('circleSolid', 15)
+        new SymbolMorph('microphone', 15)
     );
     recordButton.padding = 0;
     recordButton.corner = 12;
@@ -13838,7 +13838,6 @@ JukeboxMorph.prototype.updateList = function () {
     recordButton.contrast = this.buttonContrast;
     recordButton.hint = 'Record a new sound';
     recordButton.fixLayout();
-    recordButton.label.setColor(new Color(255, 20, 20));
     recordButton.setPosition(txt.bottomLeft().add(new Point(0, padding * 2)));
     recordButton.setPosition(txt.bottomLeft().add(new Point(0, padding * 2)));
     recordButton.setLeft(importButton.right() + padding);

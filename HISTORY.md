@@ -7,6 +7,7 @@
     * added "import sound from library" button to the jukebox
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
 * **Notable Changes:**
+    * changed the jukebox's "record new sound" button's symbol from red dot to microphone
     * new "picture", "shirt" and "microphone" symbols
 * **Notable Fixes:**
     * fixed a type inference glitch in the block editor
@@ -16,6 +17,7 @@
 * gui: adjusted wardrobe indices to the additional "import" button
 * gui: added "import sound from library" button to the jukebox
 * symbols: added new "microphone" symbol
+* gui: changed the jukebox's "record new sound" button's symbol from red dot to microphone
 
 ### 2026-10-09
 * new dev version
