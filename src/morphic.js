@@ -580,6 +580,16 @@
     e.g. when "dragging" a morph handle to resize its owner, or when
     "dragging" a slider button.
 
+    Right before a draggable morph is picked up by dragging it, its
+    optional
+
+        pickUpInstead(handMorph)
+
+    method is consulted, if it is present. If it answers true the hand
+    assumes that the morph has picked up something else in its stead,
+    e.g. a copy of itself, and leaves the original alone. This lets you
+    implement modifier-key gestures such as duplicate-on-drag.
+
     Right before a morph is picked up its
 
         selectForEdit
@@ -11679,9 +11689,13 @@ HandMorph.prototype.processMouseMove = function (event) {
                     MorphicPreferences.grabThreshold)) {
             this.setPosition(this.grabPosition);
             if (this.morphToGrab.isDraggable) {
-                morph = this.morphToGrab.selectForEdit ?
-                        this.morphToGrab.selectForEdit() : this.morphToGrab;
-                this.grab(morph);
+                if (!(this.morphToGrab.pickUpInstead &&
+                        this.morphToGrab.pickUpInstead(this))) {
+                    morph = this.morphToGrab.selectForEdit ?
+                            this.morphToGrab.selectForEdit() :
+                                this.morphToGrab;
+                    this.grab(morph);
+                }
             } else if (this.morphToGrab.isTemplate) {
                 this.world.stopEditing();
                 morph = this.morphToGrab.fullCopy();
