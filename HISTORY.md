@@ -15,6 +15,7 @@
     * fixed a type inference glitch in the block editor
     * fixed a syntax error (missing argument slot) in the Spanish translation of the "switch to scene" command block
     * fixed color picker for custom categories when zooming the IDE's magnification
+    * fixed the pipette tool in the paint editor when zooming the IDE's magnification
 * **Translation Updates:**
     * Spanish
 
@@ -25,6 +26,8 @@
 * symbols: added new "microphone" symbol
 * gui: changed the jukebox's "record new sound" button's symbol from red dot to microphone
 * objects: pressing the green flag button first stops all active processes before (re-) starting the green-flagged scripts
+* widgets: fixed color picker for custom categories when zooming the IDE's magnification
+* paint: fixed the pipette tool in the paint editor when zooming the IDE's magnification
 
 ### 2026-10-09
 * new dev version

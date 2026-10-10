@@ -74,18 +74,21 @@
     2020 Jul 13 - modified scale buttons (Jadga)
 
     2021 Mar 17 - moved stage dimension handling to scenes (Jens)
+
+    2026 Oct 10 - added ZOOM support to the pipette tool (Jens)
 */
 
 /*global Point, Rectangle, DialogBoxMorph, AlignmentMorph, PushButtonMorph, nop,
 Color, SymbolMorph, newCanvas, Morph, StringMorph, Costume, SpriteMorph,  isNil,
 localize, InputFieldMorph, SliderMorph, ToggleMorph, ToggleButtonMorph, modules,
-BoxMorph, radians, MorphicPreferences, getDocumentPositionOf, SVG_Costume*/
+BoxMorph, radians, MorphicPreferences, getDocumentPositionOf, SVG_Costume, ZOOM
+*/
 
 /*jshint esversion: 6*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.paint = '2023-May-24';
+modules.paint = '2026-October-10';
 
 // Declarations
 
@@ -521,7 +524,7 @@ PaintEditorMorph.prototype.getUserColor = function () {
             event.pageX - posInDocument.x,
             event.pageY - posInDocument.y
         ));
-        color = world.getGlobalPixelColor(hand.position());
+        color = world.getGlobalPixelColor(hand.position().divideBy(ZOOM));
         if (!color.a) {
             // ignore transparent,
             // needed for retina-display support
