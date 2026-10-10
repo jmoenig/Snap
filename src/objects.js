@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-October-05';
+modules.objects = '2026-October-10';
 
 var SpriteMorph;
 var StageMorph;
@@ -11601,6 +11601,7 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
         ide = this.parentThatIsA(IDE_Morph);
 
     this.removeAllClones();
+    this.threads.stopAll();
     this.runInitScripts();
     this.children.concat(this).forEach(morph => {
         if (isSnapObject(morph)) {

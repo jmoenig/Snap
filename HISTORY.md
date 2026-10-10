@@ -7,6 +7,7 @@
     * added "import sound from library" button to the jukebox
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
 * **Notable Changes:**
+    * pressing the green flag button first stops all active processes before (re-) starting the green-flagged scripts
     * changed the jukebox's "record new sound" button's symbol from red dot to microphone
     * new "picture", "shirt" and "microphone" symbols
     * changed the contrast of the wardrobe's and jukeboxe's creation buttons
@@ -19,6 +20,7 @@
 * gui: added "import sound from library" button to the jukebox
 * symbols: added new "microphone" symbol
 * gui: changed the jukebox's "record new sound" button's symbol from red dot to microphone
+* objects: pressing the green flag button first stops all active processes before (re-) starting the green-flagged scripts
 
 ### 2026-10-09
 * new dev version
