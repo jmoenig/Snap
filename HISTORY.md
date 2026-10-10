@@ -9,6 +9,7 @@
 * **Notable Changes:**
     * changed the jukebox's "record new sound" button's symbol from red dot to microphone
     * new "picture", "shirt" and "microphone" symbols
+    * changed the contrast of the wardrobe's and jukeboxe's creation buttons
 * **Notable Fixes:**
     * fixed a type inference glitch in the block editor
 
