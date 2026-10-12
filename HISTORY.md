@@ -8,6 +8,7 @@
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
 * **Notable Changes:**
     * pressing the green flag button first stops all active processes before (re-) starting the green-flagged scripts
+    * when testing the data type of a deleted sprite report <false> to "is ... a (sprite)"
     * changed the jukebox's "record new sound" button's symbol from red dot to microphone
     * new "picture", "shirt" and "microphone" symbols
     * changed the contrast of the wardrobe's and jukeboxe's creation buttons
@@ -20,6 +21,9 @@
     * fixed an error catching glitch in the speech-recognition extension
 * **Translation Updates:**
     * Spanish
+
+### 2026-10-12
+* threads: identify a deleted sprite or clone as type "corpse", report <false> on testing as sprite
 
 ### 2026-10-10
 * gui: added "import costume from library" button to the wardrobe

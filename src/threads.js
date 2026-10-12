@@ -66,7 +66,7 @@ CustomHatBlockMorph, SymbolMorph, MenuMorph, MorphicPreferences*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-October-01';
+modules.threads = '2026-October-12';
 
 var ThreadManager;
 var Process;
@@ -5119,6 +5119,9 @@ Process.prototype.reportTypeOf = function (thing) {
         return 'text';
     }
     if (thing instanceof SpriteMorph) {
+        if (thing.isCorpse) {
+            return 'corpse';
+        }
         return 'sprite';
     }
     if (thing instanceof StageMorph) {
