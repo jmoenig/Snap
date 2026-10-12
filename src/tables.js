@@ -404,12 +404,38 @@ TableCellMorph.prototype.render = function (ctx) {
         ctx.textAlign = 'left';
         ctx.textBaseline = 'bottom';
         txtWidth = ctx.measureText(dta).width;
+        if (txtWidth > width) {
+            dta = this.truncatedText(dta, width, ctx);
+            txtWidth = ctx.measureText(dta).width;
+        }
         txtHeight = fontHeight(fontSize);
         ctx.fillStyle = foreground;
         x = Math.max((width - txtWidth) / 2, 0);
         y = Math.max((height - txtHeight) / 2, 0);
         ctx.fillText(dta, x, txtHeight + y);
     }
+};
+
+TableCellMorph.prototype.truncatedText = function (text, width, ctx) {
+    // answer the longest prefix of the given text that, followed by
+    // an ellipsis, fits into the given width using the context's font
+    var str = text.toString(),
+        ellipsis = '\u2026',
+        lo = 0,
+        hi = str.length,
+        mid;
+    if (ctx.measureText(ellipsis).width > width) {
+        return '';
+    }
+    while (lo < hi) { // binary search for the longest fitting prefix
+        mid = Math.ceil((lo + hi) / 2);
+        if (ctx.measureText(str.slice(0, mid) + ellipsis).width <= width) {
+            lo = mid;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    return str.slice(0, lo) + ellipsis;
 };
 
 TableCellMorph.prototype.dataRepresentation = function (dta) {
