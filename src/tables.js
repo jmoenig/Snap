@@ -613,6 +613,7 @@ TableMorph.uber = FrameMorph.prototype;
 // TableMorph preferences settings:
 
 TableMorph.prototype.highContrast = false;
+TableMorph.prototype.maxMeasuredCells = 20000; // for sizing columns
 
 // TableMorph instance creation:
 
@@ -678,8 +679,10 @@ TableMorph.prototype.init = function (
     this.rowLabelWidth = 0;
     this.columns = []; // relative left positions
     this.rows = 0;
-    this.colStretch = 0; // extra width per column to fill my extent
+    this.contentWidths = null; // measured widths of the widest values
+    this.fittedWidths = []; // column widths adjusted to my extent
     this.rowStretch = 0; // extra height per row to fill my extent
+    this.probeCell = null; // scratch cell for measuring data
 
     // cached properties for scrolling and resizing (do not persist):
     this.maxStartRow = null;
@@ -772,7 +775,7 @@ TableMorph.prototype.fixLayout = function () {
 
     // determine and cache layout information
     this.rowLabelWidth = this.rowLabelsWidth();
-    this.stretchToFit();
+    this.fitColumns();
     this.columns = this.columnsLayout();
     this.rows = this.visibleRows();
 
@@ -935,7 +938,7 @@ TableMorph.prototype.step = function () {
 };
 
 TableMorph.prototype.update = function () {
-    var oldCols, oldRows, oldColStretch, oldRowStretch,
+    var oldCols, oldRows, oldWidths, oldRowStretch,
         version = this.table instanceof List ?
             this.table.version(
                 this.startRow,
@@ -950,15 +953,21 @@ TableMorph.prototype.update = function () {
     if (this.table instanceof List) {
         oldCols = this.columns.length;
         oldRows = this.rows;
-        oldColStretch = this.colStretch;
+        oldWidths = this.fittedWidths;
         oldRowStretch = this.rowStretch;
+        if (!this.contentWidths ||
+                this.contentWidths.length < this.table.cols()) {
+            this.measureColumns(); // new columns: re-measure everything
+        } else {
+            this.measureColumns(this.startRow, this.startRow + this.rows);
+        }
         this.rowLabelWidth = this.rowLabelsWidth();
-        this.stretchToFit();
+        this.fitColumns();
         this.columns = this.columnsLayout();
         this.rows = this.visibleRows();
         if (this.columns.length !== oldCols || (this.rows !== oldRows) ||
-            this.colStretch !== oldColStretch ||
-            this.rowStretch !== oldRowStretch
+            this.rowStretch !== oldRowStretch ||
+            this.fittedWidths.some((w, i) => w !== oldWidths[i])
         ) {
             this.buildCells();
         } else {
@@ -1025,41 +1034,174 @@ TableMorph.prototype.columnsLayout = function () {
 };
 
 TableMorph.prototype.colWidth = function (col) {
-    return (this.colWidths[col - 1] || this.globalColWidth) + this.colStretch;
+    return this.fittedWidths[col - 1] || this.preferredColWidth(col);
 };
 
-TableMorph.prototype.stretchToFit = function () {
-    // determine and cache the extra width and height to add to each
-    // column and row, so the cells fill my extent if all of the
-    // data fits into it, e.g. after I have been enlarged by the user
-    var cols = this.table.cols(),
+TableMorph.prototype.preferredColWidth = function (col) {
+    // answer the width a column needs to fully show its widest value,
+    // unless the user has resized it by hand
+    if (this.contentWidths === null) {
+        this.measureColumns();
+    }
+    return this.colWidths[col - 1] || this.contentWidths[col - 1] ||
+        this.globalColWidth;
+};
+
+TableMorph.prototype.minColWidth = function () {
+    // the narrowest a column gets squeezed to when all columns
+    // need to be shown in a tight space
+    return Math.ceil(this.textHeight * 1.5);
+};
+
+TableMorph.prototype.measureColumns = function (startRow, endRow) {
+    // determine and cache the width each column needs to fully
+    // display its widest value, including its label.
+    // if a range of rows is given only measure those and widen
+    // the cached widths where needed, otherwise measure all rows
+    // up to a budget of cells
+    var ctx = StringMorph.prototype.measureCtx,
+        fontSize = SyntaxElementMorph.prototype.fontSize,
+        cols = this.table.cols(),
         rows = this.table.rows(),
-        natural = this.globalExtent(),
-        colsFit = natural.x <= this.width(),
-        rowsFit = natural.y <= this.height(),
-        availableWidth = this.width() - (rowsFit ? 0 : this.scrollBarSize),
-        availableHeight = this.height() - (colsFit ? 0 : this.scrollBarSize);
+        isList = this.table instanceof List,
+        widths = [],
+        c, r, w, max, row, cells, first, last;
 
-    this.colStretch = cols && colsFit ?
-        Math.max(0, Math.floor((availableWidth - natural.x) / cols))
-        : 0;
-    this.rowStretch = rows && rowsFit ?
-        Math.max(0, Math.floor((availableHeight - natural.y) / rows))
-        : 0;
-};
+    if (startRow) {
+        first = Math.max(1, startRow);
+        last = Math.min(rows, endRow);
+    } else {
+        first = 1;
+        last = Math.min(
+            rows,
+            Math.max(100, Math.floor(this.maxMeasuredCells / cols))
+        );
+    }
 
-TableMorph.prototype.bakeColStretch = function () {
-    // make the currently stretched column widths permanent,
-    // e.g. before the user resizes columns by hand
-    var i;
-    if (!this.colStretch) {return; }
-    this.globalColWidth += this.colStretch;
-    for (i = 0; i < this.colWidths.length; i += 1) {
-        if (this.colWidths[i]) {
-            this.colWidths[i] += this.colStretch;
+    if (!this.probeCell) {
+        this.probeCell = new TableCellMorph(null, null, false);
+    }
+    ctx.font = fontSize + 'px Helvetica, Arial, sans-serif';
+
+    // column labels
+    for (c = 1; c <= cols; c += 1) {
+        widths.push(this.dataWidth(this.table.get(c, 0), ctx));
+    }
+
+    // cells
+    for (r = first; r <= last; r += 1) {
+        if (isList) {
+            row = this.table.at(r);
+            cells = row instanceof List && !row.isADT() ?
+                (cols === 1 && row.length() > 1 ? [[row]] // orphaned
+                    : row.itemsArray())
+                : [row];
+            max = Math.min(cols, cells.length);
+            for (c = 0; c < max; c += 1) {
+                w = this.dataWidth(cells[c], ctx);
+                if (w > widths[c]) {widths[c] = w; }
+            }
+        } else {
+            for (c = 0; c < cols; c += 1) {
+                w = this.dataWidth(this.table.get(c + 1, r), ctx);
+                if (w > widths[c]) {widths[c] = w; }
+            }
         }
     }
-    this.colStretch = 0;
+
+    widths = widths.map(w => Math.ceil(w) + fontSize);
+    if (startRow && this.contentWidths) {
+        this.contentWidths = widths.map((w, i) =>
+            Math.max(w, this.contentWidths[i] || 0)
+        );
+    } else {
+        this.contentWidths = widths;
+    }
+};
+
+TableMorph.prototype.dataWidth = function (dta, ctx) {
+    // answer the width needed to display the given datum in a cell,
+    // quickly handling the common cases
+    var rep;
+    if (isNil(dta)) {return 0; }
+    if (isString(dta)) {
+        return ctx.measureText(
+            dta.length > 100 ? dta.slice(0, 100) + '...' : dta
+        ).width;
+    }
+    if (typeof dta === 'number') {
+        return ctx.measureText(dta.toString()).width;
+    }
+    if (dta instanceof Costume) {return 40; }
+    rep = this.probeCell.dataRepresentation(dta);
+    if (isNil(rep)) {return 0; }
+    if (rep instanceof HTMLCanvasElement) {return rep.width; }
+    if (rep instanceof Morph) {return rep.width(); }
+    return ctx.measureText(rep.toString()).width;
+};
+
+TableMorph.prototype.fitColumns = function () {
+    // determine and cache the widths of all columns and the extra
+    // height per row so my cells fill my extent:
+    // - if all columns fit at their preferred widths the surplus
+    //   is distributed evenly among them
+    // - otherwise columns are squeezed, starting with the widest ones,
+    //   keeping the narrower ones intact, so that all columns stay
+    //   visible, unless even the minimum column widths don't fit
+    var cols = this.table.cols(),
+        rows = this.table.rows(),
+        min = this.minColWidth(),
+        natural = this.globalExtent(),
+        rowsFit = natural.y <= this.height(),
+        available = this.width() - this.rowLabelWidth - 2 -
+            this.padding * (cols + 1) -
+            (cols === 1 ? this.scrollBarSize + this.padding * 2 : 0) -
+            (rowsFit ? 0 : this.scrollBarSize),
+        widths = [],
+        flexible = [],
+        remaining = available,
+        sum = 0,
+        colsFit, share, i, idx, w;
+
+    // start out with the preferred widths, note the squeezable columns
+    for (i = 1; i <= cols; i += 1) {
+        w = this.preferredColWidth(i);
+        widths.push(w);
+        sum += w;
+        if (this.colWidths[i - 1]) {
+            remaining -= w; // resized by the user, keep as is
+        } else {
+            flexible.push(i - 1);
+        }
+    }
+
+    if (sum <= available) {
+        // stretch all columns evenly to fill my width
+        share = cols ? Math.floor((available - sum) / cols) : 0;
+        widths = widths.map(w => w + share);
+        colsFit = true;
+    } else {
+        // squeeze the flexible columns, narrowest first,
+        // so each gets at most its fair share of the remaining space
+        flexible.sort((a, b) => widths[a] - widths[b]);
+        for (i = 0; i < flexible.length; i += 1) {
+            idx = flexible[i];
+            share = Math.floor(remaining / (flexible.length - i));
+            w = Math.min(widths[idx], Math.max(min, share));
+            widths[idx] = w;
+            remaining -= w;
+        }
+        colsFit = remaining >= 0;
+    }
+    this.fittedWidths = widths;
+
+    // stretch all rows evenly to fill my height
+    this.rowStretch = rows && rowsFit ?
+        Math.max(0, Math.floor(
+            (this.height() - natural.y -
+                (colsFit ? 0 : this.scrollBarSize)) / rows
+        ))
+        : 0;
 };
 
 TableMorph.prototype.bakeRowStretch = function () {
@@ -1085,12 +1227,12 @@ TableMorph.prototype.visibleRows = function () {
 
 TableMorph.prototype.globalExtent = function () {
     // answer the extent needed to show all of my data
-    // without stretching columns or rows
+    // with every column at its preferred width
     var i,
         w = this.rowLabelsWidth() + 2,
         cols = this.table.cols();
     for (i = 0; i < cols; i += 1) {
-        w += this.colWidths[i] || this.globalColWidth;
+        w += this.preferredColWidth(i + 1);
         w += this.padding;
     }
     if (cols === 1) {
@@ -1172,30 +1314,24 @@ TableMorph.prototype.resizeCells = function (pos) {
     var delta = pos.subtract(this.resizeAnchor),
         i;
 
+    // resizing columns by hand pins them to the dragged width,
+    // "reset columns" reverts them to automatic sizing
     if (this.resizeCol) {
-        this.bakeColStretch();
         this.colWidths[this.resizeCol - 1] = Math.max(
             16,
-            (this.colWidths[this.resizeCol - 1] || this.globalColWidth) +
-                delta.x
+            this.colWidth(this.resizeCol) + delta.x
         );
     } else if (this.resizeRow) {
         this.bakeRowStretch();
         this.rowHeight = Math.max(16, this.rowHeight + delta.y);
     } else {
-        this.bakeColStretch();
         this.globalColWidth = Math.max(16, this.globalColWidth + delta.x);
-        for (i = 0; i < this.colWidths.length; i += 1) {
-            if (this.colWidths[i]) {
-                this.colWidths[i] = Math.max(
-                    16,
-                    this.colWidths[i] + delta.x
-                );
-            }
+        for (i = 1; i <= this.table.cols(); i += 1) {
+            this.colWidths[i - 1] = Math.max(16, this.colWidth(i) + delta.x);
         }
     }
     this.rowLabelWidth = this.rowLabelsWidth();
-    this.stretchToFit();
+    this.fitColumns();
     this.columns = this.columnsLayout();
     this.rows = this.visibleRows();
     this.buildCells();
@@ -1355,8 +1491,9 @@ TableMorph.prototype.userMenu = function () {
 
 TableMorph.prototype.resetColumns = function () {
     this.colWidths = [];
+    this.contentWidths = null; // re-measure
     this.rowLabelWidth = this.rowLabelsWidth();
-    this.stretchToFit();
+    this.fitColumns();
     this.columns = this.columnsLayout();
     this.rows = this.visibleRows();
     this.buildCells();
