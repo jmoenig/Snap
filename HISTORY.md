@@ -21,9 +21,11 @@
     * fixed an error catching glitch in the speech-recognition extension
 * **Translation Updates:**
     * Spanish
+    * German
 
 ### 2026-10-12
 * threads: identify a deleted sprite or clone as type "corpse", report <false> on testing as sprite
+* German translation update (typography strings)
 
 ### 2026-10-10
 * gui: added "import costume from library" button to the wardrobe
