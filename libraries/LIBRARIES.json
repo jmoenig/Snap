@@ -369,594 +369,6 @@
     "name": "~"
   },
   {
-    "fileName": "iteration-composition.xml",
-    "name": "Iteration, composition",
-    "description": "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.",
-    "translations": {
-      "ca": {
-        "name": "Iteracions i composició",
-        "description": "Construcció de bucles estàndard (while, until, etc.), construccions \"named let\" pròpies de Lisp (una generalització dels bucles \"for\"), iteració funcional (repeticions de crides a una funció) i composició de funcions."
-      },
-      "de": {
-        "name": "Iteration, Komposition",
-        "searchData": [
-          "fange _ _\rca",
-          "wirf _\rca",
-          "fange _ _\rca",
-          "wirf _ _\rca",
-          "falls _ dann _ und pause $-1-255-220-0\rca",
-          "ignoriere _\rca",
-          "führe _ mit Continuation aus",
-          "rufe _ mit Continuation auf"
-        ]
-      },
-      "es": {
-        "name": "Iteración, composición",
-        "description": "Bucles tradicionales (while, until, etc...) + el \"named let\" de Lisp (una generalización del for) + iteración funcional (invocación repetida de una función) y composición de funciones."
-      },
-      "eu": {
-        "name": "Iterazioa, konposizioa",
-        "description": "Begizta egitura tradizionalak (while, until...) + Lisp-eko \"named let\" (for-aren orokortze bat) + iterazio funtzionala (funtzio bat modu errepikatuan deitzea) eta funtzioen konposizioa."
-      },
-      "gl": {
-        "name": "Iteracións e composición",
-        "description": "Construcción de bucles estándar (while, until, etc.), construcións «named let« propias de Lisp (unha xeneralización dos bucles «for»), iteración funcional (repeticións de chamadas a unha función) e composición de funcións."
-      },
-      "he": {
-        "name": "איטרציה, קומפוזיציה"
-      },
-      "hu": {
-        "name": "Ismétlés, Kompozíció"
-      },
-      "it": {
-        "name": "Iterazione, composizione",
-        "description": "Strutture cicliche tradizionali (mentre, fino a che, ecc.)"
-      },
-      "nl": {
-        "name": "Herhaling, Samenstelling",
-        "description": "Traditionele lusconstructies (tijdens, tot, etc.) plus de Lisp \"named let\" (een generalisatie van FOR) plus functionele iteratie (herhaalde aanroep van een functie) en functiesamenstelling."
-      },
-      "no": {
-        "name": "Iterasjon, komposisjon"
-      },
-      "pl": {
-        "name": "Iteracja, kompozycja"
-      },
-      "pt": {
-        "name": "Iteração e composição",
-        "description": "Comandos tradicionais para ciclos (enquanto, até que, etc.), o «named let» do Lisp (uma generalização do ciclo PARA), iteração funcional (invocação repetida de uma função) e composição de funções.",
-        "searchData": [
-          "o resultado de _ invocações em cascata de _ com argumento inicial _ _\rca",
-          "o resultado da invocação em cascata até que _ de _ com argumento inicial _ _\rca",
-          "a composição de _ com _\rca",
-          "repete _ até que _ $-0.7\rca",
-          "repete _ enquanto _ $-0.7\rca",
-          "enquanto _ , repete _ $-0.7\rpl",
-          "repete _ vezes _ _ $-0.7\rca",
-          "para _ de _ com passo _ a _ _ $-0.7\rca",
-          "tendo _ o valor inicial _ , executa _ definido como _\rca"
-        ]
-      },
-      "sk": {
-        "name": "Iterácia, kompozícia"
-      },
-      "sv": {
-        "name": "Upprepning, komposition"
-      },
-      "ti": {
-        "name": "ምድግጋም, ምቛም"
-      },
-      "tr": {
-        "name": "Yineleme, kompozisyon"
-      },
-      "ua": {
-        "name": "Ітерація, композиція",
-        "description": "Традиційні конструкції циклу (while, until тощо) плюс Lisp \"named let\" (узагальнення FOR) плюс функціональна ітерація (повторний виклик функції) і композиція функції."
-      },
-      "zh_CN": {
-        "name": "循环、函数迭代和组合库",
-        "description": "传统的循环结构(如while、until等)，加上Lisp中的\"named let\"(FOR的一般化)，再加上函数迭代(反复调用一个函数)和函数组合。"
-      }
-    },
-    "searchData": [
-      "catch _ _",
-      "throw _",
-      "catch _ _",
-      "throw _ _",
-      "if _ do _ and pause all $-1-255-220-0",
-      "ignore _",
-      "cascade _ times _ _ _",
-      "cascade until _ _ _ _",
-      "compose _ _",
-      "repeat _ until _",
-      "repeat _ while _",
-      "repeat while _ _",
-      "repeat _ _ _",
-      "for _ = _ step _ to _ _",
-      "let _ be _ in _ _",
-      "run _ with continuation",
-      "call _ with continuation"
-    ],
-    "categories": [
-      "control"
-    ]
-  },
-  {
-    "fileName": "list-utilities.xml",
-    "name": "List utilities",
-    "description": "Some standard functions on lists (reverse, sort, etc.)",
-    "translations": {
-      "ca": {
-        "name": "Utilitats per a llistes",
-        "description": "Funcions estàndard per a llistes (capgira, ordena, etc.)",
-        "searchData": [
-          "ordena _ segons criteri _\rpl",
-          "associació _ _\rpl",
-          "_ per cada _ de _ _\rpl",
-          "notació textual de _\rpl",
-          "frase _\rpl",
-          "multi-mapeja _ sobre _\rpl"
-        ]
-      },
-      "de": {
-        "name": "Listen bearbeiten",
-        "searchData": [
-          "Satz to Liste _\rca"
-        ]
-      },
-      "es": {
-        "name": "Utilidades de lista",
-        "description": "Algunas funciones estándar de listas (inventir, sort, etc...)"
-      },
-      "eu": {
-        "name": "Zerrenden utilitateak"
-      },
-      "gl": {
-        "name": "Utilidades para listas"
-      },
-      "he": {
-        "name": "עזריי רשימות"
-      },
-      "hu": {
-        "name": "Lista eszközök"
-      },
-      "it": {
-        "name": "Operazioni su liste",
-        "description": "Alcune funzioni standard per le liste (inverti, ordina, etc.)"
-      },
-      "nl": {
-        "name": "Lijst gereedschappen"
-      },
-      "no": {
-        "name": "Liste verktøy"
-      },
-      "pl": {
-        "name": "Metody listy",
-        "searchData": [
-          "flash turbo fast spakuj _"
-        ]
-      },
-      "pt": {
-        "name": "Utilitários para listas"
-      },
-      "sk": {
-        "name": "úpravy zoznamu"
-      },
-      "sv": {
-        "name": "Listverktyg"
-      },
-      "ti": {
-        "name": "ኣገልግሎታት ዝርዝር",
-        "description": "ገለ ዝውቱራት ተግባራት ዘርዝራት (ገልብጥ፡ ስራዕ፡ ወዘተ)"
-      },
-      "tr": {
-        "name": "liste yardımcı programları"
-      },
-      "ua": {
-        "name": "Список утиліт",
-        "description": "Деякі стандартні функції для списків (перевертання, сортування тощо)"
-      },
-      "zh_CN": {
-        "name": "列表处理库",
-        "description": "一些应用在列表上的标准(高阶)函数(反转、排序等)"
-      }
-    },
-    "searchData": [
-      "flash turbo fast sort _ ordering with _",
-      "flash turbo fast assoc _ _",
-      "_ for each _ of _ _",
-      "printable _",
-      "sentence _",
-      "flash turbo fast zip _",
-      "_",
-      "multimap _ over _",
-      "sentence to list _"
-    ],
-    "categories": [
-      "lists",
-      "operators"
-    ]
-  },
-  {
-    "fileName": "colors.xml",
-    "name": "Colors and Crayons",
-    "description": "Incorporates the former crayon and set RGB libraries.  Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.",
-    "translations": {
-      "ca": {
-        "name": "Colors i Paletes",
-        "description": "Incorpora les llibreries inicials de Paletes de color i Colors RGB. Utilitza tonalitats més ajustades (més taronges, menys verds, afegeix marrons) i una escala de color lineal que inclou escala de grisos i més matisos de tonalitat.",
-        "searchData": [
-          "$brush fixa el _ del llapis a _ _",
-          "$brush _ del llapis",
-          "$brush augmenta _ del llapis en _",
-          "$brush barreja colors _ amb criteri _",
-          "$brush color amb _ _ _",
-          "$brush _ del color _",
-          "✐ color de llapis actual",
-          "✐ fixa el llapis de color _ _"
-        ]
-      },
-      "es": {
-        "name": "Colores y pinturas"
-      },
-      "it": {
-        "name": "Colori e Pastelli"
-      },
-      "ti": {
-        "name": "ሕብርታትን ክራዮናትን"
-      },
-      "ua": {
-        "name": "Кольори та олівці"
-      },
-      "zh_CN": {
-        "name": "颜色和蜡笔库"
-      }
-    },
-    "searchData": [
-      "$brush set pen _ to _ _",
-      "mmap _ over _",
-      "✐ update HSL",
-      "✐ update HSV",
-      "_",
-      "$brush pen _",
-      "$brush change pen _ by _",
-      "error _",
-      "✐ make integer RGB",
-      "catch _ _",
-      "throw _",
-      "ignore _",
-      "✐ no spaces _",
-      "$brush color _",
-      "$brush mix colors _ using _ rules",
-      "$brush color from _ _ _",
-      "$brush _ from color _",
-      "✐ current pen color",
-      "catch _ _",
-      "throw _ _",
-      "✐ set pen to crayon _ _",
-      "set pen color to r: _ g: _ b: _",
-      "set pen color to h: _ s: _ v: _",
-      "RGB color",
-      "HSV color",
-      "✐ hexchar _",
-      "✐ subset _ _ _ _ _",
-      "✐ initialize variables",
-      "✐ crayon number of color _",
-      "✐ RGB from color _",
-      "✐ X11 name of color _",
-      "✐ make fair hue table",
-      "✐ include transparency _ _",
-      "✐ extract rgba values _ _",
-      "✐ RGB from HSV _",
-      "✐ RGB from HSL _",
-      "✐ color number near color _",
-      "✐ HSL/HSV (hsl? _ ) from RGB _",
-      "✐ color number in _ family, from H: _ S: _ L: _  rising hue: _  rising min lightness: _ falling min lightness: _",
-      "✐ byte to hex _",
-      "✐ nybble to hex _",
-      "✐ limits _",
-      "✐ set pen to fair hue _ _",
-      "✐ set pen to color number _ _",
-      "✐ set pen to RGB hex _ _",
-      "✐ set pen to X11 name _ _",
-      "✐ color from X11 name _",
-      "✐ color from RGB hex _",
-      "✐ CMYK from RGB _",
-      "✐ RGB from CMYK _",
-      "lighten _",
-      "darken _",
-      "$brush color _ at weight _",
-      "plot _",
-      "$brush color from _ and _ _",
-      "✐ set pen to lightness _ _",
-      "✐ set pen to color _ _",
-      "✐ set pen size to _ _",
-      "✐ set pen transparency to _ _",
-      "✐ set pen red to _ _",
-      "✐ set pen green to _ _",
-      "✐ set pen blue to _ _",
-      "✐ constrain _ _ _",
-      "✐ set pen to RGB vector _ _",
-      "✐ set pen to HSL saturation _ _",
-      "✐ set pen to HSL vector _ _",
-      "✐ set pen saturation (HSV) to _ _",
-      "✐ set pen value (brightness) to _ _",
-      "✐ set pen to HSV vector _ _",
-      "✐ set pen to hue _ _",
-      "✐ set pen to fair saturation (HSL) _ _",
-      "✐ set pen to fair lightness _ _",
-      "✐ set pen to fair HSL vector _ _",
-      "✐ set pen to fair saturation (HSV) _ _",
-      "✐ set pen to fair value (brightness) _ _",
-      "✐ set pen to fair HSV vector _ _",
-      "multiline _",
-      "substring of _ before _",
-      "substring of _ after _",
-      "position of _ in _",
-      "use case-independent comparisons _",
-      "substring of _ from position _ to position _ inclusive",
-      "text _ contains _",
-      "to lower case _",
-      "use case-independent comparison",
-      "create _ var _",
-      "does var _ exist?"
-    ],
-    "categories": [
-      "pen",
-      "lists",
-      "other",
-      "control",
-      "operators",
-      "sensing",
-      "variables"
-    ]
-  },
-  {
-    "fileName": "crayons.xml",
-    "name": "Crayons",
-    "description": "Just the crayons, without the rest of the colors library.  Fast and simple.",
-    "translations": {
-      "ca": {
-        "name": "Llapis de colors",
-        "description": "Només els llapis de colors, sense la resta de la llibreria de colors. Més ràpida i simple.",
-        "searchData": [
-          "fixa el llapis de color _\rpl",
-          "canvia de llapis de color saltant _\rpl",
-          "llapis de color\rpl"
-        ]
-      },
-      "es": {
-        "name": "Pinturas"
-      },
-      "it": {
-        "name": "Pastelli"
-      },
-      "ti": {
-        "name": "ክራዮናት"
-      },
-      "ua": {
-        "name": "Олівці"
-      },
-      "zh_CN": {
-        "name": "蜡笔库"
-      }
-    },
-    "searchData": [
-      "set pen to crayon _",
-      "change crayon by _",
-      "pen crayon"
-    ],
-    "categories": [
-      "pen"
-    ]
-  },
-  {
-    "fileName": "bignumbers.xml",
-    "name": "Bignums, rationals, complex #s",
-    "description": "The full Scheme numeric tower.  \"USE BIGNUMS <True>\" to enable.",
-    "translations": {
-      "ca": {
-        "name": "Números sencers de precisió infinita, racionals exactes i complexos",
-        "description": "Ens ofereix la implementació numèrica de Scheme. Cal habilitar els \"Big Nums\" (amb el bloc \"USE BIGNUMS\" a cert) per utilitzar-ho"
-      },
-      "it": {
-        "name": "Numeri a precisione infinita, razionali, complessi"
-      },
-      "ti": {
-        "name": "ዓበይቲ ቁጽርታት, ትኽክል ተመቕራሒ ቁጽርታት, ሓሳባውያን ቁጽርታት"
-      },
-      "ua": {
-        "name": "Великі, раціональні, комплексні числа #s"
-      },
-      "zh_CN": {
-        "name": "Scheme数字类型库",
-        "description": "集成了Scheme的完整数字类型，可通过\"使用Scheme的数字类型系统？ <True>\"导入这些数据类型"
-      }
-    },
-    "searchData": [
-      "USE BIGNUMS _",
-      "_ !",
-      "_",
-      "Scheme number _ of _"
-    ],
-    "categories": [
-      "operators"
-    ]
-  },
-  {
-    "fileName": "try-catch.xml",
-    "name": "Catch errors",
-    "description": "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.",
-    "translations": {
-      "ca": {
-        "name": "Detecta errors",
-        "searchData": [
-          "prova de forma segura reportant _ i si _ reportant _\rpl"
-        ]
-      },
-      "it": {
-        "name": "Intercettazione degli errori"
-      },
-      "ti": {
-        "name": "ምልቃም ጌጋታት"
-      },
-      "ua": {
-        "name": "Відстежити помилки"
-      },
-      "zh_CN": {
-        "name": "异常处理库"
-      }
-    },
-    "searchData": [
-      "safely try _ then if _ _",
-      "error _",
-      "safely try reporting _ then if _ report _"
-    ],
-    "categories": [
-      "control"
-    ]
-  },
-  {
-    "fileName": "parallel_module.xml",
-    "name": "Parallelization",
-    "description": "Run several scripts in parallel and wait until all are done.",
-    "translations": {
-      "ca": {
-        "name": "Processos en paral·lel",
-        "description": "Executa diversos scripts en paral·lel, i espera que hagin acabat tots els processos abans d'aturar-se"
-      },
-      "es": {
-        "name": "Paralelización"
-      },
-      "gl": {
-        "name": "Paralelización",
-        "description": "Executar varios programas en paralelo e agardar que todos eles rematen."
-      },
-      "it": {
-        "name": "Parallelizzazione",
-        "description": "Esegue diversi script in parallelo e attende che tutti siano terminati."
-      },
-      "nl": {
-        "name": "Parallelisatie",
-        "description": "Voer verschillende scripts parallel uit en wacht tot ze allemaal klaar zijn."
-      },
-      "pt": {
-        "name": "Paralelização",
-        "description": "Executar vários guiões em paralelo e esperar que todos eles terminem.",
-        "searchData": [
-          "executa _ em paralelo e espera\rca",
-          "executa _ em paralelo\rca"
-        ]
-      },
-      "ti": {
-        "name": "ተገደም ዕማማት",
-        "description": "ሓያሎ መርሓታት ብተገደም ኣዕዪ፡ ክሳብ ኩለን መርሓታት ዕማመን ዝውድኣ ተጸበ።"
-      },
-      "ua": {
-        "name": "Розпаралелювання",
-        "description": "Запустіть кілька сценаріїв паралельно та зачекайте, поки всі будуть виконані"
-      },
-      "zh_CN": {
-        "name": "并行编程库",
-        "description": "并行运行多个脚本并等待所有脚本完成."
-      }
-    },
-    "searchData": [
-      "do in parallel _ and wait",
-      "do in parallel _"
-    ],
-    "categories": [
-      "control"
-    ]
-  },
-  {
-    "fileName": "Eisenbergification.xml",
-    "name": "Getters and setters",
-    "description": "Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.",
-    "translations": {
-      "ca": {
-        "name": "Llegir i establir paràmetres del sistema",
-        "description": "La llei de Eisenberg diu: Des de la programació s'hauria de poder fer tot allò que es faci des de l'entorn i les seves funcionalitats i configuració. I viceversa!"
-      },
-      "es": {
-        "name": "Consultas y modificaciones",
-        "description": "Ley de Eisenberg: Cualquier cosa que pueda hacerse desde la interfaz gráfica también debería de poder hacerse desde el lenguaje de programación y viceversa."
-      },
-      "eu": {
-        "description": "Eisenberg-en legea: Erabiltzaile interfaze grafiko bidez egin daitekeen edozein gauza programazio lengoaia erabiliz ere egin daiteke, eta alderantziz."
-      },
-      "gl": {
-        "description": "A lei de Eisenberg di: Calquer cousa que poida facerse dende a interface gráfica tamén deberá poder facerse dende a linguaxe de programación e viceversa."
-      },
-      "it": {
-        "name": "Metodi di accesso e di modifica",
-        "description": "Legge di Eisenberg: Qualunque cosa che può essere fatta tramite la GUI dovrebbe poter essere fatta tramite il linguaggio di programmazione, e viceversa."
-      },
-      "nl": {
-        "description": "De wet van Eisenberg: Alles wat vanuit de GUI kan worden gedaan, moet ook vanuit de programmeertaal gedaan kunnen worden, en vice versa."
-      },
-      "pt": {
-        "description": "Lei de Eisenberg: O quer que se possa fazer através da interface com o utilizador deve ser possível de fazer a partir da linguagem de programação e vice-versa.",
-        "searchData": [
-          "o valor da configuração _\rca",
-          "altera o valor da configuração _ para _\rca"
-        ]
-      },
-      "ti": {
-        "name": "ኣምጻእትን ኣንበርትን"
-      },
-      "ua": {
-        "name": "Гетери та сетери",
-        "description": "Закон Айзенберга: усе, що можна зробити за допомогою графічного інтерфейсу користувача, має бути можливим за допомогою мови програмування, і навпаки."
-      },
-      "zh_CN": {
-        "name": "获取器和设置器库",
-        "description": "艾森伯格定律：任何可以通过图形用户界面完成的事情都应该能够通过编程语言完成，反之亦然。"
-      }
-    },
-    "searchData": [
-      "setting _",
-      "set flag _ to _",
-      "set value _ to _"
-    ],
-    "categories": [
-      "sensing"
-    ]
-  },
-  {
-    "fileName": "list_comprehension_module.xml",
-    "name": "List comprehension",
-    "description": "HOF version of ZIP, letting you \"hyperize\" any dyadic function",
-    "translations": {
-      "ca": {
-        "name": "Compressió de llistes",
-        "description": "Versió HOF (amb funcions d'ordre superior) de la compressió ZIP, que permet \"hiperitzar\" qualsevol funció diàdica (amb dos arguments)"
-      },
-      "zh_CN": {
-        "name": "超运算化(基本实现)库",
-        "description": "ZIP的HOF(高阶函数)版本，可以让你“Hyperize”(超运算化)任何动态运行的计算函数"
-      }
-    },
-    "searchData": [
-      "zip _ inputs:  _ leaf-rank _  _ leaf-rank _"
-    ],
-    "categories": [
-      "control"
-    ]
-  },
-  {
-    "fileName": "~",
-    "name": "~"
-  },
-  {
-    "fileName": "~",
-    "name": "~"
-  },
-  {
-    "fileName": "~",
-    "name": "~"
-  },
-  {
     "fileName": "mobile_sensors.xml",
     "name": "Mobile Device Sensors",
     "description": "Access sensors on phones and tablets",
@@ -1727,6 +1139,119 @@
   {
     "fileName": "~",
     "name": "~"
+  },
+  {
+    "fileName": "iteration-composition.xml",
+    "name": "Iteration, composition",
+    "description": "Traditional loop constructs (while, until, etc.) plus the Lisp \"named let\" (a generalization of FOR) plus functional iteration (repeated invocation of a function) and function composition.",
+    "translations": {
+      "ca": {
+        "name": "Iteracions i composició",
+        "description": "Construcció de bucles estàndard (while, until, etc.), construccions \"named let\" pròpies de Lisp (una generalització dels bucles \"for\"), iteració funcional (repeticions de crides a una funció) i composició de funcions."
+      },
+      "de": {
+        "name": "Iteration, Komposition",
+        "searchData": [
+          "fange _ _\rca",
+          "wirf _\rca",
+          "fange _ _\rca",
+          "wirf _ _\rca",
+          "falls _ dann _ und pause $-1-255-220-0\rca",
+          "ignoriere _\rca",
+          "führe _ mit Continuation aus",
+          "rufe _ mit Continuation auf"
+        ]
+      },
+      "es": {
+        "name": "Iteración, composición",
+        "description": "Bucles tradicionales (while, until, etc...) + el \"named let\" de Lisp (una generalización del for) + iteración funcional (invocación repetida de una función) y composición de funciones."
+      },
+      "eu": {
+        "name": "Iterazioa, konposizioa",
+        "description": "Begizta egitura tradizionalak (while, until...) + Lisp-eko \"named let\" (for-aren orokortze bat) + iterazio funtzionala (funtzio bat modu errepikatuan deitzea) eta funtzioen konposizioa."
+      },
+      "gl": {
+        "name": "Iteracións e composición",
+        "description": "Construcción de bucles estándar (while, until, etc.), construcións «named let« propias de Lisp (unha xeneralización dos bucles «for»), iteración funcional (repeticións de chamadas a unha función) e composición de funcións."
+      },
+      "he": {
+        "name": "איטרציה, קומפוזיציה"
+      },
+      "hu": {
+        "name": "Ismétlés, Kompozíció"
+      },
+      "it": {
+        "name": "Iterazione, composizione",
+        "description": "Strutture cicliche tradizionali (mentre, fino a che, ecc.)"
+      },
+      "nl": {
+        "name": "Herhaling, Samenstelling",
+        "description": "Traditionele lusconstructies (tijdens, tot, etc.) plus de Lisp \"named let\" (een generalisatie van FOR) plus functionele iteratie (herhaalde aanroep van een functie) en functiesamenstelling."
+      },
+      "no": {
+        "name": "Iterasjon, komposisjon"
+      },
+      "pl": {
+        "name": "Iteracja, kompozycja"
+      },
+      "pt": {
+        "name": "Iteração e composição",
+        "description": "Comandos tradicionais para ciclos (enquanto, até que, etc.), o «named let» do Lisp (uma generalização do ciclo PARA), iteração funcional (invocação repetida de uma função) e composição de funções.",
+        "searchData": [
+          "o resultado de _ invocações em cascata de _ com argumento inicial _ _\rca",
+          "o resultado da invocação em cascata até que _ de _ com argumento inicial _ _\rca",
+          "a composição de _ com _\rca",
+          "repete _ até que _ $-0.7\rca",
+          "repete _ enquanto _ $-0.7\rca",
+          "enquanto _ , repete _ $-0.7\rpl",
+          "repete _ vezes _ _ $-0.7\rca",
+          "para _ de _ com passo _ a _ _ $-0.7\rca",
+          "tendo _ o valor inicial _ , executa _ definido como _\rca"
+        ]
+      },
+      "sk": {
+        "name": "Iterácia, kompozícia"
+      },
+      "sv": {
+        "name": "Upprepning, komposition"
+      },
+      "ti": {
+        "name": "ምድግጋም, ምቛም"
+      },
+      "tr": {
+        "name": "Yineleme, kompozisyon"
+      },
+      "ua": {
+        "name": "Ітерація, композиція",
+        "description": "Традиційні конструкції циклу (while, until тощо) плюс Lisp \"named let\" (узагальнення FOR) плюс функціональна ітерація (повторний виклик функції) і композиція функції."
+      },
+      "zh_CN": {
+        "name": "循环、函数迭代和组合库",
+        "description": "传统的循环结构(如while、until等)，加上Lisp中的\"named let\"(FOR的一般化)，再加上函数迭代(反复调用一个函数)和函数组合。"
+      }
+    },
+    "searchData": [
+      "catch _ _",
+      "throw _",
+      "catch _ _",
+      "throw _ _",
+      "if _ do _ and pause all $-1-255-220-0",
+      "ignore _",
+      "cascade _ times _ _ _",
+      "cascade until _ _ _ _",
+      "compose _ _",
+      "repeat _ until _",
+      "repeat _ while _",
+      "repeat while _ _",
+      "repeat _ _ _",
+      "for _ = _ step _ to _ _",
+      "let _ be _ in _ _",
+      "run _ with continuation",
+      "call _ with continuation"
+    ],
+    "categories": [
+      "control"
+    ]
   },
   {
     "fileName": "word-sentence.xml",
@@ -3192,6 +2717,146 @@
     }
   },
   {
+    "fileName": "bignumbers.xml",
+    "name": "Bignums, rationals, complex #s",
+    "description": "The full Scheme numeric tower.  \"USE BIGNUMS <True>\" to enable.",
+    "translations": {
+      "ca": {
+        "name": "Números sencers de precisió infinita, racionals exactes i complexos",
+        "description": "Ens ofereix la implementació numèrica de Scheme. Cal habilitar els \"Big Nums\" (amb el bloc \"USE BIGNUMS\" a cert) per utilitzar-ho"
+      },
+      "it": {
+        "name": "Numeri a precisione infinita, razionali, complessi"
+      },
+      "ti": {
+        "name": "ዓበይቲ ቁጽርታት, ትኽክል ተመቕራሒ ቁጽርታት, ሓሳባውያን ቁጽርታት"
+      },
+      "ua": {
+        "name": "Великі, раціональні, комплексні числа #s"
+      },
+      "zh_CN": {
+        "name": "Scheme数字类型库",
+        "description": "集成了Scheme的完整数字类型，可通过\"使用Scheme的数字类型系统？ <True>\"导入这些数据类型"
+      }
+    },
+    "searchData": [
+      "USE BIGNUMS _",
+      "_ !",
+      "_",
+      "Scheme number _ of _"
+    ],
+    "categories": [
+      "operators"
+    ]
+  },
+  {
+    "fileName": "try-catch.xml",
+    "name": "Catch errors",
+    "description": "Run a script; if an error happens, instead of stopping the script with a red halo, run another script to handle the error. Also includes a block to cause an error with a message given as input. Also includes a block to create a script variable and give it a value.",
+    "translations": {
+      "ca": {
+        "name": "Detecta errors",
+        "searchData": [
+          "prova de forma segura reportant _ i si _ reportant _\rpl"
+        ]
+      },
+      "it": {
+        "name": "Intercettazione degli errori"
+      },
+      "ti": {
+        "name": "ምልቃም ጌጋታት"
+      },
+      "ua": {
+        "name": "Відстежити помилки"
+      },
+      "zh_CN": {
+        "name": "异常处理库"
+      }
+    },
+    "searchData": [
+      "safely try _ then if _ _",
+      "error _",
+      "safely try reporting _ then if _ report _"
+    ],
+    "categories": [
+      "control"
+    ]
+  },
+  {
+    "fileName": "parallel_module.xml",
+    "name": "Parallelization",
+    "description": "Run several scripts in parallel and wait until all are done.",
+    "translations": {
+      "ca": {
+        "name": "Processos en paral·lel",
+        "description": "Executa diversos scripts en paral·lel, i espera que hagin acabat tots els processos abans d'aturar-se"
+      },
+      "es": {
+        "name": "Paralelización"
+      },
+      "gl": {
+        "name": "Paralelización",
+        "description": "Executar varios programas en paralelo e agardar que todos eles rematen."
+      },
+      "it": {
+        "name": "Parallelizzazione",
+        "description": "Esegue diversi script in parallelo e attende che tutti siano terminati."
+      },
+      "nl": {
+        "name": "Parallelisatie",
+        "description": "Voer verschillende scripts parallel uit en wacht tot ze allemaal klaar zijn."
+      },
+      "pt": {
+        "name": "Paralelização",
+        "description": "Executar vários guiões em paralelo e esperar que todos eles terminem.",
+        "searchData": [
+          "executa _ em paralelo e espera\rca",
+          "executa _ em paralelo\rca"
+        ]
+      },
+      "ti": {
+        "name": "ተገደም ዕማማት",
+        "description": "ሓያሎ መርሓታት ብተገደም ኣዕዪ፡ ክሳብ ኩለን መርሓታት ዕማመን ዝውድኣ ተጸበ።"
+      },
+      "ua": {
+        "name": "Розпаралелювання",
+        "description": "Запустіть кілька сценаріїв паралельно та зачекайте, поки всі будуть виконані"
+      },
+      "zh_CN": {
+        "name": "并行编程库",
+        "description": "并行运行多个脚本并等待所有脚本完成."
+      }
+    },
+    "searchData": [
+      "do in parallel _ and wait",
+      "do in parallel _"
+    ],
+    "categories": [
+      "control"
+    ]
+  },
+  {
+    "fileName": "list_comprehension_module.xml",
+    "name": "List comprehension",
+    "description": "HOF version of ZIP, letting you \"hyperize\" any dyadic function",
+    "translations": {
+      "ca": {
+        "name": "Compressió de llistes",
+        "description": "Versió HOF (amb funcions d'ordre superior) de la compressió ZIP, que permet \"hiperitzar\" qualsevol funció diàdica (amb dos arguments)"
+      },
+      "zh_CN": {
+        "name": "超运算化(基本实现)库",
+        "description": "ZIP的HOF(高阶函数)版本，可以让你“Hyperize”(超运算化)任何动态运行的计算函数"
+      }
+    },
+    "searchData": [
+      "zip _ inputs:  _ leaf-rank _  _ leaf-rank _"
+    ],
+    "categories": [
+      "control"
+    ]
+  },
+  {
     "fileName": "~",
     "name": "~"
   },
@@ -3335,5 +3000,340 @@
     ],
     "translations": {
     }
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+  {
+    "fileName": "~",
+    "name": "~"
+  },
+ {
+    "fileName": "list-utilities.xml",
+    "name": "(old) List utilities",
+    "description": "(legacy) Some standard functions on lists (reverse, sort, etc.)",
+    "translations": {
+      "ca": {
+        "name": "(old) Utilitats per a llistes",
+        "description": "Funcions estàndard per a llistes (capgira, ordena, etc.)",
+        "searchData": [
+          "ordena _ segons criteri _\rpl",
+          "associació _ _\rpl",
+          "_ per cada _ de _ _\rpl",
+          "notació textual de _\rpl",
+          "frase _\rpl",
+          "multi-mapeja _ sobre _\rpl"
+        ]
+      },
+      "de": {
+        "name": "(alt) Listen bearbeiten",
+        "searchData": [
+          "Satz to Liste _\rca"
+        ]
+      },
+      "es": {
+        "name": "Utilidades de lista",
+        "description": "Algunas funciones estándar de listas (inventir, sort, etc...)"
+      },
+      "eu": {
+        "name": "Zerrenden utilitateak"
+      },
+      "gl": {
+        "name": "Utilidades para listas"
+      },
+      "he": {
+        "name": "עזריי רשימות"
+      },
+      "hu": {
+        "name": "Lista eszközök"
+      },
+      "it": {
+        "name": "Operazioni su liste",
+        "description": "Alcune funzioni standard per le liste (inverti, ordina, etc.)"
+      },
+      "nl": {
+        "name": "Lijst gereedschappen"
+      },
+      "no": {
+        "name": "Liste verktøy"
+      },
+      "pl": {
+        "name": "Metody listy",
+        "searchData": [
+          "flash turbo fast spakuj _"
+        ]
+      },
+      "pt": {
+        "name": "Utilitários para listas"
+      },
+      "sk": {
+        "name": "úpravy zoznamu"
+      },
+      "sv": {
+        "name": "Listverktyg"
+      },
+      "ti": {
+        "name": "ኣገልግሎታት ዝርዝር",
+        "description": "ገለ ዝውቱራት ተግባራት ዘርዝራት (ገልብጥ፡ ስራዕ፡ ወዘተ)"
+      },
+      "tr": {
+        "name": "liste yardımcı programları"
+      },
+      "ua": {
+        "name": "Список утиліт",
+        "description": "Деякі стандартні функції для списків (перевертання, сортування тощо)"
+      },
+      "zh_CN": {
+        "name": "列表处理库",
+        "description": "一些应用在列表上的标准(高阶)函数(反转、排序等)"
+      }
+    },
+    "searchData": [
+      "flash turbo fast sort _ ordering with _",
+      "flash turbo fast assoc _ _",
+      "_ for each _ of _ _",
+      "printable _",
+      "sentence _",
+      "flash turbo fast zip _",
+      "_",
+      "multimap _ over _",
+      "sentence to list _"
+    ],
+    "categories": [
+      "lists",
+      "operators"
+    ]
+  },
+  {
+    "fileName": "colors.xml",
+    "name": "(old) Colors and Crayons",
+    "description": "(legacy) Incorporates the former crayon and set RGB libraries.  Implements fair hues (more orange, less green, adds brown) and a linear color scale including grayscale and fair-hue-based shades.",
+    "translations": {
+      "ca": {
+        "name": "Colors i Paletes",
+        "description": "Incorpora les llibreries inicials de Paletes de color i Colors RGB. Utilitza tonalitats més ajustades (més taronges, menys verds, afegeix marrons) i una escala de color lineal que inclou escala de grisos i més matisos de tonalitat.",
+        "searchData": [
+          "$brush fixa el _ del llapis a _ _",
+          "$brush _ del llapis",
+          "$brush augmenta _ del llapis en _",
+          "$brush barreja colors _ amb criteri _",
+          "$brush color amb _ _ _",
+          "$brush _ del color _",
+          "✐ color de llapis actual",
+          "✐ fixa el llapis de color _ _"
+        ]
+      },
+      "es": {
+        "name": "Colores y pinturas"
+      },
+      "it": {
+        "name": "Colori e Pastelli"
+      },
+      "ti": {
+        "name": "ሕብርታትን ክራዮናትን"
+      },
+      "ua": {
+        "name": "Кольори та олівці"
+      },
+      "zh_CN": {
+        "name": "颜色和蜡笔库"
+      }
+    },
+    "searchData": [
+      "$brush set pen _ to _ _",
+      "mmap _ over _",
+      "✐ update HSL",
+      "✐ update HSV",
+      "_",
+      "$brush pen _",
+      "$brush change pen _ by _",
+      "error _",
+      "✐ make integer RGB",
+      "catch _ _",
+      "throw _",
+      "ignore _",
+      "✐ no spaces _",
+      "$brush color _",
+      "$brush mix colors _ using _ rules",
+      "$brush color from _ _ _",
+      "$brush _ from color _",
+      "✐ current pen color",
+      "catch _ _",
+      "throw _ _",
+      "✐ set pen to crayon _ _",
+      "set pen color to r: _ g: _ b: _",
+      "set pen color to h: _ s: _ v: _",
+      "RGB color",
+      "HSV color",
+      "✐ hexchar _",
+      "✐ subset _ _ _ _ _",
+      "✐ initialize variables",
+      "✐ crayon number of color _",
+      "✐ RGB from color _",
+      "✐ X11 name of color _",
+      "✐ make fair hue table",
+      "✐ include transparency _ _",
+      "✐ extract rgba values _ _",
+      "✐ RGB from HSV _",
+      "✐ RGB from HSL _",
+      "✐ color number near color _",
+      "✐ HSL/HSV (hsl? _ ) from RGB _",
+      "✐ color number in _ family, from H: _ S: _ L: _  rising hue: _  rising min lightness: _ falling min lightness: _",
+      "✐ byte to hex _",
+      "✐ nybble to hex _",
+      "✐ limits _",
+      "✐ set pen to fair hue _ _",
+      "✐ set pen to color number _ _",
+      "✐ set pen to RGB hex _ _",
+      "✐ set pen to X11 name _ _",
+      "✐ color from X11 name _",
+      "✐ color from RGB hex _",
+      "✐ CMYK from RGB _",
+      "✐ RGB from CMYK _",
+      "lighten _",
+      "darken _",
+      "$brush color _ at weight _",
+      "plot _",
+      "$brush color from _ and _ _",
+      "✐ set pen to lightness _ _",
+      "✐ set pen to color _ _",
+      "✐ set pen size to _ _",
+      "✐ set pen transparency to _ _",
+      "✐ set pen red to _ _",
+      "✐ set pen green to _ _",
+      "✐ set pen blue to _ _",
+      "✐ constrain _ _ _",
+      "✐ set pen to RGB vector _ _",
+      "✐ set pen to HSL saturation _ _",
+      "✐ set pen to HSL vector _ _",
+      "✐ set pen saturation (HSV) to _ _",
+      "✐ set pen value (brightness) to _ _",
+      "✐ set pen to HSV vector _ _",
+      "✐ set pen to hue _ _",
+      "✐ set pen to fair saturation (HSL) _ _",
+      "✐ set pen to fair lightness _ _",
+      "✐ set pen to fair HSL vector _ _",
+      "✐ set pen to fair saturation (HSV) _ _",
+      "✐ set pen to fair value (brightness) _ _",
+      "✐ set pen to fair HSV vector _ _",
+      "multiline _",
+      "substring of _ before _",
+      "substring of _ after _",
+      "position of _ in _",
+      "use case-independent comparisons _",
+      "substring of _ from position _ to position _ inclusive",
+      "text _ contains _",
+      "to lower case _",
+      "use case-independent comparison",
+      "create _ var _",
+      "does var _ exist?"
+    ],
+    "categories": [
+      "pen",
+      "lists",
+      "other",
+      "control",
+      "operators",
+      "sensing",
+      "variables"
+    ]
+  },
+  {
+    "fileName": "crayons.xml",
+    "name": "(old) Crayons",
+    "description": "(legacy) Just the crayons, without the rest of the colors library.  Fast and simple.",
+    "translations": {
+      "ca": {
+        "name": "Llapis de colors",
+        "description": "Només els llapis de colors, sense la resta de la llibreria de colors. Més ràpida i simple.",
+        "searchData": [
+          "fixa el llapis de color _\rpl",
+          "canvia de llapis de color saltant _\rpl",
+          "llapis de color\rpl"
+        ]
+      },
+      "es": {
+        "name": "Pinturas"
+      },
+      "it": {
+        "name": "Pastelli"
+      },
+      "ti": {
+        "name": "ክራዮናት"
+      },
+      "ua": {
+        "name": "Олівці"
+      },
+      "zh_CN": {
+        "name": "蜡笔库"
+      }
+    },
+    "searchData": [
+      "set pen to crayon _",
+      "change crayon by _",
+      "pen crayon"
+    ],
+    "categories": [
+      "pen"
+    ]
+  },
+  {
+    "fileName": "Eisenbergification.xml",
+    "name": "(old) Getters and setters",
+    "description": "(legacy) Eisenberg's Law: Anything that can be done from the GUI should be doable from the programming language, and vice versa.",
+    "translations": {
+      "ca": {
+        "name": "Llegir i establir paràmetres del sistema",
+        "description": "La llei de Eisenberg diu: Des de la programació s'hauria de poder fer tot allò que es faci des de l'entorn i les seves funcionalitats i configuració. I viceversa!"
+      },
+      "es": {
+        "name": "Consultas y modificaciones",
+        "description": "Ley de Eisenberg: Cualquier cosa que pueda hacerse desde la interfaz gráfica también debería de poder hacerse desde el lenguaje de programación y viceversa."
+      },
+      "eu": {
+        "description": "Eisenberg-en legea: Erabiltzaile interfaze grafiko bidez egin daitekeen edozein gauza programazio lengoaia erabiliz ere egin daiteke, eta alderantziz."
+      },
+      "gl": {
+        "description": "A lei de Eisenberg di: Calquer cousa que poida facerse dende a interface gráfica tamén deberá poder facerse dende a linguaxe de programación e viceversa."
+      },
+      "it": {
+        "name": "Metodi di accesso e di modifica",
+        "description": "Legge di Eisenberg: Qualunque cosa che può essere fatta tramite la GUI dovrebbe poter essere fatta tramite il linguaggio di programmazione, e viceversa."
+      },
+      "nl": {
+        "description": "De wet van Eisenberg: Alles wat vanuit de GUI kan worden gedaan, moet ook vanuit de programmeertaal gedaan kunnen worden, en vice versa."
+      },
+      "pt": {
+        "description": "Lei de Eisenberg: O quer que se possa fazer através da interface com o utilizador deve ser possível de fazer a partir da linguagem de programação e vice-versa.",
+        "searchData": [
+          "o valor da configuração _\rca",
+          "altera o valor da configuração _ para _\rca"
+        ]
+      },
+      "ti": {
+        "name": "ኣምጻእትን ኣንበርትን"
+      },
+      "ua": {
+        "name": "Гетери та сетери",
+        "description": "Закон Айзенберга: усе, що можна зробити за допомогою графічного інтерфейсу користувача, має бути можливим за допомогою мови програмування, і навпаки."
+      },
+      "zh_CN": {
+        "name": "获取器和设置器库",
+        "description": "艾森伯格定律：任何可以通过图形用户界面完成的事情都应该能够通过编程语言完成，反之亦然。"
+      }
+    },
+    "searchData": [
+      "setting _",
+      "set flag _ to _",
+      "set value _ to _"
+    ],
+    "categories": [
+      "sensing"
+    ]
   }
 ]
