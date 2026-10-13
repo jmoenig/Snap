@@ -332,7 +332,7 @@
   },
   {
     "fileName": "edge AI.xml",
-    "name": "Edge Computer Vision",
+    "name": "Computer Vision",
     "description": "Detect hand, face and body features or gestures by using Google's AI Edge computer vision API",
     "searchData": [
       "hand landmarks on _",

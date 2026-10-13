@@ -14,6 +14,7 @@
     * changed the jukebox's "record new sound" button's symbol from red dot to microphone
     * new "picture", "shirt" and "microphone" symbols
     * changed the contrast of the wardrobe's and jukebox's creation buttons
+    * changed "Edge Computer Vision" library name into just "Computer Vision"
 * **Notable Fixes:**
     * fixed a type inference glitch in the block editor
     * fixed a syntax error (missing argument slot) in the Spanish translation of the "switch to scene" command block
@@ -29,6 +30,7 @@
 * German translation update (smooth lists)
 * added new "presentations" library
 * added new "lists" library (new utility functions)
+* changed "Edge Computer Vision" library name into just "Computer Vision"
 
 ### 2026-10-12
 * threads: identify a deleted sprite or clone as type "corpse", report <false> on testing as sprite
