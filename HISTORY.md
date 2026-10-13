@@ -3,6 +3,7 @@
 ## in development:
 
 * **New Features:**
+    * added the option to always include a tutorial in a project derived from a template
     * added "import costume from library" button to the wardrobe
     * added "import sound from library" button to the jukebox
     * new "presentations" library for creating simple slide shows and for authoring translatable tutorial windows
@@ -34,6 +35,7 @@
 * changed "Edge Computer Vision" library name into just "Computer Vision"
 * cleaned up and rearranged the list of libraries
 * scenes, guj: fixed a bug when removing a project's template information
+* scenes, gui, store: added the option to always include a tutorial in a project derived from a template (Geez, teachers are ... special)
 
 ### 2026-10-12
 * threads: identify a deleted sprite or clone as type "corpse", report <false> on testing as sprite

@@ -7399,7 +7399,7 @@ IDE_Morph.prototype.openProject = function (project, purgeCustomizedPrims) {
     if (purgeCustomizedPrims) {
         scn.blocks = SpriteMorph.prototype.primitiveBlocks();
     }
-    if (scn.createdFromTemplate) {
+    if (scn.createdFromTemplate || scn.template.tutor) {
         // switch to edit mode, unless when
         this.toggleAppMode(false);
         // launch tutorial, if any exist
@@ -8858,7 +8858,7 @@ IDE_Morph.prototype.projectSettingsMenu = function () {
 
 IDE_Morph.prototype.templateSettingsMenu = function () {
     var menu = new MenuMorph(this),
-        settings = ['lang', 'zoom', 'scale', 'fade', 'flat', 'bright'],
+        settings = ['tutor', 'lang', 'zoom', 'scale', 'fade', 'flat', 'bright'],
         tick = new SymbolMorph(
             'tick',
             MorphicPreferences.menuFontSize * 0.75
@@ -8912,6 +8912,17 @@ IDE_Morph.prototype.templateSettingsMenu = function () {
 
     menu.addLine();
 
+    menu.addPreference(
+        'Tutorial',
+        () => {
+            if (this.scene.template.tutor === undefined) {
+                this.scene.template.tutor = null;
+            } else {
+                delete this.scene.template.tutor;
+            }
+        },
+        this.scene.template.tutor !== undefined
+    );
     menu.addPreference(
         'Language',
         () => {

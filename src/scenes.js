@@ -190,6 +190,7 @@ Scene.prototype.freshTemplate = function () {
         name: null,
         version: null,
         hide: null,
+        tutor: undefined,
         lang: undefined,
         zoom: undefined,
         scale: undefined,

@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion, ADT_SlotMorph, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2026-October-05';
+modules.store = '2026-October-13';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -457,6 +457,7 @@ SnapSerializer.prototype.loadScene = function (
     var scene = new Scene(),
         model,
         hidden,
+        tutor,
         lang,
         zoom,
         scale,
@@ -510,6 +511,7 @@ SnapSerializer.prototype.loadScene = function (
     scene.role = model.scene.attributes.role || null;
     model.template = model.scene.childNamed('template');
     if (model.template) {
+        tutor = model.template.attributes.tutor;
         lang = model.template.attributes.lang;
         zoom = model.template.attributes.zoom;
         scale = model.template.attributes.scale;
@@ -531,6 +533,7 @@ SnapSerializer.prototype.loadScene = function (
             version: model.template.attributes.version,
             hide: hidden
         };
+        if (tutor === 'true') {scene.template.tutor = true; }
         if (!isNil(lang)) {scene.template.lang = lang; }
         if (!isNil(zoom)) {scene.template.zoom = zoom; }
         if (!isNil(scale)) {scene.template.scale = scale; }
@@ -2185,7 +2188,10 @@ Project.prototype.toXML = function (serializer) {
         thumbdata = null;
     }
 
-    if (scenes.some(any => any.createdFromTemplate) && !hasTemplate) {
+    if (
+        scenes.some(any => any.createdFromTemplate && !any.template.tutor) &&
+            !hasTemplate
+    ) {
         scenes = scenes.filter(each => each.role !== 'tutorial');
     }
 
@@ -2230,6 +2236,7 @@ Scene.prototype.toXML = function (serializer) {
         return '<template version="' +
             dict.version +
             '" name="' + dict.name + '"' +
+            (isNil(dict.tutor) ? '' : ' tutor="true"') +
             (isNil(dict.lang) ? '' : (' lang="' + dict.lang + '"')) +
             (isNil(dict.zoom) ? '' : (' zoom="' + dict.zoom + '"')) +
             (isNil(dict.scale) ? '' : (' scale="' + dict.scale + '"')) +
@@ -2249,6 +2256,9 @@ Scene.prototype.toXML = function (serializer) {
         this.template.hide = this.stage.hiddenGlobalBlocks();
 
         // optional settings to be included:
+        if (this.template.tutor !== undefined) {
+            this.template.tutor = true;
+        }
         if (this.template.lang !== undefined) {
             this.template.lang = SnapTranslator.language;
         }
