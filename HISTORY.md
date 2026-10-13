@@ -11,7 +11,7 @@
     * when testing the data type of a deleted sprite report <false> to "is ... a (sprite)"
     * changed the jukebox's "record new sound" button's symbol from red dot to microphone
     * new "picture", "shirt" and "microphone" symbols
-    * changed the contrast of the wardrobe's and jukeboxe's creation buttons
+    * changed the contrast of the wardrobe's and jukebox's creation buttons
 * **Notable Fixes:**
     * fixed a type inference glitch in the block editor
     * fixed a syntax error (missing argument slot) in the Spanish translation of the "switch to scene" command block
@@ -22,6 +22,9 @@
 * **Translation Updates:**
     * Spanish
     * German
+
+### 2026-10-13
+* German translation update (smooth lists)
 
 ### 2026-10-12
 * threads: identify a deleted sprite or clone as type "corpse", report <false> on testing as sprite
