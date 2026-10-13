@@ -181,7 +181,7 @@
       "height of _"
     ],
     "categories": [
-      "tables"
+      "Shapes"
     ]
   },
   {
@@ -218,6 +218,29 @@
       "zh_CN": {
         "name": "表格处理库",
         "description": "使用强大、通用的函数创建、选择、筛选、排序、转换、扩展和分析表格数据集。其设计灵感源自 Pyret 的 Tables 数据，详情可参阅：https://pyret.org/docs/latest/tables.html。感谢 Shriram Krishnamurthi 的启发、反馈与建议。示例作品(仍在开发中)：https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode"
+      }
+    }
+  },
+  {
+    "fileName": "presentations_module.xml",
+    "name": "Presentations",
+    "description": "Create simple slide shows and presentations, mixing text, typography, images and animations, and provide localizations and translations for them",
+    "searchData": [
+      "presentation",
+      "slide",
+      "buttons",
+      "align",
+      "next",
+      "back"
+
+    ],
+    "categories": [
+      "Presentations"
+    ],
+    "translations": {
+      "de": {
+        "name": "Präsentationen",
+        "description": "Einfache Präsentation und Slideshows mit Text, Typographie, Grafiken und Animationen erstellen, und mit Übersetzungen versehen"
       }
     }
   },

@@ -170,6 +170,7 @@ var snapVersion = '12.3.0-dev',
         'libraries/parallel_module.xml',
         'libraries/pixel_module.xml',
         'libraries/plot_bars_module.xml',
+        'libraries/presentations_module.xml',
         'libraries/replace_letters_module.xml',
 
         // Snap4Arduino

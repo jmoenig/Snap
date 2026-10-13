@@ -5,6 +5,7 @@
 * **New Features:**
     * added "import costume from library" button to the wardrobe
     * added "import sound from library" button to the jukebox
+    * new "presentations" library for creating simple slide shows and for authoring translatable tutorial windows
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
 * **Notable Changes:**
     * pressing the green flag button first stops all active processes before (re-) starting the green-flagged scripts
@@ -25,6 +26,7 @@
 
 ### 2026-10-13
 * German translation update (smooth lists)
+* added new "presentations" library
 
 ### 2026-10-12
 * threads: identify a deleted sprite or clone as type "corpse", report <false> on testing as sprite
