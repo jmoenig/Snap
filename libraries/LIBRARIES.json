@@ -106,6 +106,31 @@
     }
   },
   {
+    "fileName": "lists_module.xml",
+    "name": "Lists",
+    "description": "A collection of useful functions for working with lists and data",
+    "searchData": [
+      "wrap item _ of _",
+      "rotate _ by _",
+      "stretch _ by _ _",
+      "compress _ by _",
+      "mod1",
+      "plot bars _ _"
+
+    ],
+    "categories": [
+      "pen",
+      "operators",
+      "lists"
+    ],
+    "translations": {
+      "de": {
+        "name": "Listen",
+        "description": "Eine Sammlung praktischer Funktionen für die Arbeit mit Listen und Daten"
+      }
+    }
+  },
+  {
     "fileName": "colors_module.xml",
     "name": "Colors",
     "description": "mix, modify and transition colors",
