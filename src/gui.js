@@ -6548,7 +6548,7 @@ IDE_Morph.prototype.generatePuzzle = function () {
         m instanceof BlockMorph
     ).forEach(b => b.destroy());
 
-    // store the solution inside the puzzlem
+    // store the solution inside the puzzle
     // and remove the solution from the stage
     puzzle.solution = current;
     this.removeSprite(current, false); // disable undelete
