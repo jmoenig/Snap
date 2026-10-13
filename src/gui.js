@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-October-10';
+modules.gui = '2026-October-13';
 
 // Declarations
 
@@ -5350,7 +5350,7 @@ IDE_Morph.prototype.projectMenu = function () {
             if (shiftClicked) {
                 menu.addItem(
                     'Remove template',
-                    () => this.scene.template = null,
+                    () => this.scene.refreshTemplate(),
                     '"' + this.scene.template.name + '"',
                     new Color(100, 0, 0)
                 );

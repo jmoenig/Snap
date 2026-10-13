@@ -54,7 +54,7 @@ ScriptsMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2026-May-19';
+modules.scenes = '2026-October-13';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -131,17 +131,7 @@ function Scene(aStageMorph) {
     this.hideSprites = false;
 
     // template settings
-    this.template = {
-        name: null,
-        version: null,
-        hide: null,
-        lang: undefined,
-        zoom: undefined,
-        scale: undefined,
-        fade: undefined,
-        flat: undefined,
-        bright: undefined
-    };
+    this.template = this.freshTemplate();
 
     // cached IDE state
     this.sprites = new List();
@@ -193,6 +183,24 @@ Scene.prototype.initialize = function () {
             this.stage;
     }
     return this;
+};
+
+Scene.prototype.freshTemplate = function () {
+    return {
+        name: null,
+        version: null,
+        hide: null,
+        lang: undefined,
+        zoom: undefined,
+        scale: undefined,
+        fade: undefined,
+        flat: undefined,
+        bright: undefined
+    };
+};
+
+Scene.prototype.refreshTemplate = function () {
+    this.template = this.freshTemplate();
 };
 
 Scene.prototype.addDefaultSprite = function () {

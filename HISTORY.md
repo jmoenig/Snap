@@ -33,6 +33,7 @@
 * added new "lists" library (new utility functions)
 * changed "Edge Computer Vision" library name into just "Computer Vision"
 * cleaned up and rearranged the list of libraries
+* scenes, guj: fixed a bug when removing a project's template information
 
 ### 2026-10-12
 * threads: identify a deleted sprite or clone as type "corpse", report <false> on testing as sprite
