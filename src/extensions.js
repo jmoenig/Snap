@@ -32,11 +32,11 @@ IDE_Morph, CamSnapshotDialogMorph, SoundRecorderDialogMorph, isSnapObject, nop,
 Color, Process, contains, localize, SnapTranslator, isString, detect, Point,
 SVG_Costume, newCanvas, WatcherMorph, BlockMorph, HatBlockMorph, invoke, isNil,
 BigUint64Array, DeviceOrientationEvent, DialogBoxMorph, Animation, TableMorph,
-TableFrameMorph, console, Morph, MenuMorph*/
+TableFrameMorph, console, Morph, MenuMorph, Rectangle*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-October-10';
+modules.extensions = '2026-October-14';
 
 // Global stuff
 
@@ -1460,6 +1460,52 @@ SnapExtensions.primitives.set(
     function (costume) {
         costume.shrinkWrap();
         return costume;
+    }
+);
+
+SnapExtensions.primitives.set(
+    'cst_compose(cst1, cst2, x_offset, y_offset)',
+    function (cst1, cst2, x_off, y_off, proc) {
+        var img1, img2,
+            w1, w2,
+            h1, h2,
+            r1, r2,
+            ext,
+            x1, x2,
+            y1, y2,
+            pic,
+            ctx;
+
+        proc.assertType(cst1, 'costume');
+        proc.assertType(cst2, 'costume');
+
+        img1 = cst1.rasterized().contents;
+        w1 = img1.width;
+        h1 = img1.height;
+
+        img2 = cst2.rasterized().contents;
+        w2 = img2.width;
+        h2 = img2.height;
+
+        r1 = new Rectangle(0, 0, w1, h1);
+        r2 = new Rectangle(0, 0, w2, h2).translateBy(
+            new Point(+x_off, +y_off)
+        );
+        ext = r1.merge(r2).extent();
+
+        x1 = Math.abs(Math.min(0, x_off));
+        y1 = Math.abs(Math.min(0, y_off));
+
+        x2 = Math.max(0, x_off);
+        y2 = Math.max(0, y_off);
+
+        // create the target's canvas
+        pic = newCanvas(ext);
+        ctx = pic.getContext('2d');
+        ctx.drawImage(img1, x1, y1);
+        ctx.drawImage(img2, x2, y2);
+
+        return new Costume(pic, 'costume');
     }
 );
 
