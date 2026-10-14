@@ -18,6 +18,7 @@
     * changed "Edge Computer Vision" library name into just "Computer Vision"
     * cleaned up and rearranged the list of libraries
 * **Notable Fixes:**
+    * fixed centering thumbnails in costume icons (buttons) in the wardrobe and media browser
     * fixed a type inference glitch in the block editor
     * fixed a syntax error (missing argument slot) in the Spanish translation of the "switch to scene" command block
     * fixed color picker for custom categories when zooming the IDE's magnification
@@ -27,6 +28,9 @@
 * **Translation Updates:**
     * Spanish
     * German
+
+### 2026-10-14
+* objects: fixed centering thumbnails in costume icons (buttons) in the wardrobe and media browser
 
 ### 2026-10-13
 * German translation update (smooth lists)

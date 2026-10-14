@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-October-10';
+modules.objects = '2026-October-14';
 
 var SpriteMorph;
 var StageMorph;
@@ -14403,8 +14403,8 @@ Costume.prototype.thumb = function (extentPoint) {
                 (extentPoint.x / w),
                 (extentPoint.y / h)
             ),
-            xOffset = (extentPoint.x - (w * scale)) / 2,
-            yOffset = (extentPoint.y - (h * scale)) / 2;
+            xOffset = (extentPoint.x - (w * scale)) / 4,
+            yOffset = (extentPoint.y - (h * scale)) / 4;
 
         ctx.save();
         ctx.scale(scale, scale);
