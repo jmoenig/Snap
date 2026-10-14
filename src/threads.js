@@ -66,7 +66,7 @@ CustomHatBlockMorph, SymbolMorph, MenuMorph, MorphicPreferences*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-October-12';
+modules.threads = '2026-October-14';
 
 var ThreadManager;
 var Process;
@@ -8419,6 +8419,12 @@ Process.prototype.costumeNamed = function (name) {
     // private
     if (name instanceof Costume) {
         return name;
+    }
+    if (name instanceof Context) {
+        name = name.toBlock();
+    }
+    if (name instanceof BlockMorph) {
+        return new Costume(name.scriptPic(), localize('block'));
     }
     if (typeof name === 'number') {
         return this.blockReceiver().costumes.at(name);
