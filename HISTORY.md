@@ -4,9 +4,10 @@
 
 * **New Features:**
     * added the option to always include a tutorial in a project derived from a template
+    * added ability to hide individual scene(s) in the corral via the corral-bar's context menu, use for pedagogical puzzles (only!)
     * added "import costume from library" button to the wardrobe
     * added "import sound from library" button to the jukebox
-    * rogrammatically compute script pic costumes when placing a ring or a block-expression into the "_ of costume _" reporter's right input slot (and leaving the left slot empty)
+    * programmatically compute script pic costumes when placing a ring or a block-expression into the "_ of costume _" reporter's right input slot (and leaving the left slot empty)
     * new "presentations" library for creating simple slide shows and for authoring translatable tutorial windows
     * new "lists" library for rotating, stretching, smoothing, compressing and accessing lists
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
@@ -33,6 +34,7 @@
 ### 2026-10-14
 * objects: fixed centering thumbnails in costume icons (buttons) in the wardrobe and media browser
 * threads: programmatically compute script pic costumes when placing a ring or a block-expression into the "_ of costume _" reporter's right input slot (and leaving the left slot empty)
+* added ability to hide individual scene(s) in the corral via the corral-bar's context menu, use for pedagogical puzzles (only!)
 
 ### 2026-10-13
 * German translation update (smooth lists)

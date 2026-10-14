@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-October-13';
+modules.gui = '2026-October-14';
 
 // Declarations
 
@@ -2631,6 +2631,16 @@ IDE_Morph.prototype.createCorralBar = function () {
                 MorphicPreferences.menuFontSize * 0.75
             );
 
+        menu.addItem(
+            [
+                this.stage.isHiddenInCorral ? off : on,
+                this.stage.name
+            ],
+            this.stage
+        );
+        if (this.sprites.length() > 0) {
+            menu.addLine();
+        }
         this.sprites.asArray().forEach(sprite =>
             menu.addItem(
                 [
@@ -2640,16 +2650,18 @@ IDE_Morph.prototype.createCorralBar = function () {
                 sprite
             )
         );
-        if (this.sprites.length() > 0) {
+        if (this.scenes.length() > 1) {
             menu.addLine();
+            this.scenes.asArray().forEach(scene =>
+                menu.addItem(
+                    [
+                        scene.isHiddenInCorral ? off : on,
+                        scene.name || localize('untitled')
+                    ],
+                    scene
+                )
+            );
         }
-        menu.addItem(
-            [
-                this.stage.isHiddenInCorral ? off : on,
-                this.stage.name
-            ],
-            this.stage
-        );
         return menu;
     };
 
@@ -2724,7 +2736,11 @@ IDE_Morph.prototype.createCorral = function (keepSceneAlbum) {
         this.stageIcon.setLeft(this.left() + padding);
 
         // scenes
-        if (myself.tutorial || myself.scenes.length() < 2) {
+        if (
+            myself.tutorial ||
+            myself.scenes.asArray().filter(scn =>
+                !scn.isHiddenInCorral).length < 2
+        ) {
             this.album.hide();
         } else {
             this.stageIcon.setTop(this.top());
@@ -14247,13 +14263,15 @@ SceneAlbumMorph.prototype.updateList = function () {
     this.addBack(this.contents);
 
     this.ide.scenes.asArray().forEach((scene, i) => {
-        icon = new SceneIconMorph(scene);
-        if (i < 1) {
-            icon.isDraggable = false; // project scene cannot be rearranged
+        if (!scene.isHiddenInCorral) {
+            icon = new SceneIconMorph(scene);
+            if (i < 1) {
+                icon.isDraggable = false; // project scene cannot be rearranged
+            }
+            icon.setPosition(new Point(x, y));
+            this.addContents(icon);
+            y = icon.bottom() + padding;
         }
-        icon.setPosition(new Point(x, y));
-        this.addContents(icon);
-        y = icon.bottom() + padding;
     });
     this.version = this.ide.scenes.lastChanged;
 
@@ -14284,7 +14302,7 @@ SceneAlbumMorph.prototype.step = function () {
     }
 };
 
-// Wardrobe ops
+// SceneAlbumMorph ops
 
 SceneAlbumMorph.prototype.removeSceneAt = function (idx) {
     this.ide.scenes.remove(idx);

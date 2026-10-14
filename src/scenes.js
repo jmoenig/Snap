@@ -54,7 +54,7 @@ ScriptsMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2026-October-13';
+modules.scenes = '2026-October-14';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -129,6 +129,7 @@ function Scene(aStageMorph) {
     this.role = null; // null (default), "template" or "tutorial"
     this.createdFromTemplate = false;
     this.hideSprites = false;
+    this.isHiddenInCorral = false;
 
     // template settings
     this.template = this.freshTemplate();
