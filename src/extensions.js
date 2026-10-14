@@ -1502,6 +1502,7 @@ SnapExtensions.primitives.set(
         // create the target's canvas
         pic = newCanvas(ext);
         ctx = pic.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
         ctx.drawImage(img2, x2, y2);
         ctx.drawImage(img1, x1, y1);
 
