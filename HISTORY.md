@@ -34,6 +34,7 @@
 
 ### 2026-10-15
 * extensions: tweaked costume composition extension
+* German translation update (with layout terminology)
 
 ### 2026-10-14
 * objects: fixed centering thumbnails in costume icons (buttons) in the wardrobe and media browser
