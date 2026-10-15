@@ -15,6 +15,7 @@
 * **Notable Changes:**
     * pressing the green flag button first stops all active processes before (re-) starting the green-flagged scripts
     * allow hat blocks to be dropped into rings
+    * enable costumes and sounds to be exported as data dependencies in libraries, scripts and script pics. Currently limited to direct dependencies, i.e. not inside data structures (lists) for reasons of data bloat
     * when testing the data type of a deleted sprite report <false> to "is ... a (sprite)"
     * changed the jukebox's "record new sound" button's symbol from red dot to microphone
     * new "picture", "shirt" and "microphone" symbols
@@ -37,6 +38,7 @@
 * extensions: tweaked costume composition extension
 * German translation update (with layout terminology)
 * blocks: allow hat blocks to be dropped into rings
+* threads: enable costumes and sounds to be exported as data dependencies in libraries, scripts and script pics. Currently limited to direct dependencies, i.e. not inside data structures (lists) for reasons of data bloat
 
 ### 2026-10-14
 * objects: fixed centering thumbnails in costume icons (buttons) in the wardrobe and media browser

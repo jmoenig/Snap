@@ -66,7 +66,7 @@ CustomHatBlockMorph, SymbolMorph, MenuMorph, MorphicPreferences*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-October-14';
+modules.threads = '2026-October-15';
 
 var ThreadManager;
 var Process;
@@ -10719,7 +10719,12 @@ VariableFrame.prototype.fork = function (names = []) {
     // answer a copy that only has entries for the given array of variable names
     // and only has values for primitive data.
     // used for including data dependencies in libraries.
-    var frame = new VariableFrame();
+    //
+    // Note: costumes and sounds can - currently - only be referenced directly
+    // by a dependent variable, not as part of a data structure (list) assigned
+    // to it, for reasons of data bloat in libraries.
+    var frame = new VariableFrame(),
+        types = ['text', 'number', 'Boolean', 'costume', 'sound'];
     this.names(true).forEach(vName => {
         var v, val, typ;
         if (names.includes(vName)) {
@@ -10728,7 +10733,7 @@ VariableFrame.prototype.fork = function (names = []) {
                 val = '';
             } else {
                 typ = Process.prototype.reportTypeOf(v.value);
-                if (['text', 'number', 'Boolean'].includes(typ) ||
+                if (types.includes(typ) ||
                     (v.value instanceof List &&
                         (v.value.canBeCSV() || v.value.canBeJSON()))
                 ) {
