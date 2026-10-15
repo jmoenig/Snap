@@ -176,6 +176,30 @@
     }
   },
   {
+    "fileName": "costume_composition_module.xml",
+    "name": "Pictures",
+    "description": "Compose new costumes from existing ones, and programmatically generate pictures of blocks and scripts.",
+    "searchData": [
+      "above",
+      "beside",
+      "over"
+    ],
+    "categories": [
+      "looks"
+    ],
+    "translations": {
+      "de": {
+        "name": "Bilder",
+        "description": "Neue Kostüme aus vorhandenen zusammenfügen, und Bilder von Blöcken und Programmen automatisch generieren.",
+        "searchData": [
+          "über",
+          "neben",
+          "auf"
+        ]
+      }
+    }
+  },
+  {
     "fileName": "shapes_module.xml",
     "name": "Shapes",
     "description": "Create, combine, transform and display geometric shapes for a functions-first approach to teaching programming. Inspired by Pyret's image library, see: https://pyret.org/docs/horizon/image.html - under development",

@@ -11,6 +11,7 @@
     * new "cst_compose(cst1, cst2, x_offset, y_offset)" extension for composing costumes
     * new "presentations" library for creating simple slide shows and for authoring translatable tutorial windows
     * new "lists" library for rotating, stretching, smoothing, compressing and accessing lists
+    * new "Pictures" library, for composing new costumes from existing ones, and for programmatically generating costumes showing blocks and scripts
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
 * **Notable Changes:**
     * pressing the green flag button first stops all active processes before (re-) starting the green-flagged scripts
@@ -39,6 +40,7 @@
 * German translation update (with layout terminology)
 * blocks: allow hat blocks to be dropped into rings
 * threads: enable costumes and sounds to be exported as data dependencies in libraries, scripts and script pics. Currently limited to direct dependencies, i.e. not inside data structures (lists) for reasons of data bloat
+* new "Pictures" library, for composing new costumes from existing ones, and for programmatically generating costumes showing blocks and scripts
 
 ### 2026-10-14
 * objects: fixed centering thumbnails in costume icons (buttons) in the wardrobe and media browser
