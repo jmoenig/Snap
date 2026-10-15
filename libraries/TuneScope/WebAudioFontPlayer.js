@@ -742,7 +742,10 @@ var WebAudioFontPlayer = /** @class */ (function () {
                 //
             }
             else {
-                zone.delay = 0;
+                // TuneScope patch: a zone may declare the decoder delay of its
+                // compressed audio (seconds); the player starts there and shifts
+                // the loop points by it. Upstream zeroed it.
+                zone.delay = this.numValue(zone.delay, 0);
                 if (zone.sample) {
                     var decoded = atob(zone.sample);
                     zone.buffer = audioContext.createBuffer(1, decoded.length / 2, zone.sampleRate);
@@ -761,7 +764,10 @@ var WebAudioFontPlayer = /** @class */ (function () {
                         if (n >= 65536 / 2) {
                             n = n - 65536;
                         }
-                        float32Array[i] = n / 65536.0;
+                        // TuneScope patch: full scale is 32768, so a raw PCM zone
+                        // plays as loud as the same audio from a compressed file.
+                        // Upstream divided by 65536 and lost 6 dB.
+                        float32Array[i] = n / 32768.0;
                     }
                 }
                 else {
@@ -776,6 +782,15 @@ var WebAudioFontPlayer = /** @class */ (function () {
                             view[i] = b;
                         }
                         audioContext.decodeAudioData(arraybuffer, function (audioBuffer) {
+                            zone.buffer = audioBuffer;
+                        });
+                    }
+                    // TuneScope patch: the compressed audio of a zone can come as
+                    // bytes, cut from the instrument's .bin file (see tsAttachSamples)
+                    else if (zone.fileData) {
+                        var bytes = zone.fileData;
+                        zone.fileData = null;
+                        audioContext.decodeAudioData(bytes, function (audioBuffer) {
                             zone.buffer = audioBuffer;
                         });
                     }
@@ -865,6 +880,8 @@ var WebAudioFontPlayer = /** @class */ (function () {
     ;
     WebAudioFontPlayer.prototype.resumeContext = function (audioContext) {
         try {
+            // TuneScope: an off-line context (Export Tracks) is suspended until it renders and cannot be resumed
+            if (typeof OfflineAudioContext !== 'undefined' && audioContext instanceof OfflineAudioContext) return;
             if (audioContext.state == 'suspended') {
                 console.log('audioContext.resume', audioContext);
                 audioContext.resume();
@@ -1048,11 +1065,31 @@ var WebAudioFontPlayer = /** @class */ (function () {
     };
     ;
     WebAudioFontPlayer.prototype.findZone = function (audioContext, preset, pitch) {
+        // TuneScope patch (diverges from upstream): upstream returned the last
+        // listed zone whose key range contains the pitch, and silently fell
+        // through to zones[0] when none matched - which played stacked layers
+        // (accordion) and out-of-range notes (acoustic bass, drums) many
+        // semitones from their sample roots. Instead, prefer a zone whose key
+        // range contains the pitch, then one that reaches it by upstream's one
+        // key of slack above its range, breaking ties (and handling the
+        // no-match case) by the zone whose sample root is nearest the requested
+        // pitch. A drum kit tunes one sample far across neighbouring keys, so
+        // the slack alone must never beat the key's own zone.
         var zone = null;
+        var bestDistance = Infinity;
+        var bestRank = -1;
         for (var i = preset.zones.length - 1; i >= 0; i--) {
-            zone = preset.zones[i];
-            if (zone.keyRangeLow <= pitch && zone.keyRangeHigh + 1 >= pitch) {
-                break;
+            var candidate = preset.zones[i];
+            var originalPitch = (typeof candidate.originalPitch === 'number') ? candidate.originalPitch : 6000;
+            var coarseTune = (typeof candidate.coarseTune === 'number') ? candidate.coarseTune : 0;
+            var fineTune = (typeof candidate.fineTune === 'number') ? candidate.fineTune : 0;
+            var distance = Math.abs(100.0 * pitch - (originalPitch - 100.0 * coarseTune - fineTune));
+            var rank = (candidate.keyRangeLow <= pitch && pitch <= candidate.keyRangeHigh) ? 2
+                : (candidate.keyRangeLow <= pitch && candidate.keyRangeHigh + 1 >= pitch) ? 1 : 0;
+            if (rank > bestRank || (rank === bestRank && distance < bestDistance)) {
+                zone = candidate;
+                bestDistance = distance;
+                bestRank = rank;
             }
         }
         try {
