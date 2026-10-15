@@ -2,6 +2,7 @@
 
 ## in development:
 
+## 12.3.0:
 * **New Features:**
     * added the option to always include a tutorial in a project derived from a template
     * added ability to hide individual scene(s) in the corral via the corral-bar's context menu, use for pedagogical puzzles (only!)
@@ -42,6 +43,7 @@
 * threads: enable costumes and sounds to be exported as data dependencies in libraries, scripts and script pics. Currently limited to direct dependencies, i.e. not inside data structures (lists) for reasons of data bloat
 * new "Pictures" library, for composing new costumes from existing ones, and for programmatically generating costumes showing blocks and scripts
 * v12.3.0 rc
+* prepared v12.3.0 minor release
 
 ### 2026-10-14
 * objects: fixed centering thumbnails in costume icons (buttons) in the wardrobe and media browser
