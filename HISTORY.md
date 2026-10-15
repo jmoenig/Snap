@@ -14,6 +14,7 @@
     * dynamic contents for variadic C-Slots (When slot signals 'expand' -> report a command block or a stack of commands)
 * **Notable Changes:**
     * pressing the green flag button first stops all active processes before (re-) starting the green-flagged scripts
+    * allow hat blocks to be dropped into rings
     * when testing the data type of a deleted sprite report <false> to "is ... a (sprite)"
     * changed the jukebox's "record new sound" button's symbol from red dot to microphone
     * new "picture", "shirt" and "microphone" symbols
@@ -35,6 +36,7 @@
 ### 2026-10-15
 * extensions: tweaked costume composition extension
 * German translation update (with layout terminology)
+* blocks: allow hat blocks to be dropped into rings
 
 ### 2026-10-14
 * objects: fixed centering thumbnails in costume icons (buttons) in the wardrobe and media browser

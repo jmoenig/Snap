@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-October-09';
+modules.blocks = '2026-October-15';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6860,22 +6860,20 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
         minDist = 1000,
         wrap;
 
-    if (!(this instanceof HatBlockMorph)) {
+    ref.push(
+        {
+            point: this.topAttachPoint(),
+            loc: 'top'
+        }
+    );
+    wrap = this.wrapAttachPoint();
+    if (wrap) {
         ref.push(
             {
-                point: this.topAttachPoint(),
-                loc: 'top'
+                point: wrap,
+                loc: 'wrap'
             }
         );
-        wrap = this.wrapAttachPoint();
-        if (wrap) {
-            ref.push(
-                {
-                    point: wrap,
-                    loc: 'wrap'
-                }
-            );
-        }
     }
     if (!bottomBlock.isStop()) {
         ref.push(
