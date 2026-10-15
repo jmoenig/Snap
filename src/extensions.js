@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph, Rectangle*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-October-14';
+modules.extensions = '2026-October-15';
 
 // Global stuff
 
@@ -1503,8 +1503,8 @@ SnapExtensions.primitives.set(
         pic = newCanvas(ext);
         ctx = pic.getContext('2d');
         ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(img2, x2, y2);
         ctx.drawImage(img1, x1, y1);
+        ctx.drawImage(img2, x2, y2);
 
         return new Costume(pic, 'costume');
     }

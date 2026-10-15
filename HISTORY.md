@@ -32,6 +32,9 @@
     * Spanish
     * German
 
+### 2026-10-15
+* extensions: tweaked costume composition extension
+
 ### 2026-10-14
 * objects: fixed centering thumbnails in costume icons (buttons) in the wardrobe and media browser
 * threads: programmatically compute script pic costumes when placing a ring or a block-expression into the "_ of costume _" reporter's right input slot (and leaving the left slot empty)
