@@ -2,6 +2,15 @@
 
 ## in development:
 
+## 12.3.1:
+* **Notable Fixes:**
+    * fixed "include settings" predicate for puzzle templates
+    * fixed refreshing the corral when hidden scenes are un-hidden
+    * fixed removing the scene album from the corral when deleting the second-last scene
+    * fixed a minor XML formatting glitch (with no functional relevance)
+* **Notable Changes:**
+    * added a simple costume-by-name getter to the costume composition library ("Pictures")
+
 ### 2026-10-16
 * new dev version for v12.3.1
 * scenes: fixed "include settings" predicate for puzzle templates
@@ -9,6 +18,7 @@
 * gui: fixed removing the scene album from the corral when deleting the second-last scene
 * store: fixed a minor XML formatting glitch (with no functional relevance)
 * added a simple costume-by-name getter to the costume composition library ("Pictures")
+* prepared v12.3.1 patch
 
 ## 12.3.0:
 * **New Features:**
