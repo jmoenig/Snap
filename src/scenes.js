@@ -54,7 +54,7 @@ ScriptsMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.scenes = '2026-October-14';
+modules.scenes = '2026-October-16';
 
 // Projecct /////////////////////////////////////////////////////////
 
@@ -262,8 +262,15 @@ Scene.prototype.applyGlobalSettings = function () {
 // Scene embedded template settings
 
 Scene.prototype.hasEmbeddedTemplateSettings = function () {
-    return ['lang', 'zoom', 'scale', 'fade', 'flat', 'bright'].some(any =>
-        this.template[any] !== undefined);
+    return [
+        'tutor',
+        'lang',
+        'zoom',
+        'scale',
+        'fade',
+        'flat',
+        'bright'
+    ].some(any => this.template[any] !== undefined);
 };
 
 // Scene ops:
