@@ -14306,6 +14306,11 @@ SceneAlbumMorph.prototype.step = function () {
 
 SceneAlbumMorph.prototype.removeSceneAt = function (idx) {
     this.ide.scenes.remove(idx);
+    if (this.ide.scenes.length() < 2) {
+        this.ide.createCorral(false); // re-create scenes
+        this.ide.fixLayout();
+        return;
+    }
     this.updateList();
 };
 
