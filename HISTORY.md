@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-10-16
+* new dev version for v12.3.1
+
 ## 12.3.0:
 * **New Features:**
     * added the option to always include a tutorial in a project derived from a template
