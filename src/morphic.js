@@ -11471,6 +11471,24 @@ HandMorph.prototype.drop = function () {
         mouseScroll
 */
 
+HandMorph.prototype.syncModifierKeys = function (event) {
+    // flush the world's currentKey property if it remembers a modifier
+    // key that the mouse event reports as no longer held down, because
+    // its key-up was missed, e.g. after cmd-tabbing to another app
+    var held = {
+        16: event.shiftKey,
+        17: event.ctrlKey,
+        18: event.altKey,
+        91: event.metaKey, // left command (meta) key
+        92: event.metaKey, // right windows key
+        93: event.metaKey, // right command key
+        224: event.metaKey // command key in older Firefox versions
+    };
+    if (held[this.world.currentKey] === false) {
+        this.world.currentKey = null;
+    }
+};
+
 HandMorph.prototype.processMouseDown = function (event) {
     var morph, actualClick,
         posInDocument = getDocumentPositionOf(this.world.worldCanvas);
@@ -11484,6 +11502,7 @@ HandMorph.prototype.processMouseDown = function (event) {
     }
 
     // process the actual event
+    this.syncModifierKeys(event);
     this.destroyTemporaries();
     this.contextMenuEnabled = true;
     this.morphToGrab = null;
