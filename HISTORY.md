@@ -7,6 +7,7 @@
 * scenes: fixed "include settings" predicate for puzzle templates
 * gui: fixed refreshing the corral when hidden scenes are un-hidden
 * gui: fixed removing the scene album from the corral when deleting the second-last scene
+* store: fixed a minor XML formatting glitch (with no functional relevance)
 
 ## 12.3.0:
 * **New Features:**

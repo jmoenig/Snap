@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion, ADT_SlotMorph, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2026-October-14';
+modules.store = '2026-October-16';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2377,7 +2377,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.color.a,
         this.getTempo(),
         this.isThreadSafe,
-        this.isHiddenInCorral ? ' corral="false"' : '',
+        this.isHiddenInCorral ? 'corral="false" ' : '',
         this.enablePenLogging,
         this.instrument ?
                 ' instrument="' + parseInt(this.instrument) + '" ' : '',
