@@ -8,6 +8,7 @@
 * gui: fixed refreshing the corral when hidden scenes are un-hidden
 * gui: fixed removing the scene album from the corral when deleting the second-last scene
 * store: fixed a minor XML formatting glitch (with no functional relevance)
+* added a simple costume-by-name getter to the costume composition library ("Pictures")
 
 ## 12.3.0:
 * **New Features:**
