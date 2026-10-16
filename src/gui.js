@@ -2619,7 +2619,7 @@ IDE_Morph.prototype.createCorralBar = function () {
     this.corralBar.userMenu = () => {
         var menu = new MenuMorph(sprite => {
                 sprite.isHiddenInCorral = !sprite.isHiddenInCorral;
-                this.createCorral(true); // keep scenes
+                this.createCorral(false); // re-create scenes
                 this.fixLayout();
             }),
             on = new SymbolMorph(

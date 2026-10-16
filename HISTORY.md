@@ -5,6 +5,7 @@
 ### 2026-10-16
 * new dev version for v12.3.1
 * scenes: fixed "include settings" predicate for puzzle templates
+* gui: fixed refreshing the corral when hidden scenes are un-hidden
 
 ## 12.3.0:
 * **New Features:**
