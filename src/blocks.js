@@ -6097,6 +6097,47 @@ BlockMorph.prototype.pickUp = function (wrrld) {
     world.hand.grab(this);
 };
 
+BlockMorph.prototype.pickUpInstead = function (hand) {
+    // check whether the command-key is held down and if so pick up
+    // a duplicate of just this block, leaving the original in place
+    var meta = [91, 92, 93, 224]; // left / right command (meta) keys
+    if (this.isTemplate || !contains(meta, hand.world.currentKey)) {
+        return false;
+    }
+    this.userDuplicateJustThis();
+    return true;
+};
+
+BlockMorph.prototype.userDuplicateJustThis = function () {
+    // pick up a copy of just this one block, leaving me in place.
+    // the copy sits exactly on top of me, so dragging keeps the grab offset
+    var cpy = this.fullCopy(),
+        nb = cpy instanceof CommandBlockMorph ? cpy.nextBlock() : null,
+        world = this.world(),
+        ide = this.parentThatIsA(IDE_Morph),
+        blockEditor = this.parentThatIsA(BlockEditorMorph);
+    if (nb) {nb.destroy(); }
+    world.hand.grab(cpy);
+    // register the drop-origin, so the copy can
+    // slide back into the palette (and vanish) if dropped
+    // somewhere where it gets rejected
+    if (!ide && blockEditor) {
+        ide = blockEditor.target.parentThatIsA(IDE_Morph);
+    }
+    if (ide) {
+        world.hand.grabOrigin = {
+            origin: ide.palette,
+            position: ide.palette.center()
+        };
+        this.scriptTarget().recordUserEdit(
+            'scripts',
+            'block',
+            'duplicate',
+            this.abstractBlockSpec()
+        );
+    }
+};
+
 // BlockMorph events
 
 BlockMorph.prototype.mouseClickLeft = function () {
