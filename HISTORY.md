@@ -4,6 +4,7 @@
 
 ### 2026-10-17
 * new dev version for v12.3.2
+* blocks: reverted enabling to drop hat blocks into rings and C-shaped slots
 
 ## 12.3.1:
 * **Notable Fixes:**

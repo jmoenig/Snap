@@ -6760,7 +6760,7 @@ CommandBlockMorph.prototype.bottomAttachPoint = function () {
 };
 
 CommandBlockMorph.prototype.wrapAttachPoint = function () {
-    var cslot = detect( // could be a method making uses of caching...
+    var cslot = detect( // could be a method making use of caching...
         this.inputs(), // ... although these already are cached
         each => each instanceof CSlotMorph
     );
@@ -6860,20 +6860,22 @@ CommandBlockMorph.prototype.closestAttachTarget = function (newParent) {
         minDist = 1000,
         wrap;
 
-    ref.push(
-        {
-            point: this.topAttachPoint(),
-            loc: 'top'
-        }
-    );
-    wrap = this.wrapAttachPoint();
-    if (wrap) {
+    if (!(this instanceof HatBlockMorph)) {
         ref.push(
             {
-                point: wrap,
-                loc: 'wrap'
+                point: this.topAttachPoint(),
+                loc: 'top'
             }
         );
+        wrap = this.wrapAttachPoint();
+        if (wrap) {
+            ref.push(
+                {
+                    point: wrap,
+                    loc: 'wrap'
+                }
+            );
+        }
     }
     if (!bottomBlock.isStop()) {
         ref.push(
