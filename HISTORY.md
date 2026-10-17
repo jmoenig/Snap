@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-10-17
+* new dev version for v12.3.2
+
 ## 12.3.1:
 * **Notable Fixes:**
     * fixed "include settings" predicate for puzzle templates
