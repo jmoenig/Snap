@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-October-15';
+modules.blocks = '2026-October-17';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -6948,11 +6948,17 @@ CommandBlockMorph.prototype.snap = function (hand) {
             }
         }
     } else if (target.loc === 'top') {
-        target.element.removeHighlight();
-        offsetY = this.bottomBlock().bottom() - this.bottom();
-        this.setBottom(target.element.top() + this.corner - offsetY);
-        this.setLeft(target.element.left());
-        this.bottomBlock().nextBlock(target.element);
+        if (target.type === 'slot') {
+            this.removeHighlight();
+            scripts.lastNextBlock = target.element.nestedBlock();
+            target.element.nestedBlock(this);
+        } else {
+            target.element.removeHighlight();
+            offsetY = this.bottomBlock().bottom() - this.bottom();
+            this.setBottom(target.element.top() + this.corner - offsetY);
+            this.setLeft(target.element.left());
+            this.bottomBlock().nextBlock(target.element);
+        }
     } else if (target.loc === 'wrap') {
         cslot = detect( // this should be a method making use of caching
             this.inputs(), // these are already cached, so maybe it's okay
@@ -9539,7 +9545,9 @@ ScriptsMorph.prototype.recoverLastDrop = function (forRedrop) {
                     }
                 }
             } else if (rec.lastDropTarget.loc === 'top') {
-                this.add(rec.lastDropTarget.element);
+                if (rec.lastDropTarget.type !== 'slot') {
+                    this.add(rec.lastDropTarget.element);
+                }
             } else if (rec.lastDropTarget.loc === 'wrap') {
                 var cslot = detect( // could be cached...
                     rec.lastDroppedBlock.inputs(), // ...although these are
@@ -11051,6 +11059,21 @@ RingCommandSlotMorph.prototype.init = function () {
 
 RingCommandSlotMorph.prototype.getSpec = function () {
     return '%rc';
+};
+
+RingCommandSlotMorph.prototype.attachTargets = function () {
+    var answer;
+    if (this.nestedBlock() instanceof HatBlockMorph) {
+        return [];
+    }
+    answer = RingCommandSlotMorph.uber.attachTargets.call(this);
+    answer.push({
+        point: this.slotAttachPoint(),
+        element: this,
+        loc: 'top',
+        type: 'slot'
+    });
+    return answer;
 };
 
 // RingCommandSlotMorph drawing:
@@ -16590,7 +16613,7 @@ RingReporterSlotMorph.prototype.attachTargets = function () {
         // don't let commands "kick out" embedded reporters
         return [];
     }
-    return CommandSlotMorph.prototype.attachTargets.call(this);
+    return RingCommandSlotMorph.prototype.attachTargets.call(this);
 };
 
 // RingReporterSlotMorph nesting for commands:
