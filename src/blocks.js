@@ -1923,6 +1923,18 @@ SyntaxElementMorph.prototype.selectForEdit = function () {
     return this;
 };
 
+SyntaxElementMorph.prototype.isFocusable = function () {
+    // answer whether the keyboard focus can be attached to me
+    return !(this instanceof TemplateSlotMorph) &&
+        (!this.isStatic ||
+            this.choices ||
+            this instanceof BooleanSlotMorph ||
+            this instanceof RingMorph ||
+            this instanceof MultiArgMorph ||
+            this instanceof CommandSlotMorph
+        );
+};
+
 // SyntaxElementMorph drag & drop:
 
 SyntaxElementMorph.prototype.reactToGrabOf = function (grabbedMorph) {
@@ -10202,14 +10214,27 @@ ArgMorph.prototype.reactToSliderEdit = function () {
     }
 };
 
+ArgMorph.prototype.mouseClickLeft = function (pos) {
+    // shift-click: attach the keyboard focus to me, if I can take it,
+    // otherwise pass the click on to my block as usual
+    if (this.world().currentKey === 16 && this.selectForEdit().focus()) {
+        return;
+    }
+    this.escalateEvent('mouseClickLeft', pos);
+};
+
 ArgMorph.prototype.focus = function () {
     // attach the keyboard focus to me, so a block entered at it lands
     // in my slot; answer the focus, or null if I'm not in a scripting
-    // pane open to keyboard editing
+    // pane open to keyboard editing, or if the focus can't navigate
+    // to me anyway
     var scripts = this.parentThatIsA(ScriptsMorph),
         world = this.world(),
         focus;
-    if (!scripts || !ScriptsMorph.prototype.enableKeyboard) {return null; }
+    if (!scripts || !ScriptsMorph.prototype.enableKeyboard ||
+            !this.isFocusable()) {
+        return null;
+    }
     if (scripts.focus) {scripts.focus.stopEditing(); }
     world.stopEditing();
     focus = new ScriptFocusMorph(scripts, this);
@@ -17554,7 +17579,7 @@ CommentMorph.prototype.stackHeight = function () {
       - shift + click on any block
         (clicking a command block's lower half places the focus below
         the block, clicking its upper half places it above)
-      - shift + click on an input slot, or shift + enter while editing
+      - shift + click on any input slot, or shift + enter while editing
         an input slot's text (the focus attaches to that slot)
       - shift + enter in the IDE's edit mode
 
@@ -18157,15 +18182,7 @@ ScriptFocusMorph.prototype.items = function () {
     if (this.element instanceof ScriptsMorph) {return []; }
     var script = this.element.topBlock();
     return script.allChildren().filter(each =>
-        each instanceof SyntaxElementMorph &&
-            !(each instanceof TemplateSlotMorph) &&
-                (!each.isStatic ||
-                    each.choices ||
-                    each instanceof BooleanSlotMorph ||
-                    each instanceof RingMorph ||
-                    each instanceof MultiArgMorph ||
-                    each instanceof CommandSlotMorph
-                )
+        each instanceof SyntaxElementMorph && each.isFocusable()
     );
 };
 
