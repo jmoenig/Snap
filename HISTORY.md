@@ -6,6 +6,7 @@
 * new dev version for v12.3.3
 * symbols: added "blank" symbol
 * German translation update (for text layout terms)
+* updated the variables declaration library ("let"), added WARP for performance
 
 ## 12.3.2:
 * **Notable Fixes:**
