@@ -2,6 +2,15 @@
 
 ## in development:
 
+## 12.3.3:
+* **Notable Changes:**
+    * updated the variables declaration library ("let"), added WARP for performance
+    * updated the presentations library, merged the "buttons" command into the "presentation" block
+    * tweaked corral bar context menu, included section heading for "scenes"
+    * added "blank" symbol
+* **Translation Updates:**
+    * German
+
 ### 2026-10-19
 * new dev version for v12.3.3
 * symbols: added "blank" symbol
@@ -9,6 +18,7 @@
 * updated the variables declaration library ("let"), added WARP for performance
 * updated the presentations library, merged the "buttons" command into the "presentation" block
 * gui: tweaked corral bar context menu, included section heading for "scenes"
+* prepared v12.3.3 patch
 
 ## 12.3.2:
 * **Notable Fixes:**
