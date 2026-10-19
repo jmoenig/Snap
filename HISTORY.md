@@ -7,6 +7,7 @@
 * symbols: added "blank" symbol
 * German translation update (for text layout terms)
 * updated the variables declaration library ("let"), added WARP for performance
+* updated the presentations library, merged the "buttons" command into the "presentation" block
 
 ## 12.3.2:
 * **Notable Fixes:**
