@@ -8,6 +8,7 @@
 * German translation update (for text layout terms)
 * updated the variables declaration library ("let"), added WARP for performance
 * updated the presentations library, merged the "buttons" command into the "presentation" block
+* gui: tweaked corral bar context menu, included section heading for "scenes"
 
 ## 12.3.2:
 * **Notable Fixes:**

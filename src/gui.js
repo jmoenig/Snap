@@ -2638,7 +2638,7 @@ IDE_Morph.prototype.createCorralBar = function () {
             ],
             this.stage
         );
-        if (this.sprites.length() > 0) {
+        if (this.sprites.length() > 1) {
             menu.addLine();
         }
         this.sprites.asArray().forEach(sprite =>
@@ -2652,6 +2652,7 @@ IDE_Morph.prototype.createCorralBar = function () {
         );
         if (this.scenes.length() > 1) {
             menu.addLine();
+            menu.addSectionLabel('Scenes');
             this.scenes.asArray().forEach(scene =>
                 menu.addItem(
                     [
