@@ -43,7 +43,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.symbols = '2026-October-10';
+modules.symbols = '2026-October-19';
 
 var SymbolMorph;
 
@@ -166,7 +166,8 @@ SymbolMorph.prototype.names = [
     'picture',
     'shirt',
     'microphone',
-    'infinity'
+    'infinity',
+    'blank'
 ];
 
 // SymbolMorph instance creation:
@@ -574,6 +575,8 @@ SymbolMorph.prototype.renderShape = function (ctx, aColor) {
         break;
     case 'infinity':
         this.renderSymbolInfinity(ctx, aColor);
+        break;
+    case 'blank':
         break;
     default:
         throw new Error('unknown symbol name: "' + this.name + '"');

@@ -2,6 +2,10 @@
 
 ## in development:
 
+### 2026-10-19
+* new dev version for v12.3.3
+* symbols: added "blank" symbol
+
 ## 12.3.2:
 * **Notable Fixes:**
     * fixed disabling hat block drop into C-shaped slots
