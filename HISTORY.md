@@ -5,6 +5,7 @@
 ### 2026-10-19
 * new dev version for v12.3.3
 * symbols: added "blank" symbol
+* German translation update (for text layout terms)
 
 ## 12.3.2:
 * **Notable Fixes:**
