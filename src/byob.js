@@ -113,7 +113,7 @@ ADT_SlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-October-10';
+modules.byob = '2026-October-20';
 
 // Declarations
 
@@ -494,7 +494,7 @@ CustomBlockDefinition.prototype.parseChoices = function (string) {
                 }
             } else {
                 if (isString(key) && key.length > 2 && key.startsWith('$_')) {
-                    key = key.slice(2);
+                    key = localize(key.slice(2));
                 }
                 dict[key] = val;
             }

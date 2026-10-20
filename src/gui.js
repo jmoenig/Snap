@@ -87,11 +87,11 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-October-19';
+modules.gui = '2026-October-20';
 
 // Declarations
 
-var SnapVersion = '12.3.3';
+var SnapVersion = '12.3.4';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -14575,7 +14575,7 @@ CamSnapshotDialogMorph.prototype.notSupportedMessage =
 	'Some browsers also require you to access Snap!\n' +
 	'through HTTPS to use the camera.\n\n' +
     'Please replace the "http://" part of the address\n' +
-    'in your browser by "https://" and try again.';
+    'in your browser by "https://" and refresh the page.';
 
 // CamSnapshotDialogMorph instance creation
 

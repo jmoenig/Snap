@@ -2,6 +2,20 @@
 
 ## in development:
 
+## 12.3.4:
+* **Notable Fixes:**
+    * fixed a custom drop-down menu localization glitch
+* **Notable Changes:**
+    * reworded the "camera unsupported" message to include refreshing the page
+* **Translation Updates:**
+    * German
+
+### 2026-10-20
+* byob: fixed a custom drop-down menu localization glitch
+* gui: reworded the "camera unsupported" message to include refreshing the page
+* German translation update for the "camera unsupported" message
+* prepared v12.3.4 patch
+
 ## 12.3.3:
 * **Notable Changes:**
     * updated the variables declaration library ("let"), added WARP for performance
