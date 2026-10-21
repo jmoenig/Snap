@@ -2,6 +2,14 @@
 
 ## in development:
 
+## 12.3.5:
+* **Notable Fixes:**
+    * fixed using turtle-sprite clones in tutorial windows
+
+### 2026-10-21
+* objects: fixed using turtle-sprite clones in tutorial windows
+* prepared v12.3.5 patch
+
 ## 12.3.4:
 * **Notable Fixes:**
     * fixed a custom drop-down menu localization glitch

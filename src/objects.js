@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-October-14';
+modules.objects = '2026-October-21';
 
 var SpriteMorph;
 var StageMorph;
@@ -6179,18 +6179,22 @@ SpriteMorph.prototype.newClone = function (immediately) {
 };
 
 SpriteMorph.prototype.newTurtleSprite = function () {
-    var ide = this.parentThatIsA(IDE_Morph),
+    var stage = this.parentThatIsA(StageMorph),
+        ide,
         sprite;
     if (this.isCorpse) {
         throw new Error('cannot operate on a deleted sprite');
     }
-    if (ide.stage && ide.stage.cloneCount <= 5000) {
-        sprite = new SpriteMorph(ide.globalVariables);
+    if (stage && stage.cloneCount <= 5000) {
+        sprite = new SpriteMorph(this.globalVariables());
         sprite.isTemporary = true;
-        sprite.cloneOriginName = ide.newSpriteName(sprite.name);
+        ide = stage.parentThatIsA(IDE_Morph);
+        if (ide) {
+            sprite.cloneOriginName = ide.newSpriteName(sprite.name);
+        }
         sprite.setCenter(this.center());
-        ide.stage.add(sprite);
-        ide.stage.cloneCount += 1;
+        stage.add(sprite);
+        stage.cloneCount += 1;
         sprite.fixLayout();
         sprite.rerender();
     } else {
