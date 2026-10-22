@@ -3541,7 +3541,6 @@ BlockEditorMorph.prototype.popUp = function () {
 
     if (world) {
         BlockEditorMorph.uber.popUp.call(this, world);
-        this.setInitialDimensions();
         this.handle = new HandleMorph(
             this,
             280,
@@ -3550,6 +3549,7 @@ BlockEditorMorph.prototype.popUp = function () {
             this.corner
         );
         this.handle.mouseDoubleClick = () => this.fitToContents();
+        this.setInitialDimensions();
         world.keyboardFocus = null;
     }
 };
@@ -4009,23 +4009,17 @@ BlockEditorMorph.prototype.editTranslations = function () {
 // BlockEditorMorph layout
 
 BlockEditorMorph.prototype.setInitialDimensions = function () {
-    var world = this.world(),
-        mex = world.extent().subtract(new Point(this.padding, this.padding)),
-        th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
-        bh = this.buttons.height();
+    // open at the smallest size that shows all scripts without
+    // scrollbars, where I was last closed, if known
+    var world = this.world();
 
+    this.fitToContents();
     if (this.definition.editorDimensions) {
         this.setPosition(this.definition.editorDimensions.origin);
-        this.setExtent(this.definition.editorDimensions.extent().min(mex));
         this.keepWithin(world);
-        return;
+    } else {
+        this.setCenter(world.center());
     }
-    this.setExtent(
-        this.body.contents.extent().add(
-            new Point(this.padding, this.padding + th + bh)
-        ).min(mex)
-    );
-    this.setCenter(this.world().center());
 };
 
 BlockEditorMorph.prototype.fitToContents = function () {
