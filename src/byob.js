@@ -3509,7 +3509,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     scriptsFrame = new ScrollFrameMorph(scripts);
     scriptsFrame.padding = 10;
-    scriptsFrame.growth = 50;
+    scriptsFrame.growth = 0; // no slack, so scrollbars only show on overflow
     scriptsFrame.isDraggable = false;
     scriptsFrame.acceptsDrops = false;
     scriptsFrame.contents.acceptsDrops = true;
