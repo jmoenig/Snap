@@ -4028,6 +4028,7 @@ BlockEditorMorph.prototype.fitToContents = function () {
     var world = this.world(),
         frame = this.body,
         scripts = frame.contents,
+        toolBar = frame.toolBar,
         th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
         bh = this.buttons.height(),
         area = scripts.submorphBounds().expandBy(frame.padding),
@@ -4035,6 +4036,13 @@ BlockEditorMorph.prototype.fitToContents = function () {
             new Point(this.padding * 2, this.padding * 3 + th + bh)
         );
 
+    // leave room for the toolbar (undo, redo, keyboard buttons) in the
+    // frame's top-right corner, so it doesn't overlap the scripts
+    if (toolBar) {
+        ext.x += toolBar.width() +
+            (frame.vBar.isVisible ? frame.vBar.left() : frame.right()) -
+            toolBar.right();
+    }
     if (this.handle) {
         ext = ext.max(this.handle.minExtent);
     }
