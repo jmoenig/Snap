@@ -1820,6 +1820,174 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             defaults: [['sqrt'], 10],
             code: 'fn'
         },
+        reportAbs: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'abs %n',
+            defaults: [10],
+            code: 'abs'
+        },
+        reportNeg: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'neg %n',
+            defaults: [10],
+            code: 'neg'
+        },
+        reportSign: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'sign %n',
+            defaults: [10],
+            code: 'sign'
+        },
+        reportCeiling: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'ceiling %n',
+            defaults: [10],
+            code: 'ceiling'
+        },
+        reportTrunc: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'truncate %n',
+            defaults: [10],
+            code: 'trunc'
+        },
+        reportFloor: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'floor %n',
+            defaults: [10],
+            code: 'floor'
+        },
+        reportSqrt: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'sqrt %n',
+            defaults: [10],
+            code: 'sqrt'
+        },
+        reportSin: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'sin %n',
+            defaults: [10],
+            code: 'sin'
+        },
+        reportCos: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'cos %n',
+            defaults: [10],
+            code: 'cos'
+        },
+        reportTan: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'tan %n',
+            defaults: [10],
+            code: 'tan'
+        },
+        reportAsin: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'asin %n',
+            defaults: [10],
+            code: 'asin'
+        },
+        reportAcos: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'acos %n',
+            defaults: [10],
+            code: 'acos'
+        },
+        reportAtan: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'atan %n',
+            defaults: [10],
+            code: 'atan'
+        },
+        reportLn: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'ln %n',
+            defaults: [10],
+            code: 'ln'
+        },
+        reportLog: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'log %n',
+            defaults: [10],
+            code: 'log'
+        },
+        reportLg: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'lg %n',
+            defaults: [10],
+            code: 'lg'
+        },
+        reportExp: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'e^ %n',
+            defaults: [10],
+            code: 'exp'
+        },
+        reportPow10: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: '10^ %n',
+            defaults: [10],
+            code: 'pow10'
+        },
+        reportPow2: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: '2^ %n',
+            defaults: [10],
+            code: 'pow2'
+        },
+        reportSigmoid: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'σ %n',
+            defaults: [10],
+            code: 'sigmoid'
+        },
+        reportIdentity: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            spec: 'id %n',
+            defaults: [10],
+            code: 'id'
+        },
         reportPower: {
             type: 'reporter',
             reports: 'number',
@@ -3200,6 +3368,111 @@ SpriteMorph.prototype.blockAlternatives = {
     reportVariadicMax: ['reportVariadicMin', 'reportVariadicSum',
         'reportDifference', 'reportVariadicProduct', 'reportQuotient',
         'reportPower', 'reportModulus', 'reportAtan2'],
+    reportAbs: ['reportNeg', 'reportSign', 'reportCeiling', 'reportTrunc',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportNeg: ['reportAbs', 'reportSign', 'reportCeiling', 'reportTrunc',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportSign: ['reportAbs', 'reportNeg', 'reportCeiling', 'reportTrunc',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportCeiling: ['reportAbs', 'reportNeg', 'reportSign', 'reportTrunc',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportTrunc: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportFloor: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportSqrt: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportSin: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportCos: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportTan: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportAsin: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportAcos: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportAtan: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportLn: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportLog: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportLg: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportExp: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportPow10: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportExp', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportPow2: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportExp', 'reportPow10', 'reportSigmoid',
+        'reportIdentity'],
+    reportSigmoid: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportExp', 'reportPow10', 'reportPow2',
+        'reportIdentity'],
+    reportIdentity: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportExp', 'reportPow10', 'reportPow2',
+        'reportSigmoid'],
     reportVariadicLessThan: ['reportVariadicLessThanOrEquals',
         'reportVariadicEquals', 'reportVariadicIsIdentical',
         'reportVariadicNotEquals', 'reportVariadicGreaterThan',
@@ -4178,9 +4451,11 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push(block('reportVariadicMin'));
         blocks.push(block('reportVariadicMax'));
         blocks.push('-');
+        blocks.push(block('reportAbs'));
         blocks.push(block('reportRound'));
-        blocks.push(block('reportMonadic'));
-        blocks.push(block('reportAtan2'));
+        blocks.push(block('reportFloor'));
+        blocks.push(block('reportCeiling'));
+        blocks.push(block('reportTrunc'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
         blocks.push(block('reportVariadicLessThan'));
@@ -4202,6 +4477,28 @@ SpriteMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportVariadicIsIdentical'));
+        blocks.push('-');
+        blocks.push(block('reportNeg'));
+        blocks.push(block('reportSign'));
+        blocks.push('-');
+        blocks.push(block('reportSin'));
+        blocks.push(block('reportCos'));
+        blocks.push(block('reportTan'));
+        blocks.push(block('reportAsin'));
+        blocks.push(block('reportAcos'));
+        blocks.push(block('reportAtan'));
+        blocks.push(block('reportAtan2'));
+        blocks.push('-');
+        blocks.push(block('reportSqrt'));
+        blocks.push(block('reportLn'));
+        blocks.push(block('reportLog'));
+        blocks.push(block('reportLg'));
+        blocks.push(block('reportExp'));
+        blocks.push(block('reportPow10'));
+        blocks.push(block('reportPow2'));
+        blocks.push('-');
+        blocks.push(block('reportSigmoid'));
+        blocks.push(block('reportIdentity'));
 
         if (Process.prototype.enableJS) {
             blocks.push('-');
@@ -5293,6 +5590,21 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '&': 'reportVariadicAnd',
             '|': 'reportVariadicOr',
             round: 'reportRound',
+            abs: 'reportAbs',
+            neg: 'reportNeg',
+            ceiling: 'reportCeiling',
+            floor: 'reportFloor',
+            sqrt: 'reportSqrt',
+            sin: 'reportSin',
+            cos: 'reportCos',
+            tan: 'reportTan',
+            asin: 'reportAsin',
+            acos: 'reportAcos',
+            atan: 'reportAtan',
+            ln: 'reportLn',
+            log: 'reportLog',
+            lg: 'reportLg',
+            id: 'reportIdentity',
             not: 'reportNot'
         };
         monads = ['abs', 'neg', 'ceiling', 'floor', 'sqrt', 'sin', 'cos',
@@ -12028,9 +12340,11 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push(block('reportVariadicMin'));
         blocks.push(block('reportVariadicMax'));
         blocks.push('-');
+        blocks.push(block('reportAbs'));
         blocks.push(block('reportRound'));
-        blocks.push(block('reportMonadic'));
-        blocks.push(block('reportAtan2'));
+        blocks.push(block('reportFloor'));
+        blocks.push(block('reportCeiling'));
+        blocks.push(block('reportTrunc'));
         blocks.push(block('reportRandom'));
         blocks.push('-');
         blocks.push(block('reportVariadicLessThan'));
@@ -12052,6 +12366,28 @@ StageMorph.prototype.blockTemplates = function (
         blocks.push('-');
         blocks.push(block('reportIsA'));
         blocks.push(block('reportVariadicIsIdentical'));
+        blocks.push('-');
+        blocks.push(block('reportNeg'));
+        blocks.push(block('reportSign'));
+        blocks.push('-');
+        blocks.push(block('reportSin'));
+        blocks.push(block('reportCos'));
+        blocks.push(block('reportTan'));
+        blocks.push(block('reportAsin'));
+        blocks.push(block('reportAcos'));
+        blocks.push(block('reportAtan'));
+        blocks.push(block('reportAtan2'));
+        blocks.push('-');
+        blocks.push(block('reportSqrt'));
+        blocks.push(block('reportLn'));
+        blocks.push(block('reportLog'));
+        blocks.push(block('reportLg'));
+        blocks.push(block('reportExp'));
+        blocks.push(block('reportPow10'));
+        blocks.push(block('reportPow2'));
+        blocks.push('-');
+        blocks.push(block('reportSigmoid'));
+        blocks.push(block('reportIdentity'));
 
         if (Process.prototype.enableJS) { // (Process.prototype.enableJS) {
             blocks.push('-');
