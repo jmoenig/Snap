@@ -2,8 +2,14 @@
 
 ## in development:
 
+## 12.3.6:
+* **Notable Fixes:**
+    * fixed displaying intermediate ADT results in visible stepping
+
 ### 2026-10-23
 * threads: fixed a visible stepping intermediate-result-inspection bug
+* threads: fixed displaying intermediate results that are ADTs with their own visualizations method
+* prepared v12.3.6 patch
 
 ## 12.3.5:
 * **Notable Fixes:**
