@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-10-23
+* threads: fixed a visible stepping intermediate-result-inspection bug
+
 ## 12.3.5:
 * **Notable Fixes:**
     * fixed using turtle-sprite clones in tutorial windows
