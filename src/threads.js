@@ -7671,7 +7671,7 @@ Process.prototype.reportGet = function (query) {
                 ).map(
                     def => def.blockInstance().reify()
                 ).concat(
-                    SpriteMorph.prototype.categories.reduce(
+                    SpriteMorph.prototype.allCategories().reduce(
                         (blocks, category) => blocks.concat(
                             thisObj.getPrimitiveTemplates(
                                 category

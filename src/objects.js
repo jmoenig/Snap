@@ -1178,7 +1178,6 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             code: 'fill'
         },
         write: {
-            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'write %txt size %n',
@@ -4105,19 +4104,449 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
 
 // SpriteMorph block templates
 
+// SpriteMorph palette specification
+
+/*
+    The palette is described by data rather than code. A palette
+    specification ("spec") names a base palette and lists operations that
+    modify it:
+
+        {base: 'standard' | 'empty' | 'all', ops: [...]}
+
+    operations, applied in order:
+
+        {op: 'exclude', tags: [...]}
+            remove every block carrying any of the tags
+        {op: 'include', tags: [...]}
+            add every block carrying any of the tags that isn't already in
+            the palette, at the end of the block's own category
+        {op: 'remove', selector: 'sel'}
+        {op: 'add', selector: 'sel', category: 'cat', before: 'sel'}
+        {op: 'add', selector: 'sel', category: 'cat', after: 'sel'}
+            insert (or move) a block; without an anchor it is appended
+        {op: 'section', category: 'cat', entries: [...]}
+            replace a category's entire contents
+
+    The result ("resolved palette") is a Map from category name to an array
+    of entries, where an entry is a primitive's selector, one of the spacers
+    '-' (small), '=' (large), '#' (new row), or '$variables', the dynamic
+    section holding the variable buttons and variable blocks.
+
+    A block is shown at most once. Blocks marked "only" for one agent type,
+    development mode blocks and blocks gated by a "when" feature are
+    filtered when the palette is rendered, not when the spec is resolved,
+    so one spec serves sprites and the stage alike.
+
+    The spec is a per-scene setting, serialized as the <palette> element
+    inside <scene>, see store.js.
+*/
+
+SpriteMorph.prototype.standardPalette = {
+    motion: [
+        'forward', 'turn', 'turnLeft', '-', 'setHeading', 'doFaceTowards', '-',
+        'gotoXY', 'doGotoObject', 'doGlide', '-', 'changeXPosition',
+        'setXPosition', 'changeYPosition', 'setYPosition', '-',
+        'bounceOffEdge', '-', 'getPosition', 'xPosition', 'yPosition',
+        'direction'
+    ],
+    looks: [
+        'doSwitchToCostume', 'doWearNextCostume', 'getCostumeIdx', '-',
+        'doSayFor', 'bubble', 'doThinkFor', 'doThink', '-',
+        'reportGetImageAttribute', 'reportNewCostumeStretched',
+        'reportNewCostumeSkewed', 'reportNewCostume', '-', 'changeEffect',
+        'setEffect', 'clearEffects', 'getEffect', '-', 'changeScale',
+        'setScale', 'getScale', '-', 'show', 'hide', 'reportShown', '-',
+        'goToLayer', 'goBack'
+    ],
+    sound: [
+        'playSound', 'doPlaySoundUntilDone', 'doStopAllSounds', '-',
+        'doPlaySoundAtRate', 'reportGetSoundAttribute',
+        'reportNewSoundFromSamples', '-', 'doRest', 'doPlayNote',
+        'doSetInstrument', '-', 'doChangeTempo', 'doSetTempo', 'getTempo', '-',
+        'changeVolume', 'setVolume', 'getVolume', '-', 'changePan', 'setPan',
+        'getPan', '-', 'playFreq', 'stopFreq'
+    ],
+    pen: [
+        'clear', '-', 'down', 'up', 'getPenDown', '-', 'setColor',
+        'changePenColorDimension', 'setPenColorDimension', 'getPenAttribute',
+        'setBackgroundColor', 'changeBackgroundColorDimension',
+        'setBackgroundColorDimension', '-', 'changeSize', 'setSize', '-',
+        'doStamp', 'floodFill', 'write', '-', 'reportPenTrailsAsCostume', '-',
+        'doPasteOn', 'doCutFrom', 'doDrawOn', '-', 'reportColor',
+        'reportColorAttribute', 'reportNewColor'
+    ],
+    control: [
+        'receiveGo', 'receiveKey', 'receiveInteraction',
+        'receiveConditionEvent', '-', 'receiveMessage', 'doBroadcast',
+        'doBroadcastAndWait', 'reportPoll', '-', 'doWarp', '-', 'doWait',
+        'doWaitUntil', '-', 'doForever', 'doRepeat', 'doUntil', 'doFor', '-',
+        'doIf', 'doIfElse', 'reportIfElse', '-', 'doReport', 'doStopThis', '-',
+        'doRun', 'fork', 'evaluate', 'reportPipe', '-', 'doTellTo',
+        'reportAskFor', '-', 'receiveOnClone', 'createClone', 'newClone',
+        'removeClone', '-', 'doPauseAll', 'doSwitchToScene', '-',
+        'receiveUserEdit', 'doDefineBlock', 'doDeleteBlock',
+        'doSetBlockAttribute', 'reportBlockAttribute', 'reportEnvironment',
+        '-', 'receiveSlotEvent', 'doSetSlot', '-', 'reportNewProcess',
+        'reportProcessAttribute', 'reportProcessState', 'doChangeProcess'
+    ],
+    sensing: [
+        'reportTouchingObject', 'reportTouchingColor',
+        'reportColorIsTouchingColor', '-', 'doAsk', 'getLastAnswer', '-',
+        'reportMousePosition', 'reportMouseX', 'reportMouseY',
+        'reportMouseDown', '-', 'reportKeyPressed', '-', 'reportRelationTo',
+        'reportAspect', '-', 'doResetTimer', 'getTimer', 'reportDate', '-',
+        'reportAttributeOf', 'reportGet', 'reportObject', '-', 'reportURL',
+        'reportAudio', 'reportVideo', 'doSetVideoTransparency', '-',
+        'reportGlobalFlag', 'doSetGlobalFlag'
+    ],
+    operators: [
+        'reifyScript', 'reifyReporter', 'reifyPredicate', '#', '-',
+        'reportVariadicSum', 'reportDifference', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', '-', 'reportModulus',
+        'reportVariadicMin', 'reportVariadicMax', '-', 'reportRound',
+        'reportMonadic', 'reportAtan2', 'reportRandom', '-',
+        'reportVariadicLessThan', 'reportVariadicEquals',
+        'reportVariadicGreaterThan', '-', 'reportVariadicAnd',
+        'reportVariadicOr', 'reportNot', 'reportBoolean', '-',
+        'reportJoinWords', 'reportTextSplit', 'reportLetter',
+        'reportTextAttribute', '-', 'reportUnicode', 'reportUnicodeAsLetter',
+        '-', 'reportIsA', 'reportVariadicIsIdentical', '-',
+        'reportJSFunction', 'reportCompiled'
+    ],
+    variables: [
+        '$variables', 'doSetVar', 'doChangeVar', 'doShowVar', 'doHideVar',
+        'doDeclareVariables', '-', 'doDeleteAttr', '=', 'reportNewList',
+        'reportNumbers', '-', 'reportCONS', 'reportListItem', 'reportCDR', '-',
+        'reportListAttribute', 'reportListIndex', 'reportListContainsItem',
+        'reportListIsEmpty', '-', 'reportMap', 'reportKeep',
+        'reportFindFirst', 'reportCombine', '-', 'doForEach', '-',
+        'doAddToList', 'doDeleteFromList', 'doInsertInList',
+        'doReplaceInList', '-', 'reportConcatenatedLists', 'reportReshape',
+        'reportCrossproduct', '=', 'doPrimitive', 'doApplyExtension',
+        'reportApplyExtension', '=', 'doMapCodeOrHeader', 'doMapValueCode',
+        'doMapListCode', '-', 'reportMappedCode'
+    ],
+    lists: [],
+    other: []
+};
+
+// blocks appended to each category in development mode, not part of a spec
+
+SpriteMorph.prototype.devModePalette = {
+    looks: ['log', 'alert', '-', 'doScreenshot'],
+    sound: ['doPlayFrequency'],
+    control: [
+        'getLastMessage', 'reportHyperZip', '-', 'doCallCC', 'reportCallCC'
+    ],
+    sensing: [
+        'reportThreadCount', 'reportStackSize', 'reportFrameCount',
+        'reportYieldCount'
+    ],
+    operators: ['reportTypeOf', 'reportTextFunction'],
+    variables: ['doShowTable']
+};
+
+SpriteMorph.prototype.paletteSpacers = ['-', '=', '#'];
+
+SpriteMorph.prototype.newPaletteSpec = function (base = 'standard', ops = []) {
+    return {base: base, ops: ops};
+};
+
+SpriteMorph.prototype.paletteSpec = SpriteMorph.prototype.newPaletteSpec();
+
+SpriteMorph.prototype.copyPaletteTable = function (table) {
+    var copy = {};
+    Object.keys(table).forEach(cat => copy[cat] = table[cat].slice());
+    return copy;
+};
+
+SpriteMorph.prototype.isPaletteCandidate = function (selector) {
+    // answer whether a primitive may be added to the palette automatically,
+    // i.e. by the "all" base or by an "include" operation: it has to exist
+    // and must not be a development-mode or a legacy block
+    var info = SpriteMorph.prototype.blocks[selector];
+    return !isNil(info) && !info.dev && !info.legacy &&
+        !Object.hasOwn(SpriteMorph.prototype.blockMigrations || {}, selector);
+};
+
+SpriteMorph.prototype.basePalettes = {
+    standard: function () {
+        return SpriteMorph.prototype.copyPaletteTable(
+            SpriteMorph.prototype.standardPalette
+        );
+    },
+    empty: function () {
+        var table = {};
+        SpriteMorph.prototype.categories.forEach(cat => table[cat] = []);
+        table.variables.push('$variables');
+        return table;
+    },
+    all: function () {
+        // the standard palette plus every other eligible primitive,
+        // appended to its own category
+        var table = SpriteMorph.prototype.copyPaletteTable(
+                SpriteMorph.prototype.standardPalette
+            ),
+            members = new Set(Object.values(table).flat()),
+            gapped = {};
+        Object.keys(SpriteMorph.prototype.blocks).forEach(sel => {
+            var cat;
+            if (members.has(sel) ||
+                !SpriteMorph.prototype.isPaletteCandidate(sel)
+            ) {
+                return;
+            }
+            cat = SpriteMorph.prototype.blocks[sel].category;
+            if (!Object.hasOwn(table, cat)) {cat = 'other'; }
+            if (!gapped[cat]) {
+                table[cat].push('-');
+                gapped[cat] = true;
+            }
+            table[cat].push(sel);
+        });
+        return table;
+    }
+};
+
+SpriteMorph.prototype.paletteTagsOf = function (selector) {
+    // answer the tags of a primitive, including its category and type
+    var info = SpriteMorph.prototype.blocks[selector];
+    if (isNil(info)) {return []; }
+    return (info.tags || []).concat(info.category, info.type);
+};
+
+SpriteMorph.prototype.paletteFeatureEnabled = function (feature) {
+    // answer whether blocks gated by a "when" attribute are currently shown
+    switch (feature) {
+    case 'inheritance':
+        return StageMorph.prototype.enableInheritance;
+    case 'codeMapping':
+        return StageMorph.prototype.enableCodeMapping;
+    case 'extensions':
+        return SpriteMorph.prototype.showingExtensions;
+    case 'firstClass':
+        return SpriteMorph.prototype.enableFirstClass;
+    case 'js':
+        return Process.prototype.enableJS;
+    case 'compiling':
+        return Process.prototype.enableJS && Process.prototype.enableCompiling;
+    default:
+        return true;
+    }
+};
+
+SpriteMorph.prototype.resolvePaletteSpec = function (spec) {
+    // answer a new Map category -> entries for the given spec
+    var basePalettes = SpriteMorph.prototype.basePalettes,
+        base = (basePalettes[spec.base] || basePalettes.standard)(),
+        spacers = SpriteMorph.prototype.paletteSpacers,
+        blocks = SpriteMorph.prototype.blocks,
+        palette = new Map();
+
+    function warn(msg) {
+        console.warn('palette: ' + msg);
+    }
+
+    function isSelector(entry) {
+        return !spacers.includes(entry) && entry !== '$variables';
+    }
+
+    function hasTag(selector, tags) {
+        var mine = SpriteMorph.prototype.paletteTagsOf(selector);
+        return (tags || []).some(tag => mine.includes(tag));
+    }
+
+    function isMember(selector) {
+        return Array.from(palette.values()).some(entries =>
+            entries.includes(selector));
+    }
+
+    function remove(selector) {
+        palette.forEach(entries => {
+            var idx = entries.indexOf(selector);
+            if (idx > -1) {entries.splice(idx, 1); }
+        });
+    }
+
+    function targetCategory(name) {
+        if (palette.has(name)) {return name; }
+        warn('unknown category "' + name + '", using "other"');
+        return 'other';
+    }
+
+    SpriteMorph.prototype.allCategories().forEach(cat =>
+        palette.set(cat, base[cat] || [])
+    );
+
+    (spec.ops || []).forEach(op => {
+        var entries, idx, gapped = {};
+        switch (op.op) {
+        case 'exclude':
+            palette.forEach((entries, cat) =>
+                palette.set(cat, entries.filter(entry =>
+                    !isSelector(entry) || !hasTag(entry, op.tags)))
+            );
+            break;
+        case 'include':
+            Object.keys(blocks).forEach(sel => {
+                var cat;
+                if (isMember(sel) ||
+                    !SpriteMorph.prototype.isPaletteCandidate(sel) ||
+                    !hasTag(sel, op.tags)
+                ) {
+                    return;
+                }
+                cat = palette.has(blocks[sel].category) ?
+                    blocks[sel].category : 'other';
+                entries = palette.get(cat);
+                if (!gapped[cat]) {
+                    entries.push('-');
+                    gapped[cat] = true;
+                }
+                entries.push(sel);
+            });
+            break;
+        case 'remove':
+            remove(op.selector);
+            break;
+        case 'add':
+            if (isNil(blocks[op.selector])) {
+                warn('unknown block "' + op.selector + '"');
+                break;
+            }
+            remove(op.selector);
+            entries = palette.get(targetCategory(
+                op.category || blocks[op.selector].category
+            ));
+            if (op.before) {
+                idx = entries.indexOf(op.before);
+                entries.splice(idx > -1 ? idx : 0, 0, op.selector);
+            } else if (op.after) {
+                idx = entries.indexOf(op.after);
+                entries.splice(
+                    idx > -1 ? idx + 1 : entries.length,
+                    0,
+                    op.selector
+                );
+            } else {
+                entries.push(op.selector);
+            }
+            break;
+        case 'section':
+            if (!palette.has(op.category)) {
+                warn('unknown category "' + op.category + '"');
+                break;
+            }
+            entries = (op.entries || []).filter(entry => {
+                if (!isSelector(entry) || !isNil(blocks[entry])) {
+                    return true;
+                }
+                warn('unknown block "' + entry + '"');
+                return false;
+            });
+            entries.forEach(entry => {
+                if (isSelector(entry)) {remove(entry); }
+            });
+            palette.set(op.category, entries);
+            break;
+        default:
+            warn('unknown operation "' + op.op + '"');
+        }
+    });
+    return palette;
+};
+
+SpriteMorph.prototype.resolvedPalette = function () {
+    // answer the Map category -> entries for the current palette spec,
+    // cached on the spec object itself until the custom categories or
+    // the blocks dictionary change
+    var spec = SpriteMorph.prototype.paletteSpec,
+        key = Array.from(SpriteMorph.prototype.customCategories.keys()).join(
+            '\n'
+        ),
+        cache = spec.resolved,
+        spacers = SpriteMorph.prototype.paletteSpacers;
+
+    if (cache &&
+        cache.key === key &&
+        cache.blocks === SpriteMorph.prototype.blocks
+    ) {
+        return cache.palette;
+    }
+    cache = {
+        key: key,
+        blocks: SpriteMorph.prototype.blocks,
+        palette: this.resolvePaletteSpec(spec)
+    };
+    cache.members = new Set(
+        Array.from(cache.palette.values()).flat().filter(entry =>
+            !spacers.includes(entry) && entry !== '$variables')
+    );
+    Object.defineProperty(spec, 'resolved', {
+        value: cache,
+        enumerable: false,
+        configurable: true,
+        writable: true
+    });
+    return cache.palette;
+};
+
+SpriteMorph.prototype.isPaletteMember = function (selector) {
+    // answer whether the primitive is part of the current palette
+    // (regardless of whether it is hidden or restricted to an agent type)
+    this.resolvedPalette();
+    return SpriteMorph.prototype.paletteSpec.resolved.members.has(selector);
+};
+
+SpriteMorph.prototype.setPaletteSpec = function (spec) {
+    // set a new palette spec (in the scene and the shared prototype)
+    // and refresh the IDE accordingly
+    var ide = this.parentThatIsA(IDE_Morph);
+    SpriteMorph.prototype.paletteSpec = spec;
+    if (ide) {
+        ide.scene.paletteSpec = spec;
+        ide.flushBlocksCache();
+        ide.refreshPalette(true);
+        ide.refreshEmptyCategories();
+    }
+};
+
+SpriteMorph.prototype.collapsePaletteSpacers = function (items) {
+    // drop null items and leading and trailing spacers, and merge runs of
+    // spacers keeping the larger one
+    var rank = {'-': 1, '=': 2},
+        result = [];
+    items.forEach(item => {
+        var last = result[result.length - 1];
+        if (isNil(item)) {return; }
+        if (rank[item]) {
+            if (result.length === 0) {return; }
+            if (rank[last]) {
+                if (rank[item] > rank[last]) {
+                    result[result.length - 1] = item;
+                }
+                return;
+            }
+        }
+        result.push(item);
+    });
+    while (result.length && rank[result[result.length - 1]]) {
+        result.pop();
+    }
+    return result;
+};
+
 SpriteMorph.prototype.blockTemplates = function (
     category = 'motion',
     all = false // include hidden blocks
 ) {
-    var blocks = [], myself = this, varNames,
+    var blocks = [], myself = this,
         inheritedVars = this.inheritedVariableNames(),
-        wrld = this.world(),
-        devMode = wrld && wrld.isDevMode;
+        hidden = StageMorph.prototype.hiddenPrimitives,
+        spacers = SpriteMorph.prototype.paletteSpacers,
+        devEntries = SpriteMorph.prototype.devModePalette[category];
 
     function block(selector, isGhosted) {
-        if (StageMorph.prototype.hiddenPrimitives[selector] && !all) {
-            return null;
-        }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
         newBlock.isDraggable = false;
         newBlock.isTemplate = true;
@@ -4136,9 +4565,6 @@ SpriteMorph.prototype.blockTemplates = function (
     }
 
     function watcherToggle(selector) {
-        if (StageMorph.prototype.hiddenPrimitives[selector]) {
-            return null;
-        }
         var info = SpriteMorph.prototype.blocks[selector];
         return new ToggleMorph(
             'checkbox',
@@ -4173,353 +4599,35 @@ SpriteMorph.prototype.blockTemplates = function (
         );
     }
 
-    SnapExtensions.buttons.palette.forEach(buttonDescriptor => {
-        if (buttonDescriptor.category === category) {
-            blocks.push(this.customPaletteButton(buttonDescriptor));
+    function pushSelector(selector) {
+        var info = SpriteMorph.prototype.blocks[selector];
+        if (isNil(info)) {return; }
+        if (info.only && info.only !== myself.constructor) {return; }
+        if (info.when &&
+            !SpriteMorph.prototype.paletteFeatureEnabled(info.when)
+        ) {
+            return;
         }
-    });
-
-    if (category === 'motion') {
-
-        blocks.push(block('forward'));
-        blocks.push(block('turn'));
-        blocks.push(block('turnLeft'));
-        blocks.push('-');
-        blocks.push(block('setHeading'));
-        blocks.push(block('doFaceTowards'));
-        blocks.push('-');
-        blocks.push(block('gotoXY'));
-        blocks.push(block('doGotoObject'));
-        blocks.push(block('doGlide'));
-        blocks.push('-');
-        blocks.push(block('changeXPosition'));
-        blocks.push(block('setXPosition'));
-        blocks.push(block('changeYPosition'));
-        blocks.push(block('setYPosition'));
-        blocks.push('-');
-        blocks.push(block('bounceOffEdge'));
-        blocks.push('-');
-        blocks.push(block('getPosition'));
-        blocks.push(watcherToggle('xPosition'));
-        blocks.push(block('xPosition', this.inheritsAttribute('x position')));
-        blocks.push(watcherToggle('yPosition'));
-        blocks.push(block('yPosition', this.inheritsAttribute('y position')));
-        blocks.push(watcherToggle('direction'));
-        blocks.push(block('direction', this.inheritsAttribute('direction')));
-
-    } else if (category === 'looks') {
-
-        blocks.push(block('doSwitchToCostume'));
-        blocks.push(block('doWearNextCostume'));
-        blocks.push(watcherToggle('getCostumeIdx'));
-        blocks.push(block('getCostumeIdx', this.inheritsAttribute('costume #')));
-        blocks.push('-');
-        blocks.push(block('doSayFor'));
-        blocks.push(block('bubble'));
-        blocks.push(block('doThinkFor'));
-        blocks.push(block('doThink'));
-        blocks.push('-');
-        blocks.push(block('reportGetImageAttribute'));
-        blocks.push(block('reportNewCostumeStretched'));
-        blocks.push(block('reportNewCostumeSkewed'));
-        blocks.push(block('reportNewCostume'));
-        blocks.push('-');
-        blocks.push(block('changeEffect'));
-        blocks.push(block('setEffect'));
-        blocks.push(block('clearEffects'));
-        blocks.push(block('getEffect'));
-        blocks.push('-');
-        blocks.push(block('changeScale'));
-        blocks.push(block('setScale'));
-        blocks.push(watcherToggle('getScale'));
-        blocks.push(block('getScale', this.inheritsAttribute('size')));
-        blocks.push('-');
-        blocks.push(block('show'));
-        blocks.push(block('hide'));
-        blocks.push(watcherToggle('reportShown'));
-        blocks.push(block('reportShown', this.inheritsAttribute('shown?')));
-        blocks.push('-');
-        blocks.push(block('goToLayer'));
-        blocks.push(block('goBack'));
-
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('log'));
-            blocks.push(block('alert'));
-            blocks.push('-');
-            blocks.push(block('doScreenshot'));
+        if (hidden[selector]) {
+            if (!all) {return; }
+        } else if (info.watcher) {
+            blocks.push(watcherToggle(selector));
         }
+        blocks.push(block(
+            selector,
+            info.inherits ? myself.inheritsAttribute(info.inherits) : false
+        ));
+    }
 
-    } else if (category === 'sound') {
-
-        blocks.push(block('playSound'));
-        blocks.push(block('doPlaySoundUntilDone'));
-        blocks.push(block('doStopAllSounds'));
-        blocks.push('-');
-        blocks.push(block('doPlaySoundAtRate'));
-        blocks.push(block('reportGetSoundAttribute'));
-        blocks.push(block('reportNewSoundFromSamples'));
-        blocks.push('-');
-        blocks.push(block('doRest'));
-        blocks.push(block('doPlayNote'));
-        blocks.push(block('doSetInstrument'));
-        blocks.push('-');
-        blocks.push(block('doChangeTempo'));
-        blocks.push(block('doSetTempo'));
-        blocks.push(watcherToggle('getTempo'));
-        blocks.push(block('getTempo'));
-        blocks.push('-');
-        blocks.push(block('changeVolume'));
-        blocks.push(block('setVolume'));
-        blocks.push(watcherToggle('getVolume'));
-        blocks.push(block('getVolume', this.inheritsAttribute('volume')));
-        blocks.push('-');
-        blocks.push(block('changePan'));
-        blocks.push(block('setPan'));
-        blocks.push(watcherToggle('getPan'));
-        blocks.push(block('getPan', this.inheritsAttribute('balance')));
-        blocks.push('-');
-        blocks.push(block('playFreq'));
-        blocks.push(block('stopFreq'));
-
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doPlayFrequency'));
-        }
-
-    } else if (category === 'pen') {
-
-        blocks.push(block('clear'));
-        blocks.push('-');
-        blocks.push(block('down'));
-        blocks.push(block('up'));
-        blocks.push(watcherToggle('getPenDown'));
-        blocks.push(block('getPenDown', this.inheritsAttribute('pen down?')));
-        blocks.push('-');
-        blocks.push(block('setColor'));
-        blocks.push(block('changePenColorDimension'));
-        blocks.push(block('setPenColorDimension'));
-        blocks.push(block('getPenAttribute'));
-        blocks.push('-');
-        blocks.push(block('changeSize'));
-        blocks.push(block('setSize'));
-        blocks.push('-');
-        blocks.push(block('doStamp'));
-        blocks.push(block('floodFill'));
-        blocks.push(block('write'));
-        blocks.push('-');
-        blocks.push(block('reportPenTrailsAsCostume'));
-        blocks.push('-');
-        blocks.push(block('doPasteOn'));
-        blocks.push(block('doCutFrom'));
-        blocks.push(block('doDrawOn'));
-        blocks.push('-');
-        blocks.push(block('reportColor'));
-        blocks.push(block('reportColorAttribute'));
-        blocks.push(block('reportNewColor'));
-
-    } else if (category === 'control') {
-
-        blocks.push(block('receiveGo'));
-        blocks.push(block('receiveKey'));
-        blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveConditionEvent'));
-        blocks.push('-');
-        blocks.push(block('receiveMessage'));
-        blocks.push(block('doBroadcast'));
-        blocks.push(block('doBroadcastAndWait'));
-        blocks.push(block('reportPoll'));
-        blocks.push('-');
-        blocks.push(block('doWarp'));
-        blocks.push('-');
-        blocks.push(block('doWait'));
-        blocks.push(block('doWaitUntil'));
-        blocks.push('-');
-        blocks.push(block('doForever'));
-        blocks.push(block('doRepeat'));
-        blocks.push(block('doUntil'));
-        blocks.push(block('doFor'));
-        blocks.push('-');
-        // blocks.push(block('doVariadicIf'));
-        blocks.push(block('doIf'));
-        blocks.push(block('doIfElse'));
-        blocks.push(block('reportIfElse'));
-        blocks.push('-');
-        blocks.push(block('doReport'));
-        blocks.push(block('doStopThis'));
-        blocks.push('-');
-        blocks.push(block('doRun'));
-        blocks.push(block('fork'));
-        blocks.push(block('evaluate'));
-        blocks.push(block('reportPipe'));
-        blocks.push('-');
-        blocks.push(block('doTellTo'));
-        blocks.push(block('reportAskFor'));
-        blocks.push('-');
-        blocks.push(block('receiveOnClone'));
-        blocks.push(block('createClone'));
-        blocks.push(block('newClone'));
-        blocks.push(block('removeClone'));
-        blocks.push('-');
-        blocks.push(block('doPauseAll'));
-        blocks.push(block('doSwitchToScene'));
-        blocks.push('-');
-        blocks.push(block('receiveUserEdit'));
-        blocks.push(block('doDefineBlock'));
-        blocks.push(block('doDeleteBlock'));
-        blocks.push(block('doSetBlockAttribute'));
-        blocks.push(block('reportBlockAttribute'));
-        blocks.push(block('reportEnvironment'));
-        blocks.push('-');
-        blocks.push(block('receiveSlotEvent'));
-        blocks.push(block('doSetSlot'));
-        blocks.push('-');
-        blocks.push(block('reportNewProcess'));
-        blocks.push(block('reportProcessAttribute'));
-        blocks.push(block('reportProcessState'));
-        blocks.push(block('doChangeProcess'));
-
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(watcherToggle('getLastMessage'));
-            blocks.push(block('getLastMessage'));
-            blocks.push(block('reportHyperZip'));
-        // deprecated - superseded by reportEnviornment - retained for legacy
-            blocks.push('-');
-            blocks.push(block('doCallCC'));
-            blocks.push(block('reportCallCC'));
-        }
-
-    } else if (category === 'sensing') {
-
-        blocks.push(block('reportTouchingObject'));
-        blocks.push(block('reportTouchingColor'));
-        blocks.push(block('reportColorIsTouchingColor'));
-        blocks.push('-');
-        blocks.push(block('doAsk'));
-        blocks.push(watcherToggle('getLastAnswer'));
-        blocks.push(block('getLastAnswer'));
-        blocks.push('-');
-        blocks.push(block('reportMousePosition'));
-        blocks.push(watcherToggle('reportMouseX'));
-        blocks.push(block('reportMouseX'));
-        blocks.push(watcherToggle('reportMouseY'));
-        blocks.push(block('reportMouseY'));
-        blocks.push(block('reportMouseDown'));
-        blocks.push('-');
-        blocks.push(block('reportKeyPressed'));
-        blocks.push('-');
-        blocks.push(block('reportRelationTo'));
-        blocks.push(block('reportAspect'));
-        blocks.push('-');
-        blocks.push(block('doResetTimer'));
-        blocks.push(watcherToggle('getTimer'));
-        blocks.push(block('getTimer'));
-        blocks.push(block('reportDate'));
-        blocks.push('-');
-        blocks.push(block('reportAttributeOf'));
-
-        if (SpriteMorph.prototype.enableFirstClass) {
-            blocks.push(block('reportGet'));
-        }
-
-        blocks.push(block('reportObject'));
-        blocks.push('-');
-        blocks.push(block('reportURL'));
-        blocks.push(block('reportAudio'));
-        blocks.push(block('reportVideo'));
-        blocks.push(block('doSetVideoTransparency'));
-        blocks.push('-');
-        blocks.push(block('reportGlobalFlag'));
-        blocks.push(block('doSetGlobalFlag'));
-
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(watcherToggle('reportThreadCount'));
-            blocks.push(block('reportThreadCount'));
-            blocks.push(block('reportStackSize'));
-            blocks.push(block('reportFrameCount'));
-            blocks.push(block('reportYieldCount'));
-        }
-    } else if (category === 'operators') {
-
-        blocks.push(block('reifyScript'));
-        blocks.push(block('reifyReporter'));
-        blocks.push(block('reifyPredicate'));
-        blocks.push('#');
-        blocks.push('-');
-        blocks.push(block('reportVariadicSum'));
-        blocks.push(block('reportDifference'));
-        blocks.push(block('reportVariadicProduct'));
-        blocks.push(block('reportQuotient'));
-        blocks.push(block('reportPower'));
-        blocks.push('-');
-        blocks.push(block('reportModulus'));
-        blocks.push(block('reportVariadicMin'));
-        blocks.push(block('reportVariadicMax'));
-        blocks.push('-');
-        blocks.push(block('reportRound'));
-        blocks.push(block('reportMonadic'));
-        blocks.push(block('reportAtan2'));
-        blocks.push(block('reportRandom'));
-        blocks.push('-');
-        blocks.push(block('reportVariadicLessThan'));
-        blocks.push(block('reportVariadicEquals'));
-        blocks.push(block('reportVariadicGreaterThan'));
-        blocks.push('-');
-        blocks.push(block('reportVariadicAnd'));
-        blocks.push(block('reportVariadicOr'));
-        blocks.push(block('reportNot'));
-        blocks.push(block('reportBoolean'));
-        blocks.push('-');
-        blocks.push(block('reportJoinWords'));
-        blocks.push(block('reportTextSplit'));
-        blocks.push(block('reportLetter'));
-        blocks.push(block('reportTextAttribute'));
-        blocks.push('-');
-        blocks.push(block('reportUnicode'));
-        blocks.push(block('reportUnicodeAsLetter'));
-        blocks.push('-');
-        blocks.push(block('reportIsA'));
-        blocks.push(block('reportVariadicIsIdentical'));
-
-        if (Process.prototype.enableJS) {
-            blocks.push('-');
-            blocks.push(block('reportJSFunction'));
-            if (Process.prototype.enableCompiling) {
-                blocks.push(block('reportCompiled'));
-            }
-        }
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('reportTypeOf'));
-            blocks.push(block('reportTextFunction'));
-        }
-
-    } else if (category === 'variables') {
-
-        blocks.push(this.makeVariableButton());
-        if (this.deletableVariableNames().length > 0) {
-            blocks.push(this.deleteVariableButton());
+    function pushVariables() {
+        var varNames;
+        blocks.push(myself.makeVariableButton());
+        if (myself.deletableVariableNames().length > 0) {
+            blocks.push(myself.deleteVariableButton());
         }
         blocks.push('-');
 
-        varNames = this.allGlobalVariableNames(true, all);
+        varNames = myself.allGlobalVariableNames(true, all);
         if (varNames.length > 0) {
             varNames.forEach(name => {
                 blocks.push(variableWatcherToggle(name, true));
@@ -4528,7 +4636,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
         }
 
-        varNames = this.allLocalVariableNames(true, all);
+        varNames = myself.allLocalVariableNames(true, all);
         if (varNames.length > 0) {
             varNames.forEach(name => {
                 blocks.push(variableWatcherToggle(name));
@@ -4536,72 +4644,34 @@ SpriteMorph.prototype.blockTemplates = function (
             });
             blocks.push('-');
         }
+    }
 
-        blocks.push(block('doSetVar'));
-        blocks.push(block('doChangeVar'));
-        blocks.push(block('doShowVar'));
-        blocks.push(block('doHideVar'));
-        blocks.push(block('doDeclareVariables'));
-
-        // inheritance:
-
-        if (StageMorph.prototype.enableInheritance) {
-            blocks.push('-');
-            blocks.push(block('doDeleteAttr'));
+    function pushEntry(entry) {
+        if (entry === '$variables') {
+            pushVariables();
+        } else if (spacers.includes(entry)) {
+            blocks.push(entry);
+        } else {
+            pushSelector(entry);
         }
+    }
 
-        blocks.push('=');
-        blocks.push(block('reportNewList'));
-        blocks.push(block('reportNumbers'));
-        blocks.push('-');
-        blocks.push(block('reportCONS'));
-        blocks.push(block('reportListItem'));
-        blocks.push(block('reportCDR'));
-        blocks.push('-');
-        blocks.push(block('reportListAttribute'));
-        blocks.push(block('reportListIndex'));
-        blocks.push(block('reportListContainsItem'));
-        blocks.push(block('reportListIsEmpty'));
-        blocks.push('-');
-        blocks.push(block('reportMap'));
-        blocks.push(block('reportKeep'));
-        blocks.push(block('reportFindFirst'));
-        blocks.push(block('reportCombine'));
-        blocks.push('-');
-        blocks.push(block('doForEach'));
-        blocks.push('-');
-        blocks.push(block('doAddToList'));
-        blocks.push(block('doDeleteFromList'));
-        blocks.push(block('doInsertInList'));
-        blocks.push(block('doReplaceInList'));
-        blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        blocks.push(block('reportCrossproduct'));
-
-        if (SpriteMorph.prototype.showingExtensions) {
-            blocks.push('=');
-            blocks.push(block('doPrimitive'));
-            blocks.push(block('doApplyExtension'));
-            blocks.push(block('reportApplyExtension'));
+    SnapExtensions.buttons.palette.forEach(buttonDescriptor => {
+        if (buttonDescriptor.category === category) {
+            blocks.push(this.customPaletteButton(buttonDescriptor));
         }
+    });
 
-        if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push('=');
-            blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
-            blocks.push(block('doMapListCode'));
-            blocks.push('-');
-            blocks.push(block('reportMappedCode'));
-        }
+    (this.resolvedPalette().get(category) || []).forEach(pushEntry);
+    blocks = this.collapsePaletteSpacers(blocks);
 
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doShowTable'));
-        }
+    // for debugging: ///////////////
+    if (this.world()?.isDevMode && devEntries && devEntries.length) {
+        blocks.push('-');
+        blocks.push(this.devModeText());
+        blocks.push('-');
+        devEntries.forEach(pushEntry);
+        blocks = this.collapsePaletteSpacers(blocks);
     }
 
     return blocks;
@@ -5005,6 +5075,15 @@ SpriteMorph.prototype.freshPalette = function (category) {
     } else {
         // ensure we do not modify the cached array
         blocks = this.getPrimitiveTemplates(category).slice();
+        if (category === 'variables') {
+            // primitives placed in the "lists" and "other" categories
+            blocks.push(
+                '=',
+                ...this.getPrimitiveTemplates('lists'),
+                '=',
+                ...this.getPrimitiveTemplates('other')
+            );
+        }
     }
 
     if (category !== 'unified' || showButtons) {
@@ -5309,6 +5388,7 @@ SpriteMorph.prototype.blocksMatching = function (
     blocksDict = SpriteMorph.prototype.blocks;
     Object.keys(blocksDict).forEach(selector => {
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
+                this.isPaletteMember(selector) &&
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
                 spec = BlockMorph.prototype.localizeBlockSpec(block.spec),
@@ -12001,455 +12081,7 @@ StageMorph.prototype.pauseGenericHatBlocks = function () {
     }
 };
 
-// StageMorph block templates
-
-StageMorph.prototype.blockTemplates = function (
-    category = 'motion',
-    all = false // include hidden blocks
-) {
-    var blocks = [], myself = this, varNames; // txt;
-
-    function block(selector) {
-        if (myself.hiddenPrimitives[selector] && !all) {
-            return null;
-        }
-        var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
-        newBlock.isDraggable = false;
-        newBlock.isTemplate = true;
-        return newBlock;
-    }
-
-    function variableBlock(varName, isLocal) {
-        var newBlock = SpriteMorph.prototype.variableBlock(varName, isLocal);
-        newBlock.isDraggable = false;
-        newBlock.isTemplate = true;
-        return newBlock;
-    }
-
-
-    function watcherToggle(selector) {
-        if (myself.hiddenPrimitives[selector]) {
-            return null;
-        }
-        var info = SpriteMorph.prototype.blocks[selector];
-        return new ToggleMorph(
-            'checkbox',
-            this,
-            function () {
-                myself.toggleWatcher(
-                    selector,
-                    localize(info.spec),
-                    myself.blockColor[info.category]
-                );
-            },
-            null,
-            function () {
-                return myself.showingWatcher(selector);
-            },
-            null
-        );
-    }
-
-    function variableWatcherToggle(varName, isGlobal) {
-        return new ToggleMorph(
-            'checkbox',
-            this,
-            function () {
-                myself.toggleVariableWatcher(varName, isGlobal);
-            },
-            null,
-            function () {
-                return myself.showingVariableWatcher(varName, isGlobal);
-            },
-            null
-        );
-    }
-
-
-    SnapExtensions.buttons.palette.forEach(buttonDescriptor => {
-        if (buttonDescriptor.category === category) {
-            blocks.push(this.customPaletteButton(buttonDescriptor));
-        }
-    });
-
-/* // commented out to support sprite-less microworlds in v12
-
-    if (category === 'motion') {
-
-        txt = new TextMorph(localize('Stage selected:\nno motion primitives'));
-        txt.fontSize = 9;
-        txt.setColor(this.paletteTextColor);
-        txt.hideWithCategory = true; // hide txt when category names are hidden
-        blocks.push(txt);
-
-    } else
-*/
-
-    if (category === 'looks') {
-
-        blocks.push(block('doSwitchToCostume'));
-        blocks.push(block('doWearNextCostume'));
-        blocks.push(watcherToggle('getCostumeIdx'));
-        blocks.push(block('getCostumeIdx'));
-        blocks.push('-');
-        blocks.push(block('doSayFor'));
-        blocks.push(block('bubble'));
-        blocks.push('-');
-        blocks.push(block('reportGetImageAttribute'));
-        blocks.push(block('reportNewCostumeStretched'));
-        blocks.push(block('reportNewCostumeSkewed'));
-        blocks.push(block('reportNewCostume'));
-        blocks.push('-');
-        blocks.push(block('changeEffect'));
-        blocks.push(block('setEffect'));
-        blocks.push(block('clearEffects'));
-        blocks.push(block('getEffect'));
-        blocks.push('-');
-        blocks.push(block('show'));
-        blocks.push(block('hide'));
-        blocks.push(watcherToggle('reportShown'));
-        blocks.push(block('reportShown'));
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('log'));
-            blocks.push(block('alert'));
-            blocks.push('-');
-            blocks.push(block('doScreenshot'));
-        }
-
-    } else if (category === 'sound') {
-
-        blocks.push(block('playSound'));
-        blocks.push(block('doPlaySoundUntilDone'));
-        blocks.push(block('doStopAllSounds'));
-        blocks.push('-');
-        blocks.push(block('doPlaySoundAtRate'));
-        blocks.push(block('reportGetSoundAttribute'));
-        blocks.push(block('reportNewSoundFromSamples'));
-        blocks.push('-');
-        blocks.push(block('doRest'));
-        blocks.push(block('doPlayNote'));
-        blocks.push(block('doSetInstrument'));
-        blocks.push('-');
-        blocks.push(block('doChangeTempo'));
-        blocks.push(block('doSetTempo'));
-        blocks.push(watcherToggle('getTempo'));
-        blocks.push(block('getTempo'));
-        blocks.push('-');
-        blocks.push(block('changeVolume'));
-        blocks.push(block('setVolume'));
-        blocks.push(watcherToggle('getVolume'));
-        blocks.push(block('getVolume'));
-        blocks.push('-');
-        blocks.push(block('changePan'));
-        blocks.push(block('setPan'));
-        blocks.push(watcherToggle('getPan'));
-        blocks.push(block('getPan'));
-        blocks.push('-');
-        blocks.push(block('playFreq'));
-        blocks.push(block('stopFreq'));
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doPlayFrequency'));
-        }
-
-    } else if (category === 'pen') {
-
-        blocks.push(block('clear'));
-        blocks.push('-');
-        blocks.push(block('setBackgroundColor'));
-        blocks.push(block('changeBackgroundColorDimension'));
-        blocks.push(block('setBackgroundColorDimension'));
-        blocks.push('-');
-        blocks.push(block('write'));
-        blocks.push('-');
-        blocks.push(block('reportPenTrailsAsCostume'));
-        blocks.push('-');
-        blocks.push(block('doPasteOn'));
-        blocks.push(block('doCutFrom'));
-        blocks.push('-');
-        blocks.push(block('reportColor'));
-        blocks.push(block('reportColorAttribute'));
-        blocks.push(block('reportNewColor'));
-
-    } else if (category === 'control') {
-
-        blocks.push(block('receiveGo'));
-        blocks.push(block('receiveKey'));
-        blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveConditionEvent'));
-        blocks.push('-');
-        blocks.push(block('receiveMessage'));
-        blocks.push(block('doBroadcast'));
-        blocks.push(block('doBroadcastAndWait'));
-        blocks.push(block('reportPoll'));
-        blocks.push('-');
-        blocks.push(block('doWarp'));
-        blocks.push('-');
-        blocks.push(block('doWait'));
-        blocks.push(block('doWaitUntil'));
-        blocks.push('-');
-        blocks.push(block('doForever'));
-        blocks.push(block('doRepeat'));
-        blocks.push(block('doUntil'));
-        blocks.push(block('doFor'));
-        blocks.push('-');
-        // blocks.push(block('doVariadicIf'));
-        blocks.push(block('doIf'));
-        blocks.push(block('doIfElse'));
-        blocks.push(block('reportIfElse'));
-        blocks.push('-');
-        blocks.push(block('doReport'));
-        blocks.push(block('doStopThis'));
-        blocks.push('-');
-        blocks.push(block('doRun'));
-        blocks.push(block('fork'));
-        blocks.push(block('evaluate'));
-        blocks.push(block('reportPipe'));
-        blocks.push('-');
-        blocks.push(block('doTellTo'));
-        blocks.push(block('reportAskFor'));
-        blocks.push('-');
-        blocks.push(block('createClone'));
-        blocks.push(block('newClone'));
-        blocks.push('-');
-        blocks.push(block('doPauseAll'));
-        blocks.push(block('doSwitchToScene'));
-        blocks.push('-');
-        blocks.push(block('receiveUserEdit'));
-        blocks.push(block('doDefineBlock'));
-        blocks.push(block('doDeleteBlock'));
-        blocks.push(block('doSetBlockAttribute'));
-        blocks.push(block('reportBlockAttribute'));
-        blocks.push(block('reportEnvironment'));
-        blocks.push('-');
-        blocks.push(block('receiveSlotEvent'));
-        blocks.push(block('doSetSlot'));
-        blocks.push('-');
-        blocks.push(block('reportNewProcess'));
-        blocks.push(block('reportProcessAttribute'));
-        blocks.push(block('reportProcessState'));
-        blocks.push(block('doChangeProcess'));
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(watcherToggle('getLastMessage'));
-            blocks.push(block('getLastMessage'));
-            blocks.push(block('reportHyperZip'));
-        // deprecated - superseded by reportEnviornment - retained for legacy
-            blocks.push('-');
-            blocks.push(block('doCallCC'));
-            blocks.push(block('reportCallCC'));
-        }
-
-    } else if (category === 'sensing') {
-
-        blocks.push(block('doAsk'));
-        blocks.push(watcherToggle('getLastAnswer'));
-        blocks.push(block('getLastAnswer'));
-        blocks.push('-');
-        blocks.push(block('reportMousePosition'));
-        blocks.push(watcherToggle('reportMouseX'));
-        blocks.push(block('reportMouseX'));
-        blocks.push(watcherToggle('reportMouseY'));
-        blocks.push(block('reportMouseY'));
-        blocks.push(block('reportMouseDown'));
-        blocks.push('-');
-        blocks.push(block('reportKeyPressed'));
-        blocks.push('-');
-        blocks.push(block('reportAspect'));
-        blocks.push('-');
-        blocks.push(block('doResetTimer'));
-        blocks.push(watcherToggle('getTimer'));
-        blocks.push(block('getTimer'));
-        blocks.push(block('reportDate'));
-        blocks.push('-');
-        blocks.push(block('reportAttributeOf'));
-
-        if (SpriteMorph.prototype.enableFirstClass) {
-            blocks.push(block('reportGet'));
-        }
-
-        blocks.push(block('reportObject'));
-        blocks.push('-');
-        blocks.push(block('reportURL'));
-        blocks.push(block('reportAudio'));
-        blocks.push(block('reportVideo'));
-        blocks.push(block('doSetVideoTransparency'));
-        blocks.push('-');
-        blocks.push(block('reportGlobalFlag'));
-        blocks.push(block('doSetGlobalFlag'));
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(watcherToggle('reportThreadCount'));
-            blocks.push(block('reportThreadCount'));
-            blocks.push(block('reportStackSize'));
-            blocks.push(block('reportFrameCount'));
-            blocks.push(block('reportYieldCount'));
-        }
-    }
-    if (category === 'operators') {
-
-        blocks.push(block('reifyScript'));
-        blocks.push(block('reifyReporter'));
-        blocks.push(block('reifyPredicate'));
-        blocks.push('#');
-        blocks.push('-');
-        blocks.push(block('reportVariadicSum'));
-        blocks.push(block('reportDifference'));
-        blocks.push(block('reportVariadicProduct'));
-        blocks.push(block('reportQuotient'));
-        blocks.push(block('reportPower'));
-        blocks.push('-');
-        blocks.push(block('reportModulus'));
-        blocks.push(block('reportVariadicMin'));
-        blocks.push(block('reportVariadicMax'));
-        blocks.push('-');
-        blocks.push(block('reportRound'));
-        blocks.push(block('reportMonadic'));
-        blocks.push(block('reportAtan2'));
-        blocks.push(block('reportRandom'));
-        blocks.push('-');
-        blocks.push(block('reportVariadicLessThan'));
-        blocks.push(block('reportVariadicEquals'));
-        blocks.push(block('reportVariadicGreaterThan'));
-        blocks.push('-');
-        blocks.push(block('reportVariadicAnd'));
-        blocks.push(block('reportVariadicOr'));
-        blocks.push(block('reportNot'));
-        blocks.push(block('reportBoolean'));
-        blocks.push('-');
-        blocks.push(block('reportJoinWords'));
-        blocks.push(block('reportTextSplit'));
-        blocks.push(block('reportLetter'));
-        blocks.push(block('reportTextAttribute'));
-        blocks.push('-');
-        blocks.push(block('reportUnicode'));
-        blocks.push(block('reportUnicodeAsLetter'));
-        blocks.push('-');
-        blocks.push(block('reportIsA'));
-        blocks.push(block('reportVariadicIsIdentical'));
-
-        if (Process.prototype.enableJS) { // (Process.prototype.enableJS) {
-            blocks.push('-');
-            blocks.push(block('reportJSFunction'));
-            if (Process.prototype.enableCompiling) {
-                blocks.push(block('reportCompiled'));
-            }
-        }
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('reportTypeOf'));
-            blocks.push(block('reportTextFunction'));
-        }
-
-    }
-    if (category === 'variables') {
-
-        blocks.push(this.makeVariableButton());
-        if (this.variables.allNames().length > 0) {
-            blocks.push(this.deleteVariableButton());
-        }
-        blocks.push('-');
-
-        varNames = this.allGlobalVariableNames(true, all);
-        if (varNames.length > 0) {
-            varNames.forEach(name => {
-                blocks.push(variableWatcherToggle(name, true));
-                blocks.push(variableBlock(name));
-            });
-            blocks.push('-');
-        }
-
-        varNames = this.allLocalVariableNames(true, all);
-        if (varNames.length > 0) {
-            varNames.forEach(name => {
-                blocks.push(variableWatcherToggle(name));
-                blocks.push(variableBlock(name, true));
-            });
-            blocks.push('-');
-        }
-
-        blocks.push(block('doSetVar'));
-        blocks.push(block('doChangeVar'));
-        blocks.push(block('doShowVar'));
-        blocks.push(block('doHideVar'));
-        blocks.push(block('doDeclareVariables'));
-        blocks.push('=');
-        blocks.push(block('reportNewList'));
-        blocks.push(block('reportNumbers'));
-        blocks.push('-');
-        blocks.push(block('reportCONS'));
-        blocks.push(block('reportListItem'));
-        blocks.push(block('reportCDR'));
-        blocks.push('-');
-        blocks.push(block('reportListAttribute'));
-        blocks.push(block('reportListIndex'));
-        blocks.push(block('reportListContainsItem'));
-        blocks.push(block('reportListIsEmpty'));
-        blocks.push('-');
-        blocks.push(block('reportMap'));
-        blocks.push(block('reportKeep'));
-        blocks.push(block('reportFindFirst'));
-        blocks.push(block('reportCombine'));
-        blocks.push('-');
-        blocks.push(block('doForEach'));
-        blocks.push('-');
-        blocks.push(block('doAddToList'));
-        blocks.push(block('doDeleteFromList'));
-        blocks.push(block('doInsertInList'));
-        blocks.push(block('doReplaceInList'));
-        blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        blocks.push(block('reportCrossproduct'));
-
-        if (SpriteMorph.prototype.showingExtensions) {
-            blocks.push('=');
-            blocks.push(block('doPrimitive'));
-            blocks.push(block('doApplyExtension'));
-            blocks.push(block('reportApplyExtension'));
-        }
-
-        if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push('=');
-            blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
-            blocks.push(block('doMapListCode'));
-            blocks.push('-');
-            blocks.push(block('reportMappedCode'));
-        }
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doShowTable'));
-        }
-    }
-
-    return blocks;
-};
+// StageMorph block templates - shared with SpriteMorph, see below
 
 // StageMorph microworld palette support
 
@@ -13060,6 +12692,15 @@ StageMorph.prototype.customBlockTemplatesForCategory
 
 StageMorph.prototype.getPrimitiveTemplates
     = SpriteMorph.prototype.getPrimitiveTemplates;
+
+StageMorph.prototype.blockTemplates = SpriteMorph.prototype.blockTemplates;
+StageMorph.prototype.resolvedPalette = SpriteMorph.prototype.resolvedPalette;
+StageMorph.prototype.resolvePaletteSpec
+    = SpriteMorph.prototype.resolvePaletteSpec;
+StageMorph.prototype.isPaletteMember = SpriteMorph.prototype.isPaletteMember;
+StageMorph.prototype.setPaletteSpec = SpriteMorph.prototype.setPaletteSpec;
+StageMorph.prototype.collapsePaletteSpacers
+    = SpriteMorph.prototype.collapsePaletteSpacers;
 
 StageMorph.prototype.palette = SpriteMorph.prototype.palette;
 StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;
