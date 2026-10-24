@@ -218,6 +218,8 @@ SpriteMorph.prototype.bubbleMaxTextWidth = 130;
 
         only:       SpriteMorph | StageMorph - restrict to one agent type
         dev:        true - only shown in development mode
+        legacy:     true - a deprecated block kept for loading old
+                    projects, never added to a palette automatically
         watcher:    true - show a watcher toggle before the block
         inherits:   attribute name - ghost the template when the sprite
                     inherits that attribute from its exemplar
@@ -1280,6 +1282,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             defaults: [['']] // trigger the "message" expansion to refresh
         },
         receiveCondition: {
+            legacy: true,
             type: 'hat',
             category: 'control',
             spec: 'when %b'
