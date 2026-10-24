@@ -211,6 +211,34 @@ SpriteMorph.prototype.bubbleBorder = 3;
 SpriteMorph.prototype.bubbleBorderColor = new Color(190, 190, 190);
 SpriteMorph.prototype.bubbleMaxTextWidth = 130;
 
+/*
+    The blocks dictionary describes every primitive. Besides the attributes
+    that define a block (type, category, spec, defaults, code, src ...) an
+    entry can carry metadata used when laying out the palette:
+
+        only:       SpriteMorph | StageMorph - restrict to one agent type
+        dev:        true - only shown in development mode
+        watcher:    true - show a watcher toggle before the block
+        inherits:   attribute name - ghost the template when the sprite
+                    inherits that attribute from its exemplar
+        when:       'inheritance' | 'codeMapping' | 'extensions' |
+                    'firstClass' | 'js' | 'compiling' - only shown while
+                    that setting is enabled (see paletteFeatureEnabled)
+        tags:       array of tag names used by palette specs to include or
+                    exclude groups of blocks. Every block implicitly also
+                    carries its category and type as tags. Tags in use:
+
+                    hof metaprogramming processes clones oop inheritance
+                    broadcast music media video microphone web io scenes
+                    strings math comparison logic hyper debugging codemapping
+                    extensions hardware javascript color effects layers
+                    scratch (the Scratch-compatible core set)
+
+    Where a block appears in the palette is NOT determined here but by the
+    palette specification, see SpriteMorph.prototype.standardPalette and
+    SpriteMorph.prototype.resolvedPalette.
+*/
+
 SpriteMorph.prototype.primitiveBlocks = function () {
     return {
         // Bootstrapping helpers
@@ -219,6 +247,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'control',
+            tags: ['hof', 'hyper'],
             spec:
                 'zip %repRing inputs: %br %s leaf-rank %n %br %s leaf-rank %n',
             code: 'zip',
@@ -249,6 +278,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'move %n steps',
             defaults: [10],
             animation: true,
@@ -265,6 +295,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'turn $clockwise %n degrees',
             defaults: [15],
             animation: true,
@@ -277,6 +308,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'turn $counterclockwise %n degrees',
             defaults: [15],
             animation: true,
@@ -289,6 +321,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'point in direction %dir',
             defaults: [90],
             animation: true,
@@ -307,6 +340,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'point towards %dst',
             defaults: [['mouse-pointer']],
             animation: true,
@@ -316,6 +350,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'go to x: %n y: %n',
             defaults: [0, 0],
             animation: true,
@@ -328,6 +363,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'go to %dst',
             defaults: [['random position']],
             animation: true,
@@ -337,6 +373,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'glide %n secs to x: %n y: %n',
             defaults: [1, 0, 0],
             animation: false,
@@ -359,6 +396,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'change x by %n',
             defaults: [10],
             animation: true,
@@ -371,6 +409,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'set x to %n',
             defaults: [0],
             animation: true,
@@ -383,6 +422,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'change y by %n',
             defaults: [10],
             animation: true,
@@ -395,6 +435,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'set y to %n',
             defaults: [0],
             animation: true,
@@ -407,6 +448,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'if on edge, bounce',
             animation: true,
             code: 'bounce',
@@ -499,6 +541,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'motion',
+            watcher: true,
+            inherits: 'x position',
+            tags: ['scratch'],
             spec: 'x position',
             code: 'x'
         },
@@ -507,6 +552,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'motion',
+            watcher: true,
+            inherits: 'y position',
+            tags: ['scratch'],
             spec: 'y position',
             code: 'y'
         },
@@ -515,6 +563,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'motion',
+            watcher: true,
+            inherits: 'direction',
+            tags: ['scratch'],
             spec: 'direction',
             code: 'dir'
         },
@@ -523,6 +574,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSwitchToCostume: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'switch to costume %cst',
             animation: true,
             code: 'wear'
@@ -530,6 +582,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doWearNextCostume: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'next costume',
             animation: true,
             code: 'next',
@@ -544,6 +597,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'looks',
+            watcher: true,
+            inherits: 'costume #',
+            tags: ['scratch'],
             spec: 'costume #',
             code: 'costume#',
             src: `(
@@ -554,6 +610,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'looks',
+            tags: ['media'],
             spec: '%img of costume %cst',
             defaults: [['width'], ['current']],
             code: 'costume'
@@ -562,6 +619,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'looks',
+            tags: ['media'],
             spec: 'new costume %l width %dim height %dim',
             code: 'newCostume'
         },
@@ -569,6 +627,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'looks',
+            tags: ['media'],
             spec: 'stretch %cst x: %n y: %n %',
             defaults: [['current'], 100, 50],
             code: 'stretch'
@@ -577,6 +636,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'looks',
+            tags: ['media'],
             spec: 'skew %cst to %dir degrees %n %',
             defaults: [['current'], 0, 50],
             code: 'skew'
@@ -584,6 +644,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSayFor: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'say %s for %n secs',
             defaults: [localize('Hello!'), 2],
             code: 'sayFor',
@@ -596,6 +657,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         bubble: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'say %s',
             defaults: [localize('Hello!')],
             code: 'say'
@@ -604,6 +666,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'think %s for %n secs',
             defaults: [localize('Hmm...'), 2],
             code: 'thinkFor',
@@ -617,6 +680,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'think %s',
             defaults: [localize('Hmm...')],
             code: 'think'
@@ -624,6 +688,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         changeEffect: {
             type: 'command',
             category: 'looks',
+            tags: ['effects', 'scratch'],
             spec: 'change %eff effect by %n',
             defaults: [['ghost'], 25],
             animation: true,
@@ -632,6 +697,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         setEffect: {
             type: 'command',
             category: 'looks',
+            tags: ['effects', 'scratch'],
             spec: 'set %eff effect to %n',
             defaults: [['ghost'], 0],
             animation: true,
@@ -641,6 +707,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'looks',
+            tags: ['effects'],
             spec: '%eff effect',
             defaults: [['ghost']],
             code: 'effect'
@@ -648,6 +715,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         clearEffects: {
             type: 'command',
             category: 'looks',
+            tags: ['effects', 'scratch'],
             animation: true,
             spec: 'clear graphic effects'
         },
@@ -655,6 +723,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'change size by %n',
             defaults: [10],
             animation: true,
@@ -667,6 +736,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'set size to %n %',
             defaults: [100],
             animation: true,
@@ -677,22 +747,29 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'looks',
+            watcher: true,
+            inherits: 'size',
+            tags: ['scratch'],
             spec: 'size',
             code: 'size'
         },
         show: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'show'
         },
         hide: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'hide'
         },
         reportShown: {
             type: 'predicate',
             category: 'looks',
+            watcher: true,
+            inherits: 'shown?',
             spec: 'shown?',
             code: 'shown'
         },
@@ -700,6 +777,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['layers', 'scratch'],
             spec: 'go to %layer layer',
             defaults: [['front']],
             animation: true,
@@ -719,6 +797,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['layers', 'scratch'],
             spec: 'go back %n layers',
             defaults: [1],
             animation: true,
@@ -730,6 +809,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'looks',
+            tags: ['media'],
             spec: 'save %imgsource as costume named %s',
             defaults: [['pen trails'], localize('screenshot')]
         },
@@ -738,18 +818,21 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'looks',
+            tags: ['media'],
             spec: 'wardrobe'
         },
         alert: {
             dev: true,
             type: 'command',
             category: 'looks',
+            tags: ['debugging'],
             spec: 'alert %mult%s'
         },
         log: {
             dev: true,
             type: 'command',
             category: 'looks',
+            tags: ['debugging'],
             spec: 'console log %mult%s'
         },
 
@@ -757,12 +840,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         playSound: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'play sound %snd',
             code: 'play'
         },
         doPlaySoundUntilDone: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'play sound %snd until done',
             code: 'playAll',
             src: `(
@@ -782,6 +867,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doPlaySoundAtRate: {
             type: 'command',
             category: 'sound',
+            tags: ['media'],
             spec: 'play sound %snd at %rate Hz',
             defaults: ['', 44100],
             code: 'playAt',
@@ -792,6 +878,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doStopAllSounds: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'stop all sounds',
             code: 'stopSounds'
         },
@@ -799,6 +886,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sound',
+            tags: ['media'],
             spec: '%aa of sound %snd',
             defaults: [['duration']],
             code: 'sound'
@@ -807,6 +895,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'sound',
             category: 'sound',
+            tags: ['media'],
             spec: 'new sound %l rate %rate Hz',
             defaults: [null, 44100],
             code: 'newSound'
@@ -814,6 +903,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doRest: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'rest for %n beats',
             defaults: [0.2],
             code: 'rest',
@@ -824,6 +914,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doPlayNote: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'play note %note for %n beats',
             defaults: [60, 0.5],
             code: 'note'
@@ -832,12 +923,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'sound',
+            tags: ['music'],
             spec: 'play %n Hz for %n secs',
             defaults: [440, 2]
         },
         doSetInstrument: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'set instrument to %inst',
             defaults: [1],
             code: 'instrument'
@@ -845,6 +938,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doChangeTempo: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'change tempo by %n',
             defaults: [20],
             code: '+tempo',
@@ -855,6 +949,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSetTempo: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'set tempo to %n bpm',
             defaults: [60],
             code: 'tempo='
@@ -863,12 +958,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sound',
+            watcher: true,
+            tags: ['music', 'scratch'],
             spec: 'tempo',
             code: 'tempo'
         },
         changeVolume: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'change volume by %n',
             defaults: [10],
             code: '+vol',
@@ -879,6 +977,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         setVolume: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'set volume to %n %',
             defaults: [100],
             code: 'vol='
@@ -887,6 +986,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sound',
+            watcher: true,
+            inherits: 'volume',
+            tags: ['scratch'],
             spec: 'volume',
             code: 'vol'
         },
@@ -911,12 +1013,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sound',
+            watcher: true,
+            inherits: 'balance',
             spec: 'balance',
             code: 'pan'
         },
         playFreq: {
             type: 'command',
             category: 'sound',
+            tags: ['music'],
             spec: 'play frequency %n Hz',
             defaults: [440],
             code: 'freq'
@@ -924,6 +1029,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         stopFreq: {
             type: 'command',
             category: 'sound',
+            tags: ['music'],
             spec: 'stop frequency'
         },
 
@@ -933,6 +1039,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'sound',
+            tags: ['media'],
             spec: 'jukebox'
         },
 
@@ -940,6 +1047,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         clear: {
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'clear',
             animation: true
         },
@@ -947,18 +1055,22 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'pen down'
         },
         up: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'pen up'
         },
         getPenDown: {
             only: SpriteMorph,
             type: 'predicate',
             category: 'pen',
+            watcher: true,
+            inherits: 'pen down?',
             spec: 'pen down?',
             code: 'down?'
         },
@@ -966,6 +1078,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color', 'scratch'],
             spec: 'set pen color to %clr',
             src: `(
                 (prim t setColor color)
@@ -975,6 +1088,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color', 'scratch'],
             spec: 'set pen %clrdim to %n',
             defaults: [['hue'], 50],
             code: 'pen='
@@ -983,11 +1097,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color', 'scratch'],
             spec: 'change pen %clrdim by %n',
             defaults: [['hue'], 10],
             code: '+pen'
         },
         getPenAttribute: {
+            only: SpriteMorph,
             type: 'reporter',
             reports: 'number',
             category: 'pen',
@@ -999,6 +1115,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: StageMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color'],
             spec: 'set background color to %clr',
             animation: true
         },
@@ -1006,6 +1123,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: StageMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color'],
             spec: 'set background %clrdim to %n',
             defaults: [['hue'], 50],
             animation: true
@@ -1014,6 +1132,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: StageMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color'],
             spec: 'change background %clrdim by %n',
             defaults: [['hue'], 10],
             animation: true
@@ -1022,6 +1141,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'change pen size by %n',
             defaults: [1],
             animation: true,
@@ -1034,6 +1154,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'set pen size to %n',
             defaults: [1],
             animation: true,
@@ -1043,6 +1164,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'stamp',
             animation: true,
             code: 'stamp'
@@ -1067,6 +1189,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'pen',
+            tags: ['media'],
             spec: 'pen trails',
             code: 'trails'
         },
@@ -1074,12 +1197,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'pen',
+            tags: ['media'],
             spec: 'pen vectors',
             code: 'svgTrails'
         },
         doPasteOn: {
             type: 'command',
             category: 'pen',
+            tags: ['media'],
             spec: 'paste on %spr',
             code: 'paste',
             animation: true
@@ -1087,6 +1212,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doCutFrom: {
             type: 'command',
             category: 'pen',
+            tags: ['media'],
             spec: 'cut from %spr',
             code: 'cut',
             animation: true
@@ -1095,6 +1221,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['media'],
             spec: '%msk on %spr',
             defaults: [['paint'], ['Stage']],
             code: 'drawOn'
@@ -1103,6 +1230,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'color',
             category: 'pen',
+            tags: ['color'],
             spec: 'color %clr',
             code: 'colorFrom'
         },
@@ -1110,6 +1238,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'pen',
+            tags: ['color'],
             spec: '%color of color %clr',
             defaults: [['hue']],
             code: 'color'
@@ -1118,6 +1247,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'color',
             category: 'pen',
+            tags: ['color'],
             spec: 'new color %hsbt',
             code: 'newColor'
         },
@@ -1126,23 +1256,27 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveGo: {
             type: 'hat',
             category: 'control',
+            tags: ['scratch'],
             spec: 'when $greenflag clicked'
         },
         receiveKey: {
             type: 'hat',
             category: 'control',
+            tags: ['io', 'scratch'],
             spec: 'when %keyHat key pressed %keyName',
             defaults: [['space']]
         },
         receiveInteraction: {
             type: 'hat',
             category: 'control',
+            tags: ['io', 'scratch'],
             spec: 'when I am %interaction',
             defaults: [['clicked']]
         },
         receiveMessage: {
             type: 'hat',
             category: 'control',
+            tags: ['broadcast', 'scratch'],
             spec: 'when I receive %msgHat %message',
             defaults: [['']] // trigger the "message" expansion to refresh
         },
@@ -1161,17 +1295,21 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'control',
+            watcher: true,
+            tags: ['broadcast'],
             spec: 'message'
         },
         doBroadcast: {
             type: 'command',
             category: 'control',
+            tags: ['broadcast', 'scratch'],
             spec: 'broadcast %msg %receive',
             code: 'send'
         },
         doBroadcastAndWait: {
             type: 'command',
             category: 'control',
+            tags: ['broadcast', 'scratch'],
             spec: 'broadcast %msg %receive and wait',
             code: 'sendAll'
         },
@@ -1179,12 +1317,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['broadcast'],
             spec: 'request %msg %survey',
             code: 'request'
         },
         doWait: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'wait %n secs',
             defaults: [1],
             code: 'wait',
@@ -1199,6 +1339,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doWaitUntil: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'wait until %boolUE',
             code: 'waitUntil',
             src: `(
@@ -1209,6 +1350,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doForever: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'forever %loop',
             code: 'forever',
             src: `(
@@ -1219,6 +1361,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doRepeat: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'repeat %n %loop',
             defaults: [10],
             code: 'repeat',
@@ -1234,6 +1377,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doUntil: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'repeat until %boolUE %loop',
             code: 'until',
             src: `(
@@ -1267,6 +1411,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doIf: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'if %b %c %elseif',
             code: 'if',
             src: `(
@@ -1285,6 +1430,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doIfElse: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'if %b %c else %c',
             code: 'ifElse',
             src: `(
@@ -1308,6 +1454,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doStopThis: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'stop %stopChoices',
             defaults: [['all']],
             code: 'stop'
@@ -1321,6 +1468,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         fork: {
             type: 'command',
             category: 'control',
+            tags: ['processes'],
             spec: 'launch %cmdRing %inputs',
             src: `(
                 (prim t fork script inputs)
@@ -1364,6 +1512,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doTellTo: {
             type: 'command',
             category: 'control',
+            tags: ['oop'],
             // spec: 'tell %spr to %cl' // I liked this version better, -Jens
             spec: 'tell %spr to %cmdRing %inputs',
             code: 'tell',
@@ -1375,6 +1524,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['oop'],
             spec: 'ask %spr for %repRing %inputs',
             code: 'ask',
             src: `(
@@ -1385,13 +1535,16 @@ SpriteMorph.prototype.primitiveBlocks = function () {
 
         // Cloning
         receiveOnClone: {
+            only: SpriteMorph,
             type: 'hat',
             category: 'control',
+            tags: ['clones', 'scratch'],
             spec: 'when I start as a clone'
         },
         createClone: {
             type: 'command',
             category: 'control',
+            tags: ['clones', 'scratch'],
             spec: 'create a clone of %cln',
             defaults: [['myself']],
             animation: true,
@@ -1404,13 +1557,16 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'sprite',
             category: 'control',
+            tags: ['clones'],
             spec: 'a new clone of %clntrtl',
             defaults: [['myself']],
             animation: true
         },
         removeClone: {
+            only: SpriteMorph,
             type: 'command',
             category: 'control',
+            tags: ['clones', 'scratch'],
             spec: 'delete this clone',
             code: 'removeClone'
         },
@@ -1419,6 +1575,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveUserEdit: {
             type: 'hat',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'when %edit is edited %message',
             defaults: [['anything']]
         },
@@ -1427,6 +1584,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doDefineBlock: {
             type: 'command',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'define %upvar %s %repRing',
             defaults: [['block']],
             code: 'define'
@@ -1434,6 +1592,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSetBlockAttribute: {
             type: 'command',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'set %byob of block %repRing to %s',
             defaults: [['label']],
             code: 'setBlock'
@@ -1441,6 +1600,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doDeleteBlock: {
             type: 'command',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'delete block %repRing',
             code: 'deleteBlock'
         },
@@ -1448,6 +1608,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: '%block of block %repRing',
             defaults: [['definition']],
             code: 'block'
@@ -1456,6 +1617,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'this %env',
             defaults: [['script']],
             code: 'this'
@@ -1465,12 +1627,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveSlotEvent: {
             type: 'hat',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'when slot %inputSlot signals %slotEvent',
             defaults: ['', ['menu']]
         },
         doSetSlot: {
             type: 'command',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'set slot %inputSlot to %s'
         },
 
@@ -1478,6 +1642,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doPauseAll: {
             type: 'command',
             category: 'control',
+            tags: ['processes', 'debugging'],
             spec: 'pause all $pause',
             code: 'pause'
         },
@@ -1486,6 +1651,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSwitchToScene: {
             type: 'command',
             category: 'control',
+            tags: ['scenes'],
             spec: 'switch to scene %scn %send',
             defaults: [['next']],
             code: 'scene'
@@ -1496,6 +1662,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['hof'],
             spec: 'pipe %s $arrowRight %mult%repRing',
             code: 'pipe',
             src: `(
@@ -1511,6 +1678,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'process',
             category: 'control',
+            tags: ['processes'],
             spec: 'new process %cmdRing %inputs',
             code: 'process'
         },
@@ -1518,6 +1686,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['processes'],
             spec: '%procAttribs of process %p',
             defaults: [['script']],
             code: 'getProcess'
@@ -1525,6 +1694,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportProcessState: {
             type: 'predicate',
             category: 'control',
+            tags: ['processes'],
             spec: 'is process %p %procStates ?',
             defaults: [null, ['running']],
             code: 'isProcess'
@@ -1532,6 +1702,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doChangeProcess: {
             type: 'command',
             category: 'control',
+            tags: ['processes'],
             spec: '%procActions process %p',
             defaults: [['pause']],
             code: 'changeProcess'
@@ -1542,6 +1713,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
+            tags: ['scratch'],
             spec: 'touching %col ?',
             defaults: [['mouse-pointer']],
             code: 'touch'
@@ -1550,6 +1722,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
+            tags: ['color', 'scratch'],
             spec: 'touching %clr ?',
             code: 'touchColor'
         },
@@ -1557,6 +1730,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
+            tags: ['color', 'scratch'],
             spec: 'color %clr is touching %clr ?',
             defaults: [null, new Color(255, 230, 0)],
             code: 'colorTouch'
@@ -1573,6 +1747,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['debugging'],
             spec: 'stack size'
         },
         reportFrameCount: {
@@ -1580,6 +1755,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['debugging'],
             spec: 'frames'
         },
         reportYieldCount: {
@@ -1587,6 +1763,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['debugging'],
             spec: 'yields'
         },
         reportThreadCount: {
@@ -1594,12 +1771,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            watcher: true,
+            tags: ['processes', 'debugging'],
             spec: 'processes'
         },
         doAsk: {
             type: 'command',
             reports: 'any',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'ask %s and wait',
             defaults: [localize('what\'s your name?')]
         },
@@ -1608,12 +1788,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'sensing',
+            tags: ['io'],
             spec: 'answer'
         },
         getLastAnswer: {
             type: 'reporter',
             reports: 'any',
             category: 'sensing',
+            watcher: true,
+            tags: ['io', 'scratch'],
             spec: 'answer',
             code: 'answer'
         },
@@ -1621,6 +1804,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'sensing',
+            tags: ['io'],
             spec: 'mouse position',
             code: 'mouse',
             src: `(
@@ -1631,6 +1815,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            watcher: true,
+            tags: ['io', 'scratch'],
             spec: 'mouse x',
             code: 'mouseX'
         },
@@ -1638,18 +1824,22 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            watcher: true,
+            tags: ['io', 'scratch'],
             spec: 'mouse y',
             code: 'mouseY'
         },
         reportMouseDown: {
             type: 'predicate',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'mouse down?',
             code: 'mouseDown'
         },
         reportKeyPressed: {
             type: 'predicate',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'key %key pressed?',
             defaults: [['space']],
             code: 'key'
@@ -1659,6 +1849,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['scratch'],
             spec: '%rel to %dst',
             defaults: [['distance'], ['mouse-pointer']],
             code: 'relation'
@@ -1666,6 +1857,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doResetTimer: {
             type: 'command',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'reset timer',
             code: 'resetTimer'
         },
@@ -1673,12 +1865,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'reporter',
             category: 'sensing',
+            tags: ['io'],
             spec: 'timer'
         },
         getTimer: {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            watcher: true,
+            tags: ['io', 'scratch'],
             spec: 'timer',
             code: 'timer'
         },
@@ -1686,6 +1881,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'sensing',
+            tags: ['oop', 'scratch'],
             spec: '%att of %spr',
             defaults: [['costume #']],
             code: 'attribute'
@@ -1694,6 +1890,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'agent',
             category: 'sensing',
+            tags: ['oop'],
             spec: 'object %self',
             defaults: [['myself']],
             code: 'object',
@@ -1709,6 +1906,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'sensing',
+            tags: ['web'],
             spec: 'url %txt',
             defaults: ['snap.berkeley.edu'],
             code: 'url'
@@ -1731,6 +1929,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'current %dates',
             defaults: [['date']],
             code: 'current'
@@ -1739,6 +1938,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'sensing',
+            when: 'firstClass',
+            tags: ['oop'],
             spec: 'my %get',
             defaults: [['neighbors']],
             code: 'my'
@@ -1747,6 +1948,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['microphone'],
             spec: 'microphone %audio',
             defaults: [['volume']],
             code: 'audio'
@@ -1778,6 +1980,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%sum',
             alias: '+',
             code: '+'
@@ -1786,6 +1989,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%n \u2212 %n',
             alias: '-',
             code: '-'
@@ -1794,6 +1998,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%product',
             alias: '*',
             code: '*'
@@ -1802,6 +2007,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%n / %n', // '%n \u00F7 %n'
             code: '/'
         },
@@ -1809,6 +2015,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: 'round %n',
             code: 'round'
         },
@@ -1816,6 +2023,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%fun of %n',
             defaults: [['sqrt'], 10],
             code: 'fn'
@@ -1824,6 +2032,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: '%n ^ %n',
             code: '^'
         },
@@ -1831,6 +2040,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%n mod %n',
             code: 'mod'
         },
@@ -1838,6 +2048,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'atan2 %n ÷ %n',
             code: 'atan2'
         },
@@ -1845,6 +2056,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'operators',
+            tags: ['math'],
             spec: '%min',
             alias: 'min',
             code: 'min'
@@ -1853,6 +2065,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'operators',
+            tags: ['math'],
             spec: '%max',
             alias: 'max',
             code: 'max'
@@ -1861,6 +2074,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: 'pick random %ns to %ns',
             defaults: [1, 10],
             code: 'rand'
@@ -1868,42 +2082,49 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportVariadicEquals: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison', 'scratch'],
             spec: '%all=',
             code: '='
         },
         reportVariadicNotEquals: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison'],
             spec: '%all!=',
             code: '!='
         },
         reportVariadicLessThan: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison', 'scratch'],
             spec: '%all<',
             code: '<'
         },
         reportVariadicLessThanOrEquals: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison'],
             spec: '%all<=',
             code: '<='
         },
         reportVariadicGreaterThan: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison', 'scratch'],
             spec: '%all>',
             code: '>'
         },
         reportVariadicGreaterThanOrEquals: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison'],
             spec: '%all>=',
             code: '>='
         },
         reportVariadicAnd: {
             type: 'predicate',
             category: 'operators',
+            tags: ['logic', 'scratch'],
             spec: '%all',
             alias: '&',
             code: 'and'
@@ -1911,6 +2132,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportVariadicOr: {
             type: 'predicate',
             category: 'operators',
+            tags: ['logic', 'scratch'],
             spec: '%any',
             alias: '|',
             code: 'or'
@@ -1918,6 +2140,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportNot: {
             type: 'predicate',
             category: 'operators',
+            tags: ['logic', 'scratch'],
             spec: 'not %b',
             code: 'not',
             src: `(
@@ -1927,6 +2150,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportBoolean: {
             type: 'predicate',
             category: 'operators',
+            tags: ['logic'],
             spec: '%bool',
             defaults: [true],
             alias: 'true boolean',
@@ -1938,6 +2162,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportFalse: { // special case for keyboard entry and search
             type: 'predicate',
             category: 'operators',
+            tags: ['logic'],
             spec: '%bool',
             defaults: [false],
             alias: 'false boolean'
@@ -1946,6 +2171,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings', 'scratch'],
             spec: 'join %words',
             defaults: [localize('hello') + ' ', localize('world')],
             code: 'join'
@@ -1954,6 +2180,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings', 'scratch'],
             spec: 'letter %ix of %txt',
             defaults: [1, localize('world')],
             code: 'letter',
@@ -1968,6 +2195,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['strings', 'scratch'],
             spec: 'length of %s',
             defaults: [localize('world')]
         },
@@ -1975,6 +2203,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings'],
             spec: '%ta of text %txt',
             defaults: [['length'], localize('world')],
             code: 'text'
@@ -1983,6 +2212,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['strings'],
             spec: 'unicode of %txt',
             defaults: ['a'],
             code: 'unicode'
@@ -1991,6 +2221,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings'],
             spec: 'unicode %n as letter',
             defaults: [65],
             code: 'toLetter'
@@ -2005,6 +2236,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportVariadicIsIdentical: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison'],
             spec: 'is %all== ?',
             code: 'same'
         },
@@ -2012,6 +2244,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'operators',
+            tags: ['strings'],
             spec: 'split %s by %delim',
             defaults: [localize('hello') + ' ' + localize('world'), " "],
             code: 'split'
@@ -2020,6 +2253,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'reporter',
             category: 'operators',
+            when: 'js',
+            tags: ['debugging', 'javascript'],
             spec: 'JavaScript function ( %mult%s ) { %code }',
             code: 'js'
         },
@@ -2028,6 +2263,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['debugging'],
             spec: 'type of %s',
             defaults: [5]
         },
@@ -2036,6 +2272,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings'],
             spec: '%txtfun of %s',
             defaults: [['encode URI'], "Abelson & Sussman"]
         },
@@ -2044,6 +2281,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'reporter',
             category: 'operators',
+            when: 'compiling',
+            tags: ['metaprogramming', 'javascript'],
             spec: 'compile %repRing for %n args',
             defaults: [null, 0]
         },
@@ -2052,6 +2291,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSetVar: {
             type: 'command',
             category: 'variables',
+            tags: ['scratch'],
             spec: 'set %var to %s',
             defaults: [null, 0],
             code: 'set'
@@ -2059,6 +2299,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doChangeVar: {
             type: 'command',
             category: 'variables',
+            tags: ['scratch'],
             spec: 'change %hyperVar by %n',
             defaults: [null, 1],
             code: '+='
@@ -2066,12 +2307,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doShowVar: {
             type: 'command',
             category: 'variables',
+            tags: ['scratch'],
             spec: 'show variable %var',
             code: 'showVar'
         },
         doHideVar: {
             type: 'command',
             category: 'variables',
+            tags: ['scratch'],
             spec: 'hide variable %var',
             code: 'hideVar'
         },
@@ -2084,8 +2327,11 @@ SpriteMorph.prototype.primitiveBlocks = function () {
 
         // inheritance
         doDeleteAttr: {
+            only: SpriteMorph,
             type: 'command',
             category: 'variables',
+            when: 'inheritance',
+            tags: ['oop', 'inheritance'],
             spec: 'inherit %shd',
             code: 'inherit'
         },
@@ -2095,6 +2341,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'list %exp',
             code: 'list',
             src: `(
@@ -2112,6 +2359,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'item %idx of %l',
             defaults: [1],
             code: 'item'
@@ -2133,6 +2381,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['scratch'],
             spec: '%la of %l',
             defaults: [['length']],
             code: 'data'
@@ -2140,6 +2389,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportListContainsItem: {
             type: 'predicate',
             category: 'lists',
+            tags: ['scratch'],
             spec: '%l contains %s',
             defaults: [null, localize('thing')],
             code: 'contains',
@@ -2163,6 +2413,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'index of %s in %l',
             defaults: [localize('thing')],
             code: '#',
@@ -2176,6 +2427,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doAddToList: {
             type: 'command',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'add %s to %l',
             defaults: [localize('thing')],
             code: 'add'
@@ -2183,6 +2435,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doDeleteFromList: {
             type: 'command',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'delete %ida of %l',
             defaults: [1],
             code: 'del'
@@ -2190,6 +2443,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doInsertInList: {
             type: 'command',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'insert %s at %idx of %l',
             defaults: [localize('thing'), 1],
             code: 'ins'
@@ -2197,6 +2451,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doReplaceInList: {
             type: 'command',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'replace item %idx of %l with %s',
             defaults: [1, null, localize('thing')],
             code: 'put'
@@ -2207,6 +2462,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['math'],
             spec: 'numbers from %n to %n',
             defaults: [1, 10],
             code: 'range',
@@ -2225,6 +2481,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportListCombination: { // currently not in use
             type: 'reporter',
             category: 'lists',
+            tags: ['hof', 'hyper'],
             spec: '%mlfunc %lists',
             defaults: [['append']]
         },
@@ -2248,6 +2505,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hyper'],
             spec: 'combinations %lists',
             code: 'combinations',
             src: `(
@@ -2263,12 +2521,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportTranspose: { // deprecated
             type: 'reporter',
             category: 'lists',
+            tags: ['hyper'],
             spec: 'transpose %l'
         },
         reportReshape: {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hyper'],
             spec: 'reshape %s to %nums',
             defaults: [null, [4, 3]],
             code: 'reshape'
@@ -2277,6 +2537,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportSlice: { // currently not in use
             type: 'reporter',
             category: 'lists',
+            tags: ['hyper'],
             spec: 'slice %l by %nums',
             defaults: [null, [2, -1]]
         },
@@ -2287,6 +2548,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hof'],
             spec: 'map %repRing over %l',
             code: 'map',
             src: `(
@@ -2308,12 +2570,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hof'],
             spec: '$blitz map %repRing over %l'
         },
         reportKeep: {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hof'],
             spec: 'keep items %predRing from %l',
             code: 'keep',
             src: `(
@@ -2335,12 +2599,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hof'],
             spec: '$blitz keep items %predRing from %l'
         },
         reportFindFirst: {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hof'],
             spec: 'find first item %predRing in %l',
             code: 'find',
             src: `(
@@ -2361,12 +2627,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hof'],
             spec: '$blitz find first item %predRing in %l'
         },
         reportCombine: {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hof'],
             spec: 'combine %l using %repRing',
             code: 'combine',
             src: `(
@@ -2388,11 +2656,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hof'],
             spec: '$blitz combine %l using %repRing'
         },
         doForEach: {
             type: 'command',
             category: 'lists',
+            tags: ['hof'],
             spec: 'for each %upvar in %l %cla',
             defaults: [localize('item')],
             code: 'forEach',
@@ -2411,6 +2681,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'lists',
+            tags: ['debugging'],
             spec: 'show table %l'
         },
 
@@ -2418,6 +2689,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doMapCodeOrHeader: {
             type: 'command',
             category: 'other',
+            when: 'codeMapping',
+            tags: ['codemapping'],
             spec: 'map %cmdRing to %codeKind %code',
             defaults: [null, ['code']],
             code: 'transpile'
@@ -2425,6 +2698,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doMapValueCode: {
             type: 'command',
             category: 'other',
+            when: 'codeMapping',
+            tags: ['codemapping'],
             spec: 'map %mapValue to code %code',
             defaults: [['String'], '<#1>'],
             code: 'literal'
@@ -2432,6 +2707,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doMapListCode: {
             type: 'command',
             category: 'other',
+            when: 'codeMapping',
+            tags: ['codemapping'],
             spec: 'map %codeListPart of %codeListKind to code %code',
             code: 'delimit'
         },
@@ -2439,6 +2716,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'other',
+            when: 'codeMapping',
+            tags: ['codemapping'],
             spec: 'code of %cmdRing',
             code: 'encode'
         },
@@ -2447,6 +2726,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doPrimitive: {
             type: 'command',
             category: 'other',
+            when: 'extensions',
+            tags: ['extensions'],
             spec: '%bool primitive %prim',
             defaults: [true],
             code: 'prim'
@@ -2454,6 +2735,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doApplyExtension: {
             type: 'command',
             category: 'other',
+            when: 'extensions',
+            tags: ['extensions'],
             spec: 'extension %ext %mult%s',
             code: 'extension'
         },
@@ -2461,6 +2744,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'other',
+            when: 'extensions',
+            tags: ['extensions'],
             spec: 'extension %ext %mult%s',
             code: 'ext'
         },
@@ -2469,6 +2754,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSetVideoTransparency: {
             type: 'command',
             category: 'sensing',
+            tags: ['video'],
             spec: 'set video transparency to %n',
             defaults: [50],
             code: 'transparency'
@@ -2477,6 +2763,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['video'],
             spec: 'video %vid on %self',
             defaults: [['motion'], ['myself']],
             code: 'video'
@@ -2487,6 +2774,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'predicate',
             category: 'other',
+            tags: ['hardware'],
             spec: 'arduino connected?',
             src:`(
                 (prim t reportConnected) 
@@ -2499,6 +2787,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'other',
+            tags: ['hardware'],
             spec: 'set digital pin %n to %b',
             src:`(
                 (prim t digitalWrite pin value) 
@@ -2512,6 +2801,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'other',
+            tags: ['hardware'],
             spec: 'set pin %n to value %n',
             defaults: [null, 128],
             src:`(
@@ -2526,6 +2816,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'other',
+            tags: ['hardware'],
             spec: 'set servo %n to %s',
             defaults: [null, ['clockwise']],
             src:`(
@@ -2557,6 +2848,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'predicate',
             category: 'other',
+            tags: ['hardware'],
             spec: 'digital reading %n',
             src:`(
                 (prim t reportDigitalReading pin) 
