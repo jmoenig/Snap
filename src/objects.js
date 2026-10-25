@@ -4142,6 +4142,34 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
 
     The spec is a per-scene setting, serialized as the <palette> element
     inside <scene>, see store.js.
+
+    Named palettes
+
+    The base of a spec is the name of a palette registered with
+    SpriteMorph.prototype.definePalette(name, definition). Snap! defines
+    'standard' (the classic palette), 'empty' and 'all'; projects pick one
+    with <palette base="name">. A definition is one of
+
+        a function answering a table {category: [entries, ...]}
+        a table {category: [entries, ...]}
+        a spec {base: 'other name', ops: [...]} deriving from another
+            named palette
+
+    so a curated palette for, say, a course is a few lines of data:
+
+        SpriteMorph.prototype.definePalette('high-school', {
+            base: 'standard',
+            ops: [
+                {op: 'exclude', tags: ['metaprogramming', 'codemapping']},
+                {op: 'remove', selector: 'reportJSFunction'},
+                {op: 'add', selector: 'doWarp', category: 'control'}
+            ]
+        });
+
+    and a project only needs <palette base="high-school"/> to use it,
+    possibly followed by its own operations. Names are kept in the project
+    file as written; an unknown name falls back to 'standard' with a
+    warning in the console.
 */
 
 SpriteMorph.prototype.standardPalette = {
@@ -4272,44 +4300,96 @@ SpriteMorph.prototype.isPaletteCandidate = function (selector) {
         !Object.hasOwn(SpriteMorph.prototype.blockMigrations || {}, selector);
 };
 
-SpriteMorph.prototype.basePalettes = {
-    standard: function () {
-        return SpriteMorph.prototype.copyPaletteTable(
-            SpriteMorph.prototype.standardPalette
-        );
-    },
-    empty: function () {
-        var table = {};
-        SpriteMorph.prototype.categories.forEach(cat => table[cat] = []);
-        table.variables.push('$variables');
-        return table;
-    },
-    all: function () {
-        // the standard palette plus every other eligible primitive,
-        // appended to its own category
-        var table = SpriteMorph.prototype.copyPaletteTable(
-                SpriteMorph.prototype.standardPalette
-            ),
-            members = new Set(Object.values(table).flat()),
-            gapped = {};
-        Object.keys(SpriteMorph.prototype.blocks).forEach(sel => {
-            var cat;
-            if (members.has(sel) ||
-                !SpriteMorph.prototype.isPaletteCandidate(sel)
-            ) {
-                return;
-            }
-            cat = SpriteMorph.prototype.blocks[sel].category;
-            if (!Object.hasOwn(table, cat)) {cat = 'other'; }
-            if (!gapped[cat]) {
-                table[cat].push('-');
-                gapped[cat] = true;
-            }
-            table[cat].push(sel);
-        });
-        return table;
+SpriteMorph.prototype.basePalettes = {};
+
+SpriteMorph.prototype.definePalette = function (name, definition) {
+    // register a named palette that project files can use as their base,
+    // see the comment at the top of this section for the kinds of definition
+    var current = SpriteMorph.prototype.paletteSpec;
+    if (!isString(name) || !name.length) {
+        throw new Error('palette name must be a non-empty string');
+    }
+    if (isNil(definition) ||
+        (typeof definition !== 'function' && typeof definition !== 'object')
+    ) {
+        throw new Error('palette definition must be a function, ' +
+            'a table or a spec');
+    }
+    SpriteMorph.prototype.basePalettes[name] = definition;
+    if (current?.resolved) {
+        // whatever was resolved before may have depended on this name
+        delete current.resolved;
     }
 };
+
+SpriteMorph.prototype.paletteTable = function (name, stack = []) {
+    // answer a fresh table {category: [entries]} for a named palette,
+    // resolving derived palettes recursively
+    var basePalettes = SpriteMorph.prototype.basePalettes,
+        definition = basePalettes[name],
+        table;
+
+    if (stack.includes(name)) {
+        console.warn('palette: "' + name + '" is derived from itself' +
+            ', using "standard"');
+        return basePalettes.standard();
+    }
+    if (isNil(definition)) {
+        console.warn('palette: unknown base "' + name + '", using "standard"');
+        return basePalettes.standard();
+    }
+    if (typeof definition === 'function') {
+        return definition();
+    }
+    if (isString(definition.base)) {
+        table = {};
+        SpriteMorph.prototype.resolvePaletteSpec(
+            definition,
+            stack.concat(name)
+        ).forEach((entries, cat) => table[cat] = entries);
+        return table;
+    }
+    return SpriteMorph.prototype.copyPaletteTable(definition);
+};
+
+SpriteMorph.prototype.definePalette('standard', function () {
+    return SpriteMorph.prototype.copyPaletteTable(
+        SpriteMorph.prototype.standardPalette
+    );
+});
+
+SpriteMorph.prototype.definePalette('empty', function () {
+    var table = {};
+    SpriteMorph.prototype.categories.forEach(cat => table[cat] = []);
+    table.variables.push('$variables');
+    return table;
+});
+
+SpriteMorph.prototype.definePalette('all', function () {
+    // the standard palette plus every other eligible primitive,
+    // appended to its own category
+    var table = SpriteMorph.prototype.copyPaletteTable(
+            SpriteMorph.prototype.standardPalette
+        ),
+        members = new Set(Object.values(table).flat()),
+        gapped = {};
+    Object.keys(SpriteMorph.prototype.blocks).forEach(sel => {
+        var cat;
+        if (members.has(sel) ||
+            !SpriteMorph.prototype.isPaletteCandidate(sel)
+        ) {
+            return;
+        }
+        cat = SpriteMorph.prototype.blocks[sel].category;
+        if (!Object.hasOwn(table, cat)) {cat = 'other'; }
+        if (!gapped[cat]) {
+            table[cat].push('-');
+            gapped[cat] = true;
+        }
+        table[cat].push(sel);
+    });
+    return table;
+});
 
 SpriteMorph.prototype.paletteTagsOf = function (selector) {
     // answer the tags of a primitive, including its category and type
@@ -4338,10 +4418,10 @@ SpriteMorph.prototype.paletteFeatureEnabled = function (feature) {
     }
 };
 
-SpriteMorph.prototype.resolvePaletteSpec = function (spec) {
-    // answer a new Map category -> entries for the given spec
-    var basePalettes = SpriteMorph.prototype.basePalettes,
-        base = (basePalettes[spec.base] || basePalettes.standard)(),
+SpriteMorph.prototype.resolvePaletteSpec = function (spec, stack = []) {
+    // answer a new Map category -> entries for the given spec,
+    // "stack" holds the names of the derived palettes being resolved
+    var base = SpriteMorph.prototype.paletteTable(spec.base, stack),
         spacers = SpriteMorph.prototype.paletteSpacers,
         blocks = SpriteMorph.prototype.blocks,
         palette = new Map();
