@@ -211,6 +211,36 @@ SpriteMorph.prototype.bubbleBorder = 3;
 SpriteMorph.prototype.bubbleBorderColor = new Color(190, 190, 190);
 SpriteMorph.prototype.bubbleMaxTextWidth = 130;
 
+/*
+    The blocks dictionary describes every primitive. Besides the attributes
+    that define a block (type, category, spec, defaults, code, src ...) an
+    entry can carry metadata used when laying out the palette:
+
+        only:       SpriteMorph | StageMorph - restrict to one agent type
+        dev:        true - only shown in development mode
+        legacy:     true - a deprecated block kept for loading old
+                    projects, never added to a palette automatically
+        watcher:    true - show a watcher toggle before the block
+        inherits:   attribute name - ghost the template when the sprite
+                    inherits that attribute from its exemplar
+        when:       'inheritance' | 'codeMapping' | 'extensions' |
+                    'firstClass' | 'js' | 'compiling' - only shown while
+                    that setting is enabled (see paletteFeatureEnabled)
+        tags:       array of tag names used by palette specs to include or
+                    exclude groups of blocks. Every block implicitly also
+                    carries its category and type as tags. Tags in use:
+
+                    hof metaprogramming processes clones oop inheritance
+                    broadcast music media video microphone web io scenes
+                    strings math comparison logic hyper debugging codemapping
+                    extensions hardware javascript color effects layers
+                    scratch (the Scratch-compatible core set)
+
+    Where a block appears in the palette is NOT determined here but by the
+    palette specification, see SpriteMorph.prototype.standardPalette and
+    SpriteMorph.prototype.resolvedPalette.
+*/
+
 SpriteMorph.prototype.primitiveBlocks = function () {
     return {
         // Bootstrapping helpers
@@ -219,6 +249,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'control',
+            tags: ['hof', 'hyper'],
             spec:
                 'zip %repRing inputs: %br %s leaf-rank %n %br %s leaf-rank %n',
             code: 'zip',
@@ -249,6 +280,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'move %n steps',
             defaults: [10],
             animation: true,
@@ -265,6 +297,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'turn $clockwise %n degrees',
             defaults: [15],
             animation: true,
@@ -277,6 +310,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'turn $counterclockwise %n degrees',
             defaults: [15],
             animation: true,
@@ -289,6 +323,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'point in direction %dir',
             defaults: [90],
             animation: true,
@@ -307,6 +342,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'point towards %dst',
             defaults: [['mouse-pointer']],
             animation: true,
@@ -316,6 +352,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'go to x: %n y: %n',
             defaults: [0, 0],
             animation: true,
@@ -328,6 +365,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'go to %dst',
             defaults: [['random position']],
             animation: true,
@@ -337,6 +375,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'glide %n secs to x: %n y: %n',
             defaults: [1, 0, 0],
             animation: false,
@@ -359,6 +398,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'change x by %n',
             defaults: [10],
             animation: true,
@@ -371,6 +411,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'set x to %n',
             defaults: [0],
             animation: true,
@@ -383,6 +424,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'change y by %n',
             defaults: [10],
             animation: true,
@@ -395,6 +437,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'set y to %n',
             defaults: [0],
             animation: true,
@@ -407,6 +450,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'motion',
+            tags: ['scratch'],
             spec: 'if on edge, bounce',
             animation: true,
             code: 'bounce',
@@ -499,6 +543,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'motion',
+            watcher: true,
+            inherits: 'x position',
+            tags: ['scratch'],
             spec: 'x position',
             code: 'x'
         },
@@ -507,6 +554,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'motion',
+            watcher: true,
+            inherits: 'y position',
+            tags: ['scratch'],
             spec: 'y position',
             code: 'y'
         },
@@ -515,6 +565,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'motion',
+            watcher: true,
+            inherits: 'direction',
+            tags: ['scratch'],
             spec: 'direction',
             code: 'dir'
         },
@@ -523,6 +576,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSwitchToCostume: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'switch to costume %cst',
             animation: true,
             code: 'wear'
@@ -530,6 +584,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doWearNextCostume: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'next costume',
             animation: true,
             code: 'next',
@@ -544,6 +599,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'looks',
+            watcher: true,
+            inherits: 'costume #',
+            tags: ['scratch'],
             spec: 'costume #',
             code: 'costume#',
             src: `(
@@ -554,6 +612,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'looks',
+            tags: ['media'],
             spec: '%img of costume %cst',
             defaults: [['width'], ['current']],
             code: 'costume'
@@ -562,6 +621,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'looks',
+            tags: ['media'],
             spec: 'new costume %l width %dim height %dim',
             code: 'newCostume'
         },
@@ -569,6 +629,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'looks',
+            tags: ['media'],
             spec: 'stretch %cst x: %n y: %n %',
             defaults: [['current'], 100, 50],
             code: 'stretch'
@@ -577,6 +638,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'looks',
+            tags: ['media'],
             spec: 'skew %cst to %dir degrees %n %',
             defaults: [['current'], 0, 50],
             code: 'skew'
@@ -584,6 +646,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSayFor: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'say %s for %n secs',
             defaults: [localize('Hello!'), 2],
             code: 'sayFor',
@@ -596,6 +659,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         bubble: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'say %s',
             defaults: [localize('Hello!')],
             code: 'say'
@@ -604,6 +668,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'think %s for %n secs',
             defaults: [localize('Hmm...'), 2],
             code: 'thinkFor',
@@ -617,6 +682,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'think %s',
             defaults: [localize('Hmm...')],
             code: 'think'
@@ -624,6 +690,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         changeEffect: {
             type: 'command',
             category: 'looks',
+            tags: ['effects', 'scratch'],
             spec: 'change %eff effect by %n',
             defaults: [['ghost'], 25],
             animation: true,
@@ -632,6 +699,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         setEffect: {
             type: 'command',
             category: 'looks',
+            tags: ['effects', 'scratch'],
             spec: 'set %eff effect to %n',
             defaults: [['ghost'], 0],
             animation: true,
@@ -641,6 +709,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'looks',
+            tags: ['effects'],
             spec: '%eff effect',
             defaults: [['ghost']],
             code: 'effect'
@@ -648,6 +717,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         clearEffects: {
             type: 'command',
             category: 'looks',
+            tags: ['effects', 'scratch'],
             animation: true,
             spec: 'clear graphic effects'
         },
@@ -655,6 +725,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'change size by %n',
             defaults: [10],
             animation: true,
@@ -667,6 +738,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'set size to %n %',
             defaults: [100],
             animation: true,
@@ -677,22 +749,29 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'looks',
+            watcher: true,
+            inherits: 'size',
+            tags: ['scratch'],
             spec: 'size',
             code: 'size'
         },
         show: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'show'
         },
         hide: {
             type: 'command',
             category: 'looks',
+            tags: ['scratch'],
             spec: 'hide'
         },
         reportShown: {
             type: 'predicate',
             category: 'looks',
+            watcher: true,
+            inherits: 'shown?',
             spec: 'shown?',
             code: 'shown'
         },
@@ -700,6 +779,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['layers', 'scratch'],
             spec: 'go to %layer layer',
             defaults: [['front']],
             animation: true,
@@ -719,6 +799,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'looks',
+            tags: ['layers', 'scratch'],
             spec: 'go back %n layers',
             defaults: [1],
             animation: true,
@@ -730,6 +811,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'looks',
+            tags: ['media'],
             spec: 'save %imgsource as costume named %s',
             defaults: [['pen trails'], localize('screenshot')]
         },
@@ -738,18 +820,21 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'looks',
+            tags: ['media'],
             spec: 'wardrobe'
         },
         alert: {
             dev: true,
             type: 'command',
             category: 'looks',
+            tags: ['debugging'],
             spec: 'alert %mult%s'
         },
         log: {
             dev: true,
             type: 'command',
             category: 'looks',
+            tags: ['debugging'],
             spec: 'console log %mult%s'
         },
 
@@ -757,12 +842,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         playSound: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'play sound %snd',
             code: 'play'
         },
         doPlaySoundUntilDone: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'play sound %snd until done',
             code: 'playAll',
             src: `(
@@ -782,6 +869,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doPlaySoundAtRate: {
             type: 'command',
             category: 'sound',
+            tags: ['media'],
             spec: 'play sound %snd at %rate Hz',
             defaults: ['', 44100],
             code: 'playAt',
@@ -792,6 +880,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doStopAllSounds: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'stop all sounds',
             code: 'stopSounds'
         },
@@ -799,6 +888,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sound',
+            tags: ['media'],
             spec: '%aa of sound %snd',
             defaults: [['duration']],
             code: 'sound'
@@ -807,6 +897,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'sound',
             category: 'sound',
+            tags: ['media'],
             spec: 'new sound %l rate %rate Hz',
             defaults: [null, 44100],
             code: 'newSound'
@@ -814,6 +905,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doRest: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'rest for %n beats',
             defaults: [0.2],
             code: 'rest',
@@ -824,6 +916,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doPlayNote: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'play note %note for %n beats',
             defaults: [60, 0.5],
             code: 'note'
@@ -832,12 +925,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'sound',
+            tags: ['music'],
             spec: 'play %n Hz for %n secs',
             defaults: [440, 2]
         },
         doSetInstrument: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'set instrument to %inst',
             defaults: [1],
             code: 'instrument'
@@ -845,6 +940,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doChangeTempo: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'change tempo by %n',
             defaults: [20],
             code: '+tempo',
@@ -855,6 +951,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSetTempo: {
             type: 'command',
             category: 'sound',
+            tags: ['music', 'scratch'],
             spec: 'set tempo to %n bpm',
             defaults: [60],
             code: 'tempo='
@@ -863,12 +960,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sound',
+            watcher: true,
+            tags: ['music', 'scratch'],
             spec: 'tempo',
             code: 'tempo'
         },
         changeVolume: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'change volume by %n',
             defaults: [10],
             code: '+vol',
@@ -879,6 +979,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         setVolume: {
             type: 'command',
             category: 'sound',
+            tags: ['scratch'],
             spec: 'set volume to %n %',
             defaults: [100],
             code: 'vol='
@@ -887,6 +988,9 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sound',
+            watcher: true,
+            inherits: 'volume',
+            tags: ['scratch'],
             spec: 'volume',
             code: 'vol'
         },
@@ -911,12 +1015,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sound',
+            watcher: true,
+            inherits: 'balance',
             spec: 'balance',
             code: 'pan'
         },
         playFreq: {
             type: 'command',
             category: 'sound',
+            tags: ['music'],
             spec: 'play frequency %n Hz',
             defaults: [440],
             code: 'freq'
@@ -924,6 +1031,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         stopFreq: {
             type: 'command',
             category: 'sound',
+            tags: ['music'],
             spec: 'stop frequency'
         },
 
@@ -933,6 +1041,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'sound',
+            tags: ['media'],
             spec: 'jukebox'
         },
 
@@ -940,6 +1049,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         clear: {
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'clear',
             animation: true
         },
@@ -947,18 +1057,22 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'pen down'
         },
         up: {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'pen up'
         },
         getPenDown: {
             only: SpriteMorph,
             type: 'predicate',
             category: 'pen',
+            watcher: true,
+            inherits: 'pen down?',
             spec: 'pen down?',
             code: 'down?'
         },
@@ -966,6 +1080,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color', 'scratch'],
             spec: 'set pen color to %clr',
             src: `(
                 (prim t setColor color)
@@ -975,6 +1090,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color', 'scratch'],
             spec: 'set pen %clrdim to %n',
             defaults: [['hue'], 50],
             code: 'pen='
@@ -983,11 +1099,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color', 'scratch'],
             spec: 'change pen %clrdim by %n',
             defaults: [['hue'], 10],
             code: '+pen'
         },
         getPenAttribute: {
+            only: SpriteMorph,
             type: 'reporter',
             reports: 'number',
             category: 'pen',
@@ -999,6 +1117,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: StageMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color'],
             spec: 'set background color to %clr',
             animation: true
         },
@@ -1006,6 +1125,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: StageMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color'],
             spec: 'set background %clrdim to %n',
             defaults: [['hue'], 50],
             animation: true
@@ -1014,6 +1134,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: StageMorph,
             type: 'command',
             category: 'pen',
+            tags: ['color'],
             spec: 'change background %clrdim by %n',
             defaults: [['hue'], 10],
             animation: true
@@ -1022,6 +1143,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'change pen size by %n',
             defaults: [1],
             animation: true,
@@ -1034,6 +1156,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'set pen size to %n',
             defaults: [1],
             animation: true,
@@ -1043,6 +1166,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['scratch'],
             spec: 'stamp',
             animation: true,
             code: 'stamp'
@@ -1056,7 +1180,6 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             code: 'fill'
         },
         write: {
-            only: SpriteMorph,
             type: 'command',
             category: 'pen',
             spec: 'write %txt size %n',
@@ -1067,6 +1190,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'pen',
+            tags: ['media'],
             spec: 'pen trails',
             code: 'trails'
         },
@@ -1074,12 +1198,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'costume',
             category: 'pen',
+            tags: ['media'],
             spec: 'pen vectors',
             code: 'svgTrails'
         },
         doPasteOn: {
             type: 'command',
             category: 'pen',
+            tags: ['media'],
             spec: 'paste on %spr',
             code: 'paste',
             animation: true
@@ -1087,6 +1213,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doCutFrom: {
             type: 'command',
             category: 'pen',
+            tags: ['media'],
             spec: 'cut from %spr',
             code: 'cut',
             animation: true
@@ -1095,6 +1222,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'command',
             category: 'pen',
+            tags: ['media'],
             spec: '%msk on %spr',
             defaults: [['paint'], ['Stage']],
             code: 'drawOn'
@@ -1103,6 +1231,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'color',
             category: 'pen',
+            tags: ['color'],
             spec: 'color %clr',
             code: 'colorFrom'
         },
@@ -1110,6 +1239,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'pen',
+            tags: ['color'],
             spec: '%color of color %clr',
             defaults: [['hue']],
             code: 'color'
@@ -1118,6 +1248,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'color',
             category: 'pen',
+            tags: ['color'],
             spec: 'new color %hsbt',
             code: 'newColor'
         },
@@ -1126,27 +1257,32 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveGo: {
             type: 'hat',
             category: 'control',
+            tags: ['scratch'],
             spec: 'when $greenflag clicked'
         },
         receiveKey: {
             type: 'hat',
             category: 'control',
+            tags: ['io', 'scratch'],
             spec: 'when %keyHat key pressed %keyName',
             defaults: [['space']]
         },
         receiveInteraction: {
             type: 'hat',
             category: 'control',
+            tags: ['io', 'scratch'],
             spec: 'when I am %interaction',
             defaults: [['clicked']]
         },
         receiveMessage: {
             type: 'hat',
             category: 'control',
+            tags: ['broadcast', 'scratch'],
             spec: 'when I receive %msgHat %message',
             defaults: [['']] // trigger the "message" expansion to refresh
         },
         receiveCondition: {
+            legacy: true,
             type: 'hat',
             category: 'control',
             spec: 'when %b'
@@ -1161,17 +1297,21 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'control',
+            watcher: true,
+            tags: ['broadcast'],
             spec: 'message'
         },
         doBroadcast: {
             type: 'command',
             category: 'control',
+            tags: ['broadcast', 'scratch'],
             spec: 'broadcast %msg %receive',
             code: 'send'
         },
         doBroadcastAndWait: {
             type: 'command',
             category: 'control',
+            tags: ['broadcast', 'scratch'],
             spec: 'broadcast %msg %receive and wait',
             code: 'sendAll'
         },
@@ -1179,12 +1319,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['broadcast'],
             spec: 'request %msg %survey',
             code: 'request'
         },
         doWait: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'wait %n secs',
             defaults: [1],
             code: 'wait',
@@ -1199,6 +1341,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doWaitUntil: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'wait until %boolUE',
             code: 'waitUntil',
             src: `(
@@ -1209,6 +1352,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doForever: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'forever %loop',
             code: 'forever',
             src: `(
@@ -1219,6 +1363,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doRepeat: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'repeat %n %loop',
             defaults: [10],
             code: 'repeat',
@@ -1234,6 +1379,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doUntil: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'repeat until %boolUE %loop',
             code: 'until',
             src: `(
@@ -1267,6 +1413,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doIf: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'if %b %c %elseif',
             code: 'if',
             src: `(
@@ -1285,6 +1432,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doIfElse: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'if %b %c else %c',
             code: 'ifElse',
             src: `(
@@ -1308,6 +1456,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doStopThis: {
             type: 'command',
             category: 'control',
+            tags: ['scratch'],
             spec: 'stop %stopChoices',
             defaults: [['all']],
             code: 'stop'
@@ -1321,6 +1470,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         fork: {
             type: 'command',
             category: 'control',
+            tags: ['processes'],
             spec: 'launch %cmdRing %inputs',
             src: `(
                 (prim t fork script inputs)
@@ -1364,6 +1514,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doTellTo: {
             type: 'command',
             category: 'control',
+            tags: ['oop'],
             // spec: 'tell %spr to %cl' // I liked this version better, -Jens
             spec: 'tell %spr to %cmdRing %inputs',
             code: 'tell',
@@ -1375,6 +1526,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['oop'],
             spec: 'ask %spr for %repRing %inputs',
             code: 'ask',
             src: `(
@@ -1385,13 +1537,16 @@ SpriteMorph.prototype.primitiveBlocks = function () {
 
         // Cloning
         receiveOnClone: {
+            only: SpriteMorph,
             type: 'hat',
             category: 'control',
+            tags: ['clones', 'scratch'],
             spec: 'when I start as a clone'
         },
         createClone: {
             type: 'command',
             category: 'control',
+            tags: ['clones', 'scratch'],
             spec: 'create a clone of %cln',
             defaults: [['myself']],
             animation: true,
@@ -1404,13 +1559,16 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'sprite',
             category: 'control',
+            tags: ['clones'],
             spec: 'a new clone of %clntrtl',
             defaults: [['myself']],
             animation: true
         },
         removeClone: {
+            only: SpriteMorph,
             type: 'command',
             category: 'control',
+            tags: ['clones', 'scratch'],
             spec: 'delete this clone',
             code: 'removeClone'
         },
@@ -1419,6 +1577,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveUserEdit: {
             type: 'hat',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'when %edit is edited %message',
             defaults: [['anything']]
         },
@@ -1427,6 +1586,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doDefineBlock: {
             type: 'command',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'define %upvar %s %repRing',
             defaults: [['block']],
             code: 'define'
@@ -1434,6 +1594,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSetBlockAttribute: {
             type: 'command',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'set %byob of block %repRing to %s',
             defaults: [['label']],
             code: 'setBlock'
@@ -1441,6 +1602,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doDeleteBlock: {
             type: 'command',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'delete block %repRing',
             code: 'deleteBlock'
         },
@@ -1448,6 +1610,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: '%block of block %repRing',
             defaults: [['definition']],
             code: 'block'
@@ -1456,6 +1619,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'this %env',
             defaults: [['script']],
             code: 'this'
@@ -1465,12 +1629,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         receiveSlotEvent: {
             type: 'hat',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'when slot %inputSlot signals %slotEvent',
             defaults: ['', ['menu']]
         },
         doSetSlot: {
             type: 'command',
             category: 'control',
+            tags: ['metaprogramming'],
             spec: 'set slot %inputSlot to %s'
         },
 
@@ -1478,6 +1644,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doPauseAll: {
             type: 'command',
             category: 'control',
+            tags: ['processes', 'debugging'],
             spec: 'pause all $pause',
             code: 'pause'
         },
@@ -1486,6 +1653,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSwitchToScene: {
             type: 'command',
             category: 'control',
+            tags: ['scenes'],
             spec: 'switch to scene %scn %send',
             defaults: [['next']],
             code: 'scene'
@@ -1496,6 +1664,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['hof'],
             spec: 'pipe %s $arrowRight %mult%repRing',
             code: 'pipe',
             src: `(
@@ -1511,6 +1680,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'process',
             category: 'control',
+            tags: ['processes'],
             spec: 'new process %cmdRing %inputs',
             code: 'process'
         },
@@ -1518,6 +1688,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'control',
+            tags: ['processes'],
             spec: '%procAttribs of process %p',
             defaults: [['script']],
             code: 'getProcess'
@@ -1525,6 +1696,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportProcessState: {
             type: 'predicate',
             category: 'control',
+            tags: ['processes'],
             spec: 'is process %p %procStates ?',
             defaults: [null, ['running']],
             code: 'isProcess'
@@ -1532,6 +1704,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doChangeProcess: {
             type: 'command',
             category: 'control',
+            tags: ['processes'],
             spec: '%procActions process %p',
             defaults: [['pause']],
             code: 'changeProcess'
@@ -1542,6 +1715,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
+            tags: ['scratch'],
             spec: 'touching %col ?',
             defaults: [['mouse-pointer']],
             code: 'touch'
@@ -1550,6 +1724,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
+            tags: ['color', 'scratch'],
             spec: 'touching %clr ?',
             code: 'touchColor'
         },
@@ -1557,6 +1732,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             only: SpriteMorph,
             type: 'predicate',
             category: 'sensing',
+            tags: ['color', 'scratch'],
             spec: 'color %clr is touching %clr ?',
             defaults: [null, new Color(255, 230, 0)],
             code: 'colorTouch'
@@ -1573,6 +1749,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['debugging'],
             spec: 'stack size'
         },
         reportFrameCount: {
@@ -1580,6 +1757,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['debugging'],
             spec: 'frames'
         },
         reportYieldCount: {
@@ -1587,6 +1765,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['debugging'],
             spec: 'yields'
         },
         reportThreadCount: {
@@ -1594,12 +1773,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            watcher: true,
+            tags: ['processes', 'debugging'],
             spec: 'processes'
         },
         doAsk: {
             type: 'command',
             reports: 'any',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'ask %s and wait',
             defaults: [localize('what\'s your name?')]
         },
@@ -1608,12 +1790,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'sensing',
+            tags: ['io'],
             spec: 'answer'
         },
         getLastAnswer: {
             type: 'reporter',
             reports: 'any',
             category: 'sensing',
+            watcher: true,
+            tags: ['io', 'scratch'],
             spec: 'answer',
             code: 'answer'
         },
@@ -1621,6 +1806,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'sensing',
+            tags: ['io'],
             spec: 'mouse position',
             code: 'mouse',
             src: `(
@@ -1631,6 +1817,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            watcher: true,
+            tags: ['io', 'scratch'],
             spec: 'mouse x',
             code: 'mouseX'
         },
@@ -1638,18 +1826,22 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            watcher: true,
+            tags: ['io', 'scratch'],
             spec: 'mouse y',
             code: 'mouseY'
         },
         reportMouseDown: {
             type: 'predicate',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'mouse down?',
             code: 'mouseDown'
         },
         reportKeyPressed: {
             type: 'predicate',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'key %key pressed?',
             defaults: [['space']],
             code: 'key'
@@ -1659,6 +1851,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['scratch'],
             spec: '%rel to %dst',
             defaults: [['distance'], ['mouse-pointer']],
             code: 'relation'
@@ -1666,6 +1859,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doResetTimer: {
             type: 'command',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'reset timer',
             code: 'resetTimer'
         },
@@ -1673,12 +1867,15 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'reporter',
             category: 'sensing',
+            tags: ['io'],
             spec: 'timer'
         },
         getTimer: {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            watcher: true,
+            tags: ['io', 'scratch'],
             spec: 'timer',
             code: 'timer'
         },
@@ -1686,6 +1883,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'sensing',
+            tags: ['oop', 'scratch'],
             spec: '%att of %spr',
             defaults: [['costume #']],
             code: 'attribute'
@@ -1694,6 +1892,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'agent',
             category: 'sensing',
+            tags: ['oop'],
             spec: 'object %self',
             defaults: [['myself']],
             code: 'object',
@@ -1709,6 +1908,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'sensing',
+            tags: ['web'],
             spec: 'url %txt',
             defaults: ['snap.berkeley.edu'],
             code: 'url'
@@ -1731,6 +1931,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['io', 'scratch'],
             spec: 'current %dates',
             defaults: [['date']],
             code: 'current'
@@ -1739,6 +1940,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'sensing',
+            when: 'firstClass',
+            tags: ['oop'],
             spec: 'my %get',
             defaults: [['neighbors']],
             code: 'my'
@@ -1747,6 +1950,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['microphone'],
             spec: 'microphone %audio',
             defaults: [['volume']],
             code: 'audio'
@@ -1778,6 +1982,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%sum',
             alias: '+',
             code: '+'
@@ -1786,6 +1991,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%n \u2212 %n',
             alias: '-',
             code: '-'
@@ -1794,6 +2000,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%product',
             alias: '*',
             code: '*'
@@ -1802,6 +2009,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%n / %n', // '%n \u00F7 %n'
             code: '/'
         },
@@ -1809,6 +2017,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: 'round %n',
             code: 'round'
         },
@@ -1816,14 +2025,205 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%fun of %n',
             defaults: [['sqrt'], 10],
             code: 'fn'
+        },
+        reportAbs: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'abs %n',
+            defaults: [10],
+            code: 'abs'
+        },
+        reportNeg: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'neg %n',
+            defaults: [10],
+            code: 'neg'
+        },
+        reportSign: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'sign %n',
+            defaults: [10],
+            code: 'sign'
+        },
+        reportCeiling: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'ceiling %n',
+            defaults: [10],
+            code: 'ceiling'
+        },
+        reportTrunc: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'truncate %n',
+            defaults: [10],
+            code: 'trunc'
+        },
+        reportFloor: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'floor %n',
+            defaults: [10],
+            code: 'floor'
+        },
+        reportSqrt: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'sqrt %n',
+            defaults: [10],
+            code: 'sqrt'
+        },
+        reportSin: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'sin %n',
+            defaults: [10],
+            code: 'sin'
+        },
+        reportCos: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'cos %n',
+            defaults: [10],
+            code: 'cos'
+        },
+        reportTan: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'tan %n',
+            defaults: [10],
+            code: 'tan'
+        },
+        reportAsin: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'asin %n',
+            defaults: [10],
+            code: 'asin'
+        },
+        reportAcos: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'acos %n',
+            defaults: [10],
+            code: 'acos'
+        },
+        reportAtan: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'atan %n',
+            defaults: [10],
+            code: 'atan'
+        },
+        reportLn: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'ln %n',
+            defaults: [10],
+            code: 'ln'
+        },
+        reportLog: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'log %n',
+            defaults: [10],
+            code: 'log'
+        },
+        reportLg: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'lg %n',
+            defaults: [10],
+            code: 'lg'
+        },
+        reportExp: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'e^ %n',
+            defaults: [10],
+            code: 'exp'
+        },
+        reportPow10: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: '10^ %n',
+            defaults: [10],
+            code: 'pow10'
+        },
+        reportPow2: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: '2^ %n',
+            defaults: [10],
+            code: 'pow2'
+        },
+        reportSigmoid: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'σ %n',
+            defaults: [10],
+            code: 'sigmoid'
+        },
+        reportIdentity: {
+            type: 'reporter',
+            reports: 'number',
+            category: 'operators',
+            tags: ['math'],
+            spec: 'id %n',
+            defaults: [10],
+            code: 'id'
         },
         reportPower: {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: '%n ^ %n',
             code: '^'
         },
@@ -1831,6 +2231,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: '%n mod %n',
             code: 'mod'
         },
@@ -1838,6 +2239,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'atan2 %n ÷ %n',
             code: 'atan2'
         },
@@ -1845,6 +2247,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'operators',
+            tags: ['math'],
             spec: '%min',
             alias: 'min',
             code: 'min'
@@ -1853,6 +2256,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'operators',
+            tags: ['math'],
             spec: '%max',
             alias: 'max',
             code: 'max'
@@ -1861,6 +2265,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math', 'scratch'],
             spec: 'pick random %ns to %ns',
             defaults: [1, 10],
             code: 'rand'
@@ -1868,42 +2273,49 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportVariadicEquals: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison', 'scratch'],
             spec: '%all=',
             code: '='
         },
         reportVariadicNotEquals: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison'],
             spec: '%all!=',
             code: '!='
         },
         reportVariadicLessThan: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison', 'scratch'],
             spec: '%all<',
             code: '<'
         },
         reportVariadicLessThanOrEquals: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison'],
             spec: '%all<=',
             code: '<='
         },
         reportVariadicGreaterThan: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison', 'scratch'],
             spec: '%all>',
             code: '>'
         },
         reportVariadicGreaterThanOrEquals: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison'],
             spec: '%all>=',
             code: '>='
         },
         reportVariadicAnd: {
             type: 'predicate',
             category: 'operators',
+            tags: ['logic', 'scratch'],
             spec: '%all',
             alias: '&',
             code: 'and'
@@ -1911,6 +2323,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportVariadicOr: {
             type: 'predicate',
             category: 'operators',
+            tags: ['logic', 'scratch'],
             spec: '%any',
             alias: '|',
             code: 'or'
@@ -1918,6 +2331,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportNot: {
             type: 'predicate',
             category: 'operators',
+            tags: ['logic', 'scratch'],
             spec: 'not %b',
             code: 'not',
             src: `(
@@ -1927,6 +2341,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportBoolean: {
             type: 'predicate',
             category: 'operators',
+            tags: ['logic'],
             spec: '%bool',
             defaults: [true],
             alias: 'true boolean',
@@ -1938,6 +2353,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportFalse: { // special case for keyboard entry and search
             type: 'predicate',
             category: 'operators',
+            tags: ['logic'],
             spec: '%bool',
             defaults: [false],
             alias: 'false boolean'
@@ -1946,6 +2362,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings', 'scratch'],
             spec: 'join %words',
             defaults: [localize('hello') + ' ', localize('world')],
             code: 'join'
@@ -1954,6 +2371,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings', 'scratch'],
             spec: 'letter %ix of %txt',
             defaults: [1, localize('world')],
             code: 'letter',
@@ -1968,6 +2386,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['strings', 'scratch'],
             spec: 'length of %s',
             defaults: [localize('world')]
         },
@@ -1975,6 +2394,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings'],
             spec: '%ta of text %txt',
             defaults: [['length'], localize('world')],
             code: 'text'
@@ -1983,6 +2403,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['strings'],
             spec: 'unicode of %txt',
             defaults: ['a'],
             code: 'unicode'
@@ -1991,6 +2412,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings'],
             spec: 'unicode %n as letter',
             defaults: [65],
             code: 'toLetter'
@@ -2005,6 +2427,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportVariadicIsIdentical: {
             type: 'predicate',
             category: 'operators',
+            tags: ['comparison'],
             spec: 'is %all== ?',
             code: 'same'
         },
@@ -2012,6 +2435,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'operators',
+            tags: ['strings'],
             spec: 'split %s by %delim',
             defaults: [localize('hello') + ' ' + localize('world'), " "],
             code: 'split'
@@ -2020,6 +2444,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'reporter',
             category: 'operators',
+            when: 'js',
+            tags: ['debugging', 'javascript'],
             spec: 'JavaScript function ( %mult%s ) { %code }',
             code: 'js'
         },
@@ -2028,6 +2454,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['debugging'],
             spec: 'type of %s',
             defaults: [5]
         },
@@ -2036,6 +2463,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'operators',
+            tags: ['strings'],
             spec: '%txtfun of %s',
             defaults: [['encode URI'], "Abelson & Sussman"]
         },
@@ -2044,6 +2472,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'reporter',
             category: 'operators',
+            when: 'compiling',
+            tags: ['metaprogramming', 'javascript'],
             spec: 'compile %repRing for %n args',
             defaults: [null, 0]
         },
@@ -2052,6 +2482,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSetVar: {
             type: 'command',
             category: 'variables',
+            tags: ['scratch'],
             spec: 'set %var to %s',
             defaults: [null, 0],
             code: 'set'
@@ -2059,6 +2490,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doChangeVar: {
             type: 'command',
             category: 'variables',
+            tags: ['scratch'],
             spec: 'change %hyperVar by %n',
             defaults: [null, 1],
             code: '+='
@@ -2066,12 +2498,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doShowVar: {
             type: 'command',
             category: 'variables',
+            tags: ['scratch'],
             spec: 'show variable %var',
             code: 'showVar'
         },
         doHideVar: {
             type: 'command',
             category: 'variables',
+            tags: ['scratch'],
             spec: 'hide variable %var',
             code: 'hideVar'
         },
@@ -2084,8 +2518,11 @@ SpriteMorph.prototype.primitiveBlocks = function () {
 
         // inheritance
         doDeleteAttr: {
+            only: SpriteMorph,
             type: 'command',
             category: 'variables',
+            when: 'inheritance',
+            tags: ['oop', 'inheritance'],
             spec: 'inherit %shd',
             code: 'inherit'
         },
@@ -2095,6 +2532,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'list %exp',
             code: 'list',
             src: `(
@@ -2112,6 +2550,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'item %idx of %l',
             defaults: [1],
             code: 'item'
@@ -2133,6 +2572,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['scratch'],
             spec: '%la of %l',
             defaults: [['length']],
             code: 'data'
@@ -2140,6 +2580,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportListContainsItem: {
             type: 'predicate',
             category: 'lists',
+            tags: ['scratch'],
             spec: '%l contains %s',
             defaults: [null, localize('thing')],
             code: 'contains',
@@ -2163,6 +2604,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'index of %s in %l',
             defaults: [localize('thing')],
             code: '#',
@@ -2176,6 +2618,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doAddToList: {
             type: 'command',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'add %s to %l',
             defaults: [localize('thing')],
             code: 'add'
@@ -2183,6 +2626,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doDeleteFromList: {
             type: 'command',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'delete %ida of %l',
             defaults: [1],
             code: 'del'
@@ -2190,6 +2634,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doInsertInList: {
             type: 'command',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'insert %s at %idx of %l',
             defaults: [localize('thing'), 1],
             code: 'ins'
@@ -2197,6 +2642,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doReplaceInList: {
             type: 'command',
             category: 'lists',
+            tags: ['scratch'],
             spec: 'replace item %idx of %l with %s',
             defaults: [1, null, localize('thing')],
             code: 'put'
@@ -2207,6 +2653,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['math'],
             spec: 'numbers from %n to %n',
             defaults: [1, 10],
             code: 'range',
@@ -2225,6 +2672,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportListCombination: { // currently not in use
             type: 'reporter',
             category: 'lists',
+            tags: ['hof', 'hyper'],
             spec: '%mlfunc %lists',
             defaults: [['append']]
         },
@@ -2248,6 +2696,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hyper'],
             spec: 'combinations %lists',
             code: 'combinations',
             src: `(
@@ -2263,12 +2712,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportTranspose: { // deprecated
             type: 'reporter',
             category: 'lists',
+            tags: ['hyper'],
             spec: 'transpose %l'
         },
         reportReshape: {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hyper'],
             spec: 'reshape %s to %nums',
             defaults: [null, [4, 3]],
             code: 'reshape'
@@ -2277,6 +2728,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         reportSlice: { // currently not in use
             type: 'reporter',
             category: 'lists',
+            tags: ['hyper'],
             spec: 'slice %l by %nums',
             defaults: [null, [2, -1]]
         },
@@ -2287,6 +2739,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hof'],
             spec: 'map %repRing over %l',
             code: 'map',
             src: `(
@@ -2308,12 +2761,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hof'],
             spec: '$blitz map %repRing over %l'
         },
         reportKeep: {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hof'],
             spec: 'keep items %predRing from %l',
             code: 'keep',
             src: `(
@@ -2335,12 +2790,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'list',
             category: 'lists',
+            tags: ['hof'],
             spec: '$blitz keep items %predRing from %l'
         },
         reportFindFirst: {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hof'],
             spec: 'find first item %predRing in %l',
             code: 'find',
             src: `(
@@ -2361,12 +2818,14 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hof'],
             spec: '$blitz find first item %predRing in %l'
         },
         reportCombine: {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hof'],
             spec: 'combine %l using %repRing',
             code: 'combine',
             src: `(
@@ -2388,11 +2847,13 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'lists',
+            tags: ['hof'],
             spec: '$blitz combine %l using %repRing'
         },
         doForEach: {
             type: 'command',
             category: 'lists',
+            tags: ['hof'],
             spec: 'for each %upvar in %l %cla',
             defaults: [localize('item')],
             code: 'forEach',
@@ -2411,6 +2872,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'lists',
+            tags: ['debugging'],
             spec: 'show table %l'
         },
 
@@ -2418,6 +2880,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doMapCodeOrHeader: {
             type: 'command',
             category: 'other',
+            when: 'codeMapping',
+            tags: ['codemapping'],
             spec: 'map %cmdRing to %codeKind %code',
             defaults: [null, ['code']],
             code: 'transpile'
@@ -2425,6 +2889,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doMapValueCode: {
             type: 'command',
             category: 'other',
+            when: 'codeMapping',
+            tags: ['codemapping'],
             spec: 'map %mapValue to code %code',
             defaults: [['String'], '<#1>'],
             code: 'literal'
@@ -2432,6 +2898,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doMapListCode: {
             type: 'command',
             category: 'other',
+            when: 'codeMapping',
+            tags: ['codemapping'],
             spec: 'map %codeListPart of %codeListKind to code %code',
             code: 'delimit'
         },
@@ -2439,6 +2907,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'text',
             category: 'other',
+            when: 'codeMapping',
+            tags: ['codemapping'],
             spec: 'code of %cmdRing',
             code: 'encode'
         },
@@ -2447,6 +2917,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doPrimitive: {
             type: 'command',
             category: 'other',
+            when: 'extensions',
+            tags: ['extensions'],
             spec: '%bool primitive %prim',
             defaults: [true],
             code: 'prim'
@@ -2454,6 +2926,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doApplyExtension: {
             type: 'command',
             category: 'other',
+            when: 'extensions',
+            tags: ['extensions'],
             spec: 'extension %ext %mult%s',
             code: 'extension'
         },
@@ -2461,6 +2935,8 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'any',
             category: 'other',
+            when: 'extensions',
+            tags: ['extensions'],
             spec: 'extension %ext %mult%s',
             code: 'ext'
         },
@@ -2469,6 +2945,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
         doSetVideoTransparency: {
             type: 'command',
             category: 'sensing',
+            tags: ['video'],
             spec: 'set video transparency to %n',
             defaults: [50],
             code: 'transparency'
@@ -2477,6 +2954,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'sensing',
+            tags: ['video'],
             spec: 'video %vid on %self',
             defaults: [['motion'], ['myself']],
             code: 'video'
@@ -2487,6 +2965,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'predicate',
             category: 'other',
+            tags: ['hardware'],
             spec: 'arduino connected?',
             src:`(
                 (prim t reportConnected) 
@@ -2499,6 +2978,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'other',
+            tags: ['hardware'],
             spec: 'set digital pin %n to %b',
             src:`(
                 (prim t digitalWrite pin value) 
@@ -2512,6 +2992,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'other',
+            tags: ['hardware'],
             spec: 'set pin %n to value %n',
             defaults: [null, 128],
             src:`(
@@ -2526,6 +3007,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'command',
             category: 'other',
+            tags: ['hardware'],
             spec: 'set servo %n to %s',
             defaults: [null, ['clockwise']],
             src:`(
@@ -2557,6 +3039,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             dev: true,
             type: 'predicate',
             category: 'other',
+            tags: ['hardware'],
             spec: 'digital reading %n',
             src:`(
                 (prim t reportDigitalReading pin) 
@@ -3200,6 +3683,111 @@ SpriteMorph.prototype.blockAlternatives = {
     reportVariadicMax: ['reportVariadicMin', 'reportVariadicSum',
         'reportDifference', 'reportVariadicProduct', 'reportQuotient',
         'reportPower', 'reportModulus', 'reportAtan2'],
+    reportAbs: ['reportNeg', 'reportSign', 'reportCeiling', 'reportTrunc',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportNeg: ['reportAbs', 'reportSign', 'reportCeiling', 'reportTrunc',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportSign: ['reportAbs', 'reportNeg', 'reportCeiling', 'reportTrunc',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportCeiling: ['reportAbs', 'reportNeg', 'reportSign', 'reportTrunc',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportTrunc: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportFloor', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportFloor: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportSqrt', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportSqrt: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSin', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportSin: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportCos', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportCos: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportTan',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportTan: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportAsin', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportAsin: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAcos', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportAcos: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAtan', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportAtan: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportLn', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportLn: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLog',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportLog: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLg', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportLg: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportExp', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportExp: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportPow10', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportPow10: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportExp', 'reportPow2', 'reportSigmoid',
+        'reportIdentity'],
+    reportPow2: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportExp', 'reportPow10', 'reportSigmoid',
+        'reportIdentity'],
+    reportSigmoid: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportExp', 'reportPow10', 'reportPow2',
+        'reportIdentity'],
+    reportIdentity: ['reportAbs', 'reportNeg', 'reportSign', 'reportCeiling',
+        'reportTrunc', 'reportFloor', 'reportSqrt', 'reportSin', 'reportCos',
+        'reportTan', 'reportAsin', 'reportAcos', 'reportAtan', 'reportLn',
+        'reportLog', 'reportLg', 'reportExp', 'reportPow10', 'reportPow2',
+        'reportSigmoid'],
     reportVariadicLessThan: ['reportVariadicLessThanOrEquals',
         'reportVariadicEquals', 'reportVariadicIsIdentical',
         'reportVariadicNotEquals', 'reportVariadicGreaterThan',
@@ -3813,19 +4401,573 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
 
 // SpriteMorph block templates
 
+// SpriteMorph palette specification
+
+/*
+    The palette is described by data rather than code. A palette
+    specification ("spec") names a base palette and lists operations that
+    modify it:
+
+        {base: 'standard' | 'empty' | 'all', ops: [...]}
+
+    operations, applied in order:
+
+        {op: 'exclude', tags: [...]}
+            remove every block carrying any of the tags
+        {op: 'include', tags: [...]}
+            add every block carrying any of the tags that isn't already in
+            the palette, at the end of the block's own category
+        {op: 'remove', selector: 'sel'}
+        {op: 'add', selector: 'sel', category: 'cat', before: 'sel'}
+        {op: 'add', selector: 'sel', category: 'cat', after: 'sel'}
+            insert (or move) a block; without an anchor it is appended
+        {op: 'section', category: 'cat', entries: [...]}
+            replace a category's entire contents
+
+    The result ("resolved palette") is a Map from category name to an array
+    of entries, where an entry is a primitive's selector, one of the spacers
+    '-' (small), '=' (large), '#' (new row), or '$variables', the dynamic
+    section holding the variable buttons and variable blocks.
+
+    A block is shown at most once. Blocks marked "only" for one agent type,
+    development mode blocks and blocks gated by a "when" feature are
+    filtered when the palette is rendered, not when the spec is resolved,
+    so one spec serves sprites and the stage alike.
+
+    The spec is a per-scene setting, serialized as the <palette> element
+    inside <scene>, see store.js.
+
+    Named palettes
+
+    The base of a spec is the name of a palette registered with
+    SpriteMorph.prototype.definePalette(name, definition). Snap! defines
+    'standard' (the classic palette), 'empty' and 'all'; projects pick one
+    with <palette base="name">. A definition is one of
+
+        a function answering a table {category: [entries, ...]}
+        a table {category: [entries, ...]}
+        a spec {base: 'other name', ops: [...]} deriving from another
+            named palette
+
+    so a curated palette for, say, a course is a few lines of data:
+
+        SpriteMorph.prototype.definePalette('high-school', {
+            base: 'standard',
+            ops: [
+                {op: 'exclude', tags: ['metaprogramming', 'codemapping']},
+                {op: 'remove', selector: 'reportJSFunction'},
+                {op: 'add', selector: 'doWarp', category: 'control'}
+            ]
+        });
+
+    and a project only needs <palette base="high-school"/> to use it,
+    possibly followed by its own operations. Names are kept in the project
+    file as written; an unknown name falls back to 'standard' with a
+    warning in the console.
+
+    SpriteMorph.prototype.defaultPaletteBase names the palette used by new
+    projects and by project files that don't specify one. It is 'standard'
+    unless the page embedding Snap! sets the "palette" IDE configuration
+    option, see gui.js. A project file only records its base when it
+    differs from this default.
+*/
+
+SpriteMorph.prototype.standardPalette = {
+    motion: [
+        'forward', 'turn', 'turnLeft', '-', 'setHeading', 'doFaceTowards', '-',
+        'gotoXY', 'doGotoObject', 'doGlide', '-', 'changeXPosition',
+        'setXPosition', 'changeYPosition', 'setYPosition', '-',
+        'bounceOffEdge', '-', 'getPosition', 'xPosition', 'yPosition',
+        'direction'
+    ],
+    looks: [
+        'doSwitchToCostume', 'doWearNextCostume', 'getCostumeIdx', '-',
+        'doSayFor', 'bubble', 'doThinkFor', 'doThink', '-',
+        'reportGetImageAttribute', 'reportNewCostumeStretched',
+        'reportNewCostumeSkewed', 'reportNewCostume', '-', 'changeEffect',
+        'setEffect', 'clearEffects', 'getEffect', '-', 'changeScale',
+        'setScale', 'getScale', '-', 'show', 'hide', 'reportShown', '-',
+        'goToLayer', 'goBack'
+    ],
+    sound: [
+        'playSound', 'doPlaySoundUntilDone', 'doStopAllSounds', '-',
+        'doPlaySoundAtRate', 'reportGetSoundAttribute',
+        'reportNewSoundFromSamples', '-', 'doRest', 'doPlayNote',
+        'doSetInstrument', '-', 'doChangeTempo', 'doSetTempo', 'getTempo', '-',
+        'changeVolume', 'setVolume', 'getVolume', '-', 'changePan', 'setPan',
+        'getPan', '-', 'playFreq', 'stopFreq'
+    ],
+    pen: [
+        'clear', '-', 'down', 'up', 'getPenDown', '-', 'setColor',
+        'changePenColorDimension', 'setPenColorDimension', 'getPenAttribute',
+        'setBackgroundColor', 'changeBackgroundColorDimension',
+        'setBackgroundColorDimension', '-', 'changeSize', 'setSize', '-',
+        'doStamp', 'floodFill', 'write', '-', 'reportPenTrailsAsCostume', '-',
+        'doPasteOn', 'doCutFrom', 'doDrawOn', '-', 'reportColor',
+        'reportColorAttribute', 'reportNewColor'
+    ],
+    control: [
+        'receiveGo', 'receiveKey', 'receiveInteraction',
+        'receiveConditionEvent', '-', 'receiveMessage', 'doBroadcast',
+        'doBroadcastAndWait', 'reportPoll', '-', 'doWarp', '-', 'doWait',
+        'doWaitUntil', '-', 'doForever', 'doRepeat', 'doUntil', 'doFor', '-',
+        'doIf', 'doIfElse', 'reportIfElse', '-', 'doReport', 'doStopThis', '-',
+        'doRun', 'fork', 'evaluate', 'reportPipe', '-', 'doTellTo',
+        'reportAskFor', '-', 'receiveOnClone', 'createClone', 'newClone',
+        'removeClone', '-', 'doPauseAll', 'doSwitchToScene', '-',
+        'receiveUserEdit', 'doDefineBlock', 'doDeleteBlock',
+        'doSetBlockAttribute', 'reportBlockAttribute', 'reportEnvironment',
+        '-', 'receiveSlotEvent', 'doSetSlot', '-', 'reportNewProcess',
+        'reportProcessAttribute', 'reportProcessState', 'doChangeProcess'
+    ],
+    sensing: [
+        'reportTouchingObject', 'reportTouchingColor',
+        'reportColorIsTouchingColor', '-', 'doAsk', 'getLastAnswer', '-',
+        'reportMousePosition', 'reportMouseX', 'reportMouseY',
+        'reportMouseDown', '-', 'reportKeyPressed', '-', 'reportRelationTo',
+        'reportAspect', '-', 'doResetTimer', 'getTimer', 'reportDate', '-',
+        'reportAttributeOf', 'reportGet', 'reportObject', '-', 'reportURL',
+        'reportAudio', 'reportVideo', 'doSetVideoTransparency', '-',
+        'reportGlobalFlag', 'doSetGlobalFlag'
+    ],
+    operators: [
+        'reifyScript', 'reifyReporter', 'reifyPredicate', '#', '-',
+        'reportVariadicSum', 'reportDifference', 'reportVariadicProduct',
+        'reportQuotient', 'reportPower', '-', 'reportModulus',
+        'reportVariadicMin', 'reportVariadicMax', '-', 'reportRound',
+        'reportMonadic', 'reportAtan2', 'reportRandom', '-',
+        'reportVariadicLessThan', 'reportVariadicEquals',
+        'reportVariadicGreaterThan', '-', 'reportVariadicAnd',
+        'reportVariadicOr', 'reportNot', 'reportBoolean', '-',
+        'reportJoinWords', 'reportTextSplit', 'reportLetter',
+        'reportTextAttribute', '-', 'reportUnicode', 'reportUnicodeAsLetter',
+        '-', 'reportIsA', 'reportVariadicIsIdentical', '-',
+        'reportJSFunction', 'reportCompiled'
+    ],
+    variables: [
+        '$variables', 'doSetVar', 'doChangeVar', 'doShowVar', 'doHideVar',
+        'doDeclareVariables', '-', 'doDeleteAttr', '=', 'reportNewList',
+        'reportNumbers', '-', 'reportCONS', 'reportListItem', 'reportCDR', '-',
+        'reportListAttribute', 'reportListIndex', 'reportListContainsItem',
+        'reportListIsEmpty', '-', 'reportMap', 'reportKeep',
+        'reportFindFirst', 'reportCombine', '-', 'doForEach', '-',
+        'doAddToList', 'doDeleteFromList', 'doInsertInList',
+        'doReplaceInList', '-', 'reportConcatenatedLists', 'reportReshape',
+        'reportCrossproduct', '=', 'doPrimitive', 'doApplyExtension',
+        'reportApplyExtension', '=', 'doMapCodeOrHeader', 'doMapValueCode',
+        'doMapListCode', '-', 'reportMappedCode'
+    ],
+    lists: [],
+    other: []
+};
+
+// blocks appended to each category in development mode, not part of a spec
+
+SpriteMorph.prototype.devModePalette = {
+    looks: ['log', 'alert', '-', 'doScreenshot'],
+    sound: ['doPlayFrequency'],
+    control: [
+        'getLastMessage', 'reportHyperZip', '-', 'doCallCC', 'reportCallCC'
+    ],
+    sensing: [
+        'reportThreadCount', 'reportStackSize', 'reportFrameCount',
+        'reportYieldCount'
+    ],
+    operators: ['reportTypeOf', 'reportTextFunction'],
+    variables: ['doShowTable']
+};
+
+SpriteMorph.prototype.paletteSpacers = ['-', '=', '#'];
+
+// the palette of new projects and of project files that don't name one,
+// settable by the embedding page via the "palette" IDE configuration option
+
+SpriteMorph.prototype.defaultPaletteBase = 'standard';
+
+SpriteMorph.prototype.newPaletteSpec = function (
+    base = SpriteMorph.prototype.defaultPaletteBase,
+    ops = []
+) {
+    return {base: base, ops: ops};
+};
+
+SpriteMorph.prototype.paletteSpec = SpriteMorph.prototype.newPaletteSpec();
+
+SpriteMorph.prototype.copyPaletteTable = function (table) {
+    var copy = {};
+    Object.keys(table).forEach(cat => copy[cat] = table[cat].slice());
+    return copy;
+};
+
+SpriteMorph.prototype.isPaletteCandidate = function (selector) {
+    // answer whether a primitive may be added to the palette automatically,
+    // i.e. by the "all" base or by an "include" operation: it has to exist
+    // and must not be a development-mode or a legacy block
+    var info = SpriteMorph.prototype.blocks[selector];
+    return !isNil(info) && !info.dev && !info.legacy &&
+        !Object.hasOwn(SpriteMorph.prototype.blockMigrations || {}, selector);
+};
+
+SpriteMorph.prototype.basePalettes = {};
+
+SpriteMorph.prototype.definePalette = function (name, definition) {
+    // register a named palette that project files can use as their base,
+    // see the comment at the top of this section for the kinds of definition
+    var current = SpriteMorph.prototype.paletteSpec;
+    if (!isString(name) || !name.length) {
+        throw new Error('palette name must be a non-empty string');
+    }
+    if (isNil(definition) ||
+        (typeof definition !== 'function' && typeof definition !== 'object')
+    ) {
+        throw new Error('palette definition must be a function, ' +
+            'a table or a spec');
+    }
+    SpriteMorph.prototype.basePalettes[name] = definition;
+    if (current?.resolved) {
+        // whatever was resolved before may have depended on this name
+        delete current.resolved;
+    }
+};
+
+SpriteMorph.prototype.paletteTable = function (name, stack = []) {
+    // answer a fresh table {category: [entries]} for a named palette,
+    // resolving derived palettes recursively
+    var basePalettes = SpriteMorph.prototype.basePalettes,
+        definition = basePalettes[name],
+        table;
+
+    if (stack.includes(name)) {
+        console.warn('palette: "' + name + '" is derived from itself' +
+            ', using "standard"');
+        return basePalettes.standard();
+    }
+    if (isNil(definition)) {
+        console.warn('palette: unknown base "' + name + '", using "standard"');
+        return basePalettes.standard();
+    }
+    if (typeof definition === 'function') {
+        return definition();
+    }
+    if (isString(definition.base)) {
+        table = {};
+        SpriteMorph.prototype.resolvePaletteSpec(
+            definition,
+            stack.concat(name)
+        ).forEach((entries, cat) => table[cat] = entries);
+        return table;
+    }
+    return SpriteMorph.prototype.copyPaletteTable(definition);
+};
+
+SpriteMorph.prototype.definePalette('standard', function () {
+    return SpriteMorph.prototype.copyPaletteTable(
+        SpriteMorph.prototype.standardPalette
+    );
+});
+
+SpriteMorph.prototype.definePalette('empty', function () {
+    var table = {};
+    SpriteMorph.prototype.categories.forEach(cat => table[cat] = []);
+    table.variables.push('$variables');
+    return table;
+});
+
+SpriteMorph.prototype.definePalette('all', function () {
+    // the standard palette plus every other eligible primitive,
+    // appended to its own category
+    var table = SpriteMorph.prototype.copyPaletteTable(
+            SpriteMorph.prototype.standardPalette
+        ),
+        members = new Set(Object.values(table).flat()),
+        gapped = {};
+    Object.keys(SpriteMorph.prototype.blocks).forEach(sel => {
+        var cat;
+        if (members.has(sel) ||
+            !SpriteMorph.prototype.isPaletteCandidate(sel)
+        ) {
+            return;
+        }
+        cat = SpriteMorph.prototype.blocks[sel].category;
+        if (!Object.hasOwn(table, cat)) {cat = 'other'; }
+        if (!gapped[cat]) {
+            table[cat].push('-');
+            gapped[cat] = true;
+        }
+        table[cat].push(sel);
+    });
+    return table;
+});
+
+// Named palettes
+
+SpriteMorph.prototype.definePalette('bhs', {
+    // the standard palette with the Operators category rearranged around
+    // the separate monadic math-function blocks (abs, floor, sin, ln, ...)
+    // in place of the "sqrt of" dropdown block
+    base: 'standard',
+    ops: [
+        {op: 'section', category: 'operators', entries: [
+            'reifyScript', 'reifyReporter', 'reifyPredicate', '#', '-',
+            'reportVariadicSum', 'reportDifference', 'reportVariadicProduct',
+            'reportQuotient', 'reportPower', '-', 'reportModulus',
+            'reportVariadicMin', 'reportVariadicMax', '-', 'reportAbs',
+            'reportRound', 'reportFloor', 'reportCeiling', 'reportTrunc',
+            'reportRandom', '-', 'reportVariadicLessThan',
+            'reportVariadicEquals', 'reportVariadicGreaterThan', '-',
+            'reportVariadicAnd', 'reportVariadicOr', 'reportNot',
+            'reportBoolean', '-', 'reportJoinWords', 'reportTextSplit',
+            'reportLetter', 'reportTextAttribute', '-', 'reportUnicode',
+            'reportUnicodeAsLetter', '-', 'reportIsA',
+            'reportVariadicIsIdentical', '-', 'reportNeg', 'reportSign', '-',
+            'reportSin', 'reportCos', 'reportTan', 'reportAsin', 'reportAcos',
+            'reportAtan', 'reportAtan2', '-', 'reportSqrt', 'reportLn',
+            'reportLog', 'reportLg', 'reportExp', 'reportPow10', 'reportPow2',
+            '-', 'reportSigmoid', 'reportIdentity', '-', 'reportJSFunction',
+            'reportCompiled'
+        ]}
+    ]
+});
+
+SpriteMorph.prototype.paletteTagsOf = function (selector) {
+    // answer the tags of a primitive, including its category and type
+    var info = SpriteMorph.prototype.blocks[selector];
+    if (isNil(info)) {return []; }
+    return (info.tags || []).concat(info.category, info.type);
+};
+
+SpriteMorph.prototype.paletteFeatureEnabled = function (feature) {
+    // answer whether blocks gated by a "when" attribute are currently shown
+    switch (feature) {
+    case 'inheritance':
+        return StageMorph.prototype.enableInheritance;
+    case 'codeMapping':
+        return StageMorph.prototype.enableCodeMapping;
+    case 'extensions':
+        return SpriteMorph.prototype.showingExtensions;
+    case 'firstClass':
+        return SpriteMorph.prototype.enableFirstClass;
+    case 'js':
+        return Process.prototype.enableJS;
+    case 'compiling':
+        return Process.prototype.enableJS && Process.prototype.enableCompiling;
+    default:
+        return true;
+    }
+};
+
+SpriteMorph.prototype.resolvePaletteSpec = function (spec, stack = []) {
+    // answer a new Map category -> entries for the given spec,
+    // "stack" holds the names of the derived palettes being resolved
+    var base = SpriteMorph.prototype.paletteTable(spec.base, stack),
+        spacers = SpriteMorph.prototype.paletteSpacers,
+        blocks = SpriteMorph.prototype.blocks,
+        palette = new Map();
+
+    function warn(msg) {
+        console.warn('palette: ' + msg);
+    }
+
+    function isSelector(entry) {
+        return !spacers.includes(entry) && entry !== '$variables';
+    }
+
+    function hasTag(selector, tags) {
+        var mine = SpriteMorph.prototype.paletteTagsOf(selector);
+        return (tags || []).some(tag => mine.includes(tag));
+    }
+
+    function isMember(selector) {
+        return Array.from(palette.values()).some(entries =>
+            entries.includes(selector));
+    }
+
+    function remove(selector) {
+        palette.forEach(entries => {
+            var idx = entries.indexOf(selector);
+            if (idx > -1) {entries.splice(idx, 1); }
+        });
+    }
+
+    function targetCategory(name) {
+        if (palette.has(name)) {return name; }
+        warn('unknown category "' + name + '", using "other"');
+        return 'other';
+    }
+
+    SpriteMorph.prototype.allCategories().forEach(cat =>
+        palette.set(cat, base[cat] || [])
+    );
+
+    (spec.ops || []).forEach(op => {
+        var entries, idx, gapped = {};
+        switch (op.op) {
+        case 'exclude':
+            palette.forEach((entries, cat) =>
+                palette.set(cat, entries.filter(entry =>
+                    !isSelector(entry) || !hasTag(entry, op.tags)))
+            );
+            break;
+        case 'include':
+            Object.keys(blocks).forEach(sel => {
+                var cat;
+                if (isMember(sel) ||
+                    !SpriteMorph.prototype.isPaletteCandidate(sel) ||
+                    !hasTag(sel, op.tags)
+                ) {
+                    return;
+                }
+                cat = palette.has(blocks[sel].category) ?
+                    blocks[sel].category : 'other';
+                entries = palette.get(cat);
+                if (!gapped[cat]) {
+                    entries.push('-');
+                    gapped[cat] = true;
+                }
+                entries.push(sel);
+            });
+            break;
+        case 'remove':
+            remove(op.selector);
+            break;
+        case 'add':
+            if (isNil(blocks[op.selector])) {
+                warn('unknown block "' + op.selector + '"');
+                break;
+            }
+            remove(op.selector);
+            entries = palette.get(targetCategory(
+                op.category || blocks[op.selector].category
+            ));
+            if (op.before) {
+                idx = entries.indexOf(op.before);
+                entries.splice(idx > -1 ? idx : 0, 0, op.selector);
+            } else if (op.after) {
+                idx = entries.indexOf(op.after);
+                entries.splice(
+                    idx > -1 ? idx + 1 : entries.length,
+                    0,
+                    op.selector
+                );
+            } else {
+                entries.push(op.selector);
+            }
+            break;
+        case 'section':
+            if (!palette.has(op.category)) {
+                warn('unknown category "' + op.category + '"');
+                break;
+            }
+            entries = (op.entries || []).filter(entry => {
+                if (!isSelector(entry) || !isNil(blocks[entry])) {
+                    return true;
+                }
+                warn('unknown block "' + entry + '"');
+                return false;
+            });
+            entries.forEach(entry => {
+                if (isSelector(entry)) {remove(entry); }
+            });
+            palette.set(op.category, entries);
+            break;
+        default:
+            warn('unknown operation "' + op.op + '"');
+        }
+    });
+    return palette;
+};
+
+SpriteMorph.prototype.resolvedPalette = function () {
+    // answer the Map category -> entries for the current palette spec,
+    // cached on the spec object itself until the custom categories or
+    // the blocks dictionary change
+    var spec = SpriteMorph.prototype.paletteSpec,
+        key = Array.from(SpriteMorph.prototype.customCategories.keys()).join(
+            '\n'
+        ),
+        cache = spec.resolved,
+        spacers = SpriteMorph.prototype.paletteSpacers;
+
+    if (cache &&
+        cache.key === key &&
+        cache.blocks === SpriteMorph.prototype.blocks
+    ) {
+        return cache.palette;
+    }
+    cache = {
+        key: key,
+        blocks: SpriteMorph.prototype.blocks,
+        palette: this.resolvePaletteSpec(spec)
+    };
+    cache.members = new Set(
+        Array.from(cache.palette.values()).flat().filter(entry =>
+            !spacers.includes(entry) && entry !== '$variables')
+    );
+    Object.defineProperty(spec, 'resolved', {
+        value: cache,
+        enumerable: false,
+        configurable: true,
+        writable: true
+    });
+    return cache.palette;
+};
+
+SpriteMorph.prototype.isPaletteMember = function (selector) {
+    // answer whether the primitive is part of the current palette
+    // (regardless of whether it is hidden or restricted to an agent type)
+    this.resolvedPalette();
+    return SpriteMorph.prototype.paletteSpec.resolved.members.has(selector);
+};
+
+SpriteMorph.prototype.setPaletteSpec = function (spec) {
+    // set a new palette spec (in the scene and the shared prototype)
+    // and refresh the IDE accordingly
+    var ide = this.parentThatIsA(IDE_Morph);
+    SpriteMorph.prototype.paletteSpec = spec;
+    if (ide) {
+        ide.scene.paletteSpec = spec;
+        ide.flushBlocksCache();
+        ide.refreshPalette(true);
+        ide.refreshEmptyCategories();
+    }
+};
+
+SpriteMorph.prototype.collapsePaletteSpacers = function (items) {
+    // drop null items and leading and trailing spacers, and merge runs of
+    // spacers keeping the larger one
+    var rank = {'-': 1, '=': 2},
+        result = [];
+    items.forEach(item => {
+        var last = result[result.length - 1];
+        if (isNil(item)) {return; }
+        if (rank[item]) {
+            if (result.length === 0) {return; }
+            if (rank[last]) {
+                if (rank[item] > rank[last]) {
+                    result[result.length - 1] = item;
+                }
+                return;
+            }
+        }
+        result.push(item);
+    });
+    while (result.length && rank[result[result.length - 1]]) {
+        result.pop();
+    }
+    return result;
+};
+
 SpriteMorph.prototype.blockTemplates = function (
     category = 'motion',
     all = false // include hidden blocks
 ) {
-    var blocks = [], myself = this, varNames,
+    var blocks = [], myself = this,
         inheritedVars = this.inheritedVariableNames(),
-        wrld = this.world(),
-        devMode = wrld && wrld.isDevMode;
+        hidden = StageMorph.prototype.hiddenPrimitives,
+        spacers = SpriteMorph.prototype.paletteSpacers,
+        devEntries = SpriteMorph.prototype.devModePalette[category];
 
     function block(selector, isGhosted) {
-        if (StageMorph.prototype.hiddenPrimitives[selector] && !all) {
-            return null;
-        }
         var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
         newBlock.isDraggable = false;
         newBlock.isTemplate = true;
@@ -3844,9 +4986,6 @@ SpriteMorph.prototype.blockTemplates = function (
     }
 
     function watcherToggle(selector) {
-        if (StageMorph.prototype.hiddenPrimitives[selector]) {
-            return null;
-        }
         var info = SpriteMorph.prototype.blocks[selector];
         return new ToggleMorph(
             'checkbox',
@@ -3881,353 +5020,35 @@ SpriteMorph.prototype.blockTemplates = function (
         );
     }
 
-    SnapExtensions.buttons.palette.forEach(buttonDescriptor => {
-        if (buttonDescriptor.category === category) {
-            blocks.push(this.customPaletteButton(buttonDescriptor));
+    function pushSelector(selector) {
+        var info = SpriteMorph.prototype.blocks[selector];
+        if (isNil(info)) {return; }
+        if (info.only && info.only !== myself.constructor) {return; }
+        if (info.when &&
+            !SpriteMorph.prototype.paletteFeatureEnabled(info.when)
+        ) {
+            return;
         }
-    });
-
-    if (category === 'motion') {
-
-        blocks.push(block('forward'));
-        blocks.push(block('turn'));
-        blocks.push(block('turnLeft'));
-        blocks.push('-');
-        blocks.push(block('setHeading'));
-        blocks.push(block('doFaceTowards'));
-        blocks.push('-');
-        blocks.push(block('gotoXY'));
-        blocks.push(block('doGotoObject'));
-        blocks.push(block('doGlide'));
-        blocks.push('-');
-        blocks.push(block('changeXPosition'));
-        blocks.push(block('setXPosition'));
-        blocks.push(block('changeYPosition'));
-        blocks.push(block('setYPosition'));
-        blocks.push('-');
-        blocks.push(block('bounceOffEdge'));
-        blocks.push('-');
-        blocks.push(block('getPosition'));
-        blocks.push(watcherToggle('xPosition'));
-        blocks.push(block('xPosition', this.inheritsAttribute('x position')));
-        blocks.push(watcherToggle('yPosition'));
-        blocks.push(block('yPosition', this.inheritsAttribute('y position')));
-        blocks.push(watcherToggle('direction'));
-        blocks.push(block('direction', this.inheritsAttribute('direction')));
-
-    } else if (category === 'looks') {
-
-        blocks.push(block('doSwitchToCostume'));
-        blocks.push(block('doWearNextCostume'));
-        blocks.push(watcherToggle('getCostumeIdx'));
-        blocks.push(block('getCostumeIdx', this.inheritsAttribute('costume #')));
-        blocks.push('-');
-        blocks.push(block('doSayFor'));
-        blocks.push(block('bubble'));
-        blocks.push(block('doThinkFor'));
-        blocks.push(block('doThink'));
-        blocks.push('-');
-        blocks.push(block('reportGetImageAttribute'));
-        blocks.push(block('reportNewCostumeStretched'));
-        blocks.push(block('reportNewCostumeSkewed'));
-        blocks.push(block('reportNewCostume'));
-        blocks.push('-');
-        blocks.push(block('changeEffect'));
-        blocks.push(block('setEffect'));
-        blocks.push(block('clearEffects'));
-        blocks.push(block('getEffect'));
-        blocks.push('-');
-        blocks.push(block('changeScale'));
-        blocks.push(block('setScale'));
-        blocks.push(watcherToggle('getScale'));
-        blocks.push(block('getScale', this.inheritsAttribute('size')));
-        blocks.push('-');
-        blocks.push(block('show'));
-        blocks.push(block('hide'));
-        blocks.push(watcherToggle('reportShown'));
-        blocks.push(block('reportShown', this.inheritsAttribute('shown?')));
-        blocks.push('-');
-        blocks.push(block('goToLayer'));
-        blocks.push(block('goBack'));
-
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('log'));
-            blocks.push(block('alert'));
-            blocks.push('-');
-            blocks.push(block('doScreenshot'));
+        if (hidden[selector]) {
+            if (!all) {return; }
+        } else if (info.watcher) {
+            blocks.push(watcherToggle(selector));
         }
+        blocks.push(block(
+            selector,
+            info.inherits ? myself.inheritsAttribute(info.inherits) : false
+        ));
+    }
 
-    } else if (category === 'sound') {
-
-        blocks.push(block('playSound'));
-        blocks.push(block('doPlaySoundUntilDone'));
-        blocks.push(block('doStopAllSounds'));
-        blocks.push('-');
-        blocks.push(block('doPlaySoundAtRate'));
-        blocks.push(block('reportGetSoundAttribute'));
-        blocks.push(block('reportNewSoundFromSamples'));
-        blocks.push('-');
-        blocks.push(block('doRest'));
-        blocks.push(block('doPlayNote'));
-        blocks.push(block('doSetInstrument'));
-        blocks.push('-');
-        blocks.push(block('doChangeTempo'));
-        blocks.push(block('doSetTempo'));
-        blocks.push(watcherToggle('getTempo'));
-        blocks.push(block('getTempo'));
-        blocks.push('-');
-        blocks.push(block('changeVolume'));
-        blocks.push(block('setVolume'));
-        blocks.push(watcherToggle('getVolume'));
-        blocks.push(block('getVolume', this.inheritsAttribute('volume')));
-        blocks.push('-');
-        blocks.push(block('changePan'));
-        blocks.push(block('setPan'));
-        blocks.push(watcherToggle('getPan'));
-        blocks.push(block('getPan', this.inheritsAttribute('balance')));
-        blocks.push('-');
-        blocks.push(block('playFreq'));
-        blocks.push(block('stopFreq'));
-
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doPlayFrequency'));
-        }
-
-    } else if (category === 'pen') {
-
-        blocks.push(block('clear'));
-        blocks.push('-');
-        blocks.push(block('down'));
-        blocks.push(block('up'));
-        blocks.push(watcherToggle('getPenDown'));
-        blocks.push(block('getPenDown', this.inheritsAttribute('pen down?')));
-        blocks.push('-');
-        blocks.push(block('setColor'));
-        blocks.push(block('changePenColorDimension'));
-        blocks.push(block('setPenColorDimension'));
-        blocks.push(block('getPenAttribute'));
-        blocks.push('-');
-        blocks.push(block('changeSize'));
-        blocks.push(block('setSize'));
-        blocks.push('-');
-        blocks.push(block('doStamp'));
-        blocks.push(block('floodFill'));
-        blocks.push(block('write'));
-        blocks.push('-');
-        blocks.push(block('reportPenTrailsAsCostume'));
-        blocks.push('-');
-        blocks.push(block('doPasteOn'));
-        blocks.push(block('doCutFrom'));
-        blocks.push(block('doDrawOn'));
-        blocks.push('-');
-        blocks.push(block('reportColor'));
-        blocks.push(block('reportColorAttribute'));
-        blocks.push(block('reportNewColor'));
-
-    } else if (category === 'control') {
-
-        blocks.push(block('receiveGo'));
-        blocks.push(block('receiveKey'));
-        blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveConditionEvent'));
-        blocks.push('-');
-        blocks.push(block('receiveMessage'));
-        blocks.push(block('doBroadcast'));
-        blocks.push(block('doBroadcastAndWait'));
-        blocks.push(block('reportPoll'));
-        blocks.push('-');
-        blocks.push(block('doWarp'));
-        blocks.push('-');
-        blocks.push(block('doWait'));
-        blocks.push(block('doWaitUntil'));
-        blocks.push('-');
-        blocks.push(block('doForever'));
-        blocks.push(block('doRepeat'));
-        blocks.push(block('doUntil'));
-        blocks.push(block('doFor'));
-        blocks.push('-');
-        // blocks.push(block('doVariadicIf'));
-        blocks.push(block('doIf'));
-        blocks.push(block('doIfElse'));
-        blocks.push(block('reportIfElse'));
-        blocks.push('-');
-        blocks.push(block('doReport'));
-        blocks.push(block('doStopThis'));
-        blocks.push('-');
-        blocks.push(block('doRun'));
-        blocks.push(block('fork'));
-        blocks.push(block('evaluate'));
-        blocks.push(block('reportPipe'));
-        blocks.push('-');
-        blocks.push(block('doTellTo'));
-        blocks.push(block('reportAskFor'));
-        blocks.push('-');
-        blocks.push(block('receiveOnClone'));
-        blocks.push(block('createClone'));
-        blocks.push(block('newClone'));
-        blocks.push(block('removeClone'));
-        blocks.push('-');
-        blocks.push(block('doPauseAll'));
-        blocks.push(block('doSwitchToScene'));
-        blocks.push('-');
-        blocks.push(block('receiveUserEdit'));
-        blocks.push(block('doDefineBlock'));
-        blocks.push(block('doDeleteBlock'));
-        blocks.push(block('doSetBlockAttribute'));
-        blocks.push(block('reportBlockAttribute'));
-        blocks.push(block('reportEnvironment'));
-        blocks.push('-');
-        blocks.push(block('receiveSlotEvent'));
-        blocks.push(block('doSetSlot'));
-        blocks.push('-');
-        blocks.push(block('reportNewProcess'));
-        blocks.push(block('reportProcessAttribute'));
-        blocks.push(block('reportProcessState'));
-        blocks.push(block('doChangeProcess'));
-
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(watcherToggle('getLastMessage'));
-            blocks.push(block('getLastMessage'));
-            blocks.push(block('reportHyperZip'));
-        // deprecated - superseded by reportEnviornment - retained for legacy
-            blocks.push('-');
-            blocks.push(block('doCallCC'));
-            blocks.push(block('reportCallCC'));
-        }
-
-    } else if (category === 'sensing') {
-
-        blocks.push(block('reportTouchingObject'));
-        blocks.push(block('reportTouchingColor'));
-        blocks.push(block('reportColorIsTouchingColor'));
-        blocks.push('-');
-        blocks.push(block('doAsk'));
-        blocks.push(watcherToggle('getLastAnswer'));
-        blocks.push(block('getLastAnswer'));
-        blocks.push('-');
-        blocks.push(block('reportMousePosition'));
-        blocks.push(watcherToggle('reportMouseX'));
-        blocks.push(block('reportMouseX'));
-        blocks.push(watcherToggle('reportMouseY'));
-        blocks.push(block('reportMouseY'));
-        blocks.push(block('reportMouseDown'));
-        blocks.push('-');
-        blocks.push(block('reportKeyPressed'));
-        blocks.push('-');
-        blocks.push(block('reportRelationTo'));
-        blocks.push(block('reportAspect'));
-        blocks.push('-');
-        blocks.push(block('doResetTimer'));
-        blocks.push(watcherToggle('getTimer'));
-        blocks.push(block('getTimer'));
-        blocks.push(block('reportDate'));
-        blocks.push('-');
-        blocks.push(block('reportAttributeOf'));
-
-        if (SpriteMorph.prototype.enableFirstClass) {
-            blocks.push(block('reportGet'));
-        }
-
-        blocks.push(block('reportObject'));
-        blocks.push('-');
-        blocks.push(block('reportURL'));
-        blocks.push(block('reportAudio'));
-        blocks.push(block('reportVideo'));
-        blocks.push(block('doSetVideoTransparency'));
-        blocks.push('-');
-        blocks.push(block('reportGlobalFlag'));
-        blocks.push(block('doSetGlobalFlag'));
-
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(watcherToggle('reportThreadCount'));
-            blocks.push(block('reportThreadCount'));
-            blocks.push(block('reportStackSize'));
-            blocks.push(block('reportFrameCount'));
-            blocks.push(block('reportYieldCount'));
-        }
-    } else if (category === 'operators') {
-
-        blocks.push(block('reifyScript'));
-        blocks.push(block('reifyReporter'));
-        blocks.push(block('reifyPredicate'));
-        blocks.push('#');
-        blocks.push('-');
-        blocks.push(block('reportVariadicSum'));
-        blocks.push(block('reportDifference'));
-        blocks.push(block('reportVariadicProduct'));
-        blocks.push(block('reportQuotient'));
-        blocks.push(block('reportPower'));
-        blocks.push('-');
-        blocks.push(block('reportModulus'));
-        blocks.push(block('reportVariadicMin'));
-        blocks.push(block('reportVariadicMax'));
-        blocks.push('-');
-        blocks.push(block('reportRound'));
-        blocks.push(block('reportMonadic'));
-        blocks.push(block('reportAtan2'));
-        blocks.push(block('reportRandom'));
-        blocks.push('-');
-        blocks.push(block('reportVariadicLessThan'));
-        blocks.push(block('reportVariadicEquals'));
-        blocks.push(block('reportVariadicGreaterThan'));
-        blocks.push('-');
-        blocks.push(block('reportVariadicAnd'));
-        blocks.push(block('reportVariadicOr'));
-        blocks.push(block('reportNot'));
-        blocks.push(block('reportBoolean'));
-        blocks.push('-');
-        blocks.push(block('reportJoinWords'));
-        blocks.push(block('reportTextSplit'));
-        blocks.push(block('reportLetter'));
-        blocks.push(block('reportTextAttribute'));
-        blocks.push('-');
-        blocks.push(block('reportUnicode'));
-        blocks.push(block('reportUnicodeAsLetter'));
-        blocks.push('-');
-        blocks.push(block('reportIsA'));
-        blocks.push(block('reportVariadicIsIdentical'));
-
-        if (Process.prototype.enableJS) {
-            blocks.push('-');
-            blocks.push(block('reportJSFunction'));
-            if (Process.prototype.enableCompiling) {
-                blocks.push(block('reportCompiled'));
-            }
-        }
-        // for debugging: ///////////////
-        if (devMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('reportTypeOf'));
-            blocks.push(block('reportTextFunction'));
-        }
-
-    } else if (category === 'variables') {
-
-        blocks.push(this.makeVariableButton());
-        if (this.deletableVariableNames().length > 0) {
-            blocks.push(this.deleteVariableButton());
+    function pushVariables() {
+        var varNames;
+        blocks.push(myself.makeVariableButton());
+        if (myself.deletableVariableNames().length > 0) {
+            blocks.push(myself.deleteVariableButton());
         }
         blocks.push('-');
 
-        varNames = this.allGlobalVariableNames(true, all);
+        varNames = myself.allGlobalVariableNames(true, all);
         if (varNames.length > 0) {
             varNames.forEach(name => {
                 blocks.push(variableWatcherToggle(name, true));
@@ -4236,7 +5057,7 @@ SpriteMorph.prototype.blockTemplates = function (
             blocks.push('-');
         }
 
-        varNames = this.allLocalVariableNames(true, all);
+        varNames = myself.allLocalVariableNames(true, all);
         if (varNames.length > 0) {
             varNames.forEach(name => {
                 blocks.push(variableWatcherToggle(name));
@@ -4244,72 +5065,34 @@ SpriteMorph.prototype.blockTemplates = function (
             });
             blocks.push('-');
         }
+    }
 
-        blocks.push(block('doSetVar'));
-        blocks.push(block('doChangeVar'));
-        blocks.push(block('doShowVar'));
-        blocks.push(block('doHideVar'));
-        blocks.push(block('doDeclareVariables'));
-
-        // inheritance:
-
-        if (StageMorph.prototype.enableInheritance) {
-            blocks.push('-');
-            blocks.push(block('doDeleteAttr'));
+    function pushEntry(entry) {
+        if (entry === '$variables') {
+            pushVariables();
+        } else if (spacers.includes(entry)) {
+            blocks.push(entry);
+        } else {
+            pushSelector(entry);
         }
+    }
 
-        blocks.push('=');
-        blocks.push(block('reportNewList'));
-        blocks.push(block('reportNumbers'));
-        blocks.push('-');
-        blocks.push(block('reportCONS'));
-        blocks.push(block('reportListItem'));
-        blocks.push(block('reportCDR'));
-        blocks.push('-');
-        blocks.push(block('reportListAttribute'));
-        blocks.push(block('reportListIndex'));
-        blocks.push(block('reportListContainsItem'));
-        blocks.push(block('reportListIsEmpty'));
-        blocks.push('-');
-        blocks.push(block('reportMap'));
-        blocks.push(block('reportKeep'));
-        blocks.push(block('reportFindFirst'));
-        blocks.push(block('reportCombine'));
-        blocks.push('-');
-        blocks.push(block('doForEach'));
-        blocks.push('-');
-        blocks.push(block('doAddToList'));
-        blocks.push(block('doDeleteFromList'));
-        blocks.push(block('doInsertInList'));
-        blocks.push(block('doReplaceInList'));
-        blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        blocks.push(block('reportCrossproduct'));
-
-        if (SpriteMorph.prototype.showingExtensions) {
-            blocks.push('=');
-            blocks.push(block('doPrimitive'));
-            blocks.push(block('doApplyExtension'));
-            blocks.push(block('reportApplyExtension'));
+    SnapExtensions.buttons.palette.forEach(buttonDescriptor => {
+        if (buttonDescriptor.category === category) {
+            blocks.push(this.customPaletteButton(buttonDescriptor));
         }
+    });
 
-        if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push('=');
-            blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
-            blocks.push(block('doMapListCode'));
-            blocks.push('-');
-            blocks.push(block('reportMappedCode'));
-        }
+    (this.resolvedPalette().get(category) || []).forEach(pushEntry);
+    blocks = this.collapsePaletteSpacers(blocks);
 
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doShowTable'));
-        }
+    // for debugging: ///////////////
+    if (this.world()?.isDevMode && devEntries && devEntries.length) {
+        blocks.push('-');
+        blocks.push(this.devModeText());
+        blocks.push('-');
+        devEntries.forEach(pushEntry);
+        blocks = this.collapsePaletteSpacers(blocks);
     }
 
     return blocks;
@@ -4713,6 +5496,15 @@ SpriteMorph.prototype.freshPalette = function (category) {
     } else {
         // ensure we do not modify the cached array
         blocks = this.getPrimitiveTemplates(category).slice();
+        if (category === 'variables') {
+            // primitives placed in the "lists" and "other" categories
+            blocks.push(
+                '=',
+                ...this.getPrimitiveTemplates('lists'),
+                '=',
+                ...this.getPrimitiveTemplates('other')
+            );
+        }
     }
 
     if (category !== 'unified' || showButtons) {
@@ -5017,6 +5809,7 @@ SpriteMorph.prototype.blocksMatching = function (
     blocksDict = SpriteMorph.prototype.blocks;
     Object.keys(blocksDict).forEach(selector => {
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
+                this.isPaletteMember(selector) &&
                 contains(types, blocksDict[selector].type)) {
             var block = blocksDict[selector],
                 spec = BlockMorph.prototype.localizeBlockSpec(block.spec),
@@ -5293,6 +6086,21 @@ SpriteMorph.prototype.reporterize = function (expressionString) {
             '&': 'reportVariadicAnd',
             '|': 'reportVariadicOr',
             round: 'reportRound',
+            abs: 'reportAbs',
+            neg: 'reportNeg',
+            ceiling: 'reportCeiling',
+            floor: 'reportFloor',
+            sqrt: 'reportSqrt',
+            sin: 'reportSin',
+            cos: 'reportCos',
+            tan: 'reportTan',
+            asin: 'reportAsin',
+            acos: 'reportAcos',
+            atan: 'reportAtan',
+            ln: 'reportLn',
+            log: 'reportLog',
+            lg: 'reportLg',
+            id: 'reportIdentity',
             not: 'reportNot'
         };
         monads = ['abs', 'neg', 'ceiling', 'floor', 'sqrt', 'sin', 'cos',
@@ -11709,455 +12517,7 @@ StageMorph.prototype.pauseGenericHatBlocks = function () {
     }
 };
 
-// StageMorph block templates
-
-StageMorph.prototype.blockTemplates = function (
-    category = 'motion',
-    all = false // include hidden blocks
-) {
-    var blocks = [], myself = this, varNames; // txt;
-
-    function block(selector) {
-        if (myself.hiddenPrimitives[selector] && !all) {
-            return null;
-        }
-        var newBlock = SpriteMorph.prototype.blockForSelector(selector, true);
-        newBlock.isDraggable = false;
-        newBlock.isTemplate = true;
-        return newBlock;
-    }
-
-    function variableBlock(varName, isLocal) {
-        var newBlock = SpriteMorph.prototype.variableBlock(varName, isLocal);
-        newBlock.isDraggable = false;
-        newBlock.isTemplate = true;
-        return newBlock;
-    }
-
-
-    function watcherToggle(selector) {
-        if (myself.hiddenPrimitives[selector]) {
-            return null;
-        }
-        var info = SpriteMorph.prototype.blocks[selector];
-        return new ToggleMorph(
-            'checkbox',
-            this,
-            function () {
-                myself.toggleWatcher(
-                    selector,
-                    localize(info.spec),
-                    myself.blockColor[info.category]
-                );
-            },
-            null,
-            function () {
-                return myself.showingWatcher(selector);
-            },
-            null
-        );
-    }
-
-    function variableWatcherToggle(varName, isGlobal) {
-        return new ToggleMorph(
-            'checkbox',
-            this,
-            function () {
-                myself.toggleVariableWatcher(varName, isGlobal);
-            },
-            null,
-            function () {
-                return myself.showingVariableWatcher(varName, isGlobal);
-            },
-            null
-        );
-    }
-
-
-    SnapExtensions.buttons.palette.forEach(buttonDescriptor => {
-        if (buttonDescriptor.category === category) {
-            blocks.push(this.customPaletteButton(buttonDescriptor));
-        }
-    });
-
-/* // commented out to support sprite-less microworlds in v12
-
-    if (category === 'motion') {
-
-        txt = new TextMorph(localize('Stage selected:\nno motion primitives'));
-        txt.fontSize = 9;
-        txt.setColor(this.paletteTextColor);
-        txt.hideWithCategory = true; // hide txt when category names are hidden
-        blocks.push(txt);
-
-    } else
-*/
-
-    if (category === 'looks') {
-
-        blocks.push(block('doSwitchToCostume'));
-        blocks.push(block('doWearNextCostume'));
-        blocks.push(watcherToggle('getCostumeIdx'));
-        blocks.push(block('getCostumeIdx'));
-        blocks.push('-');
-        blocks.push(block('doSayFor'));
-        blocks.push(block('bubble'));
-        blocks.push('-');
-        blocks.push(block('reportGetImageAttribute'));
-        blocks.push(block('reportNewCostumeStretched'));
-        blocks.push(block('reportNewCostumeSkewed'));
-        blocks.push(block('reportNewCostume'));
-        blocks.push('-');
-        blocks.push(block('changeEffect'));
-        blocks.push(block('setEffect'));
-        blocks.push(block('clearEffects'));
-        blocks.push(block('getEffect'));
-        blocks.push('-');
-        blocks.push(block('show'));
-        blocks.push(block('hide'));
-        blocks.push(watcherToggle('reportShown'));
-        blocks.push(block('reportShown'));
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('log'));
-            blocks.push(block('alert'));
-            blocks.push('-');
-            blocks.push(block('doScreenshot'));
-        }
-
-    } else if (category === 'sound') {
-
-        blocks.push(block('playSound'));
-        blocks.push(block('doPlaySoundUntilDone'));
-        blocks.push(block('doStopAllSounds'));
-        blocks.push('-');
-        blocks.push(block('doPlaySoundAtRate'));
-        blocks.push(block('reportGetSoundAttribute'));
-        blocks.push(block('reportNewSoundFromSamples'));
-        blocks.push('-');
-        blocks.push(block('doRest'));
-        blocks.push(block('doPlayNote'));
-        blocks.push(block('doSetInstrument'));
-        blocks.push('-');
-        blocks.push(block('doChangeTempo'));
-        blocks.push(block('doSetTempo'));
-        blocks.push(watcherToggle('getTempo'));
-        blocks.push(block('getTempo'));
-        blocks.push('-');
-        blocks.push(block('changeVolume'));
-        blocks.push(block('setVolume'));
-        blocks.push(watcherToggle('getVolume'));
-        blocks.push(block('getVolume'));
-        blocks.push('-');
-        blocks.push(block('changePan'));
-        blocks.push(block('setPan'));
-        blocks.push(watcherToggle('getPan'));
-        blocks.push(block('getPan'));
-        blocks.push('-');
-        blocks.push(block('playFreq'));
-        blocks.push(block('stopFreq'));
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doPlayFrequency'));
-        }
-
-    } else if (category === 'pen') {
-
-        blocks.push(block('clear'));
-        blocks.push('-');
-        blocks.push(block('setBackgroundColor'));
-        blocks.push(block('changeBackgroundColorDimension'));
-        blocks.push(block('setBackgroundColorDimension'));
-        blocks.push('-');
-        blocks.push(block('write'));
-        blocks.push('-');
-        blocks.push(block('reportPenTrailsAsCostume'));
-        blocks.push('-');
-        blocks.push(block('doPasteOn'));
-        blocks.push(block('doCutFrom'));
-        blocks.push('-');
-        blocks.push(block('reportColor'));
-        blocks.push(block('reportColorAttribute'));
-        blocks.push(block('reportNewColor'));
-
-    } else if (category === 'control') {
-
-        blocks.push(block('receiveGo'));
-        blocks.push(block('receiveKey'));
-        blocks.push(block('receiveInteraction'));
-        blocks.push(block('receiveConditionEvent'));
-        blocks.push('-');
-        blocks.push(block('receiveMessage'));
-        blocks.push(block('doBroadcast'));
-        blocks.push(block('doBroadcastAndWait'));
-        blocks.push(block('reportPoll'));
-        blocks.push('-');
-        blocks.push(block('doWarp'));
-        blocks.push('-');
-        blocks.push(block('doWait'));
-        blocks.push(block('doWaitUntil'));
-        blocks.push('-');
-        blocks.push(block('doForever'));
-        blocks.push(block('doRepeat'));
-        blocks.push(block('doUntil'));
-        blocks.push(block('doFor'));
-        blocks.push('-');
-        // blocks.push(block('doVariadicIf'));
-        blocks.push(block('doIf'));
-        blocks.push(block('doIfElse'));
-        blocks.push(block('reportIfElse'));
-        blocks.push('-');
-        blocks.push(block('doReport'));
-        blocks.push(block('doStopThis'));
-        blocks.push('-');
-        blocks.push(block('doRun'));
-        blocks.push(block('fork'));
-        blocks.push(block('evaluate'));
-        blocks.push(block('reportPipe'));
-        blocks.push('-');
-        blocks.push(block('doTellTo'));
-        blocks.push(block('reportAskFor'));
-        blocks.push('-');
-        blocks.push(block('createClone'));
-        blocks.push(block('newClone'));
-        blocks.push('-');
-        blocks.push(block('doPauseAll'));
-        blocks.push(block('doSwitchToScene'));
-        blocks.push('-');
-        blocks.push(block('receiveUserEdit'));
-        blocks.push(block('doDefineBlock'));
-        blocks.push(block('doDeleteBlock'));
-        blocks.push(block('doSetBlockAttribute'));
-        blocks.push(block('reportBlockAttribute'));
-        blocks.push(block('reportEnvironment'));
-        blocks.push('-');
-        blocks.push(block('receiveSlotEvent'));
-        blocks.push(block('doSetSlot'));
-        blocks.push('-');
-        blocks.push(block('reportNewProcess'));
-        blocks.push(block('reportProcessAttribute'));
-        blocks.push(block('reportProcessState'));
-        blocks.push(block('doChangeProcess'));
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(watcherToggle('getLastMessage'));
-            blocks.push(block('getLastMessage'));
-            blocks.push(block('reportHyperZip'));
-        // deprecated - superseded by reportEnviornment - retained for legacy
-            blocks.push('-');
-            blocks.push(block('doCallCC'));
-            blocks.push(block('reportCallCC'));
-        }
-
-    } else if (category === 'sensing') {
-
-        blocks.push(block('doAsk'));
-        blocks.push(watcherToggle('getLastAnswer'));
-        blocks.push(block('getLastAnswer'));
-        blocks.push('-');
-        blocks.push(block('reportMousePosition'));
-        blocks.push(watcherToggle('reportMouseX'));
-        blocks.push(block('reportMouseX'));
-        blocks.push(watcherToggle('reportMouseY'));
-        blocks.push(block('reportMouseY'));
-        blocks.push(block('reportMouseDown'));
-        blocks.push('-');
-        blocks.push(block('reportKeyPressed'));
-        blocks.push('-');
-        blocks.push(block('reportAspect'));
-        blocks.push('-');
-        blocks.push(block('doResetTimer'));
-        blocks.push(watcherToggle('getTimer'));
-        blocks.push(block('getTimer'));
-        blocks.push(block('reportDate'));
-        blocks.push('-');
-        blocks.push(block('reportAttributeOf'));
-
-        if (SpriteMorph.prototype.enableFirstClass) {
-            blocks.push(block('reportGet'));
-        }
-
-        blocks.push(block('reportObject'));
-        blocks.push('-');
-        blocks.push(block('reportURL'));
-        blocks.push(block('reportAudio'));
-        blocks.push(block('reportVideo'));
-        blocks.push(block('doSetVideoTransparency'));
-        blocks.push('-');
-        blocks.push(block('reportGlobalFlag'));
-        blocks.push(block('doSetGlobalFlag'));
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(watcherToggle('reportThreadCount'));
-            blocks.push(block('reportThreadCount'));
-            blocks.push(block('reportStackSize'));
-            blocks.push(block('reportFrameCount'));
-            blocks.push(block('reportYieldCount'));
-        }
-    }
-    if (category === 'operators') {
-
-        blocks.push(block('reifyScript'));
-        blocks.push(block('reifyReporter'));
-        blocks.push(block('reifyPredicate'));
-        blocks.push('#');
-        blocks.push('-');
-        blocks.push(block('reportVariadicSum'));
-        blocks.push(block('reportDifference'));
-        blocks.push(block('reportVariadicProduct'));
-        blocks.push(block('reportQuotient'));
-        blocks.push(block('reportPower'));
-        blocks.push('-');
-        blocks.push(block('reportModulus'));
-        blocks.push(block('reportVariadicMin'));
-        blocks.push(block('reportVariadicMax'));
-        blocks.push('-');
-        blocks.push(block('reportRound'));
-        blocks.push(block('reportMonadic'));
-        blocks.push(block('reportAtan2'));
-        blocks.push(block('reportRandom'));
-        blocks.push('-');
-        blocks.push(block('reportVariadicLessThan'));
-        blocks.push(block('reportVariadicEquals'));
-        blocks.push(block('reportVariadicGreaterThan'));
-        blocks.push('-');
-        blocks.push(block('reportVariadicAnd'));
-        blocks.push(block('reportVariadicOr'));
-        blocks.push(block('reportNot'));
-        blocks.push(block('reportBoolean'));
-        blocks.push('-');
-        blocks.push(block('reportJoinWords'));
-        blocks.push(block('reportTextSplit'));
-        blocks.push(block('reportLetter'));
-        blocks.push(block('reportTextAttribute'));
-        blocks.push('-');
-        blocks.push(block('reportUnicode'));
-        blocks.push(block('reportUnicodeAsLetter'));
-        blocks.push('-');
-        blocks.push(block('reportIsA'));
-        blocks.push(block('reportVariadicIsIdentical'));
-
-        if (Process.prototype.enableJS) { // (Process.prototype.enableJS) {
-            blocks.push('-');
-            blocks.push(block('reportJSFunction'));
-            if (Process.prototype.enableCompiling) {
-                blocks.push(block('reportCompiled'));
-            }
-        }
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('reportTypeOf'));
-            blocks.push(block('reportTextFunction'));
-        }
-
-    }
-    if (category === 'variables') {
-
-        blocks.push(this.makeVariableButton());
-        if (this.variables.allNames().length > 0) {
-            blocks.push(this.deleteVariableButton());
-        }
-        blocks.push('-');
-
-        varNames = this.allGlobalVariableNames(true, all);
-        if (varNames.length > 0) {
-            varNames.forEach(name => {
-                blocks.push(variableWatcherToggle(name, true));
-                blocks.push(variableBlock(name));
-            });
-            blocks.push('-');
-        }
-
-        varNames = this.allLocalVariableNames(true, all);
-        if (varNames.length > 0) {
-            varNames.forEach(name => {
-                blocks.push(variableWatcherToggle(name));
-                blocks.push(variableBlock(name, true));
-            });
-            blocks.push('-');
-        }
-
-        blocks.push(block('doSetVar'));
-        blocks.push(block('doChangeVar'));
-        blocks.push(block('doShowVar'));
-        blocks.push(block('doHideVar'));
-        blocks.push(block('doDeclareVariables'));
-        blocks.push('=');
-        blocks.push(block('reportNewList'));
-        blocks.push(block('reportNumbers'));
-        blocks.push('-');
-        blocks.push(block('reportCONS'));
-        blocks.push(block('reportListItem'));
-        blocks.push(block('reportCDR'));
-        blocks.push('-');
-        blocks.push(block('reportListAttribute'));
-        blocks.push(block('reportListIndex'));
-        blocks.push(block('reportListContainsItem'));
-        blocks.push(block('reportListIsEmpty'));
-        blocks.push('-');
-        blocks.push(block('reportMap'));
-        blocks.push(block('reportKeep'));
-        blocks.push(block('reportFindFirst'));
-        blocks.push(block('reportCombine'));
-        blocks.push('-');
-        blocks.push(block('doForEach'));
-        blocks.push('-');
-        blocks.push(block('doAddToList'));
-        blocks.push(block('doDeleteFromList'));
-        blocks.push(block('doInsertInList'));
-        blocks.push(block('doReplaceInList'));
-        blocks.push('-');
-        blocks.push(block('reportConcatenatedLists'));
-        blocks.push(block('reportReshape'));
-        blocks.push(block('reportCrossproduct'));
-
-        if (SpriteMorph.prototype.showingExtensions) {
-            blocks.push('=');
-            blocks.push(block('doPrimitive'));
-            blocks.push(block('doApplyExtension'));
-            blocks.push(block('reportApplyExtension'));
-        }
-
-        if (StageMorph.prototype.enableCodeMapping) {
-            blocks.push('=');
-            blocks.push(block('doMapCodeOrHeader'));
-            blocks.push(block('doMapValueCode'));
-            blocks.push(block('doMapListCode'));
-            blocks.push('-');
-            blocks.push(block('reportMappedCode'));
-        }
-
-        // for debugging: ///////////////
-        if (this.world()?.isDevMode) {
-            blocks.push('-');
-            blocks.push(this.devModeText());
-            blocks.push('-');
-            blocks.push(block('doShowTable'));
-        }
-    }
-
-    return blocks;
-};
+// StageMorph block templates - shared with SpriteMorph, see below
 
 // StageMorph microworld palette support
 
@@ -12768,6 +13128,15 @@ StageMorph.prototype.customBlockTemplatesForCategory
 
 StageMorph.prototype.getPrimitiveTemplates
     = SpriteMorph.prototype.getPrimitiveTemplates;
+
+StageMorph.prototype.blockTemplates = SpriteMorph.prototype.blockTemplates;
+StageMorph.prototype.resolvedPalette = SpriteMorph.prototype.resolvedPalette;
+StageMorph.prototype.resolvePaletteSpec
+    = SpriteMorph.prototype.resolvePaletteSpec;
+StageMorph.prototype.isPaletteMember = SpriteMorph.prototype.isPaletteMember;
+StageMorph.prototype.setPaletteSpec = SpriteMorph.prototype.setPaletteSpec;
+StageMorph.prototype.collapsePaletteSpacers
+    = SpriteMorph.prototype.collapsePaletteSpacers;
 
 StageMorph.prototype.palette = SpriteMorph.prototype.palette;
 StageMorph.prototype.freshPalette = SpriteMorph.prototype.freshPalette;

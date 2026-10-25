@@ -5660,6 +5660,93 @@ Process.prototype.reportMonadic = function (fname, n) {
     );
 };
 
+// Process dedicated monadic math function primitives (hyperized)
+
+Process.prototype.reportAbs = function (n) {
+    return this.reportMonadic('abs', n);
+};
+
+Process.prototype.reportNeg = function (n) {
+    return this.reportMonadic('neg', n);
+};
+
+Process.prototype.reportSign = function (n) {
+    return this.reportMonadic('sign', n);
+};
+
+Process.prototype.reportCeiling = function (n) {
+    return this.reportMonadic('ceiling', n);
+};
+
+Process.prototype.reportFloor = function (n) {
+    return this.reportMonadic('floor', n);
+};
+
+Process.prototype.reportTrunc = function (n) {
+    return this.reportMonadic('trunc', n);
+};
+
+Process.prototype.reportSqrt = function (n) {
+    return this.reportMonadic('sqrt', n);
+};
+
+Process.prototype.reportSin = function (n) {
+    return this.reportMonadic('sin', n);
+};
+
+Process.prototype.reportCos = function (n) {
+    return this.reportMonadic('cos', n);
+};
+
+Process.prototype.reportTan = function (n) {
+    return this.reportMonadic('tan', n);
+};
+
+Process.prototype.reportAsin = function (n) {
+    return this.reportMonadic('asin', n);
+};
+
+Process.prototype.reportAcos = function (n) {
+    return this.reportMonadic('acos', n);
+};
+
+Process.prototype.reportAtan = function (n) {
+    return this.reportMonadic('atan', n);
+};
+
+Process.prototype.reportLn = function (n) {
+    return this.reportMonadic('ln', n);
+};
+
+Process.prototype.reportLog = function (n) {
+    return this.reportMonadic('log', n);
+};
+
+Process.prototype.reportLg = function (n) {
+    return this.reportMonadic('lg', n);
+};
+
+Process.prototype.reportExp = function (n) {
+    return this.reportMonadic('e^', n);
+};
+
+Process.prototype.reportPow10 = function (n) {
+    return this.reportMonadic('10^', n);
+};
+
+Process.prototype.reportPow2 = function (n) {
+    return this.reportMonadic('2^', n);
+};
+
+Process.prototype.reportSigmoid = function (n) {
+    return this.reportMonadic('sigmoid', n);
+};
+
+Process.prototype.reportIdentity = function (n) {
+    return this.reportMonadic('id', n);
+};
+
+
 Process.prototype.reportBasicMonadic = function (fname, n) {
     var x = +n,
         result = 0;
@@ -5680,6 +5767,9 @@ Process.prototype.reportBasicMonadic = function (fname, n) {
         break;
     case 'floor':
         result = Math.floor(x);
+        break;
+    case 'trunc':
+        result = Math.trunc(x);
         break;
     case 'sqrt':
         result = Math.sqrt(x);
@@ -7671,7 +7761,7 @@ Process.prototype.reportGet = function (query) {
                 ).map(
                     def => def.blockInstance().reify()
                 ).concat(
-                    SpriteMorph.prototype.categories.reduce(
+                    SpriteMorph.prototype.allCategories().reduce(
                         (blocks, category) => blocks.concat(
                             thisObj.getPrimitiveTemplates(
                                 category
