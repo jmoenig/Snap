@@ -2034,6 +2034,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'abs %n',
             defaults: [10],
             code: 'abs'
@@ -2042,6 +2043,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'neg %n',
             defaults: [10],
             code: 'neg'
@@ -2050,6 +2052,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'sign %n',
             defaults: [10],
             code: 'sign'
@@ -2058,6 +2061,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'ceiling %n',
             defaults: [10],
             code: 'ceiling'
@@ -2066,6 +2070,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'truncate %n',
             defaults: [10],
             code: 'trunc'
@@ -2074,6 +2079,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'floor %n',
             defaults: [10],
             code: 'floor'
@@ -2082,6 +2088,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'sqrt %n',
             defaults: [10],
             code: 'sqrt'
@@ -2090,6 +2097,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'sin %n',
             defaults: [10],
             code: 'sin'
@@ -2098,6 +2106,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'cos %n',
             defaults: [10],
             code: 'cos'
@@ -2106,6 +2115,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'tan %n',
             defaults: [10],
             code: 'tan'
@@ -2114,6 +2124,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'asin %n',
             defaults: [10],
             code: 'asin'
@@ -2122,6 +2133,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'acos %n',
             defaults: [10],
             code: 'acos'
@@ -2130,6 +2142,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'atan %n',
             defaults: [10],
             code: 'atan'
@@ -2138,6 +2151,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'ln %n',
             defaults: [10],
             code: 'ln'
@@ -2146,6 +2160,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'log %n',
             defaults: [10],
             code: 'log'
@@ -2154,6 +2169,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'lg %n',
             defaults: [10],
             code: 'lg'
@@ -2162,6 +2178,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'e^ %n',
             defaults: [10],
             code: 'exp'
@@ -2170,6 +2187,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: '10^ %n',
             defaults: [10],
             code: 'pow10'
@@ -2178,6 +2196,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: '2^ %n',
             defaults: [10],
             code: 'pow2'
@@ -2186,6 +2205,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'σ %n',
             defaults: [10],
             code: 'sigmoid'
@@ -2194,6 +2214,7 @@ SpriteMorph.prototype.primitiveBlocks = function () {
             type: 'reporter',
             reports: 'number',
             category: 'operators',
+            tags: ['math'],
             spec: 'id %n',
             defaults: [10],
             code: 'id'
@@ -4662,6 +4683,36 @@ SpriteMorph.prototype.definePalette('all', function () {
         table[cat].push(sel);
     });
     return table;
+});
+
+// Named palettes
+
+SpriteMorph.prototype.definePalette('bhs', {
+    // the standard palette with the Operators category rearranged around
+    // the separate monadic math-function blocks (abs, floor, sin, ln, ...)
+    // in place of the "sqrt of" dropdown block
+    base: 'standard',
+    ops: [
+        {op: 'section', category: 'operators', entries: [
+            'reifyScript', 'reifyReporter', 'reifyPredicate', '#', '-',
+            'reportVariadicSum', 'reportDifference', 'reportVariadicProduct',
+            'reportQuotient', 'reportPower', '-', 'reportModulus',
+            'reportVariadicMin', 'reportVariadicMax', '-', 'reportAbs',
+            'reportRound', 'reportFloor', 'reportCeiling', 'reportTrunc',
+            'reportRandom', '-', 'reportVariadicLessThan',
+            'reportVariadicEquals', 'reportVariadicGreaterThan', '-',
+            'reportVariadicAnd', 'reportVariadicOr', 'reportNot',
+            'reportBoolean', '-', 'reportJoinWords', 'reportTextSplit',
+            'reportLetter', 'reportTextAttribute', '-', 'reportUnicode',
+            'reportUnicodeAsLetter', '-', 'reportIsA',
+            'reportVariadicIsIdentical', '-', 'reportNeg', 'reportSign', '-',
+            'reportSin', 'reportCos', 'reportTan', 'reportAsin', 'reportAcos',
+            'reportAtan', 'reportAtan2', '-', 'reportSqrt', 'reportLn',
+            'reportLog', 'reportLg', 'reportExp', 'reportPow10', 'reportPow2',
+            '-', 'reportSigmoid', 'reportIdentity', '-', 'reportJSFunction',
+            'reportCompiled'
+        ]}
+    ]
 });
 
 SpriteMorph.prototype.paletteTagsOf = function (selector) {
