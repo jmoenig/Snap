@@ -279,6 +279,8 @@ function IDE_Morph(config = {}) {
         noSpriteEdits:  bool, hide/show the corral & sprite controls/menus
         noSprites:      bool, hide/show the stage, corral, sprite editor
         noPalette:      bool, hide/show the palette including the categories
+        palette:        str, name of the palette used by new projects and by
+                                projects that don't specify one, e.g. "bhs"
         noImports:      bool, disable/allow importing files via drag&drop
         noShare:        bool, disable/allow sharing and publishing projects
         noOwnBlocks:    bool, hider/show "make a block" and "make a category"
@@ -983,6 +985,11 @@ IDE_Morph.prototype.applyConfigurations = function () {
     // no palette
     if (cnf.noPalette) {
         ScriptsMorph.prototype.enableKeyboard = false;
+    }
+
+    // default palette
+    if (cnf.palette) {
+        SpriteMorph.prototype.defaultPaletteBase = cnf.palette;
     }
 
     if (!refreshLater) {

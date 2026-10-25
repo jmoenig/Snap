@@ -2192,7 +2192,7 @@ SnapSerializer.prototype.loadPaletteSpec = function (model) {
         }
     });
     return SpriteMorph.prototype.newPaletteSpec(
-        model.attributes.base || 'standard',
+        model.attributes.base || SpriteMorph.prototype.defaultPaletteBase,
         ops
     );
 };
@@ -2204,7 +2204,8 @@ SnapSerializer.prototype.paletteToXML = function (aMap, spec) {
     // if the palette spec differs from the default, its base and operations
     var xml,
         isDefault = isNil(spec) ||
-            (spec.base === 'standard' && !(spec.ops || []).length);
+            (spec.base === SpriteMorph.prototype.defaultPaletteBase &&
+                !(spec.ops || []).length);
     if (aMap.size === 0 && isDefault) {return ''; }
     xml = isDefault ? '<palette>'
         : this.format('<palette base="@">', spec.base);

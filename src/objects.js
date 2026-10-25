@@ -4464,6 +4464,12 @@ SpriteMorph.prototype.variableBlock = function (varName, isLocalTemplate) {
     possibly followed by its own operations. Names are kept in the project
     file as written; an unknown name falls back to 'standard' with a
     warning in the console.
+
+    SpriteMorph.prototype.defaultPaletteBase names the palette used by new
+    projects and by project files that don't specify one. It is 'standard'
+    unless the page embedding Snap! sets the "palette" IDE configuration
+    option, see gui.js. A project file only records its base when it
+    differs from this default.
 */
 
 SpriteMorph.prototype.standardPalette = {
@@ -4573,7 +4579,15 @@ SpriteMorph.prototype.devModePalette = {
 
 SpriteMorph.prototype.paletteSpacers = ['-', '=', '#'];
 
-SpriteMorph.prototype.newPaletteSpec = function (base = 'standard', ops = []) {
+// the palette of new projects and of project files that don't name one,
+// settable by the embedding page via the "palette" IDE configuration option
+
+SpriteMorph.prototype.defaultPaletteBase = 'standard';
+
+SpriteMorph.prototype.newPaletteSpec = function (
+    base = SpriteMorph.prototype.defaultPaletteBase,
+    ops = []
+) {
     return {base: base, ops: ops};
 };
 
