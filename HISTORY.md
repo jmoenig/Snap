@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-10-27
+* objects, threads: added support for displaying custom views for ADTs in variable watchers and list views
+
 ## 12.3.6:
 * **Notable Fixes:**
     * fixed displaying intermediate ADT results in visible stepping

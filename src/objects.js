@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-October-21';
+modules.objects = '2026-October-27';
 
 var SpriteMorph;
 var StageMorph;
@@ -15573,20 +15573,13 @@ CellMorph.prototype.dataAsMorph = function (data) {
         };
     } else if (data instanceof List) {
         if (data.isADT()) {
-            // attempt to render the '_morph' method for a custom view.
-            // since in this situation we don't have a full Snap! process
-            // this will fail in most cases (unless there is a JS extension)
-            // as a fallback render a box symbol representing the ADT
+            // attempt to synchronously render the '_morph' method
+            // for a custom view. As a fallback render a box symbol
             try {
-                contents = invoke(
-                    data.lookup('_morph'),
-                    new List([data]),
-                    data, // support "this(object)"
-                    500
-                );
-                if (!(contents instanceof Morph)) {
-                    return this.dataAsMorph(contents);
-                }
+                let proc = new Process(null, new StageMorph());
+                proc.pushContext();
+                proc.evaluate(proc.reportListItem('_morph', data));
+                contents = proc.rawCompute(500);
             } catch {
                 contents = new SymbolMorph('cube', 30);
             }

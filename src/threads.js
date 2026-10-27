@@ -67,7 +67,7 @@ SpeechBubbleMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-October-23';
+modules.threads = '2026-October-27';
 
 var ThreadManager;
 var Process;
@@ -817,6 +817,19 @@ Process.prototype.pauseStep = function () {
     if (this.context && this.context.startTime) {
         this.context.startTime = this.lastYield - this.pauseOffset;
     }
+};
+
+Process.prototype.rawCompute = function (timeout) {
+    // private - synchronously execute without yielding
+    // and return the final result. use with extreme caution
+    var deadline = (timeout ? Date.now() + timeout : null);
+    while (this.context) {
+        this.runStep();
+        if (this.context && deadline && (Date.now() > deadline)) {
+            throw new Error("a synchronous Snap! script has timed out");
+        }
+    }
+    return this.homeContext.inputs[0];
 };
 
 // Process GUI
