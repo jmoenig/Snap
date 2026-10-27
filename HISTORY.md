@@ -2,9 +2,15 @@
 
 ## in development:
 
+## 12.3.8:
+* **Notable Fixes:**
+    * fixed custom ADT visualizations in variable watchers and list views for non-morph readouts
+
 ### 2026-10-27
 * new dev version for v12.4
 * Tunescope major update, thanks, Jo and Glenn!
+* objects: fixed custom ADT visualizations in variable watchers and list views for non-morph readouts
+* prepared v12.3.8 patch
 
 ## 12.3.7:
 * **Notable Changes:**
