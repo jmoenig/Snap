@@ -2,9 +2,15 @@
 
 ## in development:
 
+## 12.3.7:
+* **Notable Changes:**
+    * added support for displaying custom views for ADTs in variable watchers and list views
+    * added SORT to the (new) lists library
+
 ### 2026-10-27
 * objects, threads: added support for displaying custom views for ADTs in variable watchers and list views
 * lists library: added SORT to the (new) lists library
+* prepared v12.3.7 patch
 
 ## 12.3.6:
 * **Notable Fixes:**
