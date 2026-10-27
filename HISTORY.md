@@ -2,6 +2,10 @@
 
 ## in development:
 
+### 2026-10-27
+* new dev version for v12.4
+* Tunescope major update, thanks, Jo and Glenn!
+
 ## 12.3.7:
 * **Notable Changes:**
     * added support for displaying custom views for ADTs in variable watchers and list views
