@@ -15580,6 +15580,9 @@ CellMorph.prototype.dataAsMorph = function (data) {
                 proc.pushContext();
                 proc.evaluate(proc.reportListItem('_morph', data));
                 contents = proc.rawCompute(500);
+                if (!contents.isMorph) {
+                    contents = this.dataAsMorph(contents);
+                }
             } catch {
                 contents = new SymbolMorph('cube', 30);
             }
