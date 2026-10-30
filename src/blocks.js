@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-October-17';
+modules.blocks = '2026-October-30';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -2671,12 +2671,17 @@ SyntaxElementMorph.prototype.isEmptySlot = function () {
 
 // SyntaxElementMorph speech bubble feedback:
 
-SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
+SyntaxElementMorph.prototype.showBubble = function (
+    value,
+    exportPic,
+    target,
+    clickable
+) {
     var bubble,
         txt,
         img,
         morphToShow,
-        isClickable = true,
+        isClickable = (clickable === false) ? false : true,
         ide = this.parentThatIsA(IDE_Morph) || target.parentThatIsA(IDE_Morph),
         anchor = this,
         pos = this.rightCenter().add(new Point(2, 0)),
@@ -2707,14 +2712,11 @@ SyntaxElementMorph.prototype.showBubble = function (value, exportPic, target) {
         if (frame) {
             morphToShow.expand(frame.extent());
         }
-        isClickable = true;
     } else if (value instanceof TableFrameMorph) {
         morphToShow = value;
         morphToShow.isDraggable = false;
         morphToShow.expand(this.parentThatIsA(ScrollFrameMorph).extent());
-        isClickable = true;
     } else if (value instanceof Process) {
-        isClickable = true;
         morphToShow = new Morph();
         morphToShow.color = new Color(255, 255, 255, 0);
         morphToShow.setExtent(new Point(30, 30));
