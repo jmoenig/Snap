@@ -2,6 +2,19 @@
 
 ## in development:
 
+## 12.3.9:
+* **Notable Changes:**
+    * made custom ADT swatches "live" in watchers (not - yet - in balloons)
+    * made intermediate result displays in visible stepping mode unclickable to improve tracing the evaluation of nested reporters
+* **Notable Fixes:**
+    * fixed displaying lists and ADTs inside variables watchers and list view
+
+### 2026-10-30
+* objects, lists, threads: fixed displaying lists and ADTs inside variables watchers and list view
+* objects, lists, threads: made custom ADT swatches "live" in watchers (not - yet - in balloons)
+* blocks, threads: made intermediate result displays in visible stepping mode unclickable to improve tracing the evaluation of nested reporters
+* prepared v12.3.9 patch
+
 ## 12.3.8:
 * **Notable Fixes:**
     * fixed custom ADT visualizations in variable watchers and list views for non-morph readouts

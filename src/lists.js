@@ -61,11 +61,11 @@ MorphicPreferences, TableDialogMorph, SpriteBubbleMorph, SpeechBubbleMorph,
 TableFrameMorph, TableMorph, Variable, isSnapObject, Costume, contains, detect,
 Context, ZERO, WHITE, ReadStream, Process, Table*/
 
-/*jshint esversion: 6*/
+/*jshint esversion: 11*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2026-August-17';
+modules.lists = '2026-October-30';
 
 var List;
 var ListWatcherMorph;
@@ -1595,10 +1595,11 @@ ListWatcherMorph.prototype.update = function (anyway) {
             } else if (isSnapObject(m.contents) ||
                 (m.contents instanceof Costume) ||
                 (m.contents instanceof Context) ||
-                (m.contents instanceof Process) ||
-                (m.contents instanceof List && m.contents.isADT())
+                (m.contents instanceof Process)
             ) {
                 m.update();
+            } else if (m.contents.isADT?.()) {
+                m.updateCustomSwatch();
             }
         }
     });

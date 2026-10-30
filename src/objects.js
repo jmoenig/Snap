@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-October-27';
+modules.objects = '2026-October-30';
 
 var SpriteMorph;
 var StageMorph;
@@ -15382,7 +15382,8 @@ CellMorph.prototype.createContents = function () {
             && (this.contentsMorph.list === this.contents),
         isSameTable = this.contentsMorph instanceof TableFrameMorph
             && (this.contentsMorph.tableMorph.table === this.contents ||
-                (this.contents?.isADT && this.contents.isADT()));
+                (this.contents.isADT?.() &&
+                this.contentsMorph.tableMorph.table.isADT?.()));
 
     if (this.isBig) {
         fontSize = fontSize * 1.5;
@@ -15586,6 +15587,7 @@ CellMorph.prototype.dataAsMorph = function (data) {
             } catch {
                 contents = new SymbolMorph('cube', 30);
             }
+            this.version = data.lastChanged;
         } else {
             setupList();
         }
@@ -15635,6 +15637,17 @@ CellMorph.prototype.update = function () {
         this.fixLayout();
         this.rerender();
         this.version = this.contents.version;
+    }
+};
+
+CellMorph.prototype.updateCustomSwatch = function () {
+    // special case for observing ADTs
+    if (!this.contents.isADT?.()) {
+        return;
+    }
+    if (this.version !== this.contents.lastChanged) {
+        this.fixLayout();
+        this.rerender();
     }
 };
 
@@ -15952,6 +15965,8 @@ WatcherMorph.prototype.update = function () {
         this.cellMorph.contentsMorph.update();
     } else if (isSnapObject(this.cellMorph.contents)) {
         this.cellMorph.update();
+    } else if (this.cellMorph.contents.isADT?.()) {
+        this.cellMorph.updateCustomSwatch();
     }
 };
 

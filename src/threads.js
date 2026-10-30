@@ -4277,21 +4277,21 @@ Process.prototype.doGlide = function (secs, endX, endY) {
 // Process SAY and THINK primitives
 
 Process.prototype.bubble = function (data) {
-    if (data instanceof List && data.isADT()) {
+    if (data.isADT?.()) {
         return this.dynamicViewFor(data);
     }
     this.blockReceiver().bubble(data);
 };
 
 Process.prototype.doThink = function (data) {
-    if (data instanceof List && data.isADT()) {
+    if (data.isADT?.()) {
         return this.dynamicViewFor(data);
     }
     this.blockReceiver().doThink(data);
 };
 
 Process.prototype.doSayFor = function (data, secs) {
-    if (data instanceof List && data.isADT()) {
+    if (data.isADT?.()) {
         return this.dynamicViewFor(data);
     }
     if (!this.context.startTime) {
@@ -4307,7 +4307,7 @@ Process.prototype.doSayFor = function (data, secs) {
 };
 
 Process.prototype.doThinkFor = function (data, secs) {
-    if (data instanceof List && data.isADT()) {
+    if (data.isADT?.()) {
         return this.dynamicViewFor(data);
     }
     if (!this.context.startTime) {
@@ -8651,15 +8651,17 @@ Process.prototype.returnValueToParentContext = function (value) {
                         value.isTable() ?
                             new TableFrameMorph(new TableMorph(value))
                             : new ListWatcherMorph(value),
-                        this.exportResult,
-                        this.receiver
+                        false, // export pic
+                        this.receiver,
+                        false // clickable
                     );
                 }
             } else {
                 anchor.showBubble(
                     value,
-                    this.exportResult,
-                    this.receiver
+                    false, // export pic
+                    this.receiver,
+                    false // clickable
                 );
             }
         }
