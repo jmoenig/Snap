@@ -4,6 +4,7 @@
 
 ### 2026-11-02
 * objects: turned off antialiasing for stamping - improves some operations but degrades others :/
+* updated the text costumes library rendering mechanism, added German translation
 
 ## 12.3.9:
 * **Notable Changes:**

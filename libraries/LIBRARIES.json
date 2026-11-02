@@ -677,6 +677,10 @@
         "name": "Text als vestits",
         "description": "Genera vestits utilitzant lletres, paraules... o qualevol text."
       },
+      "de": {
+        "name": "Textkostüme",
+        "description": "Kostüme aus Buchstaben oder Worten erstellen"
+      },
       "gl": {
         "name": "Traxes de texto",
         "description": "Xerar traxes a partires de letras ou palabras… ou calquera texto."
