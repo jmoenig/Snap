@@ -1958,6 +1958,10 @@
         "name": "Escrivint i formatant text",
         "description": "Escriu text utilitzant les fonts de Tethrarxitet"
       },
+      "de": {
+        "name": "Typographie",
+        "description": "Schriftsatz mit verschiedenen Schriftarten, beigesteuert von Tethrarxitet"
+      },
       "zh_CN": {
         "name": "画笔美术字库",
         "description": "允许画笔通过预定的格式打印文本，由官方社区贡献者Tethrarxitet提供"
