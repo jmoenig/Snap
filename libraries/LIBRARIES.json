@@ -404,8 +404,10 @@
     ],
     "translations": {
       "de": {
+        "name": "Mobilgerätsensoren",
+        "description": "Sensordaten auf Handys und Tablets verwenden",
         "searchData": [
-          "Neigung _\rar"
+          "Neigung _"
         ]
       },
       "ca": {
@@ -588,6 +590,10 @@
         "name": "Mapa del món",
         "description": "Afegeix mapes interactius als projectes."
       },
+      "de": {
+        "name": "Weltkarte",
+        "description": "Interaktive Karten in Projekten verwenden"
+      },
       "es": {
         "name": "Mapamundi",
         "description": "Añadir mapas interactivos a los proyectos"
@@ -648,6 +654,10 @@
     "translations": {
       "ca": {
         "description": "Demana a l'usuari que triï una opció."
+      },
+      "de": {
+	"name": "Menüs",
+        "description": "Den Benutzer eine Auswahl treffen lassen"
       },
       "zh_CN": {
         "name": "问答菜单库",
