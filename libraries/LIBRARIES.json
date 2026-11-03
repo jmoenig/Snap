@@ -404,8 +404,10 @@
     ],
     "translations": {
       "de": {
+        "name": "Mobilgerätsensoren",
+        "description": "Sensordaten auf Handys und Tablets verwenden",
         "searchData": [
-          "Neigung _\rar"
+          "Neigung _"
         ]
       },
       "ca": {
@@ -588,6 +590,10 @@
         "name": "Mapa del món",
         "description": "Afegeix mapes interactius als projectes."
       },
+      "de": {
+        "name": "Weltkarte",
+        "description": "Interaktive Karten in Projekten verwenden"
+      },
       "es": {
         "name": "Mapamundi",
         "description": "Añadir mapas interactivos a los proyectos"
@@ -649,6 +655,10 @@
       "ca": {
         "description": "Demana a l'usuari que triï una opció."
       },
+      "de": {
+	"name": "Menüs",
+        "description": "Den Benutzer eine Auswahl treffen lassen"
+      },
       "zh_CN": {
         "name": "问答菜单库",
         "description": "在询问框上提示用户选择一个选项"
@@ -676,6 +686,10 @@
       "ca": {
         "name": "Text als vestits",
         "description": "Genera vestits utilitzant lletres, paraules... o qualevol text."
+      },
+      "de": {
+        "name": "Textkostüme",
+        "description": "Kostüme aus Buchstaben oder Worten erstellen"
       },
       "gl": {
         "name": "Traxes de texto",
@@ -1953,6 +1967,10 @@
       "ca": {
         "name": "Escrivint i formatant text",
         "description": "Escriu text utilitzant les fonts de Tethrarxitet"
+      },
+      "de": {
+        "name": "Typographie",
+        "description": "Schriftsatz mit verschiedenen Schriftarten, beigesteuert von Tethrarxitet"
       },
       "zh_CN": {
         "name": "画笔美术字库",
