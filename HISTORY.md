@@ -4,6 +4,7 @@
 
 ### 2026-11-03
 * updated text-costumes library
+* updated text writing and formatting library
 
 ### 2026-11-02
 * objects: turned off antialiasing for stamping - improves some operations but degrades others :/
