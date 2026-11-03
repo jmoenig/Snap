@@ -3449,6 +3449,9 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     this.translations = definition.translationsAsText();
     this.handle = null;
     this.primitive = null; // optional selector when editing a primitive block
+    this.applyButton = null; // greyed out when there are no unapplied changes
+    this.appliedState = null; // snapshot of the last applied (or loaded) state
+    this.changeCheckTime = 0; // when the apply button was last refreshed
 
     // initialize inherited properties:
     BlockEditorMorph.uber.init.call(
@@ -3509,7 +3512,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
 
     scriptsFrame = new ScrollFrameMorph(scripts);
     scriptsFrame.padding = 10;
-    scriptsFrame.growth = 50;
+    scriptsFrame.growth = 0; // no slack, so scrollbars only show on overflow
     scriptsFrame.isDraggable = false;
     scriptsFrame.acceptsDrops = false;
     scriptsFrame.contents.acceptsDrops = true;
@@ -3519,7 +3522,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     this.addBody(scriptsFrame);
     this.addButton('ok', 'OK');
     if (!isLive) {
-        this.addButton('updateDefinition', 'Apply');
+        this.applyButton = this.addButton('updateDefinition', 'Apply');
         this.addButton('cancel', 'Cancel');
     }
 
@@ -3530,7 +3533,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     block = proto.parts()[0];
     block.forceNormalColoring();
     proto.fixBlockColor(null, true);
-
+    this.recordAppliedState();
 };
 
 BlockEditorMorph.prototype.popUp = function () {
@@ -3538,7 +3541,6 @@ BlockEditorMorph.prototype.popUp = function () {
 
     if (world) {
         BlockEditorMorph.uber.popUp.call(this, world);
-        this.setInitialDimensions();
         this.handle = new HandleMorph(
             this,
             280,
@@ -3546,6 +3548,8 @@ BlockEditorMorph.prototype.popUp = function () {
             this.corner,
             this.corner
         );
+        this.handle.mouseDoubleClick = () => this.fitToContents();
+        this.setInitialDimensions();
         world.keyboardFocus = null;
     }
 };
@@ -3800,6 +3804,91 @@ BlockEditorMorph.prototype.updateDefinition = function () {
         'update',
         this.definition.abstractBlockSpec()
     );
+    this.recordAppliedState();
+};
+
+// BlockEditorMorph change tracking
+
+BlockEditorMorph.prototype.snapshot = function () {
+    // answer a string representing my current (edited) state,
+    // or null if it cannot be determined. Used to detect whether
+    // there are any changes that haven't yet been applied
+    var scripts = this.body.contents,
+        head = detect(
+            scripts.children,
+            c => c instanceof PrototypeHatBlockMorph
+        ),
+        ide = this.target.parentThatIsA(IDE_Morph),
+        contents, xml;
+
+    if (!head || !ide) {return null; }
+    contents = {
+        // serializes all scripts, except for the prototype hat block,
+        // whose settings are captured separately below
+        toXML: serializer => '<scripts ~>' + scripts.children.reduce(
+            (xml, morph) => {
+                if (morph === head) {
+                    return xml + (head.nextBlock() ?
+                        head.nextBlock().toScriptXML(serializer) : '');
+                }
+                if (morph instanceof BlockMorph) {
+                    return xml + morph.toScriptXML(serializer, true);
+                }
+                if (morph instanceof CommentMorph && !morph.block) {
+                    return xml + morph.toXML(serializer);
+                }
+                return xml;
+            },
+            ''
+        ) + '</scripts>'
+    };
+    try {
+        xml = ide.serializer.serialize(contents);
+        return JSON.stringify([
+            xml,
+            this.prototypeSpec(),
+            Array.from(this.prototypeSlots()),
+            this.variableNames(),
+            this.prototypeSemantics(),
+            head.blockCategory,
+            head.type,
+            head.isHelper,
+            head.reports,
+            head.enforceTypes,
+            head.blockSelector,
+            head.comment ? head.comment.text() : null,
+            this.translations
+        ]);
+    } catch (err) {
+        return null;
+    }
+};
+
+BlockEditorMorph.prototype.recordAppliedState = function () {
+    // remember my current state as the one the definition reflects
+    this.appliedState = this.snapshot();
+    this.refreshApplyButton();
+};
+
+BlockEditorMorph.prototype.refreshApplyButton = function () {
+    // grey out the apply button unless I have unapplied changes
+    var changed;
+    if (!this.applyButton) {return; }
+    changed = this.appliedState === null ||
+        this.snapshot() !== this.appliedState;
+    if (changed && this.applyButton.isDisabled) {
+        this.applyButton.enable();
+    } else if (!changed && !this.applyButton.isDisabled) {
+        this.applyButton.disable();
+    }
+};
+
+BlockEditorMorph.prototype.step = function () {
+    // periodically check for unapplied changes
+    var now = Date.now();
+    if (now - this.changeCheckTime < 250) {return; }
+    this.changeCheckTime = now;
+    this.refreshApplyButton();
 };
 
 BlockEditorMorph.prototype.context = function (prototypeHat) {
@@ -3920,23 +4009,56 @@ BlockEditorMorph.prototype.editTranslations = function () {
 // BlockEditorMorph layout
 
 BlockEditorMorph.prototype.setInitialDimensions = function () {
-    var world = this.world(),
-        mex = world.extent().subtract(new Point(this.padding, this.padding)),
-        th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
-        bh = this.buttons.height();
+    // open at the smallest size that shows all scripts without
+    // scrollbars, where I was last closed, if known
+    var world = this.world();
 
+    this.fitToContents();
     if (this.definition.editorDimensions) {
         this.setPosition(this.definition.editorDimensions.origin);
-        this.setExtent(this.definition.editorDimensions.extent().min(mex));
         this.keepWithin(world);
-        return;
+    } else {
+        this.setCenter(world.center());
     }
-    this.setExtent(
-        this.body.contents.extent().add(
-            new Point(this.padding, this.padding + th + bh)
-        ).min(mex)
-    );
-    this.setCenter(this.world().center());
+};
+
+BlockEditorMorph.prototype.fitToContents = function () {
+    // shrink (or grow) to the smallest size that shows all scripts
+    // without scrollbars, keeping the top-left corner in place
+    var world = this.world(),
+        frame = this.body,
+        scripts = frame.contents,
+        toolBar = frame.toolBar,
+        th = fontHeight(this.titleFontSize) + this.titlePadding * 2,
+        bh = this.buttons.height(),
+        area = scripts.submorphBounds().expandBy(frame.padding),
+        ext = area.extent().add(
+            new Point(this.padding * 2, this.padding * 3 + th + bh)
+        );
+
+    // leave room for the toolbar (undo, redo, keyboard buttons) in the
+    // frame's top-right corner, so it doesn't overlap the scripts
+    if (toolBar) {
+        ext.x += toolBar.width() +
+            (frame.vBar.isVisible ? frame.vBar.left() : frame.right()) -
+            toolBar.right();
+    }
+    if (this.handle) {
+        ext = ext.max(this.handle.minExtent);
+    }
+    if (world) {
+        ext = ext.min(world.extent().subtract(this.padding));
+    }
+    // scroll the scripts so their top-left corner is visible
+    scripts.moveBy(frame.topLeft().subtract(area.origin));
+    this.setExtent(ext);
+    scripts.adjustBounds();
+    if (this.handle) {
+        this.handle.fixLayout();
+    }
+    if (world) {
+        this.keepWithin(world);
+    }
 };
 
 BlockEditorMorph.prototype.fixLayout = function () {
