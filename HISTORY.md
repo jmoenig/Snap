@@ -5,6 +5,7 @@
 ### 2026-11-03
 * updated text-costumes library
 * updated text writing and formatting library
+* presentations library: Added a formatted text-costume reporter
 
 ### 2026-11-02
 * objects: turned off antialiasing for stamping - improves some operations but degrades others :/
