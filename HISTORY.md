@@ -2,11 +2,20 @@
 
 ## in development:
 
+## 12.3.10:
+* **Notable Changes:**
+    * turned off antialiasing for stamping
+    * updated the rendering mechanism for text costumes (in the text-costumes and writing-and-formatting libraries)
+    * added a text-costume reporter to the presentations library
+* **Translation Updates:**
+    * German
+
 ### 2026-11-03
 * updated text-costumes library
 * updated text writing and formatting library
 * presentations library: Added a formatted text-costume reporter
 * added some more German translations to the libraries catalog
+* prepared v12.3.10 patch
 
 ### 2026-11-02
 * objects: turned off antialiasing for stamping - improves some operations but degrades others :/
