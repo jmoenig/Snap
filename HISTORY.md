@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-11-04
+* fixed centering rotation centers of text costumes
+
 ## 12.3.10:
 * **Notable Changes:**
     * turned off antialiasing for stamping
