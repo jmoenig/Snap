@@ -4,6 +4,7 @@
 
 ### 2026-11-04
 * fixed centering rotation centers of text costumes
+* objects: turned on antialiasing for stamping again
 
 ## 12.3.10:
 * **Notable Changes:**

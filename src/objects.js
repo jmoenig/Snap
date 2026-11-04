@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-November-02';
+modules.objects = '2026-November-04';
 
 var SpriteMorph;
 var StageMorph;
@@ -6899,7 +6899,7 @@ SpriteMorph.prototype.stampOnPenTrails = function () {
     ctx.scale(1 / stage.scale, 1 / stage.scale);
     ctx.globalAlpha = this.alpha;
     ctx.globalCompositeOperation = this.blendingMode();
-    ctx.imageSmoothingEnabled = false;
+    // ctx.imageSmoothingEnabled = false;
     ctx.drawImage(
         img,
         this.left() - stage.left(),
@@ -7168,7 +7168,7 @@ SpriteMorph.prototype.blitOn = function (target, mask = 'source-atop') {
     ctx.scale(relScale, relScale);
     ctx.globalAlpha = this.alpha;
     ctx.globalCompositeOperation = mask;
-    ctx.imageSmoothingEnabled = false;
+    // ctx.imageSmoothingEnabled = false;
     ctx.drawImage(sourceCostume.contents, pos.x, pos.y);
 
     // make the target wear the new costume
@@ -14096,7 +14096,7 @@ Costume.prototype.shrinkWrap = function () {
         pic = newCanvas(ext, true),
         ctx = pic.getContext('2d');
 
-    ctx.imageSmoothingEnabled = false;
+    // ctx.imageSmoothingEnabled = false;
     ctx.drawImage(
         this.contents,
         bb.origin.x,
@@ -14184,7 +14184,7 @@ Costume.prototype.copy = function () {
         cpy,
         ctx;
     ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = false;
+    // ctx.imageSmoothingEnabled = false;
     ctx.drawImage(this.contents, 0, 0);
     cpy = new Costume(canvas, this.name ? copy(this.name) : null);
     cpy.rotationCenter = this.rotationCenter.copy();
