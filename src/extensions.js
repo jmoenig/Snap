@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph, Rectangle*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-October-15';
+modules.extensions = '2026-November-05';
 
 // Global stuff
 
@@ -1716,6 +1716,18 @@ SnapExtensions.primitives.set(
         ide.flushBlocksCache();
         ide.refreshPalette();
         ide.refreshEmptyCategories();
+    }
+);
+
+SnapExtensions.primitives.set(
+    'ide_stage_size(x, y)',
+    function (x, y, proc) {
+        var ide = this.parentThatIsA(IDE_Morph);
+        if (ide) {
+            proc.assertType(x, 'number');
+            proc.assertType(y, 'number');
+            ide.setStageExtent(new Point(x, y));
+        }
     }
 );
 
