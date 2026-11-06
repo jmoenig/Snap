@@ -2972,7 +2972,11 @@ Process.prototype.reportIsBefore = function (a, b) {
             )
         );
     case 'color':
-        return a.r < b.r || a.g < b.g || a.b < b.b;
+        // lexicographic, so that the order is consistent
+        if (a.r !== b.r) {return a.r < b.r; }
+        if (a.g !== b.g) {return a.g < b.g; }
+        if (a.b !== b.b) {return a.b < b.b; }
+        return a.a < b.a;
     case 'command':
     case 'reporter':
     case 'predicate':
