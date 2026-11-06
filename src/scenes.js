@@ -143,6 +143,7 @@ function Scene(aStageMorph) {
     this.codeMappings = {};
     this.codeHeaders = {};
     this.customCategories = new Map(); // key: name, value: color
+    this.paletteSpec = SpriteMorph.prototype.newPaletteSpec();
     this.blocks = SpriteMorph.prototype.primitiveBlocks();
 
     // global settings (copied)
@@ -232,6 +233,7 @@ Scene.prototype.captureGlobalSettings = function () {
     this.enableLiveCoding = Process.prototype.enableLiveCoding;
     this.enableHyperOps = Process.prototype.enableHyperOps;
     this.customCategories = SpriteMorph.prototype.customCategories;
+    this.paletteSpec = SpriteMorph.prototype.paletteSpec;
     this.disableClickToRun = ThreadManager.prototype.disableClickToRun;
     this.disableDraggingData = SpriteMorph.prototype.disableDraggingData;
     this.penColorModel = SpriteMorph.prototype.penColorModel;
@@ -252,6 +254,7 @@ Scene.prototype.applyGlobalSettings = function () {
     Process.prototype.enableLiveCoding = this.enableLiveCoding;
     Process.prototype.enableHyperOps = this.enableHyperOps;
     SpriteMorph.prototype.customCategories = this.customCategories;
+    SpriteMorph.prototype.paletteSpec = this.paletteSpec;
     ThreadManager.prototype.disableClickToRun = this.disableClickToRun;
     SpriteMorph.prototype.disableDraggingData = this.disableDraggingData;
     SpriteMorph.prototype.penColorModel = this.penColorModel;

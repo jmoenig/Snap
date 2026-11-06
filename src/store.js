@@ -508,6 +508,8 @@ SnapSerializer.prototype.loadScene = function (
     if (model.palette) {
         scene.customCategories = this.loadPalette(model.palette);
         SpriteMorph.prototype.customCategories = scene.customCategories;
+        scene.paletteSpec = this.loadPaletteSpec(model.palette);
+        SpriteMorph.prototype.paletteSpec = scene.paletteSpec;
     }
     scene.role = model.scene.attributes.role || null;
     model.template = model.scene.childNamed('template');
@@ -2146,12 +2148,67 @@ SnapSerializer.prototype.loadPalette = function (model) {
     return p;
 };
 
+SnapSerializer.prototype.loadPaletteSpec = function (model) {
+    // private - answer a palette spec from the <palette> element's
+    // "base" attribute and its operation children, see objects.js
+    var ops = [],
+        entryTags = {
+            sep: '-',
+            gap: '=',
+            row: '#',
+            variables: '$variables'
+        };
+
+    function words(str) {
+        return (str || '').split(' ').filter(word => word.length > 0);
+    }
+
+    model.children.forEach(node => {
+        var attrs = node.attributes, op;
+        switch (node.tag) {
+        case 'exclude':
+        case 'include':
+            ops.push({op: node.tag, tags: words(attrs.tags)});
+            break;
+        case 'remove':
+            ops.push({op: 'remove', selector: attrs.s});
+            break;
+        case 'add':
+            op = {op: 'add', selector: attrs.s, category: attrs.to};
+            if (attrs.before) {op.before = attrs.before; }
+            if (attrs.after) {op.after = attrs.after; }
+            ops.push(op);
+            break;
+        case 'section':
+            ops.push({
+                op: 'section',
+                category: attrs.name,
+                entries: node.children.map(entry =>
+                    entry.tag === 'block' ? entry.attributes.s
+                        : entryTags[entry.tag]
+                ).filter(entry => !isNil(entry))
+            });
+            break;
+        }
+    });
+    return SpriteMorph.prototype.newPaletteSpec(
+        model.attributes.base || SpriteMorph.prototype.defaultPaletteBase,
+        ops
+    );
+};
+
 // SnapSerializer XML-representation of objects:
 
-SnapSerializer.prototype.paletteToXML = function (aMap) {
-    var xml;
-    if (aMap.size === 0) {return ''; }
-    xml = '<palette>';
+SnapSerializer.prototype.paletteToXML = function (aMap, spec) {
+    // answer the <palette> element holding the custom categories and,
+    // if the palette spec differs from the default, its base and operations
+    var xml,
+        isDefault = isNil(spec) ||
+            (spec.base === SpriteMorph.prototype.defaultPaletteBase &&
+                !(spec.ops || []).length);
+    if (aMap.size === 0 && isDefault) {return ''; }
+    xml = isDefault ? '<palette>'
+        : this.format('<palette base="@">', spec.base);
     aMap.forEach((value, key) => {
         xml += this.format(
             '<category name="@" color="%,%,%,%"/>',
@@ -2162,8 +2219,49 @@ SnapSerializer.prototype.paletteToXML = function (aMap) {
             value.a
         );
     });
+    if (!isDefault) {
+        xml += this.paletteOpsToXML(spec.ops);
+    }
     xml += '</palette>';
     return xml;
+};
+
+SnapSerializer.prototype.paletteOpsToXML = function (ops) {
+    // private - serialize palette spec operations, see objects.js
+    var entryTags = {
+        '-': '<sep/>',
+        '=': '<gap/>',
+        '#': '<row/>',
+        '$variables': '<variables/>'
+    };
+    return (ops || []).map(op => {
+        switch (op.op) {
+        case 'exclude':
+        case 'include':
+            return this.format(
+                '<' + op.op + ' tags="@"/>',
+                (op.tags || []).join(' ')
+            );
+        case 'remove':
+            return this.format('<remove s="@"/>', op.selector);
+        case 'add':
+            return this.format(
+                '<add s="@"%%%/>',
+                op.selector,
+                op.category ? this.format(' to="@"', op.category) : '',
+                op.before ? this.format(' before="@"', op.before) : '',
+                op.after ? this.format(' after="@"', op.after) : ''
+            );
+        case 'section':
+            return this.format('<section name="@">', op.category) +
+                (op.entries || []).map(entry =>
+                    entryTags[entry] || this.format('<block s="@"/>', entry)
+                ).join('') +
+                '</section>';
+        default:
+            return '';
+        }
+    }).join('');
 };
 
 // Generics
@@ -2316,7 +2414,7 @@ Scene.prototype.toXML = function (serializer) {
         this.enforceTypes ? ' strict="true"' : '',
         this.isHiddenInCorral ? ' corral="false"' : '',
         this.notes || '',
-        serializer.paletteToXML(this.customCategories),
+        serializer.paletteToXML(this.customCategories, this.paletteSpec),
         Object.keys(this.hiddenPrimitives).reduce(
                 (a, b) => a + ' ' + b,
                 ''
