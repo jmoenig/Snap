@@ -397,25 +397,36 @@ List.prototype.bind = function (key, value) {
 List.prototype.forget = function (key) {
     // remove all records indicated by the key
     // and return the index of the first match, if any
-    var idx = 0,
-        match = this.length(),
-        query = rec =>
-            snapEquals(rec, key) || (
-                rec instanceof List &&
+    var match = this.length(),
+        found = [],
+        keyIsList = key instanceof List,
+        items,
+        i,
+        query = rec => rec instanceof List ?
+            // a list never equals a non-list key, skip comparing it whole
+            (keyIsList && snapEquals(rec, key)) || (
                 rec.length() === 2 &&
                 snapEquals(rec.at(1), key)
-            );
+            )
+            : snapEquals(rec, key);
 
     if (parseFloat(key) === +key) { // treat as numerical index
         this.remove(key);
         return key;
     }
-    while (idx > -1) {
-        idx = this.itemsArray().findIndex(query);
-        if (idx > -1) {
-            match = Math.min(match, idx);
-            this.remove(idx + 1);
+    // single pass from the end, so removing a match doesn't shift
+    // the indices of the matches still to be removed
+    items = this.itemsArray();
+    for (i = items.length - 1; i >= 0; i -= 1) {
+        if (query(items[i])) {
+            found.push(i);
         }
+    }
+    if (found.length) {
+        this.becomeArray();
+        found.forEach(idx => this.contents.splice(idx, 1));
+        match = found[found.length - 1];
+        this.changed();
     }
     return match;
 };
