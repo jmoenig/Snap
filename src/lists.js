@@ -202,6 +202,11 @@ List.prototype.add = function (element, index) {
     var idx = isNil(index) ? this.length() + 1 : this.wrapIndex(index),
         obj = isNil(element) ? null : element;
 
+    if (idx < 1) {
+        // same as put() and at(): indices below 1 address no slot.
+        // splice() would count them from the end of the list
+        return;
+    }
     this.becomeArray();
     this.contents.splice(idx - 1, 0, obj);
     this.changed();
@@ -224,8 +229,14 @@ List.prototype.put = function (element, index) {
 
 List.prototype.remove = function (index) {
     // remove the given slot, shortening the list
+    var idx = this.wrapIndex(index);
+    if (idx < 1) {
+        // same as put() and at(): indices below 1 address no slot.
+        // splice() would count them from the end of the list
+        return;
+    }
     this.becomeArray();
-    this.contents.splice(this.wrapIndex(index) - 1, 1);
+    this.contents.splice(idx - 1, 1);
     this.changed();
 };
 
