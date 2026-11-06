@@ -202,6 +202,11 @@ List.prototype.add = function (element, index) {
     var idx = isNil(index) ? this.length() + 1 : this.wrapIndex(index),
         obj = isNil(element) ? null : element;
 
+    if (idx < 1) {
+        // same as put() and at(): indices below 1 address no slot.
+        // splice() would count them from the end of the list
+        return;
+    }
     this.becomeArray();
     this.contents.splice(idx - 1, 0, obj);
     this.changed();
@@ -224,8 +229,14 @@ List.prototype.put = function (element, index) {
 
 List.prototype.remove = function (index) {
     // remove the given slot, shortening the list
+    var idx = this.wrapIndex(index);
+    if (idx < 1) {
+        // same as put() and at(): indices below 1 address no slot.
+        // splice() would count them from the end of the list
+        return;
+    }
     this.becomeArray();
-    this.contents.splice(this.wrapIndex(index) - 1, 1);
+    this.contents.splice(idx - 1, 1);
     this.changed();
 };
 
@@ -386,25 +397,36 @@ List.prototype.bind = function (key, value) {
 List.prototype.forget = function (key) {
     // remove all records indicated by the key
     // and return the index of the first match, if any
-    var idx = 0,
-        match = this.length(),
-        query = rec =>
-            snapEquals(rec, key) || (
-                rec instanceof List &&
+    var match = this.length(),
+        found = [],
+        keyIsList = key instanceof List,
+        items,
+        i,
+        query = rec => rec instanceof List ?
+            // a list never equals a non-list key, skip comparing it whole
+            (keyIsList && snapEquals(rec, key)) || (
                 rec.length() === 2 &&
                 snapEquals(rec.at(1), key)
-            );
+            )
+            : snapEquals(rec, key);
 
     if (parseFloat(key) === +key) { // treat as numerical index
         this.remove(key);
         return key;
     }
-    while (idx > -1) {
-        idx = this.itemsArray().findIndex(query);
-        if (idx > -1) {
-            match = Math.min(match, idx);
-            this.remove(idx + 1);
+    // single pass from the end, so removing a match doesn't shift
+    // the indices of the matches still to be removed
+    items = this.itemsArray();
+    for (i = items.length - 1; i >= 0; i -= 1) {
+        if (query(items[i])) {
+            found.push(i);
         }
+    }
+    if (found.length) {
+        this.becomeArray();
+        found.forEach(idx => this.contents.splice(idx, 1));
+        match = found[found.length - 1];
+        this.changed();
     }
     return match;
 };
@@ -1121,9 +1143,11 @@ List.prototype.asCSV = function () {
     function encodeCell(atomicValue) {
         var string = isNil(atomicValue) ? '' : atomicValue.toString(),
             cell;
-        if (string.indexOf('\"') ===  -1 &&
-                (string.indexOf('\n') === -1) &&
-                (string.indexOf('\,') === -1)) {
+        // quote line breaks of any kind, and every delimiter that
+        // Process.guessDelimiterCSV() might pick when reading it back
+        if (!['\"', ',', '\n', '\r', ';', '|', '\t'].some(
+            special => string.includes(special)
+        )) {
             return string;
         }
         cell = ['\"'];
