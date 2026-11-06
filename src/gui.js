@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-November-03';
+modules.gui = '2026-November-06';
 
 // Declarations
 

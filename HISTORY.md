@@ -2,6 +2,25 @@
 
 ## in development:
 
+## 12.3.11:
+* **New Features:**
+    * new 'ide_stage_size' extension for programmatically changing the stage's dimensions, use sensibly!
+* **Notable Changes:**
+    * turned on antialiasing for stamping again (turning it off enabled lossless re-stamping of pen-trails but ended up with too many detrimental side effects elsewhere)
+* **Notable Fixes:**
+    * fixed centering rotation centers of text costumes (in libraries)
+
+### 2026-11-06
+* extensions: made 'ide_stage_size' extension's execution interpolated so it blocks during the resizing animation
+* prepared v12.3.11 patch
+
+### 2026-11-05
+* extensions: added 'ide_stage_size' extension for programmatically changing the stage's dimensions, use with care!
+
+### 2026-11-04
+* fixed centering rotation centers of text costumes
+* objects: turned on antialiasing for stamping again
+
 ## 12.3.10:
 * **Notable Changes:**
     * turned off antialiasing for stamping
