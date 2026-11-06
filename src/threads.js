@@ -5846,21 +5846,56 @@ Process.prototype.safeStringArray = function (str) {
     return Array.from(str.toString());
 };
 
+Process.prototype.textLetters = function (str) {
+    // private - answer a record for read-only access to the letters
+    // (code points) of a text: {text, letters, length}, where letters
+    // can be indexed like an array.
+    // "letter (i) of" and "length of" are typically used inside loops
+    // over the same text, so the last record is cached instead of copying
+    // the whole text into an array on every call. Texts without surrogate
+    // code units are indexed directly and never copied.
+    var cached = Process.prototype.textLettersCache,
+        hasSurrogates = false,
+        letters,
+        record,
+        code,
+        i;
+    if (cached && cached.text === str) {
+        return cached;
+    }
+    for (i = 0; i < str.length; i += 1) {
+        code = str.charCodeAt(i);
+        if (code >= 0xD800 && code <= 0xDFFF) {
+            hasSurrogates = true;
+            break;
+        }
+    }
+    letters = hasSurrogates ? this.safeStringArray(str) : str;
+    record = {text: str, letters: letters, length: letters.length};
+    if (!hasSurrogates || str.length <= 1e7) { // don't pin huge arrays
+        Process.prototype.textLettersCache = record;
+    }
+    return record;
+};
+
+Process.prototype.textLettersCache = null;
+
 Process.prototype.reportBasicLetter = function (idx, string) {
     var str = isNil(string) ? '' : string.toString(),
-        char_array = this.safeStringArray(str),
+        chars,
         i;
     if (this.inputOption(idx) === 'all') {
-        return new List(char_array);
+        return new List(this.safeStringArray(str)); // fresh, list is mutable
     }
+    chars = this.textLetters(str);
     if (this.inputOption(idx) === 'random') {
-        idx = this.reportBasicRandom(1, char_array.length);
+        idx = this.reportBasicRandom(1, chars.length);
     }
     if (this.inputOption(idx) === 'last') {
-        idx = char_array.length;
+        idx = chars.length;
     }
     i = +(idx || 0);
-    return char_array[i - 1] || '';
+    return chars.letters[i - 1] || '';
 };
 
 Process.prototype.reportTextAttribute = function (choice, text) {
@@ -5885,7 +5920,7 @@ Process.prototype.reportTextAttribute = function (choice, text) {
 
 Process.prototype.reportStringSize = function (data) {
     return this.hyper(
-        str => isString(str) ? this.safeStringArray(str).length
+        str => isString(str) ? this.textLetters(str).length
                 : (parseFloat(str) === +str ? str.toString().length : 0),
         data
     );
