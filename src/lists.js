@@ -1132,9 +1132,11 @@ List.prototype.asCSV = function () {
     function encodeCell(atomicValue) {
         var string = isNil(atomicValue) ? '' : atomicValue.toString(),
             cell;
-        if (string.indexOf('\"') ===  -1 &&
-                (string.indexOf('\n') === -1) &&
-                (string.indexOf('\,') === -1)) {
+        // quote line breaks of any kind, and every delimiter that
+        // Process.guessDelimiterCSV() might pick when reading it back
+        if (!['\"', ',', '\n', '\r', ';', '|', '\t'].some(
+            special => string.includes(special)
+        )) {
             return string;
         }
         cell = ['\"'];
