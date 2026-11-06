@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-11-06
+* extensions: made 'ide_stage_size' extension's execution interpolated so it blocks during the resizing animation
+
 ### 2026-11-05
 * extensions: added 'ide_stage_size' extension for programmatically changing the stage's dimensions, use with care!
 

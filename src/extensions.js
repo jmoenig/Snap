@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph, Rectangle*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-November-05';
+modules.extensions = '2026-November-06';
 
 // Global stuff
 
@@ -1722,11 +1722,22 @@ SnapExtensions.primitives.set(
 SnapExtensions.primitives.set(
     'ide_stage_size(x, y)',
     function (x, y, proc) {
-        var ide = this.parentThatIsA(IDE_Morph);
-        if (ide) {
-            proc.assertType(x, 'number');
-            proc.assertType(y, 'number');
-            ide.setStageExtent(new Point(x, y));
+        var ide = this.parentThatIsA(IDE_Morph),
+            ext;
+        proc.assertType(x, 'number');
+        proc.assertType(y, 'number');
+        ext = new Point(x, y).max(new Point(240, 180));
+        if (ide.isAnimating) {
+            if (!proc.context.accumulator) {
+                proc.context.accumulator = {progress: true };
+                ide.setStageExtent(ext);
+            } else if (ide.stage.dimensions.eq(ext)) {
+                return;
+            }
+            proc.pushContext('doYield');
+            proc.pushContext();
+        } else {
+            ide.setStageExtent(ext);
         }
     }
 );
