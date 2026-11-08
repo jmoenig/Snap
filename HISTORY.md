@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-11-08
+* objects: fixed an updating glitch in variable watchers
+
 ## 12.3.11:
 * **New Features:**
     * new 'ide_stage_size' extension for programmatically changing the stage's dimensions, use sensibly!

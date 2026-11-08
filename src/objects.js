@@ -96,7 +96,7 @@ CustomBlockDefinition, exportEmbroidery, CustomHatBlockMorph, HandMorph*/
 
 /*jshint esversion: 11*/
 
-modules.objects = '2026-November-04';
+modules.objects = '2026-November-08';
 
 var SpriteMorph;
 var StageMorph;
@@ -15969,7 +15969,7 @@ WatcherMorph.prototype.update = function () {
         this.cellMorph.contentsMorph.update();
     } else if (isSnapObject(this.cellMorph.contents)) {
         this.cellMorph.update();
-    } else if (this.cellMorph.contents.isADT?.()) {
+    } else if (this.cellMorph.contents?.isADT?.()) {
         this.cellMorph.updateCustomSwatch();
     }
 };
