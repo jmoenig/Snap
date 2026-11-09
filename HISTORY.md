@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-11-09
+* updated lists library with a new "first/last items" reporter
+
 ### 2026-11-08
 * objects: fixed an updating glitch in variable watchers
 
