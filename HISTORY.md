@@ -2,6 +2,12 @@
 
 ## in development:
 
+* **New Features:**
+    * new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
+    * added "first/last items" reporter to the lists library
+* **Notable Fixes:**
+    * fixed an ADT induced updating glitch in variable watchers
+
 ### 2026-11-10
 * blocks, byob, threads: new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
 
