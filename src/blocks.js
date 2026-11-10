@@ -9267,15 +9267,6 @@ ScriptsMorph.prototype.userMenu = function () {
     }
 
     menu.addItem('clean up', 'cleanUp', 'arrange scripts\nvertically');
-    if (shiftClicked) {
-        menu.addItem(
-            'clean unhatted',
-            'cleanUnhatted',
-            'arrange scripts vertically,\nremoving all scripts\n' +
-                'not attached to a hat block',
-            new Color(100, 0, 0)
-        );
-    }
     menu.addItem('add comment', 'addComment');
     menu.addItem(
         'scripts pic...',
@@ -9348,30 +9339,6 @@ ScriptsMorph.prototype.cleanUp = function () {
         target.setPosition(target.parent.topLeft());
     }
     target.adjustBounds();
-};
-
-ScriptsMorph.prototype.cleanUnhatted = function () {
-    // delete all scripts not attached to a hat block,
-    // then arrange the remaining scripts vertically
-    var target = this.selectForEdit(), // enable copy-on-edit
-        ide = target.parentThatIsA(IDE_Morph);
-    target.children.filter(child =>
-        child instanceof BlockMorph && !(child instanceof HatBlockMorph)
-    ).forEach(block => {
-        // for undrop / redrop
-        target.clearDropInfo();
-        target.lastDroppedBlock = block;
-        target.recordDrop(block.situation());
-        target.dropRecord.action = 'delete';
-
-        if (ide) {
-            // also stop any processes currently running this script
-            ide.removeBlock(block);
-        } else {
-            block.destroy();
-        }
-    });
-    target.cleanUp();
 };
 
 ScriptsMorph.prototype.exportScriptsPicture = function () {
