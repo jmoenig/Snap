@@ -113,7 +113,7 @@ ADT_SlotMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2026-October-20';
+modules.byob = '2026-November-10';
 
 // Declarations
 
@@ -4220,11 +4220,15 @@ BlockLabelFragment.prototype.defTemplateSpecFragment = function () {
             suff = ' # = ' + this.defaultValue.toString();
         } else if (contains(['%mlt', '%code'], this.type)) {
             suff = ' \u00B6 = ' + this.defaultValue.toString(); // pilcrow
+        } else if (this.type === '%emoji') {
+            suff = ' :) = ';
         } else { // 'any' or 'text'
             suff = ' = ' + this.defaultValue.toString();
         }
     } else if (this.type === '%n') {
         suff = ' #';
+    } else if (this.type === '%emoji') {
+        suff = ' :)';
     } else if (contains(['%mlt', '%code'], this.type)) {
         suff = ' \u00B6'; // pilcrow
     }
@@ -4944,7 +4948,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
                 [
                     '%s', '%n', '%nUE', '%txt', '%anyUE', '%b', '%boolUE',
                     '%adt', '%mlt', '%code', '%upvar', '%parameter', '%clr',
-                    '%mult%adt'
+                    '%emoji', '%mult%adt'
                 ],
                 this.fragment.type
             )) {
@@ -4973,7 +4977,7 @@ InputSlotDialogMorph.prototype.createSlotTypeButtons = function () {
     defInput.refresh = () => {
         if (this.isExpanded && contains(
             ['%s', '%n', '%nUE', '%txt', '%anyUE', '%mlt', '%code', '%upvar',
-                '%parameter', '%adt', '%mult%adt'],
+                '%parameter', '%adt', '%mult%adt', '%emoji'],
             this.fragment.type
         )) {
             defInput.show();
@@ -5269,7 +5273,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
             on = '\u2611 ',
             off = '\u2610 ',
             isEditable = contains(
-                ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code'],
+                ['%s', '%n', '%txt', '%anyUE', '%mlt', '%code', '%emoji'],
                 this.fragment.type
             );
         if (['%upvar', '%parameter'].includes(this.fragment.type)) {
@@ -5359,7 +5363,7 @@ InputSlotDialogMorph.prototype.addSlotsMenu = function () {
             (contains(
                 ['%mlt', '%code', '%obj', '%scriptVars', '%receive', '%send',
                     '%elseif', '%upvar', '%mult%upvar', '%parameter', '%adt',
-                    '%mult%parameter', '%mult%adt', '%nUE', '%p'],
+                    '%mult%parameter', '%mult%adt', '%nUE', '%p', '%emoji'],
                 this.fragment.type
             ) ? on : off) +
             localize('special'),
@@ -5410,6 +5414,7 @@ InputSlotDialogMorph.prototype.specialSlotsMenu = function () {
 
     addSpecialSlotType('multi-line', '%mlt');
     addSpecialSlotType('code', '%code');
+    addSpecialSlotType('emoji', '%emoji');
     addSpecialSlotType('number \u03BB', '%nUE');
     addSpecialSlotType('object', '%obj');
     addSpecialSlotType('process', '%p');

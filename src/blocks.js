@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-October-30';
+modules.blocks = '2026-November-10';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -314,7 +314,7 @@ SyntaxElementMorph.prototype.labelParts = {
 
         type: 'input'
         tags: 'numeric numstring alphanum read-only unevaluated landscape
-               static basic'
+               static basic big'
         menu: dictionary or selector
         react: selector
         value: string, number or Array for localized strings / constants
@@ -344,7 +344,11 @@ SyntaxElementMorph.prototype.labelParts = {
     },
     '%txt': {
         type: 'input',
-        tags: 'textual' // 'landscape'
+        tags: 'textual'
+    },
+    '%emoji': {
+        type: 'input',
+        tags: 'textual big'
     },
     '%anyUE': {
         type: 'input',
@@ -2203,6 +2207,12 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                         break;
                     case 'textual':
                         part.isTextual = true;
+                        break;
+                    case 'big':
+                        part.fontSizeFactor = 1.5;
+                        cnts = part.contents();
+                        cnts.fontSize *= 1.5;
+                        cnts.fixLayout();
                         break;
                     case 'alphanum':
                         part.isNumeric = true;
@@ -11763,8 +11773,8 @@ InputSlotMorph.prototype.init = function (
             BLACK,
             true
         );
-
-    contents.fontSize = this.fontSize;
+    this.fontSizeFactor = 1;
+    contents.fontSize = this.fontSize * this.fontSizeFactor;
     contents.isShowingBlanks = true;
 
 	this.selectedBlock = null;
@@ -11891,6 +11901,12 @@ InputSlotMorph.prototype.setContents = function (data) {
     if (this.onSetContents) {
         this[this.onSetContents](data);
     }
+
+    // suppress shadow-rendering for emoji-slots
+    if (this.fontSizeFactor > 1) { // emoji
+        cnts.shadowColor = null;
+        cnts.shadowOffset = ZERO;
+    }
 };
 
 InputSlotMorph.prototype.userSetContents = function (aStringOrFloat) {
@@ -11945,7 +11961,7 @@ InputSlotMorph.prototype.menuFromDict = function (
             this.userSetContents,
             null,
             this,
-            this.fontSize
+            this.fontSize * this.fontSizeFactor
         );
 
 	function update(num) {
@@ -13302,14 +13318,6 @@ InputSlotMorph.prototype.initSlotFillColor = function (ctx, borderColor) {
         ctx.fillStyle = borderColor.darker().toString();
     }
 };
-
-ArgMorph.prototype.initSlotFillColor = function (ctx, borderColor) {
-    ctx.fillStyle = this.color.toString();
-    if (!this.cachedNormalColor) { // unless flashing
-        ctx.fillStyle = borderColor.darker().toString();
-    }
-};
-
 
 // InputSlotStringMorph ///////////////////////////////////////////////
 

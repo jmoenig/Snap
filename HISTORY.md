@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-11-10
+* blocks, byob, threads: new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
+
 ### 2026-11-09
 * updated lists library with a new "first/last items" reporter
 
