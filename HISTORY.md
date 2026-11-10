@@ -17,6 +17,7 @@
 * blocks: removed experimental hidden "remove unhatted scripts" feature.
 * lists: optimized getting the length of a linked list by caching it
 * morphic: improved Unicode text rendering of multibyte characters (emoji)
+* blocks: center dropdown arrow in emoji-slots
 
 ### 2026-11-09
 * updated lists library with a new "first/last items" reporter
