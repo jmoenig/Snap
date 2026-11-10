@@ -6,6 +6,7 @@
     * new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
     * added "first/last items" reporter to the lists library
 * **Notable Changes:**
+    * optimized getting the length of a linked list by caching and updating it for cons and cdr
     * again removed experimental hidden "remove unhatted scripts" feature
 * **Notable Fixes:**
     * fixed an ADT induced updating glitch in variable watchers
@@ -13,6 +14,7 @@
 ### 2026-11-10
 * blocks, byob, threads: new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
 * blocks: removed experimental hidden "remove unhatted scripts" feature.
+* lists: optimized getting the length of a linked list by caching it
 
 ### 2026-11-09
 * updated lists library with a new "first/last items" reporter

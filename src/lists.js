@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process, Table*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2026-October-30';
+modules.lists = '2026-November-10';
 
 var List;
 var ListWatcherMorph;
@@ -144,6 +144,7 @@ function List(array) {
     this.contents = array || [];
     this.first = null;
     this.rest = null;
+    this.sizeCache = null;
     this.isLinked = false;
     this.lastChanged = Date.now();
 }
@@ -162,6 +163,7 @@ List.prototype.toString = function () {
 // List updating:
 
 List.prototype.changed = function () {
+    this.sizeCache = null;
     this.lastChanged = Date.now();
 };
 
@@ -175,12 +177,18 @@ List.prototype.cons = function (car, cdr) {
     answer.first = isNil(car) ? null : car;
     answer.rest = cdr || null;
     answer.isLinked = true;
+    if (cdr?.sizeCache) {
+        answer.sizeCache = cdr.sizeCache + 1;
+    }
     return answer;
 };
 
 List.prototype.cdr = function () {
     var result, i;
     if (this.isLinked) {
+        if (this.sizeCache && this.rest) {
+            this.rest.sizeCache = this.sizeCache - 1;
+        }
         return this.rest || new List();
     }
     if (this.contents.length < 2) {
@@ -263,13 +271,17 @@ List.prototype.wrapIndex = function (num) {
 
 List.prototype.length = function () {
     if (this.isLinked) {
+        if (this.sizeCache !== null) {
+            return this.sizeCache;
+        }
         var pair = this,
             result = 0;
         while (pair && pair.isLinked) {
             result += 1;
             pair = pair.rest;
         }
-        return result + (pair ? pair.contents.length : 0);
+        this.sizeCache = result + (pair ? pair.contents.length : 0);
+        return this.sizeCache;
     }
     return this.contents.length;
 };
