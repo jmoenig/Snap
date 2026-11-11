@@ -17650,7 +17650,7 @@ CommentMorph.prototype.stackHeight = function () {
     editing scripts:
 
       - backspace:
-        * delete currently focused reporter
+        * delete currently focused reporter (the focus stays on its slot)
         * delete command above current insertion mark (blinking)
         * collapse currently focused variadic input by one element
 
@@ -17663,7 +17663,10 @@ CommentMorph.prototype.stackHeight = function () {
         * show a menu of reachable variables for the focused input or reporter
 
       - any other key:
-        start searching for insertable matching blocks
+        start searching for insertable matching blocks. A block entered
+        while a reporter is focused wraps around it, taking the reporter
+        into its first empty slot. If it has no slot for the reporter it
+        replaces it instead, and the reporter is bounced out
 
       - in menus triggered by this feature:
         * navigate with up / down arrow keys
@@ -17845,7 +17848,7 @@ ScriptFocusMorph.prototype.menu = function () {
 
 ScriptFocusMorph.prototype.deleteLastElement = function () {
     var current = this.element,
-        i;
+        owner, idx, slot, i;
     if (current.parent instanceof ScriptsMorph) {
         if (this.atEnd || current instanceof ReporterBlockMorph) {
             current.destroy();
@@ -17864,9 +17867,18 @@ ScriptFocusMorph.prototype.deleteLastElement = function () {
         }
     } else if (current instanceof ReporterBlockMorph) {
         if (!current.isTemplate) {
+            owner = current.parent;
+            idx = owner.children.indexOf(current);
             this.lastElement();
             current.prepareToBeGrabbed();
             current.destroy();
+            // stay on the slot the reporter has left behind, if any,
+            // so typing right away fills it again
+            slot = owner.children[idx];
+            if (slot instanceof ArgMorph && slot.isFocusable()) {
+                this.element = slot;
+                this.atEnd = false;
+            }
         }
     } else if (current instanceof CommandBlockMorph) {
         if (this.atEnd) {
@@ -17893,8 +17905,40 @@ ScriptFocusMorph.prototype.insertBlock = function (block) {
     );
 };
 
+ScriptFocusMorph.prototype.wrapSlots = function (block) {
+    // answer the slots of the given block that can take the reporter it
+    // is about to wrap, i.e. the one the focus is on, best one first:
+    // the empty ones in order, or else just the first one that already
+    // has a value, e.g. a default. Slots that can't be dropped on and
+    // read-only pull-down menus don't count.
+    var slots = [],
+        empty;
+
+    function collect(element) {
+        element.inputs().forEach(inp => {
+            if (inp instanceof MultiArgMorph) {
+                collect(inp);
+            } else if (inp instanceof ArgMorph &&
+                    !(inp instanceof CommandSlotMorph) &&
+                    !(inp instanceof FunctionSlotMorph) &&
+                    !(inp instanceof TemplateSlotMorph) &&
+                    !(inp instanceof ArgLabelMorph) &&
+                    !inp.isReadOnly &&
+                    !inp.isLocked()) {
+                slots.push(inp);
+            }
+        });
+    }
+
+    collect(block);
+    empty = slots.filter(inp => inp.isEmptySlot());
+    return empty.length ? empty : slots.slice(0, 1);
+};
+
 ScriptFocusMorph.prototype.fillInBlock = function (block) {
-    var pb, stage, ide, rcvr;
+    var wrapped = null,
+        next = null,
+        pb, old, slots, stage, ide, rcvr;
     block.isTemplate = false;
     block.isDraggable = true;
 
@@ -17947,13 +17991,34 @@ ScriptFocusMorph.prototype.fillInBlock = function (block) {
         this.element = block;
         this.atEnd = true;
     } else {
+        // the focus is on an input slot or on a reporter: the block takes
+        // its place. A reporter isn't lost, the block wraps around it,
+        // taking it into its first empty slot. If the block has no slot
+        // for it the reporter is bounced out next to the block instead.
+        old = this.element instanceof ReporterBlockMorph ?
+                this.element : null;
         pb = this.element.parent;
         if (pb instanceof ScriptsMorph) {
             this.editor.add(block);
-            block.setPosition(this.element.position());
-            this.element.destroy();
+            block.setPosition(old.position());
+            old.moveBy(block.extent());
         } else {
-            pb.replaceInput(this.element, block);
+            pb.replaceInput(this.element, block); // bounces a reporter out
+        }
+        if (old) {
+            if (block instanceof RingMorph) {
+                if (!block.contents()) {
+                    block.embed(old, null, true); // don't vanish
+                    wrapped = old;
+                }
+            } else {
+                slots = this.wrapSlots(block);
+                if (slots.length) {
+                    slots[0].parent.replaceInput(slots[0], old);
+                    wrapped = old;
+                    next = slots[1];
+                }
+            }
         }
         this.element = block;
     }
@@ -17978,6 +18043,16 @@ ScriptFocusMorph.prototype.fillInBlock = function (block) {
                 }
             }
         }
+    }
+
+    if (wrapped) {
+        // go to the next slot left to fill in, if any, otherwise stay on
+        // the block, so that the next one entered wraps around it in turn
+        wrapped.fixBlockColor();
+        this.element = next || block;
+        this.atEnd = false;
+        this.fixLayout();
+        return;
     }
 
     // experimental: if the inserted block has inputs, go to the first one
