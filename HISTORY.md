@@ -16,6 +16,7 @@
 
 ### 2026-11-11
 * German translation update
+* updated lists library
 
 ### 2026-11-10
 * blocks, byob, threads: new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
