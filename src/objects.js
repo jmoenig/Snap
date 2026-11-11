@@ -4935,23 +4935,14 @@ SpriteMorph.prototype.blocksMatching = function (
     }
     if (!varNames) {varNames = []; }
 
-    function labelOf(aBlockSpec) {
-        // answer the visible label text followed by the text of any
-        // input slot menus, so that menu entries are searchable too
-        var words = (BlockMorph.prototype.parseSpec(aBlockSpec)),
-            filtered = words.filter(each =>
-                each.indexOf('%') !== 0 || each.length === 1
-            ),
-            slots = words.filter(each =>
-                each.length > 1 && each.indexOf('%') === 0
-            ).map(spec => moreTextIn(spec));
-        return filtered.join(' ') + ' ' + slots.join(' ');
+    function isSlot(aSpecWord) {
+        return aSpecWord.length > 1 && aSpecWord.indexOf('%') === 0;
     }
 
     function visibleLabelOf(aBlockSpec) {
         // answer only the label text as it appears on the block
         return BlockMorph.prototype.parseSpec(aBlockSpec).filter(each =>
-            each.indexOf('%') !== 0 || each.length === 1
+            !isSlot(each)
         ).join(' ');
     }
 
@@ -4966,27 +4957,27 @@ SpriteMorph.prototype.blocksMatching = function (
             );
     }
 
-    function moreTextIn(aSlotSpec) {
+    function termsIn(aSlotSpec) {
+        // answer an array of the searchable texts of an input slot,
+        // i.e. the entries of its menu, so they are searchable too
         var info = BlockMorph.prototype.labelParts[aSlotSpec] || {},
             menu = info.menu,
-            more;
+            terms = [];
         if (menu) {
             if (isString(menu)) {
                 menu = InputSlotMorph.prototype[menu](true);
             }
-            more = Object.values(menu).map(entry => {
+            terms = Object.values(menu).map(entry => {
                 if (isNil(entry)) {return ''; }
                 if (entry instanceof Array) {
                     return localize(entry[0]);
                 }
                 return entry.toString();
-            }).join(' ');
+            });
         }
-        return [
-            more || '',
-            localize(info.infix || ''),
-            localize(info.collapse || '')
-        ].join(' ');
+        terms.push(localize(info.infix || ''));
+        terms.push(localize(info.collapse || ''));
+        return terms.filter(each => each.length);
     }
 
     function fillDigits(anInt, totalDigits, fillChar) {
@@ -4995,35 +4986,67 @@ SpriteMorph.prototype.blocksMatching = function (
         return ans;
     }
 
-    function relevance(
-        aBlockLabel,
-        aSearchString,
-        visibleLength, // optional, length of the label text on the block
-        displayedLength // optional, function answering the length of the
-                        // block's text as displayed, incl. slot contents
-    ) {
+    function relevance(aBlockLabel, aSearchString, displayedLength) {
         // answer a sortable string key, or -1 if the label doesn't match.
         // matches are ranked by: whole-word match first, then by the
         // position of the match, then by the length of the block's text
         // (shorter first, so "clear" precedes "clear graphic effects").
         // Because the search string is a substring of every match, the
         // label length is equivalent to its edit distance from the search.
-        // If the match occurs in the visible part of the label the length
-        // of the text displayed on the block counts, otherwise (i.e. when
-        // matching text from an input slot's menu) the full searchable
-        // text counts.
+        // The optional displayedLength is a function answering the length
+        // of the block's text as displayed, incl. slot contents, to be
+        // used instead of the label's length.
         var lbl = ' ' + aBlockLabel.toLowerCase(),
             idx = lbl.indexOf(aSearchString),
-            len = aBlockLabel.length,
             atWord;
         if (idx === -1) {return -1; }
         atWord = (lbl.charAt(idx - 1) === ' ');
         if (strictly && !atWord) {return -1; }
-        if (!isNil(visibleLength) && idx <= visibleLength) {
-            len = displayedLength ? displayedLength() : visibleLength;
-        }
-        return (atWord ? '1' : '2') + fillDigits(idx, 4, '0') +
-            fillDigits(len, 4, '0');
+        return (atWord ? '1' : '2') + fillDigits(idx, 4, '0') + fillDigits(
+            displayedLength ? displayedLength() : aBlockLabel.length,
+            4,
+            '0'
+        );
+    }
+
+    function specRelevance(
+        aBlockSpec,
+        aSearchString,
+        displayedLength, // function, see relevance()
+        slotTerms // optional array of menu entries per input slot
+    ) {
+        // answer the relevance of a block with the given spec. If the
+        // search doesn't match the label text on the block try the entries
+        // of its input slot menus. Such a match is ranked as if the entry
+        // were selected in its slot, e.g. "width" matches "[width] of" at
+        // the very beginning, so only what would be visible on the block
+        // counts, not all the other choices in the menu.
+        var words = BlockMorph.prototype.parseSpec(aBlockSpec),
+            best = relevance(
+                visibleLabelOf(aBlockSpec),
+                aSearchString,
+                displayedLength
+            ),
+            slotIdx = 0;
+        if (best !== -1) {return best; }
+        words.forEach((word, i) => {
+            var terms;
+            if (!isSlot(word)) {return; }
+            terms = slotTerms ? slotTerms[slotIdx] || [] : termsIn(word);
+            slotIdx += 1;
+            terms.forEach(term => {
+                var rel = relevance(
+                    words.map((each, j) =>
+                        j === i ? term : (isSlot(each) ? null : each)
+                    ).filter(each => each !== null).join(' '),
+                    aSearchString
+                );
+                if (rel !== -1 && (best === -1 || rel < best)) {
+                    best = rel;
+                }
+            });
+        });
+        return best;
     }
 
     function primitive(selector) {
@@ -5045,14 +5068,14 @@ SpriteMorph.prototype.blocksMatching = function (
             if (contains(types, definition.type)) {
                 var spec = definition.localizedSpec(),
                     template,
-                    rel = relevance(
-                        labelOf(spec) + ' ' + definition.menuSearchWords(),
+                    rel = specRelevance(
+                        spec,
                         search,
-                        visibleLabelOf(spec).length,
                         () => {
                             template = definition.templateInstance();
                             return displayedLengthOf(template);
-                        }
+                        },
+                        definition.menuSearchTerms()
                     );
                 if (rel !== -1) {
                     blocks.push([
@@ -5071,10 +5094,9 @@ SpriteMorph.prototype.blocksMatching = function (
             var block = blocksDict[selector],
                 spec = BlockMorph.prototype.localizeBlockSpec(block.spec),
                 template,
-                rel = relevance(
-                    labelOf(spec),
+                rel = specRelevance(
+                    spec,
                     search,
-                    visibleLabelOf(spec).length,
                     () => {
                         template = primitive(selector);
                         return displayedLengthOf(template);
