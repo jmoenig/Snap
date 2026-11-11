@@ -4924,6 +4924,8 @@ SpriteMorph.prototype.blocksMatching = function (
     // Note that "predicate" is not subsumed by "reporter" and has
     // to be specified explicitly.
     // if no types are specified all blocks are searched
+    // if a block matches because of an option in one of its drop-down
+    // menus that option is selected in the block template
     var blocks = [],
         blocksDict,
         search = searchString.toLowerCase(),
@@ -4939,45 +4941,113 @@ SpriteMorph.prototype.blocksMatching = function (
         return aSpecWord.length > 1 && aSpecWord.indexOf('%') === 0;
     }
 
-    function visibleLabelOf(aBlockSpec) {
-        // answer only the label text as it appears on the block
-        return BlockMorph.prototype.parseSpec(aBlockSpec).filter(each =>
-            !isSlot(each)
-        ).join(' ');
+    function labelOf(specWords) {
+        // answer the given words of a block spec without its input slots,
+        // i.e. the label text as it appears on the block
+        return specWords.filter(each => !isSlot(each)).join(' ');
     }
 
     function displayedLengthOf(aBlock) {
         // answer the length of the block's text as displayed, i.e. its
-        // label plus the (default) contents shown in its input slots
-        return visibleLabelOf(aBlock.blockSpec).length +
-            aBlock.inputs().reduce((sum, slot) =>
-                sum + (slot instanceof InputSlotMorph ?
-                    slot.contents().text.length : 0),
-                0
-            );
+        // label plus the contents shown in its input slots
+        return labelOf(
+            BlockMorph.prototype.parseSpec(aBlock.blockSpec)
+        ).length + aBlock.inputs().reduce((sum, slot) =>
+            sum + (slot instanceof InputSlotMorph ?
+                slot.contents().text.length : 0),
+            0
+        );
     }
 
-    function termsIn(aSlotSpec) {
-        // answer an array of the searchable texts of an input slot,
-        // i.e. the entries of its menu, so they are searchable too
-        var info = BlockMorph.prototype.labelParts[aSlotSpec] || {},
-            menu = info.menu,
-            terms = [];
-        if (menu) {
-            if (isString(menu)) {
-                menu = InputSlotMorph.prototype[menu](true);
+    function menuEntriesOf(menu, useKeys) {
+        // answer an array of [text, choice] pairs, one for each option
+        // of the given drop-down menu, where choice is what selecting
+        // the option would put into the input slot. If useKeys is true
+        // the searchable text is the key under which the option is
+        // listed in the menu, otherwise it's what the input slot shows
+        var entries = [];
+        if (isString(menu)) {
+            if (typeof InputSlotMorph.prototype[menu] !== 'function') {
+                // catch typos in extension menus
+                return entries;
             }
-            terms = Object.values(menu).map(entry => {
-                if (isNil(entry)) {return ''; }
-                if (entry instanceof Array) {
-                    return localize(entry[0]);
-                }
-                return entry.toString();
-            });
+            menu = InputSlotMorph.prototype[menu](true);
         }
-        terms.push(localize(info.infix || ''));
-        terms.push(localize(info.collapse || ''));
-        return terms.filter(each => each.length);
+        if (!menu) {return entries; }
+        Object.keys(menu).forEach(key => {
+            var choice = menu[key];
+            if (isNil(choice) ||
+                    choice instanceof Function ||
+                    choice instanceof Morph) {
+                return;
+            }
+            if (choice instanceof Array && choice[0] instanceof Object) {
+                // translated sub-menu
+                entries = entries.concat(menuEntriesOf(choice[0], useKeys));
+            } else if (choice instanceof Object &&
+                    !(choice instanceof Array)) {
+                // sub-menu
+                entries = entries.concat(menuEntriesOf(choice, useKeys));
+            } else {
+                entries.push([
+                    useKeys ? key
+                        : choice instanceof Array ? localize(choice[0])
+                            : choice.toString(),
+                    choice
+                ]);
+            }
+        });
+        return entries;
+    }
+
+    // search terms are arrays: [text, word index, input index, choice]
+    // one for each text that can be shown in an input slot of a block,
+    // where word index is the position of the slot among the words of
+    // the block's spec. Input index and choice are only given for terms
+    // that are options of the drop-down menu of the input slot
+
+    function termsOfPrimitive(specWords) {
+        var terms = [],
+            idx = -1;
+        specWords.forEach((word, wordIdx) => {
+            var info;
+            if (isSlot(word) && word !== '%br') {
+                idx += 1;
+                info = BlockMorph.prototype.labelParts[word] || {};
+                if (info.menu) {
+                    menuEntriesOf(info.menu, false).forEach(entry =>
+                        terms.push([entry[0], wordIdx, idx, entry[1]])
+                    );
+                }
+                if (info.infix) {
+                    terms.push([localize(info.infix), wordIdx, null, null]);
+                }
+                if (info.collapse) {
+                    terms.push(
+                        [localize(info.collapse), wordIdx, null, null]
+                    );
+                }
+            }
+        });
+        return terms;
+    }
+
+    function termsOfCustomBlock(definition, specWords) {
+        var terms = [],
+            names = definition.inputNames(),
+            idx = -1;
+        specWords.forEach((word, wordIdx) => {
+            if (isSlot(word) && word !== '%br') {
+                idx += 1;
+                menuEntriesOf(
+                    definition.dropDownMenuOf(names[idx]),
+                    true
+                ).forEach(entry =>
+                    terms.push([entry[0], wordIdx, idx, entry[1]])
+                );
+            }
+        });
+        return terms;
     }
 
     function fillDigits(anInt, totalDigits, fillChar) {
@@ -4986,67 +5056,83 @@ SpriteMorph.prototype.blocksMatching = function (
         return ans;
     }
 
-    function relevance(aBlockLabel, aSearchString, displayedLength) {
-        // answer a sortable string key, or -1 if the label doesn't match.
-        // matches are ranked by: whole-word match first, then by the
-        // position of the match, then by the length of the block's text
-        // (shorter first, so "clear" precedes "clear graphic effects").
-        // Because the search string is a substring of every match, the
-        // label length is equivalent to its edit distance from the search.
-        // The optional displayedLength is a function answering the length
-        // of the block's text as displayed, incl. slot contents, to be
-        // used instead of the label's length.
-        var lbl = ' ' + aBlockLabel.toLowerCase(),
-            idx = lbl.indexOf(aSearchString),
-            atWord;
-        if (idx === -1) {return -1; }
-        atWord = (lbl.charAt(idx - 1) === ' ');
-        if (strictly && !atWord) {return -1; }
-        return (atWord ? '1' : '2') + fillDigits(idx, 4, '0') + fillDigits(
-            displayedLength ? displayedLength() : aBlockLabel.length,
-            4,
-            '0'
-        );
+    function relevance(text) {
+        // answer a sortable string indicating how well the search string
+        // matches the given text, or -1 if it doesn't match at all.
+        // Matches at the beginning of a word rank higher than those
+        // inside a word, and earlier matches rank higher than later ones.
+        var lbl = ' ' + text.toLowerCase(),
+            idx = search ? lbl.indexOf(search) : -1,
+            rel = -1;
+        while (idx !== -1) {
+            if (lbl.charAt(idx - 1) === ' ') {
+                return '1' + fillDigits(idx, 4, '0');
+            }
+            if (rel === -1 && !strictly) {
+                rel = '2' + fillDigits(idx, 4, '0');
+            }
+            idx = lbl.indexOf(search, idx + 1);
+        }
+        return rel;
     }
 
-    function specRelevance(
-        aBlockSpec,
-        aSearchString,
-        displayedLength, // function, see relevance()
-        slotTerms // optional array of menu entries per input slot
-    ) {
-        // answer the relevance of a block with the given spec. If the
-        // search doesn't match the label text on the block try the entries
-        // of its input slot menus. Such a match is ranked as if the entry
-        // were selected in its slot, e.g. "width" matches "[width] of" at
-        // the very beginning, so only what would be visible on the block
-        // counts, not all the other choices in the menu.
-        var words = BlockMorph.prototype.parseSpec(aBlockSpec),
-            best = relevance(
-                visibleLabelOf(aBlockSpec),
-                aSearchString,
-                displayedLength
-            ),
-            slotIdx = 0;
-        if (best !== -1) {return best; }
-        words.forEach((word, i) => {
-            var terms;
-            if (!isSlot(word)) {return; }
-            terms = slotTerms ? slotTerms[slotIdx] || [] : termsIn(word);
-            slotIdx += 1;
-            terms.forEach(term => {
-                var rel = relevance(
-                    words.map((each, j) =>
-                        j === i ? term : (isSlot(each) ? null : each)
-                    ).filter(each => each !== null).join(' '),
-                    aSearchString
-                );
-                if (rel !== -1 && (best === -1 || rel < best)) {
-                    best = rel;
-                }
-            });
+    function showing(specWords, wordIdx, text) {
+        // answer the label of a block with the given text shown in the
+        // input slot at the given word index, e.g. "width of"
+        return specWords.map((each, i) =>
+            i === wordIdx ? text : each
+        ).filter((each, i) => i === wordIdx || !isSlot(each)).join(' ');
+    }
+
+    function bestMatch(specWords, terms) {
+        // answer the best match of the search string in a block as an
+        // array: [relevance, word index, input index, choice], or null
+        // if the block doesn't match. The block's label is tried first.
+        // An option of a drop-down menu is matched and ranked as if it
+        // were selected in its input slot, e.g. "width" matches
+        // "[width] of" at the very beginning, so only what is visible
+        // on the resulting block counts, not the other options
+        var rel = relevance(labelOf(specWords)),
+            best = rel === -1 ? null : [rel, null, null, null];
+        terms.forEach(term => {
+            rel = relevance(showing(specWords, term[1], term[0]));
+            if (rel !== -1 && (best === null || rel < best[0])) {
+                best = [rel, term[1], term[2], term[3]];
+            }
         });
         return best;
+    }
+
+    function selectOption(block, specWords, match) {
+        // select the drop-down menu option the search matched in the
+        // given block template, unless the slot's current contents match
+        // the search just as well, in which case rank the block by them
+        var slot, current;
+        if (isNil(match[2])) {return; }
+        slot = block.inputs()[match[2]];
+        if (!(slot instanceof InputSlotMorph)) {return; }
+        current = relevance(
+            showing(specWords, match[1], slot.contents().text)
+        );
+        if (current !== -1 && current[0] === match[0][0]) {
+            match[0] = current;
+            return;
+        }
+        slot.setContents(match[3]);
+    }
+
+    function result(block, specWords, match) {
+        // answer a sortable search result for the given block template.
+        // Ties between blocks matching at the same position are broken
+        // by the length of the block's text as displayed (shorter first,
+        // so "clear" precedes "clear graphic effects"). Because the
+        // search string is a substring of every match, the length is
+        // equivalent to the edit distance from the search string
+        selectOption(block, specWords, match);
+        return [
+            block,
+            match[0] + fillDigits(displayedLengthOf(block), 4, '0')
+        ];
     }
 
     function primitive(selector) {
@@ -5057,31 +5143,30 @@ SpriteMorph.prototype.blocksMatching = function (
 
     // variable getters
     varNames.forEach(vName => {
-        var rel = relevance(vName, search);
+        var rel = relevance(vName);
         if (rel !== -1) {
-            blocks.push([this.variableBlock(vName), rel + '1']);
+            blocks.push([
+                this.variableBlock(vName),
+                rel + fillDigits(vName.length, 4, '0') + '1'
+            ]);
         }
     });
     // custom blocks
     [this.customBlocks, stage.globalBlocks].forEach(blocksList =>
         blocksList.forEach(definition => {
+            var words, match, res;
             if (contains(types, definition.type)) {
-                var spec = definition.localizedSpec(),
-                    template,
-                    rel = specRelevance(
-                        spec,
-                        search,
-                        () => {
-                            template = definition.templateInstance();
-                            return displayedLengthOf(template);
-                        },
-                        definition.menuSearchTerms()
-                    );
-                if (rel !== -1) {
-                    blocks.push([
-                        template || definition.templateInstance(),
-                        rel + '2'
-                    ]);
+                words = BlockMorph.prototype.parseSpec(
+                    definition.localizedSpec()
+                );
+                match = bestMatch(
+                    words,
+                    termsOfCustomBlock(definition, words)
+                );
+                if (match) {
+                    res = result(definition.templateInstance(), words, match);
+                    res[1] += '2';
+                    blocks.push(res);
                 }
             }
         })
@@ -5089,28 +5174,28 @@ SpriteMorph.prototype.blocksMatching = function (
     // primitives
     blocksDict = SpriteMorph.prototype.blocks;
     Object.keys(blocksDict).forEach(selector => {
+        var info = blocksDict[selector],
+            words, match, rel, res;
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
-                contains(types, blocksDict[selector].type)) {
-            var block = blocksDict[selector],
-                spec = BlockMorph.prototype.localizeBlockSpec(block.spec),
-                template,
-                rel = specRelevance(
-                    spec,
-                    search,
-                    () => {
-                        template = primitive(selector);
-                        return displayedLengthOf(template);
-                    }
-                );
-            if (rel === -1 && block.alias) {
-                rel = relevance(block.alias, search);
-            }
-            if (
-                (rel !== -1) &&
-                    (!block.dev) &&
-                    (!block.only || (block.only === this.constructor))
-            ) {
-                blocks.push([template || primitive(selector), rel + '3']);
+                contains(types, info.type) &&
+                !info.dev &&
+                (!info.only || info.only === this.constructor)) {
+            words = BlockMorph.prototype.parseSpec(
+                BlockMorph.prototype.localizeBlockSpec(info.spec)
+            );
+            match = bestMatch(words, termsOfPrimitive(words));
+            if (match) {
+                res = result(primitive(selector), words, match);
+                res[1] += '3';
+                blocks.push(res);
+            } else if (info.alias) {
+                rel = relevance(info.alias);
+                if (rel !== -1) {
+                    blocks.push([
+                        primitive(selector),
+                        rel + fillDigits(info.alias.length, 4, '0') + '3'
+                    ]);
+                }
             }
         }
     });
