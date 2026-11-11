@@ -4,7 +4,7 @@
 
 * **New Features:**
     * new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
-    * added "first/last items" reporter to the lists library
+    * added "first/last items" and "Σ" (sum total) reporters to the lists library
 * **Notable Changes:**
     * optimized getting the length of a linked list by caching and updating it for cons and cdr
     * again removed experimental hidden "remove unhatted scripts" feature
@@ -17,6 +17,7 @@
 ### 2026-11-11
 * German translation update
 * updated lists library
+* updated lists library with a "sum total (Σ)" reporter in the operators palette category
 
 ### 2026-11-10
 * blocks, byob, threads: new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
