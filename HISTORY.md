@@ -11,6 +11,11 @@
 * **Notable Fixes:**
     * fixed an ADT induced updating glitch in variable watchers
     * improved Unicode text rendering of multibyte characters (emoji)
+* **Translation Updates:**
+    * German
+
+### 2026-11-11
+* German translation update
 
 ### 2026-11-10
 * blocks, byob, threads: new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
