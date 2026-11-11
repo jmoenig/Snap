@@ -7,6 +7,7 @@
     * added "first/last items" and "Σ" (sum total) reporters to the lists library
 * **Notable Changes:**
     * optimized getting the length of a linked list by caching and updating it for cons and cdr
+    * include hat blocks in "my blocks" reporter result list
     * again removed experimental hidden "remove unhatted scripts" feature
 * **Notable Fixes:**
     * fixed an ADT induced updating glitch in variable watchers
@@ -18,6 +19,7 @@
 * German translation update
 * updated lists library
 * updated lists library with a "sum total (Σ)" reporter in the operators palette category
+* threads: include hat blocks in "my blocks" reporter result list
 
 ### 2026-11-10
 * blocks, byob, threads: new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)

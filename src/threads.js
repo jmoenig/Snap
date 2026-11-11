@@ -67,7 +67,7 @@ SpeechBubbleMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-November-10';
+modules.threads = '2026-November-11';
 
 var ThreadManager;
 var Process;
@@ -7688,9 +7688,8 @@ Process.prototype.reportGet = function (query) {
                         (blocks, category) => blocks.concat(
                             thisObj.getPrimitiveTemplates(
                                 category
-                            ).filter(
-                                each => each instanceof BlockMorph &&
-                                    !(each instanceof HatBlockMorph)
+                            ).filter(each =>
+                                each instanceof BlockMorph
                             ).map(block => {
                                 let instance = block.fullCopy();
                                 instance.isTemplate = false;
