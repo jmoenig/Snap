@@ -4914,9 +4914,19 @@ SpriteMorph.prototype.resolvedPalette = function () {
 
 SpriteMorph.prototype.isPaletteMember = function (selector) {
     // answer whether the primitive is part of the current palette
-    // (regardless of whether it is hidden or restricted to an agent type)
+    // (regardless of whether it is hidden or restricted to an agent type).
+    // A selector that migrates to another block, such as the search-only
+    // "reportFalse" (which becomes the Boolean block set to false) or a
+    // deprecated one kept for loading old projects, counts as a member if
+    // the block it migrates to is one
+    var migration = (SpriteMorph.prototype.blockMigrations || {})[selector];
     this.resolvedPalette();
-    return SpriteMorph.prototype.paletteSpec.resolved.members.has(selector);
+    if (SpriteMorph.prototype.paletteSpec.resolved.members.has(selector)) {
+        return true;
+    }
+    return !isNil(migration?.selector) && migration.selector !== selector ?
+        this.isPaletteMember(migration.selector)
+        : false;
 };
 
 SpriteMorph.prototype.setPaletteSpec = function (spec) {
