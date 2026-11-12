@@ -9,6 +9,7 @@
     * optimized getting the length of a linked list by caching and updating it for cons and cdr
     * include hat blocks in "my blocks" reporter result list
     * again removed experimental hidden "remove unhatted scripts" feature
+    * sped up table views
 * **Notable Fixes:**
     * fixed an ADT induced updating glitch in variable watchers
     * fixed not skipping a frame when opening a tutorial window
@@ -21,6 +22,7 @@
 ### 2026-11-12
 * gui: fixed not skipping a frame when opening a tutorial window
 * Catalan and Spanish translation updates for OOP, events, lists and code2blocks libraries, thank you, Joan!
+* lists: sped up table views
 
 ### 2026-11-11
 * German translation update
