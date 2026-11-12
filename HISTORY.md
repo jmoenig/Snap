@@ -10,6 +10,7 @@
     * include hat blocks in "my blocks" reporter result list
     * again removed experimental hidden "remove unhatted scripts" feature
     * sped up table views
+    * for ADT's "_morph" method to be automatically called by the IDE its first entry must have an ellipsis ('...') as key (and a parent or nothing as associated value)
 * **Notable Fixes:**
     * fixed an ADT induced updating glitch in variable watchers
     * fixed not skipping a frame when opening a tutorial window
@@ -23,6 +24,7 @@
 * gui: fixed not skipping a frame when opening a tutorial window
 * Catalan and Spanish translation updates for OOP, events, lists and code2blocks libraries, thank you, Joan!
 * lists: sped up table views
+* lists: require an ADT's first entry key to be '...' in order for its '_morph' method to automatically get called by the IDE
 
 ### 2026-11-11
 * German translation update

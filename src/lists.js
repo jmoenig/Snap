@@ -65,7 +65,7 @@ Context, ZERO, WHITE, ReadStream, Process, Table*/
 
 // Global settings /////////////////////////////////////////////////////
 
-modules.lists = '2026-November-12';
+modules.lists = '2026-November-13';
 
 var List;
 var ListWatcherMorph;
@@ -429,7 +429,9 @@ List.prototype.isTable = function () {
 
 List.prototype.isADT = function () {
     var first = this.at(1);
-    return (first instanceof List && first.length() === 2) &&
+    return first instanceof List &&
+        first.at(1) === '...' &&
+        first.length() === 2 &&
         this.lookup('_morph') instanceof Context;
 };
 
