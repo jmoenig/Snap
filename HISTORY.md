@@ -15,9 +15,12 @@
     * improved Unicode text rendering of multibyte characters (emoji)
 * **Translation Updates:**
     * German
+    * Catalan
+    * Spanish
 
 ### 2026-11-12
 * gui: fixed not skipping a frame when opening a tutorial window
+* Catalan and Spanish translation updates for OOP, events, lists and code2blocks libraries, thank you, Joan!
 
 ### 2026-11-11
 * German translation update
