@@ -27,6 +27,10 @@
           "codi textual dels blocs _ formatats _"
         ]
       },
+      "es": {
+        "name": "Código textual de los bloques",
+        "description": "Genera el código textual de los bloques y viceversa"
+      },
       "zh_CN": {
         "name": "积木与代码互转库",
         "description": "伪Lisp代码与积木双向转换"
@@ -57,6 +61,9 @@
       },
       "ca": {
         "description": "Objectes amb herència per prototips"
+      },
+      "es": {
+        "description": "Objectos con herencia con prototipos"
       },
       "zh_CN": {
         "name": "面向对象编程(OOP)库",
@@ -97,7 +104,11 @@
       },
       "ca": {
         "name": "Esdeveniments",
-        "description": "Crear escolta d'esdeveniments programats per canvi en les dades, canvis d'estat o creuament del llindar d'un sensor"
+        "description": "Crear detectors d'esdeveniments programats pel canvi en les dades, canvis d'estat o superació del llindar definit d'un sensor"
+      },
+      "es": {
+        "name": "Eventos",
+        "description": "Crea detectores de eventos programados por el cambio de valores, cambios de estado o por superar el umbral definido en un sensor"
       },
       "zh_CN": {
         "name": "更多事件库",
@@ -127,6 +138,14 @@
       "de": {
         "name": "Listen",
         "description": "Eine Sammlung praktischer Funktionen für die Arbeit mit Listen und Daten"
+      },
+      "ca": {
+        "name": "Llistes",
+        "description": "Col·lecció de funcions útils per treballar amb llistes i dades"
+      },
+      "es": {
+        "name": "Listas",
+        "description": "Colección de funciones útiles para trabajar con listas y datos"
       }
     }
   },
@@ -158,7 +177,8 @@
         "description": "Modifica, barreja i obté transicions de colors."
       },
       "es": {
-        "name": "Colores"
+        "name": "Colores",
+        "description": "Modifica, mezcla y obtén transiciones de colores"
       },
       "it": {
         "name": "Colori"
@@ -196,6 +216,14 @@
           "neben",
           "auf"
         ]
+      },
+      "ca": {
+        "name": "Imatges",
+        "description": "Crea nous vestits a partir de vestits existents i programa la generació d'imatges de blocs i programes."
+      },
+      "es": {
+        "name": "Imágenes",
+        "description": "Crea nuevos vestidos a partir de vestidos existentes y programa la generación de imágenes de bloques y programas."
       }
     }
   },
@@ -231,7 +259,17 @@
     ],
     "categories": [
       "Shapes"
-    ]
+    ],
+    "translations": {
+      "ca": {
+        "name": "Formes",
+        "description": "Crea, combina, transforma i mostra formes geomètriques per treballar amb un enfoc de programació centrat en funcions. Inspirat per la biblioteca de imatges que té pyret.org, https://pyret.org/docs/horizon/image.html - en desenvolupament"
+      },
+      "es": {
+        "name": "Formas",
+        "description": "Crea, combina, transforma y muestra formas geométricas para trabajar con un enfoque de programación centrado en funciones. Inspirado en la biblioteca de imágenes de pyret.org, https://pyret.org/docs/horizon/image.html - en desarrollo"
+      }
+    }
   },
   {
     "fileName": "tables_module.xml",
@@ -264,6 +302,14 @@
       "Tables"
     ],
     "translations": {
+      "ca": {
+        "name": "Taules",
+        "description": "Crea, selecciona, filtra, ordena, transforma, amplia i analitza conjunts de dades tabulars amb funcions eficients. Inspirat en les taules de pyret.org,  https://pyret.org/docs/latest/tables.html. Agraïments a Shriram Krishnamurthi per la seva inspiració, retroalimentació i consell. Projecte d'exemple (en desenvolupament): https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode"
+      },
+      "es": {
+        "name": "Tablas",
+        "description": "Crea, selecciona, filtra, ordena, transforma, amplía i analiza conjuntos de datos tabulares con funciones eficientes. Inspirado en les tablas de pyret.org,  https://pyret.org/docs/latest/tables.html. Agradecimientos a Shriram Krishnamurthi por su inspiración, retroalimentación i consejo. Proyecto de ejemplo (en desarrollo): https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode"
+      },
       "zh_CN": {
         "name": "表格处理库",
         "description": "使用强大、通用的函数创建、选择、筛选、排序、转换、扩展和分析表格数据集。其设计灵感源自 Pyret 的 Tables 数据，详情可参阅：https://pyret.org/docs/latest/tables.html。感谢 Shriram Krishnamurthi 的启发、反馈与建议。示例作品(仍在开发中)：https://snap.berkeley.edu/versions/dev/snap.html#present:Username=jens&ProjectName=Shriram%20Tables&editMode"
@@ -290,6 +336,14 @@
       "de": {
         "name": "Präsentationen",
         "description": "Einfache Präsentation und Slideshows mit Text, Typographie, Grafiken und Animationen erstellen, und mit Übersetzungen versehen"
+      },
+      "ca": {
+        "name": "Presentacions",
+        "description": "Crea presentacions de diapositives senzilles amb text, tipografies, imatges i animacions, amb suport a la localització/traducció del contingut"
+      },
+      "es": {
+        "name": "Presentaciones",
+        "description": "Crea presentaciones de diapositivas sencillas con texto, tipografías, imágenes y animaciones, con soporte a la localización/traducción del contenido"
       }
     }
   },
@@ -348,6 +402,10 @@
         "name": "Xarxes Neuronals",
         "description": "Classifica dades vectoritzades utilitzant xarxes neuronals. Entrena i valida els teus propis models interns."
       },
+      "es": {
+        "name": "Redes Neuronales",
+        "description": "Clasifica datos vectorizados utilizando redes neuronales. Entrena y valida tus propios modelos internos."
+      },
       "zh_CN": {
         "name": "神经网络训练库",
         "description": "借助神经网络对数据向量进行分类，训练并验证你自己的深度神经网络模型。本库完全用Snap!本身实现"
@@ -374,6 +432,14 @@
       "Edge Computer Vision"
     ],
     "translations": {
+      "ca": {
+        "name": "Visió artificial",
+        "description": "Detecta trets o gestos de la mà, la cara i el cos mitjançant l'API de visió artificial AI Edge de Google"
+      },
+      "es": {
+        "name": "Visión artificial",
+        "description": "Detecta características o gestos de manos, rostros y cuerpo mediante la API de visión artificial AI Edge de Google"
+      },
       "zh_CN": {
         "name": "Edge AI视觉检测库",
         "description": "通过 Google 的 Edge AI 计算机视觉 API 检测手部、人脸和身体特征或手势"
@@ -414,6 +480,10 @@
         "name": "Sensors de dispositius mòbils",
         "description": "Lectures dels sensors de mòbils i tauletes."
       },
+      "es": {
+        "name": "Sensores de dispositivos móviles",
+        "description": "Lecturas de los sensores de móviles i tabletas."
+      },
       "zh_CN": {
         "name": "移动设备传感器库",
         "description": "访问手机和平板上的传感器"
@@ -427,6 +497,9 @@
     "translations": {
       "ca": {
         "description": "Interactua amb dispositius programats amb Microblocks conentant-los per USB o per BLE. Els missatges enviats per Microblocks es reben automàticament a Snap! després de la connexió"
+      },
+      "es": {
+        "description": "Interactua con dispositivos programados con Microblocks conectándolos por USB o BLE. Los mensajes enviados por Microblocks se reciben automáticamente en Snap! después de la conexión"
       },
       "zh_CN": {
         "description": "通过USB或BLE无线连接与MicroBlocks设备进行交互。连接后，MicroBlocks设备生成的广播将自动在Snap!端接收"
@@ -447,7 +520,7 @@
   {
     "fileName": "s4aConn.xml",
     "name": "S4A Connector",
-    "description": "Snap for All firmata boards Connector, Adding all Snap4Arduino features. Connecting Snap! to any Firmata compatible board: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... to dynamically control their functionalities. Firmata firmware uploaded is required.",
+    "description": "Snap for All firmata boards Connector, adding all Snap4Arduino features. Connecting Snap! to any Firmata compatible board: Arduino, UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... to dynamically control their functionalities. Firmata firmware uploaded is required.",
     "searchData": [
       "board connected ?",
       "set digital pin _ to _",
@@ -462,7 +535,7 @@
     "translations": {
       "ca": {
         "name": "Connector S4A",
-        "description": "Connector de Snap! a per totes les plaques compatibles amb firmata: UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... per controlar dinàmicament les seves funcionalitats. Necessita que la placa tingui el Firmata carregat prèviament.",
+        "description": "Connector de Snap! que ofereix totes les funcionalitats de Snap4Arduino, per a totes les plaques compatibles amb firmata: Arduino, UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... per controlar dinàmicament les seves funcionalitats. Necessita que la placa tingui el Firmata carregat prèviament.",
         "searchData": [
           "placa connectada?\res",
           "posa el pin digital _ a _\res",
@@ -471,6 +544,10 @@
           "lectura analògica _\res",
           "lectura digital _\res"
         ]
+      },
+      "es": {
+        "name": "Conector S4A",
+        "description": "Conector de Snap! que ofrece todas las funcionalidades de Snap4Arduino, para todas las placas compatibles con firmata: Arduino, UNO, Nano, Mega, Leonardo, Micro, Due, 101, ESP8266, NodeMCU... para controlar dinámicamente sus funcionalidades. Necesita que la placa tenga Firmata como firmware."
       },
       "zh_CN": {
         "name": "Snap!4Arduino硬件连接库",
@@ -540,6 +617,10 @@
           "vista de l'escarbat"
         ]
       },
+      "es": {
+        "name": "Geometría 3D del escarabajo",
+        "description": "Crea geometría 3D extruyendo puntos, líneas o polígonos en un camino definido dentro del espacio 3D."
+      },
       "zh_CN": {
         "name": "3D甲虫教学库",
         "description": "在三维空间中沿路径绘制点、线或多边形，以生成3D几何图形。\n对于TurboWarp或Gandi IDE用户：本库并非Snap! 3D的实现，\n而是Snap!改版Beetle Blocks的Snap! DSL(领域特定语言)重写版本\n(由于此前Beetle Blocks的服务器数据丢失，因此，在Snap! 10版本，Beetle Blocks被重写为Snap!库。)\n详见\nhttps://snapwiki.miraheze.org/wiki/Beetle_Blocks"
@@ -574,6 +655,10 @@
       "ca": {
         "name": "Brodats digitals",
         "description": "Generació d'arxius per les brodadores digitals afegint les funcionalitats de brodadora al dibuix de tortuga estàndard. Experimental"
+      },
+      "es": {
+        "name": "Bordados digitales",
+        "description": "Generación de archivos para las bordadoras digitales añadiendo funcionalidades de bordado al dibujo de tortuga normal. Experimental"
       },
       "zh_CN": {
         "name": "刺绣库",
@@ -653,10 +738,15 @@
     "description": "Prompt the user to pick an option.",
     "translations": {
       "ca": {
+        "name": "Menús",
         "description": "Demana a l'usuari que triï una opció."
       },
+      "es": {
+        "name": "Menús",
+        "description": "Interactua con el usuario para que pueda escoger una opción de menú."
+      },
       "de": {
-	"name": "Menüs",
+        "name": "Menüs",
         "description": "Den Benutzer eine Auswahl treffen lassen"
       },
       "zh_CN": {
@@ -685,7 +775,11 @@
     "translations": {
       "ca": {
         "name": "Text als vestits",
-        "description": "Genera vestits utilitzant lletres, paraules... o qualevol text."
+        "description": "Genera vestits utilitzant lletres, paraules... o qualsevol text."
+      },
+      "es": {
+        "name": "Texto en los vestidos",
+        "description": "Genera vestidos utilizando letras, palabras... o cualquier texto."
       },
       "de": {
         "name": "Textkostüme",
@@ -749,6 +843,10 @@
         "name": "Lector de text",
         "description": "Utilitza la síntesi de veu per crear so des d'un text"
       },
+      "es": {
+        "name": "Lector de texto",
+        "description": "Utilitza la síntesis de voz para crear sonido a partir de un texto"
+      },
       "it": {
         "name": "Da Testo a Voce",
         "description": "Pronuncia il testo usando un sintetizzatore"
@@ -791,7 +889,8 @@
         "description": "Fés lliscar, crèixer i girar els objectes utilitzant diferents formes i filtres a les animacions"
       },
       "es": {
-        "name": "Animación"
+        "name": "Animaciones",
+        "description": "Permite deslizar, cambiar el tamaño y girar los objetos utilizando diferentes formas y filtros de animación"
       },
       "eu": {
         "name": "Animazioa"
@@ -847,7 +946,8 @@
         "description": "Manipulem els píxels dels vestits"
       },
       "es": {
-        "name": "Píxeles"
+        "name": "Píxeles",
+        "description": "Manipula los píxeles de los vestidos"
       },
       "eu": {
         "name": "Pixelak"
@@ -924,6 +1024,10 @@
         "name": "Contorns i Halos",
         "description": "Crea i mostra contorns i halos dinàmics als vestits dels objectes"
       },
+      "es": {
+        "name": "Contornos i Halos",
+        "description": "Crea y muestra contornos y halos dinámicos en vestidos de los objetos"
+      },
       "zh_CN": {
         "name": "光环库",
         "description": "计算并显示角色当前造型周围的光环"
@@ -940,7 +1044,8 @@
         "description": "Analitza, manipula i genera mostres de so"
       },
       "es": {
-        "name": "Composición de audio"
+        "name": "Composición de audio",
+        "description": "Analiza, manipula y genera muestras de sonido"
       },
       "eu": {
         "name": "Audioa"
@@ -1021,7 +1126,8 @@
        "description": "Daten auf die Verteilung ihrer Häufigkeit hin untersuchen"
       },
       "es": {
-        "name": "Análisis de distribución de frecuencias"
+        "name": "Análisis de distribución de frecuencias",
+        "description": "Analiza los datos de distribución de frecuencias"
       },
       "gl": {
         "name": "Analise da distribución de frecuencias"
@@ -1093,7 +1199,8 @@
         ]
       },
       "es": {
-        "name": "Base de datos"
+        "name": "Base de datos",
+        "description": "Gurada en el navegador datos (clave-valor) persistentes entre sesiones de Snap!"
       },
       "it": {
         "name": "Database",
@@ -1131,6 +1238,10 @@
         "name": "Rajoles d'escenari",
         "description": "Divideix l'escenari en diferents regions iguals per realitzar la mateixa acció repetitivament"
       },
+      "es": {
+        "name": "Baldosas de escenario",
+        "description": "Divide el escenario en diferentes regiones iguales para realizar la misma acción repetitivamente"
+      },
       "zh_CN": {
         "name": "子区域库",
         "description": "将舞台分成若干大小相同的区域，并对每个区域执行相同的程序"
@@ -1152,6 +1263,10 @@
     "translations": {
       "ca": {
         "description": "Creeu arcs tot girant els objectes un número de graus i movent-los en un radi determinat"
+      },
+      "es": {
+        "name": "Arcos",
+        "description": "Crea arcos girando los objetos un número de grados y moviéndolos con un radio determinado"
       },
       "zh_CN": {
         "name": "圆周运动库",
@@ -1298,7 +1413,7 @@
     "translations": {
       "ca": {
         "name": "Paraules i frases",
-        "description": "Una de les idees importants en Logo que no va ser inclosa a Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta llibreria torna a desenvolupar aquesta idea.",
+        "description": "Una de les idees importants en Logo que no va ser inclosa a Scratch era pensar en els textos com a una estructura de paraules i frases, més que no com una llista de caràcters. Aquesta biblioteca torna a desenvolupar aquella idea.",
         "searchData": [
           "frase _\res",
           "notació textual de _\res"
@@ -1318,7 +1433,8 @@
         "name": "Λέξεις, φράσεις"
       },
       "es": {
-        "name": "Palabras, frases"
+        "name": "Palabras, frases",
+        "description": "Una de las ideas importantes en Logo que no fue incluida en Scratch era pensar en los textos como en una estructura de palabras y frases, y no tanto como en una lista de carácteres. Esta biblioteca vuelve a desarrolar esa idea."
       },
       "eu": {
         "name": "Hitzak, esaldiak"
@@ -1412,7 +1528,11 @@
     "translations": {
       "ca": {
         "name": "Només paraules",
-        "description": "Utilitza els textos com si fossin llistes de paraules. Una variant mínima de la llibreria 'Paraules i Frases' per a projectes lingüístics com ara un xat amb un robot."
+        "description": "Utilitza els textos com si fossin llistes de paraules. Una variant mínima de la biblioteca 'Paraules i Frases' per a projectes lingüístics com ara un robot de xat."
+      },
+      "es": {
+        "name": "Sólo palabras",
+        "description": "Utiliza los textos como lista de palabras. Es una variante mínima de la biblioteca 'Palabras, frases' para proyectos lingüísticos como un robot de xat."
       },
       "zh_CN": {
         "name": "纯单词处理库",
@@ -1437,6 +1557,10 @@
       "ca": {
         "name": "Operadors de text i entrades multilínia",
         "description": "Extreu part de cadenes de text amb diversos criteris. El bloc \"multilínia\" permet afegir entrades de text multilínia en qualsevol entrada de blocs"
+      },
+      "es": {
+        "name": "Operadores de texto y entradas multilínea",
+        "description": "Extrae partes de cadenas de texto con diversos criterios. El bloque \"multilínea\" permite añadir entradas de texto multilínea en cualquier ranura de entrada de bloques"
       },
       "it": {
         "name": "Stringhe, argomento multilinea"
@@ -1472,8 +1596,12 @@
     "description": "Replace all occurrences of a letter or a sequence of letters with another in a text.",
     "translations": {
       "ca": {
-        "name": "Substitueix Lletres",
+        "name": "Substitueix lletres",
         "description": "Substitueix totes les aparicions d'una lletra o d'una seqüència de lletres per unes altres en un text."
+      },
+      "es": {
+        "name": "Substituye letras",
+        "description": "Substituye todas las apariciones de una letra o secuencia de letras por otras en un texto."
       }
     },
     "searchData": [
@@ -1496,7 +1624,8 @@
         ]
       },
       "es": {
-        "name": "Primitivas APL"
+        "name": "Primitivas APL",
+        "description": "Añade funcionalidades del lenguaje APL a los hiperbloques"
       },
       "it": {
         "name": "Primitive APL",
@@ -1586,14 +1715,15 @@
     "description": "A variation on the list data type in which each list item isn't computed until it's needed, so you can construct million-item lists without really taking up all that time or memory, or even infinite-sized lists.  (A block that reports all the prime numbers is included as an example.)  See SICP 3.5 for a tutorial.",
     "translations": {
       "ca": {
-        "name": "Streams (llistes presconstruides)",
+        "name": "Streams (llistes preconstruïdes)",
         "description": "Variació del tipus de dades \"llistes\" on els elements de la llista no són avaluats fins que s'utilitzen. D'aquesta manera es poden construir llistes amb milions d'elements sense un gran consum de memòria i fins i tot construir llistes de mida infinita. (S'inclou un bloc d'exemple que reporta tots els números primers.) Veieu el tutorial a SICP 3.5.",
         "searchData": [
           "ordena _ segons criteri _"
         ]
       },
       "es": {
-        "name": "Streams (listas perezosas)"
+        "name": "Streams (listas preconstruidas)",
+        "description": "Variación del tipo de datos \"listas\" donde los elementos de la lista no son evaluados hasta que se utilizan. De esta forma se pueden construir listas de millones de elementos sin un gran consumo de memoria y hasta construir una lista infinita. (Se incluye un bloque de ejemplo que obtiene todos los números primos.) Documentado en el tutorial SICP 3.5."
       },
       "eu": {
         "name": "Jarioak (zerrenda alferrak)"
@@ -1694,12 +1824,16 @@
     "translations": {
       "ca": {
         "name": "Gràfics de barres",
-        "description": "Agafa una taula (normalment obtinguda des d'un fitxer CSV) com a entrada i obté un resum de la taula agrupant les dades pel camp especificat pel número de columna. Les altres tres entrades només s'utilitzen si els valors d'aquest camp són nombres, i llavors permet agrupar-los (per exemple en dècades, segles...). Aquestes tres entrades indiquen els valors més petits i més grans dels grups i, més important, la longitud de l'agrupació (10 per dècades, 100 per segles). Si el camp no és numèric, cal deixar aquests tres camps buits o a zero. En aquest darrer cas, cada valor de text farà una agrupació (una dada a representar) i apareixerà en ordre alfabètic. El bloc retorna una nova taula amb tres columnes. La primera té el nom del grup. La segona el número de registres que té cada grup. I la tercera té una altra taula amb els registres originals que s'han agrupat. Si les agrupacions no tenen una amplada constant o es vol agrupar per alguna funció o per més d'un camp, cal utilitzar la llibreria \"Anàlisi de la distribució de freqüències\".",
+        "description": "Agafa una taula (normalment obtinguda des d'un fitxer CSV) com a entrada i obté un resum de la taula agrupant les dades pel camp especificat pel número de columna. Les altres tres entrades només s'utilitzen si els valors d'aquest camp són nombres, i llavors permet agrupar-los (per exemple en dècades, segles...). Aquestes tres entrades indiquen els valors més petits i més grans dels grups i, més important, la longitud de l'agrupació (10 per dècades, 100 per segles). Si el camp no és numèric, cal deixar aquests tres camps buits o a zero. En aquest darrer cas, cada valor de text farà una agrupació (una dada a representar) i apareixerà en ordre alfabètic. El bloc retorna una nova taula amb tres columnes. La primera té el nom del grup. La segona el número de registres que té cada grup. I la tercera té una altra taula amb els registres originals que s'han agrupat. Si les agrupacions no tenen una amplada constant o es vol agrupar per alguna funció o per més d'un camp, cal utilitzar la biblioteca \"Anàlisi de la distribució de freqüències\".",
         "searchData": [
           "gràfica de la taula _ agrupada pel camp",
           "ordena taula _ pel camp _ en ordre _",
           "agrupa taula _ pel camp _ per intervals de _"
         ]
+      },
+      "es": {
+        "name": "Gráficos de barras",
+        "description": "Usando una tabla (normalmente obtenida a partir de un archivo CSV) como entrada, se obtiene un resumen de la tabla agrupando los datos por el campo especificado de número de columna. Las otras tres entradas sólo se utilizan si los valores de este campo son números, y entonces permite agruparlos (por ejemplo en décadas, siglos...). Estas tres entradas indican los valores más pequeños y más grandes de los grupos y, aún más importante, la longitud de la agrupación (10 para décadas, 100 para siglos). Si el campo no es numérico, se han de dejar estos campos vacíos o a cero. En este último caso, cada valor de texto formará una agrupación (un dato a representar) y se mostrará en orden alfabético. El bloque retorna una nueva tabla con tres columnas. La primera tiene el nombre del grupo. La segunda el número de registros que tiene cada grupo. Y la tercera tiene otra tabla con los registros originales que se han agrupado. Si las agrupaciones no tienen un media constante o si se quiere agrupar por alguna función o por más de un campo, hay que utilizar la biblioteca \"Análisis de distribución de frecuencias\"."
       },
       "it": {
         "name": "Grafico a barre"
@@ -1737,6 +1871,10 @@
       "ca": {
         "name": "Només gràfics de barres",
         "description": "Representa una llista de nombres utilitzant línies verticals distribuïdes per tot l'escenari"
+      },
+      "es": {
+        "name": "Sólo gráficos de barras",
+        "description": "Representa una lista de números utilizando líneas verticales distribuidas por todo el escenario"
       }
     },
     "searchData": [
@@ -1759,7 +1897,8 @@
         "name": "Zugriff auf Webservices"
       },
       "es": {
-        "name": "Acceso a servicios web (https)"
+        "name": "Acceso a servicios web (https)",
+        "description": "Una versión ampliada del bloque URL que permite trebaajr con llamadas \"POST\", \"PUT\", \"DELETE\" y \"GET\" y también escoger el protocolo \"HTTP-HTTPS\" y controlar las cabeceras. También permite trabajar con datos en formato JSON."
       },
       "eu": {
         "name": "Web zerbitzuak atzitzea (https)"
@@ -1847,6 +1986,10 @@
       "ca": {
         "name": "Declara i inicialitza variables de programa",
         "description": "Declara i inicialitza múltiples variables dins els programes"
+      },
+      "es": {
+        "name": "Declara y inicializa variables de programa",
+        "description": "Declara y inicializa múltiples variables dentro de programas"
       }
     }
   },
@@ -1865,7 +2008,8 @@
         ]
       },
       "es": {
-        "name": "Crear variables"
+        "name": "Crea variables",
+        "description": "Crea y gestiona variables del tipo global/objeto/programa dentro de los propios programas"
       },
       "gl": {
         "description": "Crear e xestionar \"global/sprite/script\" variábeis a partires dun programa."
@@ -1921,6 +2065,10 @@
       "ca": {
         "name": "Operadors 'bitwise'",
         "description": "Operadors aritmètics 'bitwise' per a manipular dades a baix nivell (a nivell dels seus bits)"
+      },
+      "es": {
+        "name": "Operadores 'bitwise'",
+        "description": "Operadores aritméticos 'bitwise' para manipular datos a bajo nivel (al nivel de sus bits)"
       }
     },
     "searchData": [
@@ -1953,6 +2101,8 @@
     ],
     "translations": {
       "es": {
+        "name": "Escribir y formatar texto",
+        "description": "Escribe texto utilizando la fuente de Tethrarxitet",
         "searchData": [
           "escribir _ con tamaña _ e información _\rpt",
           "disfraz de texto _ tamaño _ e información _\rpt",
@@ -2000,6 +2150,10 @@
       "ca": {
         "name": "Blocs propis dels objectes",
         "description": "Crida els blocs propis dels objectes des de altres objectes"
+      },
+      "es": {
+        "name": "Bloques propios de los objetos",
+        "description": "Permite usar los bloques propios de un objeto desde otros objetos"
       }
     }
   },
@@ -2022,6 +2176,9 @@
     "translations": {
       "ca": {
         "description": "Funcions científiques, gràfics, comandes SQL i 'Machine Learning' creats per la Universitat de Göttingen (Eckart Modrow)"
+      },
+      "es": {
+        "description": "Funciones científicas, gráficos, comandos SQL y 'Machine Learning' creados por la Universitat de Göttingen (Eckart Modrow)"
       }
     },
     "searchData": [
@@ -2430,6 +2587,9 @@
           "assigna a _ el valor _\res",
           "associació _ _"
         ]
+      },
+      "es": {
+        "description": "Notación musical, instrumentos, baterías, tonos, acordes y pistas creadas por la Universidat de Virginia (Glen Bull)"
       }
     },
     "searchData": [
@@ -2500,7 +2660,8 @@
         "description": "Connexió a microcontroladors connectats al port sèrie utilitzant el Web Serial API (requereix de la utilització del navegador Chromium, Chrome o Edge)"
       },
       "es": {
-        "name": "Puertos serie"
+        "name": "Puertos serie",
+        "description": "Conexión con microcontroladores conectados al puerto serie utilizando el Web Serial API (necesita el navegador Chromium, Chrome o Edge)"
       },
       "it": {
         "name": "Porte Seriali",
@@ -2539,6 +2700,9 @@
     "translations": {
       "ca": {
         "description": "MQTT (Message Queuing Telemetry Transport - Transport de telemetria de missatges en cua) Protocol per connectar dispositius IoT amb diferent programari"
+      },
+      "es": {
+        "description": "MQTT (Message Queuing Telemetry Transport - Transporte de telemetría de mensajes en cola) Protocolo para conectar dispositivos IoT con diferentes programas"
       }
     },
     "searchData": [
@@ -2683,7 +2847,11 @@
     ],
     "translations": {
       "ca": {
-        "description": "Posiciona i ajusta la mida de la finstra del tutorial."
+        "description": "Posiciona i ajusta la mida de la finestra del tutorial."
+      },
+      "es": {
+        "name": "Tutoriales",
+        "description": "Posiciona y ajusta la medida de la ventana del tutorial."
       }
     }
   },
@@ -2713,6 +2881,10 @@
         "name": "Metaprogramació",
         "description": "Analitza, transforma i genera blocs i programes dinàmicament"
       },
+      "es": {
+        "name": "Metaprogramación",
+        "description": "Analiza, transforma y genera bloques y programas dinámicamente"
+      },
       "zh_CN": {
         "name": "元编程库",
         "description": "分析、转换、生成积木和程序"
@@ -2735,6 +2907,10 @@
         "name": "Continuacions",
         "description": "Captura dinàmicament les continuacions en temps d'execució i crea diferents estructures de control"
       },
+      "es": {
+        "name": "Continuaciones",
+        "description": "Captura dinámicamente las continuaciones en tiempo de ejecución y crea diferentes estructuras de control"
+      },
       "zh_CN": {
         "name": "延续 + call/cc库",
         "description": "动态获取continuation(延续)，以实现更多控制流\n译者注：call/cc的全称是“call-with-current-continuation”，Snap!的中文翻译传统之一是将其译为“带延续运行”/“带延续调用”。\ncall/cc的用例如：\n“循环、函数迭代和组合”库里的“非本地退出”积木、协程(Coroutine)、生成器(Generator)"
@@ -2755,6 +2931,14 @@
       "de": {
         "name": "Male Pfade",
         "description": "Male Vektorpfade und Polygone direkt, ohne den Stift zu bewegen, wahlweise ausgefüllt oder umrandet"
+      },
+      "ca": {
+        "name": "Dibuixa camins",
+        "description": "Dibuixa figures plenes o perfilades amb polilínies i polígons sense moure el llapis de l'objecte"
+      },
+      "es": {
+        "name": "Dibuja caminos",
+        "description": "Dibuja figuras llenas o perfiladas con polilíneas y polígonos sin mover el lápiz del objeto"
       }
     }
   },
@@ -2765,7 +2949,11 @@
     "translations": {
       "ca": {
         "name": "Números sencers de precisió infinita, racionals exactes i complexos",
-        "description": "Ens ofereix la implementació numèrica de Scheme. Cal habilitar els \"Big Nums\" (amb el bloc \"USE BIGNUMS\" a cert) per utilitzar-ho"
+        "description": "Ens ofereix la implementació numèrica de Scheme. Cal habilitar els \"Big Nums\" (amb el bloc \"USE BIGNUMS\" a 'cert') per utilitzar-ho"
+      },
+      "es": {
+        "name": "Números enteros de precisión infinita, racionales exactos i complexos",
+        "description": "Nos ofrece la implementación numérica de Scheme. Al habilitar los \"Big Nums\" (con el bloque \"USE BIGNUMS\" a 'verdadero') para utilizarlo"
       },
       "it": {
         "name": "Numeri a precisione infinita, razionali, complessi"
@@ -2802,6 +2990,9 @@
           "prova de forma segura reportant _ i si _ reportant _\rpl"
         ]
       },
+      "ca": {
+        "name": "Detecta errores"
+      },
       "it": {
         "name": "Intercettazione degli errori"
       },
@@ -2834,7 +3025,8 @@
         "description": "Executa diversos scripts en paral·lel, i espera que hagin acabat tots els processos abans d'aturar-se"
       },
       "es": {
-        "name": "Paralelización"
+        "name": "Paralelización",
+        "description": "Ejecuta diversos scripts en paralelo, y espera acabar todos los procesos antes de pararse"
       },
       "gl": {
         "name": "Paralelización",
@@ -2885,6 +3077,10 @@
       "ca": {
         "name": "Compressió de llistes",
         "description": "Versió HOF (amb funcions d'ordre superior) de la compressió ZIP, que permet \"hiperitzar\" qualsevol funció diàdica (amb dos arguments)"
+      },
+      "es": {
+        "name": "Compresión de listas",
+        "description": "Versión HOF (con funciones de orden superior) de la compresión ZIP, que permite \"hiperizar\" cualquier función diádica (con dos argumentos)"
       },
       "zh_CN": {
         "name": "超运算化(基本实现)库",
@@ -3158,7 +3354,7 @@
     "translations": {
       "ca": {
         "name": "Colors i Paletes",
-        "description": "Incorpora les llibreries inicials de Paletes de color i Colors RGB. Utilitza tonalitats més ajustades (més taronges, menys verds, afegeix marrons) i una escala de color lineal que inclou escala de grisos i més matisos de tonalitat.",
+        "description": "Incorpora les biblioteques inicials de Paletes de color i Colors RGB. Utilitza tonalitats més ajustades (més taronges, menys verds, afegeix marrons) i una escala de color lineal que inclou escala de grisos i més matisos de tonalitat.",
         "searchData": [
           "$brush fixa el _ del llapis a _ _",
           "$brush _ del llapis",
@@ -3171,7 +3367,8 @@
         ]
       },
       "es": {
-        "name": "Colores y pinturas"
+        "name": "Colores y pinturas",
+        "description": "Incorpora las bibliotecas iniciales de Paletas de color i Colores RGB. Utiliza tonalidades más ajustadas (más naranjas, menos verdes, incorpora marrones) i una escala de color lineal que incluye a la escala de grises y más matices de tonalitad."
       },
       "it": {
         "name": "Colori e Pastelli"
@@ -3292,7 +3489,7 @@
     "translations": {
       "ca": {
         "name": "Llapis de colors",
-        "description": "Només els llapis de colors, sense la resta de la llibreria de colors. Més ràpida i simple.",
+        "description": "Només els llapis de colors, sense la resta de la biblioteca de colors. Més ràpida i simple.",
         "searchData": [
           "fixa el llapis de color _\rpl",
           "canvia de llapis de color saltant _\rpl",
@@ -3300,7 +3497,8 @@
         ]
       },
       "es": {
-        "name": "Pinturas"
+        "name": "Pinturas",
+        "description": "Solamente lápices de colores, sin el resto de la biblioteca de colores. Más rápido y sencillo."
       },
       "it": {
         "name": "Pastelli"
