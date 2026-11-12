@@ -11,9 +11,13 @@
     * again removed experimental hidden "remove unhatted scripts" feature
 * **Notable Fixes:**
     * fixed an ADT induced updating glitch in variable watchers
+    * fixed not skipping a frame when opening a tutorial window
     * improved Unicode text rendering of multibyte characters (emoji)
 * **Translation Updates:**
     * German
+
+### 2026-11-12
+* gui: fixed not skipping a frame when opening a tutorial window
 
 ### 2026-11-11
 * German translation update

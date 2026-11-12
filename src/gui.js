@@ -87,7 +87,7 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-November-06';
+modules.gui = '2026-November-12';
 
 // Declarations
 
@@ -10317,7 +10317,10 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
         );
     };
 
-    scene.stage.fireGreenFlagEvent();
+    this.world().schedule(() =>
+        scene.stage.fireGreenFlagEvent(),
+        0
+    );
 };
 
 IDE_Morph.prototype.escapeTutorial = function () {
