@@ -2,6 +2,56 @@
 
 ## in development:
 
+## 12.4.0:
+* **New Features:**
+    * new special slot type "emoji" for displaying emoji characters, including in drop-down menus, with meta-programming support (slot type 26)
+    * added "first/last items", "pop last item" and "Σ" (sum total) reporters to the lists library
+* **Notable Changes:**
+    * optimized getting the length of a linked list by caching and updating it for cons and cdr
+    * include hat blocks in "my blocks" reporter result list
+    * sped up table views
+    * for ADT's "_morph" method to be automatically called by the IDE its first entry must have an ellipsis ('...') as key (and a parent or nothing as associated value)
+    * updated libraries for new ADT _morph requirement: OOP, neural networks, shapes, tables, presentations
+    * again removed experimental hidden "remove unhatted scripts" feature
+* **Notable Fixes:**
+    * fixed an ADT induced updating glitch in variable watchers
+    * fixed not skipping a frame when opening a tutorial window
+    * improved Unicode text rendering of multibyte characters (emoji)
+* **Translation Updates:**
+    * German
+    * Catalan
+    * Spanish
+
+### 2026-11-14
+* prepared v12.4.0 minor release
+
+### 2026-11-12
+* gui: fixed not skipping a frame when opening a tutorial window
+* Catalan and Spanish translation updates for OOP, events, lists and code2blocks libraries, thank you, Joan!
+* lists: sped up table views
+* lists: require an ADT's first entry key to be '...' in order for its '_morph' method to automatically get called by the IDE
+* updated libraries for new ADT _morph requirement: OOP, neural networks, shapes, tables, presentations
+
+### 2026-11-11
+* German translation update
+* updated lists library
+* updated lists library with a "sum total (Σ)" reporter in the operators palette category
+* threads: include hat blocks in "my blocks" reporter result list
+* updated lists library with a "pop last item" reporter
+
+### 2026-11-10
+* blocks, byob, threads: new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
+* blocks: removed experimental hidden "remove unhatted scripts" feature.
+* lists: optimized getting the length of a linked list by caching it
+* morphic: improved Unicode text rendering of multibyte characters (emoji)
+* blocks: center dropdown arrow in emoji-slots
+
+### 2026-11-09
+* updated lists library with a new "first/last items" reporter
+
+### 2026-11-08
+* objects: fixed an updating glitch in variable watchers
+
 ## 12.3.11:
 * **New Features:**
     * new 'ide_stage_size' extension for programmatically changing the stage's dimensions, use sensibly!

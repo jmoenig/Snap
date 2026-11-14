@@ -87,11 +87,11 @@ HatBlockMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.gui = '2026-November-06';
+modules.gui = '2026-November-14';
 
 // Declarations
 
-var SnapVersion = '12.4-dev';
+var SnapVersion = '12.5-dev';
 
 var IDE_Morph;
 var ProjectDialogMorph;
@@ -10317,7 +10317,10 @@ IDE_Morph.prototype.launchTutorial = function (scene) {
         );
     };
 
-    scene.stage.fireGreenFlagEvent();
+    this.world().schedule(() =>
+        scene.stage.fireGreenFlagEvent(),
+        0
+    );
 };
 
 IDE_Morph.prototype.escapeTutorial = function () {

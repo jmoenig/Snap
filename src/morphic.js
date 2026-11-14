@@ -1376,7 +1376,7 @@
 
 /*jshint esversion: 11, bitwise: false*/
 
-var morphicVersion = '2026-May-11';
+var morphicVersion = '2026-November-10';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = true;
 var ZOOM = 1;
@@ -8748,7 +8748,7 @@ StringMorph.prototype.render = function (ctx) {
     stop = Math.max(this.startMark, this.endMark);
     for (i = start; i < stop; i += 1) {
         p = this.slotPosition(i).subtract(this.position());
-        c = txt.charAt(i);
+        c = String.fromCodePoint(txt.codePointAt(i));
         ctx.fillStyle = this.markedBackgoundColor.toString();
         ctx.fillRect(p.x, p.y, ctx.measureText(c).width + 1 + x,
             fontHeight(this.fontSize) + y);
@@ -9517,7 +9517,7 @@ TextMorph.prototype.render = function (ctx) {
     stop = Math.max(this.startMark, this.endMark);
     for (i = start; i < stop; i += 1) {
         p = this.slotPosition(i).subtract(this.position());
-        c = this.text.charAt(i);
+        c = String.fromCodePoint(this.text.codePointAt(i));
         ctx.fillStyle = this.markedBackgoundColor.toString();
         ctx.fillRect(p.x, p.y, ctx.measureText(c).width + 1,
             fontHeight(this.fontSize));
