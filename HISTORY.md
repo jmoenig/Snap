@@ -2,16 +2,17 @@
 
 ## in development:
 
+## 12.4.0:
 * **New Features:**
-    * new special slot type "emoji" for displaying emoji characters, including drop-down menu. Including meta-programming support (slot type 26)
+    * new special slot type "emoji" for displaying emoji characters, including in drop-down menus, with meta-programming support (slot type 26)
     * added "first/last items", "pop last item" and "Σ" (sum total) reporters to the lists library
 * **Notable Changes:**
     * optimized getting the length of a linked list by caching and updating it for cons and cdr
     * include hat blocks in "my blocks" reporter result list
-    * again removed experimental hidden "remove unhatted scripts" feature
     * sped up table views
     * for ADT's "_morph" method to be automatically called by the IDE its first entry must have an ellipsis ('...') as key (and a parent or nothing as associated value)
     * updated libraries for new ADT _morph requirement: OOP, neural networks, shapes, tables, presentations
+    * again removed experimental hidden "remove unhatted scripts" feature
 * **Notable Fixes:**
     * fixed an ADT induced updating glitch in variable watchers
     * fixed not skipping a frame when opening a tutorial window
@@ -20,6 +21,9 @@
     * German
     * Catalan
     * Spanish
+
+### 2026-11-14
+* prepared v12.4.0 minor release
 
 ### 2026-11-12
 * gui: fixed not skipping a frame when opening a tutorial window
