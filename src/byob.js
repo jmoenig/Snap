@@ -552,35 +552,6 @@ CustomBlockDefinition.prototype.decodeChoices = function (choices) {
     return list;
 };
 
-CustomBlockDefinition.prototype.menuSearchWords = function () {
-    // return a single string containing words that can be searched for
-    // inside my dropdown menus
-    var terms = [];
-    this.inputNames().forEach(slot => {
-        var menu = this.dropDownMenuOf(slot);
-        if (menu) {
-            if (isString(menu)) { // special menu, translates its values
-                if (typeof InputSlotMorph.prototype[menu] === 'function') {
-                    // catch typos in extension menus
-                    menu = InputSlotMorph.prototype[menu](true);
-                    terms.push(
-                        Object.values(menu).map(entry => {
-                            if (isNil(entry)) {return ''; }
-                            if (entry instanceof Array) {
-                                return localize(entry[0]);
-                            }
-                            return entry.toString();
-                        }).join(' ')
-                    );
-                }
-            } else { // assume a dictionary, take its keys
-                terms.push(Object.keys(menu).join(' '));
-            }
-        }
-    });
-    return terms.join(' ').toLowerCase();
-};
-
 CustomBlockDefinition.prototype.isReadOnlyInput = function (inputName) {
     return this.declarations.has(inputName) &&
         this.declarations.get(inputName)[3] === true;

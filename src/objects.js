@@ -4924,6 +4924,8 @@ SpriteMorph.prototype.blocksMatching = function (
     // Note that "predicate" is not subsumed by "reporter" and has
     // to be specified explicitly.
     // if no types are specified all blocks are searched
+    // if a block matches because of an option in one of its drop-down
+    // menus that option is selected in the block template
     var blocks = [],
         blocksDict,
         search = searchString.toLowerCase(),
@@ -4936,37 +4938,90 @@ SpriteMorph.prototype.blocksMatching = function (
     if (!varNames) {varNames = []; }
 
     function labelOf(aBlockSpec) {
-        var words = (BlockMorph.prototype.parseSpec(aBlockSpec)),
-            filtered = words.filter(each =>
-                each.indexOf('%') !== 0 || each.length === 1
-            ),
-            slots = words.filter(each =>
-                each.length > 1 && each.indexOf('%') === 0
-            ).map(spec => moreTextIn(spec));
-        return filtered.join(' ') + ' ' + slots.join(' ');
+        // answer the words of a block spec without its input slots
+        return BlockMorph.prototype.parseSpec(aBlockSpec).filter(each =>
+            each.indexOf('%') !== 0 || each.length === 1
+        ).join(' ');
     }
 
-    function moreTextIn(aSlotSpec) {
-        var info = BlockMorph.prototype.labelParts[aSlotSpec] || {},
-            menu = info.menu,
-            more;
-        if (menu) {
-            if (isString(menu)) {
-                menu = InputSlotMorph.prototype[menu](true);
+    function menuEntriesOf(menu, useKeys) {
+        // answer an array of [text, choice] pairs, one for each option
+        // of the given drop-down menu, where choice is what selecting
+        // the option would put into the input slot. If useKeys is true
+        // the searchable text is the key under which the option is
+        // listed in the menu, otherwise it's what the input slot shows
+        var entries = [];
+        if (isString(menu)) {
+            if (typeof InputSlotMorph.prototype[menu] !== 'function') {
+                // catch typos in extension menus
+                return entries;
             }
-            more = Object.values(menu).map(entry => {
-                if (isNil(entry)) {return ''; }
-                if (entry instanceof Array) {
-                    return localize(entry[0]);
-                }
-                return entry.toString();
-            }).join(' ');
+            menu = InputSlotMorph.prototype[menu](true);
         }
-        return [
-            more || '',
-            localize(info.infix || ''),
-            localize(info.collapse || '')
-        ].join(' ');
+        if (!menu) {return entries; }
+        Object.keys(menu).forEach(key => {
+            var choice = menu[key];
+            if (isNil(choice) ||
+                    choice instanceof Function ||
+                    choice instanceof Morph) {
+                return;
+            }
+            if (choice instanceof Array && choice[0] instanceof Object) {
+                // translated sub-menu
+                entries = entries.concat(menuEntriesOf(choice[0], useKeys));
+            } else if (choice instanceof Object &&
+                    !(choice instanceof Array)) {
+                // sub-menu
+                entries = entries.concat(menuEntriesOf(choice, useKeys));
+            } else {
+                entries.push([
+                    useKeys ? key
+                        : choice instanceof Array ? localize(choice[0])
+                            : choice.toString(),
+                    choice
+                ]);
+            }
+        });
+        return entries;
+    }
+
+    // search terms are arrays: [text, input index, choice]
+    // where input index and choice are only given for terms
+    // that are options of the drop-down menu of an input slot
+
+    function termsOfPrimitive(aBlockSpec) {
+        var terms = [[labelOf(aBlockSpec), null, null]],
+            idx = -1;
+        BlockMorph.prototype.parseSpec(aBlockSpec).forEach(word => {
+            var info;
+            if (word.length > 1 && word.indexOf('%') === 0 &&
+                    word !== '%br') {
+                idx += 1;
+                info = BlockMorph.prototype.labelParts[word] || {};
+                if (info.menu) {
+                    menuEntriesOf(info.menu, false).forEach(entry =>
+                        terms.push([entry[0], idx, entry[1]])
+                    );
+                }
+                if (info.infix) {
+                    terms.push([localize(info.infix), null, null]);
+                }
+                if (info.collapse) {
+                    terms.push([localize(info.collapse), null, null]);
+                }
+            }
+        });
+        return terms;
+    }
+
+    function termsOfCustomBlock(definition) {
+        var terms = [[labelOf(definition.localizedSpec()), null, null]];
+        definition.inputNames().forEach((name, idx) =>
+            menuEntriesOf(definition.dropDownMenuOf(name), true).forEach(
+                entry => terms.push([entry[0], idx, entry[1]])
+            )
+        );
+        return terms;
     }
 
     function fillDigits(anInt, totalDigits, fillChar) {
@@ -4975,14 +5030,53 @@ SpriteMorph.prototype.blocksMatching = function (
         return ans;
     }
 
-    function relevance(aBlockLabel, aSearchString) {
-        var lbl = ' ' + aBlockLabel.toLowerCase(),
-            idx = lbl.indexOf(aSearchString),
-            atWord;
-        if (idx === -1) {return -1; }
-        atWord = (lbl.charAt(idx - 1) === ' ');
-        if (strictly && !atWord) {return -1; }
-        return (atWord ? '1' : '2') + fillDigits(idx, 4, '0');
+    function relevance(text, offset) {
+        // answer a sortable string indicating how well the search string
+        // matches the given text, or -1 if it doesn't match at all.
+        // Matches at the beginning of a word rank higher than those
+        // inside a word, and earlier matches rank higher than later ones.
+        // offset is the position of the text among all search terms
+        var lbl = ' ' + text.toLowerCase(),
+            idx = search ? lbl.indexOf(search) : -1,
+            rel = -1;
+        while (idx !== -1) {
+            if (lbl.charAt(idx - 1) === ' ') {
+                return '1' + fillDigits(offset + idx, 4, '0');
+            }
+            if (rel === -1 && !strictly) {
+                rel = '2' + fillDigits(offset + idx, 4, '0');
+            }
+            idx = lbl.indexOf(search, idx + 1);
+        }
+        return rel;
+    }
+
+    function bestMatch(terms) {
+        // answer the best matching of the given search terms as an array:
+        // [relevance, input index, choice], or null if none matches
+        var best = null,
+            offset = 0;
+        terms.forEach(term => {
+            var rel = relevance(term[0], offset);
+            if (rel !== -1 && (best === null || rel < best[0])) {
+                best = [rel, term[1], term[2]];
+            }
+            offset += term[0].length + 1;
+        });
+        return best;
+    }
+
+    function selectOption(block, match) {
+        // select the drop-down menu option the search matched
+        // in the given block template, unless the slot's current
+        // contents match the search just as well
+        var slot, current;
+        if (isNil(match[1])) {return; }
+        slot = block.inputs()[match[1]];
+        if (!(slot instanceof InputSlotMorph)) {return; }
+        current = relevance(slot.contents().text, 0);
+        if (current !== -1 && current[0] === match[0][0]) {return; }
+        slot.setContents(match[2]);
     }
 
     function primitive(selector) {
@@ -4993,7 +5087,7 @@ SpriteMorph.prototype.blocksMatching = function (
 
     // variable getters
     varNames.forEach(vName => {
-        var rel = relevance(vName, search);
+        var rel = relevance(vName, 0);
         if (rel !== -1) {
             blocks.push([this.variableBlock(vName), rel + '1']);
         }
@@ -5001,14 +5095,13 @@ SpriteMorph.prototype.blocksMatching = function (
     // custom blocks
     [this.customBlocks, stage.globalBlocks].forEach(blocksList =>
         blocksList.forEach(definition => {
+            var match, block;
             if (contains(types, definition.type)) {
-                var spec = definition.localizedSpec(),
-                    rel = relevance(labelOf(
-                        spec) + ' ' + definition.menuSearchWords(),
-                        search
-                    );
-                if (rel !== -1) {
-                    blocks.push([definition.templateInstance(), rel + '2']);
+                match = bestMatch(termsOfCustomBlock(definition));
+                if (match) {
+                    block = definition.templateInstance();
+                    selectOption(block, match);
+                    blocks.push([block, match[0] + '2']);
                 }
             }
         })
@@ -5016,20 +5109,25 @@ SpriteMorph.prototype.blocksMatching = function (
     // primitives
     blocksDict = SpriteMorph.prototype.blocks;
     Object.keys(blocksDict).forEach(selector => {
+        var info = blocksDict[selector],
+            match, rel, block;
         if (!StageMorph.prototype.hiddenPrimitives[selector] &&
-                contains(types, blocksDict[selector].type)) {
-            var block = blocksDict[selector],
-                spec = BlockMorph.prototype.localizeBlockSpec(block.spec),
-                rel = relevance(labelOf(spec), search);
-            if (rel === -1 && block.alias) {
-                rel = relevance(block.alias, search);
+                contains(types, info.type) &&
+                !info.dev &&
+                (!info.only || info.only === this.constructor)) {
+            match = bestMatch(termsOfPrimitive(
+                BlockMorph.prototype.localizeBlockSpec(info.spec)
+            ));
+            if (!match && info.alias) {
+                rel = relevance(info.alias, 0);
+                if (rel !== -1) {
+                    match = [rel, null, null];
+                }
             }
-            if (
-                (rel !== -1) &&
-                    (!block.dev) &&
-                    (!block.only || (block.only === this.constructor))
-            ) {
-                blocks.push([primitive(selector), rel + '3']);
+            if (match) {
+                block = primitive(selector);
+                selectOption(block, match);
+                blocks.push([block, match[0] + '3']);
             }
         }
     });
