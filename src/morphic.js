@@ -524,6 +524,16 @@
     Likewise, removing the event handler method will render your morph
     passive to the event in question.
 
+    Independent of which morph ends up handling a mouse-down event, the
+    optional
+
+        reactToClickInside(clickedMorph, handMorph)
+
+    method is invoked on the clicked morph and on each of its owners, if
+    present. This lets a container (e.g. a dialog box) notice clicks
+    anywhere inside of it, such as to bring itself to the front, without
+    interfering with the event handling of its submorphs.
+
 
     (b) context menu:
     -----------------
@@ -11512,6 +11522,11 @@ HandMorph.prototype.processMouseDown = function (event) {
             this.morphToGrab = morph.rootForGrab();
             this.grabPosition = this.bounds.origin.copy();
         }
+        morph.allParents().forEach(m => {
+            if (m.reactToClickInside) {
+                m.reactToClickInside(morph, this);
+            }
+        });
         if (event.button === 2 || event.ctrlKey) {
             this.mouseButton = 'right';
             actualClick = 'mouseDownRight';
