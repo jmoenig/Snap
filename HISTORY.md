@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-11-23
+* updated German translation with cardinal directions
+
 ## 12.4.0:
 * **New Features:**
     * new special slot type "emoji" for displaying emoji characters, including in drop-down menus, with meta-programming support (slot type 26)
