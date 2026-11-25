@@ -1043,9 +1043,9 @@ SnapSerializer.prototype.loadObject = function (object, model) {
             console.log(object.name + ': missing costume to wear');
         } else {
             costume = this.loadValue(node, object);
-            if (costume.loaded) {
+            if (costume?.loaded) {
                 object.wearCostume(costume, true);
-            } else {
+            } else if (!isNil(costume)) {
                 costume.loaded = function () {
                     this.loaded = true;
                     object.wearCostume(costume, true);
