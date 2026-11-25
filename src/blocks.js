@@ -3412,6 +3412,7 @@ BlockMorph.prototype.init = function () {
     this.blockSpec = ''; // formal description of label and arguments
     this.comment = null; // optional "sticky" comment morph
     this.enforceTypes = false;
+    this.hasBreakpoint = false; // session-only, see debugger.js
 
     // not to be persisted:
     this.instantiationSpec = null; // spec to set upon fullCopy() of template
@@ -3422,6 +3423,29 @@ BlockMorph.prototype.init = function () {
     BlockMorph.uber.init.call(this);
     this.color = new Color(102, 102, 102);
     this.cachedInputs = null;
+};
+
+// BlockMorph breakpoints
+
+BlockMorph.prototype.canHaveBreakpoint = function () {
+    // answer whether I get my own Context when evaluated: commands other
+    // than hat blocks, and custom reporters and predicates
+    if (this instanceof HatBlockMorph) {
+        return false;
+    }
+    if (this instanceof CommandBlockMorph) {
+        return true;
+    }
+    return this.isCustomBlock === true;
+};
+
+BlockMorph.prototype.toggleBreakpoint = function () {
+    this.setBreakpoint(!this.hasBreakpoint);
+};
+
+BlockMorph.prototype.setBreakpoint = function (bool) {
+    this.hasBreakpoint = !!bool;
+    this.rerender();
 };
 
 BlockMorph.prototype.scriptTarget = function (noError) {
@@ -3854,6 +3878,16 @@ BlockMorph.prototype.userMenu = function () {
         return menu;
     }
     menu.addLine();
+    if (Process.prototype.enableDebugging && this.canHaveBreakpoint()) {
+        menu.addItem(
+            this.hasBreakpoint ? 'remove breakpoint' : 'set breakpoint',
+            'toggleBreakpoint',
+            this.hasBreakpoint ?
+                'stop pausing execution\nwhen this block runs'
+                : 'pause execution\nwhenever this block runs'
+        );
+        menu.addLine();
+    }
     if (this.selector === 'reportGetVar') {
         menu.addItem(
             'rename...',
@@ -5734,6 +5768,28 @@ BlockMorph.prototype.render = function (ctx) {
     if (this.hasLocationPin()) {
         this.drawMethodIcon(ctx);
     }
+
+    // draw breakpoint marker, if any
+    if (this.hasBreakpoint) {
+        this.drawBreakpointMarker(ctx);
+    }
+};
+
+BlockMorph.prototype.drawBreakpointMarker = function (ctx) {
+    // a dot centered on my left edge, grey while debugging is disabled
+    var r = Math.max(3, Math.floor(this.fontSize * 0.3)),
+        y = this.height() / 2,
+        color = Process.prototype.enableDebugging ?
+            new Color(255, 0, 0) : new Color(160, 160, 160);
+
+    ctx.fillStyle = color.toString();
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(0, y, r, radians(0), radians(360), false);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
 };
 
 BlockMorph.prototype.drawMethodIcon = function (ctx) {
