@@ -4,6 +4,7 @@
 
 ### 2026-11-25
 * store: fixed an occasional serialization bug for hidden stages (now that we have them, sigh!)
+* extensions: fixed "obj_name" for off-IDE objects
 
 ### 2026-11-23
 * updated German translation with cardinal directions
