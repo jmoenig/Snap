@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion, ADT_SlotMorph, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2026-October-16';
+modules.store = '2026-November-25';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -2389,7 +2389,7 @@ StageMorph.prototype.toXML = function (serializer) {
         this.enableCodeMapping,
         this.enableInheritance,
         this.enableSublistIDs,
-        normalizeCanvas(this.trailsCanvas, true).toDataURL('image/png'),
+        normalizeCanvas(this.penTrails(), true).toDataURL('image/png'),
 
         // current costume, if it's not in the wardrobe
         !costumeIdx && this.costume ?

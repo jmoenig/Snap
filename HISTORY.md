@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-11-25
+* store: fixed an occasional serialization bug for hidden stages (now that we have them, sigh!)
+
 ### 2026-11-23
 * updated German translation with cardinal directions
 
