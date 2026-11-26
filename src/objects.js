@@ -15925,7 +15925,9 @@ WatcherMorph.prototype.update = function () {
         }
         if (newValue !== '' && !isNil(newValue)) {
             num = +newValue;
-            if (typeof newValue !== 'boolean' && !isNaN(num)) {
+            if (typeof newValue !== 'boolean' && !isNaN(num) && newValue <= Number.MAX_SAFE_INTEGER) {
+				// rounding will not be done when the watcher value exceeds the MAX_SAFE_INTEGER to prevent
+				// unnecessary rounding, so that the number won't become infinity if it exceeds 1.79e302.
                 newValue = Math.round(newValue * 1000000) / 1000000;
             }
         }
