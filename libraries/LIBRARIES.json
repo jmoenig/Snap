@@ -218,12 +218,12 @@
         ]
       },
       "ca": {
-        "name": "Imatges",
+        "name": "Vestits",
         "description": "Crea nous vestits a partir de vestits existents i programa la generació d'imatges de blocs i programes."
       },
       "es": {
-        "name": "Imágenes",
-        "description": "Crea nuevos vestidos a partir de vestidos existentes y programa la generación de imágenes de bloques y programas."
+        "name": "Disfraces",
+        "description": "Crea nuevos disfraces a partir de disfraces existentes y programa la generación de imágenes de bloques y programas."
       }
     }
   },
