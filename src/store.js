@@ -1694,7 +1694,7 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
         block = this.obsoleteBlock(isReporter);
     }
     if (model.attributes.locked === 'true') {
-        block.isLocked = true;
+        block.isLockedUp = true;
         block.isDraggable = false;
     } else {
         block.isDraggable = true;
@@ -2708,7 +2708,7 @@ BlockMorph.prototype.toBlockXML = function (serializer) {
     return serializer.format(
         '<block s="@"%>%%</block>',
         this.selector,
-        this.isLocked ? ' locked="true"' : '',
+        this.isLockedUp ? ' locked="true"' : '',
         serializer.store(this.inputs()),
         this.comment ? this.comment.toXML(serializer) : ''
     );

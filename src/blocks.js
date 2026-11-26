@@ -3412,7 +3412,7 @@ BlockMorph.prototype.init = function () {
     this.blockSpec = ''; // formal description of label and arguments
     this.comment = null; // optional "sticky" comment morph
     this.enforceTypes = false;
-    this.isLocked = false;
+    this.isLockedUp = false;
 
     // not to be persisted:
     this.instantiationSpec = null; // spec to set upon fullCopy() of template
@@ -3711,12 +3711,12 @@ BlockMorph.prototype.userMenu = function () {
         );
     }
 
-    if (this.isLocked) {
+    if (this.isLockedUp) {
         menu.addItem(
             'unlock',
             () => {
                 this.isDraggable = true;
-                this.isLocked = false;
+                this.isLockedUp = false;
             }
         );
         return menu;
@@ -4167,7 +4167,7 @@ BlockMorph.prototype.userMenu = function () {
             'lock',
             () => {
                 this.isDraggable = false;
-                this.isLocked = true;
+                this.isLockedUp = true;
             }
         );
     }
