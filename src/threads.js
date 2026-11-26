@@ -1406,11 +1406,11 @@ Process.prototype.evaluateNextInput = function (element) {
                 this.context.addInput(exp);
             } else if (sel === 'doUntil' || sel === 'doWaitUntil') {
                 this.pushContext(exp, outer);
-            } else if ( // +++
+            } else if (
                 exp instanceof ReporterBlockMorph &&
                 (exp.selector === 'reportGetVar' ||
                     [   // 'reportListItem',
-                        'reportAttributeOf',
+                        // 'reportAttributeOf',
                         'reportEnvironment'
                     ].includes(exp.selector) ||
                     [
@@ -1457,7 +1457,7 @@ Process.prototype.evaluateNextInputSet = function (element) {
                     exp instanceof ReporterBlockMorph &&
                     (exp.selector === 'reportGetVar' ||
                         [   // 'reportListItem',
-                            'reportAttributeOf',
+                            // 'reportAttributeOf',
                             'reportEnvironment'
                         ].includes(exp.selector) ||
                         [
