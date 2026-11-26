@@ -6,6 +6,7 @@
 * Catalan and Spanish translation update, thanks, Joan!
 * presentation library update (permanent buttons, restored after translation PR)
 * blocks, store: new "lock" feature for hat blocks (used for cursed pedagogical puzzles)
+* German translation update ('lock', 'unlock')
 
 ### 2026-11-25
 * store: fixed an occasional serialization bug for hidden stages (now that we have them, sigh!)
