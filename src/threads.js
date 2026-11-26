@@ -67,7 +67,7 @@ SpeechBubbleMorph*/
 
 /*jshint esversion: 11, bitwise: false, evil: true*/
 
-modules.threads = '2026-November-11';
+modules.threads = '2026-November-26';
 
 var ThreadManager;
 var Process;
@@ -1406,6 +1406,23 @@ Process.prototype.evaluateNextInput = function (element) {
                 this.context.addInput(exp);
             } else if (sel === 'doUntil' || sel === 'doWaitUntil') {
                 this.pushContext(exp, outer);
+            } else if ( // +++
+                exp instanceof ReporterBlockMorph &&
+                (exp.selector === 'reportGetVar' ||
+                    [   // 'reportListItem',
+                        'reportAttributeOf',
+                        'reportEnvironment'
+                    ].includes(exp.selector) ||
+                    [
+                        'command',
+                        'reporter',
+                        'predicate',
+                        'hat',
+                        'script'
+                    ].includes(exp.reports)
+                )
+            ) {
+                this.pushContext(exp, outer);
             } else {
                 this.context.addInput(this.reify(exp, new List()));
             }
@@ -1434,6 +1451,24 @@ Process.prototype.evaluateNextInputSet = function (element) {
                 if (sel === 'reify' || sel === 'reportScript') {
                     this.context.addInput(exp);
                 } else if (sel === 'doUntil' || sel === 'doWaitUntil') {
+                    this.pushContext(exp, outer);
+                    break;
+                } else if (
+                    exp instanceof ReporterBlockMorph &&
+                    (exp.selector === 'reportGetVar' ||
+                        [   // 'reportListItem',
+                            'reportAttributeOf',
+                            'reportEnvironment'
+                        ].includes(exp.selector) ||
+                        [
+                            'command',
+                            'reporter',
+                            'predicate',
+                            'hat',
+                            'script'
+                        ].includes(exp.reports)
+                    )
+                ) {
                     this.pushContext(exp, outer);
                     break;
                 } else {
