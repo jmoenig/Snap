@@ -63,7 +63,7 @@ Project, CustomHatBlockMorph, SnapVersion, ADT_SlotMorph, SnapTranslator*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.store = '2026-November-25';
+modules.store = '2026-November-26';
 
 // XML_Serializer ///////////////////////////////////////////////////////
 /*
@@ -1693,7 +1693,12 @@ SnapSerializer.prototype.loadBlock = function (model, isReporter, object) {
     if (block === null) {
         block = this.obsoleteBlock(isReporter);
     }
-    block.isDraggable = true;
+    if (model.attributes.locked === 'true') {
+        block.isLocked = true;
+        block.isDraggable = false;
+    } else {
+        block.isDraggable = true;
+    }
     inputs = block.inputs();
     model.children.forEach((child, i) => {
         if (child.tag === 'variables') {
@@ -2701,8 +2706,9 @@ BlockMorph.prototype.toXML = BlockMorph.prototype.toScriptXML = function (
 
 BlockMorph.prototype.toBlockXML = function (serializer) {
     return serializer.format(
-        '<block s="@">%%</block>',
+        '<block s="@"%>%%</block>',
         this.selector,
+        this.isLocked ? ' locked="true"' : '',
         serializer.store(this.inputs()),
         this.comment ? this.comment.toXML(serializer) : ''
     );

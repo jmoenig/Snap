@@ -164,7 +164,7 @@ CustomHatBlockMorph, GrayPaletteMorph, ZOOM*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2026-November-10';
+modules.blocks = '2026-November-26';
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -3412,6 +3412,7 @@ BlockMorph.prototype.init = function () {
     this.blockSpec = ''; // formal description of label and arguments
     this.comment = null; // optional "sticky" comment morph
     this.enforceTypes = false;
+    this.isLocked = false;
 
     // not to be persisted:
     this.instantiationSpec = null; // spec to set upon fullCopy() of template
@@ -3710,6 +3711,16 @@ BlockMorph.prototype.userMenu = function () {
         );
     }
 
+    if (this.isLocked) {
+        menu.addItem(
+            'unlock',
+            () => {
+                this.isDraggable = true;
+                this.isLocked = false;
+            }
+        );
+        return menu;
+    }
     menu.addItem(
         "help...",
         'showHelp'
@@ -4150,6 +4161,15 @@ BlockMorph.prototype.userMenu = function () {
         if (rcvr && !rcvr.parentThatIsA(IDE_Morph).config.noRingify) {
             menu.addItem("ringify", 'ringify');
         }
+    }
+    if (this instanceof HatBlockMorph && this.parent instanceof ScriptsMorph) {
+        menu.addItem(
+            'lock',
+            () => {
+                this.isDraggable = false;
+                this.isLocked = true;
+            }
+        );
     }
     if (StageMorph.prototype.enableCodeMapping) {
         menu.addLine();
