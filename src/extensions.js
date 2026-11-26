@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph, Rectangle*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-November-06';
+modules.extensions = '2026-November-25';
 
 // Global stuff
 
@@ -1308,10 +1308,10 @@ SnapExtensions.primitives.set(
         } else if (obj instanceof Costume) {
             obj.name = this.newCostumeName(name, obj);
             obj.version = Date.now();
-            ide.hasChangedMedia = true;
-            ide.recordUnsavedChanges();
         } else if (obj instanceof Sound) {
             obj.name = ide.newSoundName(name);
+        }
+        if (ide) {
             ide.hasChangedMedia = true;
             ide.recordUnsavedChanges();
         }

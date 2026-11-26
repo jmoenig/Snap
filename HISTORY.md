@@ -2,6 +2,15 @@
 
 ## in development:
 
+### 2026-11-25
+* store: fixed an occasional serialization bug for hidden stages (now that we have them, sigh!)
+* extensions: fixed "obj_name" for off-IDE objects
+* made buttons in the presentations library permanent so they survive project-save
+* store: fixed an occasional costume deserialization glitch
+
+### 2026-11-23
+* updated German translation with cardinal directions
+
 ## 12.4.0:
 * **New Features:**
     * new special slot type "emoji" for displaying emoji characters, including in drop-down menus, with meta-programming support (slot type 26)
