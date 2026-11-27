@@ -36,7 +36,7 @@ TableFrameMorph, console, Morph, MenuMorph, Rectangle*/
 
 /*jshint esversion: 11, bitwise: false*/
 
-modules.extensions = '2026-November-25';
+modules.extensions = '2026-November-27';
 
 // Global stuff
 
@@ -1727,7 +1727,7 @@ SnapExtensions.primitives.set(
         proc.assertType(x, 'number');
         proc.assertType(y, 'number');
         ext = new Point(x, y).max(new Point(240, 180));
-        if (ide.isAnimating) {
+        if (ide.isAnimating && !proc.isAtomic) {
             if (!proc.context.accumulator) {
                 proc.context.accumulator = {progress: true };
                 ide.setStageExtent(ext);
@@ -1737,7 +1737,11 @@ SnapExtensions.primitives.set(
             proc.pushContext('doYield');
             proc.pushContext();
         } else {
-            ide.setStageExtent(ext);
+            ide.stage.dimensions = ext;
+            ide.stage.setExtent(ide.stage.dimensions);
+            ide.stage.clearPenTrails();
+            ide.fixLayout();
+            ide.setExtent(ide.world().extent());
         }
     }
 );

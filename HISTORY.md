@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-11-27
+* extensions: prevent animation of stage resizing when warped
+
 ### 2026-11-26
 * Catalan and Spanish translation update, thanks, Joan!
 * presentation library update (permanent buttons, restored after translation PR)
