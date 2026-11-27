@@ -2,6 +2,9 @@
 
 ## in development:
 
+### 2026-11-28
+* fixed a button layout glitch in the presentations library
+
 ### 2026-11-27
 * extensions: prevent animation of stage resizing when warped
 
